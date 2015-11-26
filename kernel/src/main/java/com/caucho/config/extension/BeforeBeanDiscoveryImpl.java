@@ -82,7 +82,10 @@ public class BeforeBeanDiscoveryImpl implements BeforeBeanDiscovery
     _cdiManager.addStereotype(stereotype, stereotypeDef);
   }
 
-  @Override
+  public void addInterceptorBinding(Class<? extends Annotation> aClass) {
+
+  }
+
   public void addInterceptorBinding(Class<? extends Annotation> bindingType,
                                     Annotation... bindings)
   {

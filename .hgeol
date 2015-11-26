@@ -1,6 +1,0 @@
-;; .hgeol
-
-[patterns]
-
-;; The default is set to native.  This MUST be the last pattern.
-** = native
