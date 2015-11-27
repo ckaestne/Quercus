@@ -29,21 +29,17 @@
 
 package com.caucho.quercus.lib;
 
-import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.annotation.Optional;
+import com.caucho.quercus.Location;
 import com.caucho.quercus.annotation.VariableArguments;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.CallExpr;
 import com.caucho.quercus.expr.Expr;
-import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.quercus.function.AbstractFunction;
+import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -104,16 +100,17 @@ public class FunctionModule extends AbstractQuercusModule {
     }
 
     // nam: 2012-04-30 this works for interpreted, but need to also work for compiled
-    //QuercusClass oldCallingClass = env.getCallingClass();
-    //env.pushCall(new CallExpr(function.getCallbackName(), Expr.NULL_ARGS), null, args);
+    // chk: 2015-11-26 fix this, otherwise stackframes and consequently wordpress title is missing
+    QuercusClass oldCallingClass = env.getCallingClass();
+    env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, args);
 
     try {
       return function.call(env, args).copyReturn();
     }
     finally {
-      //env.popCall();
+      env.popCall();
 
-      //env.setCallingClass(oldCallingClass);
+      env.setCallingClass(oldCallingClass);
     }
   }
 
