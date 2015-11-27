@@ -1,7 +1,9 @@
 language: 
   - scala
-  - php
-php: 5.6
+addons:
+  apt:
+    packages:
+    - php5
 scala: 2.11.7
 jdk: oraclejdk8
 sudo: false
