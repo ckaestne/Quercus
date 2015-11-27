@@ -33,12 +33,10 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequestImpl;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponseImpl;
 import com.caucho.vfs.*;
-import com.openbrace.obmimic.mimic.servlet.http.HttpServletResponseMimic;
 import net.liftweb.mocks.MockHttpServletResponse;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;

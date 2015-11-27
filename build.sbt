@@ -13,7 +13,7 @@ lazy val quercus = project.dependsOn(kernel)
 
 lazy val phptest = project.dependsOn(quercus)
 
-lazy val wordpress = project.dependsOn(quercus)
+lazy val wordpress = project.dependsOn(quercus).dependsOn(phptest % "test->test")
 
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")

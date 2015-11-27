@@ -1,22 +1,20 @@
 package edu.cmu.cs.varex
 
-import java.io.{FileWriter, File}
+import java.io.{File, FileWriter}
 import java.util
 import javax.servlet._
-import javax.servlet.http.{Part, HttpServletResponse, Cookie, HttpServletRequest}
+import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse, Part}
 
 import com.caucho.quercus.TQuercus
 import com.caucho.util.CharBuffer
 import com.caucho.vfs.StringWriter
-import com.openbrace.obmimic.config.ObMimic
+import com.openbrace.obmimic.mimic.servlet.http.HttpServletRequestMimic
 import com.openbrace.obmimic.support.servlet.{EndPoint, URLEncodedRequestParameters}
-import jregex.Pattern
 import net.liftweb.mocks.MockHttpServletRequest
 import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
 
+import scala.collection.JavaConversions._
 import scala.io.Source
-import com.openbrace.obmimic.mimic.servlet.http.HttpServletRequestMimic
-import collection.JavaConversions._
 
 class AbstractPHPTest {
 
@@ -232,6 +230,8 @@ class MyMockHttpServletRequest() extends MockHttpServletRequest() {
     override def isAsyncSupported: Boolean = ???
 
     override def getServletContext: ServletContext = ???
+
+
 }
 /*
 
