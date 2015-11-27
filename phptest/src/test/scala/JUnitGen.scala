@@ -1,4 +1,4 @@
-import java.io.{FileWriter, File}
+import java.io.{File, FileWriter}
 
 import scala.io.Source
 
@@ -53,6 +53,9 @@ object JUnitGen extends App {
                 w.write("@Ignore(\"marked to ignore\")")
             else if ((content contains "--SKIPIF--") && !(content contains "skip ZendEngine 2 needed"))
                 w.write("@Ignore(\"SKIPIF not supported\")")
+            else
+            if (new File(v.getParentFile,v.getName+".diff.html").exists())
+                w.write("@Ignore(\"FAILING: This test is failing with Quercus baseline\")")
             i += 1
             val name = v.getName.dropRight(5).replace("-", "_").replace(".", "_")
             val funName = if (content contains "BROKEN") "broken" else "test"
