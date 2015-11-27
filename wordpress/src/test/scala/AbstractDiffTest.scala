@@ -12,7 +12,9 @@ import scala.sys.process._
 
 class AbstractDiffTest {
 
+
     val externalPHPexecutable = "\\php\\php.exe"
+    val phpExecutable = if (new File(externalPHPexecutable).exists()) externalPHPexecutable else "php"
 
     def testFile(phpFile: String): Unit = {
         val file = new File(phpFile)
@@ -29,7 +31,7 @@ class AbstractDiffTest {
         writeFile(file, ".quercus.html", quercusResult)
 
 
-        var zendResult = (externalPHPexecutable + " " + file.getPath) !!
+        var zendResult = (phpExecutable + " " + file.getPath) !!
 
         zendResult = zendResult.replace("\r\n","\n").trim
         writeFile(file, ".zend.html", zendResult)

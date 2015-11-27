@@ -1,4 +1,6 @@
-language: scala
+language: 
+  - scala
+  - php
 scala: 2.11.7
 jdk: oraclejdk8
 sudo: false
