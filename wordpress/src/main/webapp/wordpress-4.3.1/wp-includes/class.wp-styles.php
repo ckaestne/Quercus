@@ -48,7 +48,7 @@ class WP_Styles extends WP_Dependencies {
 			return false;
 
 		$obj = $this->registered[$handle];
-		if ( null === $obj->ver )
+		if ( null == $obj->ver )
 			$ver = '';
 		else
 			$ver = $obj->ver ? $obj->ver : $this->default_version;
@@ -114,6 +114,7 @@ class WP_Styles extends WP_Dependencies {
 			$conditional_pre  = "<!--[if {$obj->extra['conditional']}]>\n";
 			$conditional_post = "<![endif]-->\n";
 		}
+
 
 		if ( $this->do_concat ) {
 			$this->print_html .= $conditional_pre;
