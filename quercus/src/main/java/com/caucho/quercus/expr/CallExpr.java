@@ -30,15 +30,14 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
 
 import java.util.ArrayList;
+
+//import java.io.FileWriter;
+//import java.io.IOException;
 
 /**
  * A "foo(...)" function call.
@@ -168,6 +167,14 @@ public class CallExpr extends Expr {
   }
 
 
+//  static FileWriter w;
+//  static {
+//  try {
+//    w=new FileWriter("c:\\php\\trace\\t.txt");
+//  } catch (IOException e) {
+//  }
+//  };
+
   /**
    * Evaluates the expression.
    *
@@ -177,6 +184,11 @@ public class CallExpr extends Expr {
    */
   private Value evalImpl(Env env, boolean isRef, boolean isCopy)
   {
+//    try {
+//      w.write(_name+" - "+this.getLocation().toString()+"\n");
+//      w.flush();
+//    } catch (IOException e) {
+//    }
     if (_funId <= 0) {
       _funId = env.findFunctionId(_name);
 
