@@ -32,7 +32,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequestImpl;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponseImpl;
+import com.caucho.util.CharBuffer;
 import com.caucho.vfs.*;
+import net.liftweb.mocks.MockHttpServletRequest;
 import net.liftweb.mocks.MockHttpServletResponse;
 
 import javax.servlet.ServletOutputStream;
@@ -41,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,13 +95,26 @@ public class TQuercus
     }
 
 
-    public void executeScript(String code, StreamImpl os, HttpServletRequest request)
+    public static String executeScript(String code)
+            throws IOException {
+        HttpServletRequest request = new MockHttpServletRequest((String) null, "");
+        StringWriter out = new StringWriter(new CharBuffer());
+        out.openWrite();
+        TQuercus quercus = setup(Collections.emptyMap());
+
+        quercus.executeScript(code, out, request);
+
+        return out.getString();
+
+    }
+
+    void executeScript(String code, StreamImpl os, HttpServletRequest request)
             throws IOException {
         Path path = new StringPath(code);
         execute(path, os, request);
     }
 
-    public void executeFile(File file, StreamImpl os, HttpServletRequest request)
+    void executeFile(File file, StreamImpl os, HttpServletRequest request)
             throws IOException {
         Path path = new FilePath(file.getPath());
         execute(path, os, request);
