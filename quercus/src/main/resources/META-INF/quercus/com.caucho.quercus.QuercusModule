@@ -17,6 +17,7 @@ com.caucho.quercus.lib.FunctionModule
 com.caucho.quercus.lib.gae.GaeUserServiceModule
 com.caucho.quercus.lib.gettext.GettextModule
 com.caucho.quercus.lib.HashModule
+com.caucho.quercus.lib.VModule
 com.caucho.quercus.lib.HtmlModule
 com.caucho.quercus.lib.HttpModule
 com.caucho.quercus.lib.image.ImageModule
