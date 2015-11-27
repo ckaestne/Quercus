@@ -33,35 +33,18 @@ import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReturnNullAsFalse;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.ConnectionEntry;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.lib.VariableModule;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.util.L10N;
 import com.caucho.util.SQLExceptionWrapper;
 import com.caucho.vfs.Path;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.DataTruncation;
-import java.sql.Driver;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1333,7 +1316,7 @@ public class Mysqli extends JdbcConnectionResource
       return true;
     }
     catch (SQLException e) {
-      env.warning(e);
+     // env.warning(e);
 
       return false;
     }
