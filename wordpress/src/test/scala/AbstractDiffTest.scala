@@ -24,14 +24,14 @@ class AbstractDiffTest {
         val out = new com.caucho.vfs.StringWriter(new CharBuffer())
         out.openWrite()
         TQuercus.mainFile(file, out, request, Map[String, String]())
-        var quercusResult = out.getString.trim
-        quercusResult = quercusResult.replace("\r\n","\n")
+        var quercusResult = out.getString
+        quercusResult = quercusResult.replace("\r\n","\n").trim
         writeFile(file, ".quercus.html", quercusResult)
 
 
         var zendResult = (externalPHPexecutable + " " + file.getPath) !!
 
-        zendResult = zendResult.replace("\r\n","\n")
+        zendResult = zendResult.replace("\r\n","\n").trim
         writeFile(file, ".zend.html", zendResult)
 
         assert(zendResult == quercusResult,
