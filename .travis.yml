@@ -7,5 +7,5 @@ after_success: "sbt coveralls"
 services:
   - mysql
 before_script: 
-  - mysql -e "create database IF NOT EXISTS wordpress_test;" -uroot
-  - mysql -uroot wordpress_test < wordpress/src/test/resources/wordpress.sql 
+  - mysql -e "create database IF NOT EXISTS wordpress_test;" -u travis
+  - mysql -u travis wordpress_test < wordpress/src/test/resources/wordpress.sql 
