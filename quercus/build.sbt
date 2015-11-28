@@ -21,10 +21,10 @@ libraryDependencies += "org.bitbucket.cowwoc.diff-match-patch" % "diff-match-pat
 
 libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
 
-libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
-
-libraryDependencies += "org.checkerframework" % "jdk8" % "1.9.8"
-
-javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint", "-implicit:class", "-processor",
-    "org.checkerframework.checker.nullness.NullnessChecker", "-AprintErrorStack",
-        "-Xbootclasspath/p:checker/dist/jdk8.jar")
+//libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
+//
+//libraryDependencies += "org.checkerframework" % "jdk8" % "1.9.8"
+//
+//javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint", "-implicit:class", "-processor",
+//    "org.checkerframework.checker.nullness.NullnessChecker", "-AprintErrorStack",
+//        "-Xbootclasspath/p:checker/dist/jdk8.jar")
