@@ -38,7 +38,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -303,7 +303,7 @@ public class SimpleXMLElement extends SimpleXMLNode
 
   public void varDumpImpl(Env env,
                           Value obj,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -312,7 +312,7 @@ public class SimpleXMLElement extends SimpleXMLNode
   }
 
   public void printRImpl(Env env,
-                         WriteStream out,
+                         VWriteStream out,
                          int depth,
                          IdentityHashMap<Value, String> valueSet)
     throws IOException

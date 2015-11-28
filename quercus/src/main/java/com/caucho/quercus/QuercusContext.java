@@ -59,7 +59,7 @@ import com.caucho.util.TimedCache;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.Vfs;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 import javax.cache.Cache;
 import javax.sql.DataSource;
@@ -2149,7 +2149,7 @@ public class QuercusContext
   }
 
   public Env createEnv(QuercusPage page,
-                       WriteStream out,
+                       VWriteStream out,
                        QuercusHttpServletRequest request,
                        QuercusHttpServletResponse response)
   {

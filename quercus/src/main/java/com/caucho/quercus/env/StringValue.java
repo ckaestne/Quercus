@@ -38,7 +38,7 @@ import com.caucho.util.ByteAppendable;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -2805,7 +2805,7 @@ abstract public class StringValue
 
   @Override
   abstract public void varDumpImpl(Env env,
-                                   WriteStream out,
+                                   VWriteStream out,
                                    int depth,
                                    IdentityHashMap<Value, String> valueSet)
     throws IOException;

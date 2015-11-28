@@ -41,6 +41,7 @@ import com.caucho.util.Log;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -2249,7 +2250,7 @@ public class PostgresModule extends AbstractQuercusModule {
       StringValue contents = pg_lo_read(env, largeObject, -1);
 
       if (contents != null) {
-        env.getOut().print(contents);
+        env.getOut().print(VHelper.noCtx(), contents);
       }
 
     } catch (Exception ex) {

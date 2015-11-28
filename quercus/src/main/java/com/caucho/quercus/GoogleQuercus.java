@@ -38,7 +38,7 @@ import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.vfs.GoogleMergePath;
 import com.caucho.vfs.MergePath;
 import com.caucho.vfs.Path;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 /**
  * Facade for the PHP language.
@@ -96,7 +96,7 @@ public class GoogleQuercus extends QuercusContext
 
   @Override
   public Env createEnv(QuercusPage page,
-                       WriteStream out,
+                       VWriteStream out,
                        QuercusHttpServletRequest request,
                        QuercusHttpServletResponse response)
   {

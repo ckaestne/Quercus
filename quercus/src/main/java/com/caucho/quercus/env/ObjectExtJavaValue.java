@@ -32,8 +32,8 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.JavaClassDef;
-import com.caucho.vfs.WriteStream;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -140,7 +140,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
   }
 
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -155,7 +155,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
 
   @Override
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException

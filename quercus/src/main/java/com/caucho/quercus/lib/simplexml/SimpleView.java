@@ -32,7 +32,7 @@ package com.caucho.quercus.lib.simplexml;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 import org.w3c.dom.*;
 
 import javax.xml.xpath.XPath;
@@ -157,7 +157,7 @@ public abstract class SimpleView
   }
 
   public void varDump(Env env,
-                      WriteStream out,
+                      VWriteStream out,
                       int depth,
                       IdentityHashMap<Value, String> valueSet,
                       QuercusClass cls)
@@ -169,7 +169,7 @@ public abstract class SimpleView
   }
 
   public void printR(Env env,
-                     WriteStream out,
+                     VWriteStream out,
                      int depth,
                      IdentityHashMap<Value, String> valueSet,
                      QuercusClass cls)

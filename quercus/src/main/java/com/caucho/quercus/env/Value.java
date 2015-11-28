@@ -39,6 +39,7 @@ import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -2939,7 +2940,21 @@ abstract public class Value implements java.io.Serializable
   /**
    * Prints the value.
    * @param env
+   * @param out
    */
+  public void print(Env env, VWriteStream out)
+  {
+    try {
+      out.print(VHelper.noCtx(), toString(env));
+    } catch (IOException e) {
+      throw new QuercusRuntimeException(e);
+    }
+  }
+
+  /**
+   * nonvariational print method
+     */
+  @Deprecated
   public void print(Env env, WriteStream out)
   {
     try {
@@ -3095,13 +3110,13 @@ abstract public class Value implements java.io.Serializable
   }
 
   public final void varDump(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
     if (valueSet.get(this) != null) {
-      out.print("*recursion*");
+      out.print(VHelper.noCtx(), "*recursion*");
       return;
     }
 
@@ -3116,22 +3131,22 @@ abstract public class Value implements java.io.Serializable
   }
 
   protected void varDumpImpl(Env env,
-                             WriteStream out,
+                             VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print("resource(" + toString() + ")");
+    out.print(VHelper.noCtx(), "resource(" + toString() + ")");
   }
 
   public final void printR(Env env,
-                           WriteStream out,
+                           VWriteStream out,
                            int depth,
                            IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
     if (valueSet.get(this) != null) {
-      out.print("*recursion*");
+      out.print(VHelper.noCtx(), "*recursion*");
       return;
     }
 
@@ -3146,19 +3161,19 @@ abstract public class Value implements java.io.Serializable
   }
 
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print(toString());
+    out.print(VHelper.noCtx(), toString());
   }
 
-  protected void printDepth(WriteStream out, int depth)
+  protected void printDepth(VWriteStream out, int depth)
     throws IOException
   {
     for (int i = 0; i < depth; i++)
-      out.print(' ');
+      out.print(VHelper.noCtx(), ' ');
   }
 
   public int getHashCode()

@@ -33,7 +33,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.VariableModule;
 import com.caucho.util.L10N;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -356,7 +356,7 @@ public class SplObjectStorage
 
   public void varDumpImpl(Env env,
                           Value obj,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException

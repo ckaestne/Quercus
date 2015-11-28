@@ -55,6 +55,7 @@ import com.caucho.vfs.i18n.EncodingReader;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.script.Bindings;
@@ -349,10 +350,10 @@ public class Env
 
   private ScriptContext _scriptContext;
 
-  private WriteStream _originalOut;
+  private VWriteStream _originalOut;
   private OutputBuffer _outputBuffer;
 
-  private WriteStream _out;
+  private VWriteStream _out;
 
   private LocaleInfo _locale;
 
@@ -405,7 +406,7 @@ public class Env
 
   public Env(QuercusContext quercus,
              QuercusPage page,
-             WriteStream out,
+             VWriteStream out,
              QuercusHttpServletRequest request,
              QuercusHttpServletResponse response)
   {
@@ -1285,7 +1286,7 @@ public class Env
   /**
    * Returns the writer.
    */
-  public WriteStream getOut()
+  public VWriteStream getOut()
   {
     return _out;
   }
@@ -1293,7 +1294,7 @@ public class Env
   /**
    * Returns the writer.
    */
-  public WriteStream getOriginalOut()
+  public VWriteStream getOriginalOut()
   {
     return _originalOut;
   }
@@ -1316,7 +1317,7 @@ public class Env
   public final void print(String v)
   {
     try {
-      getOut().print(v);
+      getOut().print(VHelper.noCtx(), v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1328,7 +1329,7 @@ public class Env
   public final void print(char []buffer, int offset, int length)
   {
     try {
-      getOut().print(buffer, offset, length);
+      getOut().print(VHelper.noCtx(), buffer, offset, length);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1340,7 +1341,7 @@ public class Env
   public final void print(char v)
   {
     try {
-      getOut().print(v);
+      getOut().print(VHelper.noCtx(), v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1352,7 +1353,7 @@ public class Env
   public final void print(long v)
   {
     try {
-      getOut().print(v);
+      getOut().print(VHelper.noCtx(), v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1367,9 +1368,9 @@ public class Env
       long longV = (long) v;
 
       if (v == longV)
-        getOut().print(longV);
+        getOut().print(VHelper.noCtx(), longV);
       else
-        getOut().print(v);
+        getOut().print(VHelper.noCtx(), v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1381,7 +1382,7 @@ public class Env
   public final void print(Object v)
   {
     try {
-      getOut().print(v);
+      getOut().print(VHelper.noCtx(), v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1401,7 +1402,7 @@ public class Env
   public final void println()
   {
     try {
-      getOut().println();
+      getOut().println(VHelper.noCtx());
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1413,7 +1414,7 @@ public class Env
   public final void println(String v)
   {
     try {
-      getOut().println(v);
+      getOut().println(VHelper.noCtx(), v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1426,7 +1427,7 @@ public class Env
   {
     try {
       v.print(this);
-      getOut().println();
+      getOut().println(VHelper.noCtx());
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1438,7 +1439,7 @@ public class Env
   public final void println(Object v)
   {
     try {
-      getOut().println(v);
+      getOut().println(VHelper.noCtx(), v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1450,7 +1451,7 @@ public class Env
   public final void write(byte []buffer, int offset, int length)
   {
     try {
-      getOut().write(buffer, offset, length);
+      getOut().write(VHelper.noCtx(), buffer, offset, length);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -6214,7 +6215,7 @@ public class Env
       return exit();
 
     try {
-      getOut().print(msg.toString());
+      getOut().print(VHelper.noCtx(), msg.toString());
     } catch (IOException e) {
       log.log(Level.WARNING, e.toString(), e);
     }
@@ -6237,7 +6238,7 @@ public class Env
   public Value die(String msg)
   {
     try {
-      getOut().print(msg);
+      getOut().print(VHelper.noCtx(), msg);
     } catch (IOException e) {
       log.log(Level.WARNING, e.toString(), e);
     }
@@ -6936,7 +6937,7 @@ public class Env
         }
         else if (getIniBoolean("display_errors")) {
           // initial newline to match PHP
-          getOut().println("\n" + fullMsg);
+          getOut().println(VHelper.noCtx(), "\n" + fullMsg);
         }
 
         if (getIniBoolean("log_errors"))

@@ -46,6 +46,7 @@ import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.geom.*;
 import java.awt.image.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -1204,8 +1205,11 @@ public class ImageModule extends AbstractQuercusModule {
           os.close();
         }
       }
-      else
-        ImageIO.write(image.getBufferedImage(), "gif", env.getOut());
+      else     {
+        assert false : "TODO make variational";
+        ImageIO.write(image.getBufferedImage(), "gif",(File)null /*env.getOut()*/);
+
+      }
 
       return true;
     }
@@ -1258,8 +1262,11 @@ public class ImageModule extends AbstractQuercusModule {
           os.close();
         }
       }
-      else
-        ImageIO.write(image.getBufferedImage(), "jpeg", env.getOut());
+      else     {
+        assert false : "TODO make variational";
+        ImageIO.write(image.getBufferedImage(), "jpeg",(File)null /*env.getOut()*/);
+
+      }
 
       return true;
     }
@@ -1325,8 +1332,11 @@ public class ImageModule extends AbstractQuercusModule {
           os.close();
         }
       }
-      else
-        ImageIO.write(image.getBufferedImage(), "png", env.getOut());
+      else     {
+        assert false : "TODO make variational";
+        ImageIO.write(image.getBufferedImage(), "png",(File)null /*env.getOut()*/);
+
+      }
 
       return true;
     }

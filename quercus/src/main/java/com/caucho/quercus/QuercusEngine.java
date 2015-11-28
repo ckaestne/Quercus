@@ -39,6 +39,7 @@ import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.vfs.*;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -127,11 +128,11 @@ public class QuercusEngine
     QuercusProgram program = QuercusParser.parse(_quercus, null, reader);
 
     OutputStream os = _out;
-    WriteStream out;
+    VWriteStream out;
 
     if (os != null) {
       OutputStreamStream s = new OutputStreamStream(os);
-      WriteStream ws = new WriteStream(s);
+      VWriteStream ws = VWriteStream.adapt(new WriteStream(s));
 
       ws.setNewlineString("\n");
 
@@ -143,7 +144,7 @@ public class QuercusEngine
       out = ws;
     }
     else
-      out = new WriteStream(StdoutStream.create());
+      out =  VWriteStream.adapt(new WriteStream(StdoutStream.create()));;
 
     QuercusPage page = new InterpretedPage(program);
 

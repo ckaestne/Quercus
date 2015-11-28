@@ -30,7 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -391,15 +392,15 @@ public class BooleanValue extends Value
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value,String> valueSet)
     throws IOException
   {
     if (toBoolean())
-      out.print("bool(true)");
+      out.print(VHelper.noCtx(), "bool(true)");
     else
-      out.print("bool(false)");
+      out.print(VHelper.noCtx(), "bool(false)");
   }
 
   //

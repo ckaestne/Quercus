@@ -41,7 +41,8 @@ import com.caucho.util.L10N;
 import com.caucho.vfs.FilePath;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.Vfs;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -133,7 +134,7 @@ public class QuercusServletImpl extends HttpServlet
     throws ServletException, IOException
   {
     Env env = null;
-    WriteStream ws = null;
+    VWriteStream ws = null;
 
     QuercusHttpServletRequest req = new QuercusHttpServletRequestImpl(request);
     QuercusHttpServletResponse res = new QuercusHttpServletResponseImpl(response);
@@ -223,13 +224,13 @@ public class QuercusServletImpl extends HttpServlet
       catch (QuercusLineRuntimeException e) {
         log.log(Level.FINE, e.toString(), e);
 
-        ws.println(e.getMessage());
+        ws.println(VHelper.noCtx(), e.getMessage());
         //  return;
       }
       catch (QuercusValueException e) {
         log.log(Level.FINE, e.toString(), e);
 
-        ws.println(e.toString());
+        ws.println(VHelper.noCtx(), e.toString());
 
         //  return;
       }
@@ -282,14 +283,14 @@ public class QuercusServletImpl extends HttpServlet
     throw new ServletException(e);
   }
 
-  protected WriteStream openWrite(HttpServletResponse response)
+  protected VWriteStream openWrite(HttpServletResponse response)
     throws IOException
   {
-    WriteStream ws;
+    VWriteStream ws;
 
     OutputStream out = response.getOutputStream();
 
-    ws = Vfs.openWrite(out);
+    ws = VWriteStream.adapt(Vfs.openWrite(out));
 
     return ws;
   }

@@ -44,7 +44,8 @@ import com.caucho.util.L10N;
 import com.caucho.vfs.StreamImplOutputStream;
 import com.caucho.vfs.TempBuffer;
 import com.caucho.vfs.TempStream;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -183,7 +184,7 @@ public class ZlibModule extends AbstractQuercusModule {
       return BooleanValue.FALSE;
 
     try {
-      return LongValue.create(env.getOut().writeStream(is.getInputStream()));
+      return LongValue.create(env.getOut().writeStream(VHelper.noCtx(), is.getInputStream()));
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     } finally {
@@ -362,7 +363,7 @@ public class ZlibModule extends AbstractQuercusModule {
    */
   public Value gzpassthru(Env env, @NotNull BinaryInput is)
   {
-    WriteStream out = env.getOut();
+    VWriteStream out = env.getOut();
     TempBuffer tempBuf = TempBuffer.allocate();
     byte[] buffer = tempBuf.getBuffer();
 
@@ -370,7 +371,7 @@ public class ZlibModule extends AbstractQuercusModule {
     try {
       int sublen = is.read(buffer, 0, buffer.length);
       while (sublen > 0) {
-        out.write(buffer, 0, sublen);
+        out.write(VHelper.noCtx(), buffer, 0, sublen);
         length += sublen;
         sublen = is.read(buffer, 0, buffer.length);
       }

@@ -29,7 +29,8 @@
 
 package com.caucho.quercus.env;
 
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -101,22 +102,22 @@ public class ResourceValue extends Value
 
   @Override
   protected void varDumpImpl(Env env,
-                             WriteStream out,
+                             VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print("resource(" + toString(env) + ")");
+    out.print(VHelper.noCtx(), "resource(" + toString(env) + ")");
   }
 
   @Override
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print("resource(" + toString(env) + ")");
+    out.print(VHelper.noCtx(), "resource(" + toString(env) + ")");
   }
 }
 

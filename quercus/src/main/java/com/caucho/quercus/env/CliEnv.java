@@ -31,14 +31,14 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.page.QuercusPage;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 public class CliEnv extends Env {
   private final String[] _argv;
 
   public CliEnv(QuercusContext quercus,
                 QuercusPage page,
-                WriteStream out,
+                VWriteStream out,
                 String[] argv)
   {
     super(quercus, page, out, null, null);

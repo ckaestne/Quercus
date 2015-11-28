@@ -32,7 +32,8 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.util.CharBuffer;
 import com.caucho.vfs.TempCharBuffer;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -1642,11 +1643,12 @@ public class StringBuilderValue
   /**
    * Prints the value.
    * @param env
+   * @param out
    */
-  public void print(Env env, WriteStream out)
+  public void print(Env env, VWriteStream out)
   {
     try {
-      out.write(_buffer, 0, _length);
+      out.write(VHelper.noCtx(), _buffer, 0, _length);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1694,7 +1696,7 @@ public class StringBuilderValue
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -1704,13 +1706,13 @@ public class StringBuilderValue
     if (length < 0)
         length = 0;
 
-    out.print("string(");
-    out.print(length);
-    out.print(") \"");
+    out.print(VHelper.noCtx(), "string(");
+    out.print(VHelper.noCtx(), length);
+    out.print(VHelper.noCtx(), ") \"");
 
-    out.write(_buffer, 0, _length);
+    out.write(VHelper.noCtx(), _buffer, 0, _length);
 
-    out.print("\"");
+    out.print(VHelper.noCtx(), "\"");
   }
 
   @Override

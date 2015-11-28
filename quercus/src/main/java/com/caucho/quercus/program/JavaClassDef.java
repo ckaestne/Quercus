@@ -44,10 +44,10 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import com.caucho.quercus.module.ModuleContext;
 import com.caucho.util.L10N;
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -1467,7 +1467,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    */
   public boolean printRImpl(Env env,
                             Object obj,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -1491,7 +1491,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   public boolean varDumpImpl(Env env,
                              Value obj,
                              Object javaObj,
-                             WriteStream out,
+                             VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet)
     throws IOException

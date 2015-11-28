@@ -30,7 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.QuercusRuntimeException;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -738,8 +739,9 @@ public class LargeStringBuilderValue
   /**
    * Prints the value.
    * @param env
+   * @param out
    */
-  public void print(Env env, WriteStream out)
+  public void print(Env env, VWriteStream out)
   {
     try {
       for (int i = 0; i < _length; i += SIZE) {
@@ -749,7 +751,7 @@ public class LargeStringBuilderValue
         if (SIZE < sublen)
           sublen = SIZE;
 
-        out.write(_bufferList[chunk], 0, sublen);
+        out.write(VHelper.noCtx(), _bufferList[chunk], 0, sublen);
       }
     } catch (IOException e) {
       throw new QuercusRuntimeException(e);
@@ -847,7 +849,7 @@ public class LargeStringBuilderValue
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -857,17 +859,17 @@ public class LargeStringBuilderValue
     if (length < 0)
         length = 0;
 
-    out.print("string(");
-    out.print(length);
-    out.print(") \"");
+    out.print(VHelper.noCtx(), "string(");
+    out.print(VHelper.noCtx(), length);
+    out.print(VHelper.noCtx(), ") \"");
 
     for (int i = 0; i < length; i++) {
       int ch = charAt(i);
 
-      out.print((char) ch);
+      out.print(VHelper.noCtx(), (char) ch);
     }
 
-    out.print("\"");
+    out.print(VHelper.noCtx(), "\"");
 
     /*
     int length = length();

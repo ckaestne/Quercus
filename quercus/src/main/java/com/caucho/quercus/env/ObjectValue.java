@@ -34,10 +34,10 @@ import com.caucho.quercus.lib.ArrayModule;
 import com.caucho.quercus.program.Arg;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.CurrentTime;
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -805,7 +805,7 @@ abstract public class ObjectValue extends Callback {
   }
 
   public void varDumpObject(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -815,11 +815,11 @@ abstract public class ObjectValue extends Callback {
     if (isIncompleteObject())
       size++;
 
-    out.println("object(" + getName() + ") (" + size + ") {");
+    out.println(VHelper.noCtx(), "object(" + getName() + ") (" + size + ") {");
 
     if (isIncompleteObject()) {
       printDepth(out, 2 * (depth + 1));
-      out.println("[\"__Quercus_Incomplete_Class_name\"]=>");
+      out.println(VHelper.noCtx(), "[\"__Quercus_Incomplete_Class_name\"]=>");
 
       printDepth(out, 2 * (depth + 1));
 
@@ -827,7 +827,7 @@ abstract public class ObjectValue extends Callback {
 
       value.varDump(env, out, depth + 1, valueSet);
 
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
     ArrayValue sortedEntries = new ArrayValueImpl();
@@ -850,7 +850,7 @@ abstract public class ObjectValue extends Callback {
       Value value = entry.getValue();
 
       printDepth(out, 2 * depth);
-      out.println("[\"" + key + "\"]=>");
+      out.println(VHelper.noCtx(), "[\"" + key + "\"]=>");
 
       depth++;
 
@@ -858,14 +858,14 @@ abstract public class ObjectValue extends Callback {
 
       value.varDump(env, out, depth, valueSet);
 
-      out.println();
+      out.println(VHelper.noCtx());
 
       depth--;
     }
 
     printDepth(out, 2 * depth);
 
-    out.print("}");
+    out.print(VHelper.noCtx(), "}");
   }
 
   /**

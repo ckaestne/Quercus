@@ -29,6 +29,7 @@
 package com.caucho.quercus.lib.file;
 
 import com.caucho.quercus.env.Env;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 
@@ -49,12 +50,12 @@ public class PhpBinaryOutput extends AbstractBinaryOutput {
   public void write(byte []buffer, int offset, int length)
     throws IOException
   {
-    _env.getOut().write(buffer, offset, length);
+    _env.getOut().write(VHelper.noCtx(), buffer, offset, length);
   }
 
   public void write(int b)
     throws IOException
   {
-    _env.getOut().write(b);
+    _env.getOut().write(VHelper.noCtx(), b);
   }
 }

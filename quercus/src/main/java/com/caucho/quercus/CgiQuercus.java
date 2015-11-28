@@ -37,6 +37,7 @@ import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.StdoutStream;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ public class CgiQuercus
 {
   @Override
   public Env createEnv(QuercusPage page,
-                       WriteStream out,
+                       VWriteStream out,
                        QuercusHttpServletRequest request,
                        QuercusHttpServletResponse response)
   {
@@ -77,7 +78,7 @@ public class CgiQuercus
 
     QuercusPage page = parse(path);
 
-    WriteStream os = new WriteStream(StdoutStream.create());
+    VWriteStream os = VWriteStream.adapt(new WriteStream(StdoutStream.create()));
 
     os.setNewlineString("\n");
     os.setEncoding("iso-8859-1");

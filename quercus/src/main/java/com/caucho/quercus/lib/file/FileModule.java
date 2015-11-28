@@ -42,6 +42,8 @@ import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.quercus.resources.StreamContextResource;
 import com.caucho.util.L10N;
 import com.caucho.vfs.*;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -1768,9 +1770,9 @@ public class FileModule extends AbstractQuercusModule {
       if (is == null)
         return BooleanValue.FALSE;
 
-      WriteStream out = env.getOut();
+      VWriteStream out = env.getOut();
 
-      long writeLength = out.writeStream(is.getInputStream());
+      long writeLength = out.writeStream(VHelper.noCtx(), is.getInputStream());
 
       return LongValue.create(writeLength);
     } catch (IOException e) {

@@ -32,9 +32,10 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -1603,26 +1604,26 @@ abstract public class ArrayValue extends Value {
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.println("array(" + getSize() + ") {");
+    out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
 
     for (Map.Entry<Value,Value> mapEntry : entrySet()) {
       varDumpEntry(env, out, depth + 1, valueSet, mapEntry);
 
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
     printDepth(out, 2 * depth);
 
-    out.print("}");
+    out.print(VHelper.noCtx(), "}");
   }
 
   protected void varDumpEntry(Env env,
-                              WriteStream out,
+                              VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet,
                               Map.Entry<Value, Value> mapEntry)
@@ -1635,14 +1636,14 @@ abstract public class ArrayValue extends Value {
 
   @Override
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.println("Array");
+    out.println(VHelper.noCtx(), "Array");
     printDepth(out, 4 * depth);
-    out.println("(");
+    out.println(VHelper.noCtx(), "(");
 
     for (Map.Entry<Value,Value> mapEntry : entrySet()) {
       ArrayValue.Entry entry = (ArrayValue.Entry) mapEntry;
@@ -1651,11 +1652,11 @@ abstract public class ArrayValue extends Value {
     }
 
     printDepth(out, 4 * depth);
-    out.println(")");
+    out.println(VHelper.noCtx(), ")");
   }
 
   protected void printREntry(Env env,
-                             WriteStream out,
+                             VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet,
                              Map.Entry<Value, Value> mapEntry)
@@ -1885,20 +1886,20 @@ abstract public class ArrayValue extends Value {
     }
 
     public void varDumpImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
       throws IOException
     {
       printDepth(out, 2 * depth);
-      out.print("[");
+      out.print(VHelper.noCtx(), "[");
 
       if (_key instanceof StringValue)
-        out.print("\"" + _key + "\"");
+        out.print(VHelper.noCtx(), "\"" + _key + "\"");
       else
-        out.print(_key);
+        out.print(VHelper.noCtx(), _key);
 
-      out.println("]=>");
+      out.println(VHelper.noCtx(), "]=>");
 
       printDepth(out, 2 * depth);
 
@@ -1906,27 +1907,27 @@ abstract public class ArrayValue extends Value {
     }
 
     protected void printRImpl(Env env,
-                              WriteStream out,
+                              VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet)
       throws IOException
     {
       printDepth(out, 4 * (depth + 1));
-      out.print("[");
-      out.print(_key);
-      out.print("] => ");
+      out.print(VHelper.noCtx(), "[");
+      out.print(VHelper.noCtx(), _key);
+      out.print(VHelper.noCtx(), "] => ");
       if (getRawValue() != null) {
         getRawValue().printR(env, out, depth + 2, valueSet);
       }
 
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
-    private void printDepth(WriteStream out, int depth)
+    private void printDepth(VWriteStream out, int depth)
       throws java.io.IOException
     {
       for (int i = depth; i > 0; i--)
-        out.print(' ');
+        out.print(VHelper.noCtx(), ' ');
     }
 
     @Override

@@ -33,8 +33,8 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.This;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.ArrayModule;
-import com.caucho.vfs.WriteStream;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -231,16 +231,16 @@ public class ArrayIterator
   }
 
 
-   private static void printDepth(WriteStream out, int depth)
+   private static void printDepth(VWriteStream out, int depth)
     throws java.io.IOException
   {
     for (int i = depth; i > 0; i--)
-      out.print(' ');
+      out.print(VHelper.noCtx(), ' ');
   }
 
   public void varDumpImpl(Env env,
                           Value obj,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -256,7 +256,7 @@ public class ArrayIterator
     else {
       Value arrayValue = _value;
 
-      out.println("object(" + name + ") (" + arrayValue.getCount(env) + ") {");
+      out.println(VHelper.noCtx(), "object(" + name + ") (" + arrayValue.getCount(env) + ") {");
 
       depth++;
 
@@ -271,27 +271,27 @@ public class ArrayIterator
 
         printDepth(out, 2 * depth);
 
-        out.print("[");
+        out.print(VHelper.noCtx(), "[");
 
         if (key.isString())
-          out.print("\"" + key + "\"");
+          out.print(VHelper.noCtx(), "\"" + key + "\"");
         else
-          out.print(key);
+          out.print(VHelper.noCtx(), key);
 
-        out.println("]=>");
+        out.println(VHelper.noCtx(), "]=>");
 
         printDepth(out, 2 * depth);
 
         value.varDump(env, out, depth, valueSet);
 
-        out.println();
+        out.println(VHelper.noCtx());
       }
 
       depth--;
 
       printDepth(out, 2 * depth);
 
-      out.print("}");
+      out.print(VHelper.noCtx(), "}");
     }
   }
 }

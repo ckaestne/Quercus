@@ -38,7 +38,8 @@ import com.caucho.quercus.module.IniDefinition;
 import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.util.IntMap;
 import com.caucho.util.L10N;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -213,7 +214,7 @@ public class TokenModule extends AbstractQuercusModule {
   {
     try {
       StringValue sb = isReturn ? env.createUnicodeBuilder() : null;
-      WriteStream out = env.getOut();
+      VWriteStream out = env.getOut();
 
       Token lexer = new Token(env, s);
       int token;
@@ -240,7 +241,7 @@ public class TokenModule extends AbstractQuercusModule {
           if (sb != null)
             sb.append((char) token);
           else
-            out.print((char) token);
+            out.print(VHelper.noCtx(), (char) token);
         }
         else {
           StringValue lexeme = lexer.getLexeme();
@@ -264,7 +265,7 @@ public class TokenModule extends AbstractQuercusModule {
   }
 
   private static void highlight(StringValue sb,
-                                WriteStream out,
+                                VWriteStream out,
                                 String string)
     throws IOException
   {
@@ -272,12 +273,12 @@ public class TokenModule extends AbstractQuercusModule {
       sb.append(string);
     }
     else {
-      out.print(string);
+      out.print(VHelper.noCtx(), string);
     }
   }
 
   private static void highlight(StringValue sb,
-                                WriteStream out,
+                                VWriteStream out,
                                 StringValue string)
     throws IOException
   {
@@ -309,16 +310,16 @@ public class TokenModule extends AbstractQuercusModule {
 
         switch (ch) {
           case '<':
-            out.print("&lt;");
+            out.print(VHelper.noCtx(), "&lt;");
             break;
           case '>':
-            out.print("&gt;");
+            out.print(VHelper.noCtx(), "&gt;");
             break;
           case ' ':
-            out.print("&nbsp;");
+            out.print(VHelper.noCtx(), "&nbsp;");
             break;
           default:
-            out.print(ch);
+            out.print(VHelper.noCtx(), ch);
           break;
         }
       }

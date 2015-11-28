@@ -30,7 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -69,7 +70,7 @@ abstract public class UnicodeValue extends StringValue {
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -79,14 +80,14 @@ abstract public class UnicodeValue extends StringValue {
     if (length < 0)
         length = 0;
     
-    out.print("unicode(");
-    out.print(length);
-    out.print(") \"");
+    out.print(VHelper.noCtx(), "unicode(");
+    out.print(VHelper.noCtx(), length);
+    out.print(VHelper.noCtx(), ") \"");
 
     for (int i = 0; i < length; i++)
-      out.print(charAt(i));
+      out.print(VHelper.noCtx(), charAt(i));
 
-    out.print("\"");
+    out.print(VHelper.noCtx(), "\"");
   }
 
   /**

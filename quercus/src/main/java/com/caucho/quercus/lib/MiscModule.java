@@ -265,7 +265,7 @@ public class MiscModule extends AbstractQuercusModule {
 
       is.close();
 
-      env.getOut().writeStream(es);
+      env.getOut().writeStream(VHelper.noCtx(), es);
       es.close();
 
       int status = process.waitFor();
@@ -694,7 +694,7 @@ public class MiscModule extends AbstractQuercusModule {
         OutputStream os = process.getOutputStream();
         os.close();
 
-        env.getOut().writeStream(is);
+        env.getOut().writeStream(VHelper.noCtx(), is);
         is.close();
 
         int status = process.waitFor();

@@ -32,10 +32,10 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -145,15 +145,15 @@ public class CallbackObjectMethod extends Callback {
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print(getClass().getName());
-    out.print('[');
-    out.print(_methodName);
-    out.print(']');
+    out.print(VHelper.noCtx(), getClass().getName());
+    out.print(VHelper.noCtx(), '[');
+    out.print(VHelper.noCtx(), _methodName);
+    out.print(VHelper.noCtx(), ']');
   }
 
   @Override

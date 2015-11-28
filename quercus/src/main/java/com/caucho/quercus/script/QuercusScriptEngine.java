@@ -38,7 +38,12 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.util.L10N;
-import com.caucho.vfs.*;
+import com.caucho.vfs.ReadStream;
+import com.caucho.vfs.VfsStream;
+import com.caucho.vfs.WriteStream;
+import com.caucho.vfs.WriterStreamImpl;
+import edu.cmu.cs.varex.VNullWriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 import javax.script.*;
 import java.io.InputStream;
@@ -192,12 +197,12 @@ public class QuercusScriptEngine
 
       Writer writer = cxt.getWriter();
 
-      WriteStream out;
+      VWriteStream out;
 
       if (writer != null) {
         WriterStreamImpl s = new WriterStreamImpl();
         s.setWriter(writer);
-        WriteStream os = new WriteStream(s);
+        VWriteStream os = VWriteStream.adapt(new WriteStream(s));
 
         os.setNewlineString("\n");
 
@@ -217,7 +222,7 @@ public class QuercusScriptEngine
         out = os;
       }
       else {
-        out = new NullWriteStream();
+        out = VNullWriteStream.create();
       }
 
       QuercusPage page = new InterpretedPage(program);

@@ -31,9 +31,9 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.lib.OutputModule;
 import com.caucho.vfs.TempBuffer;
-import com.caucho.vfs.TempStream;
-import com.caucho.vfs.WriteStream;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VTempStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -57,8 +57,8 @@ public class OutputBuffer {
 
   private final OutputBuffer _next;
 
-  private TempStream _tempStream;
-  private WriteStream _out;
+  private VTempStream _tempStream;
+  private VWriteStream _out;
 
   private final Env _env;
 
@@ -78,8 +78,8 @@ public class OutputBuffer {
     _env = env;
     _callback = callback;
 
-    _tempStream = new TempStream();
-    _out = new WriteStream(_tempStream);
+    _tempStream = VTempStream.create();
+    _out = VWriteStream.create(_tempStream);
     
     _out.setNewlineString("\n");
 
@@ -117,7 +117,7 @@ public class OutputBuffer {
   /**
    * Returns the writer.
    */
-  public WriteStream getOut()
+  public VWriteStream getOut()
   {
     return _out;
   }
@@ -252,10 +252,10 @@ public class OutputBuffer {
       doFlush();
     }
 
-    WriteStream out = _out;
+    VWriteStream out = _out;
     _out = null;
 
-    TempStream tempStream = _tempStream;
+    VTempStream tempStream = _tempStream;
     _tempStream = null;
 
     try {
@@ -301,7 +301,7 @@ public class OutputBuffer {
     try {
       _out.flush();
 
-      WriteStream out = getNextOut();
+      VWriteStream out = getNextOut();
 
       _tempStream.writeToStream(out);
 
@@ -311,7 +311,7 @@ public class OutputBuffer {
     }
   }
 
-  private WriteStream getNextOut()
+  private VWriteStream getNextOut()
   {
     if (_next != null)
       return _next.getOut();

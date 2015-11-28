@@ -32,6 +32,7 @@ package com.caucho.quercus;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.vfs.*;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -198,7 +199,7 @@ public class Quercus
   {
     QuercusPage page = parse(path);
 
-    WriteStream os = new WriteStream(StdoutStream.create());
+    VWriteStream os = VWriteStream.adapt(new WriteStream(StdoutStream.create()));
 
     os.setNewlineString("\n");
     os.setEncoding("iso-8859-1");
@@ -226,7 +227,7 @@ public class Quercus
   {
     QuercusPage page = parse(stream);
 
-    WriteStream os = new WriteStream(StdoutStream.create());
+    VWriteStream os = VWriteStream.adapt(new WriteStream(StdoutStream.create()));
 
     os.setNewlineString("\n");
     os.setEncoding("iso-8859-1");

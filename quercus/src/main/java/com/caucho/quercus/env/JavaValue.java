@@ -31,9 +31,10 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.program.JavaClassDef;
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.*;
@@ -178,7 +179,7 @@ public class JavaValue extends ObjectValue
 
   @Override
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -190,40 +191,40 @@ public class JavaValue extends ObjectValue
     Set<? extends Map.Entry<Value,Value>> entrySet = entrySet();
 
     if (entrySet == null) {
-      out.print("resource(" + toString(env) + ")"); // XXX:
+      out.print(VHelper.noCtx(), "resource(" + toString(env) + ")"); // XXX:
       return;
     }
 
-    out.print(_classDef.getSimpleName());
-    out.println(" Object");
+    out.print(VHelper.noCtx(), _classDef.getSimpleName());
+    out.println(VHelper.noCtx(), " Object");
     printRDepth(out, depth);
-    out.print("(");
+    out.print(VHelper.noCtx(), "(");
 
     for (Map.Entry<Value,Value> entry : entrySet) {
-      out.println();
+      out.println(VHelper.noCtx());
       printRDepth(out, depth);
-      out.print("    [" + entry.getKey() + "] => ");
+      out.print(VHelper.noCtx(), "    [" + entry.getKey() + "] => ");
 
       entry.getValue().printRImpl(env, out, depth + 1, valueSet);
     }
 
-    out.println();
+    out.println(VHelper.noCtx());
     printRDepth(out, depth);
-    out.println(")");
+    out.println(VHelper.noCtx(), ")");
   }
 
   @Override
   protected void varDumpImpl(Env env,
-                            WriteStream out,
-                            int depth,
-                            IdentityHashMap<Value, String> valueSet)
+                             VWriteStream out,
+                             int depth,
+                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
     Value oldThis = env.setThis(this);
 
     try {
       if (! _classDef.varDumpImpl(env, this, _object, out, depth, valueSet))
-        out.print("resource(" + toString(env) + ")"); // XXX:
+        out.print(VHelper.noCtx(), "resource(" + toString(env) + ")"); // XXX:
     }
     finally {
       env.setThis(oldThis);
@@ -653,11 +654,11 @@ public class JavaValue extends ObjectValue
       return super.toInputStream();
   }
 
-  private static void printRDepth(WriteStream out, int depth)
+  private static void printRDepth(VWriteStream out, int depth)
     throws IOException
   {
     for (int i = 0; i < 8 * depth; i++)
-      out.print(' ');
+      out.print(VHelper.noCtx(), ' ');
   }
 
   //

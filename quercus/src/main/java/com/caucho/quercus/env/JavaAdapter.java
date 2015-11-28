@@ -34,9 +34,10 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import com.caucho.quercus.program.JavaClassDef;
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -885,67 +886,67 @@ abstract public class JavaAdapter extends ArrayValue
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.println("array(" + getSize() + ") {");
+    out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
 
     int nestedDepth = depth + 1;
 
     for (Map.Entry<Value,Value> mapEntry : entrySet()) {
       printDepth(out, nestedDepth * 2);
-      out.print("[");
+      out.print(VHelper.noCtx(), "[");
 
       Value key = mapEntry.getKey();
 
       if (key.isString())
-        out.print("\"" + key + "\"");
+        out.print(VHelper.noCtx(), "\"" + key + "\"");
       else
-        out.print(key);
+        out.print(VHelper.noCtx(), key);
 
-      out.println("]=>");
+      out.println(VHelper.noCtx(), "]=>");
 
       printDepth(out, nestedDepth * 2);
 
       mapEntry.getValue().varDump(env, out, nestedDepth, valueSet);
 
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
     printDepth(out, 2 * depth);
 
-    out.print("}");
+    out.print(VHelper.noCtx(), "}");
   }
 
   @Override
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.println("Array");
+    out.println(VHelper.noCtx(), "Array");
     printDepth(out, 8 * depth);
-    out.println("(");
+    out.println(VHelper.noCtx(), "(");
 
     for (Map.Entry<Value,Value> mapEntry : entrySet()) {
       printDepth(out, 8 * depth);
 
-      out.print("    [");
-      out.print(mapEntry.getKey());
-      out.print("] => ");
+      out.print(VHelper.noCtx(), "    [");
+      out.print(VHelper.noCtx(), mapEntry.getKey());
+      out.print(VHelper.noCtx(), "] => ");
 
       Value value = mapEntry.getValue();
 
       if (value != null)
         value.printR(env, out, depth + 1, valueSet);
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
     printDepth(out, 8 * depth);
-    out.println(")");
+    out.println(VHelper.noCtx(), ")");
   }
 
   //

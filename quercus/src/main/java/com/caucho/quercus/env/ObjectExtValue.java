@@ -32,10 +32,10 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.CurrentTime;
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -1235,7 +1235,7 @@ public class ObjectExtValue extends ObjectValue
 
   //XXX: push up to super, and use varDumpObject
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -1245,11 +1245,11 @@ public class ObjectExtValue extends ObjectValue
     if (isIncompleteObject())
       size++;
 
-    out.println("object(" + getName() + ") (" + size + ") {");
+    out.println(VHelper.noCtx(), "object(" + getName() + ") (" + size + ") {");
 
     if (isIncompleteObject()) {
       printDepth(out, 2 * (depth + 1));
-      out.println("[\"__Quercus_Incomplete_Class_name\"]=>");
+      out.println(VHelper.noCtx(), "[\"__Quercus_Incomplete_Class_name\"]=>");
 
       printDepth(out, 2 * (depth + 1));
 
@@ -1257,7 +1257,7 @@ public class ObjectExtValue extends ObjectValue
 
       value.varDump(env, out, depth + 1, valueSet);
 
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
     for (Map.Entry<Value,Value> mapEntry : entrySet()) {
@@ -1268,21 +1268,21 @@ public class ObjectExtValue extends ObjectValue
 
     printDepth(out, 2 * depth);
 
-    out.print("}");
+    out.print(VHelper.noCtx(), "}");
   }
 
   @Override
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print(getName());
-    out.print(' ');
-    out.println("Object");
+    out.print(VHelper.noCtx(), getName());
+    out.print(VHelper.noCtx(), ' ');
+    out.println(VHelper.noCtx(), "Object");
     printDepth(out, 4 * depth);
-    out.println("(");
+    out.println(VHelper.noCtx(), "(");
 
     for (Map.Entry<Value,Value> mapEntry : entrySet()) {
       ObjectExtValue.Entry entry = (ObjectExtValue.Entry) mapEntry;
@@ -1291,7 +1291,7 @@ public class ObjectExtValue extends ObjectValue
     }
 
     printDepth(out, 4 * depth);
-    out.println(")");
+    out.println(VHelper.noCtx(), ")");
   }
 
   //
@@ -1681,7 +1681,7 @@ public class ObjectExtValue extends ObjectValue
     }
 
     public void varDumpImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
       throws IOException
@@ -1697,17 +1697,17 @@ public class ObjectExtValue extends ObjectValue
       }
 
       printDepth(out, 2 * depth);
-      out.println("[\"" + name + suffix + "\"]=>");
+      out.println(VHelper.noCtx(), "[\"" + name + suffix + "\"]=>");
 
       printDepth(out, 2 * depth);
 
       _value.varDump(env, out, depth, valueSet);
 
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
     protected void printRImpl(Env env,
-                              WriteStream out,
+                              VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet)
       throws IOException
@@ -1723,18 +1723,18 @@ public class ObjectExtValue extends ObjectValue
       }
 
       printDepth(out, 4 * depth);
-      out.print("[" + name + suffix + "] => ");
+      out.print(VHelper.noCtx(), "[" + name + suffix + "] => ");
 
       _value.printR(env, out, depth + 1, valueSet);
 
-      out.println();
+      out.println(VHelper.noCtx());
     }
 
-    private void printDepth(WriteStream out, int depth)
+    private void printDepth(VWriteStream out, int depth)
       throws java.io.IOException
     {
       for (int i = 0; i < depth; i++)
-        out.print(' ');
+        out.print(VHelper.noCtx(), ' ');
     }
 
     @Override

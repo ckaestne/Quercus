@@ -38,6 +38,8 @@ import com.caucho.util.LruCache;
 import com.caucho.vfs.StderrStream;
 import com.caucho.vfs.StringWriter;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -538,11 +540,11 @@ public class VariableModule extends AbstractQuercusModule {
                               @Optional boolean isReturn)
   {
     try {
-      WriteStream out;
+      VWriteStream out;
 
       if (isReturn) {
         StringWriter writer = new StringWriter();
-        out = writer.openWrite();
+        out = VWriteStream.adapt(writer.openWrite());
 
         out.setNewlineString("\n");
 
@@ -563,11 +565,11 @@ public class VariableModule extends AbstractQuercusModule {
     }
   }
 
-  private static void printDepth(WriteStream out, int depth)
+  private static void printDepth(VWriteStream out, int depth)
     throws IOException
   {
     for (int i = 0; i < depth; i++) {
-      out.print(' ');
+      out.print(VHelper.noCtx(), ' ');
     }
   }
 
@@ -712,22 +714,22 @@ public class VariableModule extends AbstractQuercusModule {
   {
     try {
       if (v == null)
-        env.getOut().print("NULL#java");
+        env.getOut().print(VHelper.noCtx(), "NULL#java");
       else {
         v.varDump(env, env.getOut(), 0,  new IdentityHashMap<Value,String>());
 
-        env.getOut().println();
+        env.getOut().println(VHelper.noCtx());
       }
 
       if (args != null) {
         for (Value value : args) {
           if (value == null)
-            env.getOut().print("NULL#java");
+            env.getOut().print(VHelper.noCtx(), "NULL#java");
           else {
             value.varDump(env, env.getOut(), 0,
                           new IdentityHashMap<Value,String>());
 
-            env.getOut().println();
+            env.getOut().println(VHelper.noCtx());
           }
         }
       }
@@ -742,26 +744,26 @@ public class VariableModule extends AbstractQuercusModule {
                                       @PassThru @ReadOnly Value v,
                                       Value []args)
   {
-    WriteStream out = new WriteStream(StderrStream.create());
+    VWriteStream out = VWriteStream.adapt(new WriteStream(StderrStream.create()));
 
     try {
       if (v == null)
-        out.print("NULL#java");
+        out.print(VHelper.noCtx(), "NULL#java");
       else {
         v.varDump(env, out, 0,  new IdentityHashMap<Value,String>());
 
-        out.println();
+        out.println(VHelper.noCtx());
       }
 
       if (args != null) {
         for (Value value : args) {
           if (value == null)
-            out.print("NULL#java");
+            out.print(VHelper.noCtx(), "NULL#java");
           else {
             value.varDump(env, out, 0,
                           new IdentityHashMap<Value,String>());
 
-            out.println();
+            out.println(VHelper.noCtx());
           }
         }
       }
@@ -796,47 +798,47 @@ public class VariableModule extends AbstractQuercusModule {
   private static void debug_impl(Env env, Value v, int depth)
     throws IOException
   {
-    WriteStream out = env.getOut();
+    VWriteStream out = env.getOut();
 
     if (v instanceof Var)
-      out.print("&");
+      out.print(VHelper.noCtx(), "&");
 
     v = v.toValue();
 
     if (v instanceof ArrayValue) {
       ArrayValue array = (ArrayValue) v;
 
-      out.println("Array");
+      out.println(VHelper.noCtx(), "Array");
       printDepth(out, 2 * depth);
-      out.println("(");
+      out.println(VHelper.noCtx(), "(");
 
       for (Map.Entry<Value,Value> entry : array.entrySet()) {
         printDepth(out, 2 * depth);
-        out.print("    [");
-        out.print(entry.getKey());
-        out.print("] => ");
+        out.print(VHelper.noCtx(), "    [");
+        out.print(VHelper.noCtx(), entry.getKey());
+        out.print(VHelper.noCtx(), "] => ");
         debug_impl(env, entry.getValue(), depth + 1); // XXX: recursion
       }
       printDepth(out, 2 * depth);
-      out.println(")");
+      out.println(VHelper.noCtx(), ")");
     }
     else if (v instanceof BooleanValue) {
       if (v.toBoolean())
-        out.print("bool(true)");
+        out.print(VHelper.noCtx(), "bool(true)");
       else
-        out.print("bool(false)");
+        out.print(VHelper.noCtx(), "bool(false)");
     }
     else if (v instanceof LongValue) {
-      out.print("int(" + v.toLong() + ")");
+      out.print(VHelper.noCtx(), "int(" + v.toLong() + ")");
     }
     else if (v instanceof DoubleValue) {
-      out.print("float(" + v.toDouble() + ")");
+      out.print(VHelper.noCtx(), "float(" + v.toDouble() + ")");
     }
     else if (v instanceof StringValue) {
-      out.print("string(" + v.toString() + ")");
+      out.print(VHelper.noCtx(), "string(" + v.toString() + ")");
     }
     else if (v instanceof NullValue) {
-      out.print("NULL");
+      out.print(VHelper.noCtx(), "NULL");
     }
     else {
       v.print(env);

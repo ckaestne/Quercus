@@ -88,7 +88,8 @@ public class PDF
 
   public PDF(Env env)
   {
-    _out = new PDFWriter(env.getOut());
+    assert false : "TODO make variational";
+    _out = null;//new PDFWriter(env.getOut());
     _env = env;
   }
 

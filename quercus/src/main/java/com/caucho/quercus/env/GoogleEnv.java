@@ -33,7 +33,7 @@ import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 /**
  * Represents the Quercus environment.
@@ -43,7 +43,7 @@ public class GoogleEnv extends Env {
 
   public GoogleEnv(QuercusContext quercus,
                    QuercusPage page,
-                   WriteStream out,
+                   VWriteStream out,
                    QuercusHttpServletRequest request,
                    QuercusHttpServletResponse response)
   {

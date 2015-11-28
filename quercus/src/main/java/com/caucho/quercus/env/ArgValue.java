@@ -29,7 +29,7 @@
 
 package com.caucho.quercus.env;
 
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -122,7 +122,7 @@ abstract public class ArgValue extends Value
 
   @Override
   protected void varDumpImpl(Env env,
-                             WriteStream out,
+                             VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet)
     throws IOException
@@ -132,7 +132,7 @@ abstract public class ArgValue extends Value
 
   @Override
   protected void printRImpl(Env env,
-                            WriteStream out,
+                            VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException

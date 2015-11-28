@@ -29,7 +29,8 @@
 
 package com.caucho.quercus.env;
 
-import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -102,12 +103,12 @@ public class BreakValue extends Value {
   }
 
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print(getClass().getName());
+    out.print(VHelper.noCtx(), getClass().getName());
   }
 }
 

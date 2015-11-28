@@ -29,9 +29,10 @@
 
 package com.caucho.quercus.env;
 
-import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
@@ -1452,12 +1453,12 @@ public class JavaAdapterVar extends Value
 
   @Override
   public void varDumpImpl(Env env,
-                          WriteStream out,
+                          VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    out.print("&");
+    out.print(VHelper.noCtx(), "&");
     getValue().varDump(env, out, depth, valueSet);
   }
 
