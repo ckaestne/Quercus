@@ -35,6 +35,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents the introspected static function information.
@@ -171,7 +172,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
                                        Value []args)
   {
     if (args.length < _methodTable.length) {

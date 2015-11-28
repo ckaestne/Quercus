@@ -30,8 +30,8 @@
 package com.caucho.quercus.program;
 
 import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.expr.VarInfo;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.expr.VarInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;

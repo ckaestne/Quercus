@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP function expression.
@@ -56,7 +57,7 @@ abstract public class AbstractMethodExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return eval(env, VHelper.noCtx()).map((a)->a.copy());
   }
@@ -70,7 +71,7 @@ abstract public class AbstractMethodExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return eval(env, VHelper.noCtx()).map((a)->a.copy());
   }

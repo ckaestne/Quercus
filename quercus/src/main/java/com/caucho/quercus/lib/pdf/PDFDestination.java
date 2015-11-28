@@ -29,7 +29,8 @@
 
 package com.caucho.quercus.lib.pdf;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * pdf object oriented API facade

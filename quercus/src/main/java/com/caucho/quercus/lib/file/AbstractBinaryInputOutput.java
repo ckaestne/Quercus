@@ -29,7 +29,10 @@
 
 package com.caucho.quercus.lib.file;
 
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.BooleanValue;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.vfs.TempBuffer;
 
 import java.io.IOException;

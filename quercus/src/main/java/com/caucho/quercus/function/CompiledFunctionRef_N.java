@@ -36,6 +36,7 @@ import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -106,7 +107,7 @@ abstract public class CompiledFunctionRef_N extends CompiledFunctionRef {
     return callRefImpl(env, ctx, argValues);
   }
 
-  abstract public V<? extends Value> callRefImpl(Env env,  FeatureExpr ctx, Value []args);
+  abstract public @NonNull V<? extends Value> callRefImpl(Env env,  FeatureExpr ctx, Value []args);
 
   public String toString()
   {

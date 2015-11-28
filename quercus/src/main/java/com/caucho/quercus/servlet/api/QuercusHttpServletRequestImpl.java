@@ -29,15 +29,14 @@
 
 package com.caucho.quercus.servlet.api;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Map;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Map;
 
 public class QuercusHttpServletRequestImpl implements QuercusHttpServletRequest
 {

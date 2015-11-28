@@ -31,7 +31,6 @@ package com.caucho.quercus.lib.dom;
 
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.Env;
-
 import org.w3c.dom.Element;
 
 public class DOMElement extends DOMNode<Element>

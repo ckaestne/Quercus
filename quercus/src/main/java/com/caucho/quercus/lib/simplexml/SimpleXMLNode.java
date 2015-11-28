@@ -1,5 +1,12 @@
 package com.caucho.quercus.lib.simplexml;
 
+import com.caucho.quercus.annotation.Name;
+import com.caucho.quercus.annotation.Optional;
+import com.caucho.quercus.env.*;
+import com.caucho.util.IoUtil;
+import com.caucho.util.L10N;
+import com.caucho.vfs.Path;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -8,27 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
-
-import com.caucho.quercus.annotation.Name;
-import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.annotation.ReturnNullAsFalse;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.JavaValue;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.ObjectExtJavaValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.util.IoUtil;
-import com.caucho.util.L10N;
-import com.caucho.vfs.Path;
 
 public abstract class SimpleXMLNode
 {

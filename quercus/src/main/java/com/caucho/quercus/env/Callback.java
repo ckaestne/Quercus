@@ -31,6 +31,7 @@ package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a call to a function.
@@ -55,7 +56,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public V<? extends Value> callArray(Env env, FeatureExpr ctx, 
+  final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
                                Value a1)
@@ -94,7 +95,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public V<? extends Value> callArray(Env env, FeatureExpr ctx, 
+  final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
                                Value a1,
@@ -134,7 +135,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public V<? extends Value> callArray(Env env, FeatureExpr ctx,
+  final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
                                Value a1,
@@ -170,7 +171,7 @@ abstract public class Callback extends Value implements Callable {
    * @param env the calling environment
    * @param ctx
    */
-  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
+  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
 
   /**
    *

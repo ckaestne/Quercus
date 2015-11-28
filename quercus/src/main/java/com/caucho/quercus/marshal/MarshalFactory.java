@@ -30,28 +30,18 @@
 package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.*;
-import com.caucho.quercus.module.ModuleContext;
 import com.caucho.quercus.lib.file.BinaryInput;
 import com.caucho.quercus.lib.file.BinaryOutput;
-import com.caucho.quercus.lib.regexp.Ereg;
-import com.caucho.quercus.lib.regexp.Eregi;
-import com.caucho.quercus.lib.regexp.Regexp;
-import com.caucho.quercus.lib.regexp.UnicodeEreg;
-import com.caucho.quercus.lib.regexp.UnicodeEregi;
+import com.caucho.quercus.lib.regexp.*;
+import com.caucho.quercus.module.ModuleContext;
 import com.caucho.quercus.program.JavaClassDef;
-import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.

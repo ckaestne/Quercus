@@ -35,19 +35,17 @@ import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.SocketStream;
 import com.caucho.vfs.WriteStream;
 
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.net.SocketFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Represents read/write stream

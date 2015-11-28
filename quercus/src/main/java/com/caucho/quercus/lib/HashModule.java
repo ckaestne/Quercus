@@ -31,19 +31,25 @@ package com.caucho.quercus.lib;
 
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
-import com.caucho.quercus.module.*;
-import com.caucho.util.*;
-import com.caucho.vfs.*;
+import com.caucho.quercus.module.AbstractQuercusModule;
+import com.caucho.util.L10N;
+import com.caucho.vfs.Path;
+import com.caucho.vfs.ReadStream;
+import com.caucho.vfs.TempBuffer;
 
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.Adler32;
-
-import javax.crypto.*;
-import javax.crypto.spec.*;
 
 /**
  * Hash functions.

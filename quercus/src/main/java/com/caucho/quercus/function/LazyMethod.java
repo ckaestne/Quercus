@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Lazily load a compiled method.
@@ -205,7 +206,7 @@ public class LazyMethod extends AbstractFunction
   //
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value []args)
@@ -214,7 +215,7 @@ public class LazyMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis)
   {
@@ -222,7 +223,7 @@ public class LazyMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1)
@@ -231,7 +232,7 @@ public class LazyMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2)
@@ -240,7 +241,7 @@ public class LazyMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2, Value a3)
@@ -249,7 +250,7 @@ public class LazyMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2, Value a3, Value a4)
@@ -258,7 +259,7 @@ public class LazyMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     return getFun().callMethod(env, ctx, qClass, qThis, a1, a2, a3, a4, a5);
@@ -269,7 +270,7 @@ public class LazyMethod extends AbstractFunction
   //
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
@@ -278,48 +279,48 @@ public class LazyMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
   {
     return getFun().callMethodRef(env, ctx, qClass, qThis);
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1)
   {
     return getFun().callMethodRef(env, ctx, qClass, qThis, a1);
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2)
   {
     return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2);
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2, Value a3)
   {
     return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3);
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2, Value a3, Value a4)
   {
     return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3, a4);
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3, a4, a5);
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }

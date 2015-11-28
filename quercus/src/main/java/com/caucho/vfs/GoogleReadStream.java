@@ -29,12 +29,12 @@
 
 package com.caucho.vfs;
 
+import com.caucho.util.L10N;
+import com.google.appengine.api.files.FileReadChannel;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
-
-import com.caucho.util.L10N;
-import com.google.appengine.api.files.FileReadChannel;
 
 /**
  * Reading from a google stream.

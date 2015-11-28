@@ -36,6 +36,7 @@ import com.caucho.quercus.program.InterpretedClassDef;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a class definition
@@ -53,7 +54,7 @@ public class ClassDefStatement extends Statement {
   }
 
   @Override
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     env.addClass(_cl.getName(), _cl);
 

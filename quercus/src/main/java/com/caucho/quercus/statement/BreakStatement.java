@@ -37,6 +37,7 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 
@@ -62,7 +63,7 @@ public class BreakStatement extends Statement {
   /**
    * Executes the statement, returning the expression value.
    */
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     if (_target == null)
       return VHelper.toV(BreakValue.BREAK);

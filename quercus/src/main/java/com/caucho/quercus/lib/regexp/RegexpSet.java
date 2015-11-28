@@ -29,9 +29,9 @@
 
 package com.caucho.quercus.lib.regexp;
 
-import java.util.HashMap;
+import com.caucho.util.IntSet;
 
-import com.caucho.util.*;
+import java.util.HashMap;
 
 // XXX: non-ascii range not quite correct for unicode, and neither is
 // PHP's /u unicode option

@@ -29,14 +29,14 @@
 
 package com.caucho.quercus.lib.file;
 
-import java.io.IOException;
-
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.EnvCleanup;
 import com.caucho.quercus.env.Value;
 import com.caucho.vfs.LockableStream;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
+
+import java.io.IOException;
 
 /**
  * Represents a Quercus file open for reading

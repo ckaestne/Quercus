@@ -29,26 +29,18 @@
 
 package com.caucho.quercus.lib.simplexml;
 
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.w3c.dom.Comment;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.Element;
-import org.w3c.dom.EntityReference;
-import org.w3c.dom.Node;
-import org.w3c.dom.Text;
+import com.caucho.util.L10N;
+import org.w3c.dom.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.ext.DefaultHandler2;
 
-import com.caucho.util.L10N;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SimpleHandler extends DefaultHandler2
 {

@@ -39,6 +39,7 @@ import com.caucho.quercus.program.Function;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 
@@ -116,7 +117,7 @@ public class ClosureExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return evalImpl(env);
   }
@@ -130,7 +131,7 @@ public class ClosureExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return evalImpl(env);
   }

@@ -29,14 +29,14 @@
 
 package com.caucho.quercus.lib.file;
 
+import com.caucho.quercus.env.Value;
+import com.caucho.vfs.TempBuffer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.caucho.quercus.env.Value;
-import com.caucho.vfs.TempBuffer;
 
 /**
  * Represents a Quercus file open for reading

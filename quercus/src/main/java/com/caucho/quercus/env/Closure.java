@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
 
@@ -145,7 +146,7 @@ abstract public class Closure extends Callback
   //
 
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                                        FeatureExpr ctx, StringValue methodName, int hash,
                                        Value[] args)
   {
@@ -163,7 +164,7 @@ abstract public class Closure extends Callback
    * @param ctx
    * @param args
    */
-  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
+  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
 
   @Override
   public String toString()

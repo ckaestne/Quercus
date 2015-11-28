@@ -29,21 +29,17 @@
 
 package com.caucho.quercus.lib.reflection;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.module.IniDefinition;
 import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.quercus.module.ModuleInfo;
 import com.caucho.util.L10N;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class ReflectionExtension
   implements Reflector

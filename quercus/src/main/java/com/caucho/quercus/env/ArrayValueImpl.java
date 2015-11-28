@@ -29,14 +29,11 @@
 
 package com.caucho.quercus.env;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
+import com.caucho.util.RandomUtil;
+
+import java.io.*;
 import java.util.IdentityHashMap;
 import java.util.Map;
-import com.caucho.util.RandomUtil;
 
 /**
  * Represents a PHP array value.

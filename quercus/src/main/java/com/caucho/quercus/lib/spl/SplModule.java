@@ -29,21 +29,12 @@
 
 package com.caucho.quercus.lib.spl;
 
+import com.caucho.quercus.annotation.Optional;
+import com.caucho.quercus.env.*;
+import com.caucho.quercus.module.AbstractQuercusModule;
+
 import java.util.ArrayList;
 import java.util.Locale;
-
-import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.CallbackFunction;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.module.AbstractQuercusModule;
 
 public class SplModule extends AbstractQuercusModule
 {

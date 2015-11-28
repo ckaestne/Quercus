@@ -29,9 +29,8 @@
 
 package com.caucho.quercus.lib.dom;
 
-import org.w3c.dom.NodeList;
-
 import com.caucho.quercus.annotation.Delegates;
+import org.w3c.dom.NodeList;
 
 @Delegates(DOMNodeListDelegate.class)
 public class DOMNodeList

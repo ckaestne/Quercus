@@ -29,27 +29,21 @@
 
 package com.caucho.quercus.lib.dom;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Map;
-
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.Env;
 import com.caucho.util.LruCache;
 import com.caucho.xpath.Expr;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
 
 public class DOMXPath
 {

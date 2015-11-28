@@ -32,7 +32,6 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.program.JavaClassDef;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 /**
  * Represents a Quercus java Date value.

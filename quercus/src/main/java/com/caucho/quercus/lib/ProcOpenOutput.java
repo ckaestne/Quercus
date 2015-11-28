@@ -31,7 +31,6 @@ package com.caucho.quercus.lib;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.EnvCleanup;
-
 import com.caucho.quercus.lib.file.AbstractBinaryOutput;
 import com.caucho.quercus.lib.file.PopenOutput;
 import com.caucho.vfs.VfsStream;

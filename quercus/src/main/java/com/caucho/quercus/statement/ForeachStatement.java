@@ -39,6 +39,7 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class ForeachStatement
     return true;
   }
 
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     Value origObj = _objExpr.eval(env, VHelper.noCtx()).getOne();
     Value obj = origObj.copy(); // php/0669

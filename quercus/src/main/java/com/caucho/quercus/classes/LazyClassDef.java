@@ -36,6 +36,7 @@ import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.ClassField;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -245,7 +246,7 @@ public class LazyClassDef extends CompiledClassDef
    * Creates a new instance.
    */
   @Override
-  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
+  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
   {
     return getClassDef().callNew(env, ctx, args);
   }

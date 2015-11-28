@@ -29,17 +29,12 @@
 
 package com.caucho.quercus.env;
 
+import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.quercus.lib.string.StringModule;
 import com.caucho.quercus.lib.string.StringUtility;
-import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.util.L10N;
-import com.caucho.vfs.FilePath;
-import com.caucho.vfs.MultipartStream;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.VfsStream;
-import com.caucho.vfs.WriteStream;
+import com.caucho.vfs.*;
 
 import java.io.IOException;
 import java.io.InputStream;

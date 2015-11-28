@@ -37,6 +37,7 @@ import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.statement.Statement;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents an expression that is assignable
@@ -126,7 +127,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  abstract public V<? extends Value> eval(Env env, FeatureExpr ctx);
+  abstract public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression as a reference (by RefExpr).
@@ -148,7 +149,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalRef(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
   {
     return evalVar(env, ctx);
   }
@@ -162,7 +163,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return evalVar(env, ctx);
   }
@@ -176,7 +177,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map((a)->a.copy());
   }
@@ -190,7 +191,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     return evalVar(env, ctx).map((a)->a.toAutoArray());
   }
@@ -204,7 +205,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     return evalVar(env, ctx).map((a)->a.toObject(env));
   }
@@ -228,7 +229,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     return evalAssignRef(env, ctx, value);
   }
@@ -242,6 +243,6 @@ abstract public class AbstractVarExpr extends Expr {
    * @param value
    * @return the expression value.
    */
-  abstract public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value);
+  abstract public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value);
 }
 

@@ -39,6 +39,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class ClassFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<StringValue> varName = _varName.evalStringValue(env, VHelper.noCtx());
 
@@ -121,7 +122,7 @@ public class ClassFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     V<StringValue> varName = _varName.evalStringValue(env, VHelper.noCtx());
 

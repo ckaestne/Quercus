@@ -38,6 +38,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 
@@ -86,7 +87,7 @@ public class ObjectNewVarExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     String name = _name.evalString(env, VHelper.noCtx()).getOne().intern();
     QuercusClass cl = env.findAbstractClass(name);

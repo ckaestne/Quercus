@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Converts to a boolean
@@ -59,7 +60,7 @@ public class ToBooleanExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return _expr.evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
   }

@@ -29,11 +29,7 @@
 
 package com.caucho.quercus.lib.dom;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.TraversableDelegate;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 
 import java.util.Iterator;
 import java.util.Map;

@@ -36,12 +36,7 @@ import com.caucho.quercus.env.Var;
 import com.caucho.util.L10N;
 import com.caucho.util.Log;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLFeatureNotSupportedException;
-import java.sql.Statement;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP clone
@@ -58,7 +59,7 @@ public class FunCloneExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return _expr.eval(env, VHelper.noCtx()).map((a)->a.clone(env));
   }

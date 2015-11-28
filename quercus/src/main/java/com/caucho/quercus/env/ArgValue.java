@@ -29,13 +29,11 @@
 
 package com.caucho.quercus.env;
 
+import com.caucho.vfs.WriteStream;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.IdentityHashMap;
-
-import com.caucho.quercus.Location;
-import com.caucho.vfs.WriteStream;
 
 /**
  * Represents an array-get argument which might be a call to a reference.

@@ -28,31 +28,20 @@
 package com.caucho.quercus.lib.image;
 
 import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ResourceValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.OptionsModule;
 import com.caucho.util.IntQueue;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.Stroke;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
-
-import javax.imageio.ImageIO;
 
 public class QuercusImage extends ResourceValue
 {

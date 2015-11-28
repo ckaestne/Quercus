@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents the empty() expression.
@@ -58,7 +59,7 @@ public class FunEmptyExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return _value.evalEmpty(env, VHelper.noCtx()).map((a)->BooleanValue.create(a));
   }

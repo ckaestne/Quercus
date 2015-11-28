@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Var;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP array reference expression.
@@ -82,7 +83,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
@@ -99,7 +100,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
@@ -116,7 +117,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
@@ -133,7 +134,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalDirty(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalDirty(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
@@ -150,7 +151,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
@@ -167,7 +168,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     // php/0d2t
     // php/0d1c
@@ -205,7 +206,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, Expr valueExpr)
+  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, Expr valueExpr)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // php/04ah
@@ -223,7 +224,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
   {
     // php/03mk
     // php/04ai
@@ -231,7 +232,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
   }
 
   @Override
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     return _expr.evalArrayAssignRef(env, VHelper.noCtx(), _index, value);
   }

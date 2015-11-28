@@ -38,6 +38,7 @@ import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.util.*;
@@ -791,7 +792,7 @@ abstract public class ObjectValue extends Callback {
    * Call for callable.
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     AbstractFunction fun = _quercusClass.getInvoke();
 

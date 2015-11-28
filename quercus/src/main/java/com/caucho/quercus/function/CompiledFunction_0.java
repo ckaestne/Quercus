@@ -36,6 +36,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -69,7 +70,7 @@ abstract public class CompiledFunction_0 extends CompiledFunction {
     return args;
   }
 
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
   {
     return call(env, VHelper.noCtx());
   }

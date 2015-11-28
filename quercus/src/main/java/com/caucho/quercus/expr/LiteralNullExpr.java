@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP null expression.
@@ -79,7 +80,7 @@ public class LiteralNullExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(NullValue.NULL);
   }

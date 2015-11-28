@@ -29,6 +29,13 @@
 
 package com.caucho.quercus.lib.file;
 
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.EnvCleanup;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
+import com.caucho.quercus.resources.StreamContextResource;
+import com.caucho.vfs.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -37,21 +44,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvCleanup;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.resources.StreamContextResource;
-import com.caucho.vfs.Encoding;
-import com.caucho.vfs.HttpStreamWrapper;
-import com.caucho.vfs.LockableStream;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.ReadWritePair;
-import com.caucho.vfs.TempBuffer;
-import com.caucho.vfs.WriteStream;
 
 public class HttpInputOutput extends AbstractBinaryOutput
   implements BinaryInput, BinaryOutput, LockableStream, EnvCleanup

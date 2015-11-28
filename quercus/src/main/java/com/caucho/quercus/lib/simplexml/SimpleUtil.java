@@ -29,22 +29,8 @@
 
 package com.caucho.quercus.lib.simplexml;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Comment;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.Element;
-import org.w3c.dom.Entity;
-import org.w3c.dom.EntityReference;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.Text;
-
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.JavaValue;
-import com.caucho.quercus.env.ObjectExtJavaValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
+import org.w3c.dom.*;
 
 public class SimpleUtil
 {

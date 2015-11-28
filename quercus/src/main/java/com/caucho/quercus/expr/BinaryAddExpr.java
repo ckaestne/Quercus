@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP add expression.
@@ -50,7 +51,7 @@ public class BinaryAddExpr extends AbstractBinaryExpr {
     super(left, right);
   }
 
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return VHelper.mapAll(_left.eval(env, VHelper.noCtx()) , _right.eval(env, VHelper.noCtx()),(l,r)-> l.add(r));
   }

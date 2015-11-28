@@ -34,6 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a compiled PHP program.
@@ -49,7 +50,7 @@ public class NullStatement extends Statement {
   /**
    * The null statement does nothing.
    */
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     return null;
   }

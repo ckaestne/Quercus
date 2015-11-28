@@ -36,12 +36,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.CharBuffer;
 import com.caucho.util.L10N;
 
-import javax.mail.Address;
-import javax.mail.AuthenticationFailedException;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import java.net.InetAddress;
 import java.util.ArrayList;

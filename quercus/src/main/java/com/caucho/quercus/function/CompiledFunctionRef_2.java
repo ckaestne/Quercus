@@ -29,15 +29,16 @@
 
 package com.caucho.quercus.function;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.expr.Expr;
-import com.caucho.quercus.program.Arg;
-import com.caucho.util.L10N;
-import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
+ import com.caucho.quercus.env.Env;
+ import com.caucho.quercus.env.Value;
+ import com.caucho.quercus.expr.Expr;
+ import com.caucho.quercus.program.Arg;
+ import com.caucho.util.L10N;
+ import de.fosd.typechef.featureexpr.FeatureExpr;
+ import edu.cmu.cs.varex.V;
+ import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.logging.Logger;
+ import java.util.logging.Logger;
 
 /**
  * Represents a compiled function with 2 args
@@ -69,7 +70,7 @@ abstract public class CompiledFunctionRef_2 extends CompiledFunctionRef {
     return args;
   }
 
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
     switch (argValues.length) {
     case 0:
@@ -88,21 +89,21 @@ abstract public class CompiledFunctionRef_2 extends CompiledFunctionRef {
     }
   }
 
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
     return callRef(env, ctx,
                    _args[0].eval(env),
                    _args[1].eval(env));
   }
 
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
   {
     return callRef(env, ctx,
                    a1,
                    _args[1].eval(env));
   }
 
-  abstract public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2);
+  abstract public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2);
 
   public String toString()
   {

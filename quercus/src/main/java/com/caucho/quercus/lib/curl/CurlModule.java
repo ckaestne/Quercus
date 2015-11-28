@@ -30,7 +30,6 @@
 package com.caucho.quercus.lib.curl;
 
 import com.caucho.quercus.QuercusModuleException;
-import com.caucho.quercus.UnimplementedException;
 import com.caucho.quercus.annotation.NotNull;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.Reference;

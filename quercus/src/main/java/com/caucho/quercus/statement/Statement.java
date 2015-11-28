@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.IdentityHashMap;
 import java.util.logging.Level;
@@ -85,7 +86,7 @@ abstract public class Statement {
     _parent = parent;
   }
 
-  abstract public V<? extends Value> execute(Env env, FeatureExpr ctx);
+  abstract public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx);
 
   /**
    * Returns true if the statement can fallthrough.

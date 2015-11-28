@@ -29,13 +29,13 @@
 
 package com.caucho.quercus.env;
 
-import java.util.*;
-
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.function.FunSpecialCall;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.util.L10N;
 import com.caucho.util.Primes;
+
+import java.util.Iterator;
 
 /**
  * Case-insensitive method mapping

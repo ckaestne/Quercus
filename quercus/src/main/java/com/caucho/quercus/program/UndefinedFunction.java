@@ -36,6 +36,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents an undefined
@@ -63,7 +64,7 @@ public class UndefinedFunction extends AbstractFunction {
   /**
    * Evaluates the function.
    */
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     if (_globalId > 0) {
       AbstractFunction fun = env._fun[_globalId];

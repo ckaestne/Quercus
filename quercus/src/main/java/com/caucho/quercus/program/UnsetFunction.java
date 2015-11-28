@@ -34,6 +34,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents an unset function
@@ -51,7 +52,7 @@ public class UnsetFunction extends AbstractFunction {
     return _crc;
   }
 
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     throw new UnsupportedOperationException();
   }

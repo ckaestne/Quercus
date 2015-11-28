@@ -34,7 +34,6 @@ import com.caucho.quercus.env.UnsetValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.lib.file.FileReadValue;
 import com.caucho.util.L10N;
-import com.caucho.util.Log;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
 import com.caucho.vfs.TempReadStream;
@@ -44,14 +43,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.ParameterMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
-import java.util.logging.Logger;
+import java.sql.*;
 
 /**
  * Represents a JDBC Statement value.

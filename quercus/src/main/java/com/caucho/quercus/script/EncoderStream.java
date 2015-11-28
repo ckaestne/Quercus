@@ -27,14 +27,14 @@
 
 package com.caucho.quercus.script;
 
-import java.io.IOException;
-import java.io.Reader;
-
 import com.caucho.quercus.env.StringBuilderValue;
 import com.caucho.quercus.lib.i18n.Encoder;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.StreamImpl;
+
+import java.io.IOException;
+import java.io.Reader;
 
 public class EncoderStream extends StreamImpl
 {

@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP append ('.') expression.
@@ -83,7 +84,7 @@ public class BinaryAppendExpr extends Expr
   }
 
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     Value value = _value.eval(env, VHelper.noCtx()).getOne();
 

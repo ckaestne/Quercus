@@ -36,6 +36,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents the 'this' expression.
@@ -85,7 +86,7 @@ public class ThisExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getThis());
   }
@@ -99,7 +100,7 @@ public class ThisExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return VHelper.toV(env.getThis());
   }
@@ -128,7 +129,7 @@ public class ThisExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     env.error(L.l("can't assign $this"), getLocation());
 
@@ -145,7 +146,7 @@ public class ThisExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     env.error(L.l("can't assign $this"), getLocation());
 

@@ -36,6 +36,7 @@ import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP string literal expression.
@@ -142,7 +143,7 @@ public class LiteralStringExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(_value);
   }

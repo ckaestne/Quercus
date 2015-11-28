@@ -29,8 +29,6 @@
 
 package com.caucho.quercus;
 
-import java.io.IOException;
-
 import com.caucho.quercus.env.CgiEnv;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.page.QuercusPage;
@@ -39,6 +37,8 @@ import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.StdoutStream;
 import com.caucho.vfs.WriteStream;
+
+import java.io.IOException;
 
 public class CgiQuercus
   extends Quercus

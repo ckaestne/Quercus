@@ -55,6 +55,7 @@ import com.caucho.vfs.i18n.EncodingReader;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -4165,7 +4166,7 @@ public class Env
    * @param code the code to evalute
    * @return the result
    */
-  public V<? extends Value> evalCode(StringValue code)
+  public @NonNull V<? extends Value> evalCode(StringValue code)
     throws IOException
   {
     if (log.isLoggable(Level.FINER)) {
@@ -4226,7 +4227,7 @@ public class Env
    *
    * @return the result
    */
-  public V<? extends Value> executeTop()
+  public @NonNull V<? extends Value> executeTop()
   {
     try {
       return executePageTop(_page);
@@ -4293,7 +4294,7 @@ public class Env
    * @param name the function name
    * @return the function value
    */
-  public V<? extends Value> call(StringValue name, FeatureExpr ctx)
+  public @NonNull V<? extends Value> call(StringValue name, FeatureExpr ctx)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -4314,7 +4315,7 @@ public class Env
    * @param a0 the first argument
    * @return the function value
    */
-  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0)
+  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -4332,7 +4333,7 @@ public class Env
    * @param a1 the second argument
    * @return the function value
    */
-  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1)
+  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1)
   {
     return getFunction(name).call(this, ctx, a0, a1);
   }
@@ -4346,7 +4347,7 @@ public class Env
    * @param a2 the third argument
    * @return the function value
    */
-  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
+  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
   {
     return getFunction(name).call(this, ctx, a0, a1, a2);
   }
@@ -4361,7 +4362,7 @@ public class Env
    * @param a3 the fourth argument
    * @return the function value
    */
-  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
   {
     return getFunction(name).call(this, ctx, a0, a1, a2, a3);
   }
@@ -4377,7 +4378,7 @@ public class Env
    * @param a4 the fifth argument
    * @return the function value
    */
-  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1,
+  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1,
                     Value a2, Value a3, Value a4)
   {
     return getFunction(name).call(this, ctx, a0, a1, a2, a3, a4);
@@ -4390,7 +4391,7 @@ public class Env
    * @param args the arguments
    * @return the function value
    */
-  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value []args)
+  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value []args)
   {
     return getFunction(name).call(this, ctx, args);
   }
@@ -4401,7 +4402,7 @@ public class Env
    * @param name the function name
    * @return the function value
    */
-  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
+  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -4418,7 +4419,7 @@ public class Env
    * @param a0 the first argument
    * @return the function value
    */
-  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
+  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -4436,7 +4437,7 @@ public class Env
    * @param a1 the second argument
    * @return the function value
    */
-  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
+  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -4455,7 +4456,7 @@ public class Env
    * @param a2 the third argument
    * @return the function value
    */
-  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
+  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -4475,7 +4476,7 @@ public class Env
    * @param a3 the fourth argument
    * @return the function value
    */
-  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -4496,7 +4497,7 @@ public class Env
    * @param a4 the fifth argument
    * @return the function value
    */
-  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
+  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
                        Value a2, Value a3, Value a4)
   {
     AbstractFunction fun = findFunction(name);
@@ -4514,7 +4515,7 @@ public class Env
    * @param args the arguments
    * @return the function value
    */
-  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
+  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
   {
     AbstractFunction fun = findFunction(name);
 
@@ -5799,7 +5800,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public V<? extends Value> requireOnce(StringValue include)
+  public @NonNull V<? extends Value> requireOnce(StringValue include)
   {
     return include(getSelfDirectory(), include, true, true);
   }
@@ -5807,7 +5808,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public V<? extends Value> require(StringValue include)
+  public @NonNull V<? extends Value> require(StringValue include)
   {
     return include(getSelfDirectory(), include, true, false);
   }
@@ -5815,7 +5816,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public V<? extends Value> include(StringValue include)
+  public @NonNull V<? extends Value> include(StringValue include)
   {
     return include(getSelfDirectory(), include, false, false);
   }
@@ -5823,7 +5824,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public V<? extends Value> includeOnce(StringValue include)
+  public @NonNull V<? extends Value> includeOnce(StringValue include)
   {
     return include(getSelfDirectory(), include, false, true);
   }
@@ -5831,7 +5832,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public V<? extends Value> includeOnce(Path scriptPwd, StringValue include,
+  public @NonNull V<? extends Value> includeOnce(Path scriptPwd, StringValue include,
                                         boolean isRequire)
   {
     return include(scriptPwd, include, isRequire, true);
@@ -5840,7 +5841,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public V<? extends Value> include(Path scriptPwd, StringValue include,
+  public @NonNull V<? extends Value> include(Path scriptPwd, StringValue include,
                                     boolean isRequire, boolean isOnce)
   {
     try {

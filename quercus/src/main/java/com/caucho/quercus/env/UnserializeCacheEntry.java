@@ -29,8 +29,9 @@
 
 package com.caucho.quercus.env;
 
-import java.lang.ref.*;
-import com.caucho.util.*;
+import com.caucho.util.FreeList;
+
+import java.lang.ref.SoftReference;
 
 /**
  * Cache entry root

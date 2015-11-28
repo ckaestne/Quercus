@@ -29,33 +29,13 @@
 
 package com.caucho.quercus.lib.simplexml;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.caucho.quercus.env.*;
+import org.w3c.dom.*;
 
 import javax.xml.xpath.XPathExpressionException;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.UnsetValue;
-import com.caucho.quercus.env.Value;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ElementView extends SimpleView
 {

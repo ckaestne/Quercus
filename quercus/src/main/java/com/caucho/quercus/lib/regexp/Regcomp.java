@@ -33,18 +33,17 @@
 
 package com.caucho.quercus.lib.regexp;
 
+import com.caucho.quercus.env.ConstStringValue;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.lib.regexp.RegexpNode.GroupHead;
+import com.caucho.util.CharBuffer;
+import com.caucho.util.L10N;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.caucho.quercus.env.ConstStringValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.StringBuilderValue;
-import com.caucho.quercus.lib.regexp.RegexpNode.GroupHead;
-import com.caucho.util.CharBuffer;
-import com.caucho.util.L10N;
 
 /**
  * Regular expression compilation.

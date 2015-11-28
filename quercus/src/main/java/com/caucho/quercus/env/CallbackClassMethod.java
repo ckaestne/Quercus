@@ -35,6 +35,7 @@ import com.caucho.util.L10N;
 import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -79,7 +80,7 @@ public class CallbackClassMethod extends Callback {
    * @param ctx
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash);
   }
@@ -91,7 +92,7 @@ public class CallbackClassMethod extends Callback {
    * @param ctx
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1);
@@ -103,7 +104,7 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1, a2);
@@ -115,7 +116,7 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1, a2, a3);
@@ -127,7 +128,7 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
                              Value a4)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
@@ -140,7 +141,7 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
                     Value a4, Value a5)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
@@ -148,7 +149,7 @@ public class CallbackClassMethod extends Callback {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash, args);
   }

@@ -33,25 +33,13 @@ import com.caucho.quercus.UnimplementedException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReadOnly;
 import com.caucho.quercus.annotation.Reference;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.DefaultValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvCleanup;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.UnsetValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * PDO object oriented API facade.

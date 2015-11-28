@@ -41,19 +41,13 @@ import com.caucho.vfs.FilePath;
 import com.caucho.vfs.GoogleMergePath;
 import com.caucho.vfs.Path;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.servlet.GenericServlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class GoogleStaticFileServlet extends GenericServlet {
   private static final L10N L = new L10N(GoogleStaticFileServlet.class);

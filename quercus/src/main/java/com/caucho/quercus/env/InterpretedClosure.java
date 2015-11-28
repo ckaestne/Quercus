@@ -33,6 +33,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a closure
@@ -110,7 +111,7 @@ public class InterpretedClosure extends Closure
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     Value oldThis = env.setThis(getThis());
     Closure oldClosure = env.setClosure(this);

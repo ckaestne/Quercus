@@ -29,28 +29,13 @@
 
 package com.caucho.quercus.lib.db;
 
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.sql.Time;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

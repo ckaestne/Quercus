@@ -29,18 +29,6 @@
 
 package com.caucho.quercus.env;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.util.IdentityHashMap;
-import java.util.Locale;
-import java.util.zip.CRC32;
-
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.lib.file.BinaryInput;
@@ -51,6 +39,11 @@ import com.caucho.util.LruCache;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
 import com.caucho.vfs.WriteStream;
+
+import java.io.*;
+import java.util.IdentityHashMap;
+import java.util.Locale;
+import java.util.zip.CRC32;
 
 /**
  * Represents a Quercus string value.

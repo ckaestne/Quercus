@@ -32,6 +32,7 @@ package com.caucho.quercus.function;
 import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a function
@@ -51,7 +52,7 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
 
@@ -62,7 +63,7 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value []args)
@@ -77,7 +78,7 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)

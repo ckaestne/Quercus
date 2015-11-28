@@ -37,6 +37,7 @@ import com.caucho.quercus.expr.ParamRequiredExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a compiled closure.
@@ -48,46 +49,46 @@ abstract public class CompiledClosure extends Closure {
     super(name, qThis);
   }
 
-  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
+  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
 
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
     return call(env, VHelper.noCtx(), argValues).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
     return call(env, VHelper.noCtx()).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
   {
     return call(env, VHelper.noCtx(), a1).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
     return call(env, ctx, a1, a2).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
     return call(env, ctx, a1, a2, a3).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
     return call(env, ctx, a1, a2, a3, a4).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
                        Value a3, Value a4, Value a5)
   {
     return call(env, ctx, a1, a2, a3, a4, a5).map((a)->a.copyReturn());
@@ -100,12 +101,12 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       return call(env, VHelper.noCtx());
     }
 
-    abstract public V<? extends Value> call(Env env, FeatureExpr ctx);
+    abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx);
   }
 
   public abstract static class CompiledClosure_1 extends CompiledClosure {
@@ -119,7 +120,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
@@ -133,12 +134,12 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
     {
       return call(env, VHelper.noCtx(), _default0.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1);
+    abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1);
   }
 
   public abstract static class CompiledClosure_2 extends CompiledClosure {
@@ -155,7 +156,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
@@ -175,18 +176,18 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
     {
       return call(env, ctx, _default0.eval(env, VHelper.noCtx()).getOne(), _default1.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
       return call(env, ctx, a1, _default1.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2);
+    abstract public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2);
   }
 
   public abstract static class CompiledClosure_3 extends CompiledClosure {
@@ -205,7 +206,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
@@ -233,7 +234,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
     {
       return call(env, ctx,
                   _default0.eval(env, VHelper.noCtx()).getOne(),
@@ -242,7 +243,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
       return call(env, ctx,
                   a1,
@@ -251,7 +252,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
+    public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
     {
       return call(env, ctx,
                   a1,
@@ -259,7 +260,7 @@ abstract public class CompiledClosure extends Closure {
                   _default2.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3);
+    abstract public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3);
   }
 
   public abstract static class CompiledClosure_4 extends CompiledClosure {
@@ -281,7 +282,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
@@ -319,7 +320,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
     {
       return call(env, ctx,
                   _default0.eval(env, VHelper.noCtx()).getOne(),
@@ -329,7 +330,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
       return call(env, ctx,
                   a1,
@@ -339,7 +340,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
+    public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
     {
       return call(env, ctx,
                   a1,
@@ -349,7 +350,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+    public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
     {
       return call(env, ctx,
                   a1,
@@ -358,7 +359,7 @@ abstract public class CompiledClosure extends Closure {
                   _default3.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4);
+    abstract public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4);
   }
 
   public abstract static class CompiledClosure_5 extends CompiledClosure {
@@ -383,7 +384,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
@@ -433,7 +434,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
     {
       return call(env, ctx,
                   _default0.eval(env, VHelper.noCtx()).getOne(),
@@ -444,7 +445,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+    public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
       return call(env, ctx,
                   a1,
@@ -455,7 +456,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
+    public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
     {
       return call(env, ctx,
                   a1,
@@ -466,7 +467,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+    public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
     {
       return call(env, ctx,
                   a1,
@@ -477,7 +478,7 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
+    public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
     {
       return call(env, ctx,
                   a1,
@@ -487,7 +488,7 @@ abstract public class CompiledClosure extends Closure {
                   _default4.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4,
+    abstract public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4,
                                Value a5);
   }
 
@@ -524,7 +525,7 @@ abstract public class CompiledClosure extends Closure {
       return callImpl(env, ctx, argValues);
     }
 
-    abstract public V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value []args);
+    abstract public @NonNull V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value []args);
   }
 }
 

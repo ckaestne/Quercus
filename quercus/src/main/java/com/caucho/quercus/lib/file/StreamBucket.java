@@ -29,7 +29,10 @@
 
 package com.caucho.quercus.lib.file;
 
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.BinaryValue;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.LongValue;
+import com.caucho.quercus.env.Value;
 
 /**
  * Bucket for stream filters.

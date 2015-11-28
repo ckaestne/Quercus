@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP equality testing expression.
@@ -59,7 +60,7 @@ public class BinaryEqualsExpr extends AbstractBinaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
   }

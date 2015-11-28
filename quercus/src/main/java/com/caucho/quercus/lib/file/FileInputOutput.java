@@ -33,11 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.EnvCleanup;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
-import com.caucho.vfs.Encoding;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.RandomAccessStream;
-import com.caucho.vfs.TempBuffer;
-import com.caucho.vfs.LockableStream;
+import com.caucho.vfs.*;
 
 import java.io.*;
 import java.util.logging.Level;

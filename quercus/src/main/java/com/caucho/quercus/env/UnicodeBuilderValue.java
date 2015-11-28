@@ -30,9 +30,11 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.QuercusModuleException;
-import com.caucho.vfs.*;
+import com.caucho.vfs.WriteStream;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Reader;
 import java.util.Locale;
 
 /**

@@ -43,6 +43,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -669,13 +670,13 @@ abstract public class JavaInvoker
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     return callMethod(env, ctx, (QuercusClass) null, (Value) null, args);
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
@@ -685,7 +686,7 @@ abstract public class JavaInvoker
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value []args)
@@ -711,7 +712,7 @@ abstract public class JavaInvoker
   }
 
   @Override
-  public V<? extends Value> callNew(Env env,
+  public @NonNull V<? extends Value> callNew(Env env,
                                     FeatureExpr ctx, QuercusClass qClass,
                                     Value qThis,
                                     Value[] args)

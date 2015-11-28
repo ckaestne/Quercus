@@ -29,18 +29,12 @@
 
 package com.caucho.quercus.env;
 
+import com.caucho.quercus.QuercusModuleException;
 import com.caucho.util.CharBuffer;
 import com.caucho.vfs.TempCharBuffer;
 import com.caucho.vfs.WriteStream;
-import com.caucho.quercus.QuercusModuleException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
+import java.io.*;
 import java.util.IdentityHashMap;
 import java.util.Locale;
 import java.util.zip.CRC32;

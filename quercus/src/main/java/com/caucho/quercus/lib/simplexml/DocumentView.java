@@ -29,18 +29,13 @@
 
 package com.caucho.quercus.lib.simplexml;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import java.util.*;
 
 public class DocumentView extends SimpleView
 {

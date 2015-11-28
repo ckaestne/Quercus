@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a compiled method with 0 args
@@ -54,13 +55,13 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     throw new IllegalStateException(getClass().getName());
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
@@ -69,7 +70,7 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis)
   {
@@ -78,7 +79,7 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1)
@@ -87,7 +88,7 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2)
@@ -96,7 +97,7 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3)
@@ -105,7 +106,7 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3, Value a4)
@@ -114,7 +115,7 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3, Value a4, Value a5)

@@ -36,6 +36,7 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a throw expression statement in a Quercus program.
@@ -56,7 +57,7 @@ public class ThrowStatement extends Statement {
   /**
    * Executes the statement, returning the expression value.
    */
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     throw _expr.eval(env, VHelper.noCtx()).map((a)->a.toException(env,
                                       getLocation().getFileName(),

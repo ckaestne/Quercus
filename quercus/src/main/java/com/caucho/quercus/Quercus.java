@@ -29,20 +29,15 @@
 
 package com.caucho.quercus;
 
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.page.QuercusPage;
+import com.caucho.vfs.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.logging.*;
-
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.page.QuercusPage;
-import com.caucho.vfs.InputStreamStream;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.StdoutStream;
-import com.caucho.vfs.StreamImpl;
-import com.caucho.vfs.StringPath;
-import com.caucho.vfs.WriteStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Quercus
   extends QuercusContext

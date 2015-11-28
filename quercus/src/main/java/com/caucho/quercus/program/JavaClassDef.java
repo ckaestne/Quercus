@@ -48,6 +48,7 @@ import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -590,7 +591,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    * Eval new
    */
   @Override
-  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
+  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
   {
     if (_cons != null) {
       if (__construct != null) {
@@ -647,7 +648,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                                        StringValue methodName, int hash,
                                        Value []args)
   {
@@ -659,7 +660,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash)
   {
     AbstractFunction fun = _functionMap.get(methodName, hash);
@@ -670,7 +671,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           Value a1)
   {
@@ -682,7 +683,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           Value a1, Value a2)
   {
@@ -694,7 +695,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           Value a1, Value a2, Value a3)
   {
@@ -706,7 +707,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           Value a1, Value a2, Value a3, Value a4)
   {
@@ -718,7 +719,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {

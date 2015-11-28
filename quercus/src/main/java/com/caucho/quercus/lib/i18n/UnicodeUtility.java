@@ -29,7 +29,7 @@
 
 package com.caucho.quercus.lib.i18n;
 
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 
 public class UnicodeUtility

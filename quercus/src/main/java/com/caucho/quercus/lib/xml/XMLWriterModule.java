@@ -29,14 +29,14 @@
 
 package com.caucho.quercus.lib.xml;
 
-import com.caucho.quercus.annotation.*;
+import com.caucho.quercus.annotation.NotNull;
+import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
-import com.caucho.util.L10N;
-import com.caucho.vfs.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
+import com.caucho.util.L10N;
+import com.caucho.vfs.Path;
 
-import java.io.*;
-import java.util.logging.*;
+import java.util.logging.Logger;
 
 /**
  * XMLWriter

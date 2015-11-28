@@ -28,10 +28,10 @@
 
 package com.caucho.quercus.lib.db;
 
-import com.caucho.quercus.env.QuercusLanguageException;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.Location;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.QuercusLanguageException;
+import com.caucho.quercus.env.Value;
 
 public class PDOException
   extends QuercusLanguageException

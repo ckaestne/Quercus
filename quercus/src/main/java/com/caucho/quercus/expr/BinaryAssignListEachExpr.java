@@ -36,6 +36,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP list() = each() assignment expression.
@@ -61,7 +62,7 @@ public class BinaryAssignListEachExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (! _value.isVar()) {
       env.error(L.l("each() argument must be a variable at '{0}'", _value));

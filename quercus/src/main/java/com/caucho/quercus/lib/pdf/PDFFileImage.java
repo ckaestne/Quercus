@@ -30,10 +30,6 @@
 package com.caucho.quercus.lib.pdf;
 
 import java.io.IOException;
-import java.io.InputStream;
-
-import com.caucho.vfs.Path;
-import com.caucho.vfs.TempBuffer;
 
 /**
  * deals with an image

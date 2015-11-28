@@ -37,6 +37,7 @@ import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP reference argument.
@@ -80,7 +81,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     // quercus/0d28
     V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
@@ -97,7 +98,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
     

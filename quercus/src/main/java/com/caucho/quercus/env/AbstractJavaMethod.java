@@ -35,6 +35,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents the introspected static function information.
@@ -124,7 +125,7 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   }
 
   @Override
-  abstract public V<? extends Value> callMethod(Env env,
+  abstract public @NonNull V<? extends Value> callMethod(Env env,
                                                 FeatureExpr ctx,
                                                 QuercusClass qClass,
                                    Value qThis,
@@ -134,47 +135,47 @@ abstract public class AbstractJavaMethod extends AbstractFunction
    * Evaluates the function, returning a copy
    */
   @Override
-  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
   {
     return call(env, VHelper.noCtx(), args);
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null, args);
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null,
                       new Value[0]);
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null,
                       new Value[] {a1});
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null,
                       new Value[] {a1, a2});
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null,
                       new Value[] {a1, a2, a3});
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx,
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx,
                     Value a1, Value a2, Value a3, Value a4)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null,
@@ -182,7 +183,7 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx,
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx,
                     Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null,
@@ -190,19 +191,19 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis)
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis)
   {
     return callMethod(env, ctx, qClass, qThis, new Value[0]);
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis, Value a1)
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis, Value a1)
   {
     return callMethod(env, ctx, qClass, qThis, new Value[] {a1});
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1,
@@ -212,7 +213,7 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1,
@@ -223,14 +224,14 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                           Value a1, Value a2, Value a3, Value a4)
   {
     return callMethod(env, ctx, qClass, qThis, new Value[] {a1, a2, a3, a4});
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     return callMethod(env, ctx, qClass, qThis,

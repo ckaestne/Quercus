@@ -31,14 +31,20 @@ package com.caucho.quercus.lib.i18n;
 
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.UnimplementedException;
-import com.caucho.quercus.env.*;
-import com.caucho.vfs.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
+import com.caucho.vfs.TempBuffer;
+import com.caucho.vfs.TempCharBuffer;
+import com.caucho.vfs.TempStream;
+import com.caucho.vfs.WriteStream;
 
 import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class IconvUtility {
   private static final Logger log

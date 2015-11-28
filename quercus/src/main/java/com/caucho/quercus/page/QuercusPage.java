@@ -38,6 +38,7 @@ import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -142,7 +143,7 @@ abstract public class QuercusPage
    *
    * @param env the calling environment
    */
-  public V<? extends Value> executeTop(Env env)
+  public @NonNull V<? extends Value> executeTop(Env env)
   {
     QuercusPage compile = getCompiledPage();
 
@@ -202,7 +203,7 @@ abstract public class QuercusPage
    *
    * @param env the calling environment
    */
-  abstract public V<? extends Value> execute(Env env);
+  abstract public @NonNull V<? extends Value> execute(Env env);
 
   /**
    * Initialize the program

@@ -37,6 +37,7 @@ import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class ClassVarNameConstExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     StringValue name = _name.evalStringValue(env, VHelper.noCtx()).getOne();
 

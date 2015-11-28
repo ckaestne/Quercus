@@ -34,16 +34,15 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.OutputModule;
 import com.caucho.quercus.module.AbstractQuercusModule;
-import com.caucho.quercus.module.ModuleStartupListener;
-import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.quercus.module.IniDefinition;
+import com.caucho.quercus.module.IniDefinitions;
+import com.caucho.quercus.module.ModuleStartupListener;
 import com.caucho.quercus.servlet.api.QuercusCookie;
 import com.caucho.quercus.servlet.api.QuercusCookieImpl;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.util.L10N;
 
 import java.util.logging.Logger;
-import java.util.Iterator;
 
 /**
  * Quercus session handling

@@ -37,6 +37,7 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a return expression statement in a PHP program.
@@ -58,7 +59,7 @@ public class ReturnRefStatement extends Statement {
    * Executes the statement, returning the expression value.
    */
   @Override
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     if (_expr != null) {
       // php/0750

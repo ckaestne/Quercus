@@ -29,13 +29,15 @@
 
 package com.caucho.quercus.lib.regexp;
 
-import java.util.logging.*;
-
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.util.*;
+import com.caucho.util.CharBuffer;
+import com.caucho.util.L10N;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RegexpState {
   private static final Logger log

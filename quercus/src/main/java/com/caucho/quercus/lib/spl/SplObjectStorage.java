@@ -29,24 +29,17 @@
 
 package com.caucho.quercus.lib.spl;
 
+import com.caucho.quercus.annotation.Optional;
+import com.caucho.quercus.env.*;
+import com.caucho.quercus.lib.VariableModule;
+import com.caucho.util.L10N;
+import com.caucho.vfs.WriteStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
-
-import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.QuercusLanguageException;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.lib.VariableModule;
-import com.caucho.util.L10N;
-import com.caucho.vfs.WriteStream;
 
 public class SplObjectStorage
   implements ArrayAccess, Countable, Iterator, Serializable

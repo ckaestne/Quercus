@@ -36,6 +36,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -66,12 +67,12 @@ abstract public class CompiledFunctionRef_0 extends CompiledFunctionRef {
     return args;
   }
 
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
     return callRef(env, VHelper.noCtx());
   }
 
-  abstract public V<? extends Value> callRef(Env env, FeatureExpr ctx);
+  abstract public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx);
 
   public String toString()
   {

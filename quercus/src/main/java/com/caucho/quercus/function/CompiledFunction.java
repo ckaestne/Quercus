@@ -36,6 +36,7 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a compiled function
@@ -50,43 +51,43 @@ abstract public class CompiledFunction extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
     return call(env, ctx, argValues).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
     return call(env, VHelper.noCtx()).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
   {
     return call(env, VHelper.noCtx(), a1).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
     return call(env, ctx, a1, a2).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
     return call(env, ctx, a1, a2, a3).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
     return call(env, ctx, a1, a2, a3, a4).map((a)->a.copyReturn());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
                        Value a3, Value a4, Value a5)
   {
     return call(env, ctx, a1, a2, a3, a4, a5).map((a)->a.copyReturn());
@@ -98,7 +99,7 @@ abstract public class CompiledFunction extends CompiledAbstractFunction {
   //
 
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value[] args)
   {

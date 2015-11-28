@@ -34,6 +34,7 @@ import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP variable expression.
@@ -65,7 +66,7 @@ public class VarVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
@@ -89,7 +90,7 @@ public class VarVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
@@ -139,7 +140,7 @@ public class VarVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
@@ -162,7 +163,7 @@ public class VarVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 

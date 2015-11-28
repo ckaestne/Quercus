@@ -33,6 +33,7 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a call to an object's method
@@ -47,7 +48,7 @@ public class CallbackError extends Callback {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     return VHelper.toV(NullValue.NULL);
   }

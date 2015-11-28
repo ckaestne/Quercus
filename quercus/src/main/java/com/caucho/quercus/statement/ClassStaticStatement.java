@@ -36,6 +36,7 @@ import com.caucho.quercus.expr.VarExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a static statement in a PHP program.
@@ -62,7 +63,7 @@ public class ClassStaticStatement
     _initValue = initValue;
   }
 
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       StringValue staticName = _staticName;

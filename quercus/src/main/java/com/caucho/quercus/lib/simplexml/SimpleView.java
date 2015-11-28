@@ -29,30 +29,18 @@
 
 package com.caucho.quercus.lib.simplexml;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.QuercusClass;
+import com.caucho.quercus.env.Value;
+import com.caucho.vfs.WriteStream;
+import org.w3c.dom.*;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
-import com.caucho.vfs.WriteStream;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * A simplexml abstraction of the dom Node.

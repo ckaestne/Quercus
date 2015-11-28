@@ -29,8 +29,6 @@
 
 package com.caucho.quercus.lib.date;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import com.caucho.quercus.UnimplementedException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.Env;
@@ -39,6 +37,9 @@ import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
 import com.caucho.util.QDate;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Date functions.

@@ -30,19 +30,13 @@
 package com.caucho.quercus.lib.pdf;
 
 import com.caucho.util.L10N;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.TempBuffer;
-import com.caucho.vfs.TempStream;
-import com.caucho.vfs.Vfs;
-import com.caucho.vfs.WriteStream;
+import com.caucho.vfs.*;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
 
 /**
  * deals with an image

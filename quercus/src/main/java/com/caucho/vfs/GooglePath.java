@@ -29,6 +29,12 @@
 
 package com.caucho.vfs;
 
+import com.caucho.util.IoUtil;
+import com.caucho.vfs.GoogleInode.FileType;
+import com.google.appengine.api.files.AppEngineFile;
+import com.google.appengine.api.files.FileReadChannel;
+import com.google.appengine.api.files.FileService;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,12 +43,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.caucho.util.IoUtil;
-import com.caucho.vfs.GoogleInode.FileType;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileReadChannel;
-import com.google.appengine.api.files.FileService;
 
 /**
  * FilePath implements the native filesystem.

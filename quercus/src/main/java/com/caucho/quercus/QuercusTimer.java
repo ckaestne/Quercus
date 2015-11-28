@@ -29,10 +29,10 @@
 
 package com.caucho.quercus;
 
+import com.caucho.util.CurrentTime;
+
 import java.util.concurrent.locks.LockSupport;
 import java.util.logging.Logger;
-
-import com.caucho.util.CurrentTime;
 
 public class QuercusTimer
 {

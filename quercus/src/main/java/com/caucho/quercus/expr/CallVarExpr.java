@@ -38,6 +38,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 
@@ -96,21 +97,21 @@ public class CallVarExpr extends Expr {
   }
   
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, false, false);
   }
   
   
   @Override
-  public V<? extends Value> evalRef(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, true, false);
   }
   
   
   @Override
-  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, false, true);
   }
@@ -122,7 +123,7 @@ public class CallVarExpr extends Expr {
    *
    * @return the expression value.
    */
-  public V<? extends Value> evalImpl(Env env, boolean isRef, boolean isCopy)
+  public @NonNull V<? extends Value> evalImpl(Env env, boolean isRef, boolean isCopy)
   {
     V<? extends Value> value = _name.eval(env, VHelper.noCtx());
     

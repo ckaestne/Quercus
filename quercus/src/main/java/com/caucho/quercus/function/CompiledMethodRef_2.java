@@ -36,6 +36,7 @@ import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -56,7 +57,7 @@ abstract public class CompiledMethodRef_2 extends CompiledMethodRef {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
                                           Value []args)
   {
     switch (args.length) {
@@ -80,7 +81,7 @@ abstract public class CompiledMethodRef_2 extends CompiledMethodRef {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
   {
     return callMethodRef(env, ctx, qClass, qThis,
                          _args[0].eval(env),
@@ -91,7 +92,7 @@ abstract public class CompiledMethodRef_2 extends CompiledMethodRef {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 			     Value a1)
   {
     return callMethodRef(env, ctx, qClass, qThis,
@@ -100,7 +101,7 @@ abstract public class CompiledMethodRef_2 extends CompiledMethodRef {
   }
 
   @Override
-  abstract public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+  abstract public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                                       Value a1, Value a2);
 }
 

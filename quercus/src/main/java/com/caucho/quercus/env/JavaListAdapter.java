@@ -31,10 +31,11 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.JavaClassDef;
 
-import com.caucho.quercus.QuercusRuntimeException;
-
-import java.util.*;
-import java.util.logging.*;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a marshalled Collection argument.

@@ -29,9 +29,7 @@
 
 package com.caucho.quercus.lib.curl;
 
-import com.caucho.quercus.env.Callable;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -37,6 +37,7 @@ import com.caucho.quercus.program.ClassField;
 import com.caucho.util.IdentityIntMap;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -386,7 +387,7 @@ public class CompiledClassDef extends ClassDef {
    * Eval new
    */
   @Override
-  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
+  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
   {
     return null;
   }
@@ -395,7 +396,7 @@ public class CompiledClassDef extends ClassDef {
    * Eval new
    */
   @Override
-  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
+  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
   {
     return null;
   }

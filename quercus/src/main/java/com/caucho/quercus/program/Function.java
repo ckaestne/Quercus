@@ -40,6 +40,7 @@ import com.caucho.quercus.statement.Statement;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -219,17 +220,17 @@ public class Function extends AbstractFunction {
     return values;
   }
 
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Expr []args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Expr []args)
   {
     return callImpl(env, ctx, args, false);
   }
 
-  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Expr []args)
+  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Expr []args)
   {
     return callImpl(env, ctx, args, false);
   }
 
-  public V<? extends Value> callRef(Env env,FeatureExpr ctx,  Expr []args)
+  public @NonNull V<? extends Value> callRef(Env env,FeatureExpr ctx,  Expr []args)
   {
     return callImpl(env, ctx, args, true);
   }
@@ -317,30 +318,30 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     return callImpl(env, ctx, args, false, null, null);
   }
 
   @Override
-  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
   {
     return callImpl(env, ctx, args, false, null, null).map((a)->a.copy());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
   {
     return callImpl(env, ctx, args, true, null, null);
   }
 
   @Override
-  public V<? extends Value> callClosure(Env env, FeatureExpr ctx, Value []args, Value []useArgs)
+  public @NonNull V<? extends Value> callClosure(Env env, FeatureExpr ctx, Value []args, Value []useArgs)
   {
     return callImpl(env, ctx, args, false, getClosureUseArgs(), useArgs).map((a)->a.copy());
   }
 
-  public V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value []args, boolean isRef,
+  public @NonNull V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value []args, boolean isRef,
                         Arg []useParams, Value []useArgs)
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>(8);
@@ -436,7 +437,7 @@ public class Function extends AbstractFunction {
   //
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value[] args)
@@ -456,7 +457,7 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value[] args)

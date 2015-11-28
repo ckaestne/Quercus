@@ -36,6 +36,7 @@ import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -752,7 +753,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value[] args)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -764,7 +765,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
@@ -775,7 +776,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -787,7 +788,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -799,7 +800,7 @@ public class ObjectExtValue extends ObjectValue
    * calls the function.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3)
   {
@@ -812,7 +813,7 @@ public class ObjectExtValue extends ObjectValue
    * calls the function.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3, Value a4)
   {
@@ -825,7 +826,7 @@ public class ObjectExtValue extends ObjectValue
    * calls the function.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3, Value a4, Value a5)
   {
@@ -838,7 +839,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value[] args)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -850,7 +851,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
@@ -861,7 +862,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -873,7 +874,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -885,7 +886,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2, Value a3)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -897,7 +898,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2, Value a3, Value a4)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -909,7 +910,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);

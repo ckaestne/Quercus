@@ -47,16 +47,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Servlet to call PHP through javax.script.

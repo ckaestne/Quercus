@@ -38,6 +38,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     V<? extends Value> value = _objExpr.evalArg(env, ctx, false);
 
@@ -126,7 +127,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
 
@@ -143,7 +144,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
@@ -162,7 +163,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
@@ -179,7 +180,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
@@ -194,7 +195,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 

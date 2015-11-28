@@ -34,6 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A "+ $a" unary plus.
@@ -57,7 +58,7 @@ public class UnaryPlusExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return _expr.eval(env, ctx).map((a)->a.pos());
   }

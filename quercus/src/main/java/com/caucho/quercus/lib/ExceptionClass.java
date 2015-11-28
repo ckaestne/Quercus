@@ -30,11 +30,11 @@
 package com.caucho.quercus.lib;
 
 import com.caucho.quercus.Location;
+import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.annotation.ClassImplementation;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.This;
 import com.caucho.quercus.env.*;
-import com.caucho.quercus.QuercusException;
 
 import java.util.Iterator;
 

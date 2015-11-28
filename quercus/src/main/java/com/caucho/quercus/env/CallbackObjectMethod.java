@@ -36,6 +36,7 @@ import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -68,7 +69,7 @@ public class CallbackObjectMethod extends Callback {
    * @param ctx
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash);
   }
@@ -80,7 +81,7 @@ public class CallbackObjectMethod extends Callback {
    * @param ctx
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
                            a1);
@@ -92,7 +93,7 @@ public class CallbackObjectMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
                            a1, a2);
@@ -104,7 +105,7 @@ public class CallbackObjectMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
                            a1, a2, a3);
@@ -116,7 +117,7 @@ public class CallbackObjectMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
                              Value a4)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
@@ -129,7 +130,7 @@ public class CallbackObjectMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
                     Value a4, Value a5)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
@@ -137,7 +138,7 @@ public class CallbackObjectMethod extends Callback {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash, args);
   }

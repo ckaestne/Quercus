@@ -32,11 +32,7 @@ package com.caucho.quercus.lib.db;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * oracle result set class (postgres has NO object oriented API)

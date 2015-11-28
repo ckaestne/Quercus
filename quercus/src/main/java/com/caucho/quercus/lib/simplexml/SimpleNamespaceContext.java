@@ -29,12 +29,11 @@
 
 package com.caucho.quercus.lib.simplexml;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class SimpleNamespaceContext implements NamespaceContext
 {

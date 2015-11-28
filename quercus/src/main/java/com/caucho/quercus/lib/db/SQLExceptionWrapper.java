@@ -29,7 +29,7 @@
 
 package com.caucho.quercus.lib.db;
 
-import java.sql.*;
+import java.sql.SQLException;
 
 /**
  * SQLException wrapper

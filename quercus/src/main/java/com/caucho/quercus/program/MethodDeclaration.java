@@ -38,6 +38,7 @@ import com.caucho.quercus.statement.Statement;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -90,7 +91,7 @@ public class MethodDeclaration extends Function
   /**
    * Evaluates the function.
    */
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     throw new UnsupportedOperationException();
   }

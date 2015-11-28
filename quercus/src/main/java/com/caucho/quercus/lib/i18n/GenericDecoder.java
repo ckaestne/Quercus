@@ -29,16 +29,16 @@
 
 package com.caucho.quercus.lib.i18n;
 
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.UnicodeBuilderValue;
+import com.caucho.vfs.TempCharBuffer;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.UnicodeBuilderValue;
-import com.caucho.quercus.env.UnicodeValue;
-import com.caucho.vfs.TempCharBuffer;
 
 public class GenericDecoder
   extends Decoder

@@ -29,24 +29,9 @@
 
 package com.caucho.quercus.lib.simplexml;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.caucho.quercus.env.*;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import java.util.*;
 
 public class SelectedView extends SimpleView
 {

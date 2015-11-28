@@ -32,8 +32,8 @@ package com.caucho.quercus.lib.jms;
 import com.caucho.quercus.annotation.NotNull;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
-import com.caucho.vfs.TempBuffer;
 import com.caucho.util.L10N;
+import com.caucho.vfs.TempBuffer;
 
 import javax.jms.*;
 import java.io.Serializable;

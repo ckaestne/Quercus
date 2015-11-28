@@ -29,8 +29,8 @@
 
 package com.caucho.quercus.module;
 
-import com.caucho.quercus.env.*;
 import com.caucho.quercus.QuercusContext;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 
 import java.util.HashMap;

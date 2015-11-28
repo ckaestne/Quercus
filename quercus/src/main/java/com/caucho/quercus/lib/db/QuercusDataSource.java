@@ -29,12 +29,11 @@
 
 package com.caucho.quercus.lib.db;
 
+import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
-import javax.sql.DataSource;
 
 public class QuercusDataSource implements DataSource {
   private final DataSource _ds;

@@ -29,13 +29,16 @@
 
 package com.caucho.quercus.env;
 
-import java.io.*;
-import java.util.*;
-
-import com.caucho.vfs.*;
 import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.marshal.Marshal;
-import com.caucho.util.*;
+import com.caucho.util.CurrentTime;
+import com.caucho.vfs.TempBuffer;
+import com.caucho.vfs.WriteStream;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.IdentityHashMap;
+import java.util.Locale;
 
 /**
  * Represents a 8-bit PHP 6 style binary builder (unicode.semantics = on)

@@ -30,12 +30,12 @@
 package com.caucho.quercus.lib;
 
 import com.caucho.quercus.QuercusContext;
+import com.caucho.quercus.annotation.Name;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.quercus.servlet.api.QuercusServletContext;
-import com.caucho.quercus.annotation.Name;
 
 /**
  * Quercus functions to get information about the Quercus environment.

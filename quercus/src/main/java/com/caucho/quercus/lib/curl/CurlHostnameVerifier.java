@@ -29,11 +29,10 @@
 
 package com.caucho.quercus.lib.curl;
 
-import java.security.Principal;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
+import java.security.Principal;
 
 public final class CurlHostnameVerifier
   implements HostnameVerifier

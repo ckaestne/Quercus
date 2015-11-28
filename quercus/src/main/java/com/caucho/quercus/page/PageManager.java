@@ -41,7 +41,8 @@ import com.caucho.vfs.Path;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Each "page" refers to a quercus file.

@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a logical and expression.
@@ -67,7 +68,7 @@ public class BinaryAndExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()) , _right.evalBoolean(env, VHelper.noCtx()),(l,r)-> {
       if (l && r)

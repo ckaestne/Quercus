@@ -38,6 +38,7 @@ import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a PHP variable expression.
@@ -137,7 +138,7 @@ public class VarExpr
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getValue(_name, false, true));
   }
@@ -150,7 +151,7 @@ public class VarExpr
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalTop(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalTop(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getValue(_name, false, false));
   }
@@ -166,7 +167,7 @@ public class VarExpr
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getValue(_name, false, false));
   }
@@ -179,7 +180,7 @@ public class VarExpr
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map((a)->a.copy());
   }
@@ -192,7 +193,7 @@ public class VarExpr
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     Value value = env.getVar(_name);
 
@@ -209,7 +210,7 @@ public class VarExpr
    * @param ctx
    * @return the expression value.
    */
-  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     Value value;
 
@@ -256,7 +257,7 @@ public class VarExpr
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     // php/043k
     // php/0443
@@ -271,7 +272,7 @@ public class VarExpr
    * @param value
    */
   @Override
-  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     // php/0232
     env.setValue(_name, value.getOne());
@@ -286,7 +287,7 @@ public class VarExpr
    * @param value
    */
   @Override
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     env.setRef(_name, value.getOne());
 

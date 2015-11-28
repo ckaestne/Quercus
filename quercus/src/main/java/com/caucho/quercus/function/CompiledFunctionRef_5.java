@@ -36,6 +36,7 @@ import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -74,7 +75,7 @@ abstract public class CompiledFunctionRef_5 extends CompiledFunctionRef {
     return args;
   }
 
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
     switch (argValues.length) {
     case 0:
@@ -124,7 +125,7 @@ abstract public class CompiledFunctionRef_5 extends CompiledFunctionRef {
     }
   }
 
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
     return callRef(env, ctx,
                    _args[0].eval(env),
@@ -134,7 +135,7 @@ abstract public class CompiledFunctionRef_5 extends CompiledFunctionRef {
                    _args[4].eval(env));
   }
 
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
   {
     return callRef(env, ctx,
                    a1,
@@ -144,7 +145,7 @@ abstract public class CompiledFunctionRef_5 extends CompiledFunctionRef {
                    _args[4].eval(env));
   }
 
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
     return callRef(env, ctx,
                    a1,
@@ -154,7 +155,7 @@ abstract public class CompiledFunctionRef_5 extends CompiledFunctionRef {
                    _args[4].eval(env));
   }
 
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
     return callRef(env, ctx,
                    a1,
@@ -164,7 +165,7 @@ abstract public class CompiledFunctionRef_5 extends CompiledFunctionRef {
                    _args[4].eval(env));
   }
 
-  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
+  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
     return callRef(env, ctx,
                    a1,
@@ -177,7 +178,7 @@ abstract public class CompiledFunctionRef_5 extends CompiledFunctionRef {
   /**
    * Evaluates the function with arguments
    */
-  abstract public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4,
+  abstract public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4,
                                 Value a5);
 
   public String toString()

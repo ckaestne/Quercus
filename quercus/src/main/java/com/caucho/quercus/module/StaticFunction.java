@@ -31,14 +31,10 @@ package com.caucho.quercus.module;
 
 import com.caucho.quercus.QuercusExitException;
 import com.caucho.quercus.QuercusModuleException;
-import com.caucho.quercus.annotation.Name;
 import com.caucho.quercus.env.JavaInvoker;
-import com.caucho.quercus.program.JavaClassDef;
-import com.caucho.util.L10N;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.logging.Logger;
 
 /**
  * Represents the introspected static function information.

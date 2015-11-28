@@ -36,6 +36,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -54,43 +55,43 @@ abstract public class CompiledFunctionRef extends CompiledAbstractFunction {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
   {
     return callRef(env, VHelper.noCtx(), argValues).map((a)->a.copy());
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return callRef(env, VHelper.noCtx()).map((a)->a.copy());
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value arg)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value arg)
   {
     return callRef(env, ctx, arg).map((a)->a.copy());
   }
 
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
     return callRef(env, ctx, a1, a2).map((a)->a.copy());
   }
 
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
     return callRef(env, ctx, a1, a2, a3).map((a)->a.copy());
   }
 
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
     return callRef(env, ctx, a1, a2, a3, a4).map((a)->a.copy());
   }
 
   @Override
-  public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     return callRef(env, ctx, a1, a2, a3, a4, a5).map((a)->a.copy());
   }

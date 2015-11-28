@@ -29,12 +29,7 @@
 
 package com.caucho.quercus.lib.filter;
 
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.UnsetValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 
 public class IntValidateFilter extends AbstractFilter implements ValidateFilter
 {

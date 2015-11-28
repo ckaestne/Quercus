@@ -29,6 +29,19 @@
 
 package com.caucho.quercus.lib.string;
 
+import com.caucho.quercus.QuercusException;
+import com.caucho.quercus.QuercusModuleException;
+import com.caucho.quercus.annotation.*;
+import com.caucho.quercus.annotation.Optional;
+import com.caucho.quercus.env.*;
+import com.caucho.quercus.lib.file.BinaryOutput;
+import com.caucho.quercus.lib.file.FileModule;
+import com.caucho.quercus.module.AbstractQuercusModule;
+import com.caucho.util.*;
+import com.caucho.vfs.ByteToChar;
+import com.caucho.vfs.Path;
+import com.caucho.vfs.TempBuffer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -36,49 +49,9 @@ import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Currency;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.QuercusModuleException;
-import com.caucho.quercus.annotation.Expect;
-import com.caucho.quercus.annotation.NotNull;
-import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.annotation.Reference;
-import com.caucho.quercus.annotation.UsesSymbolTable;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.DefaultValue;
-import com.caucho.quercus.env.DoubleValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LocaleInfo;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.QuercusLocale;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.UnexpectedValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
-import com.caucho.quercus.lib.file.BinaryOutput;
-import com.caucho.quercus.lib.file.FileModule;
-import com.caucho.quercus.module.AbstractQuercusModule;
-import com.caucho.util.CharBuffer;
-import com.caucho.util.FreeList;
-import com.caucho.util.IntSet;
-import com.caucho.util.L10N;
-import com.caucho.util.RandomUtil;
-import com.caucho.vfs.ByteToChar;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.TempBuffer;
 
 /**
  * PHP functions implemented from the string module

@@ -33,6 +33,7 @@ import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -1988,7 +1989,7 @@ public class Var extends Value
   /**
    * Evaluates the function.
    */
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     return _value.call(env, VHelper.noCtx(), args);
   }
@@ -1996,7 +1997,7 @@ public class Var extends Value
   /**
    * Evaluates the function, returning a reference.
    */
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
   {
     return _value.callRef(env, VHelper.noCtx(), args);
   }
@@ -2004,7 +2005,7 @@ public class Var extends Value
   /**
    * Evaluates the function, returning a copy
    */
-  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
+  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
   {
     return _value.callCopy(env, VHelper.noCtx(), args);
   }
@@ -2013,7 +2014,7 @@ public class Var extends Value
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return _value.call(env, VHelper.noCtx());
   }
@@ -2022,7 +2023,7 @@ public class Var extends Value
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
     return _value.callRef(env, VHelper.noCtx());
   }
@@ -2031,7 +2032,7 @@ public class Var extends Value
    * Evaluates the function with an argument .
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
     return _value.call(env, VHelper.noCtx(), a1);
   }
@@ -2040,7 +2041,7 @@ public class Var extends Value
    * Evaluates the function with an argument .
    */
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1)
   {
     return _value.callRef(env, ctx, a1);
   }
@@ -2049,7 +2050,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2)
   {
     return _value.call(env, ctx, a1, a2);
   }
@@ -2058,7 +2059,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1, Value a2)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1, Value a2)
   {
     return _value.callRef(env, ctx, a1, a2);
   }
@@ -2067,7 +2068,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3)
   {
     return _value.call(env, ctx, a1, a2, a3);
   }
@@ -2076,7 +2077,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3)
   {
     return _value.callRef(env, ctx, a1, a2, a3);
   }
@@ -2085,7 +2086,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3, Value a4)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3, Value a4)
   {
     return _value.call(env, ctx, a1, a2, a3, a4);
   }
@@ -2094,7 +2095,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3, Value a4)
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3, Value a4)
   {
     return _value.callRef(env, ctx, a1, a2, a3, a4);
   }
@@ -2103,7 +2104,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3, Value a4, Value a5)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx,  Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     return _value.call(env, ctx, a1, a2, a3, a4, a5);
   }
@@ -2112,7 +2113,7 @@ public class Var extends Value
    * Evaluates the function with arguments
    */
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, 
+  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx,
                        Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     return _value.callRef(env, ctx, a1, a2, a3, a4, a5);
@@ -2126,7 +2127,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value[] args)
   {
     return _value.callMethod(env, ctx, methodName, hash, args);
@@ -2136,7 +2137,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value[] args)
   {
     return _value.callMethodRef(env, ctx, methodName, hash, args);
@@ -2146,7 +2147,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _value.callMethod(env, ctx, methodName, hash);
   }
@@ -2155,7 +2156,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _value.callMethodRef(env, ctx, methodName, hash);
   }
@@ -2164,7 +2165,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1)
   {
@@ -2175,7 +2176,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,
+  public @NonNull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1)
   {
@@ -2186,7 +2187,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2)
   {
@@ -2198,7 +2199,7 @@ public class Var extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,
+  public @NonNull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2)
   {
@@ -2210,7 +2211,7 @@ public class Var extends Value
    * Evaluates a method with 3 args.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3)
   {
@@ -2222,7 +2223,7 @@ public class Var extends Value
    * Evaluates a method with 3 args.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,
+  public @NonNull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2, Value a3)
   {
@@ -2234,7 +2235,7 @@ public class Var extends Value
    * Evaluates a method with 4 args.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3, Value a4)
   {
@@ -2245,7 +2246,7 @@ public class Var extends Value
    * Evaluates a method with 4 args.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,
+  public @NonNull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2, Value a3, Value a4)
   {
@@ -2256,7 +2257,7 @@ public class Var extends Value
    * Evaluates a method with 5 args.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
+  public @NonNull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3, Value a4, Value a5)
   {
@@ -2267,7 +2268,7 @@ public class Var extends Value
    * Evaluates a method with 5 args.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env,
+  public @NonNull V<? extends Value> callMethodRef(Env env,
                                           FeatureExpr ctx, StringValue methodName, int hash,
                                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {

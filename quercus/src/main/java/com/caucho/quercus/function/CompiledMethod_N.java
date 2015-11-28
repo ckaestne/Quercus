@@ -36,6 +36,7 @@ import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -98,7 +99,7 @@ abstract public class CompiledMethod_N extends CompiledMethod {
     return callMethodImpl(env, ctx, qClass, qThis, args);
   }
 
-  abstract public V<? extends Value> callMethodImpl(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  abstract public @NonNull V<? extends Value> callMethodImpl(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
                                                     Value[] args);
 
   public String toString()

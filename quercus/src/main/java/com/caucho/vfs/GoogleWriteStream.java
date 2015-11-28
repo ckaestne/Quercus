@@ -29,13 +29,13 @@
 
 package com.caucho.vfs;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import com.caucho.util.CurrentTime;
 import com.caucho.util.L10N;
 import com.caucho.vfs.GoogleInode.FileType;
 import com.google.appengine.api.files.FileWriteChannel;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Writing to a google stream.

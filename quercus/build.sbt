@@ -18,3 +18,9 @@ libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 
 
 libraryDependencies += "org.bitbucket.cowwoc.diff-match-patch" % "diff-match-patch" % "1.0" % "test"
+
+libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
+
+//libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
+//
+//libraryDependencies += "org.checkerframework" % "jdk8" % "1.9.8"

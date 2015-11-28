@@ -32,8 +32,8 @@ package com.caucho.quercus.lib;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
-import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.quercus.module.IniDefinition;
+import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.util.L10N;
 
 import java.math.BigDecimal;

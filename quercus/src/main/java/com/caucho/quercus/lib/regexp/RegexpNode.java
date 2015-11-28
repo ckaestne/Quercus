@@ -29,13 +29,13 @@
 
 package com.caucho.quercus.lib.regexp;
 
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Map;
-
 import com.caucho.quercus.env.StringValue;
 import com.caucho.util.CharBuffer;
 import com.caucho.util.IntSet;
+
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 class RegexpNode {
   static final int RC_END = 0;

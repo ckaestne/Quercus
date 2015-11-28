@@ -36,7 +36,6 @@ import com.caucho.quercus.annotation.ReturnNullAsFalse;
 import com.caucho.quercus.env.Env;
 import com.caucho.util.L10N;
 import com.caucho.vfs.ReadStream;
-
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 

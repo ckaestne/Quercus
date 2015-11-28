@@ -29,11 +29,10 @@
 
 package com.caucho.quercus.lib.dom;
 
-import org.w3c.dom.Node;
-
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.lib.i18n.Encoder;
+import org.w3c.dom.Node;
 
 public class DOMNode<T extends Node>
   extends DOMWrapper<T>

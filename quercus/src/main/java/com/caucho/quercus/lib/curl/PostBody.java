@@ -29,14 +29,13 @@
 
 package com.caucho.quercus.lib.curl;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.Callback;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.lib.file.BinaryInput;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 abstract public class PostBody
 {

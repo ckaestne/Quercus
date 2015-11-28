@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a compiled method with 3 args
@@ -52,7 +53,7 @@ abstract public class CompiledMethod_3 extends CompiledMethod {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
                                        Value []args)
   {
     switch (args.length) {
@@ -81,7 +82,7 @@ abstract public class CompiledMethod_3 extends CompiledMethod {
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis)
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis)
   {
     return callMethod(env, ctx, qClass, qThis,
                       _args[0].eval(env),
@@ -90,7 +91,7 @@ abstract public class CompiledMethod_3 extends CompiledMethod {
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                           Value a1)
   {
     return callMethod(env, ctx, qClass, qThis,
@@ -100,7 +101,7 @@ abstract public class CompiledMethod_3 extends CompiledMethod {
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                           Value a1, Value a2)
   {
     return callMethod(env, ctx, qClass, qThis,
@@ -110,7 +111,7 @@ abstract public class CompiledMethod_3 extends CompiledMethod {
   }
 
   @Override
-  abstract public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
+  abstract public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                                    Value a1,
                                    Value a2,
                                    Value a3);

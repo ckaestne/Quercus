@@ -36,6 +36,7 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents an expression statement in a PHP program.
@@ -61,7 +62,7 @@ public class ExprStatement extends Statement {
     return _expr;
   }
 
-  public V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     // php/0d92
     Location oldLocation = env.setLocation(getLocation());

@@ -35,7 +35,6 @@ import com.caucho.quercus.env.ArrayValueImpl;
 import com.caucho.quercus.env.Callable;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.expr.ParamRequiredExpr;
-import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 
 public abstract class ReflectionFunctionAbstract

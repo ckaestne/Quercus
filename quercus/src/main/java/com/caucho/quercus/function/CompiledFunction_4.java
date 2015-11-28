@@ -36,6 +36,7 @@ import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.logging.Logger;
 
@@ -73,7 +74,7 @@ abstract public class CompiledFunction_4 extends CompiledFunction {
     return args;
   }
 
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
   {
     switch (argValues.length) {
     case 0:
@@ -111,7 +112,7 @@ abstract public class CompiledFunction_4 extends CompiledFunction {
     }
   }
 
-  public V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return call(env, ctx,
                 _args[0].eval(env),
@@ -120,7 +121,7 @@ abstract public class CompiledFunction_4 extends CompiledFunction {
                 _args[3].eval(env));
   }
 
-  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
     return call(env, ctx,
                 a1,
@@ -129,7 +130,7 @@ abstract public class CompiledFunction_4 extends CompiledFunction {
                 _args[3].eval(env));
   }
 
-  public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
     return call(env, ctx,
                 a1,
@@ -138,7 +139,7 @@ abstract public class CompiledFunction_4 extends CompiledFunction {
                 _args[3].eval(env));
   }
 
-  public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
     return call(env, ctx,
                 a1,
@@ -150,7 +151,7 @@ abstract public class CompiledFunction_4 extends CompiledFunction {
   /**
    * Evaluates the function with arguments
    */
-  abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4);
+  abstract public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4);
 
   public String toString()
   {

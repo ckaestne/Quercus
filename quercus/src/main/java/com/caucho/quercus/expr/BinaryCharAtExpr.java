@@ -37,6 +37,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents the character at expression
@@ -69,7 +70,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
 
@@ -99,7 +100,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return eval(env, VHelper.noCtx());
   }
@@ -113,7 +114,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    * @param value
    * @return the expression value.
    */
-  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     Value obj = _objExpr.eval(env, VHelper.noCtx()).getOne();
 

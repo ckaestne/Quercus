@@ -29,7 +29,6 @@
 
 package com.caucho.quercus.env;
 
-import com.caucho.quercus.QuercusException;
 import com.caucho.vfs.WriteStream;
 
 import java.io.IOException;

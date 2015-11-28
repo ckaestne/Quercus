@@ -28,24 +28,19 @@
  */
 
 package com.caucho.quercus.lib.i18n;
-import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import com.caucho.quercus.UnimplementedException;
+import com.caucho.quercus.env.*;
+import com.caucho.util.L10N;
 
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeUtility;
-
-import com.caucho.quercus.UnimplementedException;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.util.L10N;
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class QuercusMimeUtility
 {

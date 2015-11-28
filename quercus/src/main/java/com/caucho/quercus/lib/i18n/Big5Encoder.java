@@ -29,11 +29,11 @@
 
 package com.caucho.quercus.lib.i18n;
 
+import com.caucho.quercus.env.StringValue;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CoderResult;
-
-import com.caucho.quercus.env.StringValue;
 
 public class Big5Encoder
   extends GenericEncoder

@@ -29,8 +29,8 @@
 
 package com.caucho.quercus.lib.gettext;
 
-import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.UnicodeBuilderValue;
 import com.caucho.quercus.lib.gettext.expr.PluralExpr;
 import com.caucho.util.L10N;

@@ -29,7 +29,10 @@
 
 package com.caucho.quercus.lib.pdf;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * pdf object oriented API facade

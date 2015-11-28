@@ -29,9 +29,9 @@
 
 package com.caucho.quercus.lib.spl;
 
+import com.caucho.quercus.annotation.Delegates;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
-import com.caucho.quercus.annotation.Delegates;
 
 @Delegates(ArrayAccessDelegate.class)
 public interface ArrayAccess

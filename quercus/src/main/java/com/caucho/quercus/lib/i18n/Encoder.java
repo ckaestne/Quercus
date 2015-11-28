@@ -29,7 +29,6 @@
 
 package com.caucho.quercus.lib.i18n;
 
-import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 
 abstract public class Encoder

@@ -31,7 +31,10 @@ package com.caucho.quercus.env;
 
 import com.caucho.util.IntMap;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents the Quercus static environment.

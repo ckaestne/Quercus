@@ -29,15 +29,7 @@
 
 package com.caucho.quercus.lib.curl;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-
 import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.Callback;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
@@ -47,6 +39,12 @@ import com.caucho.util.RandomUtil;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class MultipartBody extends PostBody
 {

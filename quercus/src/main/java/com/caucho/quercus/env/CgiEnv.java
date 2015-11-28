@@ -29,14 +29,14 @@
 
 package com.caucho.quercus.env;
 
-import java.io.InputStream;
-
 import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.lib.string.StringModule;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.vfs.WriteStream;
+
+import java.io.InputStream;
 
 public class CgiEnv
   extends Env

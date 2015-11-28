@@ -29,18 +29,18 @@
 
 package com.caucho.quercus.lib.gettext;
 
-import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.BooleanValue;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.lib.string.StringModule;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.Path;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.logging.Logger;
 

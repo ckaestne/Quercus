@@ -30,19 +30,7 @@
 package com.caucho.quercus.lib;
 
 import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.annotation.This;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.ConstStringValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.StringBuilderOutputStream;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.UnicodeBuilderValue;
-import com.caucho.quercus.env.UnsetValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.file.BinaryInput;
 import com.caucho.quercus.lib.file.BinaryStream;
 import com.caucho.quercus.lib.file.FileModule;
@@ -51,12 +39,7 @@ import com.caucho.util.Base64;
 import com.caucho.util.CharBuffer;
 import com.caucho.util.L10N;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.Map;

@@ -29,14 +29,14 @@
 
 package com.caucho.quercus.lib.db;
 
+import com.caucho.quercus.QuercusException;
+import com.caucho.util.L10N;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
-import com.caucho.quercus.QuercusException;
-import com.caucho.util.L10N;
 
 /**
  * Extra Mysql metadata.
