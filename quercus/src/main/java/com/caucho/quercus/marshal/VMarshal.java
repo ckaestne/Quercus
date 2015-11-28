@@ -71,9 +71,7 @@ public class VMarshal extends Marshal
   public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof V)
-      return V.one((ArrayValue) value);
-    else if (value instanceof Value)
-      return V.one(((Value) value).toArrayValue(env));
+      return (V<Value>)value;
     else
       return V.one(NullValue.NULL);
   }

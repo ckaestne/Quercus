@@ -36,6 +36,7 @@ import com.caucho.quercus.lib.regexp.*;
 import com.caucho.quercus.module.ModuleContext;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.V;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -245,6 +246,9 @@ public class MarshalFactory {
     }
     else if (Enum.class.isAssignableFrom(argType)) {
       marshal = new EnumMarshal(argType);
+    }
+    else if (V.class.isAssignableFrom(argType)) {
+      marshal = new VMarshal();
     }
     else {
       String typeName = argType.getName();
