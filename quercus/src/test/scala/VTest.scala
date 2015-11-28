@@ -6,7 +6,7 @@ import org.junit.Test
 /**
   * Created by ckaestne on 11/27/2015.
   */
-class CreateConditionalTest extends AbstractPhpTest {
+class VTest extends AbstractPhpTest {
 
     val foo = FeatureExprFactory.createDefinedExternal("foo")
     val bar = FeatureExprFactory.createDefinedExternal("bar")
@@ -40,6 +40,10 @@ class CreateConditionalTest extends AbstractPhpTest {
     @Test
     def testVIf() {
         eval("if (create_conditional('foo')) echo 'x'; else echo 'y'; echo 'z';") to c(foo, "x") + c(foo.not(), "y")+"z"
+        eval("if (create_conditional('foo')) echo 'x'; else " +
+            "if (create_conditional('bar')) echo 'y'; echo 'z';") to c(foo, "x") + c(foo.not().and(bar), "y")+"z"
+        eval("if (create_conditional('foo')) echo create_conditional('foo');") to c(foo, "1")
+        eval("if (create_conditional('foo')) echo 1+create_conditional('bar');") to c(foo.and(bar), "2") + c(foo.andNot(bar), "1")
     }
 
 
