@@ -142,10 +142,13 @@ public class TQuercus
         try {
             env.execute();
         } catch (QuercusDieException e) {
+            System.err.println(e);
             log.log(Level.FINER, e.toString(), e);
         } catch (QuercusExitException e) {
+            System.err.println(e);
             log.log(Level.FINER, e.toString(), e);
         } catch (QuercusErrorException e) {
+            System.err.println(e);
             log.log(Level.FINER, e.toString(), e);
         } finally {
 //            for (Object header: response.getHeaderNames())

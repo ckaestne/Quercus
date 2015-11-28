@@ -26,4 +26,9 @@ public class VHelper {
     public static <T> V<T> toV(T v) {
         return V.one(v);
     }
+
+    public static <T> V<T> nonNull(V<T> t) {
+        assert(t!=null);
+        return t;
+    }
 }

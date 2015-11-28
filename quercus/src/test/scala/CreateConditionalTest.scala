@@ -14,7 +14,7 @@ class CreateConditionalTest extends AbstractPhpTest {
         eval("echo 'foo';") to "foo";
 
 
-        eval("echo create_conditional('foo');") to "CHOICE(definedEx(foo) ? 1 : )"
+        eval("echo create_conditional('foo');") to "CHOICE(1<-definedEx(foo); <-!definedEx(foo))"
     }
 
 

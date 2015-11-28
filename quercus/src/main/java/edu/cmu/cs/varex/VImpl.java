@@ -3,8 +3,7 @@ package edu.cmu.cs.varex;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -100,7 +99,24 @@ class VImpl<T> implements V<T> {
 
     }
 
+    @Override
+    public String toString() {
+        StringBuffer out = new StringBuffer();
+        List<String> entries = new ArrayList<>(values.size());
+        for (HashMap.Entry<FeatureExpr, T> e : values.entrySet())
+            entries.add(e.getValue().toString() + "<-" + e.getKey().toTextExpr());
+        Collections.sort(entries);
+        out.append("CHOICE(");
+        for (String e : entries) {
+            out.append(e);
+            out.append("; ");
+        }
+        out.delete(out.length() - 2, out.length());
+        out.append(")");
 
+
+        return out.toString();
+    }
 }
 
 

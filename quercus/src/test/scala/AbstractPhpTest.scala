@@ -1,5 +1,7 @@
 package edu.cmu.cs.varex
 
+import java.util.logging.{ConsoleHandler, Level, Logger}
+
 import com.caucho.quercus.TQuercus
 import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
 
@@ -7,6 +9,14 @@ import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
   * Created by ckaestne on 11/27/2015.
   */
 trait AbstractPhpTest {
+
+    val log =Logger.getLogger("com.caucho.quercus")
+    log.setLevel(Level.ALL)
+    val handler = new ConsoleHandler()
+    log.addHandler(handler)
+    handler.setLevel(Level.WARNING)
+
+    log.fine("test")
 
     case class Eval(code: String) {
         def to(expected: String): Unit = {
