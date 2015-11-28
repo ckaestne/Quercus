@@ -35,6 +35,8 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.vfs.Path;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class PathMarshal extends Marshal
@@ -56,13 +58,13 @@ public class PathMarshal extends Marshal
     return env.lookupPwd(value);
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     // XXX: need test
     String className = value.getClass().getName();
     JavaClassDef def = env.getQuercus().getJavaClassDefinition(className);
     
-    return def.wrap(env, value);
+    return V.one(def.wrap(env, value));
   }
   
   @Override

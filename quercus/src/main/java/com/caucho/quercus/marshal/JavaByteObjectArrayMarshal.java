@@ -32,6 +32,8 @@ package com.caucho.quercus.marshal;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 public class JavaByteObjectArrayMarshal extends JavaArrayMarshal
 {
@@ -39,18 +41,18 @@ public class JavaByteObjectArrayMarshal extends JavaArrayMarshal
     = new JavaByteObjectArrayMarshal();
 
   @Override
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     Byte []byteValue = (Byte []) value;
 
     if (byteValue == null)
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
 
     byte []data = new byte[byteValue.length];
     for (int i = 0; i < data.length; i++)
       data[i] = byteValue[i];
 
-    return env.createBinaryBuilder(data);
+    return V.one(env.createBinaryBuilder(data));
   }
 
   @Override

@@ -34,6 +34,8 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 /**
@@ -62,14 +64,14 @@ public class BooleanMarshal extends Marshal {
     return value.toBoolean() ? Boolean.TRUE : Boolean.FALSE;
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
     else
-      return Boolean.TRUE.equals(value)
+      return V.one(Boolean.TRUE.equals(value)
         ? BooleanValue.TRUE
-        : BooleanValue.FALSE;
+        : BooleanValue.FALSE);
   }
 
   @Override

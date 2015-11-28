@@ -34,6 +34,8 @@ import com.caucho.quercus.env.JavaDateValue;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.Date;
@@ -57,9 +59,9 @@ public class DateMarshal extends Marshal
     return value.toJavaDate();
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava((Date)value);
+    return V.one(env.wrapJava((Date)value));
   }
   
   @Override

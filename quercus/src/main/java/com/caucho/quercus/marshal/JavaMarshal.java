@@ -35,6 +35,8 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 /**
@@ -100,9 +102,9 @@ public class JavaMarshal extends Marshal {
   }
 
   @Override
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava(value, _def, _isUnmarshalNullAsFalse);
+    return V.one(env.wrapJava(value, _def, _isUnmarshalNullAsFalse));
   }
 
   @Override

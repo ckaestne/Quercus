@@ -34,6 +34,8 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.lib.regexp.RegexpModule;
 import com.caucho.quercus.lib.regexp.UnicodeEreg;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 /**
@@ -52,7 +54,7 @@ public class UnicodeEregMarshal extends StringMarshal {
     return RegexpModule.createUnicodeEreg(env, value.toStringValue());
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }

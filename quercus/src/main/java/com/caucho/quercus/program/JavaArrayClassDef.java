@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import com.caucho.quercus.module.ModuleContext;
+import edu.cmu.cs.varex.VHelper;
 
 import java.lang.reflect.Array;
 
@@ -82,7 +83,7 @@ public class JavaArrayClassDef extends JavaClassDef {
     for (int i = 0; i < length; i++) {
       Object component = Array.get(obj, i);
       
-      arrayValueImpl.put(componentClassMarshal.unmarshal(env, component));
+      arrayValueImpl.put(componentClassMarshal.unmarshal(env, VHelper.noCtx(), component).getOne());
     }
 
     return arrayValueImpl;

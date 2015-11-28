@@ -31,6 +31,8 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.math.BigDecimal;
@@ -51,9 +53,9 @@ public class BigDecimalMarshal extends Marshal {
     return value.toBigDecimal();
   }
   
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava((BigDecimal) value);
+    return V.one(env.wrapJava((BigDecimal) value));
   }
   
   @Override

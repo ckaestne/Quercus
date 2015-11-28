@@ -31,6 +31,8 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class BinaryValueMarshal extends Marshal
@@ -68,16 +70,16 @@ public class BinaryValueMarshal extends Marshal
     return arg;
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof BinaryBuilderValue)
-      return (BinaryBuilderValue) value;
+      return V.one((BinaryBuilderValue) value);
     else if (value instanceof Value)
-      return ((Value) value).toBinaryValue(env);
+      return V.one(((Value) value).toBinaryValue(env));
     else {
       StringValue ret =  env.createBinaryBuilder();
       ret.append(value);
-      return ret;
+      return V.one(ret);
     }
   }
 

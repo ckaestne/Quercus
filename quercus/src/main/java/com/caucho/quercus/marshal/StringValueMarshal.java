@@ -33,6 +33,8 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class StringValueMarshal extends Marshal
@@ -63,14 +65,14 @@ public class StringValueMarshal extends Marshal
     return value.toStringValue(env);
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof StringValue)
-      return (StringValue) value;
+      return V.one((StringValue) value);
     else if (value instanceof Value)
-      return ((Value) value).toStringValue(env);
+      return V.one(((Value) value).toStringValue(env));
     else if (value != null)
-      return env.createString(String.valueOf(value));
+      return V.one(env.createString(String.valueOf(value)));
     else
       return null;
   }

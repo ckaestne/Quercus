@@ -33,6 +33,8 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class ByteObjectMarshal extends Marshal
@@ -55,12 +57,12 @@ public class ByteObjectMarshal extends Marshal
     return value.toJavaByte();
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
-      return LongValue.ZERO;
+      return V.one(LongValue.ZERO);
     else
-      return LongValue.create(((Number) value).longValue());
+      return V.one(LongValue.create(((Number) value).longValue()));
   }
 
   @Override

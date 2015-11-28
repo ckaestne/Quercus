@@ -29,46 +29,71 @@
 
 package com.caucho.quercus.marshal;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
+import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
-public class JavaByteArrayMarshal extends JavaArrayMarshal
+public class VMarshal extends Marshal
 {
-  public static final Marshal MARSHAL
-    = new JavaByteArrayMarshal();
-
-  @Override
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public static final Marshal MARSHAL = new VMarshal();
+  
+  public boolean isReference()
   {
-    return V.one(env.createBinaryBuilder((byte[]) value));
+    return true;
+  }
+      
+  public boolean isReadOnly()
+  {
+    return false;
+  }
+      
+  /**
+   * Return true if is a Value.
+   */
+  @Override
+  public boolean isValue()
+  {
+    return true;
+  }
+  
+  public Object marshal(Env env, Expr expr, Class expectedClass)
+  {
+    return expr.eval(env, VHelper.noCtx()).getOne();
   }
 
+  public Object marshal(Env env, Value value, Class expectedClass)
+  {
+    return value;
+  }
+
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  {
+    if (value instanceof V)
+      return V.one((ArrayValue) value);
+    else if (value instanceof Value)
+      return V.one(((Value) value).toArrayValue(env));
+    else
+      return V.one(NullValue.NULL);
+  }
+  
   @Override
   protected int getMarshalingCostImpl(Value argValue)
   {
-    return argValue.toByteArrayMarshalCost();
-
-    /*
-    if (argValue.isString()) {
-      if (argValue.isUnicode())
-        return Marshal.UNICODE_BYTE_ARRAY_COST;
-      else if (argValue.isBinary())
-        return Marshal.BINARY_BYTE_ARRAY_COST;
+    if (argValue.isArray()) {
+      if (argValue instanceof JavaAdapter)
+        return Marshal.ONE;
       else
-        return Marshal.PHP5_BYTE_ARRAY_COST;
+        return Marshal.ZERO;
     }
-    else if (argValue.isArray())
-      return Marshal.THREE;
     else
       return Marshal.FOUR;
-    */
   }
-
+  
   @Override
   public Class getExpectedClass()
   {
-    return byte[].class;
+    return ArrayValue.class;
   }
 }

@@ -706,9 +706,9 @@ abstract public class JavaInvoker
       }
     }
 
-    Value value = _unmarshalReturn.unmarshal(env, result);
+    V<? extends Value> value = _unmarshalReturn.unmarshal(env, VHelper.noCtx(), result);
 
-    return VHelper.toV(value);
+    return value;
   }
 
   @Override

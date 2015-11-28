@@ -32,6 +32,8 @@ package com.caucho.quercus.marshal;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 public class JavaCharacterArrayMarshal extends JavaArrayMarshal
 {
@@ -39,14 +41,14 @@ public class JavaCharacterArrayMarshal extends JavaArrayMarshal
     = new JavaCharacterArrayMarshal();
 
   @Override
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     char []buffer = (char []) value;
 
     if (buffer != null)
-      return env.createString(buffer, 0, buffer.length);
+      return V.one(env.createString(buffer, 0, buffer.length));
     else
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
   }
 
   @Override

@@ -34,6 +34,8 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.math.BigInteger;
@@ -54,9 +56,9 @@ public class BigIntegerMarshal extends Marshal {
     return value.toBigInteger();
   }
   
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava((BigInteger) value);
+    return V.one(env.wrapJava((BigInteger) value));
   }
   
   @Override

@@ -31,6 +31,8 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class ArrayValueMarshal extends Marshal
@@ -66,14 +68,14 @@ public class ArrayValueMarshal extends Marshal
     return value.toArrayValue(env);
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof ArrayValue)
-      return (ArrayValue) value;
+      return V.one((ArrayValue) value);
     else if (value instanceof Value)
-      return ((Value) value).toArrayValue(env);
+      return V.one(((Value) value).toArrayValue(env));
     else
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
   }
   
   @Override

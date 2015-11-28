@@ -33,6 +33,8 @@ import com.caucho.quercus.env.DoubleValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class DoubleMarshal extends Marshal
@@ -59,12 +61,12 @@ public class DoubleMarshal extends Marshal
     return new Double(value.toDouble());
   }
 
-  public Value unmarshal(Env env, Object value)
+  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
-      return DoubleValue.ZERO;
+      return V.one(DoubleValue.ZERO);
     else
-      return new DoubleValue(((Number) value).doubleValue());
+      return V.one(new DoubleValue(((Number) value).doubleValue()));
   }
 
   @Override
