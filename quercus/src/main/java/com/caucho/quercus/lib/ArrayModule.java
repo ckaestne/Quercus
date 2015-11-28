@@ -43,6 +43,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.RandomUtil;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.text.Collator;
@@ -2707,7 +2708,7 @@ public class ArrayModule
 
     for (Value variableName : variables) {
       if (variableName.isString()) {
-        Var var = env.getRef(variableName.toStringValue(), false);
+        Var var = env.getRef(VHelper.noCtx(), variableName.toStringValue(), false).getOne();
 
         if (var != null)
           compactArray.put(variableName, var.toValue());
@@ -2805,7 +2806,7 @@ public class ArrayModule
       StringValue symbolName = entryKey.toStringValue();
 
       if (validVariableName(symbolName)) {
-        env.setValue(symbolName, entryValue);
+        env.setValue(VHelper.noCtx(), symbolName, V.one(entryValue));
 
         completedSymbols++;
       }
@@ -2868,7 +2869,7 @@ public class ArrayModule
 
       StringValue symbolName = entryKey.toStringValue();
 
-      Value tableValue = env.getValue(symbolName);
+      Value tableValue = env.getValue(VHelper.noCtx(), symbolName).getOne();
 
       switch ((int) extractType) {
       case EXTR_SKIP:
@@ -2908,7 +2909,7 @@ public class ArrayModule
       }
 
       if (validVariableName(symbolName)) {
-        env.setValue(symbolName, entryValue);
+        env.setValue(VHelper.noCtx(), symbolName, V.one(entryValue));
 
         completedSymbols++;
       }

@@ -31,6 +31,8 @@ package com.caucho.quercus.env;
 
 import com.caucho.inject.Module;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -67,7 +69,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
    */
   public ArrayValue append(Value key, Value value)
   {
-    _env.setGlobalValue(key.toStringValue(), value);
+    _env.setGlobalValue(VHelper.noCtx(), key.toStringValue(), V.one(value));
 
     return this;
   }
@@ -77,7 +79,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
    */
   public Value get(Value key)
   {
-    return _env.getGlobalValue(key.toStringValue());
+    return _env.getGlobalValue(VHelper.noCtx(), key.toStringValue()).getOne();
   }
   
   /**
@@ -88,7 +90,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   {
     // return _env.getGlobalRef(key.toStringValue());
 
-    return _env.getGlobalVar(key.toStringValue());
+    return _env.getGlobalVar(VHelper.noCtx(), key.toStringValue()).getOne();
   }
 
   /**
@@ -116,7 +118,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   @Override
   public Value remove(Value key)
   {
-    return _env.unsetGlobalVar(key.toStringValue());
+    return _env.unsetGlobalVar(VHelper.noCtx(), key.toStringValue()).getOne();
   }
   
   @Override
@@ -148,7 +150,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
     EnvVar var = _env.getGlobalEnv().get(key.toStringValue());
 
     if (var != null)
-      return var.get();
+      return var.get(VHelper.noCtx()).getOne();
     else
       return null;
   }
@@ -224,7 +226,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
     for (Map.Entry<StringValue, EnvVar> entry : _env.getGlobalEnv()
       .entrySet()) {
       Value key = entry.getKey();
-      Value val = entry.getValue().get();
+      Value val = entry.getValue().get(VHelper.noCtx()).getOne();
       
       array.put(key, val);
     }

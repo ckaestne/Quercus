@@ -131,9 +131,10 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public void evalUnset(Env env)
+  public void evalUnset(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }

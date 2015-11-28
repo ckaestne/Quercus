@@ -34,6 +34,7 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.util.IntMap;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -200,7 +201,7 @@ public class SaveState {
 
       int id = addGlobalName(entry.getKey());
 
-      _globalValues[id] = envVar.get().copy(env);
+      _globalValues[id] = envVar.get(VHelper.noCtx()).getOne().copy(env);
     }
   }
   

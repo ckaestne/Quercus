@@ -70,7 +70,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<? extends Value> value = varName.map((vn)->env.getValue(vn));
+    V<? extends Value> value = varName.flatMap((vn)->env.getValue(VHelper.noCtx(), vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -95,7 +95,7 @@ public class VarVarExpr extends AbstractVarExpr {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
     // php/0d63
-    env.setRef(varName.getOne(), value.getOne());
+    env.setRef(ctx, varName.getOne(), value);
 
     return value;
   }
@@ -105,14 +105,15 @@ public class VarVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public void evalUnset(Env env)
+  public void evalUnset(Env env, FeatureExpr ctx)
   {
     StringValue varName = _var.evalStringValue(env, VHelper.noCtx()).getOne();
 
-    env.unsetVar(varName);
+    env.unsetVar(VHelper.noCtx(), varName);
   }
 
   /**
@@ -128,7 +129,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    return varName.map((vn)-> env.getVar(vn));
+    return varName.flatMap((vn)-> env.getVar(ctx, vn));
   }
 
   /**
@@ -144,7 +145,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<? extends Value> value = varName.map((vn)-> env.getVar(vn));
+    V<? extends Value> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -167,7 +168,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<? extends Value> value = varName.map((vn)-> env.getVar(vn));
+    V<? extends Value> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
 
     return value.map((a)->a.toAutoArray());
   }

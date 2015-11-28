@@ -34,6 +34,7 @@ import com.caucho.quercus.lib.string.StringModule;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.InputStream;
@@ -53,7 +54,7 @@ public class CgiEnv
   @Override
   protected String getQueryString()
   {
-    Value serverEnv = getGlobalValue("_SERVER");
+    Value serverEnv = getGlobalValue(VHelper.noCtx(), "_SERVER").getOne();
 
     return serverEnv.get(createString("QUERY_STRING")).toString();
   }
@@ -61,7 +62,7 @@ public class CgiEnv
   @Override
   protected String getContentType()
   {
-    Value serverEnv = getGlobalValue("_SERVER");
+    Value serverEnv = getGlobalValue(VHelper.noCtx(), "_SERVER").getOne();
 
     return serverEnv.get(createString("CONTENT_TYPE")).toString();
   }
@@ -72,7 +73,7 @@ public class CgiEnv
     ArrayValue array = new ArrayValueImpl();
     boolean isMagicQuotes = getIniBoolean("magic_quotes_gpc");
 
-    Value serverEnv = getGlobalValue("_SERVER");
+    Value serverEnv = getGlobalValue(VHelper.noCtx(), "_SERVER").getOne();
     String cookies = serverEnv.get(createString("HTTP_COOKIE")).toString();
 
     int i = 0;
@@ -298,7 +299,7 @@ public class CgiEnv
   {
     InputStream is = System.in;
 
-    Value serverEnv = getGlobalValue("_SERVER");
+    Value serverEnv = getGlobalValue(VHelper.noCtx(), "_SERVER").getOne();
 
     String method = serverEnv.get(createString("REQUEST_METHOD")).toString();
     String contentType

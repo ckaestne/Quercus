@@ -29,44 +29,53 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+
 /**
  * Encapsulates an environment entry for a variable.  The EnvVar is a
  * container for Vars.
+ *
+ * One per name, usually no need for V<EnvVar>
  */
 abstract public class EnvVar
 {
   /**
    * Returns the current value.
+   * @param ctx
    */
-  abstract public Value get();
+  abstract public V<? extends Value> get(FeatureExpr ctx);
 
   /**
    * Sets the current value.
    */
-  abstract public Value set(Value value);
+  abstract public V<? extends Value> set(FeatureExpr ctx, V<? extends Value> value);
 
   /**
    * Returns the current Var.
+   * @param ctx
    */
-  abstract public Var getVar();
+  abstract public V<? extends Var> getVar(FeatureExpr ctx);
 
   /**
    * Sets the var.
    */
-  abstract public Var setVar(Var var);
+  abstract public V<? extends Var> setVar(FeatureExpr ctx, V<? extends Var> var);
 
   /**
    * Sets the value as a reference. If the value is a Var, it replaces
    * the current Var, otherwise it sets the value. 
    */
-  public Var setRef(Value value)
+  public V<? extends Var> setRef(FeatureExpr ctx, V<? extends Value> value)
   {
-    if (value.isVar())
-      setVar((Var) value);
-    else
-      set(value);
+    value.vforeach(ctx, (c, v) -> {
+      if (v.isVar())
+        setVar(c, V.one((Var) v));
+      else
+        set(c, V.one(v));
+    });
     
-    return getVar();
+    return getVar(ctx);
   }
 }
 

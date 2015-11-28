@@ -71,7 +71,7 @@ public class StaticStatement extends Statement {
     try {
       Var var = env.getStaticVar(_uniqueStaticName);
 
-      env.setRef(_var.getName(), var);
+      env.setRef(ctx, _var.getName(), V.one(var));
 
       if (! var.isset() && _initValue != null) {
         var.set(_initValue.eval(env, VHelper.noCtx()).getOne());

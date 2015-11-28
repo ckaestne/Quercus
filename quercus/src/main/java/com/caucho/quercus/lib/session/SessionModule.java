@@ -41,6 +41,7 @@ import com.caucho.quercus.servlet.api.QuercusCookie;
 import com.caucho.quercus.servlet.api.QuercusCookieImpl;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.logging.Logger;
 
@@ -323,7 +324,7 @@ public class SessionModule extends AbstractQuercusModule
     if (nameV instanceof StringValue) {
       String name = nameV.toString();
 
-      Value var = env.getGlobalVar(name);
+      Value var = env.getGlobalVar(VHelper.noCtx(), name).getOne();
 
       Value value = session.get(nameV);
 

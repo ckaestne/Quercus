@@ -29,6 +29,9 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+
 /**
  * For compiled code and error reporting.
  * XXX: Need to instantiate vars when they're used, not at the top of the method.
@@ -45,34 +48,36 @@ public class LazyEnvVar extends EnvVar {
 
   /**
    * Returns the current value.
+   * @param ctx
    */
-  public Value get()
+  public V<? extends Value> get(FeatureExpr ctx)
   {
-    return getEnvVar(true).get();
+    return getEnvVar(true).get(ctx);
   }
 
   /**
    * Sets the current value.
    */
-  public Value set(Value value)
+  public V<? extends Value> set(FeatureExpr ctx, V<? extends Value> value)
   {
-    return getEnvVar(false).set(value);
+    return getEnvVar(false).set(ctx, value);
   }
 
   /**
    * Returns the current Var.
+   * @param ctx
    */
-  public Var getVar()
+  public V<? extends Var> getVar(FeatureExpr ctx)
   {
-    return getEnvVar(false).getVar();
+    return getEnvVar(false).getVar(ctx);
   }
 
   /**
    * Sets the var.
    */
-  public Var setVar(Var var)
+  public V<? extends Var> setVar(FeatureExpr ctx, V<? extends Var> var)
   {
-    return getEnvVar(false).setVar(var);
+    return getEnvVar(false).setVar(ctx, var);
   }
 
   private EnvVar getEnvVar(boolean isOutputNotice)

@@ -37,6 +37,7 @@ import com.caucho.quercus.module.IniDefinition;
 import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.quercus.module.ModuleStartupListener;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -497,7 +498,7 @@ public class OutputModule extends AbstractQuercusModule
   public static Value ob_gzhandler(Env env, StringValue buffer, int state)
   {
     Encoding encoding = Encoding.NONE;
-    Value _SERVER = env.getGlobalVar("_SERVER");
+    Value _SERVER = env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne();
 
     String [] acceptedList
       = _SERVER.get(env.createString("HTTP_ACCEPT_ENCODING")).toString().split(",");

@@ -217,8 +217,8 @@ public class Env
 
   private QuercusPage _page;
 
-  private HashMap<String,Value> _scriptGlobalMap
-    = new HashMap<String,Value>(16);
+  private HashMap<String,V<? extends Value>> _scriptGlobalMap
+    = new HashMap<>(16);
 
   // Function map
   public AbstractFunction []_fun;
@@ -676,7 +676,7 @@ public class Env
     else
       value = wrapJava(object);
 
-    _scriptGlobalMap.put(name, value);
+    _scriptGlobalMap.put(name, V.one(value));
 
     return value;
   }
@@ -1746,27 +1746,27 @@ public class Env
     }
 
     if (session != null) {
-      Value var = getGlobalVar(sessionStr);
+      Value var = getGlobalVar(VHelper.noCtx(), sessionStr).getOne();
 
       if (! (var instanceof SessionVar)) {
         var = new SessionVar();
-        setGlobalValue(sessionStr, var);
+        setGlobalValue(VHelper.noCtx(), sessionStr, V.one(var));
       }
 
       var.set(session);
 
-      setGlobalValue("HTTP_SESSION_VARS", session);
+      setGlobalValue(VHelper.noCtx(), "HTTP_SESSION_VARS", V.one(session));
 
       session.addUse();
     }
     else {
       // php/1k0v
-      Value v = getGlobalVar(sessionStr);
+      Value v = getGlobalVar(VHelper.noCtx(), sessionStr).getOne();
 
       if (v != null)
         v.set(UnsetValue.UNSET);
 
-      v = getGlobalVar("HTTP_SESSION_VARS");
+      v = getGlobalVar(VHelper.noCtx(), "HTTP_SESSION_VARS").getOne();
 
       if (v != null)
         v.set(UnsetValue.UNSET);
@@ -1997,24 +1997,24 @@ public class Env
   /**
    * Gets a value.
    */
-  public Value getValue(StringValue name)
+  public V<? extends Value> getValue(FeatureExpr ctx, StringValue name)
   {
-    return getValue(name, true, false);
+    return getValue(ctx, name, true, false);
   }
 
   /**
    * Gets a value.
    */
-  public Value getValue(StringValue name,
-                        boolean isAutoCreate,
-                        boolean isOutputNotice)
+  public V<? extends Value> getValue(FeatureExpr ctx, StringValue name,
+                                     boolean isAutoCreate,
+                                     boolean isOutputNotice)
   {
     EnvVar var = getEnvVar(name, isAutoCreate, isOutputNotice);
 
     if (var != null)
-      return var.get();
+      return var.get(ctx);
     else
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
   }
 
   /**
@@ -2037,21 +2037,21 @@ public class Env
     return value;
   }
 
-  public Value getGlobalValue(String name)
+  public V<? extends Value> getGlobalValue(FeatureExpr ctx, String name)
   {
-    return getGlobalValue(createString(name));
+    return getGlobalValue(VHelper.noCtx(), createString(name));
   }
 
   /**
    * Gets a global
    */
-  public Value getGlobalValue(StringValue name)
+  public V<? extends Value> getGlobalValue(FeatureExpr ctx, StringValue name)
   {
     EnvVar var = getGlobalEnvVar(name);
 
     // XXX: don't allocate?
 
-    return var.get();
+    return var.get(ctx);
 
     /*
     if (var != null)
@@ -2063,16 +2063,19 @@ public class Env
 
   /**
    * Gets a variable
-   *
+   *  @param var the current value of the variable
+   * @param ctx
    * @param name the variable name
-   * @param var the current value of the variable
+   * @param value
    */
-  public final Var getVar(StringValue name, Value value)
+  public final V<? extends Var> getVar(FeatureExpr ctx, StringValue name, V<? extends Value> value)
   {
-    if (value != null)
-      return (Var) value;
-
-    return getRef(name);
+    return value.vflatMap(ctx, (c, v)-> {
+      if (v != null)
+        return V.one((Var) value);
+      else
+        return getRef(c, name);
+    });
   }
 
   /**
@@ -2081,24 +2084,26 @@ public class Env
    * @param name the variable name
    * @param value the current value of the variable
    */
-  public final Var getGlobalVar(StringValue name, Value value)
+  public final V<? extends Var> getGlobalVar(FeatureExpr ctx, StringValue name, V<? extends Value> value)
   {
-    if (value != null)
-      return (Var) value;
-
-    return getGlobalRef(name);
+    return value.vflatMap(ctx, (c, v)-> {
+      if (v != null)
+        return V.one((Var) value);
+      else
+        return getGlobalRef(c, name);
+    });
   }
 
   /**
    * Gets a value.
    */
-  public Var getRef(StringValue name)
+  public V<? extends Var> getRef(FeatureExpr ctx, StringValue name)
   {
     EnvVar envVar = getEnvVar(name);
 
     // XXX: can return null?
 
-    return envVar.getVar();
+    return envVar.getVar(ctx);
 
     /*
     Var var = _map.get(name);
@@ -2117,12 +2122,12 @@ public class Env
   /**
    * Gets a value.
    */
-  public Var getRef(StringValue name, boolean isAutoCreate)
+  public V<? extends Var> getRef(FeatureExpr ctx, StringValue name, boolean isAutoCreate)
   {
     EnvVar envVar = getEnvVar(name, isAutoCreate, true);
 
     if (envVar != null)
-      return envVar.getVar();
+      return envVar.getVar(ctx);
     else
       return null;
   }
@@ -2138,13 +2143,13 @@ public class Env
   /**
    * Gets a global value.
    */
-  public Var getGlobalRef(StringValue name)
+  public V<? extends Var> getGlobalRef(FeatureExpr ctx, StringValue name)
   {
     EnvVar envVar = getGlobalEnvVar(name);
 
     // XXX: not create?
 
-    return envVar.getVar();
+    return envVar.getVar(ctx);
   }
 
   public final EnvVar getEnvVar(StringValue name)
@@ -2199,7 +2204,7 @@ public class Env
         return null;
       }
 
-      envVar = new EnvVarImpl(new Var());
+      envVar = new EnvVarImpl(V.one(new Var()));
     }
 
     _map.put(name, envVar);
@@ -2238,11 +2243,11 @@ public class Env
     if (envVar == null) {
       // variables set by the caller, e.g. the servlet
 
-      Value value = _scriptGlobalMap.get(name);
+      V<? extends Value> value = _scriptGlobalMap.get(name);
 
       if (value != null) {
-        envVar = new EnvVarImpl(new Var());
-        envVar.setRef(value);
+        envVar = new EnvVarImpl(V.one(new Var()));
+        envVar.setRef(VHelper.noCtx(), value);
       }
     }
 
@@ -2261,7 +2266,7 @@ public class Env
       Var var = new Var();
       // var.setGlobal();
 
-      envVar = new EnvVarImpl(var);
+      envVar = new EnvVarImpl(V.one(var));
     }
 
     _globalMap.put(name, envVar);
@@ -2405,16 +2410,17 @@ public class Env
   /**
    * Unsets variable
    *
+   * @param ctx
    * @param name the variable name
    */
-  public final Var unsetVar(StringValue name)
+  public final V<? extends Var> unsetVar(FeatureExpr ctx, StringValue name)
   {
     EnvVar envVar = _map.get(name);
 
     if (envVar != null)
-      envVar.setVar(new Var());
+      envVar.setVar(ctx, V.one(new Var()));
 
-    return null;
+    return V.one(null);
   }
 
   /**
@@ -2448,31 +2454,33 @@ public class Env
   /**
    * Unsets variable
    *
+   * @param ctx
    * @param name the variable name
    */
-  public final Var unsetLocalVar(StringValue name)
+  public final V<? extends Var> unsetLocalVar(FeatureExpr ctx, StringValue name)
   {
     EnvVar envVar = _map.get(name);
 
     if (envVar != null)
-      envVar.setVar(new Var());
+      envVar.setVar(ctx, V.one(new Var()));
 
-    return null;
+    return V.one(null);
   }
 
   /**
    * Unsets variable
    *
+   * @param ctx
    * @param name the variable name
    */
-  public final Var unsetGlobalVar(StringValue name)
+  public final V<? extends Var> unsetGlobalVar(FeatureExpr ctx, StringValue name)
   {
     EnvVar envVar = _globalMap.get(name);
 
     if (envVar != null)
-      envVar.setVar(new Var());
+      envVar.setVar(ctx, V.one(new Var()));
 
-    return null;
+    return V.one(null);
   }
 
   /**
@@ -2551,12 +2559,12 @@ public class Env
     switch (specialVarId) {
       case _ENV: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
         ArrayValue array = new ArrayValueImpl(getInputEnvArray());
-        envVar.set(array);
+        envVar.set(VHelper.noCtx(), V.one(array));
 
         return envVar;
       }
@@ -2567,10 +2575,10 @@ public class Env
         }
 
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         ArrayValue array = createArgv();
-        envVar.set(array);
+        envVar.set(VHelper.noCtx(), V.one(array));
 
         _globalMap.put(name, envVar);
 
@@ -2582,15 +2590,15 @@ public class Env
           return null;
         }
 
-        Var array = getGlobalEnvVar(isUnicodeSemantics() ? S_ARGV_U : S_ARGV).getVar();
+        Var array = getGlobalEnvVar(isUnicodeSemantics() ? S_ARGV_U : S_ARGV).getVar(VHelper.noCtx()).getOne();
 
         int size = array.getSize();
 
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         LongValue value = LongValue.create(size);
-        envVar.set(value);
+        envVar.set(VHelper.noCtx(), V.one(value));
 
         _globalMap.put(name, envVar);
 
@@ -2606,13 +2614,13 @@ public class Env
 
       case _POST: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
         ArrayValue post = new ArrayValueImpl();
 
-        envVar.set(post);
+        envVar.set(VHelper.noCtx(), V.one(post));
 
         if (_variablesOrder.indexOf('P') >= 0
             && _inputPost.getSize() > 0) {
@@ -2633,7 +2641,7 @@ public class Env
 
       case _FILES: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
@@ -2645,7 +2653,7 @@ public class Env
           }
         }
 
-        envVar.set(files);
+        envVar.set(VHelper.noCtx(), V.one(files));
 
         return envVar;
       }
@@ -2668,7 +2676,7 @@ public class Env
         }
 
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
@@ -2681,18 +2689,18 @@ public class Env
           array = new ArrayValueImpl();
         }
 
-        envVar.set(array);
+        envVar.set(VHelper.noCtx(), V.one(array));
 
         return envVar;
       }
 
       case _REQUEST: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         ArrayValue array = new ArrayValueImpl();
 
-        envVar.set(array);
+        envVar.set(VHelper.noCtx(), V.one(array));
 
         _globalMap.put(name, envVar);
 
@@ -2731,7 +2739,7 @@ public class Env
           return null;
 
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
@@ -2749,7 +2757,7 @@ public class Env
 
       case _SERVER: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
@@ -2778,7 +2786,7 @@ public class Env
 
       case _GLOBAL: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
@@ -2795,7 +2803,7 @@ public class Env
 
       case _COOKIE: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
@@ -2812,7 +2820,7 @@ public class Env
 
         if (envVar == null) {
           Var var = new SessionVar();
-          envVar = new EnvVarImpl(var);
+          envVar = new EnvVarImpl(V.one(var));
 
           _globalMap.put(name, envVar);
         }
@@ -2822,11 +2830,11 @@ public class Env
 
       case PHP_SELF: {
         Var var = new Var();
-        EnvVar envVar = new EnvVarImpl(var);
+        EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
 
-        var.set(getGlobalVar("_SERVER").get(isUnicodeSemantics() ? PHP_SELF_STRING_U : PHP_SELF_STRING));
+        var.set(getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().get(isUnicodeSemantics() ? PHP_SELF_STRING_U : PHP_SELF_STRING));
 
         return envVar;
       }
@@ -2915,7 +2923,7 @@ public class Env
         argv.put(arg);
       }
 
-      Value serverEnv = getGlobalValue("_SERVER");
+      Value serverEnv = getGlobalValue(VHelper.noCtx(), "_SERVER").getOne();
 
       serverEnv.put(createString("argc"),
                     LongValue.create(args.length));
@@ -2964,11 +2972,11 @@ public class Env
     }
 
     if (value != null) {
-      envVar = new EnvVarImpl(new Var());
+      envVar = new EnvVarImpl(V.one(new Var()));
 
       _globalMap.put(name, envVar);
 
-      envVar.set(wrapJava(value));
+      envVar.set(VHelper.noCtx(), V.one(wrapJava(value)));
     }
 
     return envVar;
@@ -3022,22 +3030,22 @@ public class Env
     return sb.toString();
   }
 
-  public Var getVar(String name)
+  public V<? extends Var> getVar(FeatureExpr ctx, String name)
   {
-    return getVar(createString(name));
+    return getVar(ctx, createString(name));
   }
 
   /**
    * Gets a value.
    */
-  public Var getVar(StringValue name,
-                    boolean isAutoCreate,
-                    boolean isOutputNotice)
+  public V<? extends Var> getVar(FeatureExpr ctx, StringValue name,
+                                 boolean isAutoCreate,
+                                 boolean isOutputNotice)
   {
     EnvVar envVar = getEnvVar(name, isAutoCreate, isOutputNotice);
 
     if (envVar != null) {
-      return envVar.getVar();
+      return envVar.getVar(ctx);
     }
     else {
       return null;
@@ -3047,46 +3055,46 @@ public class Env
   /**
    * Gets a value.
    */
-  public Var getVar(StringValue name)
+  public V<? extends Var> getVar(FeatureExpr ctx, StringValue name)
   {
     EnvVar envVar = getEnvVar(name, true, false);
 
-    return envVar.getVar();
+    return envVar.getVar(ctx);
   }
 
   /**
    * Gets a value.
    */
-  public Var getGlobalVar(String name)
+  public V<? extends Var> getGlobalVar(FeatureExpr ctx, String name)
   {
     EnvVar envVar = getGlobalEnvVar(createString(name));
 
-    return envVar.getVar();
+    return envVar.getVar(ctx);
   }
 
   /**
    * Gets a value.
    */
-  public Var getGlobalVar(StringValue name)
+  public V<? extends Var> getGlobalVar(FeatureExpr ctx, StringValue name)
   {
     EnvVar envVar = getGlobalEnvVar(name);
 
-    return envVar.getVar();
+    return envVar.getVar(ctx);
   }
 
-  public void setValue(String name, Value value)
+  public void setValue(FeatureExpr ctx, String name, V<? extends Value> value)
   {
     // XXX: update to Quercus
-    setValue(createString(name), value);
+    setValue(ctx, createString(name), value);
   }
   /**
    * Sets a value. value must not be a Var.
    */
-  public Value setValue(StringValue name, Value value)
+  public V<? extends Value> setValue(FeatureExpr ctx, StringValue name, V<? extends Value> value)
   {
     EnvVar envVar = getEnvVar(name, true, false);
 
-    envVar.set(value);
+    envVar.set(ctx, value);
 
     return value;
   }
@@ -3094,11 +3102,11 @@ public class Env
   /**
    * Sets a variable.
    */
-  public Var setVar(StringValue name, Var var)
+  public V<? extends Var> setVar(FeatureExpr ctx, StringValue name, V<? extends Var> var)
   {
     EnvVar envVar = getEnvVar(name, true, false);
 
-    envVar.setVar(var);
+    envVar.setVar(ctx, var);
 
     return var;
   }
@@ -3106,11 +3114,11 @@ public class Env
   /**
    * Sets a value.
    */
-  public Var setRef(StringValue name, Value value)
+  public V<? extends Var> setRef(FeatureExpr ctx, StringValue name, V<? extends Value> value)
   {
     EnvVar envVar = getEnvVar(name, true, false);
 
-    return envVar.setRef(value);
+    return envVar.setRef(ctx, value);
   }
 
   /**
@@ -3154,19 +3162,19 @@ public class Env
   /**
    * External calls to set a global value.
    */
-  public Value setGlobalValue(String name, Value value)
+  public V<? extends Value> setGlobalValue(FeatureExpr ctx, String name, V<? extends Value> value)
   {
-    return setGlobalValue(createString(name), value);
+    return setGlobalValue(VHelper.noCtx(), createString(name), value);
   }
 
   /**
    * External calls to set a global value.
    */
-  public Value setGlobalValue(StringValue name, Value value)
+  public V<? extends Value> setGlobalValue(FeatureExpr ctx, StringValue name, V<? extends Value> value)
   {
     EnvVar envVar = getGlobalEnvVar(name);
 
-    envVar.setRef(value);
+    envVar.setRef(ctx, value);
 
     return value;
   }
@@ -4641,7 +4649,7 @@ public class Env
       EnvVar newEnvVar = _globalMap.get(oldEntry.getKey());
 
       if (newEnvVar != null)
-        oldEnvVar.setVar(newEnvVar.getVar());
+        oldEnvVar.setVar(VHelper.noCtx(), newEnvVar.getVar(VHelper.noCtx()));
     }
 
     // php/404j - include_once
@@ -6928,7 +6936,7 @@ public class Env
         }
 
         if (getIniBoolean("track_errors")) {
-          setGlobalValue("php_errormsg", createString(fullMsg));
+          setGlobalValue(VHelper.noCtx(), "php_errormsg", V.one(createString(fullMsg)));
         }
 
         if ("stderr".equals(getIniString("display_errors"))) {
@@ -7630,8 +7638,8 @@ public class Env
 
         Value sessionCopy = session.copy(this);
 
-        setGlobalValue("_SESSION", sessionCopy);
-        setGlobalValue("HTTP_SESSION_VARS", sessionCopy);
+        setGlobalValue(VHelper.noCtx(), "_SESSION", V.one(sessionCopy));
+        setGlobalValue(VHelper.noCtx(), "HTTP_SESSION_VARS", V.one(sessionCopy));
       }
     }
   }

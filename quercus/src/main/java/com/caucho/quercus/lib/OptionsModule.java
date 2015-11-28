@@ -364,7 +364,7 @@ public class OptionsModule extends AbstractQuercusModule {
    */
   public static Value getenv(Env env, StringValue key)
   {
-    Value serverVars = env.getGlobalVar("_SERVER");
+    Value serverVars = env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne();
     Value val = serverVars.get(key);
 
     if (val == null || ! val.isset())
@@ -782,15 +782,15 @@ public class OptionsModule extends AbstractQuercusModule {
     }
 
     if (hasRequest(env)) {
-      phpinfoVariable(env, "_REQUEST", env.getGlobalVar("_REQUEST"));
-      phpinfoVariable(env, "_GET", env.getGlobalVar("_GET"));
-      phpinfoVariable(env, "_POST", env.getGlobalVar("_POST"));
-      phpinfoVariable(env, "_COOKIE", env.getGlobalVar("_COOKIE"));
-      phpinfoVariable(env, "_SESSION", env.getGlobalVar("_SESSION"));
+      phpinfoVariable(env, "_REQUEST", env.getGlobalVar(VHelper.noCtx(), "_REQUEST").getOne());
+      phpinfoVariable(env, "_GET", env.getGlobalVar(VHelper.noCtx(), "_GET").getOne());
+      phpinfoVariable(env, "_POST", env.getGlobalVar(VHelper.noCtx(), "_POST").getOne());
+      phpinfoVariable(env, "_COOKIE", env.getGlobalVar(VHelper.noCtx(), "_COOKIE").getOne());
+      phpinfoVariable(env, "_SESSION", env.getGlobalVar(VHelper.noCtx(), "_SESSION").getOne());
     }
 
-    phpinfoVariable(env, "_ENV", env.getGlobalVar("_ENV"));
-    phpinfoVariable(env, "_SERVER", env.getGlobalVar("_SERVER"));
+    phpinfoVariable(env, "_ENV", env.getGlobalVar(VHelper.noCtx(), "_ENV").getOne());
+    phpinfoVariable(env, "_SERVER", env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne());
 
     if (hasRequest(env))
       env.print(VHelper.noCtx(), "</table>");
@@ -870,7 +870,7 @@ public class OptionsModule extends AbstractQuercusModule {
     StringValue key = settings.substring(0, eqIndex);
     StringValue val = settings.substring(eqIndex + 1);
 
-    env.getGlobalVar("_SERVER").put(key, val);
+    env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().put(key, val);
 
     return true;
   }

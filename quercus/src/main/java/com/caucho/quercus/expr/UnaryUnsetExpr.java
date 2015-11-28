@@ -65,7 +65,7 @@ public class UnaryUnsetExpr extends Expr {
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    _var.evalUnset(env);
+    _var.evalUnset(env, VHelper.noCtx());
 
     return VHelper.toV(NullValue.NULL);
   }

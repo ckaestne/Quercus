@@ -38,6 +38,7 @@ import com.caucho.util.LruCache;
 import com.caucho.vfs.StderrStream;
 import com.caucho.vfs.StringWriter;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -197,14 +198,14 @@ public class VariableModule extends AbstractQuercusModule {
 
     for (Map.Entry<StringValue,EnvVar> entry : map.entrySet()) {
       result.append(entry.getKey(),
-                    entry.getValue().get());
+                    entry.getValue().get(VHelper.noCtx()).getOne());
     }
 
     Map<StringValue,EnvVar> globalMap = env.getGlobalEnv();
     if (map != globalMap) {
       for (Map.Entry<StringValue,EnvVar> entry : globalMap.entrySet()) {
         result.append(entry.getKey(),
-                      entry.getValue().get());
+                      entry.getValue().get(VHelper.noCtx()).getOne());
       }
     }
 
@@ -247,11 +248,11 @@ public class VariableModule extends AbstractQuercusModule {
       Value value = null;
 
       if (ch == 'c' || ch == 'C')
-        value = env.getGlobalValue("_COOKIE");
+        value = env.getGlobalValue(VHelper.noCtx(), "_COOKIE").getOne();
       else if (ch == 'g' || ch == 'G')
-        value = env.getGlobalValue("_GET");
+        value = env.getGlobalValue(VHelper.noCtx(), "_GET").getOne();
       else if (ch == 'p' || ch == 'P')
-        value = env.getGlobalValue("_POST");
+        value = env.getGlobalValue(VHelper.noCtx(), "_POST").getOne();
 
       if (! (value instanceof ArrayValue))
         continue;
@@ -261,8 +262,8 @@ public class VariableModule extends AbstractQuercusModule {
       for (Map.Entry<Value,Value> entry : array.entrySet()) {
         String key = entry.getKey().toString();
 
-        env.setGlobalValue(prefix + key,
-                         array.getVar(entry.getKey()));
+        env.setGlobalValue(VHelper.noCtx(), prefix + key,
+                         V.one(array.getVar(entry.getKey())));
       }
     }
 

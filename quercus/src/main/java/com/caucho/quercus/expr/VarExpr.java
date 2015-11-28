@@ -140,7 +140,7 @@ public class VarExpr
   @Override
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getValue(_name, false, true));
+    return env.getValue(ctx, _name, false, true);
   }
 
   /**
@@ -153,7 +153,7 @@ public class VarExpr
   @Override
   public @NonNull V<? extends Value> evalTop(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getValue(_name, false, false));
+    return env.getValue(ctx, _name, false, false);
   }
 
   /**
@@ -161,7 +161,7 @@ public class VarExpr
    */
   public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getValue(_name, false, false).isset());
+    return env.getValue(VHelper.noCtx(), _name, false, false).map((a)->a.isset());
   }
 
   /**
@@ -169,7 +169,7 @@ public class VarExpr
    */
   public @NonNull V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getValue(_name, false, false));
+    return env.getValue(VHelper.noCtx(), _name, false, false);
   }
 
   /**
@@ -195,11 +195,11 @@ public class VarExpr
   @Override
   public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    Value value = env.getVar(_name);
+    V<? extends Value> value = env.getVar(ctx, _name);
 
-    value = value.toAutoArray();
+    value = value.map((a)->a.toAutoArray());
 
-    return VHelper.toV(value);
+    return value;
   }
 
   /**
@@ -212,7 +212,7 @@ public class VarExpr
    */
   public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    Value value;
+    V<? extends Value> value;
 
     /*
     if (_var.isGlobal()) {
@@ -225,16 +225,16 @@ public class VarExpr
       }
     } else {
     */
-      value = env.getValue(_name);
+      value = env.getValue(VHelper.noCtx(), _name);
 
-      if (value == null || value.isString() || value.isNull()) {
-        value = env.createObject();
-
-        env.setValue(_name, value);
-      }
+      value.vforeach(ctx, (c,v)-> {
+                if (v == null || v.isString() || v.isNull()) {
+                  env.setValue(c, _name, V.one(env.createObject()));
+                }
+              });
     //}
 
-    return VHelper.toV(value);
+    return value;
   }
 
   /**
@@ -246,7 +246,7 @@ public class VarExpr
    */
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getVar(_name));
+    return env.getVar(ctx, _name);
   }
 
   /**
@@ -262,7 +262,7 @@ public class VarExpr
     // php/043k
     // php/0443
 
-    return VHelper.toV(env.getVar(_name));
+    return env.getVar(ctx, _name);
   }
 
   /**
@@ -275,7 +275,7 @@ public class VarExpr
   public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     // php/0232
-    env.setValue(_name, value.getOne());
+    env.setValue(ctx, _name, value);
 
     return value;
   }
@@ -289,7 +289,7 @@ public class VarExpr
   @Override
   public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    env.setRef(_name, value.getOne());
+    env.setRef(ctx, _name, value);
 
     return value;
   }
@@ -298,9 +298,10 @@ public class VarExpr
    * Evaluates the expression.
    *
    * @param env the calling environment.
+   * @param ctx
    */
   @Override
-  public void evalUnset(Env env)
+  public void evalUnset(Env env, FeatureExpr ctx)
   {
     // php/023b
     /*
@@ -308,7 +309,7 @@ public class VarExpr
       env.unsetGlobalVar(_name);
     else
     */
-    env.unsetLocalVar(_name);
+    env.unsetLocalVar(ctx, _name);
   }
 
   public int hashCode()

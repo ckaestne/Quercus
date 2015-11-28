@@ -254,7 +254,7 @@ public class Function extends AbstractFunction {
       else if (arg.isReference()) {
         values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne();
 
-        map.put(arg.getName(), new EnvVarImpl(values[i].toLocalVarDeclAsRef()));
+        map.put(arg.getName(), new EnvVarImpl(V.one(values[i].toLocalVarDeclAsRef())));
       }
       else {
         // php/0d04
@@ -262,7 +262,7 @@ public class Function extends AbstractFunction {
 
         Var var = values[i].toVar();
 
-        map.put(arg.getName(), new EnvVarImpl(var));
+        map.put(arg.getName(), new EnvVarImpl(V.one(var)));
 
         values[i] = var.toValue();
       }
@@ -277,10 +277,10 @@ public class Function extends AbstractFunction {
         return VHelper.toV(env.error("expected default expression"));
       else if (arg.isReference())
         map.put(arg.getName(),
-                new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar()));
+                new EnvVarImpl(V.one(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar())));
       else {
         map.put(arg.getName(),
-                new EnvVarImpl(defaultExpr.eval(env, VHelper.noCtx()).getOne().copy().toVar()));
+                new EnvVarImpl(V.one(defaultExpr.eval(env, VHelper.noCtx()).getOne().copy().toVar())));
       }
     }
 
@@ -348,7 +348,7 @@ public class Function extends AbstractFunction {
 
     if (useParams != null) {
       for (int i = 0; i < useParams.length; i++) {
-        map.put(useParams[i].getName(), new EnvVarImpl(useArgs[i].toVar()));
+        map.put(useParams[i].getName(), new EnvVarImpl(V.one(useArgs[i].toVar())));
       }
     }
 
@@ -362,7 +362,7 @@ public class Function extends AbstractFunction {
       if (arg == null) {
       }
       else if (arg.isReference()) {
-        map.put(arg.getName(), new EnvVarImpl(args[i].toLocalVarDeclAsRef()));
+        map.put(arg.getName(), new EnvVarImpl(V.one(args[i].toLocalVarDeclAsRef())));
       }
       else {
         // XXX: php/1708, toVar() may be doing another copy()
@@ -377,7 +377,7 @@ public class Function extends AbstractFunction {
         }
 
         // quercus/0d04
-        map.put(arg.getName(), new EnvVarImpl(var));
+        map.put(arg.getName(), new EnvVarImpl(V.one(var)));
       }
     }
 
@@ -390,9 +390,9 @@ public class Function extends AbstractFunction {
         if (defaultExpr == null)
           return VHelper.toV(env.error("expected default expression"));
         else if (arg.isReference())
-          map.put(arg.getName(), new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar()));
+          map.put(arg.getName(), new EnvVarImpl(V.one(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar())));
         else {
-          map.put(arg.getName(), new EnvVarImpl(defaultExpr.eval(env, VHelper.noCtx()).getOne().toLocalVar()));
+          map.put(arg.getName(), new EnvVarImpl(V.one(defaultExpr.eval(env, VHelper.noCtx()).getOne().toLocalVar())));
         }
       } catch (Exception e) {
         throw new QuercusException(getName() + ":arg(" + arg.getName() + ") "

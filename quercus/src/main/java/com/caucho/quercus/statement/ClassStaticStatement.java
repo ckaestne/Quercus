@@ -78,7 +78,7 @@ public class ClassStaticStatement
       Var var = env.getStaticVar(env.createString(className
                                                   + "::" + staticName));
 
-      env.setVar(_var.getName(), var);
+      env.setVar(ctx, _var.getName(), V.one(var));
 
       if (! var.isset() && _initValue != null)
         var.set(_initValue.eval(env, VHelper.noCtx()).getOne());

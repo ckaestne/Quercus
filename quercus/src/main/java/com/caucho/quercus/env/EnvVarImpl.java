@@ -29,15 +29,18 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+
 /**
  * Encapsulates an environment entry for a variable.  The EnvVar is a
  * container for Vars.
  */
 public final class EnvVarImpl extends EnvVar
 {
-  private Var _var;
+  private V<? extends Var> _var;
 
-  public EnvVarImpl(Var var)
+  public EnvVarImpl(V<? extends Var> var)
   {
     if (var == null)
       throw new NullPointerException();
@@ -47,24 +50,27 @@ public final class EnvVarImpl extends EnvVar
 
   /**
    * Returns the current value.
+   * @param ctx
    */
-  public Value get()
+  public V<? extends Value> get(FeatureExpr ctx)
   {
-    return _var.toValue();
+    return _var.map((a)->a.toValue());
   }
 
   /**
    * Sets the current value.
    */
-  public Value set(Value value)
+  public V<? extends Value> set(FeatureExpr ctx, V<? extends Value> value)
   {
-    return _var.set(value);
+    assert ctx.isTautology() : "TODO implement conditional updates";
+    return _var.map((a)->a.set(value.getOne()));
   }
 
   /**
    * Returns the current Var.
+   * @param ctx
    */
-  public Var getVar()
+  public V<? extends Var> getVar(FeatureExpr ctx)
   {
     return _var;
   }
@@ -72,7 +78,7 @@ public final class EnvVarImpl extends EnvVar
   /**
    * Sets the var.
    */
-  public Var setVar(Var var)
+  public V<? extends Var> setVar(FeatureExpr ctx, V<? extends Var> var)
   {
     _var = var;
 

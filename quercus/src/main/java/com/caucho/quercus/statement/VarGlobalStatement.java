@@ -60,7 +60,7 @@ public class VarGlobalStatement extends Statement {
   {
     V<? extends StringValue> name = _varExpr.evalStringValue(env, VHelper.noCtx());
     
-    name.map((a)->env.setRef(a, env.getGlobalVar(a)));
+    name.flatMap((a)->env.getGlobalVar(ctx, a).map((b)->env.setRef(a, b)));
 
     return null;
   }

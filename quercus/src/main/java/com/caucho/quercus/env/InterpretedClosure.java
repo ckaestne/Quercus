@@ -33,6 +33,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -58,9 +59,9 @@ public class InterpretedClosure extends Closure
         Arg arg = args[i];
 
         if (arg.isReference())
-          _args[i] = env.getRef(arg.getName());
+          _args[i] = env.getRef(VHelper.noCtx(), arg.getName()).getOne();
         else
-          _args[i] = env.getValue(arg.getName());
+          _args[i] = env.getValue(VHelper.noCtx(), arg.getName()).getOne();
       }
     }
     else {

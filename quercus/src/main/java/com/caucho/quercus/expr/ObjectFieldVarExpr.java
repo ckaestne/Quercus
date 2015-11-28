@@ -207,9 +207,10 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public void evalUnset(Env env)
+  public void evalUnset(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
 

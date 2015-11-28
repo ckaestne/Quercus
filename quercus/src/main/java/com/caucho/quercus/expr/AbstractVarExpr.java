@@ -215,9 +215,10 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  abstract public void evalUnset(Env env);
+  abstract public void evalUnset(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression.

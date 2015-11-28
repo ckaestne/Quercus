@@ -29,6 +29,10 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
 /**
  * Encapsulates an environment entry for a variable.  The EnvVar is a
  * container for Vars.
@@ -46,34 +50,36 @@ public class LazySaveEnvVar extends EnvVar
   
   /**
    * Returns the current value.
+   * @param ctx
    */
-  public Value get()
+  public V<? extends Value> get(FeatureExpr ctx)
   {
-    return getEnvVar().get();
+    return getEnvVar().get(ctx);
   }
 
   /**
    * Sets the current value.
    */
-  public Value set(Value value)
+  public V<? extends Value> set(FeatureExpr ctx, V<? extends Value> value)
   {
-    return getEnvVar().set(value);
+    return getEnvVar().set(ctx, value);
   }
 
   /**
    * Returns the current Var.
+   * @param ctx
    */
-  public Var getVar()
+  public V<? extends Var> getVar(FeatureExpr ctx)
   {
-    return getEnvVar().getVar();
+    return getEnvVar().getVar(ctx);
   }
 
   /**
    * Sets the var.
    */
-  public Var setVar(Var var)
+  public V<? extends Var> setVar(FeatureExpr ctx, V<? extends Var> var)
   {
-    return getEnvVar().setVar(var);
+    return getEnvVar().setVar(ctx, var);
   }
 
   private EnvVar getEnvVar()
@@ -82,9 +88,9 @@ public class LazySaveEnvVar extends EnvVar
     EnvVar []globals = env.getGlobalList();
 
     if (globals[_id] == this) {
-      EnvVar var = new EnvVarImpl(new Var());
+      EnvVar var = new EnvVarImpl(V.one(new Var()));
 
-      var.set(_value.copy(env));
+      var.set(VHelper.noCtx(), V.one(_value.copy(env)));
 
       globals[_id] = var;
     }

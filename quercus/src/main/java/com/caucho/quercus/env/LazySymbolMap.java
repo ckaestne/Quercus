@@ -30,6 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.util.IntMap;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -74,14 +76,14 @@ public class LazySymbolMap extends AbstractMap<StringValue,EnvVar> {
         Var var = new Var();
         // var.setGlobal();
         
-        envVar = new EnvVarImpl(var);
+        envVar = new EnvVarImpl(V.one(var));
         _extMap.put(key, envVar);
           
         Env env = Env.getCurrent();
         
         Value value = _values[id].copy(env);
 
-        envVar.set(value);
+        envVar.set(VHelper.noCtx(), V.one(value));
       }
     }
     

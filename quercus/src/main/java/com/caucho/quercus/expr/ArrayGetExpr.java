@@ -254,10 +254,11 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public void evalUnset(Env env)
+  public void evalUnset(Env env, FeatureExpr ctx)
   {
     _expr.evalUnsetArray(env, VHelper.noCtx(), _index);
   }

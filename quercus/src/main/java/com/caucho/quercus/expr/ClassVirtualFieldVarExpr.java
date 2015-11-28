@@ -159,9 +159,10 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public void evalUnset(Env env)
+  public void evalUnset(Env env, FeatureExpr ctx)
   {
     env.error(L.l("{0}::${1}: Cannot unset static variables.",
                   env.getCallingClass().getName(), _varName),

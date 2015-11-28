@@ -34,6 +34,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.ArrayModule;
 import com.caucho.util.L10N;
 import com.caucho.vfs.ByteToChar;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 
@@ -131,7 +132,7 @@ public class StringUtility
             String arrayName = key.substring(0, openBracketIndex);
             arrayName = arrayName.replace('.', '_');
 
-            Value v = env.getVar(arrayName).getRawValue();
+            Value v = env.getVar(VHelper.noCtx(), arrayName).getOne().getRawValue();
             if (v instanceof ArrayValue) {
               //Check to make sure valid string (ie: foo[...])
               if (closeBracketIndex < 0) {
@@ -244,7 +245,7 @@ public class StringUtility
       if (array != null)
         part = array.get(keyValue);
       else
-        part = env.getVar(keyValue);
+        part = env.getVar(VHelper.noCtx(), keyValue).getOne();
 
       if (! part.isArray())
         part = new ArrayValueImpl();

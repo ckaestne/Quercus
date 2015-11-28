@@ -46,5 +46,10 @@ class VTest extends AbstractPhpTest {
         eval("if (create_conditional('foo')) echo 1+create_conditional('bar');") to c(foo.and(bar), "2") + c(foo.andNot(bar), "1")
     }
 
+    @Test
+    def testVVar() {
+        eval("$x = 1+create_conditional('foo'); echo 1+$x;") to c(foo, "3") + c(foo.not(), "2")
+    }
+
 
 }
