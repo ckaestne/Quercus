@@ -31,6 +31,7 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -895,10 +896,11 @@ public class UnicodeBuilderValue
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.print(_buffer, 0, _length);
+    env.print(ctx, _buffer, 0, _length);
   }
 
   /**

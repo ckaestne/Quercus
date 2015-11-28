@@ -74,11 +74,11 @@ public class ConditionalExpr extends Expr {
    * @return the expression value.
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+
   {
-    if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
-      return _trueExpr.eval(env, VHelper.noCtx());
-    else
-      return _falseExpr.eval(env, VHelper.noCtx());
+    return _test.evalBoolean(env, ctx).vflatMap(ctx, (c, a)->
+            a?   _trueExpr.eval(env, c):  _falseExpr.eval(env, c)
+    );
   }
 
   /**
@@ -89,7 +89,7 @@ public class ConditionalExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
       return _trueExpr.evalBoolean(env, VHelper.noCtx());

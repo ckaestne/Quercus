@@ -87,7 +87,7 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
   @Override
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
     return cls.map((a)->a.getStaticFieldValue(env, _varName));
   }
@@ -101,9 +101,9 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
     return cls.map((a)->a.getStaticFieldVar(env, _varName));
   }
@@ -120,7 +120,7 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
   @Override
   public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
     return cls.map((a)->a.setStaticFieldRef(env, _varName, value.getOne()));
   }

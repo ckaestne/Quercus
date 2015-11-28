@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.util.CharBuffer;
 import com.caucho.vfs.TempCharBuffer;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -1634,10 +1635,11 @@ public class StringBuilderValue
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.write(_buffer, 0, _length);
+    env.write(ctx, _buffer, 0, _length);
   }
 
   /**

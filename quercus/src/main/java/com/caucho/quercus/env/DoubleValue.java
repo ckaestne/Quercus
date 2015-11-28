@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -494,10 +495,11 @@ public class DoubleValue extends NumberValue
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.print(toString());
+    env.print(ctx, toString());
   }
 
   /**

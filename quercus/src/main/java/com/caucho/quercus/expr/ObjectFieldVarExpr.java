@@ -111,7 +111,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     // quercus/0d1k
     V<? extends Value> value = _objExpr.evalObject(env, VHelper.noCtx());
@@ -222,7 +222,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   }
 
   @Override
-  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
       V<? extends Value> object = _objExpr.eval(env, VHelper.noCtx());
       return object.map((a)->a.issetField(env, _nameExpr.evalStringValue(env, VHelper.noCtx()).getOne()));

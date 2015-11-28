@@ -137,9 +137,9 @@ public class LiteralExpr extends Expr {
   }
 
   @Override
-  public V<QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
+  public V<? extends QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
-    V<String> className = evalString(env, VHelper.noCtx());
+    V<? extends String> className = evalString(env, VHelper.noCtx());
 
     return className.map((a)->env.getClass(a));
   }

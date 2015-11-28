@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -108,9 +110,10 @@ public class DefaultValue extends NullValue {
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
   @Override
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
   }
 

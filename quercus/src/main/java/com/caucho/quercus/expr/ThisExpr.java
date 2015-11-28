@@ -114,7 +114,7 @@ public class ThisExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getThis().toVar());
   }
@@ -168,7 +168,7 @@ public class ThisExpr extends AbstractVarExpr {
   /**
    * Evaluates as a QuercusClass.
    */
-  public V<QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
+  public V<? extends QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getThis().getQuercusClass());
   }

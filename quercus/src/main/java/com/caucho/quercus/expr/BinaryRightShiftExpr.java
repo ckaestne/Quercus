@@ -83,7 +83,7 @@ public class BinaryRightShiftExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Long> evalLong(Env env, FeatureExpr ctx)
+  public V<? extends Long> evalLong(Env env, FeatureExpr ctx)
   {
     V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());
     V<? extends Value> rValue = _right.eval(env, VHelper.noCtx());

@@ -60,9 +60,9 @@ public class TextStatement extends Statement {
 
   public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    _value.print(env);
+    _value.print(env, ctx);
 
-    return null;
+    return V.one(null);
   }
 }
 

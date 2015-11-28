@@ -84,7 +84,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     // quercus/0d28
-    V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
+    V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
     
     return value.map((a)->a.toRef());
   }
@@ -100,7 +100,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
   @Override
   public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
+    V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
     
     return value.map((a)->a.toArgRef());
   }
@@ -113,9 +113,9 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
+    V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
 
     // php/112d
     return value;

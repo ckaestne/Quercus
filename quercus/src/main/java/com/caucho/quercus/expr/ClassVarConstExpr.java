@@ -86,7 +86,7 @@ public class ClassVarConstExpr extends Expr
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     // php/09d2
-    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
     return cls.map((a)->a.getConstant(env, _name));
   }

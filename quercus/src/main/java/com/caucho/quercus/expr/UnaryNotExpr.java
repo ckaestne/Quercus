@@ -70,7 +70,7 @@ public class UnaryNotExpr extends AbstractUnaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     return  _expr.evalBoolean(env, ctx).map((a)->!a);
   }

@@ -772,11 +772,12 @@ public class ArgRef extends Value
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
   @Override
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    _var.print(env);
+    _var.print(env, VHelper.noCtx());
   }
 
   @Override

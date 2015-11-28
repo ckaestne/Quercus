@@ -107,7 +107,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
 
@@ -126,7 +126,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<String> evalString(Env env, FeatureExpr ctx)
+  public V<? extends String> evalString(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
 

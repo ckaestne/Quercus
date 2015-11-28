@@ -102,7 +102,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
     }
     else {
       // php/0d4e need to do a toValue()
-      V<Value> obj = _expr.evalArray(env, ctx).map((a)->a.toValue());
+      V<? extends Value> obj = _expr.evalArray(env, ctx).map((a)->a.toValue());
 
       return obj.map((a)->a.getArgTail(env, isTop));
     }
@@ -116,9 +116,9 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<Var> obj = _expr.evalVar(env, ctx);
+    V<? extends Var> obj = _expr.evalVar(env, ctx);
 
     return obj.map((a)->a.putVar());
   }

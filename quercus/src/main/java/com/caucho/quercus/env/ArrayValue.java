@@ -1135,11 +1135,12 @@ abstract public class ArrayValue extends Value {
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
   @Override
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.print("Array");
+    env.print(ctx, "Array");
   }
 
   /**

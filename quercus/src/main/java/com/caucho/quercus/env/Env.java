@@ -1314,10 +1314,10 @@ public class Env
   /**
    * Prints a string
    */
-  public final void print(String v)
+  public final void print(FeatureExpr ctx, String v)
   {
     try {
-      getOut().print(VHelper.noCtx(), v);
+      getOut().print(ctx, v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1326,10 +1326,10 @@ public class Env
   /**
    * Prints a character buffer.
    */
-  public final void print(char []buffer, int offset, int length)
+  public final void print(FeatureExpr ctx, char[] buffer, int offset, int length)
   {
     try {
-      getOut().print(VHelper.noCtx(), buffer, offset, length);
+      getOut().print(ctx, buffer, offset, length);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1338,10 +1338,10 @@ public class Env
   /**
    * Prints a char
    */
-  public final void print(char v)
+  public final void print(FeatureExpr ctx, char v)
   {
     try {
-      getOut().print(VHelper.noCtx(), v);
+      getOut().print(ctx, v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1350,10 +1350,10 @@ public class Env
   /**
    * Prints a long
    */
-  public final void print(long v)
+  public final void print(FeatureExpr ctx, long v)
   {
     try {
-      getOut().print(VHelper.noCtx(), v);
+      getOut().print(ctx, v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1362,15 +1362,15 @@ public class Env
   /**
    * Prints a double
    */
-  public final void print(double v)
+  public final void print(FeatureExpr ctx, double v)
   {
     try {
       long longV = (long) v;
 
       if (v == longV)
-        getOut().print(VHelper.noCtx(), longV);
+        getOut().print(ctx, longV);
       else
-        getOut().print(VHelper.noCtx(), v);
+        getOut().print(ctx, v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1379,10 +1379,10 @@ public class Env
   /**
    * Prints an object
    */
-  public final void print(Object v)
+  public final void print(FeatureExpr ctx, Object v)
   {
     try {
-      getOut().print(VHelper.noCtx(), v);
+      getOut().print(ctx, v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1391,18 +1391,18 @@ public class Env
   /**
    * Prints a value
    */
-  public final void print(Value v)
+  public final void print(FeatureExpr ctx, Value v)
   {
-    v.print(this);
+    v.print(this, ctx);
   }
 
   /**
    * Prints a string
    */
-  public final void println()
+  public final void println(FeatureExpr ctx)
   {
     try {
-      getOut().println(VHelper.noCtx());
+      getOut().println(ctx);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1411,10 +1411,10 @@ public class Env
   /**
    * Prints a string
    */
-  public final void println(String v)
+  public final void println(FeatureExpr ctx, String v)
   {
     try {
-      getOut().println(VHelper.noCtx(), v);
+      getOut().println(ctx, v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1423,11 +1423,11 @@ public class Env
   /**
    * Prints a string
    */
-  public final void println(Value v)
+  public final void println(FeatureExpr ctx, Value v)
   {
     try {
-      v.print(this);
-      getOut().println(VHelper.noCtx());
+      v.print(this, ctx);
+      getOut().println(ctx);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1436,10 +1436,10 @@ public class Env
   /**
    * Prints and object.
    */
-  public final void println(Object v)
+  public final void println(FeatureExpr ctx, Object v)
   {
     try {
-      getOut().println(VHelper.noCtx(), v);
+      getOut().println(ctx, v);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
@@ -1448,10 +1448,10 @@ public class Env
   /**
    * Prints a byte buffer.
    */
-  public final void write(byte []buffer, int offset, int length)
+  public final void write(FeatureExpr ctx, byte[] buffer, int offset, int length)
   {
     try {
-      getOut().write(VHelper.noCtx(), buffer, offset, length);
+      getOut().write(ctx, buffer, offset, length);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }

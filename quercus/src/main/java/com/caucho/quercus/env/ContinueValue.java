@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+
 /**
  * Represents a PHP continue value.
  */
@@ -91,8 +93,9 @@ public class ContinueValue extends Value {
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
   }
 }

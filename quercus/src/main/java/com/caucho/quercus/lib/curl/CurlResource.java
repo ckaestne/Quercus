@@ -38,6 +38,7 @@ import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -837,7 +838,7 @@ public class CurlResource extends ResourceValue
     }
     else {
       if (isPrintData) {
-        env.print(data);
+        env.print(VHelper.noCtx(),data);
       }
 
       return BooleanValue.TRUE;

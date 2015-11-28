@@ -61,7 +61,7 @@ public class ToUnicodeExpr extends ToStringExpr {
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    V<Value> value = _expr.eval(env, VHelper.noCtx()).map((a)->a.toValue());
+    V<? extends Value> value = _expr.eval(env, VHelper.noCtx()).map((a)->a.toValue());
 
     return value.map((v)-> {
       if (v.isUnicode())

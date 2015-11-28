@@ -75,7 +75,7 @@ public class ToArrayExpr extends AbstractUnaryExpr {
    */
   public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    V<Value> value = _expr.eval(env, VHelper.noCtx()).map((a)->a.toValue());
+    V<? extends Value> value = _expr.eval(env, VHelper.noCtx()).map((a)->a.toValue());
 
     return value.map((v)->
       v instanceof ArrayValue?

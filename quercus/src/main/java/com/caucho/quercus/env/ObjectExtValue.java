@@ -1183,11 +1183,12 @@ public class ObjectExtValue extends ObjectValue
   /**
    * Converts to a string.
    * @param env
+   * @param ctx
    */
   @Override
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.print(toString(env));
+    env.print(VHelper.noCtx(),toString(env));
   }
 
   /**

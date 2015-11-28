@@ -29,6 +29,7 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -97,8 +98,9 @@ public class BreakValue extends Value {
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
   }
 

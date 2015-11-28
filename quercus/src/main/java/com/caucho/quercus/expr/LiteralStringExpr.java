@@ -157,7 +157,7 @@ public class LiteralStringExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<StringValue> evalStringValue(Env env, FeatureExpr ctx)
+  public V<? extends StringValue> evalStringValue(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(_value);
   }

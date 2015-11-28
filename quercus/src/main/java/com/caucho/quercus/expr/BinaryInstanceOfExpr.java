@@ -78,7 +78,7 @@ public class BinaryInstanceOfExpr extends AbstractUnaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _expr.eval(env, VHelper.noCtx());
 

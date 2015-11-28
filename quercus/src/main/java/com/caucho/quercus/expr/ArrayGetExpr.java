@@ -175,7 +175,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.evalArg(env, VHelper.noCtx(), false);
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    V<Value> result = VHelper.mapAll(array, index,(a,i)-> a.getArg(i, isTop));
+    V<? extends Value> result = VHelper.mapAll(array, index,(a,i)-> a.getArg(i, isTop));
 
     return result;
   }
@@ -189,7 +189,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
@@ -241,7 +241,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * Evaluates the expression as an isset().
    */
   @Override
-  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.evalIssetValue(env, VHelper.noCtx());
     V<? extends Value> index = _index.evalIssetValue(env, VHelper.noCtx());
@@ -266,7 +266,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * Evaluates as an empty() expression.
    */
   @Override
-  public V<Boolean> evalEmpty(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalEmpty(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.evalIssetValue(env, VHelper.noCtx());
     V<? extends Value> index = _index.evalIssetValue(env, VHelper.noCtx());

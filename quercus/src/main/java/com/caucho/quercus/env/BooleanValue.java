@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -284,11 +285,12 @@ public class BooleanValue extends Value
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
   @Override
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.print(_value ? "1" : "");
+    env.print(ctx, _value ? "1" : "");
   }
 
   //

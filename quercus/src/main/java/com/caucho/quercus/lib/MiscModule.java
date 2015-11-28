@@ -636,10 +636,10 @@ public class MiscModule extends AbstractQuercusModule {
       is.close();
 
       if ((ch = es.read()) >= 0) {
-        env.print((char) ch);
+        env.print(VHelper.noCtx(),(char) ch);
 
         while ((ch = es.read()) >= 0) {
-          env.print((char) ch);
+          env.print(VHelper.noCtx(),(char) ch);
         }
 
         return NullValue.NULL;

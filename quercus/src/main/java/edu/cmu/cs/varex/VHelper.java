@@ -8,17 +8,17 @@ import de.fosd.typechef.featureexpr.FeatureExprFactory;
  */
 public class VHelper {
     public static FeatureExpr noCtx() {
-        System.err.println("missing context");
+//        System.err.println("missing context");
         return FeatureExprFactory.True();
     }
 
-    public static <A, B, C, R> V<R> mapAll(V<A> a, V<B> b, V<C> c, Function4<A, B, C, R> fun) {
+    public static <A, B, C, R> V<? extends R> mapAll(V<? extends A> a, V<? extends B> b, V<? extends C> c, Function4<A, B, C, R> fun) {
         return a.flatMap((aa) ->
                 b.flatMap((bb) ->
-                        c.map((cc) -> fun.apply(aa, bb, cc))));
+                        c.<R>map((cc) -> fun.apply(aa, bb, cc))));
     }
 
-    public static <A, B, R> V<R> mapAll(V<A> a, V<B> b, Function3<A, B, R> fun) {
+    public static <A, B, R> V<? extends R> mapAll(V<? extends A> a, V<? extends B> b, Function3<A, B, R> fun) {
         return a.flatMap((aa) ->
                 b.map((bb) -> fun.apply(aa, bb)));
     }
@@ -31,4 +31,5 @@ public class VHelper {
         assert(t!=null);
         return t;
     }
+
 }

@@ -85,7 +85,7 @@ public class BinaryAssignListEachExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     if (! _value.isVar()) {
       env.error(L.l("each() argument must be a variable at '{0}'", _value));

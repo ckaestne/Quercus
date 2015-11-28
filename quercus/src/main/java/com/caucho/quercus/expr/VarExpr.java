@@ -159,7 +159,7 @@ public class VarExpr
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getValue(_name, false, false).isset());
   }
@@ -244,7 +244,7 @@ public class VarExpr
    * @param ctx
    * @return the expression value.
    */
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getVar(_name));
   }

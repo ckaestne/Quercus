@@ -138,7 +138,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  abstract public V<Var> evalVar(Env env, FeatureExpr ctx);
+  abstract public V<? extends Var> evalVar(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression as a reference when possible.

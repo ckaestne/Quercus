@@ -84,14 +84,17 @@ public class IfStatement extends Statement {
    */
   public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    if (_test.evalBoolean(env, VHelper.noCtx()).getOne()) {
-      return _trueBlock.execute(env, VHelper.noCtx());
+    FeatureExpr condition = _test.evalBoolean(env, VHelper.noCtx()).when((b)->b);
+
+    V<? extends Value> trueResult = V.one(null);
+    V<? extends Value> falseResult = V.one(null);
+    if (ctx.and(condition).isSatisfiable()) {
+      trueResult = _trueBlock.execute(env, ctx.and(condition));
     }
-    else if (_falseBlock != null) {
-      return _falseBlock.execute(env, VHelper.noCtx());
+    if (_falseBlock != null && ctx.andNot(condition).isSatisfiable()) {
+      falseResult= _falseBlock.execute(env, ctx.andNot(condition));
     }
-    else
-      return V.one(null);
+    return V.<Value>choice(condition, trueResult, falseResult);
   }
 }
 

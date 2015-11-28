@@ -68,9 +68,9 @@ public class VarVarExpr extends AbstractVarExpr {
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<Value> value = varName.map((vn)->env.getValue(vn));
+    V<? extends Value> value = varName.map((vn)->env.getValue(vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -92,7 +92,7 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
     // php/0d63
     env.setRef(varName.getOne(), value.getOne());
@@ -124,9 +124,9 @@ public class VarVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
     return varName.map((vn)-> env.getVar(vn));
   }
@@ -142,9 +142,9 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<Value> value = varName.map((vn)-> env.getVar(vn));
+    V<? extends Value> value = varName.map((vn)-> env.getVar(vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -165,9 +165,9 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<Value> value = varName.map((vn)-> env.getVar(vn));
+    V<? extends Value> value = varName.map((vn)-> env.getVar(vn));
 
     return value.map((a)->a.toAutoArray());
   }

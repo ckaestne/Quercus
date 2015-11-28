@@ -469,7 +469,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.toVar());
   }
@@ -644,7 +644,7 @@ abstract public class Expr {
 
     V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
-    V<Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
+    V<? extends Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -668,7 +668,7 @@ abstract public class Expr {
 
     V<? extends Value> value = valueExpr.evalRef(env, ctx);
 
-    V<Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
+    V<? extends Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -690,7 +690,7 @@ abstract public class Expr {
     V<? extends Value> array = evalArray(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    V<Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
+    V<? extends Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -712,9 +712,9 @@ abstract public class Expr {
   /**
    * Handles post increments.
    */
-  public V<Value> evalPostIncrement(Env env, FeatureExpr ctx, int incr)
+  public V<? extends Value> evalPostIncrement(Env env, FeatureExpr ctx, int incr)
   {
-    V<Var> value = evalVar(env, ctx);
+    V<? extends Var> value = evalVar(env, ctx);
 
     return value.map(a->a.postincr(incr));
   }
@@ -722,9 +722,9 @@ abstract public class Expr {
   /**
    * Handles post increments.
    */
-  public V<Value> evalPreIncrement(Env env, FeatureExpr ctx, int incr)
+  public V<? extends Value> evalPreIncrement(Env env, FeatureExpr ctx, int incr)
   {
-    V<Var> value = evalVar(env, ctx);
+    V<? extends Var> value = evalVar(env, ctx);
 
     return value.map(a->a.preincr(incr));
   }
@@ -737,7 +737,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<String> evalString(Env env, FeatureExpr ctx)
+  public V<? extends String> evalString(Env env, FeatureExpr ctx)
   {
     V<? extends Value> value = eval(env, ctx);
 
@@ -757,7 +757,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<StringValue> evalStringValue(Env env, FeatureExpr ctx)
+  public V<? extends StringValue> evalStringValue(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.toStringValue(env));
   }
@@ -770,7 +770,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Character> evalChar(Env env, FeatureExpr ctx)
+  public V<? extends Character> evalChar(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.toChar());
   }
@@ -783,7 +783,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.toBoolean());
   }
@@ -796,7 +796,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Long> evalLong(Env env, FeatureExpr ctx)
+  public V<? extends Long> evalLong(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.toLong());
   }
@@ -809,7 +809,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Double> evalDouble(Env env, FeatureExpr ctx)
+  public V<? extends Double> evalDouble(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.toDouble());
   }
@@ -817,7 +817,7 @@ abstract public class Expr {
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.isset());
   }
@@ -844,7 +844,7 @@ abstract public class Expr {
   /**
    * Evaluates as an empty() expression.
    */
-  public V<Boolean> evalEmpty(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalEmpty(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx).map(a->a.isEmpty());
   }
@@ -852,7 +852,7 @@ abstract public class Expr {
   /**
    * Evaluates as a QuercusClass.
    */
-  public V<QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
+  public V<? extends QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = eval(env, ctx);
 
@@ -879,7 +879,7 @@ abstract public class Expr {
   public void print(Env env, FeatureExpr ctx)
     throws IOException
   {
-    eval(env, ctx).foreach((a)->a.print(env));
+    eval(env, ctx).foreach((a)->a.print(env, VHelper.noCtx()));
   }
 
   @Override

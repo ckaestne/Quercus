@@ -70,7 +70,7 @@ public class UnaryBitNotExpr extends AbstractUnaryExpr {
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    V<Long> lValue = _expr.evalLong(env, VHelper.noCtx());
+    V<? extends Long> lValue = _expr.evalLong(env, VHelper.noCtx());
 
     return lValue.map((a)->LongValue.create(~ a.longValue()));
   }

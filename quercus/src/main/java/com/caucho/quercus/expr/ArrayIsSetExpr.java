@@ -85,7 +85,7 @@ public class ArrayIsSetExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());

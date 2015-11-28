@@ -789,7 +789,7 @@ public class VariableModule extends AbstractQuercusModule {
       return s;
     }
     else {
-      env.print(s);
+      env.print(VHelper.noCtx(),s);
 
       return NullValue.NULL;
     }
@@ -841,7 +841,7 @@ public class VariableModule extends AbstractQuercusModule {
       out.print(VHelper.noCtx(), "NULL");
     }
     else {
-      v.print(env);
+      v.print(env, VHelper.noCtx());
     }
   }
 

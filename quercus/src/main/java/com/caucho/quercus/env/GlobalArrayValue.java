@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import com.caucho.inject.Module;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -174,10 +175,11 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.print("Array");
+    env.print(ctx, "Array");
   }
 
   /**

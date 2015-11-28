@@ -84,7 +84,7 @@ public class ClassVarVarConstExpr extends Expr
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
     return cls.map((a)->a.getConstant(env, _name.evalStringValue(env, VHelper.noCtx()).getOne()));
   }

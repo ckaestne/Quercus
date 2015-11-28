@@ -58,9 +58,9 @@ public class EchoStatement extends Statement {
   {
     V<? extends Value> value = _expr.eval(env, VHelper.noCtx());
 
-    value.foreach((a)->a.print(env));
+    value.vforeach(ctx, (c, a)->a.print(env, c));
 
-    return null;
+    return V.one(null);
   }
 }
 

@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.QuercusRuntimeException;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -722,8 +723,9 @@ public class LargeStringBuilderValue
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
     for (int i = 0; i < _length; i += SIZE) {
       int chunk = i / SIZE;
@@ -732,7 +734,7 @@ public class LargeStringBuilderValue
       if (SIZE < sublen)
         sublen = SIZE;
 
-      env.write(_bufferList[chunk], 0, sublen);
+      env.write(VHelper.noCtx(), _bufferList[chunk], 0, sublen);
     }
   }
 

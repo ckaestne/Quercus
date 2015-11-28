@@ -2290,11 +2290,12 @@ public class Var extends Value
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
   @Override
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    _value.print(env);
+    _value.print(env, VHelper.noCtx());
   }
 
   /**

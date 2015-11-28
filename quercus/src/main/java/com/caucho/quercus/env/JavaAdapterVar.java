@@ -1437,9 +1437,9 @@ public class JavaAdapterVar extends Value
    * Prints the value.
    */
   @Override
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    getValue().print(env);
+    getValue().print(env, VHelper.noCtx());
   }
 
   /**

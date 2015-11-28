@@ -143,7 +143,7 @@ public class ClosureExpr extends Expr {
    *
    * @return the expression value.
    */
-  private V<Value> evalImpl(Env env)
+  private V<? extends Value> evalImpl(Env env)
   {
     Value qThis = NullValue.NULL;
 

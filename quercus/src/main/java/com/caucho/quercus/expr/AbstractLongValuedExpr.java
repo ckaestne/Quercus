@@ -72,7 +72,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     return evalLong(env, VHelper.noCtx()).map((a)->a != 0);
   }
@@ -85,7 +85,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Double> evalDouble(Env env, FeatureExpr ctx)
+  public V<? extends Double> evalDouble(Env env, FeatureExpr ctx)
   {
     return evalLong(env, VHelper.noCtx()).map((a)->(double)a);
   }
@@ -98,6 +98,6 @@ abstract public class AbstractLongValuedExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  abstract public V<Long> evalLong(Env env, FeatureExpr ctx);
+  abstract public V<? extends Long> evalLong(Env env, FeatureExpr ctx);
 }
 

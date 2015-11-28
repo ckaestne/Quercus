@@ -86,7 +86,7 @@ public class BinaryAndExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()) , _right.evalBoolean(env, VHelper.noCtx()),(l,r)-> l&&r);
   }

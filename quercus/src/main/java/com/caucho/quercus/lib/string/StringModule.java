@@ -41,6 +41,7 @@ import com.caucho.util.*;
 import com.caucho.vfs.ByteToChar;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -1466,7 +1467,7 @@ public class StringModule extends AbstractQuercusModule {
    */
   public static long print(Env env, Value value)
   {
-    value.print(env);
+    value.print(env, VHelper.noCtx());
 
     return 1;
   }
@@ -1484,7 +1485,7 @@ public class StringModule extends AbstractQuercusModule {
   {
     Value str = sprintf(env, format, args);
 
-    str.print(env);
+    str.print(env, VHelper.noCtx());
 
     return str.length();
   }

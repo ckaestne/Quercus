@@ -88,7 +88,7 @@ public class ClassVarNameVirtualConstExpr extends Expr {
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    V<StringValue> name = _name.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> name = _name.evalStringValue(env, VHelper.noCtx());
 
     return name.map((n)->env.getCallingClass().getConstant(env, n));
   }

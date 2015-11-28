@@ -100,7 +100,7 @@ public class BinaryAppendExpr extends Expr
   }
 
   @Override
-  public V<String> evalString(Env env, FeatureExpr ctx)
+  public V<? extends String> evalString(Env env, FeatureExpr ctx)
   {
     Value value = _value.eval(env, VHelper.noCtx()).getOne();
 

@@ -2931,10 +2931,11 @@ abstract public class Value implements java.io.Serializable
   /**
    * Prints the value.
    * @param env
+   * @param ctx
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
   {
-    env.print(toString(env));
+    env.print(ctx, toString(env));
   }
 
   /**

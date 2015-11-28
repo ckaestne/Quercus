@@ -74,7 +74,7 @@ public class BinaryCommaExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     _left.eval(env, VHelper.noCtx());
 

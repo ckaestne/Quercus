@@ -110,7 +110,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public V<Var> evalVar(Env env, FeatureExpr ctx)
+  public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
@@ -165,12 +165,12 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    * Handles post increments.
    */
   @Override
-  public V<Value> evalPostIncrement(Env env, FeatureExpr ctx, int incr)
+  public V<? extends Value> evalPostIncrement(Env env, FeatureExpr ctx, int incr)
   {
     // php/09kp
 
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
-    final V<Value> value = obj.map((a)->a.getField(env, _name))
+    final V<? extends Value> value = obj.map((a)->a.getField(env, _name))
       .map((a)->a.postincr(incr));
     obj.map((a)->a.putField(env, _name, value.getOne()));
 
@@ -181,12 +181,12 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    * Handles post increments.
    */
   @Override
-  public V<Value> evalPreIncrement(Env env, FeatureExpr ctx, int incr)
+  public V<? extends Value> evalPreIncrement(Env env, FeatureExpr ctx, int incr)
   {
     // php/09kq
 
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
-    V<Value> value = obj.map((a)->a.getField(env, _name))
+    V<? extends Value> value = obj.map((a)->a.getField(env, _name))
             .map((a)->a.preincr(incr));
     obj.map((a)->a.putField(env, _name, value.getOne()));
 
@@ -259,7 +259,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   }
 
   @Override
-  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
     V<? extends Value> object = _objExpr.eval(env, VHelper.noCtx());
 

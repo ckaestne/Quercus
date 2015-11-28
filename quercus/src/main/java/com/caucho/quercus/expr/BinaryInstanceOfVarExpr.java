@@ -74,7 +74,7 @@ public class BinaryInstanceOfVarExpr extends AbstractBinaryExpr {
    * Evaluates the equality as a boolean.
    */
   @Override
-  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());
     V<? extends Value> rValue = _right.eval(env, VHelper.noCtx());
