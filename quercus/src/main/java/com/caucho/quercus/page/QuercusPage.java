@@ -36,6 +36,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
@@ -141,7 +142,7 @@ abstract public class QuercusPage
    *
    * @param env the calling environment
    */
-  public Value executeTop(Env env)
+  public V<? extends Value> executeTop(Env env)
   {
     QuercusPage compile = getCompiledPage();
 
@@ -168,7 +169,7 @@ abstract public class QuercusPage
         uncaughtExceptionError(env, e);
       }
 
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     } finally {
       env.setPwd(oldPwd);
     }
@@ -201,7 +202,7 @@ abstract public class QuercusPage
    *
    * @param env the calling environment
    */
-  abstract public Value execute(Env env);
+  abstract public V<? extends Value> execute(Env env);
 
   /**
    * Initialize the program

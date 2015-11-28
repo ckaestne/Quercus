@@ -32,12 +32,12 @@ public class Choice<T> implements V<T> {
 
     @Override
     public <U> V<U> map(Function<T, U> fun) {
-        return null;
+        return new Choice<>(condition, fun.apply(a), fun.apply(b));
     }
 
     @Override
     public <U> V<U> flatMap(Function<T, V<U>> fun) {
-        return null;
+        return new Choice<>(condition, fun.apply(a).getOne(), fun.apply(b).getOne());
     }
 
     @Override

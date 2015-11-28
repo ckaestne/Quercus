@@ -14,16 +14,16 @@ public class VHelper {
 
     public static <A,B,C,R> V<R> mapAll(V<A> a, V<B> b, V<C> c, Function4<A, B, C, R> fun) {
         System.err.println("missing implementation");
-        return null;
+        return toV(fun.apply(a.getOne(),b.getOne(),c.getOne()));
     }
 
     public static <A,B,R> V<R> mapAll(V<A> a, V<B> b, Function3<A, B, R> fun) {
         System.err.println("missing implementation");
-        return null;
+        return toV(fun.apply(a.getOne(),b.getOne()));
     }
 
     public static <T> V<T> toV(T v) {
         System.err.println("missing implementation");
-        return null;
+        return new One(v);
     }
 }

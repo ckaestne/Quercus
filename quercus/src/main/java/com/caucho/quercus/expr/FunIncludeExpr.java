@@ -37,7 +37,6 @@ import com.caucho.quercus.env.Value;
 import com.caucho.vfs.Path;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP include statement
@@ -91,7 +90,7 @@ public class FunIncludeExpr extends AbstractUnaryExpr {
       
     env.pushCall(this, NullValue.NULL, new Value[] { name });
     try {
-      return VHelper.toV(env.include(_dir, name, _isRequire, false));
+      return env.include(_dir, name, _isRequire, false);
     } finally {
       env.popCall();
     }

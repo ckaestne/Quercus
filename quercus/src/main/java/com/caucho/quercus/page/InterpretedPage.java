@@ -38,6 +38,8 @@ import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.InterpretedClassDef;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
 
@@ -85,12 +87,12 @@ public class InterpretedPage extends QuercusPage
    *
    * @param env the calling environment
    */
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env)
   {
-    Value result = _program.execute(env).getOne();
+    V<? extends Value> result = _program.execute(env);
 
     if (result == null)
-      result = LongValue.ONE;
+      result = VHelper.toV(LongValue.ONE);
 
     return result;
   }

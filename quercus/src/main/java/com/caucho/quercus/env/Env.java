@@ -4226,7 +4226,7 @@ public class Env
    *
    * @return the result
    */
-  public Value executeTop()
+  public V<? extends Value> executeTop()
   {
     try {
       return executePageTop(_page);
@@ -4245,7 +4245,7 @@ public class Env
         uncaughtExceptionError(e);
       }
 
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     }
   }
 
@@ -4265,7 +4265,7 @@ public class Env
   /**
    * Executes the given page
    */
-  protected Value executePage(QuercusPage page)
+  protected V<? extends Value> executePage(QuercusPage page)
   {
     if (log.isLoggable(Level.FINEST))
       log.finest(this + " executePage " + page);
@@ -4279,7 +4279,7 @@ public class Env
   /**
    * Executes the given page
    */
-  protected Value executePageTop(QuercusPage page)
+  protected V<? extends Value> executePageTop(QuercusPage page)
   {
     if (page.getCompiledPage() != null)
       return page.getCompiledPage().execute(this);
@@ -5799,7 +5799,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public Value requireOnce(StringValue include)
+  public V<? extends Value> requireOnce(StringValue include)
   {
     return include(getSelfDirectory(), include, true, true);
   }
@@ -5807,7 +5807,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public Value require(StringValue include)
+  public V<? extends Value> require(StringValue include)
   {
     return include(getSelfDirectory(), include, true, false);
   }
@@ -5815,7 +5815,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public Value include(StringValue include)
+  public V<? extends Value> include(StringValue include)
   {
     return include(getSelfDirectory(), include, false, false);
   }
@@ -5823,7 +5823,7 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public Value includeOnce(StringValue include)
+  public V<? extends Value> includeOnce(StringValue include)
   {
     return include(getSelfDirectory(), include, false, true);
   }
@@ -5831,8 +5831,8 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public Value includeOnce(Path scriptPwd, StringValue include,
-                           boolean isRequire)
+  public V<? extends Value> includeOnce(Path scriptPwd, StringValue include,
+                                        boolean isRequire)
   {
     return include(scriptPwd, include, isRequire, true);
   }
@@ -5840,8 +5840,8 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public Value include(Path scriptPwd, StringValue include,
-                       boolean isRequire, boolean isOnce)
+  public V<? extends Value> include(Path scriptPwd, StringValue include,
+                                    boolean isRequire, boolean isOnce)
   {
     try {
       Path pwd = getPwd();
@@ -5852,11 +5852,11 @@ public class Env
       }
       else if (isRequire) {
         error(L.l("'{0}' is not a valid include path", include));
-        return BooleanValue.FALSE;
+        return VHelper.toV(BooleanValue.FALSE);
       }
       else {
         warning(L.l("'{0}' is not a valid include path", include));
-        return BooleanValue.FALSE;
+        return VHelper.toV(BooleanValue.FALSE);
       }
 
       // php/0b2d
@@ -5866,13 +5866,13 @@ public class Env
         log.warning(dbgId() + msg);
         error(msg);
 
-        return BooleanValue.FALSE;
+        return VHelper.toV(BooleanValue.FALSE);
       }
 
       QuercusPage page = _includeMap.get(path);
 
       if (page != null && isOnce)
-        return BooleanValue.TRUE;
+        return VHelper.toV(BooleanValue.TRUE);
       else if (page == null || page.isModified()) {
         page = _quercus.parse(path);
 

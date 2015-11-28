@@ -93,11 +93,11 @@ public class FunIncludeOnceExpr extends AbstractUnaryExpr {
     
     try {
       if (_dir != null)
-        return VHelper.toV(env.includeOnce(_dir, name, _isRequire));
+        return env.includeOnce(_dir, name, _isRequire);
       else if (_isRequire)
-        return VHelper.toV(env.requireOnce(name));
+        return env.requireOnce(name);
       else
-        return VHelper.toV(env.includeOnce(name));
+        return env.includeOnce(name);
     }
     finally {
       env.popCall();
