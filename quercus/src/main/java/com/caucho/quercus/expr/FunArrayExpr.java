@@ -34,6 +34,9 @@ import com.caucho.quercus.env.ArrayValue;
 import com.caucho.quercus.env.ArrayValueImpl;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -105,21 +108,22 @@ public class FunArrayExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     ArrayValue array = new ArrayValueImpl();
 
     for (int i = 0; i < _values.length; i++) {
       Expr keyExpr = _keys[i];
 
-      Value value = _values[i].evalArg(env, true);
+      Value value = _values[i].evalArg(env, VHelper.noCtx(), true).getOne();
       // php/0471
       value = value.toRefValue();
 
       if (keyExpr != null) {
-        Value key = keyExpr.evalArg(env, true).toLocalValue();
+        Value key = keyExpr.evalArg(env, VHelper.noCtx(), true).getOne().toLocalValue();
 
         array.put(key, value);
       }
@@ -127,7 +131,7 @@ public class FunArrayExpr extends Expr {
         array.put(value);
     }
 
-    return array;
+    return VHelper.toV(array);
   }
 
   public String toString()

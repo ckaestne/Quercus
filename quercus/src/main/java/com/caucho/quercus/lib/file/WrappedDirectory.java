@@ -29,13 +29,8 @@
 
 package com.caucho.quercus.lib.file;
 
-import com.caucho.quercus.env.ConstStringValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.UnicodeBuilderValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP directory listing
@@ -71,9 +66,9 @@ public class WrappedDirectory extends Directory {
   public boolean open(Env env, StringValue path, LongValue flags)
   {
     if (env.isUnicodeSemantics())
-      return _wrapper.callMethod(env, DIR_OPENDIR_U, path, flags).toBoolean();
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR_U, path, flags).getOne().toBoolean();
     else
-      return _wrapper.callMethod(env, DIR_OPENDIR, path, flags).toBoolean();
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR, path, flags).getOne().toBoolean();
   }
 
   /**
@@ -83,9 +78,9 @@ public class WrappedDirectory extends Directory {
   public Value read(Env env)
   {
     if (env.isUnicodeSemantics())
-      return _wrapper.callMethod(env, DIR_READDIR_U);
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR_U).getOne();
     else
-      return _wrapper.callMethod(env, DIR_READDIR);
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR).getOne();
   }
 
   /**
@@ -95,9 +90,9 @@ public class WrappedDirectory extends Directory {
   public void rewind(Env env)
   {
     if (env.isUnicodeSemantics())
-      _wrapper.callMethod(env, DIR_REWINDDIR_U);
+      _wrapper.callMethod(env, VHelper.noCtx(), DIR_REWINDDIR_U);
     else
-      _wrapper.callMethod(env, DIR_REWINDDIR);
+      _wrapper.callMethod(env, VHelper.noCtx(), DIR_REWINDDIR);
   }
 
   /**
@@ -107,9 +102,9 @@ public class WrappedDirectory extends Directory {
   public void close(Env env)
   {
     if (env.isUnicodeSemantics())
-      _wrapper.callMethod(env, DIR_CLOSEDIR_U);
+      _wrapper.callMethod(env, VHelper.noCtx(), DIR_CLOSEDIR_U);
     else
-      _wrapper.callMethod(env, DIR_CLOSEDIR);
+      _wrapper.callMethod(env, VHelper.noCtx(), DIR_CLOSEDIR);
   }
 
   /**

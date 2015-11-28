@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+
 /**
  * Represents a PHP shutdown function.
  */
@@ -45,9 +47,9 @@ public class Shutdown {
   /**
    * Evaluate the shutdown function
    */
-  public void call(Env env)
+  public void call(Env env, FeatureExpr ctx)
   {
-    _callback.call(env, _args);
+    _callback.call(env, ctx, _args);
   }
 }
 

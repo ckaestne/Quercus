@@ -30,16 +30,13 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.IdentityIntMap;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -389,7 +386,7 @@ public class CompiledClassDef extends ClassDef {
    * Eval new
    */
   @Override
-  public Value callNew(Env env, Expr []args)
+  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
   {
     return null;
   }
@@ -398,7 +395,7 @@ public class CompiledClassDef extends ClassDef {
    * Eval new
    */
   @Override
-  public Value callNew(Env env, Value []args)
+  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
   {
     return null;
   }

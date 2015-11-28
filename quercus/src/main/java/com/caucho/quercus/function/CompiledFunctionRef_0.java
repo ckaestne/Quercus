@@ -33,6 +33,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.logging.Logger;
 
@@ -63,12 +66,12 @@ abstract public class CompiledFunctionRef_0 extends CompiledFunctionRef {
     return args;
   }
 
-  public Value callRef(Env env, Value []argValues)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
-    return callRef(env);
+    return callRef(env, VHelper.noCtx());
   }
 
-  abstract public Value callRef(Env env);
+  abstract public V<? extends Value> callRef(Env env, FeatureExpr ctx);
 
   public String toString()
   {

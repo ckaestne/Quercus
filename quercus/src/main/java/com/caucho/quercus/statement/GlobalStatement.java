@@ -33,6 +33,8 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.VarExpr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a global statement in a PHP program.
@@ -50,7 +52,7 @@ public class GlobalStatement extends Statement {
     _var = var;
   }
   
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       env.setRef(_var.getName(), env.getGlobalVar(_var.getName()));

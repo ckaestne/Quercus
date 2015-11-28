@@ -40,6 +40,9 @@ import com.caucho.quercus.program.Arg;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.Visibility;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a function
@@ -453,7 +456,7 @@ abstract public class AbstractFunction extends Callback {
     Value[]values = new Value[args.length];
 
     for (int i = 0; i < args.length; i++)
-      values[i] = args[i].evalArg(env, true);
+      values[i] = args[i].evalArg(env, VHelper.noCtx(), true).getOne();
 
     return values;
   }
@@ -494,30 +497,30 @@ abstract public class AbstractFunction extends Callback {
    * Evaluates the function.
    */
   @Override
-  abstract public Value call(Env env, Value []args);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
 
   /**
    * Evaluates the function, returning a reference.
    */
   @Override
-  public Value callRef(Env env, Value []args)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
   {
-    return call(env, args);
+    return call(env, ctx, args);
   }
 
   /**
    * Evaluates the function, returning a copy
    */
   @Override
-  public Value callCopy(Env env, Value []args)
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
   {
-    return call(env, args).copyReturn();
+    return call(env, ctx, args).map((a)->a.copyReturn());
   }
 
   /**
    * Evaluates the function as a closure.
    */
-  public Value callClosure(Env env, Value []args, Value []useArgs)
+  public V<? extends Value> callClosure(Env env, FeatureExpr ctx, Value []args, Value []useArgs)
   {
     throw new UnsupportedOperationException();
   }
@@ -526,109 +529,109 @@ abstract public class AbstractFunction extends Callback {
    * Evaluates the function.
    */
   @Override
-  public Value call(Env env)
+  public V<? extends Value> call(Env env, FeatureExpr ctx)
   {
-    return call(env, NULL_ARG_VALUES);
+    return call(env, ctx, NULL_ARG_VALUES);
   }
 
   /**
    * Evaluates the function with an argument .
    */
   @Override
-  public Value call(Env env, Value a1)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
-    return call(env, new Value[] { a1 });
+    return call(env, ctx, new Value[] { a1 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value call(Env env, Value a1, Value a2)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
-    return call(env, new Value[] { a1, a2 });
+    return call(env, ctx, new Value[] { a1, a2 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return call(env, new Value[] { a1, a2, a3 });
+    return call(env, ctx, new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
-    return call(env, new Value[] { a1, a2, a3, a4 });
+    return call(env, ctx, new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return call(env, new Value[] { a1, a2, a3, a4, a5 });
+    return call(env, ctx, new Value[] { a1, a2, a3, a4, a5 });
   }
 
   /**
    * Evaluates the function.
    */
   @Override
-  public Value callRef(Env env)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
-    return callRef(env, NULL_ARG_VALUES);
+    return callRef(env, ctx, NULL_ARG_VALUES);
   }
 
   /**
    * Evaluates the function with an argument .
    */
   @Override
-  public Value callRef(Env env, Value a1)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1)
   {
-    return callRef(env, new Value[] { a1 });
+    return callRef(env, ctx, new Value[] { a1 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value callRef(Env env, Value a1, Value a2)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
-    return callRef(env, new Value[] { a1, a2 });
+    return callRef(env, ctx, new Value[] { a1, a2 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value callRef(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return callRef(env, new Value[] { a1, a2, a3 });
+    return callRef(env, ctx, new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value callRef(Env env, Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
-    return callRef(env, new Value[] { a1, a2, a3, a4 });
+    return callRef(env, ctx, new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates the function with arguments
    */
   @Override
-  public Value callRef(Env env,
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, 
                        Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return callRef(env, new Value[] { a1, a2, a3, a4, a5 });
+    return callRef(env, ctx, new Value[] { a1, a2, a3, a4, a5 });
   }
 
   //
@@ -638,7 +641,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the method call.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis,
                           Value []args)
@@ -650,7 +653,7 @@ abstract public class AbstractFunction extends Callback {
     QuercusClass oldClass = env.setCallingClass(qClass);
 
     try {
-      return call(env, args);
+      return call(env, ctx, args);
     } finally {
       env.setThis(oldThis);
       env.setCallingClass(oldClass);
@@ -661,18 +664,18 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the new() method call.
    */
-  public Value callNew(Env env,
-                       QuercusClass qClass,
-                       Value qThis,
-                       Value []args)
+  public V<? extends Value> callNew(Env env,
+                                    FeatureExpr ctx, QuercusClass qClass,
+                                    Value qThis,
+                                    Value[] args)
   {
-    return callMethod(env, qClass, qThis, args);
+    return callMethod(env, ctx, qClass, qThis, args);
   }
 
   /**
    * Evaluates the method call, returning a reference.
    */
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, 
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
@@ -684,7 +687,7 @@ abstract public class AbstractFunction extends Callback {
     QuercusClass oldClass = env.setCallingClass(qClass);
 
     try {
-      return callRef(env, args);
+      return callRef(env, ctx, args);
     } finally {
       env.setThis(oldThis);
       env.setCallingClass(oldClass);
@@ -695,147 +698,147 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis)
   {
-    return callMethod(env, qClass, qThis, NULL_ARG_VALUES);
+    return callMethod(env, ctx, qClass, qThis, NULL_ARG_VALUES);
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, 
                              QuercusClass qClass,
                              Value qThis)
   {
-    return callMethodRef(env, qClass, qThis, NULL_ARG_VALUES);
+    return callMethodRef(env, ctx, qClass, qThis, NULL_ARG_VALUES);
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis,
                           Value a1)
   {
-    return callMethod(env, qClass, qThis,
+    return callMethod(env, ctx, qClass, qThis,
                       new Value[] { a1 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, 
                              QuercusClass qClass,
                              Value qThis,
                              Value a1)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          new Value[] { a1 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2)
   {
-    return callMethod(env, qClass, qThis,
+    return callMethod(env, ctx, qClass, qThis,
                       new Value[] { a1, a2 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, 
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          new Value[] { a1, a2 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2, Value a3)
   {
-    return callMethod(env, qClass, qThis,
+    return callMethod(env, ctx, qClass, qThis,
                       new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, 
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2, Value a3, Value a4)
   {
-    return callMethod(env, qClass, qThis,
+    return callMethod(env, ctx, qClass, qThis,
                       new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, 
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3, Value a4)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return callMethod(env, qClass, qThis,
+    return callMethod(env, ctx, qClass, qThis,
                       new Value[] { a1, a2, a3, a4, a5 });
   }
 
   /**
    * Evaluates the function as a method call.
    */
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, 
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          new Value[] { a1, a2, a3, a4, a5 });
   }
 
   /**
    * Evaluates the function.
    */
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, 
                           QuercusClass qClass,
                           Value qThis,
                           Expr []exprs)
@@ -845,34 +848,34 @@ abstract public class AbstractFunction extends Callback {
 
     for (int i = 0; i < exprs.length; i++) {
       if (i < args.length && args[i].isReference()) {
-        argValues[i] = exprs[i].evalArg(env, true);
+        argValues[i] = exprs[i].evalArg(env, ctx, true).getOne();
       }
       else
-        argValues[i] = exprs[i].eval(env);
+        argValues[i] = exprs[i].eval(env, ctx).getOne();
     }
 
-    return callMethod(env, qClass, qThis, argValues);
+    return callMethod(env, ctx, qClass, qThis, argValues);
   }
 
   /**
    * Evaluates the function.
    */
-  public Value callMethodRef(Env env,
-                             QuercusClass qClass,
-                             Value qThis,
-                             Expr []exprs)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+                                          QuercusClass qClass,
+                                          Value qThis,
+                                          Expr []exprs)
   {
     Value []argValues = new Value[exprs.length];
     Arg []args = getArgs(env);
 
     for (int i = 0; i < exprs.length; i++) {
       if (i < args.length && args[i].isReference())
-        argValues[i] = exprs[i].evalArg(env, true);
+        argValues[i] = exprs[i].evalArg(env, ctx, true).getOne();
       else
-        argValues[i] = exprs[i].eval(env);
+        argValues[i] = exprs[i].eval(env, ctx).getOne();
     }
 
-    return callMethodRef(env, qClass, qThis, argValues);
+    return callMethodRef(env, ctx, qClass, qThis, argValues);
   }
 
   protected Value errorProtectedAccess(Env env, Value oldThis)

@@ -2,6 +2,9 @@ package edu.cmu.cs.varex;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 /**
  * Created by ckaestne on 11/27/2015.
  */
@@ -19,5 +22,27 @@ public class Choice<T> implements V<T> {
     @Override
     public String toString() {
         return "CHOICE(" + condition.toTextExpr() + " ? " + a + " : " + b + ")";
+    }
+
+    @Override
+    public T getOne() {
+        System.err.println("calling getOne on a Choice");
+        return a;
+    }
+
+    @Override
+    public <U> V<U> map(Function<T, U> fun) {
+        return null;
+    }
+
+    @Override
+    public <U> V<U> flatMap(Function<T, V<U>> fun) {
+        return null;
+    }
+
+    @Override
+    public void foreach(Consumer<T> fun) {
+        fun.accept(a);
+        fun.accept(b);
     }
 }

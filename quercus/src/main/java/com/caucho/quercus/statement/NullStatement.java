@@ -32,6 +32,8 @@ package com.caucho.quercus.statement;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a compiled PHP program.
@@ -47,7 +49,7 @@ public class NullStatement extends Statement {
   /**
    * The null statement does nothing.
    */
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     return null;
   }

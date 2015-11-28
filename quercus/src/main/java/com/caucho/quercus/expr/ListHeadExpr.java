@@ -29,12 +29,11 @@
 
 package com.caucho.quercus.expr;
 
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -70,9 +69,10 @@ public class ListHeadExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }
@@ -82,15 +82,17 @@ public class ListHeadExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
-  public Value evalAssignValue(Env env, Value value)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     int len = _varList.length;
 
     for (int i = 0; i < len; i++) {
       if (_varList[i] != null)
-        _varList[i].evalAssignValue(env, value.get(_keyList[i]).copy());
+        _varList[i].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value.getOne().get(_keyList[i]).copy()));
     }
 
     return value;
@@ -106,10 +108,10 @@ public class ListHeadExpr extends Expr {
     ArrayValue array = value.toArrayValue(env);
 
     if (_varList.length > 0 && _varList[0] != null)
-      _varList[0].evalAssignValue(env, array.key());
+      _varList[0].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.key()));
 
     if (_varList.length > 1 && _varList[1] != null)
-      _varList[1].evalAssignValue(env, array.current().copy());
+      _varList[1].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.current().copy()));
 
     return array.each();
   }
@@ -127,10 +129,10 @@ public class ListHeadExpr extends Expr {
       return false;
 
     if (_varList.length > 0 && _varList[0] != null)
-      _varList[0].evalAssignValue(env, array.key());
+      _varList[0].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.key()));
 
     if (_varList.length > 1 && _varList[1] != null)
-      _varList[1].evalAssignValue(env, array.current().copy());
+      _varList[1].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.current().copy()));
 
     array.next();
 

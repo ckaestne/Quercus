@@ -29,13 +29,16 @@
 
 package com.caucho.quercus.expr;
 
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.util.ArrayList;
 
 /**
  * A parent::bar(...) method call expression.
@@ -85,15 +88,16 @@ public class TraitParentClassMethodExpr extends AbstractMethodExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cls = env.getThis().getQuercusClass();
 
     QuercusClass parent = cls.getTraitParent(env, _traitName);
 
-    Value []values = evalArgs(env, _args);
+    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
 
     Value oldThis = env.getThis();
 
@@ -117,7 +121,7 @@ public class TraitParentClassMethodExpr extends AbstractMethodExpr {
     try {
       env.checkTimeout();
 
-      return parent.callStaticMethod(env, qThis, _methodName, _hash, values);
+      return parent.callStaticMethod(env,VHelper.noCtx(), qThis, _methodName, _hash, values);
     } finally {
       env.popCall();
       env.setThis(oldThis);

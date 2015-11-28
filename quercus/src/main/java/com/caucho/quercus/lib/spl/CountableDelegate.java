@@ -29,12 +29,8 @@
 
 package com.caucho.quercus.lib.spl;
 
-import com.caucho.quercus.env.CountDelegate;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.ConstStringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * A delegate that intercepts the global count() function and calls count()
@@ -49,7 +45,7 @@ public class CountableDelegate implements CountDelegate
   @Override
   public int count(Env env, ObjectValue qThis)
   {    
-    Value count = qThis.callMethod(env, COUNT_METHOD);
+    Value count = qThis.callMethod(env, VHelper.noCtx(), COUNT_METHOD).getOne();
 
     return count.toInt();
   }

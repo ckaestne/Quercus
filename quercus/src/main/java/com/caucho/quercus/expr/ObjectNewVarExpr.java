@@ -30,12 +30,14 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -81,11 +83,12 @@ public class ObjectNewVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    String name = _name.evalString(env).intern();
+    String name = _name.evalString(env, VHelper.noCtx()).getOne().intern();
     QuercusClass cl = env.findAbstractClass(name);
 
     _fullArgs = _args;
@@ -93,7 +96,7 @@ public class ObjectNewVarExpr extends Expr {
     Value []args = new Value[_args.length];
 
     for (int i = 0; i < args.length; i++) {
-      args[i] = _args[i].eval(env);
+      args[i] = _args[i].eval(env, VHelper.noCtx()).getOne();
     }
 
     env.pushCall(this, NullValue.NULL, args);
@@ -101,7 +104,7 @@ public class ObjectNewVarExpr extends Expr {
     try {
       env.checkTimeout();
 
-      return cl.callNew(env, args);
+      return VHelper.toV(cl.callNew(env, args));
     } finally {
       env.popCall();
     }

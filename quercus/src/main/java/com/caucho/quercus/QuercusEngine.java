@@ -29,9 +29,6 @@
 
 package com.caucho.quercus;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
@@ -39,12 +36,12 @@ import com.caucho.quercus.page.InterpretedPage;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.QuercusProgram;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.StdoutStream;
-import com.caucho.vfs.StreamImpl;
-import com.caucho.vfs.StringPath;
-import com.caucho.vfs.WriteStream;
+import com.caucho.vfs.*;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class QuercusEngine
 {
@@ -97,7 +94,7 @@ public class QuercusEngine
   /**
    * Executes the script
    */
-  public Value executeFile(String filename)
+  public V<? extends Value> executeFile(String filename)
     throws IOException
   {
     init();
@@ -110,7 +107,7 @@ public class QuercusEngine
   /**
    * Executes the script.
    */
-  public Value execute(String script)
+  public V<? extends Value> execute(String script)
     throws IOException
   {
     return execute(new StringPath(script));
@@ -119,7 +116,7 @@ public class QuercusEngine
   /**
    * Executes the script.
    */
-  public Value execute(Path path)
+  public V<? extends Value> execute(Path path)
     throws IOException
   {
     init();
@@ -151,7 +148,7 @@ public class QuercusEngine
 
     Env env = new Env(_quercus, page, out, null, null);
 
-    Value value = NullValue.NULL;
+    V<? extends Value> value = VHelper.toV(NullValue.NULL);
 
     try {
       env.start();

@@ -30,10 +30,12 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a throw expression statement in a Quercus program.
@@ -54,11 +56,11 @@ public class ThrowStatement extends Statement {
   /**
    * Executes the statement, returning the expression value.
    */
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    throw _expr.eval(env).toException(env,
+    throw _expr.eval(env, VHelper.noCtx()).map((a)->a.toException(env,
                                       getLocation().getFileName(),
-                                      getLocation().getLineNumber());
+                                      getLocation().getLineNumber())).getOne();
   }
 
   /**

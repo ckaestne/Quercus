@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP import statement
@@ -55,16 +58,17 @@ public class ImportExpr extends Expr
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (_isWildcard)
       env.addWildcardImport(_name);
     else
       env.putQualifiedImport(_name);
 
-    return NullValue.NULL;
+    return VHelper.toV(NullValue.NULL);
   }
   
   public String toString()

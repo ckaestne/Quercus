@@ -34,6 +34,7 @@ import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.ParamRequiredExpr;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a formal argument.
@@ -65,7 +66,7 @@ public class Arg {
    */
   public Value eval(Env env)
   {
-    return _default.eval(env);
+    return _default.eval(env, VHelper.noCtx()).getOne();
   }
 
   /**

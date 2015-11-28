@@ -33,18 +33,15 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.CurrentTime;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a PHP object value.
@@ -213,7 +210,7 @@ public class ObjectExtValue extends ObjectValue
       return e._value;
     }
 
-    return _quercusClass.getField(env, this, name);
+    return _quercusClass.getField(env, VHelper.noCtx(), this, name).getOne();
   }
 
   /**
@@ -459,11 +456,11 @@ public class ObjectExtValue extends ObjectValue
           Value retValue = NullValue.NULL;
 
           try {
-            retValue = fieldSet.callMethod(env,
+            retValue = fieldSet.callMethod(env,   VHelper.noCtx(),
                                            _quercusClass,
                                            this,
                                            name,
-                                           value);
+                                           value).getOne();
           } finally {
             _isFieldInit = false;
           }
@@ -755,169 +752,169 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value[] args)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
-    return fun.callMethod(env, _quercusClass, this, args);
+    return fun.callMethod(env, ctx, _quercusClass, this, args);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
-    return fun.callMethod(env, _quercusClass, this);
+    return fun.callMethod(env, ctx, _quercusClass, this);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1)
-  {
-    AbstractFunction fun = _methodMap.get(methodName, hash);
-
-    return fun.callMethod(env, _quercusClass, this, a1);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2)
-  {
-    AbstractFunction fun = _methodMap.get(methodName, hash);
-
-    return fun.callMethod(env, _quercusClass, this, a1, a2);
-  }
-
-  /**
-   * calls the function.
-   */
-  @Override
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3)
-  {
-    AbstractFunction fun = _methodMap.get(methodName, hash);
-
-    return fun.callMethod(env, _quercusClass, this, a1, a2, a3);
-  }
-
-  /**
-   * calls the function.
-   */
-  @Override
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4)
-  {
-    AbstractFunction fun = _methodMap.get(methodName, hash);
-
-    return fun.callMethod(env, _quercusClass, this, a1, a2, a3, a4);
-  }
-
-  /**
-   * calls the function.
-   */
-  @Override
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4, Value a5)
-  {
-    AbstractFunction fun = _methodMap.get(methodName, hash);
-
-    return fun.callMethod(env, _quercusClass, this, a1, a2, a3, a4, a5);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value []args)
-  {
-    AbstractFunction fun = _methodMap.get(methodName, hash);
-
-    return fun.callMethodRef(env, _quercusClass, this, args);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash)
-  {
-    AbstractFunction fun = _methodMap.get(methodName, hash);
-
-    return fun.callMethodRef(env, _quercusClass, this);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
-    return fun.callMethodRef(env, _quercusClass, this, a1);
+    return fun.callMethod(env, ctx, _quercusClass, this, a1);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
-    return fun.callMethodRef(env, _quercusClass, this, a1, a2);
+    return fun.callMethod(env, ctx, _quercusClass, this, a1, a2);
   }
 
   /**
-   * Evaluates a method.
+   * calls the function.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
-    return fun.callMethodRef(env, _quercusClass, this, a1, a2, a3);
+    return fun.callMethod(env, ctx, _quercusClass, this, a1, a2, a3);
   }
 
   /**
-   * Evaluates a method.
+   * calls the function.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3, Value a4)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
-    return fun.callMethodRef(env, _quercusClass, this, a1, a2, a3, a4);
+    return fun.callMethod(env, ctx, _quercusClass, this, a1, a2, a3, a4);
+  }
+
+  /**
+   * calls the function.
+   */
+  @Override
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3, Value a4, Value a5)
+  {
+    AbstractFunction fun = _methodMap.get(methodName, hash);
+
+    return fun.callMethod(env, ctx, _quercusClass, this, a1, a2, a3, a4, a5);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value[] args)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
-    return fun.callMethodRef(env, _quercusClass, this, a1, a2, a3, a4, a5);
+    return fun.callMethodRef(env, ctx, _quercusClass, this, args);
+  }
+
+  /**
+   * Evaluates a method.
+   */
+  @Override
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  {
+    AbstractFunction fun = _methodMap.get(methodName, hash);
+
+    return fun.callMethodRef(env, ctx, _quercusClass, this);
+  }
+
+  /**
+   * Evaluates a method.
+   */
+  @Override
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1)
+  {
+    AbstractFunction fun = _methodMap.get(methodName, hash);
+
+    return fun.callMethodRef(env, ctx, _quercusClass, this, a1);
+  }
+
+  /**
+   * Evaluates a method.
+   */
+  @Override
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2)
+  {
+    AbstractFunction fun = _methodMap.get(methodName, hash);
+
+    return fun.callMethodRef(env, ctx, _quercusClass, this, a1, a2);
+  }
+
+  /**
+   * Evaluates a method.
+   */
+  @Override
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3)
+  {
+    AbstractFunction fun = _methodMap.get(methodName, hash);
+
+    return fun.callMethodRef(env, ctx, _quercusClass, this, a1, a2, a3);
+  }
+
+  /**
+   * Evaluates a method.
+   */
+  @Override
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3, Value a4)
+  {
+    AbstractFunction fun = _methodMap.get(methodName, hash);
+
+    return fun.callMethodRef(env, ctx, _quercusClass, this, a1, a2, a3, a4);
+  }
+
+  /**
+   * Evaluates a method.
+   */
+  @Override
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                          Value a1, Value a2, Value a3, Value a4, Value a5)
+  {
+    AbstractFunction fun = _methodMap.get(methodName, hash);
+
+    return fun.callMethodRef(env, ctx, _quercusClass, this, a1, a2, a3, a4, a5);
   }
 
   /**
@@ -1061,7 +1058,7 @@ public class ObjectExtValue extends ObjectValue
       sb.append('"');
       sb.append(':');
 
-      StringValue value = fun.callMethod(env, qClass, this).toStringValue(env);
+      StringValue value = fun.callMethod(env, VHelper.noCtx(), qClass, this).getOne().toStringValue(env);
 
       sb.append(value.length());
       sb.append(':');
@@ -1177,7 +1174,7 @@ public class ObjectExtValue extends ObjectValue
     AbstractFunction toString = _quercusClass.getToString();
 
     if (toString != null)
-      return toString.callMethod(env, _quercusClass, this).toStringValue();
+      return toString.callMethod(env, VHelper.noCtx(), _quercusClass, this).getOne().toStringValue();
     else
       return env.createString(_className + "[]");
   }

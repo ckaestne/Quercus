@@ -29,12 +29,9 @@
 
 package com.caucho.quercus.marshal;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.BinaryValue;
-import com.caucho.quercus.env.BinaryBuilderValue;
-import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class BinaryValueMarshal extends Marshal
 {
@@ -56,7 +53,7 @@ public class BinaryValueMarshal extends Marshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env), expectedClass);
+    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

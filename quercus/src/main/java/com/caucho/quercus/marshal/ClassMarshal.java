@@ -29,13 +29,14 @@
 
 package com.caucho.quercus.marshal;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -58,7 +59,7 @@ public class ClassMarshal extends Marshal {
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env), expectedClass);
+    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

@@ -31,22 +31,13 @@ package com.caucho.quercus.lib.curl;
 
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.QuercusModuleException;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvCleanup;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -349,7 +340,7 @@ public class CurlHttpRequest
       sb.append(httpStatus);
       sb.append("\r\n");
 
-      Value len = _curl.getHeaderCallback().call(env, env.wrapJava(_curl), sb);
+      Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), env.wrapJava(_curl), sb).getOne();
 
       if (len.toInt() != sb.length()) {
         _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);
@@ -373,7 +364,7 @@ public class CurlHttpRequest
         sb.append(_conn.getHeaderField(i));
         sb.append("\r\n");
 
-        Value len = _curl.getHeaderCallback().call(env, _curl, sb);
+        Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), _curl, sb).getOne();
 
         if (len.toInt() != sb.length()) {
           _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);
@@ -391,9 +382,9 @@ public class CurlHttpRequest
 
       sb.append("\r\n");
 
-      Value len = _curl.getHeaderCallback().call(env,
-                                                 env.wrapJava(_curl),
-                                                 sb);
+      Value len = _curl.getHeaderCallback().call(env,VHelper.noCtx(),
+              env.wrapJava(_curl),
+                                                 sb).getOne();
 
       if (len.toInt() != sb.length()) {
         _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);
@@ -449,7 +440,7 @@ public class CurlHttpRequest
     }
 
     if (_curl.getWriteCallback() != null) {
-      Value len = _curl.getWriteCallback().call(env, env.wrapJava(_curl), bb);
+      Value len = _curl.getWriteCallback().call(env, VHelper.noCtx(), env.wrapJava(_curl), bb).getOne();
 
       if (len.toInt() != bb.length()) {
         _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);

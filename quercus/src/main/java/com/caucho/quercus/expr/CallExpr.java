@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -132,10 +135,11 @@ public class CallExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, false, false);
   }
@@ -145,10 +149,11 @@ public class CallExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, false, true);
   }
@@ -158,10 +163,11 @@ public class CallExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalRef(Env env)
+  public V<? extends Value> evalRef(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, true, true);
   }
@@ -182,7 +188,7 @@ public class CallExpr extends Expr {
    *
    * @return the expression value.
    */
-  private Value evalImpl(Env env, boolean isRef, boolean isCopy)
+  private V<? extends Value> evalImpl(Env env, boolean isRef, boolean isCopy)
   {
 //    try {
 //      w.write(_name+" - "+this.getLocation().toString()+"\n");
@@ -200,7 +206,7 @@ public class CallExpr extends Expr {
         if (_funId <= 0) {
           env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
 
-          return NullValue.NULL;
+          return VHelper.toV(NullValue.NULL);
         }
       }
     }
@@ -210,10 +216,10 @@ public class CallExpr extends Expr {
     if (fun == null) {
       env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
 
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     }
 
-    Value []args = evalArgs(env, _args);
+    Value []args = evalArgs(env, _args, VHelper.noCtx()).getOne();
 
     env.pushCall(this, NullValue.NULL, args);
 
@@ -234,11 +240,11 @@ public class CallExpr extends Expr {
         */
 
       if (isRef)
-        return fun.callRef(env, args);
+        return fun.callRef(env, VHelper.noCtx(), args);
       else if (isCopy)
-        return fun.call(env, args).copyReturn();
+        return fun.call(env, VHelper.noCtx(), args).map((a)->a.copyReturn());
       else {
-        return fun.call(env, args).toValue();
+        return fun.call(env, VHelper.noCtx(), args).map((a)->a.toValue());
       }
     //} catch (Exception e) {
     //  throw QuercusException.create(e, env.getStackTrace());

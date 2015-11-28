@@ -29,12 +29,9 @@
 
 package com.caucho.quercus.marshal;
 
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.JavaAdapter;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class ArrayValueMarshal extends Marshal
 {
@@ -61,7 +58,7 @@ public class ArrayValueMarshal extends Marshal
   
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return expr.eval(env).toArrayValue(env);
+    return expr.eval(env, VHelper.noCtx()).getOne().toArrayValue(env);
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

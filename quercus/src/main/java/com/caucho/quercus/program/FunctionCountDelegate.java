@@ -33,6 +33,7 @@ import com.caucho.quercus.env.CountDelegate;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.JavaInvoker;
 import com.caucho.quercus.env.ObjectValue;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * A delegate that performs Array operations for Quercus objects.
@@ -59,9 +60,9 @@ public class FunctionCountDelegate implements CountDelegate {
   public int count(Env env, ObjectValue qThis)
   {
     if (_count != null) {
-      return _count.callMethod(env,
+      return _count.callMethod(env, VHelper.noCtx(),
                                _count.getQuercusClass(),
-                               qThis).toInt();
+                               qThis).getOne().toInt();
     }
     else
       return 1;

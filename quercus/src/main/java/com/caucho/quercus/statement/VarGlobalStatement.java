@@ -31,10 +31,13 @@ package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarVarExpr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a global statement in a PHP program.
@@ -52,11 +55,11 @@ public class VarGlobalStatement extends Statement {
     _varExpr = var.getExpr();
   }
   
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    StringValue name = _varExpr.evalStringValue(env);
+    V<StringValue> name = _varExpr.evalStringValue(env, VHelper.noCtx());
     
-    env.setRef(name, env.getGlobalVar(name));
+    name.map((a)->env.setRef(a, env.getGlobalVar(a)));
 
     return null;
   }

@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents an if statement.
@@ -78,13 +81,13 @@ public class IfStatement extends Statement {
   /**
    * Executes the 'if' statement, returning any value.
    */
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    if (_test.evalBoolean(env)) {
-      return _trueBlock.execute(env);
+    if (_test.evalBoolean(env, VHelper.noCtx()).getOne()) {
+      return _trueBlock.execute(env, VHelper.noCtx());
     }
     else if (_falseBlock != null) {
-      return _falseBlock.execute(env);
+      return _falseBlock.execute(env, VHelper.noCtx());
     }
     else
       return null;

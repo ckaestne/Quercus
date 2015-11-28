@@ -30,13 +30,14 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Closure;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.NullValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.parser.QuercusParser;
-import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -95,21 +96,21 @@ public class CallVarExpr extends Expr {
   }
   
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, false, false);
   }
   
   
   @Override
-  public Value evalRef(Env env)
+  public V<? extends Value> evalRef(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, true, false);
   }
   
   
   @Override
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, false, true);
   }
@@ -121,11 +122,11 @@ public class CallVarExpr extends Expr {
    *
    * @return the expression value.
    */
-  public Value evalImpl(Env env, boolean isRef, boolean isCopy)
+  public V<? extends Value> evalImpl(Env env, boolean isRef, boolean isCopy)
   {
-    Value value = _name.eval(env);
+    V<? extends Value> value = _name.eval(env, VHelper.noCtx());
     
-    Value []args = evalArgs(env, _args);
+    V<Value[]> args = evalArgs(env, _args, VHelper.noCtx());
 
     env.pushCall(this, NullValue.NULL, null);
 
@@ -133,11 +134,11 @@ public class CallVarExpr extends Expr {
       env.checkTimeout();
       
       if (isRef)
-        return value.callRef(env, args);
+        return value.flatMap((a)->a.callRef(env, VHelper.noCtx(), args.getOne()));
       else if (isCopy)
-        return value.call(env, args).copyReturn();
+        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args.getOne()).map((b)->b.copyReturn()));
       else
-        return value.call(env, args).toValue();
+        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args.getOne()).map((b)->b.toValue()));
     } finally {
       env.popCall();
     }

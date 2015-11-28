@@ -10,6 +10,8 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.13"
 
 libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.3.7"
 
+libraryDependencies += "de.fosd.typechef" % "conditionallib_2.11" % "0.3.7"
+
 libraryDependencies += "net.liftweb" %% "lift-testkit" % "2.6.2" % "test"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"

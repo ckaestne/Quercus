@@ -29,22 +29,17 @@
 
 package com.caucho.quercus.program;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.FieldVisibility;
-import com.caucho.quercus.env.ObjectExtValue;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.Location;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
-import com.caucho.quercus.Location;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -365,7 +360,7 @@ abstract public class ClassDef implements InstanceInitializer {
   /**
    * Creates a new instance.
    */
-  public Value callNew(Env env, Expr []args)
+  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
   {
     return null;
   }
@@ -373,7 +368,7 @@ abstract public class ClassDef implements InstanceInitializer {
   /**
    * Creates a new instance.
    */
-  public Value callNew(Env env, Value []args)
+  public V<? extends Value> callNew(Env env,  FeatureExpr ctx, Value []args)
   {
     return null;
   }

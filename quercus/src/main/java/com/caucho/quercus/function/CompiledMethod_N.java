@@ -30,12 +30,12 @@
 package com.caucho.quercus.function;
 
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.expr.Expr;
-import com.caucho.quercus.expr.ParamRequiredExpr;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -68,8 +68,8 @@ abstract public class CompiledMethod_N extends CompiledMethod {
   }
 
   @Override
-  public final Value callMethod(Env env, QuercusClass qClass, Value qThis,
-                                Value []args)
+  public final V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+                                             Value []args)
   {
     /*
     Value []args;
@@ -95,11 +95,11 @@ abstract public class CompiledMethod_N extends CompiledMethod {
       env.warning("required argument missing");
     }
 
-    return callMethodImpl(env, qClass, qThis, args);
+    return callMethodImpl(env, ctx, qClass, qThis, args);
   }
 
-  abstract public Value callMethodImpl(Env env, QuercusClass qClass, Value qThis,
-                                       Value []args);
+  abstract public V<? extends Value> callMethodImpl(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+                                                    Value[] args);
 
   public String toString()
   {

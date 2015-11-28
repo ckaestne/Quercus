@@ -29,8 +29,6 @@
 
 package com.caucho.quercus.expr;
 
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.InterpretedClosure;
@@ -38,6 +36,11 @@ import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.Function;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.util.ArrayList;
 
 /**
  * Represents a PHP closure expression.
@@ -109,10 +112,25 @@ public class ClosureExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
+  {
+    return evalImpl(env);
+  }
+
+  /**
+   * Evaluates the expression.
+   *
+   * @param env the calling environment.
+   *
+   * @param ctx
+   * @return the expression value.
+   */
+  @Override
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return evalImpl(env);
   }
@@ -124,20 +142,7 @@ public class ClosureExpr extends Expr {
    *
    * @return the expression value.
    */
-  @Override
-  public Value evalCopy(Env env)
-  {
-    return evalImpl(env);
-  }
-
-  /**
-   * Evaluates the expression.
-   *
-   * @param env the calling environment.
-   *
-   * @return the expression value.
-   */
-  private Value evalImpl(Env env)
+  private V<Value> evalImpl(Env env)
   {
     Value qThis = NullValue.NULL;
 
@@ -145,7 +150,7 @@ public class ClosureExpr extends Expr {
       qThis = env.getThis();
     }
 
-    return new InterpretedClosure(env, _fun, qThis);
+    return VHelper.toV(new InterpretedClosure(env, _fun, qThis));
   }
 
   public String toString()

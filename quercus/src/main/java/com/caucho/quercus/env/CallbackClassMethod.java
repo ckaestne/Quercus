@@ -33,6 +33,8 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -74,22 +76,24 @@ public class CallbackClassMethod extends Callback {
    * Evaluates the callback with no arguments.
    *
    * @param env the calling environment
+   * @param ctx
    */
   @Override
-  public Value call(Env env)
+  public V<? extends Value> call(Env env, FeatureExpr ctx)
   {
-    return _qClass.callMethod(env, _qThis, _methodName, _hash);
+    return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash);
   }
 
   /**
    * Evaluates the callback with 1 argument.
    *
    * @param env the calling environment
+   * @param ctx
    */
   @Override
-  public Value call(Env env, Value a1)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
-    return _qClass.callMethod(env, _qThis, _methodName, _hash,
+    return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1);
   }
 
@@ -99,9 +103,9 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2)
+  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2)
   {
-    return _qClass.callMethod(env, _qThis, _methodName, _hash,
+    return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1, a2);
   }
 
@@ -111,9 +115,9 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3)
   {
-    return _qClass.callMethod(env, _qThis, _methodName, _hash,
+    return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1, a2, a3);
   }
 
@@ -123,10 +127,10 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3,
+  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
                              Value a4)
   {
-    return _qClass.callMethod(env, _qThis, _methodName, _hash,
+    return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1, a2, a3, a4);
   }
 
@@ -136,17 +140,17 @@ public class CallbackClassMethod extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3,
+  public V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
                     Value a4, Value a5)
   {
-    return _qClass.callMethod(env, _qThis, _methodName, _hash,
+    return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash,
                               a1, a2, a3, a4, a5);
   }
 
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
-    return _qClass.callMethod(env, _qThis, _methodName, _hash, args);
+    return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash, args);
   }
 
   @Override

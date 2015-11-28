@@ -34,10 +34,13 @@ import com.caucho.quercus.annotation.ReadOnly;
 import com.caucho.quercus.annotation.ReturnNullAsFalse;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
+import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.quercus.program.ClassField;
-import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -52,35 +55,35 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * Calls an object method.
    */
-  public static Value call_user_method(Env env,
-                                       StringValue name,
-                                       Value obj,
-                                       Value []args)
+  public static V<? extends Value> call_user_method(Env env,   FeatureExpr ctx,
+                                                    StringValue name,
+                                                    Value obj,
+                                                    Value []args)
   {
     if (obj.isObject()) {
-      return obj.callMethod(env, name, args);
+      return obj.callMethod(env, ctx, name, args);
     }
     else {
       QuercusClass cls = env.getClass(obj.toString());
 
-      Value result
-        = cls.callMethod(env, env.getThis(), name, name.hashCode(), args);
+      V<? extends Value> result
+        = cls.callMethod(env, ctx, env.getThis(), name, name.hashCode(), args);
 
-      return result.copyReturn();
+      return result.map((a)->a.copyReturn());
     }
   }
 
   /**
    * Calls a object method with arguments in an array.
    */
-  public static Value call_user_method_array(Env env,
+  public static  V<? extends Value> call_user_method_array(Env env, FeatureExpr ctx,
                                              StringValue methodName,
                                              Value obj,
                                              ArrayValue params)
   {
     Value []args = params.valuesToArray();
 
-    return call_user_method(env, methodName, obj, args);
+    return call_user_method(env, ctx, methodName, obj, args);
   }
 
   /**
@@ -231,7 +234,7 @@ public class ClassesModule extends AbstractQuercusModule {
         StringValue name = field.getName();
         Expr initValue = field.getInitExpr();
 
-        Value value = initValue.eval(env);
+        Value value = initValue.eval(env, VHelper.noCtx()).getOne();
 
         varArray.append(name, value);
       }

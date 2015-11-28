@@ -31,8 +31,11 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP function expression.
@@ -49,12 +52,13 @@ abstract public class AbstractMethodExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env).copy();
+    return eval(env, VHelper.noCtx()).map((a)->a.copy());
   }
 
   /**
@@ -62,12 +66,13 @@ abstract public class AbstractMethodExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return eval(env).copy();
+    return eval(env, VHelper.noCtx()).map((a)->a.copy());
   }
 
   /**
@@ -75,20 +80,21 @@ abstract public class AbstractMethodExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  protected Value eval(Env env, Value qThis,
-                       StringValue methodName, int hashCode,
-                       Expr []argExprs)
+  protected V<? extends Value> eval(Env env, FeatureExpr ctx, Value qThis,
+                                    StringValue methodName, int hashCode,
+                                    Expr[] argExprs)
   {
-    Value []args = evalArgs(env, argExprs);
+    Value []args = evalArgs(env, argExprs, VHelper.noCtx()).getOne();
 
     env.pushCall(this, qThis, args);
 
     try {
       env.checkTimeout();
 
-      return qThis.callMethod(env, methodName, hashCode, args);
+      return qThis.callMethod(env, VHelper.noCtx(), methodName, hashCode, args);
     } finally {
       env.popCall();
     }

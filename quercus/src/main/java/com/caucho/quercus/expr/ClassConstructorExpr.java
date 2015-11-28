@@ -32,10 +32,13 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -83,9 +86,10 @@ public class ClassConstructorExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);
 
@@ -97,7 +101,7 @@ public class ClassConstructorExpr extends Expr {
 
     AbstractFunction fun = cl.getFunction(nameV);
 
-    Value []values = evalArgs(env, _args);
+    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
 
     Value qThis = env.getThis();
     env.pushCall(this, qThis, values);
@@ -105,7 +109,7 @@ public class ClassConstructorExpr extends Expr {
     try {
       env.checkTimeout();
 
-      return cl.callMethod(env, qThis, nameV, nameV.hashCode(), values);
+      return cl.callMethod(env, ctx, qThis, nameV, nameV.hashCode(), values);
     } finally {
       env.popCall();
     }

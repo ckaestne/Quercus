@@ -29,28 +29,20 @@
 
 package com.caucho.quercus.lib.reflection;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.caucho.quercus.UnimplementedException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReturnNullAsFalse;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.MethodMap;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.QuercusLanguageException;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReflectionClass
   implements Reflector
@@ -479,7 +471,7 @@ public class ReflectionClass
     for (Map.Entry<StringValue, ClassField> entry : fieldMap.entrySet()) {
       Expr initExpr = entry.getValue().getInitExpr();
 
-      array.put(entry.getKey(), initExpr.eval(env));
+      array.put(entry.getKey(), initExpr.eval(env, VHelper.noCtx()).getOne());
     }
 
     return array;

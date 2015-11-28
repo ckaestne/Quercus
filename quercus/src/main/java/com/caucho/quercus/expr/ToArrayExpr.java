@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.ArrayValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Converts to an array
@@ -53,11 +56,12 @@ public class ToArrayExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _expr.eval(env).toArray();
+    return _expr.eval(env, VHelper.noCtx()).map((a)->a.toArray());
   }
 
   /**
@@ -65,16 +69,17 @@ public class ToArrayExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    Value value = _expr.eval(env).toValue();
+    V<Value> value = _expr.eval(env, VHelper.noCtx()).map((a)->a.toValue());
 
-    if (value instanceof ArrayValue)
-      return value.copy();
-    else
-      return value.toArray();
+    return value.map((v)->
+      v instanceof ArrayValue?
+      v.copy():
+      v.toArray());
   }
 
   public String toString()

@@ -33,6 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -55,7 +56,7 @@ public class StringMarshal extends Marshal {
   @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return expr.evalString(env);
+    return expr.evalString(env, VHelper.noCtx());
   }
 
   @Override

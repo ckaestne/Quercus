@@ -33,8 +33,8 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
+import edu.cmu.cs.varex.VHelper;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -336,7 +336,7 @@ public final class UnserializeReader {
         StringValue dataV = env.createString(data);
 
         Value obj = qClass.createObject(env, false);
-        fun.callMethod(env, qClass, obj, dataV);
+        fun.callMethod(env, VHelper.noCtx(), qClass, obj, dataV);
 
         expect('}');
 

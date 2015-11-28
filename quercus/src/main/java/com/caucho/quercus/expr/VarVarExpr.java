@@ -30,14 +30,10 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP variable expression.
@@ -66,18 +62,21 @@ public class VarVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    StringValue varName = _var.evalStringValue(env);
+    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    Value value = env.getValue(varName);
+    V<Value> value = varName.map((vn)->env.getValue(vn));
 
-    if (value != null)
-      return value;
-    else
-      return NullValue.NULL;
+    return value.map((v)-> {
+      if (v != null)
+        return v;
+      else
+        return NullValue.NULL;
+    });
   }
 
   /**
@@ -85,15 +84,17 @@ public class VarVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    StringValue varName = _var.evalStringValue(env);
+    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
     // php/0d63
-    env.setRef(varName, value);
+    env.setRef(varName.getOne(), value.getOne());
 
     return value;
   }
@@ -108,7 +109,7 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public void evalUnset(Env env)
   {
-    StringValue varName = _var.evalStringValue(env);
+    StringValue varName = _var.evalStringValue(env, VHelper.noCtx()).getOne();
 
     env.unsetVar(varName);
   }
@@ -118,14 +119,15 @@ public class VarVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    StringValue varName = _var.evalStringValue(env);
+    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    return env.getVar(varName);
+    return varName.map((vn)-> env.getVar(vn));
   }
 
   /**
@@ -133,19 +135,22 @@ public class VarVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    StringValue varName = _var.evalStringValue(env);
+    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    Value value = env.getVar(varName);
+    V<Value> value = varName.map((vn)-> env.getVar(vn));
 
-    if (value != null)
-      return value;
-    else
-      return NullValue.NULL;
+    return value.map((v)-> {
+      if (v != null)
+        return v;
+      else
+        return NullValue.NULL;
+    });
   }
 
   /**
@@ -153,16 +158,17 @@ public class VarVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    StringValue varName = _var.evalStringValue(env);
+    V<StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    Value value = env.getVar(varName);
+    V<Value> value = varName.map((vn)-> env.getVar(vn));
 
-    return value.toAutoArray();
+    return value.map((a)->a.toAutoArray());
   }
 
   public String toString()

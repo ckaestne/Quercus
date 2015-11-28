@@ -34,6 +34,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -75,14 +78,15 @@ public class ObjectNewExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     Value []args = new Value[_args.length];
 
     for (int i = 0; i < args.length; i++) {
-      args[i] = _args[i].evalArg(env, true);
+      args[i] = _args[i].evalArg(env, VHelper.noCtx(), true).getOne();
     }
 
     env.pushCall(this, NullValue.NULL, args);
@@ -92,7 +96,7 @@ public class ObjectNewExpr extends Expr {
 
       env.checkTimeout();
 
-      return cl.callNew(env, args);
+      return VHelper.toV(cl.callNew(env, args));
     } finally {
       env.popCall();
     }

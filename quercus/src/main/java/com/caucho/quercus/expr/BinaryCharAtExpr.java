@@ -34,6 +34,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents the character at expression
@@ -62,14 +65,15 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value obj = _objExpr.eval(env);
+    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
 
-    return obj.charValueAt(_indexExpr.evalLong(env));
+    return obj.map((a)->a.charValueAt(_indexExpr.evalLong(env, VHelper.noCtx()).getOne()));
   }
   
   /**
@@ -77,12 +81,13 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return eval(env).toVar();
+    return eval(env, VHelper.noCtx()).map((a)->a.toVar());
   }
   
   /**
@@ -90,12 +95,13 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return eval(env);
+    return eval(env, VHelper.noCtx());
   }
   
   /**
@@ -103,16 +109,18 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    Value obj = _objExpr.eval(env);
+    Value obj = _objExpr.eval(env, VHelper.noCtx()).getOne();
 
-    Value result = obj.setCharValueAt(_indexExpr.evalLong(env),
-                                      value);
+    Value result = obj.setCharValueAt(_indexExpr.evalLong(env, VHelper.noCtx()).getOne(),
+                                      value.getOne());
 
-    _objExpr.evalAssignValue(env, result);
+    _objExpr.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(result));
     
     return value;
   }

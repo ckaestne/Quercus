@@ -33,6 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Code for marshalling arguments.
@@ -47,7 +48,7 @@ public class EnumMarshal extends Marshal {
 
   public Object marshal(Env env, Expr expr, Class argClass)
   {
-    String name = expr.evalString(env);
+    String name = expr.evalString(env, VHelper.noCtx()).toString();
 
     if (name == null) {
       return null;

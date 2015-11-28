@@ -29,22 +29,17 @@
 
 package com.caucho.quercus.classes;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.ClassField;
-import com.caucho.quercus.env.CompiledClassDef;
-import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * Lazily load a compiled class
@@ -250,9 +245,9 @@ public class LazyClassDef extends CompiledClassDef
    * Creates a new instance.
    */
   @Override
-  public Value callNew(Env env, Value []args)
+  public V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
   {
-    return getClassDef().callNew(env, args);
+    return getClassDef().callNew(env, ctx, args);
   }
 
   /**

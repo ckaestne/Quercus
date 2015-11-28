@@ -34,6 +34,9 @@ import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.UnsetValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP array is set expression.
@@ -65,11 +68,12 @@ public class ArrayIsSetExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return evalBoolean(env) ? BooleanValue.TRUE : BooleanValue.FALSE;
+   return evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
   }
 
   /**
@@ -77,14 +81,16 @@ public class ArrayIsSetExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.eval(env);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return array.get(index) != UnsetValue.UNSET;
+    return VHelper.mapAll(array, index,(a,i)->
+      a.get(i) != UnsetValue.UNSET);
   }
 
   public String toString()

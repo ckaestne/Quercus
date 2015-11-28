@@ -32,9 +32,10 @@ package com.caucho.quercus.function;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
-import com.caucho.quercus.expr.ParamRequiredExpr;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -77,7 +78,7 @@ abstract public class CompiledFunctionRef_N extends CompiledFunctionRef {
     return args;
   }
 
-  public final Value callRef(Env env, Value []argValues)
+  public final V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
     /*
     Value []args = argValues;
@@ -102,10 +103,10 @@ abstract public class CompiledFunctionRef_N extends CompiledFunctionRef {
       env.warning("required argument missing");
     }
 
-    return callRefImpl(env, argValues);
+    return callRefImpl(env, ctx, argValues);
   }
 
-  abstract public Value callRefImpl(Env env, Value []args);
+  abstract public V<? extends Value> callRefImpl(Env env,  FeatureExpr ctx, Value []args);
 
   public String toString()
   {

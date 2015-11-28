@@ -32,6 +32,7 @@ package com.caucho.quercus.marshal;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class ExpectMarshal extends Marshal
 {
@@ -79,7 +80,7 @@ public class ExpectMarshal extends Marshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return expect(env, expr.eval(env));
+    return expect(env, expr.eval(env, VHelper.noCtx()).getOne());
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

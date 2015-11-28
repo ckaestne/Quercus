@@ -29,16 +29,19 @@
 
 package com.caucho.quercus.expr;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents a PHP field reference.
@@ -87,13 +90,14 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value obj = _objExpr.eval(env);
-    return obj.getField(env, _name);
+    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
+    return obj.map((a)->a.getField(env, _name));
   }
 
   /**
@@ -101,14 +105,15 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    Value obj = _objExpr.evalObject(env);
+    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
-    return obj.getFieldVar(env, _name);
+    return obj.map((a)->a.getFieldVar(env, _name));
   }
 
   /**
@@ -116,23 +121,24 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    Value value = _objExpr.evalArg(env, false);
+    V<? extends Value> value = _objExpr.evalArg(env, VHelper.noCtx(), false);
 
-    return value.getFieldArg(env, _name, isTop);
+    return value.map((a)->a.getFieldArg(env, _name, isTop));
   }
 
   @Override
-  public Value evalDirty(Env env)
+  public V<? extends Value> evalDirty(Env env, FeatureExpr ctx)
   {
     // php/0228
-    Value obj = _objExpr.eval(env);
+    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
 
-    return obj.getFieldVar(env, _name).toValue();
+    return obj.map((a)->a.getFieldVar(env, _name).toValue());
   }
 
   /**
@@ -140,14 +146,16 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    Value obj = _objExpr.evalObject(env);
+    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
-    obj.putField(env, _name, value);
+    obj.map((a)->a.putField(env, _name, value.getOne()));
 
     return value;
   }
@@ -156,15 +164,14 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    * Handles post increments.
    */
   @Override
-  public Value evalPostIncrement(Env env, int incr)
+  public V<Value> evalPostIncrement(Env env, FeatureExpr ctx, int incr)
   {
     // php/09kp
 
-    Value obj = _objExpr.evalObject(env);
-    Value value = obj.getField(env, _name);
-
-    value = value.postincr(incr);
-    obj.putField(env, _name, value);
+    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
+    final V<Value> value = obj.map((a)->a.getField(env, _name))
+      .map((a)->a.postincr(incr));
+    obj.map((a)->a.putField(env, _name, value.getOne()));
 
     return value;
   }
@@ -173,15 +180,14 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    * Handles post increments.
    */
   @Override
-  public Value evalPreIncrement(Env env, int incr)
+  public V<Value> evalPreIncrement(Env env, FeatureExpr ctx, int incr)
   {
     // php/09kq
 
-    Value obj = _objExpr.evalObject(env);
-    Value value = obj.getField(env, _name);
-
-    value = value.preincr(incr);
-    obj.putField(env, _name, value);
+    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
+    V<Value> value = obj.map((a)->a.getField(env, _name))
+            .map((a)->a.preincr(incr));
+    obj.map((a)->a.putField(env, _name, value.getOne()));
 
     return value;
   }
@@ -191,14 +197,15 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    Value obj = _objExpr.evalObject(env);
+    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
-    return obj.getFieldArray(env, _name);
+    return obj.map((a)->a.getFieldArray(env, _name));
   }
 
   /**
@@ -206,15 +213,16 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalObject(Env env)
+  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    Value obj = _objExpr.evalObject(env);
+    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 
     // php/0a6f
-    return obj.getFieldObject(env, _name);
+    return obj.map((a)->a.getFieldObject(env, _name));
   }
 
   /**
@@ -227,20 +235,20 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   @Override
   public void evalUnset(Env env)
   {
-    Value obj = _objExpr.eval(env);
-    obj.unsetField(_name);
+    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
+    obj.foreach((a)->a.unsetField(_name));
   }
 
   /**
    * Evaluates the expression as an array index unset
    */
   @Override
-  public void evalUnsetArray(Env env, Expr indexExpr)
+  public void evalUnsetArray(Env env, FeatureExpr ctx, Expr indexExpr)
   {
-    Value obj = _objExpr.eval(env);
-    Value index = indexExpr.eval(env);
+    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
+    V<? extends Value> index = indexExpr.eval(env, VHelper.noCtx());
 
-    obj.unsetArray(env, _name, index);
+    obj.foreach((a)->a.unsetArray(env, _name, index.getOne()));
   }
 
   @Override
@@ -250,11 +258,11 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   }
 
   @Override
-  public boolean evalIsset(Env env)
+  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
-    Value object = _objExpr.eval(env);
+    V<? extends Value> object = _objExpr.eval(env, VHelper.noCtx());
 
-    return object.issetField(env, _name);
+    return object.map((a)->a.issetField(env, _name));
   }
 }
 

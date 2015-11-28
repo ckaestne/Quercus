@@ -29,6 +29,9 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+
 /**
  * Represents a call to a function.
  */
@@ -52,24 +55,24 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public Value callArray(Env env,
+  final public V<? extends Value> callArray(Env env, FeatureExpr ctx, 
                                ArrayValue array,
                                Value key,
                                Value a1)
   {
     // php/1740
 
-    Value result;
+    V<? extends Value> result;
 
     if (a1 instanceof Var) {
       a1 = new ArgRef((Var) a1);
 
-      result = call(env, a1);
+      result = call(env, ctx, a1);
     }
     else {
       Value aVar = new Var(a1);
 
-      result = call(env, aVar);
+      result = call(env, ctx, aVar);
 
       Value aNew = aVar.toValue();
 
@@ -91,7 +94,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public Value callArray(Env env,
+  final public V<? extends Value> callArray(Env env, FeatureExpr ctx, 
                                ArrayValue array,
                                Value key,
                                Value a1,
@@ -99,17 +102,17 @@ abstract public class Callback extends Value implements Callable {
   {
     // php/1740
 
-    Value result;
+    V<? extends Value> result;
 
     if (a1 instanceof Var) {
       a1 = new ArgRef((Var) a1);
 
-      result = call(env, a1, a2);
+      result = call(env, ctx, a1, a2);
     }
     else {
       Value aVar = new Var(a1);
 
-      result = call(env, aVar, a2);
+      result = call(env, ctx, aVar, a2);
 
       Value aNew = aVar.toValue();
 
@@ -131,7 +134,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public Value callArray(Env env,
+  final public V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
                                Value a1,
@@ -140,17 +143,17 @@ abstract public class Callback extends Value implements Callable {
   {
     // php/1740
 
-    Value result;
+    V<? extends Value> result;
 
     if (a1 instanceof Var) {
       a1 = new ArgRef((Var) a1);
 
-      result = call(env, a1, a2, a3);
+      result = call(env, ctx, a1, a2, a3);
     }
     else {
       Value aVar = new Var(a1);
 
-      result = call(env, aVar, a2, a3);
+      result = call(env, ctx, aVar, a2, a3);
 
       Value aNew = aVar.toValue();
 
@@ -165,8 +168,9 @@ abstract public class Callback extends Value implements Callable {
    * Evaluates the callback with variable arguments.
    *
    * @param env the calling environment
+   * @param ctx
    */
-  abstract public Value call(Env env, Value []args);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
 
   /**
    *

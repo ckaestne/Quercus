@@ -31,6 +31,9 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP list assignment expression.
@@ -51,13 +54,14 @@ public class BinaryAssignListExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value value = _value.eval(env);
+    V<? extends Value> value = _value.eval(env, VHelper.noCtx());
 
-    _listHead.evalAssignValue(env, value);
+    _listHead.evalAssignValue(env, VHelper.noCtx(), value);
 
     return value;
   }
@@ -67,11 +71,12 @@ public class BinaryAssignListExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env).copy();
+    return eval(env, VHelper.noCtx()).map((a)->a.copy());
   }
 }
 

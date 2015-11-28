@@ -34,6 +34,8 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Function;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a function definition
@@ -50,7 +52,7 @@ public class FunctionDefStatement extends Statement {
     _fun = fun;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       String name = _fun.getName();

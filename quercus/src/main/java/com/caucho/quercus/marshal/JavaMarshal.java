@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Code for marshaling arguments.
@@ -64,7 +65,7 @@ public class JavaMarshal extends Marshal {
   @Override
   public Object marshal(Env env, Expr expr, Class argClass)
   {
-    Value value = expr.eval(env);
+    Value value = expr.eval(env, VHelper.noCtx()).getOne();
 
     return marshal(env, value, argClass);
   }

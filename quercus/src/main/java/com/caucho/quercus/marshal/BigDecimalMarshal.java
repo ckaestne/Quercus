@@ -29,17 +29,11 @@
 
 package com.caucho.quercus.marshal;
 
-import java.math.BigDecimal;
-import java.net.URL;
-
-import com.caucho.quercus.env.DoubleValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.BigDecimalValue;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
-import com.caucho.quercus.program.JavaClassDef;
-import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
+
+import java.math.BigDecimal;
 
 /**
  * Code for marshalling arguments.
@@ -49,7 +43,7 @@ public class BigDecimalMarshal extends Marshal {
 
   public Object marshal(Env env, Expr expr, Class argClass)
   {
-    return expr.eval(env).toBigDecimal();
+    return expr.eval(env, VHelper.noCtx()).getOne().toBigDecimal();
   }
   
   public Object marshal(Env env, Value value, Class argClass)

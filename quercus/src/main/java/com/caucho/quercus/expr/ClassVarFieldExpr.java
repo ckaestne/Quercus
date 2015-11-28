@@ -29,18 +29,16 @@
 
 package com.caucho.quercus.expr;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.MethodIntern;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents a variable class field reference $class::$b.
@@ -82,14 +80,15 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    QuercusClass cls = _className.evalQuercusClass(env);
+    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
-    return cls.getStaticFieldValue(env, _varName);
+    return cls.map((a)->a.getStaticFieldValue(env, _varName));
   }
 
   /**
@@ -97,14 +96,15 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    QuercusClass cls = _className.evalQuercusClass(env);
+    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
-    return cls.getStaticFieldVar(env, _varName);
+    return cls.map((a)->a.getStaticFieldVar(env, _varName));
   }
 
   /**
@@ -112,14 +112,16 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    QuercusClass cls = _className.evalQuercusClass(env);
+    V<QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 
-    return cls.setStaticFieldRef(env, _varName, value);
+    return cls.map((a)->a.setStaticFieldRef(env, _varName, value.getOne()));
   }
 
   /**

@@ -30,6 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.Arg;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a call to a function.
@@ -80,35 +82,35 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  abstract public Value call(Env env);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the callback with 1 arguments.
    *
    * @param env the calling environment
    */
-  abstract public Value call(Env env, Value a1);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1);
 
   /**
    * Evaluates the callback with 2 arguments.
    *
    * @param env the calling environment
    */
-  abstract public Value call(Env env, Value a1, Value a2);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2);
 
   /**
    * Evaluates the callback with 3 arguments.
    *
    * @param env the calling environment
    */
-  abstract public Value call(Env env, Value a1, Value a2, Value a3);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3);
 
   /**
    * Evaluates the callback with 4 arguments.
    *
    * @param env the calling environment
    */
-  abstract public Value call(Env env, Value a1, Value a2, Value a3,
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
                              Value a4);
 
   /**
@@ -116,7 +118,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  abstract public Value call(Env env, Value a1, Value a2, Value a3,
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
                              Value a4, Value a5);
 
   /**
@@ -124,7 +126,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  abstract public Value call(Env env, Value []args);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value []args);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -136,7 +138,7 @@ public interface Callable {
    * @param key index of a1 in the array
    * @param a1 need to make a reference to this variable
    */
-  abstract public Value callArray(Env env,
+  abstract public V<? extends Value> callArray(Env env, FeatureExpr ctx, 
                                   ArrayValue array,
                                   Value key,
                                   Value a1);
@@ -152,7 +154,7 @@ public interface Callable {
    * @param a1 need to make a reference to this variable
    * @param a2 additional argument to pass to the callback
    */
-  abstract public Value callArray(Env env,
+  abstract public V<? extends Value> callArray(Env env, FeatureExpr ctx, 
                                   ArrayValue array,
                                   Value key,
                                   Value a1,
@@ -170,7 +172,7 @@ public interface Callable {
    * @param a2 additional argument to pass to the callback
    * @param a3 additional argument to pass to the callback
    */
-  abstract public Value callArray(Env env,
+  abstract public V<? extends Value> callArray(Env env, FeatureExpr ctx, 
                                   ArrayValue array,
                                   Value key,
                                   Value a1,

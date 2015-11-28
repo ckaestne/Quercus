@@ -33,6 +33,8 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents static text in a PHP program.
@@ -55,7 +57,7 @@ public class TextStatement extends Statement {
     return _value;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     _value.print(env);
 

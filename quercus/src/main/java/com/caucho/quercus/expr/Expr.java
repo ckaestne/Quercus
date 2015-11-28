@@ -30,14 +30,13 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.statement.Statement;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -456,20 +455,22 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  abstract public Value eval(Env env);
+  abstract public V<? extends Value> eval(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression, always returning a variable.
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return eval(env).toVar();
+    return eval(env, ctx).map(a->a.toVar());
   }
 
   /**
@@ -477,11 +478,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalValue(Env env)
+  public V<? extends Value> evalValue(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
@@ -490,11 +492,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalRef(Env env)
+  public V<? extends Value> evalRef(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
@@ -505,25 +508,27 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
    * Evaluates the expression as a function argument where it is unknown
    * if the value will be used as a reference.
    *
-   * @param env the calling environment.
    * @param isTail true for the top expression
    *
+   * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
@@ -531,11 +536,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalTop(Env env)
+  public V<? extends Value> evalTop(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
@@ -544,11 +550,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalDirty(Env env)
+  public V<? extends Value> evalDirty(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
@@ -556,11 +563,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
@@ -568,27 +576,28 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalObject(Env env)
+  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
    * Evaluates an assignment. The value must not be a Var.
    */
-  public Value evalAssignValue(Env env, Expr valueExpr)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, Expr valueExpr)
   {
-    Value value = valueExpr.evalCopy(env);
+    V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
-    return evalAssignValue(env, value);
+    return evalAssignValue(env, ctx, value);
   }
 
   /**
    * Evaluates an assignment. The value must not be a Var.
    */
-  public Value evalAssignValue(Env env, Value value)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     throw new RuntimeException(L.l(
       "{0} is an invalid left-hand side of an assignment.",
@@ -599,18 +608,18 @@ abstract public class Expr {
    * Evaluates an assignment. If the value is a Var, it replaces the
    * current Var.
    */
-  public Value evalAssignRef(Env env, Expr valueExpr)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
   {
-    Value value = valueExpr.evalRef(env);
+    V<? extends Value> value = valueExpr.evalRef(env, ctx);
 
-    return evalAssignRef(env, value);
+    return evalAssignRef(env, ctx, value);
   }
 
   /**
    * Evaluates an assignment. If the value is a Var, it replaces the
    * current Var.
    */
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     throw new RuntimeException(L.l(
       "{0} is an invalid left-hand side of an assignment.",
@@ -621,7 +630,7 @@ abstract public class Expr {
    * Evaluates as an array index assign ($a[index] = value).
    * @return what was assigned
    */
-  public Value evalArrayAssign(Env env, Expr indexExpr, Expr valueExpr)
+  public V<? extends Value> evalArrayAssign(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // overrided in ThisFieldExpr and ThisFieldVarExpr
@@ -629,12 +638,12 @@ abstract public class Expr {
     //
     //return var.put(index, value);
 
-    Value array = evalArray(env);
-    Value index = indexExpr.eval(env);
+    V<? extends Value> array = evalArray(env, ctx);
+    V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    Value value = valueExpr.evalCopy(env);
+    V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
-    Value result = array.put(index, value);
+    V<Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -645,7 +654,7 @@ abstract public class Expr {
    * Evaluates as an array index assign ($a[index] = value).
    * @return what was assigned
    */
-  public Value evalArrayAssignRef(Env env, Expr indexExpr, Expr valueExpr)
+  public V<? extends Value> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // overrided in ThisFieldExpr and ThisFieldVarExpr
@@ -653,12 +662,12 @@ abstract public class Expr {
     //
     //return var.put(index, value);
 
-    Value array = evalArray(env);
-    Value index = indexExpr.eval(env);
+    V<? extends Value> array = evalArray(env, ctx);
+    V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    Value value = valueExpr.evalRef(env);
+    V<? extends Value> value = valueExpr.evalRef(env, ctx);
 
-    Value result = array.put(index, value);
+    V<Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -669,7 +678,7 @@ abstract public class Expr {
    * Evaluates as an array index assign ($a[index] = value).
    * @return what was assigned
    */
-  public Value evalArrayAssignRef(Env env, Expr indexExpr, Value value)
+  public V<? extends Value> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, V<? extends Value> value)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // overrided in ThisFieldExpr and ThisFieldVarExpr
@@ -677,10 +686,10 @@ abstract public class Expr {
     //
     //return var.put(index, value);
 
-    Value array = evalArray(env);
-    Value index = indexExpr.eval(env);
+    V<? extends Value> array = evalArray(env, ctx);
+    V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    Value result = array.put(index, value);
+    V<Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -691,10 +700,10 @@ abstract public class Expr {
    * Evaluates as an array tail assign ($a[] = value).
    * @return what was assigned
    */
-  public Value evalArrayAssignTail(Env env, Value value)
+  public V<? extends Value> evalArrayAssignTail(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    Value array = evalArray(env);
-    array.put(value);
+    V<? extends Value> array = evalArray(env, ctx);
+    array.map(a->a.put(value.getOne()));
 
     return value;
   }
@@ -702,21 +711,21 @@ abstract public class Expr {
   /**
    * Handles post increments.
    */
-  public Value evalPostIncrement(Env env, int incr)
+  public V<Value> evalPostIncrement(Env env, FeatureExpr ctx, int incr)
   {
-    Value value = evalVar(env);
+    V<Var> value = evalVar(env, ctx);
 
-    return value.postincr(incr);
+    return value.map(a->a.postincr(incr));
   }
 
   /**
    * Handles post increments.
    */
-  public Value evalPreIncrement(Env env, int incr)
+  public V<Value> evalPreIncrement(Env env, FeatureExpr ctx, int incr)
   {
-    Value value = evalVar(env);
+    V<Var> value = evalVar(env, ctx);
 
-    return value.preincr(incr);
+    return value.map(a->a.preincr(incr));
   }
 
   /**
@@ -724,16 +733,19 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public String evalString(Env env)
+  public V<String> evalString(Env env, FeatureExpr ctx)
   {
-    Value value = eval(env);
+    V<? extends Value> value = eval(env, ctx);
 
-    if (value.isObject())
-      return value.toString(env).toJavaString();
-    else
-      return value.toJavaString();
+    return value.map(v-> {
+      if (v.isObject())
+        return v.toString(env).toJavaString();
+      else
+        return v.toJavaString();
+    });
   }
 
   /**
@@ -741,11 +753,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public StringValue evalStringValue(Env env)
+  public V<StringValue> evalStringValue(Env env, FeatureExpr ctx)
   {
-    return eval(env).toStringValue(env);
+    return eval(env, ctx).map(a->a.toStringValue(env));
   }
 
   /**
@@ -753,11 +766,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public char evalChar(Env env)
+  public V<Character> evalChar(Env env, FeatureExpr ctx)
   {
-    return eval(env).toChar();
+    return eval(env, ctx).map(a->a.toChar());
   }
 
   /**
@@ -765,11 +779,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    return eval(env).toBoolean();
+    return eval(env, ctx).map(a->a.toBoolean());
   }
 
   /**
@@ -777,11 +792,12 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public long evalLong(Env env)
+  public V<Long> evalLong(Env env, FeatureExpr ctx)
   {
-    return eval(env).toLong();
+    return eval(env, ctx).map(a->a.toLong());
   }
 
   /**
@@ -789,79 +805,80 @@ abstract public class Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public double evalDouble(Env env)
+  public V<Double> evalDouble(Env env, FeatureExpr ctx)
   {
-    return eval(env).toDouble();
+    return eval(env, ctx).map(a->a.toDouble());
   }
 
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public boolean evalIsset(Env env)
+  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
-    return eval(env).isset();
+    return eval(env, ctx).map(a->a.isset());
   }
 
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public Value evalIssetValue(Env env)
+  public V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
   {
-    return eval(env);
+    return eval(env, ctx);
   }
 
   /**
    * Evaluates the expression as an array index unset
    */
-  public void evalUnsetArray(Env env, Expr indexExpr)
+  public void evalUnsetArray(Env env, FeatureExpr ctx, Expr indexExpr)
   {
-    Value array = evalDirty(env);
-    Value index = indexExpr.eval(env);
+    V<? extends Value> array = evalDirty(env, ctx);
+    V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    array.remove(index);
+    array.map(a->a.remove(index.getOne()));
   }
 
   /**
    * Evaluates as an empty() expression.
    */
-  public boolean evalEmpty(Env env)
+  public V<Boolean> evalEmpty(Env env, FeatureExpr ctx)
   {
-    return eval(env).isEmpty();
+    return eval(env, ctx).map(a->a.isEmpty());
   }
 
   /**
    * Evaluates as a QuercusClass.
    */
-  public QuercusClass evalQuercusClass(Env env)
+  public V<QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
-    Value obj = eval(env);
+    V<? extends Value> obj = eval(env, ctx);
 
-    return obj.findQuercusClass(env);
+    return obj.map(a->a.findQuercusClass(env));
   }
 
   /**
    * Evaluates arguments
    */
-  public static Value []evalArgs(Env env, Expr []exprs)
+  public static V<Value[]> evalArgs(Env env, Expr[] exprs, FeatureExpr ctx)
   {
     Value []args = new Value[exprs.length];
 
     for (int i = 0; i < args.length; i++) {
-      args[i] = exprs[i].evalArg(env, true);
+      args[i] = exprs[i].evalArg(env, ctx, true).getOne();
     }
 
-    return args;
+    return VHelper.toV(args);
   }
 
   /**
    * Prints to the output as an echo.
    */
-  public void print(Env env)
+  public void print(Env env, FeatureExpr ctx)
     throws IOException
   {
-    eval(env).print(env);
+    eval(env, ctx).foreach((a)->a.print(env));
   }
 
   @Override

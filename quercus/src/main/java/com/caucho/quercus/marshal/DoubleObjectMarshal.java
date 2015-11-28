@@ -33,6 +33,7 @@ import com.caucho.quercus.env.DoubleValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class DoubleObjectMarshal extends Marshal
 {
@@ -45,7 +46,7 @@ public class DoubleObjectMarshal extends Marshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return new Double(expr.evalDouble(env));
+    return new Double(expr.evalDouble(env, VHelper.noCtx()).getOne());
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

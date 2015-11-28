@@ -32,8 +32,8 @@ package com.caucho.quercus.lib.file;
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
-import com.caucho.quercus.program.Function;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -113,10 +113,10 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     _wrapper = qClass.callNew(env, Value.NULL_ARGS);
 
     if (env.isUnicodeSemantics())
-      _wrapper.callMethod(env, STREAM_OPEN_U,
+      _wrapper.callMethod(env, VHelper.noCtx(), STREAM_OPEN_U,
                           path, mode, options, NullValue.NULL);
     else
-      _wrapper.callMethod(env, STREAM_OPEN,
+      _wrapper.callMethod(env, VHelper.noCtx(), STREAM_OPEN,
                           path, mode, options, NullValue.NULL);
   }
 
@@ -188,7 +188,7 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
         return;
       }
 
-      _wrapper.callMethod(_env, funName);
+      _wrapper.callMethod(_env, VHelper.noCtx(), funName);
     }
   }
 
@@ -213,9 +213,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
       Value output;
 
       if (_env.isUnicodeSemantics())
-        output = _wrapper.callMethod(_env, STREAM_READ_U, LongValue.ONE);
+        output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U, LongValue.ONE).getOne();
       else
-        output = _wrapper.callMethod(_env, STREAM_READ, LongValue.ONE);
+        output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ, LongValue.ONE).getOne();
 
       _buffer = (int) output.toLong();
 
@@ -239,11 +239,11 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     Value output;
 
     if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, STREAM_READ_U,
-                                   LongValue.create(length));
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
+                                   LongValue.create(length)).getOne();
     else
-      output = _wrapper.callMethod(_env, STREAM_READ,
-                                   LongValue.create(length));
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ,
+                                   LongValue.create(length)).getOne();
 
     if (output.length() == 0)
       return -1;
@@ -265,11 +265,11 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     Value output;
 
     if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, STREAM_READ_U,
-                                   LongValue.create(length));
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
+                                   LongValue.create(length)).getOne();
     else
-      output = _wrapper.callMethod(_env, STREAM_READ,
-                                   LongValue.create(length));
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ,
+                                   LongValue.create(length)).getOne();
 
     if (output.length() == 0)
       return -1;
@@ -312,11 +312,11 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     Value output;
 
     if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, STREAM_READ_U,
-                                   LongValue.create(length));
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
+                                   LongValue.create(length)).getOne();
     else
-      output = _wrapper.callMethod(_env, STREAM_READ,
-                                   LongValue.create(length));
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ,
+                                   LongValue.create(length)).getOne();
 
     return output.toBinaryValue(_env);
   }
@@ -355,9 +355,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     Value output;
 
     if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, STREAM_WRITE_U, bb);
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE_U, bb).getOne();
     else
-      output = _wrapper.callMethod(_env, STREAM_WRITE, bb);
+      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE, bb).getOne();
 
     _writeLength = (int) output.toLong();
   }
@@ -434,9 +434,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   public boolean isEOF()
   {
     if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, STREAM_EOF_U).toBoolean();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_EOF_U).getOne().toBoolean();
     else
-      return _wrapper.callMethod(_env, STREAM_EOF).toBoolean();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_EOF).getOne().toBoolean();
   }
 
   /**
@@ -445,9 +445,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   public long getPosition()
   {
     if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, STREAM_TELL_U).toLong();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_TELL_U).getOne().toLong();
     else
-      return _wrapper.callMethod(_env, STREAM_TELL).toLong();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_TELL).getOne().toLong();
   }
 
   /**
@@ -459,11 +459,11 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     LongValue whenceValue = LongValue.create(SEEK_SET);
 
     if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, STREAM_SEEK_U,
-                                 offsetValue, whenceValue).toBoolean();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK_U,
+                                 offsetValue, whenceValue).getOne().toBoolean();
     else
-      return _wrapper.callMethod(_env, STREAM_SEEK,
-                                 offsetValue, whenceValue).toBoolean();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK,
+                                 offsetValue, whenceValue).getOne().toBoolean();
   }
 
   public long seek(long offset, int whence)
@@ -472,11 +472,11 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     LongValue whenceValue = LongValue.create(whence);
 
     if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, STREAM_SEEK_U,
-                                 offsetValue, whenceValue).toLong();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK_U,
+                                 offsetValue, whenceValue).getOne().toLong();
     else
-      return _wrapper.callMethod(_env, STREAM_SEEK,
-                                 offsetValue, whenceValue).toLong();
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK,
+                                 offsetValue, whenceValue).getOne().toLong();
   }
 
   public void flush()
@@ -485,9 +485,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     boolean result;
 
     if (_env.isUnicodeSemantics())
-      result = _wrapper.callMethod(_env, STREAM_FLUSH_U).toBoolean();
+      result = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH_U).getOne().toBoolean();
     else
-      result = _wrapper.callMethod(_env, STREAM_FLUSH).toBoolean();
+      result = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH).getOne().toBoolean();
 
     if (! result)
       throw new IOException(); // Get around java.io.Flushable
@@ -496,9 +496,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   public Value stat()
   {
     if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, STREAM_FLUSH_U);
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH_U).getOne();
     else
-      return _wrapper.callMethod(_env, STREAM_FLUSH);
+      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH).getOne();
   }
 
   private class WrappedInputStream extends InputStream {
@@ -514,9 +514,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
       throws IOException
     {
       if (_env.isUnicodeSemantics())
-        _wrapper.callMethod(_env, STREAM_WRITE_U, LongValue.create(b));
+        _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE_U, LongValue.create(b));
       else
-        _wrapper.callMethod(_env, STREAM_WRITE, LongValue.create(b));
+        _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE, LongValue.create(b));
     }
   }
 }

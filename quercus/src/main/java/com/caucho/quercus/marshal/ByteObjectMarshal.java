@@ -33,6 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class ByteObjectMarshal extends Marshal
 {
@@ -40,7 +41,7 @@ public class ByteObjectMarshal extends Marshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return new Byte((byte) expr.evalLong(env));
+    return new Byte((byte) expr.evalLong(env, VHelper.noCtx()).getOne().longValue());
   }
 
   public boolean isReadOnly()

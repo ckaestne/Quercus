@@ -87,7 +87,7 @@ public class InterpretedPage extends QuercusPage
    */
   public Value execute(Env env)
   {
-    Value result = _program.execute(env);
+    Value result = _program.execute(env).getOne();
 
     if (result == null)
       result = LongValue.ONE;

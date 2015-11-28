@@ -29,16 +29,11 @@
 
 package com.caucho.quercus.program;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.FieldVisibility;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.Location;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
-import com.caucho.quercus.Location;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -542,7 +537,7 @@ public class InterpretedClassDef extends ClassDef
 
       Var var = qClass.getStaticFieldVar(env, name);
 
-      var.set(field.getValue().eval(env).copy());
+      var.set(field.getValue().eval(env, VHelper.noCtx()).getOne().copy());
     }
   }
 

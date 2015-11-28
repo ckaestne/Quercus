@@ -30,13 +30,14 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.ArrayValueImpl;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP variable expression.
@@ -132,68 +133,72 @@ public class VarExpr
    * Evaluates the expression.
    *
    * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return env.getValue(_name, false, true);
+    return VHelper.toV(env.getValue(_name, false, true));
   }
 
   /**
    * Evaluates the expression.
    *
    * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalTop(Env env)
+  public V<? extends Value> evalTop(Env env, FeatureExpr ctx)
   {
-    return env.getValue(_name, false, false);
+    return VHelper.toV(env.getValue(_name, false, false));
   }
 
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public boolean evalIsset(Env env)
+  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
-    return env.getValue(_name, false, false).isset();
+    return VHelper.toV(env.getValue(_name, false, false).isset());
   }
 
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public Value evalIssetValue(Env env)
+  public V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
   {
-    return env.getValue(_name, false, false);
+    return VHelper.toV(env.getValue(_name, false, false));
   }
 
   /**
    * Evaluates the expression.
    *
    * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env).copy();
+    return eval(env, ctx).map((a)->a.copy());
   }
 
   /**
    * Evaluates the expression, converting to an array if unset.
    *
    * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     Value value = env.getVar(_name);
 
     value = value.toAutoArray();
 
-    return value;
+    return VHelper.toV(value);
   }
 
   /**
@@ -201,9 +206,10 @@ public class VarExpr
    * or is a string.
    *
    * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalObject(Env env)
+  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     Value value;
 
@@ -227,58 +233,62 @@ public class VarExpr
       }
     //}
 
-    return value;
+    return VHelper.toV(value);
   }
 
   /**
    * Evaluates the expression.
    *
    * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return env.getVar(_name);
+    return VHelper.toV(env.getVar(_name));
   }
 
   /**
    * Evaluates the expression.
    *
    * @param env the calling environment.
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     // php/043k
     // php/0443
 
-    return env.getVar(_name);
+    return VHelper.toV(env.getVar(_name));
   }
 
   /**
    * Evaluates the expression. The value must not be a Var.
-   *
    * @param env the calling environment.
+   * @param ctx
+   * @param value
    */
   @Override
-  public Value evalAssignValue(Env env, Value value)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     // php/0232
-    env.setValue(_name, value);
+    env.setValue(_name, value.getOne());
 
     return value;
   }
 
   /**
    * Evaluates the expression.
-   *
    * @param env the calling environment.
+   * @param ctx
+   * @param value
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    env.setRef(_name, value);
+    env.setRef(_name, value.getOne());
 
     return value;
   }

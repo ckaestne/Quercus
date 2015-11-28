@@ -32,6 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * A "($foo, $bar)" comma expression (evaluates all and returns first).
@@ -52,13 +55,14 @@ public class BinaryCommaExpr extends AbstractBinaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    _left.eval(env);
+    _left.eval(env, VHelper.noCtx());
 
-    return _right.eval(env);
+    return _right.eval(env, VHelper.noCtx());
   }
 
   /**
@@ -66,13 +70,14 @@ public class BinaryCommaExpr extends AbstractBinaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    _left.eval(env);
+    _left.eval(env, VHelper.noCtx());
 
-    return _right.evalBoolean(env);
+    return _right.evalBoolean(env, VHelper.noCtx());
   }
 
   public String toString()

@@ -30,12 +30,11 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -83,9 +82,10 @@ public class ClassVirtualMethodExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     Value qThis = env.getThis();
 
@@ -94,17 +94,17 @@ public class ClassVirtualMethodExpr extends Expr {
     if (cls == null) {
       env.error(L.l("no calling class found"), getLocation());
 
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     }
 
-    Value []values = evalArgs(env, _args);
+    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
 
     env.pushCall(this, cls, values);
 
     try {
       env.checkTimeout();
 
-      return cls.callMethod(env, qThis, _methodName, _hash, values);
+      return cls.callMethod(env, ctx, qThis, _methodName, _hash, values);
     } finally {
       env.popCall();
     }

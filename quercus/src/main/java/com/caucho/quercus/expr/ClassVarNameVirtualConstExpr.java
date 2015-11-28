@@ -29,14 +29,17 @@
 
 package com.caucho.quercus.expr;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.parser.QuercusParser;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents a PHP parent::{$foo} constant call expression.
@@ -79,13 +82,14 @@ public class ClassVarNameVirtualConstExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    StringValue name = _name.evalStringValue(env);
+    V<StringValue> name = _name.evalStringValue(env, VHelper.noCtx());
 
-    return env.getCallingClass().getConstant(env, name);
+    return name.map((n)->env.getCallingClass().getConstant(env, n));
   }
 
   @Override

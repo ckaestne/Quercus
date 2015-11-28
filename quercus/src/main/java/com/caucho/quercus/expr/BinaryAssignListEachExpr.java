@@ -29,11 +29,13 @@
 
 package com.caucho.quercus.expr;
 
-import com.caucho.quercus.env.ArrayValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP list() = each() assignment expression.
@@ -55,19 +57,20 @@ public class BinaryAssignListEachExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (! _value.isVar()) {
       env.error(L.l("each() argument must be a variable at '{0}'", _value));
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     }
 
-    Value value = _value.eval(env);
+    V<? extends Value> value = _value.eval(env, VHelper.noCtx());
 
-    _listHead.evalAssignEachValue(env, value);
+    _listHead.evalAssignEachValue(env, value.getOne());
 
     return value;
   }
@@ -77,19 +80,20 @@ public class BinaryAssignListEachExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     if (! _value.isVar()) {
       env.error(L.l("each() argument must be a variable at '{0}'", _value));
-      return false;
+      return VHelper.toV(false);
     }
 
-    Value value = _value.eval(env);
+    V<? extends Value> value = _value.eval(env, VHelper.noCtx());
 
-    return _listHead.evalEachBoolean(env, value);
+    return VHelper.toV(_listHead.evalEachBoolean(env, value.getOne()));
   }
 }
 

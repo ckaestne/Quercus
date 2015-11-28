@@ -34,10 +34,11 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.ExprFactory;
-import com.caucho.quercus.statement.*;
+import com.caucho.quercus.statement.Statement;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -89,7 +90,7 @@ public class MethodDeclaration extends Function
   /**
    * Evaluates the function.
    */
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     throw new UnsupportedOperationException();
   }

@@ -32,11 +32,7 @@ package com.caucho.quercus.lib;
 import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.QuercusModuleException;
-import com.caucho.quercus.annotation.NotNull;
-import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.annotation.Reference;
-import com.caucho.quercus.annotation.ReturnNullAsFalse;
-import com.caucho.quercus.annotation.UsesSymbolTable;
+import com.caucho.quercus.annotation.*;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.file.BinaryStream;
 import com.caucho.quercus.lib.file.FileInput;
@@ -46,7 +42,10 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.util.L10N;
 import com.caucho.util.RandomUtil;
-import com.caucho.vfs.*;
+import com.caucho.vfs.Path;
+import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -179,7 +178,7 @@ public class MiscModule extends AbstractQuercusModule {
    * Comples and evaluates an expression.
    */
   @UsesSymbolTable
-  public Value eval(Env env, StringValue code)
+  public V<? extends Value> eval(Env env, StringValue code)
   {
     try {
       if (log.isLoggable(Level.FINER))
@@ -189,10 +188,10 @@ public class MiscModule extends AbstractQuercusModule {
 
       QuercusProgram program = quercus.parseCode(code);
 
-      Value value = program.execute(env);
+      V<? extends Value> value = program.execute(env);
 
       if (value == null)
-        value = NullValue.NULL;
+        value = VHelper.toV(NullValue.NULL);
 
       return value;
     } catch (IOException e) {

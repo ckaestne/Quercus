@@ -36,6 +36,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.AbstractVarExpr;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -85,9 +88,9 @@ public class ForeachStatement
     return true;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    Value origObj = _objExpr.eval(env);
+    Value origObj = _objExpr.eval(env, VHelper.noCtx()).getOne();
     Value obj = origObj.copy(); // php/0669
 
     if (_key == null && ! _isRef) {
@@ -98,9 +101,9 @@ public class ForeachStatement
 
         value = value.copy(); // php/0662
 
-        _value.evalAssignValue(env, value);
+        _value.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value));
 
-        Value result = _block.execute(env);
+        Value result = _block.execute(env, VHelper.noCtx()).getOne();
 
         if (result == null) {
         }
@@ -110,7 +113,7 @@ public class ForeachStatement
           int target = conValue.getTarget();
 
           if (target > 1) {
-            return new ContinueValue(target - 1);
+            return VHelper.toV(new ContinueValue(target - 1));
           }
         }
         else if (result instanceof BreakValue) {
@@ -119,12 +122,12 @@ public class ForeachStatement
           int target = breakValue.getTarget();
 
           if (target > 1)
-            return new BreakValue(target - 1);
+            return VHelper.toV(new BreakValue(target - 1));
           else
             break;
         }
         else
-          return result;
+          return VHelper.toV(result);
       }
 
       return null;
@@ -135,14 +138,14 @@ public class ForeachStatement
         Value key = iter.next();
 
         if (_key != null)
-          _key.evalAssignValue(env, key);
+          _key.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(key));
 
         Value value = origObj.getVar(key);
 
         // php/0667
-        _value.evalAssignRef(env, value);
+        _value.evalAssignRef(env, VHelper.noCtx(), VHelper.toV(value));
 
-        Value result = _block.execute(env);
+        Value result = _block.execute(env, VHelper.noCtx()).getOne();
 
         if (result == null) {
         }
@@ -152,7 +155,7 @@ public class ForeachStatement
           int target = conValue.getTarget();
 
           if (target > 1) {
-            return new ContinueValue(target - 1);
+            return VHelper.toV(new ContinueValue(target - 1));
           }
         }
         else if (result instanceof BreakValue) {
@@ -161,12 +164,12 @@ public class ForeachStatement
           int target = breakValue.getTarget();
 
           if (target > 1)
-            return new BreakValue(target - 1);
+            return VHelper.toV(new BreakValue(target - 1));
           else
             break;
         }
         else
-          return result;
+          return VHelper.toV(result);
       }
     }
     else {
@@ -179,11 +182,11 @@ public class ForeachStatement
 
         value = value.copy(); // php/066w
 
-        _key.evalAssignValue(env, key);
+        _key.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(key));
 
-        _value.evalAssignValue(env, value);
+        _value.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value));
 
-        Value result = _block.execute(env);
+        Value result = _block.execute(env, VHelper.noCtx()).getOne();
 
         if (result == null) {
         }
@@ -193,7 +196,7 @@ public class ForeachStatement
           int target = conValue.getTarget();
 
           if (target > 1) {
-            return new ContinueValue(target - 1);
+            return VHelper.toV(new ContinueValue(target - 1));
           }
         }
         else if (result instanceof BreakValue) {
@@ -202,12 +205,12 @@ public class ForeachStatement
           int target = breakValue.getTarget();
 
           if (target > 1)
-            return new BreakValue(target - 1);
+            return VHelper.toV(new BreakValue(target - 1));
           else
             break;
         }
         else
-          return result;
+          return VHelper.toV(result);
       }
     }
 

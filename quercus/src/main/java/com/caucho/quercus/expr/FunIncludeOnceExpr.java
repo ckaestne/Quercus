@@ -32,9 +32,12 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.vfs.Path;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP include statement
@@ -77,11 +80,12 @@ public class FunIncludeOnceExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    StringValue name = _expr.eval(env).toStringValue();
+    StringValue name = _expr.eval(env, VHelper.noCtx()).getOne().toStringValue();
 
     // return env.include(_dir, name);
     
@@ -89,11 +93,11 @@ public class FunIncludeOnceExpr extends AbstractUnaryExpr {
     
     try {
       if (_dir != null)
-        return env.includeOnce(_dir, name, _isRequire);
+        return VHelper.toV(env.includeOnce(_dir, name, _isRequire));
       else if (_isRequire)
-        return env.requireOnce(name);
+        return VHelper.toV(env.requireOnce(name));
       else
-        return env.includeOnce(name);
+        return VHelper.toV(env.includeOnce(name));
     }
     finally {
       env.popCall();

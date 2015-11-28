@@ -35,6 +35,9 @@ import com.caucho.quercus.env.ContinueValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -82,10 +85,10 @@ public class SwitchStatement extends Statement {
   /**
    * Executes the 'switch' statement, returning any value.
    */
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
-      Value testValue = _value.eval(env);
+      Value testValue = _value.eval(env, VHelper.noCtx()).getOne();
 
       int len = _cases.length;
 
@@ -93,10 +96,10 @@ public class SwitchStatement extends Statement {
         Expr []values = _cases[i];
 
         for (int j = 0; j < values.length; j++) {
-          Value caseValue = values[j].eval(env);
+          Value caseValue = values[j].eval(env, VHelper.noCtx()).getOne();
 
           if (testValue.eq(caseValue)) {
-            Value retValue = _blocks[i].execute(env);
+            Value retValue = _blocks[i].execute(env, VHelper.noCtx()).getOne();
 
             if (retValue instanceof BreakValue) {
               BreakValue breakValue = (BreakValue) retValue;
@@ -104,7 +107,7 @@ public class SwitchStatement extends Statement {
               int target = breakValue.getTarget();
               
               if (target > 1)
-                return new BreakValue(target - 1);
+                return VHelper.toV(new BreakValue(target - 1));
               else
                 return null;
             }
@@ -114,23 +117,23 @@ public class SwitchStatement extends Statement {
               int target = conValue.getTarget();
               
               if (target > 1)
-                return new ContinueValue(target - 1);
+                return VHelper.toV(new ContinueValue(target - 1));
               else
                 return null;
             }
             else
-              return retValue;
+              return VHelper.toV(retValue);
           }
         }
       }
 
       if (_defaultBlock != null) {
-        Value retValue = _defaultBlock.execute(env);
+        Value retValue = _defaultBlock.execute(env, VHelper.noCtx()).getOne();
 
         if (retValue instanceof BreakValue)
           return null;
         else
-          return retValue;
+          return VHelper.toV(retValue);
       }
 
     }

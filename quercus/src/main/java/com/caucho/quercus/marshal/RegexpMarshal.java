@@ -29,15 +29,12 @@
 
 package com.caucho.quercus.marshal;
 
-import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
-import com.caucho.quercus.lib.regexp.RegexpModule;
-import com.caucho.quercus.lib.regexp.Regexp;
 import com.caucho.quercus.expr.Expr;
-
-import java.util.logging.*;
+import com.caucho.quercus.lib.regexp.Regexp;
+import com.caucho.quercus.lib.regexp.RegexpModule;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -48,7 +45,7 @@ public class RegexpMarshal extends StringMarshal {
   @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return RegexpModule.createRegexp(expr.evalStringValue(env));
+    return RegexpModule.createRegexp(expr.evalStringValue(env, VHelper.noCtx()).getOne());
   }
 
   @Override

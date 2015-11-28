@@ -32,6 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP pre increment expression.
@@ -55,9 +58,9 @@ public class UnaryPreIncrementExpr extends AbstractUnaryExpr {
     _incr = incr;
   }
 
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _expr.evalPreIncrement(env, _incr);
+    return _expr.evalPreIncrement(env, VHelper.noCtx(), _incr);
   }
 
   /**

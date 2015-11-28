@@ -34,6 +34,8 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -71,37 +73,37 @@ abstract public class CompiledFunctionRef_4 extends CompiledFunctionRef {
     return args;
   }
 
-  public Value callRef(Env env, Value []argValues)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
     switch (argValues.length) {
     case 0:
-      return callRef(env,
+      return callRef(env, ctx,
                      _args[0].eval(env),
                      _args[1].eval(env),
                      _args[2].eval(env),
                      _args[3].eval(env));
 
     case 1:
-      return callRef(env,
+      return callRef(env, ctx,
                      argValues[0],
                      _args[1].eval(env),
                      _args[2].eval(env),
                      _args[3].eval(env));
     case 2:
-      return callRef(env,
+      return callRef(env, ctx,
                      argValues[0],
                      argValues[1],
                      _args[2].eval(env),
                      _args[3].eval(env));
     case 3:
-      return callRef(env,
+      return callRef(env, ctx,
                      argValues[0],
                      argValues[1],
                      argValues[2],
                      _args[3].eval(env));
     case 4:
     default:
-      return callRef(env,
+      return callRef(env, ctx,
                      argValues[0],
                      argValues[1],
                      argValues[2],
@@ -109,36 +111,36 @@ abstract public class CompiledFunctionRef_4 extends CompiledFunctionRef {
     }
   }
 
-  public Value callRef(Env env)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
-    return callRef(env,
+    return callRef(env, ctx,
                    _args[0].eval(env),
                    _args[1].eval(env),
                    _args[2].eval(env),
                    _args[3].eval(env));
   }
 
-  public Value callRef(Env env, Value a1)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
   {
-    return callRef(env,
+    return callRef(env, ctx,
                    a1,
                    _args[1].eval(env),
                    _args[2].eval(env),
                    _args[3].eval(env));
   }
 
-  public Value callRef(Env env, Value a1, Value a2)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
-    return callRef(env,
+    return callRef(env, ctx,
                    a1,
                    a2,
                    _args[2].eval(env),
                    _args[3].eval(env));
   }
 
-  public Value callRef(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return callRef(env,
+    return callRef(env, ctx,
                     a1,
                     a2,
                     a3,
@@ -148,7 +150,7 @@ abstract public class CompiledFunctionRef_4 extends CompiledFunctionRef {
   /**
    * Evaluates the function with arguments
    */
-  abstract public Value callRef(Env env, Value a1, Value a2, Value a3, Value a4);
+  abstract public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4);
 
   public String toString()
   {

@@ -33,6 +33,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents an undefined
@@ -60,16 +63,16 @@ public class UndefinedFunction extends AbstractFunction {
   /**
    * Evaluates the function.
    */
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     if (_globalId > 0) {
       AbstractFunction fun = env._fun[_globalId];
       env._fun[_id] = fun;
 
-      return fun.call(env, args);
+      return fun.call(env, VHelper.noCtx(), args);
     }
 
-    return env.error(L.l("'{0}' is an unknown function.", _name));
+    return VHelper.toV(env.error(L.l("'{0}' is an unknown function.", _name)));
   }
 
   public String toString()

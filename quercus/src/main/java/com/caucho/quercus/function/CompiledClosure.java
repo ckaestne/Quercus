@@ -34,6 +34,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.ParamRequiredExpr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a compiled closure.
@@ -45,49 +48,49 @@ abstract public class CompiledClosure extends Closure {
     super(name, qThis);
   }
 
-  abstract public Value call(Env env, Value []args);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
 
   @Override
-  public Value callRef(Env env, Value []argValues)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
-    return call(env, argValues).copyReturn();
+    return call(env, VHelper.noCtx(), argValues).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callRef(Env env)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
-    return call(env).copyReturn();
+    return call(env, VHelper.noCtx()).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callRef(Env env, Value a1)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1)
   {
-    return call(env, a1).copyReturn();
+    return call(env, VHelper.noCtx(), a1).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
-    return call(env, a1, a2).copyReturn();
+    return call(env, ctx, a1, a2).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return call(env, a1, a2, a3).copyReturn();
+    return call(env, ctx, a1, a2, a3).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
-    return call(env, a1, a2, a3, a4).copyReturn();
+    return call(env, ctx, a1, a2, a3, a4).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2,
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
                        Value a3, Value a4, Value a5)
   {
-    return call(env, a1, a2, a3, a4, a5).copyReturn();
+    return call(env, ctx, a1, a2, a3, a4, a5).map((a)->a.copyReturn());
   }
 
   public abstract static class CompiledClosure_0 extends CompiledClosure {
@@ -97,12 +100,12 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env, Value []argValues)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
-      return call(env);
+      return call(env, VHelper.noCtx());
     }
 
-    abstract public Value call(Env env);
+    abstract public V<? extends Value> call(Env env, FeatureExpr ctx);
   }
 
   public abstract static class CompiledClosure_1 extends CompiledClosure {
@@ -116,26 +119,26 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env, Value []argValues)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
           return call(env,
-                      _default0.eval(env));
+                  VHelper.noCtx(), _default0.eval(env, VHelper.noCtx()).getOne());
         case 1:
         default:
           return call(env,
-                      argValues[0]);
+                  VHelper.noCtx(), argValues[0]);
       }
     }
 
     @Override
-    public Value call(Env env)
+    public V<? extends Value> call(Env env, FeatureExpr ctx)
     {
-      return call(env, _default0.eval(env));
+      return call(env, VHelper.noCtx(), _default0.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public Value call(Env env, Value a1);
+    abstract public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1);
   }
 
   public abstract static class CompiledClosure_2 extends CompiledClosure {
@@ -152,38 +155,38 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env, Value []argValues)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
-          return call(env,
-                      _default0.eval(env),
-                      _default1.eval(env));
+          return call(env, ctx,
+                      _default0.eval(env, VHelper.noCtx()).getOne(),
+                      _default1.eval(env, VHelper.noCtx()).getOne());
         case 1:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
-                      _default1.eval(env));
+                      _default1.eval(env, VHelper.noCtx()).getOne());
         case 2:
         default:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1]);
       }
     }
 
     @Override
-    public Value call(Env env)
+    public V<? extends Value> call(Env env, FeatureExpr ctx)
     {
-      return call(env, _default0.eval(env), _default1.eval(env));
+      return call(env, ctx, _default0.eval(env, VHelper.noCtx()).getOne(), _default1.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
-      return call(env, a1, _default1.eval(env));
+      return call(env, ctx, a1, _default1.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public Value call(Env env, Value a1, Value a2);
+    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2);
   }
 
   public abstract static class CompiledClosure_3 extends CompiledClosure {
@@ -202,27 +205,27 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env, Value []argValues)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
-          return call(env,
-                      _default0.eval(env),
-                      _default1.eval(env),
-                      _default2.eval(env));
+          return call(env, ctx,
+                      _default0.eval(env, VHelper.noCtx()).getOne(),
+                      _default1.eval(env, VHelper.noCtx()).getOne(),
+                      _default2.eval(env, VHelper.noCtx()).getOne());
         case 1:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
-                      _default1.eval(env),
-                      _default2.eval(env));
+                      _default1.eval(env, VHelper.noCtx()).getOne(),
+                      _default2.eval(env, VHelper.noCtx()).getOne());
         case 2:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
-                      _default2.eval(env));
+                      _default2.eval(env, VHelper.noCtx()).getOne());
         case 3:
         default:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
                       argValues[2]);
@@ -230,33 +233,33 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env)
+    public V<? extends Value> call(Env env, FeatureExpr ctx)
     {
-      return call(env,
-                  _default0.eval(env),
-                  _default1.eval(env),
-                  _default2.eval(env));
+      return call(env, ctx,
+                  _default0.eval(env, VHelper.noCtx()).getOne(),
+                  _default1.eval(env, VHelper.noCtx()).getOne(),
+                  _default2.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
-                  _default1.eval(env),
-                  _default2.eval(env));
+                  _default1.eval(env, VHelper.noCtx()).getOne(),
+                  _default2.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1, Value a2)
+    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
                   a2,
-                  _default2.eval(env));
+                  _default2.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public Value call(Env env, Value a1, Value a2, Value a3);
+    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3);
   }
 
   public abstract static class CompiledClosure_4 extends CompiledClosure {
@@ -278,36 +281,36 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env, Value []argValues)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
-          return call(env,
-                      _default0.eval(env),
-                      _default1.eval(env),
-                      _default2.eval(env),
-                      _default3.eval(env));
+          return call(env, ctx,
+                      _default0.eval(env, VHelper.noCtx()).getOne(),
+                      _default1.eval(env, VHelper.noCtx()).getOne(),
+                      _default2.eval(env, VHelper.noCtx()).getOne(),
+                      _default3.eval(env, VHelper.noCtx()).getOne());
         case 1:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
-                      _default1.eval(env),
-                      _default2.eval(env),
-                      _default3.eval(env));
+                      _default1.eval(env, VHelper.noCtx()).getOne(),
+                      _default2.eval(env, VHelper.noCtx()).getOne(),
+                      _default3.eval(env, VHelper.noCtx()).getOne());
         case 2:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
-                      _default2.eval(env),
-                      _default3.eval(env));
+                      _default2.eval(env, VHelper.noCtx()).getOne(),
+                      _default3.eval(env, VHelper.noCtx()).getOne());
         case 3:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
                       argValues[2],
-                      _default3.eval(env));
+                      _default3.eval(env, VHelper.noCtx()).getOne());
         case 4:
         default:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
                       argValues[2],
@@ -316,46 +319,46 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env)
+    public V<? extends Value> call(Env env, FeatureExpr ctx)
     {
-      return call(env,
-                  _default0.eval(env),
-                  _default1.eval(env),
-                  _default2.eval(env),
-                  _default3.eval(env));
+      return call(env, ctx,
+                  _default0.eval(env, VHelper.noCtx()).getOne(),
+                  _default1.eval(env, VHelper.noCtx()).getOne(),
+                  _default2.eval(env, VHelper.noCtx()).getOne(),
+                  _default3.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
-                  _default1.eval(env),
-                  _default2.eval(env),
-                  _default3.eval(env));
+                  _default1.eval(env, VHelper.noCtx()).getOne(),
+                  _default2.eval(env, VHelper.noCtx()).getOne(),
+                  _default3.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1, Value a2)
+    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
                   a2,
-                  _default2.eval(env),
-                  _default3.eval(env));
+                  _default2.eval(env, VHelper.noCtx()).getOne(),
+                  _default3.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1, Value a2, Value a3)
+    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
                   a2,
                   a3,
-                  _default3.eval(env));
+                  _default3.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public Value call(Env env, Value a1, Value a2, Value a3, Value a4);
+    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4);
   }
 
   public abstract static class CompiledClosure_5 extends CompiledClosure {
@@ -380,47 +383,47 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env, Value []argValues)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       switch (argValues.length) {
         case 0:
-          return call(env,
-                      _default0.eval(env),
-                      _default1.eval(env),
-                      _default2.eval(env),
-                      _default3.eval(env),
-                      _default4.eval(env));
+          return call(env, ctx,
+                      _default0.eval(env, VHelper.noCtx()).getOne(),
+                      _default1.eval(env, VHelper.noCtx()).getOne(),
+                      _default2.eval(env, VHelper.noCtx()).getOne(),
+                      _default3.eval(env, VHelper.noCtx()).getOne(),
+                      _default4.eval(env, VHelper.noCtx()).getOne());
         case 1:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
-                      _default1.eval(env),
-                      _default2.eval(env),
-                      _default3.eval(env),
-                      _default4.eval(env));
+                      _default1.eval(env, VHelper.noCtx()).getOne(),
+                      _default2.eval(env, VHelper.noCtx()).getOne(),
+                      _default3.eval(env, VHelper.noCtx()).getOne(),
+                      _default4.eval(env, VHelper.noCtx()).getOne());
         case 2:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
-                      _default2.eval(env),
-                      _default3.eval(env),
-                      _default4.eval(env));
+                      _default2.eval(env, VHelper.noCtx()).getOne(),
+                      _default3.eval(env, VHelper.noCtx()).getOne(),
+                      _default4.eval(env, VHelper.noCtx()).getOne());
         case 3:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
                       argValues[2],
-                      _default3.eval(env),
-                      _default4.eval(env));
+                      _default3.eval(env, VHelper.noCtx()).getOne(),
+                      _default4.eval(env, VHelper.noCtx()).getOne());
         case 4:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
                       argValues[2],
                       argValues[3],
-                      _default4.eval(env));
+                      _default4.eval(env, VHelper.noCtx()).getOne());
         case 5:
         default:
-          return call(env,
+          return call(env, ctx,
                       argValues[0],
                       argValues[1],
                       argValues[2],
@@ -430,61 +433,61 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public Value call(Env env)
+    public V<? extends Value> call(Env env, FeatureExpr ctx)
     {
-      return call(env,
-                  _default0.eval(env),
-                  _default1.eval(env),
-                  _default2.eval(env),
-                  _default3.eval(env),
-                  _default4.eval(env));
+      return call(env, ctx,
+                  _default0.eval(env, VHelper.noCtx()).getOne(),
+                  _default1.eval(env, VHelper.noCtx()).getOne(),
+                  _default2.eval(env, VHelper.noCtx()).getOne(),
+                  _default3.eval(env, VHelper.noCtx()).getOne(),
+                  _default4.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1)
+    public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
-                  _default1.eval(env),
-                  _default2.eval(env),
-                  _default3.eval(env),
-                  _default4.eval(env));
+                  _default1.eval(env, VHelper.noCtx()).getOne(),
+                  _default2.eval(env, VHelper.noCtx()).getOne(),
+                  _default3.eval(env, VHelper.noCtx()).getOne(),
+                  _default4.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1, Value a2)
+    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
                   a2,
-                  _default2.eval(env),
-                  _default3.eval(env),
-                  _default4.eval(env));
+                  _default2.eval(env, VHelper.noCtx()).getOne(),
+                  _default3.eval(env, VHelper.noCtx()).getOne(),
+                  _default4.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1, Value a2, Value a3)
+    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
                   a2,
                   a3,
-                  _default3.eval(env),
-                  _default4.eval(env));
+                  _default3.eval(env, VHelper.noCtx()).getOne(),
+                  _default4.eval(env, VHelper.noCtx()).getOne());
     }
 
     @Override
-    public Value call(Env env, Value a1, Value a2, Value a3, Value a4)
+    public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
     {
-      return call(env,
+      return call(env, ctx,
                   a1,
                   a2,
                   a3,
                   a4,
-                  _default4.eval(env));
+                  _default4.eval(env, VHelper.noCtx()).getOne());
     }
 
-    abstract public Value call(Env env, Value a1, Value a2, Value a3, Value a4,
+    abstract public V<? extends Value> call(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4,
                                Value a5);
   }
 
@@ -512,16 +515,16 @@ abstract public class CompiledClosure extends Closure {
     }
 
     @Override
-    public final Value call(Env env, Value []argValues)
+    public final V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
     {
       if (argValues.length < _requiredArgs) {
         env.warning("required argument missing");
       }
 
-      return callImpl(env, argValues);
+      return callImpl(env, ctx, argValues);
     }
 
-    abstract public Value callImpl(Env env, Value []args);
+    abstract public V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value []args);
   }
 }
 

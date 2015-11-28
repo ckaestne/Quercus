@@ -31,8 +31,11 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -71,18 +74,19 @@ public class ObjectMethodExpr extends AbstractMethodExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value obj = _objExpr.eval(env);
+    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
 
     StringValue methodName = _methodName;
 
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return eval(env, obj, methodName, hash, _args);
+    return eval(env, VHelper.noCtx(), obj.getOne(), methodName, hash, _args);
   }
 
   public String toString()

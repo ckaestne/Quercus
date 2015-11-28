@@ -31,16 +31,13 @@ package com.caucho.quercus.lib.regexp;
 
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.QuercusRuntimeException;
-import com.caucho.quercus.annotation.Hide;
-import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.annotation.NotNull;
-import com.caucho.quercus.annotation.Reference;
-import com.caucho.quercus.annotation.UsesSymbolTable;
+import com.caucho.quercus.annotation.*;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.i18n.MbstringModule;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -1155,7 +1152,7 @@ public class RegexpModule
         regs.put(group);
       }
 
-      Value replacement = fun.call(env, regs);
+      Value replacement = fun.call(env, VHelper.noCtx(), regs).getOne();
 
       result = result.append(replacement);
 

@@ -35,6 +35,8 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -731,10 +733,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value[] args)
   {
-    return _classDef.callMethod(env, this,
+    return _classDef.callMethod(env, ctx, this,
                                 methodName, hash,
                                 args);
   }
@@ -743,19 +745,19 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
-    return _classDef.callMethod(env, this, methodName, hash);
+    return _classDef.callMethod(env, ctx, this, methodName, hash);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1);
   }
 
@@ -763,10 +765,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2);
   }
 
@@ -774,10 +776,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3);
   }
 
@@ -785,10 +787,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3, Value a4)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4);
   }
 
@@ -796,10 +798,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4, a5);
   }
 
@@ -807,31 +809,31 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
-                             Value []args)
+  public V<? extends Value> callMethodRef(Env env,
+                                FeatureExpr ctx, StringValue methodName, int hash,
+                                Value[] args)
   {
-    return _classDef.callMethod(env, this, methodName, hash, args);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, args);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
-    return _classDef.callMethod(env, this, methodName, hash);
+    return _classDef.callMethod(env, ctx, this, methodName, hash);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
-                             Value a1)
+  public V<? extends Value> callMethodRef(Env env,
+                                FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1)
   {
-    return _classDef.callMethod(env, this,
+    return _classDef.callMethod(env, ctx, this,
                                 methodName, hash,
                                 a1);
   }
@@ -840,10 +842,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2);
   }
 
@@ -851,10 +853,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3);
   }
 
@@ -862,10 +864,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3, Value a4)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4);
   }
 
@@ -873,10 +875,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                          Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4, a5);
   }
 

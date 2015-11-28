@@ -29,17 +29,12 @@
 
 package com.caucho.quercus.statement;
 
-import com.caucho.quercus.Location;
-import com.caucho.quercus.QuercusDieException;
-import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.QuercusExitException;
-import com.caucho.quercus.QuercusRuntimeException;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.QuercusLanguageException;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.*;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.AbstractVarExpr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -66,10 +61,10 @@ public class TryStatement extends Statement {
     block.setParent(this);
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
-      return _block.execute(env);
+      return _block.execute(env, VHelper.noCtx());
     }
     catch (QuercusLanguageException e) {
       Value value = null;
@@ -87,13 +82,13 @@ public class TryStatement extends Statement {
         if (value != null && value.isA(env, item.getId())
             || item.getId().equalsString("Exception")) {
           if (value != null) {
-            item.getExpr().evalAssignValue(env, value);
+            item.getExpr().evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value));
           }
           else {
-            item.getExpr().evalAssignValue(env, NullValue.NULL);
+            item.getExpr().evalAssignValue(env, VHelper.noCtx(), VHelper.toV(NullValue.NULL));
           }
 
-          return item.getBlock().execute(env);
+          return item.getBlock().execute(env, VHelper.noCtx());
         }
       }
 
@@ -104,9 +99,9 @@ public class TryStatement extends Statement {
         Catch item = _catchList.get(i);
 
         if (item.getId().equalsString("QuercusDieException")) {
-          item.getExpr().evalAssignValue(env, env.createException(e));
+          item.getExpr().evalAssignValue(env, VHelper.noCtx(), VHelper.toV(env.createException(e)));
 
-          return item.getBlock().execute(env);
+          return item.getBlock().execute(env, VHelper.noCtx());
         }
       }
 
@@ -117,9 +112,9 @@ public class TryStatement extends Statement {
         Catch item = _catchList.get(i);
 
         if (item.getId().equalsString("QuercusExitException")) {
-          item.getExpr().evalAssignValue(env, env.createException(e));
+          item.getExpr().evalAssignValue(env, VHelper.noCtx(), VHelper.toV(env.createException(e)));
 
-          return item.getBlock().execute(env);
+          return item.getBlock().execute(env, VHelper.noCtx());
         }
       }
 
@@ -135,9 +130,9 @@ public class TryStatement extends Statement {
           //if (e instanceof QuercusException && e.getCause() != null)
             //cause = e.getCause();
 
-          item.getExpr().evalAssignValue(env, env.createException(cause));
+          item.getExpr().evalAssignValue(env, VHelper.noCtx(), VHelper.toV(env.createException(cause)));
 
-          return item.getBlock().execute(env);
+          return item.getBlock().execute(env, VHelper.noCtx());
         }
       }
 

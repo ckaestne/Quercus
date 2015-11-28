@@ -32,6 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP add expression.
@@ -47,12 +50,9 @@ public class BinaryAddExpr extends AbstractBinaryExpr {
     super(left, right);
   }
 
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value lValue = _left.eval(env);
-    Value rValue = _right.eval(env);
-
-    return lValue.add(rValue);
+    return VHelper.mapAll(_left.eval(env, VHelper.noCtx()) , _right.eval(env, VHelper.noCtx()),(l,r)-> l.add(r));
   }
 
   /**

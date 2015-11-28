@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents an expression statement in a PHP program.
@@ -58,13 +61,13 @@ public class ExprStatement extends Statement {
     return _expr;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     // php/0d92
     Location oldLocation = env.setLocation(getLocation());
 
     // php/1a08
-    _expr.evalTop(env);
+    _expr.evalTop(env, VHelper.noCtx());
 
     env.setLocation(oldLocation);
 

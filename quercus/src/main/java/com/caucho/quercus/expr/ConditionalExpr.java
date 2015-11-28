@@ -32,6 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a conditional expression.
@@ -66,14 +69,15 @@ public class ConditionalExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    if (_test.evalBoolean(env))
-      return _trueExpr.eval(env);
+    if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
+      return _trueExpr.eval(env, VHelper.noCtx());
     else
-      return _falseExpr.eval(env);
+      return _falseExpr.eval(env, VHelper.noCtx());
   }
 
   /**
@@ -81,14 +85,15 @@ public class ConditionalExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    if (_test.evalBoolean(env))
-      return _trueExpr.evalBoolean(env);
+    if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
+      return _trueExpr.evalBoolean(env, VHelper.noCtx());
     else
-      return _falseExpr.evalBoolean(env);
+      return _falseExpr.evalBoolean(env, VHelper.noCtx());
   }
 
   /**
@@ -96,14 +101,15 @@ public class ConditionalExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    if (_test.evalBoolean(env))
-      return _trueExpr.evalCopy(env);
+    if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
+      return _trueExpr.evalCopy(env, VHelper.noCtx());
     else
-      return _falseExpr.evalCopy(env);
+      return _falseExpr.evalCopy(env, VHelper.noCtx());
   }
 
   public String toString()

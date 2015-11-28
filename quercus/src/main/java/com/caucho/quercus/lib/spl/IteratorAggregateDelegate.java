@@ -30,13 +30,9 @@
 package com.caucho.quercus.lib.spl;
 
 import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.env.ConstStringValue;
-import com.caucho.quercus.env.TraversableDelegate;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.StringBuilderValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -100,6 +96,6 @@ public class IteratorAggregateDelegate
 
   private Value getTarget(Env env, ObjectValue qThis)
   {
-    return qThis.callMethod(env, GET_ITERATOR);
+    return qThis.callMethod(env, VHelper.noCtx(), GET_ITERATOR).getOne();
   }
 }

@@ -31,6 +31,8 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a call to a function.
@@ -102,22 +104,24 @@ public class CallbackFunction extends Callback {
    * Evaluates the callback with no arguments.
    *
    * @param env the calling environment
+   * @param ctx
    */
   @Override
-  public Value call(Env env)
+  public V<? extends Value> call(Env env, FeatureExpr ctx)
   {
-    return getFunction(env).call(env);
+    return getFunction(env).call(env, ctx);
   }
 
   /**
    * Evaluates the callback with 1 argument.
    *
    * @param env the calling environment
+   * @param ctx
    */
   @Override
-  public Value call(Env env, Value a1)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
-    return getFunction(env).call(env, a1);
+    return getFunction(env).call(env, ctx, a1);
   }
 
   /**
@@ -126,9 +130,9 @@ public class CallbackFunction extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
-    return getFunction(env).call(env, a1, a2);
+    return getFunction(env).call(env, ctx, a1, a2);
   }
 
   /**
@@ -137,9 +141,9 @@ public class CallbackFunction extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return getFunction(env).call(env, a1, a2, a3);
+    return getFunction(env).call(env, ctx, a1, a2, a3);
   }
 
   /**
@@ -148,10 +152,10 @@ public class CallbackFunction extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3,
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
                     Value a4)
   {
-    return getFunction(env).call(env, a1, a2, a3, a4);
+    return getFunction(env).call(env, ctx, a1, a2, a3, a4);
   }
 
   /**
@@ -160,16 +164,16 @@ public class CallbackFunction extends Callback {
    * @param env the calling environment
    */
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3,
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
                     Value a4, Value a5)
   {
-    return getFunction(env).call(env, a1, a2, a3, a4, a5);
+    return getFunction(env).call(env, ctx, a1, a2, a3, a4, a5);
   }
 
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
-    return getFunction(env).call(env, args);
+    return getFunction(env).call(env, ctx, args);
   }
 
   public String getCallbackName()

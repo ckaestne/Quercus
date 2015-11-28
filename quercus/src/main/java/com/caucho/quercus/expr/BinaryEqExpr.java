@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP equality testing expression.
@@ -57,20 +60,20 @@ public class BinaryEqExpr extends AbstractBinaryExpr
   /**
    * Evaluates the equality as a boolean.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return evalBoolean(env) ? BooleanValue.TRUE : BooleanValue.FALSE;
+    return evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
   }
 
   /**
    * Evaluates the equality as a boolean.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    Value lValue = _left.eval(env);
-    Value rValue = _right.eval(env);
+    V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());
+    V<? extends Value> rValue = _right.eval(env, VHelper.noCtx());
 
-    return lValue.eq(rValue);
+    return VHelper.mapAll(lValue,rValue,(l,r)-> l.eq(r));
   }
 
   public String toString()

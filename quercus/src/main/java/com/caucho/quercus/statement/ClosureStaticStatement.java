@@ -33,10 +33,12 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Closure;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarExpr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a static statement in a PHP program.
@@ -60,7 +62,7 @@ public class ClosureStaticStatement
     _initValue = initValue;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     Closure closure = env.getClosure();
 
@@ -70,7 +72,7 @@ public class ClosureStaticStatement
       env.setRef(_var.getName(), var);
 
       if (! var.isset() && _initValue != null) {
-        var.set(_initValue.eval(env));
+        var.set(_initValue.eval(env, VHelper.noCtx()).getOne());
       }
 
     }

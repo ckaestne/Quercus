@@ -32,6 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * A "$b - $a" subtract expression.
@@ -51,14 +54,15 @@ public class BinarySubExpr extends AbstractBinaryExpr {
    * Evaluates the expression returning the expression value.
    *
    * @param env the quercus environment
+   * @param ctx
    * @return the resulting value
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value lValue = _left.eval(env);
-    Value rValue = _right.eval(env);
+    V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());
+    V<? extends Value> rValue = _right.eval(env, VHelper.noCtx());
 
-    return lValue.sub(rValue);
+    return VHelper.mapAll(lValue,rValue,(l,r)-> l.sub(r));
   }
 
   public String toString()

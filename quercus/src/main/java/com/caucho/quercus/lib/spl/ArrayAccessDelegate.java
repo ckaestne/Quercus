@@ -30,6 +30,7 @@
 package com.caucho.quercus.lib.spl;
 
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * A delegate that intercepts array access methods on the
@@ -50,31 +51,31 @@ public class ArrayAccessDelegate implements ArrayDelegate
   @Override
   public Value get(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, OFFSET_GET, index);
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_GET, index).getOne();
   }
 
   @Override
   public Value put(Env env, ObjectValue qThis, Value index, Value value)
   {
-    return qThis.callMethod(env, OFFSET_SET, index, value);
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_SET, index, value).getOne();
   }
 
   @Override
   public Value put(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, OFFSET_SET, UnsetValue.UNSET, index);
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_SET, UnsetValue.UNSET, index).getOne();
   }
 
   @Override
   public boolean isset(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, OFFSET_EXISTS, index).toBoolean();
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_EXISTS, index).getOne().toBoolean();
   }
 
   @Override
   public boolean isEmpty(Env env, ObjectValue qThis, Value index)
   {
-    boolean isExists = qThis.callMethod(env, OFFSET_EXISTS, index).toBoolean();
+    boolean isExists = qThis.callMethod(env, VHelper.noCtx(), OFFSET_EXISTS, index).getOne().toBoolean();
 
     if (! isExists) {
       return true;
@@ -88,7 +89,7 @@ public class ArrayAccessDelegate implements ArrayDelegate
   @Override
   public Value unset(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, OFFSET_UNSET, index);
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_UNSET, index).getOne();
   }
 
   @Override

@@ -32,11 +32,14 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.parser.QuercusParser;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
+import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -120,10 +123,11 @@ public class ClassMethodVarExpr extends AbstractMethodExpr
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);
 
@@ -134,12 +138,12 @@ public class ClassMethodVarExpr extends AbstractMethodExpr
     // qa/0954 - static calls pass the current $this
     Value qThis = env.getThis();
 
-    StringValue methodName = _nameExpr.evalStringValue(env);
+    StringValue methodName = _nameExpr.evalStringValue(env, VHelper.noCtx()).getOne();
 
-    Value []args = evalArgs(env, _args);
+    Value []args = evalArgs(env, _args, VHelper.noCtx()).getOne();
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return cl.callStaticMethod(env, qThis, methodName, hash, args);
+    return cl.callStaticMethod(env, ctx, qThis, methodName, hash, args);
   }
 
   public String toString()

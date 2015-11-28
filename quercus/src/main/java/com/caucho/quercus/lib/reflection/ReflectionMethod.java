@@ -32,17 +32,13 @@ package com.caucho.quercus.lib.reflection;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.CallExpr;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 public class ReflectionMethod extends ReflectionFunctionAbstract
   implements Reflector
@@ -94,7 +90,7 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
 
   public Value invoke(Env env, ObjectValue object, Value []args)
   {
-    return getFunction().callMethod(env, object.getQuercusClass(), object, args);
+    return getFunction().callMethod(env, VHelper.noCtx(), object.getQuercusClass(), object, args).getOne();
   }
 
   public Value invokeArgs(Env env, ObjectValue object, ArrayValue args)
@@ -105,8 +101,8 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
     env.pushCall(expr, object, args.getValueArray(env));
 
     try {
-      return fun.callMethod(env, object.getQuercusClass(), object,
-                            args.getValueArray(env));
+      return fun.callMethod(env, VHelper.noCtx(), object.getQuercusClass(), object,
+                            args.getValueArray(env)).getOne();
     }
     finally {
       env.popCall();

@@ -31,6 +31,8 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a closure
@@ -108,13 +110,13 @@ public class InterpretedClosure extends Closure
   }
 
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     Value oldThis = env.setThis(getThis());
     Closure oldClosure = env.setClosure(this);
 
     try {
-      return _fun.callClosure(env, args, _args);
+      return _fun.callClosure(env, ctx, args, _args);
     }
     finally {
       env.setClosure(oldClosure);

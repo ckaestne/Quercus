@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP instanceof expression.
@@ -66,20 +69,20 @@ public class BinaryInstanceOfExpr extends AbstractUnaryExpr {
    * Evaluates the equality as a boolean.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return evalBoolean(env) ? BooleanValue.TRUE : BooleanValue.FALSE;
+    return evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
   }
 
   /**
    * Evaluates the equality as a boolean.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    Value obj = _expr.eval(env);
+    V<? extends Value> obj = _expr.eval(env, VHelper.noCtx());
 
     // php/03p1
-    return obj.isA(env, _right);
+    return obj.map((a)->a.isA(env, _right));
   }
 
   public String toString()

@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP expression.
@@ -52,11 +55,12 @@ abstract public class AbstractLongValuedExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return LongValue.create(evalLong(env));
+    return evalLong(env, VHelper.noCtx()).map((a)->LongValue.create(a));
   }
 
   /**
@@ -64,11 +68,12 @@ abstract public class AbstractLongValuedExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    return evalLong(env) != 0;
+    return evalLong(env, VHelper.noCtx()).map((a)->a != 0);
   }
 
   /**
@@ -76,11 +81,12 @@ abstract public class AbstractLongValuedExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public double evalDouble(Env env)
+  public V<Double> evalDouble(Env env, FeatureExpr ctx)
   {
-    return evalLong(env);
+    return evalLong(env, VHelper.noCtx()).map((a)->(double)a);
   }
 
   /**
@@ -88,8 +94,9 @@ abstract public class AbstractLongValuedExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  abstract public long evalLong(Env env);
+  abstract public V<Long> evalLong(Env env, FeatureExpr ctx);
 }
 

@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.lib.file.BinaryOutput;
 import com.caucho.quercus.lib.file.WriteStreamOutput;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.OutputStream;
 
@@ -58,7 +59,7 @@ public class BinaryOutputMarshal extends Marshal
   @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env), expectedClass);
+    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   @Override

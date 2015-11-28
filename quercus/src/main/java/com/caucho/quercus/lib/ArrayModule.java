@@ -29,31 +29,12 @@
 
 package com.caucho.quercus.lib;
 
-import java.text.Collator;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReadOnly;
 import com.caucho.quercus.annotation.Reference;
 import com.caucho.quercus.annotation.UsesSymbolTable;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.DoubleValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.NumberValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.env.ArrayValue.AbstractGet;
 import com.caucho.quercus.env.ArrayValue.GetKey;
 import com.caucho.quercus.env.ArrayValue.KeyComparator;
@@ -62,6 +43,15 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.RandomUtil;
+import edu.cmu.cs.varex.VHelper;
+
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * PHP array routines.
@@ -458,7 +448,7 @@ public class ArrayModule
         Value searchKey = ((ArrayValue) arrays[k]).contains(entryValue);
 
         if (! searchKey.isNull())
-          ValueFound = ((int) func.call(env, searchKey, entryKey).toLong())
+          ValueFound = ((int) func.call(env, VHelper.noCtx(),searchKey, entryKey).getOne().toLong())
               == 0;
       }
 
@@ -522,7 +512,7 @@ public class ArrayModule
         while (keyItr.hasNext() && ! keyFound) {
           Value currentKey = keyItr.next();
 
-          keyFound = ((int) func.call(env, entryKey, currentKey).toLong()) == 0;
+          keyFound = ((int) func.call(env, VHelper.noCtx(),entryKey, currentKey).getOne().toLong()) == 0;
         }
       }
 
@@ -672,7 +662,7 @@ public class ArrayModule
 
           // php/1740
           boolean isMatch
-            = callback.callArray(env, array, key, value).toBoolean();
+            = callback.callArray(env, VHelper.noCtx(),array, key, value).getOne().toBoolean();
 
           if (isMatch)
             filteredArray.put(key, value);
@@ -888,7 +878,7 @@ public class ArrayModule
         Value searchValue = ((ArrayValue) arrays[k]).containsKey(entryKey);
 
         if (searchValue != null)
-          valueFound = func.call(env, searchValue, entryValue).toLong() == 0;
+          valueFound = func.call(env, VHelper.noCtx(), searchValue, entryValue).getOne().toLong() == 0;
         else
           valueFound = false;
       }
@@ -957,7 +947,7 @@ public class ArrayModule
         while (keyItr.hasNext() && ! keyFound) {
           Value currentKey = keyItr.next();
 
-          keyFound = ((int) func.call(env, entryKey, currentKey).toLong()) == 0;
+          keyFound = ((int) func.call(env, VHelper.noCtx(), entryKey, currentKey).getOne().toLong()) == 0;
         }
 
       }
@@ -1136,7 +1126,7 @@ public class ArrayModule
           param[i + 1] = NullValue.NULL;
       }
 
-      resultArray.put(entry.getKey(), fun.call(env, param));
+      resultArray.put(entry.getKey(), fun.call(env, VHelper.noCtx(), param).getOne());
     }
 
     return resultArray;
@@ -1582,7 +1572,7 @@ public class ArrayModule
 
     for (Map.Entry<Value, Value> entry : array.entrySet()) {
       try {
-        result = callable.call(env, result, entry.getValue());
+        result = callable.call(env, VHelper.noCtx(), result, entry.getValue()).getOne();
       }
       catch (Exception t) {
         log.log(Level.WARNING, t.toString(), t);
@@ -1986,7 +1976,7 @@ public class ArrayModule
             boolean valueFound = false;
 
             if (keyFound)
-              valueFound = cmp.call(env, entryValue, entry.getValue())
+              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne()
                 .toLong() == 0;
 
             isFound = keyFound && valueFound;
@@ -2073,12 +2063,12 @@ public class ArrayModule
         for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, entryValue, entry.getValue()).toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
 
             boolean keyFound = false;
 
             if (valueFound)
-              keyFound = cmpKey.call(env, entryKey, entry.getKey()).toLong()
+              keyFound = cmpKey.call(env, VHelper.noCtx(), entryKey, entry.getKey()).getOne().toLong()
                   == 0;
 
             isFound = valueFound && keyFound;
@@ -2156,7 +2146,7 @@ public class ArrayModule
 
         for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, entryValue, entry.getValue()).toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
           }
           catch (Exception t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -2237,8 +2227,8 @@ public class ArrayModule
             boolean valueFound = false;
 
             if (keyFound)
-              valueFound = cmp.call(env, entryValue, entry.getValue())
-                .toLong() == 0;
+              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue())
+                      .getOne().toLong() == 0;
 
             isFound = keyFound && valueFound;
           }
@@ -2322,12 +2312,12 @@ public class ArrayModule
         for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, entryValue, entry.getValue()).toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
 
             boolean keyFound = false;
 
             if (valueFound)
-              keyFound = cmpKey.call(env, entryKey, entry.getKey()).toLong()
+              keyFound = cmpKey.call(env, VHelper.noCtx(), entryKey, entry.getKey()).getOne().toLong()
                   == 0;
 
             isFound = valueFound && keyFound;
@@ -2403,7 +2393,7 @@ public class ArrayModule
 
         for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, entryValue, entry.getValue()).toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
           }
           catch (Throwable t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -2558,7 +2548,7 @@ public class ArrayModule
             return false;
         }
         else
-          callback.callArray(env, array, key, value, key, extra);
+          callback.callArray(env, VHelper.noCtx(), array, key, value, key, extra);
       }
 
       return true;
@@ -2611,7 +2601,7 @@ public class ArrayModule
         else
           value = entry.getValue();
 
-        callback.callArray(env, array, key, value, key, userData);
+        callback.callArray(env, VHelper.noCtx(),array, key, value, key, userData);
       }
 
       return true;
@@ -3642,7 +3632,7 @@ public class ArrayModule
         Value aElement = _getter.get(aEntry);
         Value bElement = _getter.get(bEntry);
 
-        return (int) _func.call(_env, aElement, bElement).toLong();
+        return (int) _func.call(_env,VHelper.noCtx(),aElement, bElement).getOne().toLong();
       }
       catch (Exception e) {
         throw new QuercusModuleException(e);

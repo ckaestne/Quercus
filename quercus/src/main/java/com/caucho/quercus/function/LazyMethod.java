@@ -29,11 +29,12 @@
 
 package com.caucho.quercus.function;
 
-import com.caucho.quercus.env.ArrayValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Lazily load a compiled method.
@@ -204,63 +205,63 @@ public class LazyMethod extends AbstractFunction
   //
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value []args)
   {
-    return getFun().callMethod(env, qClass, qThis, args);
+    return getFun().callMethod(env, ctx, qClass, qThis, args);
   }
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis)
   {
-    return getFun().callMethod(env, qClass, qThis);
+    return getFun().callMethod(env, ctx, qClass, qThis);
   }
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1)
   {
-    return getFun().callMethod(env, qClass, qThis, a1);
+    return getFun().callMethod(env, ctx, qClass, qThis, a1);
   }
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2)
   {
-    return getFun().callMethod(env, qClass, qThis, a1, a2);
+    return getFun().callMethod(env, ctx, qClass, qThis, a1, a2);
   }
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2, Value a3)
   {
-    return getFun().callMethod(env, qClass, qThis, a1, a2, a3);
+    return getFun().callMethod(env, ctx, qClass, qThis, a1, a2, a3);
   }
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value a1, Value a2, Value a3, Value a4)
   {
-    return getFun().callMethod(env, qClass, qThis, a1, a2, a3, a4);
+    return getFun().callMethod(env, ctx, qClass, qThis, a1, a2, a3, a4);
   }
 
   @Override
-  public Value callMethod(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return getFun().callMethod(env, qClass, qThis, a1, a2, a3, a4, a5);
+    return getFun().callMethod(env, ctx, qClass, qThis, a1, a2, a3, a4, a5);
   }
 
   //
@@ -268,57 +269,57 @@ public class LazyMethod extends AbstractFunction
   //
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
   {
-    return getFun().callMethodRef(env, qClass, qThis, args);
+    return getFun().callMethodRef(env, ctx, qClass, qThis, args);
   }
 
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis)
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
   {
-    return getFun().callMethodRef(env, qClass, qThis);
+    return getFun().callMethodRef(env, ctx, qClass, qThis);
   }
 
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1)
   {
-    return getFun().callMethodRef(env, qClass, qThis, a1);
+    return getFun().callMethodRef(env, ctx, qClass, qThis, a1);
   }
 
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2)
   {
-    return getFun().callMethodRef(env, qClass, qThis, a1, a2);
+    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2);
   }
 
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2, Value a3)
   {
-    return getFun().callMethodRef(env, qClass, qThis, a1, a2, a3);
+    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3);
   }
 
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2, Value a3, Value a4)
   {
-    return getFun().callMethodRef(env, qClass, qThis, a1, a2, a3, a4);
+    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3, a4);
   }
 
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
                              Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return getFun().callMethodRef(env, qClass, qThis, a1, a2, a3, a4, a5);
+    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3, a4, a5);
   }
 
   @Override
-  public Value call(Env env, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }

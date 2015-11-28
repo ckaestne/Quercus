@@ -34,6 +34,7 @@ import com.caucho.quercus.env.FieldVisibility;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class ClassField
 {
@@ -222,7 +223,7 @@ public class ClassField
 
   public Value evalInitExpr(Env env)
   {
-    return _initValue.eval(env).copy();
+    return _initValue.eval(env, VHelper.noCtx()).getOne().copy();
   }
 
   public boolean isPublic()

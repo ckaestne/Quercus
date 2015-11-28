@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +65,7 @@ public class JavaModule extends AbstractQuercusModule {
         return null;
       }
       
-      Value newObj = def.callNew(env, args);
+      Value newObj = def.callNew(env, VHelper.noCtx(),args).getOne();
 
       if (newObj.isNull())
         return new JavaValue(env, null, def);

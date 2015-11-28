@@ -29,23 +29,19 @@
 
 package com.caucho.quercus.env;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import com.caucho.quercus.QuercusException;
+import com.caucho.quercus.program.JavaClassDef;
+import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-
-import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.program.JavaClassDef;
-import com.caucho.vfs.WriteStream;
 
 /**
  * Represents a Quercus java value.
@@ -339,60 +335,60 @@ public class JavaValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
+                             Value[] args)
   {
-    return _classDef.callMethod(env, this, methodName, hash, args);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, args);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
-    return _classDef.callMethod(env, this, methodName, hash);
+    return _classDef.callMethod(env, ctx, this, methodName, hash);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1)
   {
-    return _classDef.callMethod(env, this, methodName, hash, a1);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, a1);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2)
   {
-    return _classDef.callMethod(env, this, methodName, hash, a1, a2);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3)
   {
-    return _classDef.callMethod(env, this, methodName, hash, a1, a2, a3);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2, a3);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3, Value a4)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4);
   }
 
@@ -400,10 +396,10 @@ public class JavaValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethod(Env env, StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4, a5);
   }
 
@@ -411,19 +407,19 @@ public class JavaValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value []args)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value[] args)
   {
-    return _classDef.callMethod(env, this, methodName, hash, args);
+    return _classDef.callMethod(env, ctx,  this, methodName, hash, args);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
-    Value value = _classDef.callMethod(env, this, methodName, hash);
+    V<? extends Value> value = _classDef.callMethod(env, ctx, this, methodName, hash);
 
     return value;
   }
@@ -432,40 +428,40 @@ public class JavaValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1)
   {
-    return _classDef.callMethod(env, this, methodName, hash, a1);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, a1);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2)
   {
-    return _classDef.callMethod(env, this, methodName, hash, a1, a2);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3)
   {
-    return _classDef.callMethod(env, this, methodName, hash, a1, a2, a3);
+    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2, a3);
   }
 
   /**
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3, Value a4)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4);
   }
 
@@ -473,10 +469,10 @@ public class JavaValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public Value callMethodRef(Env env, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                          Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return _classDef.callMethod(env, this, methodName, hash,
+    return _classDef.callMethod(env, ctx, this, methodName, hash,
                                 a1, a2, a3, a4, a5);
   }
 

@@ -30,12 +30,11 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 
@@ -67,29 +66,30 @@ public class FunEachExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (! _isVar) {
       env.error(L.l("each() argument must be a variable at '{0}'", getExpr()));
       
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     }
     
-    Value var = getExpr().evalRef(env);
+    Value var = getExpr().evalRef(env, VHelper.noCtx()).getOne();
     Value value = var.toValue();
 
     if (value instanceof ArrayValue) {
       ArrayValue array = (ArrayValue) value;
 
-      return array.each();
+      return VHelper.toV(array.each());
     }
     else {
       env.warning(L.l("each() argument must be an array at '{0}'",
                       value.getClass().getSimpleName()));
     
-      return BooleanValue.FALSE;
+      return VHelper.toV(BooleanValue.FALSE);
     }
   }
 }

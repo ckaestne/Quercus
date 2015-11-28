@@ -31,10 +31,10 @@ package com.caucho.quercus.lib;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.QuercusContext;
+import com.caucho.quercus.annotation.Name;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReadOnly;
 import com.caucho.quercus.annotation.UsesSymbolTable;
-import com.caucho.quercus.annotation.Name;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.quercus.module.AbstractQuercusModule;
@@ -44,6 +44,7 @@ import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.util.IoUtil;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +53,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * PHP options
@@ -130,7 +132,7 @@ public class OptionsModule extends AbstractQuercusModule {
         QuercusProgram program = quercus.parseCode(value.toStringValue(env));
 
         program = program.createExprReturn();
-        Value v = program.execute(env);
+        Value v = program.execute(env).getOne();
 
         result = v != null && v.toBoolean();
       }
@@ -165,7 +167,7 @@ public class OptionsModule extends AbstractQuercusModule {
         StringValue fileName = env.createString(location.getFileName());
         LongValue lineNumber = LongValue.create(location.getLineNumber());
 
-        callback.call(env, fileName, lineNumber, message);
+        callback.call(env, VHelper.noCtx(), fileName, lineNumber, message);
       }
 
       if (isAssertWarn(env)) {

@@ -29,13 +29,16 @@
 
 package com.caucho.quercus.statement;
 
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.ContinueValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.util.ArrayList;
 
 /**
  * Represents a continue expression statement in a PHP program.
@@ -58,12 +61,12 @@ public class ContinueStatement extends Statement {
   /**
    * Executes the statement, returning the expression value.
    */
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     if (_target == null)
-      return ContinueValue.CONTINUE;
+      return VHelper.toV(ContinueValue.CONTINUE);
     else
-      return new ContinueValue(_target.eval(env).toInt());
+      return _target.eval(env, VHelper.noCtx()).map((a)-> new ContinueValue(a.toInt()));
   }
 }
 

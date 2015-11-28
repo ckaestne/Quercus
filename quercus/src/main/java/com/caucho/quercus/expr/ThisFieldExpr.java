@@ -29,16 +29,19 @@
 
 package com.caucho.quercus.expr;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.ClassField;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents a PHP field reference.
@@ -99,19 +102,20 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return obj.getThisField(env, _name);
+    return VHelper.toV(obj.getThisField(env, _name));
   }
 
   /**
@@ -119,19 +123,20 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return obj.getThisField(env, _name).copy();
+    return VHelper.toV(obj.getThisField(env, _name).copy());
   }
 
   /**
@@ -139,10 +144,11 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
     init();
 
@@ -151,10 +157,10 @@ public class ThisFieldExpr extends AbstractVarExpr {
     if (obj.isNull()) {
       env.thisError(getLocation());
 
-      return new Var();
+      return VHelper.toV(new Var());
     }
 
-    return obj.getThisFieldVar(env, _name);
+    return VHelper.toV(obj.getThisFieldVar(env, _name));
   }
 
   /**
@@ -162,20 +168,21 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return obj.getThisFieldArg(env, _name);
+    return VHelper.toV(obj.getThisFieldArg(env, _name));
   }
 
   /**
@@ -183,20 +190,22 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignValue(Env env, Value value)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
-    obj.putThisField(env, _name, value);
+    obj.putThisField(env, _name, value.getOne());
 
     return value;
   }
@@ -206,20 +215,22 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
-    obj.putThisField(env, _name, value);
+    obj.putThisField(env, _name, value.getOne());
 
     return value;
   }
@@ -228,46 +239,46 @@ public class ThisFieldExpr extends AbstractVarExpr {
    * Evaluates as an array index assign ($a[index] = value).
    */
   @Override
-  public Value evalArrayAssign(Env env, Expr indexExpr, Expr valueExpr)
+  public V<? extends Value> evalArrayAssign(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
     // php/044i
     Value fieldVar = obj.getThisFieldArray(env, _name);
-    Value index = indexExpr.eval(env);
+    V<? extends Value> index = indexExpr.eval(env, VHelper.noCtx());
 
-    Value value = valueExpr.evalCopy(env);
+    V<? extends Value> value = valueExpr.evalCopy(env, VHelper.noCtx());
 
-    return fieldVar.putThisFieldArray(env, obj, _name, index, value);
+    return VHelper.mapAll(index, value, (i,v)-> fieldVar.putThisFieldArray(env, obj, _name, i, v));
   }
 
   /**
    * Evaluates as an array index assign ($a[index] = value).
    */
   @Override
-  public Value evalArrayAssignRef(Env env, Expr indexExpr, Expr valueExpr)
+  public V<? extends Value> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
     // php/044i
     Value fieldVar = obj.getThisFieldArray(env, _name);
-    Value index = indexExpr.eval(env);
+    V<? extends Value> index = indexExpr.eval(env, VHelper.noCtx());
 
-    Value value = valueExpr.evalRef(env);
+    V<? extends Value> value = valueExpr.evalRef(env, VHelper.noCtx());
 
-    return fieldVar.putThisFieldArray(env, obj, _name, index, value);
+    return  VHelper.mapAll(index, value, (i,v)-> fieldVar.putThisFieldArray(env, obj, _name, i, v));
   }
 
   /**
@@ -275,19 +286,20 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return obj.getThisFieldArray(env, _name);
+    return VHelper.toV(obj.getThisFieldArray(env, _name));
   }
 
   /**
@@ -295,19 +307,20 @@ public class ThisFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalObject(Env env)
+  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     init();
 
     Value obj = env.getThis();
 
     if (obj.isNull()) {
-      return env.thisError(getLocation());
+      return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return obj.getThisFieldObject(env, _name);
+    return VHelper.toV(obj.getThisFieldObject(env, _name));
   }
 
   /**

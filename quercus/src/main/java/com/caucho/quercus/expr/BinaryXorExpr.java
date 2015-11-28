@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a logical xor expression.
@@ -61,14 +64,13 @@ public class BinaryXorExpr extends AbstractBinaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    if (_left.evalBoolean(env) != _right.evalBoolean(env))
-      return BooleanValue.TRUE;
-    else
-      return BooleanValue.FALSE;
+    return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->
+            a!=b?      BooleanValue.TRUE:BooleanValue.FALSE);
   }
 
   /**
@@ -76,11 +78,12 @@ public class BinaryXorExpr extends AbstractBinaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    return _left.evalBoolean(env) != _right.evalBoolean(env);
+    return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->a!=b);
   }
 
   public String toString()

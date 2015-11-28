@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.parser.QuercusParser;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 
@@ -81,14 +84,15 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.eval(env);
+      return _expr.eval(env, VHelper.noCtx());
     } finally {
       env.setErrorMask(oldErrorMask);
     }
@@ -99,14 +103,15 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.evalBoolean(env);
+      return _expr.evalBoolean(env, VHelper.noCtx());
     } finally {
       env.setErrorMask(oldErrorMask);
     }
@@ -117,14 +122,15 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public String evalString(Env env)
+  public V<String> evalString(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.evalString(env);
+      return _expr.evalString(env, VHelper.noCtx());
     } finally {
       env.setErrorMask(oldErrorMask);
     }
@@ -135,14 +141,15 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.evalCopy(env);
+      return _expr.evalCopy(env, VHelper.noCtx());
     } finally {
       env.setErrorMask(oldErrorMask);
     }

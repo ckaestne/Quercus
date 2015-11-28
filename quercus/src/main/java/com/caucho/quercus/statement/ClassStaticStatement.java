@@ -30,13 +30,12 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarExpr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a static statement in a PHP program.
@@ -63,7 +62,7 @@ public class ClassStaticStatement
     _initValue = initValue;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       StringValue staticName = _staticName;
@@ -81,7 +80,7 @@ public class ClassStaticStatement
       env.setVar(_var.getName(), var);
 
       if (! var.isset() && _initValue != null)
-        var.set(_initValue.eval(env));
+        var.set(_initValue.eval(env, VHelper.noCtx()).getOne());
 
     }
     catch (RuntimeException e) {

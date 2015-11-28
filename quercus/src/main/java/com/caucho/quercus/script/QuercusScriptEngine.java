@@ -38,26 +38,15 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.util.L10N;
-import com.caucho.vfs.NullWriteStream;
-import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.VfsStream;
-import com.caucho.vfs.WriteStream;
-import com.caucho.vfs.WriterStreamImpl;
+import com.caucho.vfs.*;
 
+import javax.script.*;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.script.AbstractScriptEngine;
-import javax.script.Bindings;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptContext;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
 
 /**
  * Script engine
@@ -243,7 +232,7 @@ public class QuercusScriptEngine
       Object result = null;
 
       try {
-        Value value = program.execute(env);
+        Value value = program.execute(env).getOne();
 
         if (value != null) {
           //if (value instanceof JavaValue || value instanceof JavaAdapter) {

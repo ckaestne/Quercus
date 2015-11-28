@@ -30,11 +30,11 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.QuercusExitException;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
-
-import java.io.IOException;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents the exit expression
@@ -69,17 +69,18 @@ public class FunExitExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (_value != null) {
-      Value msg = _value.eval(env);
+      V<? extends Value> msg = _value.eval(env, VHelper.noCtx());
     
-      return env.exit(msg);
+      return VHelper.toV(env.exit(msg.getOne()));
     }
     else
-      return env.exit();
+      return VHelper.toV(env.exit());
   }
 }
 

@@ -29,10 +29,12 @@
 
 package com.caucho.quercus.expr;
 
-import com.caucho.quercus.env.BinaryBuilderValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP append ('.') expression.
@@ -81,33 +83,33 @@ public class BinaryAppendExpr extends Expr
   }
 
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value value = _value.eval(env);
+    Value value = _value.eval(env, VHelper.noCtx()).getOne();
 
     StringValue sb = value.toStringBuilder(env);
 
     for (BinaryAppendExpr ptr = _next; ptr != null; ptr = ptr._next) {
-      Value ptrValue = ptr._value.eval(env);
+      Value ptrValue = ptr._value.eval(env, VHelper.noCtx()).getOne();
 
       sb = sb.appendUnicode(ptrValue);
     }
 
-    return sb;
+    return VHelper.toV(sb);
   }
 
   @Override
-  public String evalString(Env env)
+  public V<String> evalString(Env env, FeatureExpr ctx)
   {
-    Value value = _value.eval(env);
+    Value value = _value.eval(env, VHelper.noCtx()).getOne();
 
     StringValue sb = value.toStringBuilder(env);
 
     for (BinaryAppendExpr ptr = _next; ptr != null; ptr = ptr._next) {
-      sb = sb.appendUnicode(ptr._value.eval(env));
+      sb = sb.appendUnicode(ptr._value.eval(env, VHelper.noCtx()));
     }
 
-    return sb.toString();
+    return VHelper.toV(sb.toString());
   }
 
   /**

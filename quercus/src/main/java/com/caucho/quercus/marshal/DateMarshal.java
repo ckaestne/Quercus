@@ -34,6 +34,7 @@ import com.caucho.quercus.env.JavaDateValue;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Date;
 
@@ -48,7 +49,7 @@ public class DateMarshal extends Marshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env), expectedClass);
+    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

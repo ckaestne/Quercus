@@ -29,15 +29,12 @@
 
 package com.caucho.quercus.lib.reflection;
 
-import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.ParamRequiredExpr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 public class ReflectionParameter
   implements Reflector
@@ -181,7 +178,7 @@ public class ReflectionParameter
       throw new ReflectionException(env, L.l("parameter '{0}' is not optional", _arg.getName()));
     }
 
-    return _arg.getDefault().eval(env);
+    return _arg.getDefault().eval(env, VHelper.noCtx()).getOne();
   }
 
   public String toString()

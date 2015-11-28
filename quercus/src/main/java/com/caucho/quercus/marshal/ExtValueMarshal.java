@@ -30,9 +30,9 @@
 package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.UnicodeValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -64,7 +64,7 @@ public class ExtValueMarshal extends Marshal
   @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env), expectedClass);
+    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   @Override

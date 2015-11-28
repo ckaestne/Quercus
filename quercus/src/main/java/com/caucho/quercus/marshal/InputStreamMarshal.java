@@ -29,13 +29,13 @@
 
 package com.caucho.quercus.marshal;
 
-import java.io.InputStream;
-
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.JavaValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
-import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.InputStream;
 
 public class InputStreamMarshal extends Marshal
 {
@@ -48,7 +48,7 @@ public class InputStreamMarshal extends Marshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env), expectedClass);
+    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

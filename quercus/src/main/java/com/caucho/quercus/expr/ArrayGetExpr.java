@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP array reference expression.
@@ -75,15 +78,16 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.eval(env);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return array.get(index);
+    return VHelper.mapAll(array, index,(a,i)-> a.get(i));
   }
 
   /**
@@ -91,15 +95,16 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.eval(env);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return array.get(index).copy();
+    return VHelper.mapAll(array, index,(a,i)-> a.get(i).copy());
   }
 
   /**
@@ -107,15 +112,16 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.evalArray(env);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return array.getArray(index);
+    return VHelper.mapAll(array, index,(a,i)-> a.getArray(i));
   }
 
   /**
@@ -123,15 +129,16 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalDirty(Env env)
+  public V<? extends Value> evalDirty(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.eval(env);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return array.getDirty(index);
+    return VHelper.mapAll(array, index,(a,i)-> a.getDirty(i));
   }
 
   /**
@@ -139,15 +146,16 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalObject(Env env)
+  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.evalArray(env);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return array.getObject(env, index);
+    return VHelper.mapAll(array, index,(a,i)-> a.getObject(env, i));
   }
 
   /**
@@ -155,17 +163,18 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     // php/0d2t
     // php/0d1c
-    Value array = _expr.evalArg(env, false);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.evalArg(env, VHelper.noCtx(), false);
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    Value result = array.getArg(index, isTop);
+    V<Value> result = VHelper.mapAll(array, index,(a,i)-> a.getArg(i, isTop));
 
     return result;
   }
@@ -175,15 +184,16 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.evalArray(env);
-    Value index = _index.eval(env);
+    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return array.getVar(index);
+    return VHelper.mapAll(array, index,(a,i)-> a.getVar(i));
   }
 
   /**
@@ -191,14 +201,15 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalAssignValue(Env env, Expr valueExpr)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, Expr valueExpr)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // php/04ah
-    Value array = _expr.evalArrayAssign(env, _index, valueExpr);
+    V<? extends Value> array = _expr.evalArrayAssign(env, VHelper.noCtx(), _index, valueExpr);
 
     return array;
   }
@@ -208,32 +219,33 @@ public class ArrayGetExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Expr valueExpr)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
   {
     // php/03mk
     // php/04ai
-    return _expr.evalArrayAssignRef(env, _index, valueExpr);
+    return _expr.evalArrayAssignRef(env, VHelper.noCtx(), _index, valueExpr);
   }
 
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    return _expr.evalArrayAssignRef(env, _index, value);
+    return _expr.evalArrayAssignRef(env, VHelper.noCtx(), _index, value);
   }
 
   /**
    * Evaluates the expression as an isset().
    */
   @Override
-  public boolean evalIsset(Env env)
+  public V<Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.evalIssetValue(env);
-    Value index = _index.evalIssetValue(env);
+    V<? extends Value> array = _expr.evalIssetValue(env, VHelper.noCtx());
+    V<? extends Value> index = _index.evalIssetValue(env, VHelper.noCtx());
 
-    return array.isset(index);
+    return VHelper.mapAll(array, index,(a,i)-> a.isset(i));
   }
 
   /**
@@ -246,19 +258,19 @@ public class ArrayGetExpr extends AbstractVarExpr {
   @Override
   public void evalUnset(Env env)
   {
-    _expr.evalUnsetArray(env, _index);
+    _expr.evalUnsetArray(env, VHelper.noCtx(), _index);
   }
 
   /**
    * Evaluates as an empty() expression.
    */
   @Override
-  public boolean evalEmpty(Env env)
+  public V<Boolean> evalEmpty(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.evalIssetValue(env);
-    Value index = _index.evalIssetValue(env);
+    V<? extends Value> array = _expr.evalIssetValue(env, VHelper.noCtx());
+    V<? extends Value> index = _index.evalIssetValue(env, VHelper.noCtx());
 
-    return array.isEmpty(env, index);
+    return VHelper.mapAll(array, index,(a,i)-> a.isEmpty(env, i));
   }
 
   @Override

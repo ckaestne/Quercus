@@ -33,6 +33,7 @@ import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -81,7 +82,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
     }
 
     Value value = _javaClassDef.getField(env, this, name);
-    Value quercusValue = _quercusClass.getField(env,this, name);
+    Value quercusValue = _quercusClass.getField(env, VHelper.noCtx(), this, name).getOne();
 
     if (quercusValue != null
         && quercusValue != UnsetValue.UNSET 
@@ -134,7 +135,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
    */
   private Object createJavaObject(Env env)
   {
-    Value javaWrapper = _javaClassDef.callNew(env, Value.NULL_ARGS);
+    Value javaWrapper = _javaClassDef.callNew(env, VHelper.noCtx(), Value.NULL_ARGS).getOne();
     return javaWrapper.toJavaObject();
   }
 
@@ -176,7 +177,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
     AbstractFunction toString = _quercusClass.getToString();
 
     if (toString != null) {
-      return toString.callMethod(env, _quercusClass, this).toStringValue();
+      return toString.callMethod(env, VHelper.noCtx(), _quercusClass, this).getOne().toStringValue();
     }
     else if (_javaClassDef.getToString() != null) {
       JavaValue value = new JavaValue(env, _object, _javaClassDef);

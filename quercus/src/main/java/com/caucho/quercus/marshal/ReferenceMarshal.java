@@ -32,6 +32,7 @@ package com.caucho.quercus.marshal;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class ReferenceMarshal extends Marshal
 {
@@ -50,7 +51,7 @@ public class ReferenceMarshal extends Marshal
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     // quercus/0d1k
-    return expr.evalRef(env);
+    return expr.evalRef(env, VHelper.noCtx());
   }
 
   @Override

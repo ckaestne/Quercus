@@ -30,11 +30,12 @@
 package com.caucho.quercus.function;
 
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.expr.Expr;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -55,17 +56,17 @@ abstract public class CompiledMethod_1 extends CompiledMethod {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public Value callMethod(Env env,
-                          QuercusClass qClass, Value qThis,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                       QuercusClass qClass, Value qThis,
+                                       Value []args)
   {
     switch (args.length) {
     case 0:
-      return callMethod(env, qClass, qThis,
+      return callMethod(env, ctx, qClass, qThis,
                         _args[0].eval(env));
     case 1:
     default:
-      return callMethod(env, qClass, qThis,
+      return callMethod(env, ctx, qClass, qThis,
                         args[0]);
     }
   }
@@ -74,14 +75,14 @@ abstract public class CompiledMethod_1 extends CompiledMethod {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public Value callMethod(Env env, QuercusClass qClass, Value qThis)
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis)
   {
-    return callMethod(env, qClass, qThis,
+    return callMethod(env, ctx, qClass, qThis,
                       _args[0].eval(env));
   }
 
   @Override
-  abstract public Value callMethod(Env env, QuercusClass qClass, Value qThis,
+  abstract public V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
                                    Value a1);
 }
 

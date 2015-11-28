@@ -32,9 +32,12 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.vfs.Path;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP include statement
@@ -79,15 +82,16 @@ public class FunIncludeExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    StringValue name = _expr.eval(env).toStringValue();
+    StringValue name = _expr.eval(env, ctx).getOne().toStringValue();
       
     env.pushCall(this, NullValue.NULL, new Value[] { name });
     try {
-      return env.include(_dir, name, _isRequire, false);
+      return VHelper.toV(env.include(_dir, name, _isRequire, false));
     } finally {
       env.popCall();
     }

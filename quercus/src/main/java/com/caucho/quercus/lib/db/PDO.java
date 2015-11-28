@@ -32,15 +32,9 @@ package com.caucho.quercus.lib.db;
 import com.caucho.quercus.UnimplementedException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReadOnly;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvCleanup;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -523,7 +517,7 @@ public class PDO implements EnvCleanup {
       if (_statementClassName != null) {
         QuercusClass cls = env.getClass(_statementClassName);
 
-        Value phpObject = cls.callNew(env, pdoStatement, _statementClassArgs);
+        Value phpObject = cls.callNew(env, VHelper.noCtx(),  pdoStatement, _statementClassArgs).getOne();
 
         return phpObject;
       }
@@ -569,7 +563,7 @@ public class PDO implements EnvCleanup {
       if (_statementClassName != null) {
         QuercusClass cls = env.getClass(_statementClassName);
 
-        return cls.callNew(env, pdoStatement, _statementClassArgs);
+        return cls.callNew(env, VHelper.noCtx(), pdoStatement, _statementClassArgs).getOne();
       }
       else {
         return env.wrapJava(pdoStatement);

@@ -29,46 +29,13 @@
 
 package com.caucho.quercus.env;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.sql.DataSource;
-
 import com.caucho.java.WorkDir;
-import com.caucho.quercus.Location;
-import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.QuercusDieException;
-import com.caucho.quercus.QuercusErrorException;
-import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.QuercusExitException;
-import com.caucho.quercus.QuercusModuleException;
-import com.caucho.quercus.QuercusRuntimeException;
+import com.caucho.quercus.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.lib.ErrorModule;
 import com.caucho.quercus.lib.VariableModule;
-import com.caucho.quercus.lib.file.FileModule;
-import com.caucho.quercus.lib.file.PhpProtocolWrapper;
-import com.caucho.quercus.lib.file.PhpStderr;
-import com.caucho.quercus.lib.file.PhpStdin;
-import com.caucho.quercus.lib.file.PhpStdout;
-import com.caucho.quercus.lib.file.ProtocolWrapper;
-import com.caucho.quercus.lib.file.ZlibProtocolWrapper;
+import com.caucho.quercus.lib.file.*;
 import com.caucho.quercus.lib.regexp.RegexpState;
 import com.caucho.quercus.lib.string.StringModule;
 import com.caucho.quercus.lib.string.StringUtility;
@@ -81,27 +48,24 @@ import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.quercus.program.UndefinedFunction;
 import com.caucho.quercus.resources.StreamContextResource;
-import com.caucho.quercus.servlet.api.QuercusCookie;
-import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
-import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
-import com.caucho.quercus.servlet.api.QuercusHttpSession;
-import com.caucho.quercus.servlet.api.QuercusServletContext;
-import com.caucho.util.CharBuffer;
-import com.caucho.util.FreeList;
-import com.caucho.util.IntMap;
-import com.caucho.util.L10N;
-import com.caucho.util.LruCache;
-import com.caucho.util.QDate;
-import com.caucho.vfs.ByteToChar;
-import com.caucho.vfs.Encoding;
-import com.caucho.vfs.JarPath;
-import com.caucho.vfs.MemoryPath;
-import com.caucho.vfs.NullPath;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.ReadStream;
-import com.caucho.vfs.TempBuffer;
-import com.caucho.vfs.WriteStream;
+import com.caucho.quercus.servlet.api.*;
+import com.caucho.util.*;
+import com.caucho.vfs.*;
 import com.caucho.vfs.i18n.EncodingReader;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.URL;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents the Quercus environment.
@@ -4201,7 +4165,7 @@ public class Env
    * @param code the code to evalute
    * @return the result
    */
-  public Value evalCode(StringValue code)
+  public V<? extends Value> evalCode(StringValue code)
     throws IOException
   {
     if (log.isLoggable(Level.FINER)) {
@@ -4212,10 +4176,10 @@ public class Env
 
     QuercusProgram program = quercus.parseEvalExpr(code);
 
-    Value value = program.execute(this);
+    V<? extends Value> value = program.execute(this);
 
     if (value == null)
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     else
       return value;
   }
@@ -4271,7 +4235,7 @@ public class Env
 
       if (getExceptionHandler() != null) {
         try {
-          getExceptionHandler().call(this, e.toException(this));
+          getExceptionHandler().call(this, VHelper.noCtx(), e.toException(this));
         }
         catch (QuercusLanguageException e2) {
           uncaughtExceptionError(e2);
@@ -4329,14 +4293,14 @@ public class Env
    * @param name the function name
    * @return the function value
    */
-  public Value call(StringValue name)
+  public V<? extends Value> call(StringValue name, FeatureExpr ctx)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.call(this);
+    return fun.call(this, ctx);
   }
 
   //
@@ -4350,14 +4314,14 @@ public class Env
    * @param a0 the first argument
    * @return the function value
    */
-  public Value call(StringValue name, Value a0)
+  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.call(this, a0);
+    return fun.call(this, ctx, a0);
   }
 
   /**
@@ -4368,9 +4332,9 @@ public class Env
    * @param a1 the second argument
    * @return the function value
    */
-  public Value call(StringValue name, Value a0, Value a1)
+  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1)
   {
-    return getFunction(name).call(this, a0, a1);
+    return getFunction(name).call(this, ctx, a0, a1);
   }
 
   /**
@@ -4382,9 +4346,9 @@ public class Env
    * @param a2 the third argument
    * @return the function value
    */
-  public Value call(StringValue name, Value a0, Value a1, Value a2)
+  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
   {
-    return getFunction(name).call(this, a0, a1, a2);
+    return getFunction(name).call(this, ctx, a0, a1, a2);
   }
 
   /**
@@ -4397,9 +4361,9 @@ public class Env
    * @param a3 the fourth argument
    * @return the function value
    */
-  public Value call(StringValue name, Value a0, Value a1, Value a2, Value a3)
+  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
   {
-    return getFunction(name).call(this, a0, a1, a2, a3);
+    return getFunction(name).call(this, ctx, a0, a1, a2, a3);
   }
 
   /**
@@ -4413,10 +4377,10 @@ public class Env
    * @param a4 the fifth argument
    * @return the function value
    */
-  public Value call(StringValue name, Value a0, Value a1,
+  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1,
                     Value a2, Value a3, Value a4)
   {
-    return getFunction(name).call(this, a0, a1, a2, a3, a4);
+    return getFunction(name).call(this, ctx, a0, a1, a2, a3, a4);
   }
 
   /**
@@ -4426,9 +4390,9 @@ public class Env
    * @param args the arguments
    * @return the function value
    */
-  public Value call(StringValue name, Value []args)
+  public V<? extends Value> call(FeatureExpr ctx, StringValue name, Value []args)
   {
-    return getFunction(name).call(this, args);
+    return getFunction(name).call(this, ctx, args);
   }
 
   /**
@@ -4437,14 +4401,14 @@ public class Env
    * @param name the function name
    * @return the function value
    */
-  public Value callRef(StringValue name)
+  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.callRef(this);
+    return fun.callRef(this, ctx);
   }
 
   /**
@@ -4454,14 +4418,14 @@ public class Env
    * @param a0 the first argument
    * @return the function value
    */
-  public Value callRef(StringValue name, Value a0)
+  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.callRef(this, a0);
+    return fun.callRef(this, ctx, a0);
   }
 
   /**
@@ -4472,14 +4436,14 @@ public class Env
    * @param a1 the second argument
    * @return the function value
    */
-  public Value callRef(StringValue name, Value a0, Value a1)
+  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.callRef(this, a0, a1);
+    return fun.callRef(this, ctx, a0, a1);
   }
 
   /**
@@ -4491,14 +4455,14 @@ public class Env
    * @param a2 the third argument
    * @return the function value
    */
-  public Value callRef(StringValue name, Value a0, Value a1, Value a2)
+  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.callRef(this, a0, a1, a2);
+    return fun.callRef(this, ctx, a0, a1, a2);
   }
 
   /**
@@ -4511,14 +4475,14 @@ public class Env
    * @param a3 the fourth argument
    * @return the function value
    */
-  public Value callRef(StringValue name, Value a0, Value a1, Value a2, Value a3)
+  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.callRef(this, a0, a1, a2, a3);
+    return fun.callRef(this, ctx, a0, a1, a2, a3);
   }
 
   /**
@@ -4532,15 +4496,15 @@ public class Env
    * @param a4 the fifth argument
    * @return the function value
    */
-  public Value callRef(StringValue name, Value a0, Value a1,
+  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
                        Value a2, Value a3, Value a4)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.callRef(this, a0, a1, a2, a3, a4);
+    return fun.callRef(this, ctx, a0, a1, a2, a3, a4);
   }
 
   /**
@@ -4550,14 +4514,14 @@ public class Env
    * @param args the arguments
    * @return the function value
    */
-  public Value callRef(StringValue name, Value []args)
+  public V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
   {
     AbstractFunction fun = findFunction(name);
 
     if (fun == null)
-      return error(L.l("'{0}' is an unknown function.", name));
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
 
-    return fun.callRef(this, args);
+    return fun.callRef(this, ctx, args);
   }
 
   /**
@@ -5286,7 +5250,7 @@ public class Env
           for (int i = 0; i < size; i++) {
             Callable cb = _autoloadList.get(i);
 
-            cb.call(this, nameString);
+            cb.call(this, VHelper.noCtx(), nameString);
 
             // php/0977
             QuercusClass cls = findClass(name, id, false, useImport, useAliasMap);
@@ -5300,7 +5264,7 @@ public class Env
               _autoload = findFunction(createString("__autoload"));
 
             if (_autoload != null) {
-              _autoload.call(this, nameString);
+              _autoload.call(this, VHelper.noCtx(), nameString);
 
               // php/0976
               QuercusClass cls = findClass(name, id, false, useImport, useAliasMap);
@@ -6929,7 +6893,7 @@ public class Env
 
         Value context = NullValue.NULL;
 
-        handler.call(this, LongValue.create(mask), createString(msg),
+        handler.call(this, VHelper.noCtx(),LongValue.create(mask), createString(msg),
                      fileNameV, lineV, context);
 
         return NullValue.NULL;
@@ -7494,7 +7458,7 @@ public class Env
     if (_shutdownList != null) {
       for (int i = 0; i < _shutdownList.size(); i++) {
         try {
-          _shutdownList.get(i).call(this);
+          _shutdownList.get(i).call(this, VHelper.noCtx());
         }
         catch (Throwable e) {
           log.log(Level.FINE, e.toString(), e);

@@ -37,6 +37,9 @@ import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.Map;
@@ -54,23 +57,23 @@ public class FunctionModule extends AbstractQuercusModule {
   /**
    * Calls a user function
    */
-  public static Value call_user_func(Env env,
-                                     Callable function,
-                                     Value []args)
+  public static V<? extends Value> call_user_func(Env env, FeatureExpr ctx,
+                                                  Callable function,
+                                                  Value []args)
   {
-    return function.call(env, args).copyReturn();
+    return function.call(env, ctx, args).map((a)->a.copyReturn());
   }
 
   /**
    * Calls a user function
    */
-  public static Value call_user_func_array(Env env,
+  public static V<? extends Value> call_user_func_array(Env env, FeatureExpr ctx,
                                            Callable function,
                                            Value arg)
   {
     if (function == null) {
       env.warning("call_user_func_array: first argument is not a valid function");
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
     }
 
     ArrayValue argArray;
@@ -105,7 +108,7 @@ public class FunctionModule extends AbstractQuercusModule {
     env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, args);
 
     try {
-      return function.call(env, args).copyReturn();
+      return function.call(env, ctx, args).map((a)->a.copyReturn());
     }
     finally {
       env.popCall();

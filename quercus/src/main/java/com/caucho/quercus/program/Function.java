@@ -31,20 +31,15 @@ package com.caucho.quercus.program;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvVar;
-import com.caucho.quercus.env.EnvVarImpl;
-import com.caucho.quercus.env.NullThisValue;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.ExprFactory;
 import com.caucho.quercus.expr.ParamRequiredExpr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.statement.Statement;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -212,34 +207,34 @@ public class Function extends AbstractFunction {
         arg = _args[i];
 
       if (arg == null)
-        values[i] = args[i].eval(env).copy();
+        values[i] = args[i].eval(env, VHelper.noCtx()).getOne().copy();
       else if (arg.isReference())
-        values[i] = args[i].evalVar(env);
+        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne();
       else {
         // php/0d04
-        values[i] = args[i].eval(env);
+        values[i] = args[i].eval(env, VHelper.noCtx()).getOne();
       }
     }
 
     return values;
   }
 
-  public Value call(Env env, Expr []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Expr []args)
   {
-    return callImpl(env, args, false);
+    return callImpl(env, ctx, args, false);
   }
 
-  public Value callCopy(Env env, Expr []args)
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Expr []args)
   {
-    return callImpl(env, args, false);
+    return callImpl(env, ctx, args, false);
   }
 
-  public Value callRef(Env env, Expr []args)
+  public V<? extends Value> callRef(Env env,FeatureExpr ctx,  Expr []args)
   {
-    return callImpl(env, args, true);
+    return callImpl(env, ctx, args, true);
   }
 
-  private Value callImpl(Env env, Expr []args, boolean isRef)
+  private V<? extends Value> callImpl(Env env, FeatureExpr ctx, Expr[] args, boolean isRef)
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>();
 
@@ -253,16 +248,16 @@ public class Function extends AbstractFunction {
       }
 
       if (arg == null) {
-        values[i] = args[i].eval(env).copy();
+        values[i] = args[i].eval(env, VHelper.noCtx()).getOne().copy();
       }
       else if (arg.isReference()) {
-        values[i] = args[i].evalVar(env);
+        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne();
 
         map.put(arg.getName(), new EnvVarImpl(values[i].toLocalVarDeclAsRef()));
       }
       else {
         // php/0d04
-        values[i] = args[i].eval(env);
+        values[i] = args[i].eval(env, VHelper.noCtx()).getOne();
 
         Var var = values[i].toVar();
 
@@ -278,13 +273,13 @@ public class Function extends AbstractFunction {
       Expr defaultExpr = arg.getDefault();
 
       if (defaultExpr == null)
-        return env.error("expected default expression");
+        return VHelper.toV(env.error("expected default expression"));
       else if (arg.isReference())
         map.put(arg.getName(),
-                new EnvVarImpl(defaultExpr.evalVar(env).toVar()));
+                new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar()));
       else {
         map.put(arg.getName(),
-                new EnvVarImpl(defaultExpr.eval(env).copy().toVar()));
+                new EnvVarImpl(defaultExpr.eval(env, VHelper.noCtx()).getOne().copy().toVar()));
       }
     }
 
@@ -300,14 +295,14 @@ public class Function extends AbstractFunction {
       oldThis = env.getThis();
 
     try {
-      Value value = _statement.execute(env);
+      V<? extends Value> value = _statement.execute(env, VHelper.noCtx());
 
       if (value != null)
         return value;
       else if (_info.isReturnsReference())
-        return new Var();
+        return VHelper.toV(new Var());
       else
-        return NullValue.NULL;
+        return VHelper.toV(NullValue.NULL);
       /*
       else if (_isReturnsReference && isRef)
         return value;
@@ -322,30 +317,30 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
-    return callImpl(env, args, false, null, null);
+    return callImpl(env, ctx, args, false, null, null);
   }
 
   @Override
-  public Value callCopy(Env env, Value []args)
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
   {
-    return callImpl(env, args, false, null, null).copy();
+    return callImpl(env, ctx, args, false, null, null).map((a)->a.copy());
   }
 
   @Override
-  public Value callRef(Env env, Value []args)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
   {
-    return callImpl(env, args, true, null, null);
+    return callImpl(env, ctx, args, true, null, null);
   }
 
   @Override
-  public Value callClosure(Env env, Value []args, Value []useArgs)
+  public V<? extends Value> callClosure(Env env, FeatureExpr ctx, Value []args, Value []useArgs)
   {
-    return callImpl(env, args, false, getClosureUseArgs(), useArgs).copy();
+    return callImpl(env, ctx, args, false, getClosureUseArgs(), useArgs).map((a)->a.copy());
   }
 
-  public Value callImpl(Env env, Value []args, boolean isRef,
+  public V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value []args, boolean isRef,
                         Arg []useParams, Value []useArgs)
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>(8);
@@ -392,11 +387,11 @@ public class Function extends AbstractFunction {
 
       try {
         if (defaultExpr == null)
-          return env.error("expected default expression");
+          return VHelper.toV(env.error("expected default expression"));
         else if (arg.isReference())
-          map.put(arg.getName(), new EnvVarImpl(defaultExpr.evalVar(env).toVar()));
+          map.put(arg.getName(), new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar()));
         else {
-          map.put(arg.getName(), new EnvVarImpl(defaultExpr.eval(env).toLocalVar()));
+          map.put(arg.getName(), new EnvVarImpl(defaultExpr.eval(env, VHelper.noCtx()).getOne().toLocalVar()));
         }
       } catch (Exception e) {
         throw new QuercusException(getName() + ":arg(" + arg.getName() + ") "
@@ -417,18 +412,18 @@ public class Function extends AbstractFunction {
     }
 
     try {
-      Value value = _statement.execute(env);
+      V<? extends Value> value = _statement.execute(env, VHelper.noCtx());
 
       if (value == null) {
         if (_isReturnsReference)
-          return new Var();
+          return VHelper.toV(new Var());
         else
-          return NullValue.NULL;
+          return VHelper.toV(NullValue.NULL);
       }
       else if (_isReturnsReference)
         return value;
       else
-        return value.toValue().copy();
+        return value.map((a)->a.toValue().copy());
     } finally {
       env.restoreFunctionArgs(oldArgs);
       env.popEnv(oldMap);
@@ -441,7 +436,7 @@ public class Function extends AbstractFunction {
   //
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value[] args)
@@ -453,7 +448,7 @@ public class Function extends AbstractFunction {
     QuercusClass oldClass = env.setCallingClass(qClass);
 
     try {
-      return callImpl(env, args, false, null, null);
+      return callImpl(env, ctx, args, false, null, null);
     } finally {
       env.setThis(oldThis);
       env.setCallingClass(oldClass);
@@ -461,7 +456,7 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value[] args)
@@ -470,7 +465,7 @@ public class Function extends AbstractFunction {
     QuercusClass oldClass = env.setCallingClass(qClass);
 
     try {
-      return callImpl(env, args, true, null, null);
+      return callImpl(env, ctx, args, true, null, null);
     } finally {
       env.setThis(oldThis);
       env.setCallingClass(oldClass);

@@ -29,18 +29,19 @@
 
 package com.caucho.quercus.expr;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents a PHP static field reference.
@@ -88,20 +89,21 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     String className = env.getThis().getQuercusClass().getName();
-    StringValue varName = _varName.evalStringValue(env);
+    StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
 
     StringValue sb = env.createStringBuilder();
     sb.append(className);
     sb.append("::");
     sb.append(varName);
 
-    return env.getStaticValue(sb);
+    return VHelper.toV(env.getStaticValue(sb));
   }
 
   /**
@@ -109,20 +111,21 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
     String className = env.getThis().getQuercusClass().getName();
-    StringValue varName = _varName.evalStringValue(env);
+    StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
 
     StringValue var = env.createStringBuilder();
     var.append(className);
     var.append("::");
     var.append(varName);
 
-    return env.getStaticVar(var);
+    return VHelper.toV(env.getStaticVar(var));
   }
 
   /**
@@ -130,20 +133,22 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     String className = env.getThis().getQuercusClass().getName();
-    StringValue varName = _varName.evalStringValue(env);
+    StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
 
     StringValue var = env.createStringBuilder();
     var.append(className);
     var.append("::");
     var.append(varName);
 
-    env.setStaticRef(var, value);
+    env.setStaticRef(var, value.getOne());
 
     return value;
   }

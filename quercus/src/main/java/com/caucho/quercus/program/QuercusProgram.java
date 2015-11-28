@@ -30,25 +30,23 @@
 package com.caucho.quercus.program;
 
 import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.QuercusException;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.page.QuercusPage;
-import com.caucho.quercus.statement.*;
-import com.caucho.vfs.BasicDependencyContainer;
-import com.caucho.vfs.Depend;
-import com.caucho.vfs.Path;
-import com.caucho.vfs.Dependency;
-import com.caucho.vfs.PersistentDependency;
+import com.caucho.quercus.statement.BlockStatement;
+import com.caucho.quercus.statement.ExprStatement;
+import com.caucho.quercus.statement.ReturnStatement;
+import com.caucho.quercus.statement.Statement;
+import com.caucho.vfs.*;
+import de.fosd.typechef.featureexpr.FeatureExprFactory;
+import edu.cmu.cs.varex.V;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a compiled Quercus program.
@@ -412,9 +410,9 @@ public class QuercusProgram {
    * @return null if there is no return value
    *
    */
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env)
   {
-    return _statement.execute(env);
+    return _statement.execute(env, FeatureExprFactory.True());
   }
 
   /**

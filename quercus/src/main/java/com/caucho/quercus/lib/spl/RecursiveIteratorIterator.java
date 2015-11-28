@@ -34,6 +34,7 @@ import com.caucho.quercus.env.ConstStringValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -177,13 +178,13 @@ public class RecursiveIteratorIterator
     @Override
     public boolean hasChildren(Env env)
     {
-      return _obj.callMethod(env, HAS_CHILDREN).toBoolean();
+      return _obj.callMethod(env, VHelper.noCtx(), HAS_CHILDREN).getOne().toBoolean();
     }
 
     @Override
     public RecursiveIterator getChildren(Env env)
     {
-      Value result = _obj.callMethod(env, GET_CHILDREN);
+      Value result = _obj.callMethod(env, VHelper.noCtx(), GET_CHILDREN).getOne();
 
       return create(result);
     }
@@ -191,31 +192,31 @@ public class RecursiveIteratorIterator
     @Override
     public boolean valid(Env env)
     {
-      return _obj.callMethod(env, VALID).toBoolean();
+      return _obj.callMethod(env, VHelper.noCtx(), VALID).getOne().toBoolean();
     }
 
     @Override
     public Value current(Env env)
     {
-      return _obj.callMethod(env, CURRENT);
+      return _obj.callMethod(env, VHelper.noCtx(), CURRENT).getOne();
     }
 
     @Override
     public Value key(Env env)
     {
-      return _obj.callMethod(env, KEY);
+      return _obj.callMethod(env, VHelper.noCtx(), KEY).getOne();
     }
 
     @Override
     public void next(Env env)
     {
-      _obj.callMethod(env, NEXT);
+      _obj.callMethod(env, VHelper.noCtx(), NEXT);
     }
 
     @Override
     public void rewind(Env env)
     {
-      _obj.callMethod(env, REWIND);
+      _obj.callMethod(env, VHelper.noCtx(), REWIND);
     }
   }
 }

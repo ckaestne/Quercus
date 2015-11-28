@@ -32,11 +32,14 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.parser.QuercusParser;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
+import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -102,12 +105,13 @@ public class ClassVarMethodExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    QuercusClass cl = _className.evalQuercusClass(env);
+    QuercusClass cl = _className.evalQuercusClass(env, VHelper.noCtx()).getOne();
 
     if (cl == null) {
       env.error(L.l("no matching class {0}", _className), getLocation());
@@ -117,9 +121,9 @@ public class ClassVarMethodExpr extends Expr {
 
     int hash = nameV.hashCodeCaseInsensitive();
 
-    return cl.callMethod(env, env.getThis(),
+    return cl.callMethod(env, ctx, env.getThis(),
                          nameV, hash,
-                         evalArgs(env, _args));
+                         evalArgs(env, _args, VHelper.noCtx()).getOne());
   }
 
   public String toString()

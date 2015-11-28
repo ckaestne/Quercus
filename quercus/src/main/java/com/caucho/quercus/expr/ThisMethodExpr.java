@@ -35,6 +35,9 @@ import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.InterpretedClassDef;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 
@@ -70,22 +73,23 @@ public class ThisMethodExpr extends ObjectMethodExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (! _isInit) {
       init();
     }
 
-    Value qThis = _objExpr.eval(env);
+    Value qThis = _objExpr.eval(env, VHelper.noCtx()).getOne();
 
     if (_fun != null) {
-      return evalPrivate(env, _fun, qThis, _args);
+      return VHelper.toV(evalPrivate(env, _fun, qThis, _args));
     }
     else {
-      return evalImpl(env, qThis, _methodName, _hashCodeInsensitive, _args);
+      return VHelper.toV(evalImpl(env, qThis, _methodName, _hashCodeInsensitive, _args));
     }
   }
 
@@ -103,14 +107,14 @@ public class ThisMethodExpr extends ObjectMethodExpr {
   private Value evalPrivate(Env env, AbstractFunction fun, Value qThis,
                             Expr []argExprs)
   {
-    Value []args = evalArgs(env, argExprs);
+    Value []args = evalArgs(env, argExprs, VHelper.noCtx()).getOne();
 
     env.pushCall(this, qThis, args);
 
     try {
       env.checkTimeout();
 
-      return fun.callMethod(env, qThis.getQuercusClass(), qThis, args);
+      return fun.callMethod(env, VHelper.noCtx(), qThis.getQuercusClass(), qThis, args).getOne();
     }
     finally {
       env.popCall();
@@ -121,14 +125,14 @@ public class ThisMethodExpr extends ObjectMethodExpr {
                          StringValue methodName, int hashCode,
                          Expr []argExprs)
   {
-    Value []args = evalArgs(env, argExprs);
+    Value []args = evalArgs(env, argExprs, VHelper.noCtx()).getOne();
 
     env.pushCall(this, qThis, args);
 
     try {
       env.checkTimeout();
 
-      return qThis.callMethod(env, methodName, hashCode, args);
+      return qThis.callMethod(env, VHelper.noCtx(), methodName, hashCode, args).getOne();
     }
     finally {
       env.popCall();

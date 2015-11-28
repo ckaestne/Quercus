@@ -31,6 +31,9 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a conditional expression.
@@ -51,16 +54,19 @@ public class ConditionalShortExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value value = _test.eval(env);
+    V<? extends Value> value = _test.eval(env, VHelper.noCtx());
 
-    if (value.toBoolean())
-      return value.copy(); // php/03cj, php/03ck
-    else
-      return _falseExpr.evalCopy(env); // php/03cl
+    return value.map((v)-> {
+      if (v.toBoolean())
+        return v.copy(); // php/03cj, php/03ck
+      else
+        return _falseExpr.evalCopy(env, VHelper.noCtx()).getOne(); // php/03cl
+    });
   }
 
   public String toString()

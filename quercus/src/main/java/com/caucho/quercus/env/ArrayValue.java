@@ -33,6 +33,8 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -505,20 +507,20 @@ abstract public class ArrayValue extends Value {
     }
   }
 
-  public final Value callCallback(Env env, Callable callback, Value key)
+  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key)
   {
-    Value result;
+    V<? extends Value> result;
     Value value = getRaw(key);
 
     if (value instanceof Var) {
       value = new ArgRef((Var) value);
 
-      result = call(env, value);
+      result = call(env, ctx, value);
     }
     else {
       Value aVar = new Var(value);
 
-      result = callback.call(env, aVar);
+      result = callback.call(env, ctx, aVar);
 
       Value aNew = aVar.toValue();
 
@@ -529,21 +531,21 @@ abstract public class ArrayValue extends Value {
     return result;
   }
 
-  public final Value callCallback(Env env, Callable callback, Value key,
+  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key,
                                   Value a2)
   {
-    Value result;
+    V<? extends Value> result;
     Value value = getRaw(key);
 
     if (value instanceof Var) {
       value = new ArgRef((Var) value);
 
-      result = callback.call(env, value, a2);
+      result = callback.call(env, ctx, value, a2);
     }
     else {
       Value aVar = new Var(value);
 
-      result = callback.call(env, aVar, a2);
+      result = callback.call(env, ctx, aVar, a2);
 
       Value aNew = aVar.toValue();
 
@@ -554,21 +556,21 @@ abstract public class ArrayValue extends Value {
     return result;
   }
 
-  public final Value callCallback(Env env, Callable callback, Value key,
+  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key,
                                   Value a2, Value a3)
   {
-    Value result;
+    V<? extends Value> result;
     Value value = getRaw(key);
 
     if (value instanceof Var) {
       value = new ArgRef((Var) value);
 
-      result = callback.call(env, value, a2, a3);
+      result = callback.call(env, ctx, value, a2, a3);
     }
     else {
       Value aVar = new Var(value);
 
-      result = callback.call(env, aVar, a2, a3);
+      result = callback.call(env,ctx,  aVar, a2, a3);
 
       Value aNew = aVar.toValue();
 

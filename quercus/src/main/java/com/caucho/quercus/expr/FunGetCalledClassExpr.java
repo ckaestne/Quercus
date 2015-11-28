@@ -34,6 +34,9 @@ import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents returns the current called class.
@@ -51,18 +54,19 @@ public class FunGetCalledClassExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     Value qThis = env.getThis();
 
     if (qThis.isNull()) {
-      return errorStatic(env);
+      return VHelper.toV(errorStatic(env));
     }
     else {
-      return env.createString(qThis.getClassName());
+      return VHelper.toV(env.createString(qThis.getClassName()));
     }
   }
 

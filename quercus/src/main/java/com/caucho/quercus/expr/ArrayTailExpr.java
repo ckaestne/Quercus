@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP array[] reference expression.
@@ -72,11 +75,12 @@ public class ArrayTailExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return env.error("Cannot use [] as a read-value.", getLocation());
+    return VHelper.toV(env.error("Cannot use [] as a read-value.", getLocation()));
   }
 
   /**
@@ -84,21 +88,22 @@ public class ArrayTailExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     if (isTop) {
-      Value obj = _expr.evalArray(env);
+      V<? extends Value> obj = _expr.evalArray(env, ctx);
 
-      return obj.putVar();
+      return obj.map((a)->a.putVar());
     }
     else {
       // php/0d4e need to do a toValue()
-      Value obj = _expr.evalArray(env).toValue();
+      V<Value> obj = _expr.evalArray(env, ctx).map((a)->a.toValue());
 
-      return obj.getArgTail(env, isTop);
+      return obj.map((a)->a.getArgTail(env, isTop));
     }
   }
 
@@ -107,13 +112,14 @@ public class ArrayTailExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    Value obj = _expr.evalVar(env);
+    V<Var> obj = _expr.evalVar(env, ctx);
 
-    return obj.putVar();
+    return obj.map((a)->a.putVar());
   }
 
   /**
@@ -121,13 +127,14 @@ public class ArrayTailExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    Value obj = _expr.evalArray(env);
+    V<? extends Value> obj = _expr.evalArray(env, VHelper.noCtx());
 
-    return obj.putArray(env);
+    return obj.map((a)->a.putArray(env));
   }
 
   /**
@@ -135,17 +142,18 @@ public class ArrayTailExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value evalObject(Env env)
+  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    Value array = _expr.evalArray(env);
+    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
 
     Value value = env.createObject();
 
-    array.put(value);
+    array.map((a)->a.put(value));
 
-    return value;
+    return VHelper.toV(value);
   }
 
   /**
@@ -153,10 +161,12 @@ public class ArrayTailExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignValue(Env env, Value value)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     /*
     Value array = _expr.evalVar(env);
@@ -169,7 +179,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
     */
 
     // php/048b
-    Value array = _expr.evalArrayAssignTail(env, value);
+    V<? extends Value> array = _expr.evalArrayAssignTail(env, ctx, value);
 
     return array;
   }
@@ -179,14 +189,16 @@ public class ArrayTailExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    Value array = _expr.evalArray(env);
+    V<? extends Value> array = _expr.evalArray(env, ctx);
 
-    array.put(value);
+    array.map((a)->a.put(value.getOne()));
 
     return value;
   }

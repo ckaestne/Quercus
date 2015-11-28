@@ -35,6 +35,9 @@ import com.caucho.quercus.env.ContinueValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a while statement.
@@ -64,15 +67,15 @@ public class WhileStatement extends Statement {
     return true;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       env.setLocation(getLocation());
       
-      while (_test.evalBoolean(env)) {
+      while (_test.evalBoolean(env, VHelper.noCtx()).getOne()) {
         env.checkTimeout();
 
-        Value value = _block.execute(env);
+        Value value = _block.execute(env, VHelper.noCtx()).getOne();
         
         if (value == null) {
         }
@@ -82,7 +85,7 @@ public class WhileStatement extends Statement {
           int target = breakValue.getTarget();
           
           if (target > 1)
-            return new BreakValue(target - 1);
+            return VHelper.toV(new BreakValue(target - 1));
           else
             break;
         }
@@ -92,11 +95,11 @@ public class WhileStatement extends Statement {
           int target = conValue.getTarget();
           
           if (target > 1) {
-            return new ContinueValue(target - 1);
+            return VHelper.toV(new ContinueValue(target - 1));
           }
         }
         else
-          return value;
+          return VHelper.toV(value);
         
         env.setLocation(getLocation());
       }

@@ -29,20 +29,18 @@
 
 package com.caucho.quercus.env;
 
-import com.caucho.quercus.expr.LiteralNullExpr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.lib.ArrayModule;
 import com.caucho.quercus.program.Arg;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.CurrentTime;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Represents a Quercus object value.
@@ -127,7 +125,7 @@ abstract public class ObjectValue extends Callback {
     AbstractFunction fun = qClass.getDestructor();
 
     if (fun != null) {
-      fun.callMethod(env, qClass, this);
+      fun.callMethod(env, VHelper.noCtx(), qClass, this);
     }
   }
 
@@ -793,15 +791,15 @@ abstract public class ObjectValue extends Callback {
    * Call for callable.
    */
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     AbstractFunction fun = _quercusClass.getInvoke();
 
     if (fun != null)
-      return fun.callMethod(env, _quercusClass, this, args);
+      return fun.callMethod(env,VHelper.noCtx(), _quercusClass, this, args);
     else {
-      return env.warning(L.l("{0} is not a valid function",
-                             this));
+      return VHelper.toV(env.warning(L.l("{0} is not a valid function",
+                             this)));
     }
   }
 
@@ -882,9 +880,9 @@ abstract public class ObjectValue extends Callback {
         throw new IllegalStateException(L.l("must implement jsonSerialize()"));
       }
 
-      Value value = fun.callMethod(env, getQuercusClass(), this);
+      V<? extends Value> value = fun.callMethod(env, VHelper.noCtx(), getQuercusClass(), this);
 
-      value.jsonEncode(env, context, sb);
+      value.foreach((a)->a.jsonEncode(env, context, sb));
 
       return;
     }

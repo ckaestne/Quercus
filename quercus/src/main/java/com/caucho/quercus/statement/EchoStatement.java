@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents an echo statement in a PHP program.
@@ -50,11 +53,11 @@ public class EchoStatement extends Statement {
     _expr = expr;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    Value value = _expr.eval(env);
+    V<? extends Value> value = _expr.eval(env, VHelper.noCtx());
 
-    value.print(env);
+    value.foreach((a)->a.print(env));
 
     return null;
   }

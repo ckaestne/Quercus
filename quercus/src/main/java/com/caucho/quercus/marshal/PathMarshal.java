@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 public class PathMarshal extends Marshal
 {
@@ -47,7 +48,7 @@ public class PathMarshal extends Marshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return env.lookupPwd(expr.eval(env));
+    return env.lookupPwd(expr.eval(env, VHelper.noCtx()).getOne());
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

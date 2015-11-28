@@ -32,6 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents the die expression
@@ -66,18 +69,19 @@ public class FunDieExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (_value != null) {
-      String msg = _value.evalString(env);
+      V<String> msg = _value.evalString(env, VHelper.noCtx());
       
-      return env.die(msg);
+      return msg.map((a)->env.die(a));
     }
     else
-      return env.die();
+      return VHelper.toV(env.die());
   }
 }
 

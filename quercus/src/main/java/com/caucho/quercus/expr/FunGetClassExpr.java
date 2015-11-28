@@ -32,7 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.parser.QuercusParser;
-import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents returns the current class.
@@ -57,12 +59,13 @@ public class FunGetClassExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return env.createString(_className);
+    return VHelper.toV(env.createString(_className));
   }
 
   public String toString()

@@ -34,6 +34,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.logging.Logger;
 
@@ -123,40 +126,40 @@ public class LazyFunction extends AbstractFunction
   //
 
   @Override
-  public Value call(Env env, Value []argValues)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
   {
-    return getFun(env).call(env, argValues);
+    return getFun(env).call(env, ctx, argValues);
   }
 
   @Override
-  public Value call(Env env, Value arg)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value arg)
   {
-    return getFun(env).call(env, arg);
+    return getFun(env).call(env, ctx, arg);
   }
 
   @Override
-  public Value call(Env env, Value a1, Value a2)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
-    return getFun(env).call(env, a1, a2);
+    return getFun(env).call(env, ctx, a1, a2);
   }
 
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return getFun(env).call(env, a1, a2, a3);
+    return getFun(env).call(env, ctx, a1, a2, a3);
   }
 
   @Override
-  public Value call(Env env, Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
-    return getFun(env).call(env, a1, a2, a3, a4);
+    return getFun(env).call(env, ctx, a1, a2, a3, a4);
   }
 
   @Override
-  public Value call(Env env, Value a1, Value a2,
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2,
                     Value a3, Value a4, Value a5)
   {
-    return getFun(env).call(env, a1, a2, a3, a4, a5);
+    return getFun(env).call(env, ctx, a1, a2, a3, a4, a5);
   }
 
   //
@@ -164,40 +167,40 @@ public class LazyFunction extends AbstractFunction
   //
 
   @Override
-  public Value callRef(Env env, Value []argValues)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
   {
-    return getFun(env).callRef(env, argValues);
+    return getFun(env).callRef(env, VHelper.noCtx(), argValues);
   }
 
   @Override
-  public Value callRef(Env env, Value arg)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value arg)
   {
-    return getFun(env).callRef(env, arg);
+    return getFun(env).callRef(env, ctx, arg);
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
   {
-    return getFun(env).callRef(env, a1, a2);
+    return getFun(env).callRef(env, ctx, a1, a2);
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return getFun(env).callRef(env, a1, a2, a3);
+    return getFun(env).callRef(env, ctx, a1, a2, a3);
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
-    return getFun(env).callRef(env, a1, a2, a3, a4);
+    return getFun(env).callRef(env, ctx, a1, a2, a3, a4);
   }
 
   @Override
-  public Value callRef(Env env, Value a1, Value a2,
+  public V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
                        Value a3, Value a4, Value a5)
   {
-    return getFun(env).callRef(env, a1, a2, a3, a4, a5);
+    return getFun(env).callRef(env, ctx, a1, a2, a3, a4, a5);
   }
 
   //
@@ -205,9 +208,9 @@ public class LazyFunction extends AbstractFunction
   //
 
   @Override
-  public Value callCopy(Env env, Value []argValues)
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] argValues)
   {
-    return getFun(env).callCopy(env, argValues);
+    return getFun(env).callCopy(env, VHelper.noCtx(), argValues);
   }
 }
 

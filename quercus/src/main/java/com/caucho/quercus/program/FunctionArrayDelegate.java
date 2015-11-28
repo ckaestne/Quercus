@@ -29,12 +29,8 @@
 
 package com.caucho.quercus.program;
 
-import com.caucho.quercus.env.ArrayDelegate;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.JavaInvoker;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.UnsetValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * A delegate that performs Array operations for Quercus objects.
@@ -79,10 +75,10 @@ public class FunctionArrayDelegate implements ArrayDelegate {
   public Value get(Env env, ObjectValue qThis, Value key)
   {
     if (_arrayGet != null) {
-      return _arrayGet.callMethod(env,
+      return _arrayGet.callMethod(env, VHelper.noCtx(),
                                   _arrayGet.getQuercusClass(),
                                   qThis,
-                                  new Value[] { key });
+                                  new Value[] { key }).getOne();
     }
     else
       return UnsetValue.UNSET;
@@ -95,9 +91,9 @@ public class FunctionArrayDelegate implements ArrayDelegate {
   public Value put(Env env, ObjectValue qThis, Value key, Value value)
   {
     if (_arrayPut != null)
-      return _arrayPut.callMethod(env,
+      return _arrayPut.callMethod(env,   VHelper.noCtx(),
                                   _arrayPut.getQuercusClass(),
-                                  qThis, key, value);
+                                  qThis, key, value).getOne();
     else
       return UnsetValue.UNSET;
   }
@@ -109,9 +105,9 @@ public class FunctionArrayDelegate implements ArrayDelegate {
   public Value put(Env env, ObjectValue qThis, Value value)
   {
     if (_arrayPut != null)
-      return _arrayPut.callMethod(env,
+      return _arrayPut.callMethod(env,   VHelper.noCtx(),
                                   _arrayPut.getQuercusClass(),
-                                  qThis, value);
+                                  qThis, value).getOne();
     else
       return UnsetValue.UNSET;
   }
@@ -147,9 +143,9 @@ public class FunctionArrayDelegate implements ArrayDelegate {
   public long count(Env env, ObjectValue qThis)
   {
     if (_arrayCount!= null) {
-      return _arrayCount .callMethod(env,
+      return _arrayCount .callMethod(env,  VHelper.noCtx(),
                                      _arrayGet.getQuercusClass(),
-                                     qThis).toLong();
+                                     qThis).getOne().toLong();
     }
     else
       return 1;

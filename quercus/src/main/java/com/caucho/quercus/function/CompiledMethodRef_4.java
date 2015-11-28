@@ -30,12 +30,12 @@
 package com.caucho.quercus.function;
 
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.expr.Expr;
+import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -59,37 +59,37 @@ abstract public class CompiledMethodRef_4 extends CompiledMethodRef {
   /**
    * Evaluates the method with the given variable arguments.
    */
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
-                             Value []args)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+                                          Value []args)
   {
     switch (args.length) {
     case 0:
-      return callMethodRef(env, qClass, qThis,
+      return callMethodRef(env, ctx, qClass, qThis,
                            _args[0].eval(env),
                            _args[1].eval(env),
                            _args[2].eval(env),
                            _args[3].eval(env));
     case 1:
-      return callMethodRef(env, qClass, qThis,
+      return callMethodRef(env, ctx, qClass, qThis,
                            args[0],
                            _args[1].eval(env),
                            _args[2].eval(env),
                            _args[3].eval(env));
     case 2:
-      return callMethodRef(env, qClass, qThis,
+      return callMethodRef(env, ctx, qClass, qThis,
                            args[0],
                            args[1],
                            _args[2].eval(env),
                            _args[3].eval(env));
     case 3:
-      return callMethodRef(env, qClass, qThis,
+      return callMethodRef(env, ctx, qClass, qThis,
                            args[0],
                            args[1],
                            args[2],
                            _args[3].eval(env));
     case 4:
     default:
-      return callMethodRef(env, qClass, qThis,
+      return callMethodRef(env, ctx, qClass, qThis,
                            args[0],
                            args[1],
                            args[2],
@@ -101,9 +101,9 @@ abstract public class CompiledMethodRef_4 extends CompiledMethodRef {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis)
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          _args[0].eval(env),
                          _args[1].eval(env),
                          _args[2].eval(env),
@@ -114,10 +114,10 @@ abstract public class CompiledMethodRef_4 extends CompiledMethodRef {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 			     Value a1)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          a1,
                          _args[1].eval(env),
                          _args[2].eval(env),
@@ -128,11 +128,11 @@ abstract public class CompiledMethodRef_4 extends CompiledMethodRef {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 			     Value a1,
 			     Value a2)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          a1,
                          a2,
                          _args[2].eval(env),
@@ -143,12 +143,12 @@ abstract public class CompiledMethodRef_4 extends CompiledMethodRef {
    * Evaluates the method with the given variable arguments.
    */
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 			     Value a1,
 			     Value a2,
 			     Value a3)
   {
-    return callMethodRef(env, qClass, qThis,
+    return callMethodRef(env, ctx, qClass, qThis,
                          a1,
                          a2,
                          a3,
@@ -156,7 +156,7 @@ abstract public class CompiledMethodRef_4 extends CompiledMethodRef {
   }
 
   @Override
-  abstract public Value callMethodRef(Env env,
+  abstract public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                                       QuercusClass qClass,
                                       Value qThis,
                                       Value a1,

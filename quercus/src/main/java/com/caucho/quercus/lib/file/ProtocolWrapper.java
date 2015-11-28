@@ -29,13 +29,9 @@
 
 package com.caucho.quercus.lib.file;
 
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
+import edu.cmu.cs.varex.VHelper;
 
 public class ProtocolWrapper {
   private QuercusClass _qClass;
@@ -75,7 +71,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, _qClass, obj, path);
+    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, path).getOne();
 
     return result.toBoolean();
   }
@@ -90,7 +86,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, _qClass, obj, from, to);
+    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, from, to).getOne();
 
     return result.toBoolean();
   }
@@ -108,7 +104,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, _qClass, obj, path, mode, options);
+    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, mode, options).getOne();
 
     return result.toBoolean();
   }
@@ -123,7 +119,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, _qClass, obj, path, options);
+    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, options).getOne();
 
     return result.toBoolean();
   }
@@ -138,7 +134,7 @@ public class ProtocolWrapper {
       return BooleanValue.FALSE;
     }
 
-    Value result = function.callMethod(env, _qClass, obj, path, flags);
+    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, flags).getOne();
 
     return result;
   }
@@ -153,7 +149,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, _qClass, obj, path, options, arg);
+    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, path, options, arg).getOne();
 
     return result.toBoolean();
   }

@@ -30,13 +30,12 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.program.InterpretedClassDef;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents the 'this' expression.
@@ -83,11 +82,12 @@ public class ThisExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return env.getThis();
+    return VHelper.toV(env.getThis());
   }
 
   /**
@@ -95,12 +95,13 @@ public class ThisExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return env.getThis();
+    return VHelper.toV(env.getThis());
   }
 
   /**
@@ -108,12 +109,13 @@ public class ThisExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return env.getThis().toVar();
+    return VHelper.toV(env.getThis().toVar());
   }
 
   /**
@@ -121,10 +123,12 @@ public class ThisExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignValue(Env env, Value value)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     env.error(L.l("can't assign $this"), getLocation());
 
@@ -136,10 +140,12 @@ public class ThisExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     env.error(L.l("can't assign $this"), getLocation());
 
@@ -161,9 +167,9 @@ public class ThisExpr extends AbstractVarExpr {
   /**
    * Evaluates as a QuercusClass.
    */
-  public QuercusClass evalQuercusClass(Env env)
+  public V<QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
-    return env.getThis().getQuercusClass();
+    return VHelper.toV(env.getThis().getQuercusClass());
   }
 
   public String toString()

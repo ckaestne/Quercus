@@ -29,12 +29,9 @@
 
 package com.caucho.quercus.function;
 
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a function
@@ -54,25 +51,25 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
 
-    return _call.call(env, _name, arrayArgs);
+    return _call.call(env, ctx, _name, arrayArgs);
   }
 
   /**
    * Evaluates the function.
    */
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value []args)
   {
     ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
 
-    return _call.callMethod(env, qClass, qThis,
+    return _call.callMethod(env, ctx, qClass, qThis,
                             _name, arrayArgs);
   }
 
@@ -80,14 +77,14 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
   {
     ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
 
-    return _call.callMethodRef(env, qClass, qThis,
+    return _call.callMethodRef(env, ctx, qClass, qThis,
                                _name, arrayArgs);
   }
 

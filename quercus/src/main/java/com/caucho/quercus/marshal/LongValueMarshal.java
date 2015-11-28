@@ -33,6 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 public class LongValueMarshal
   extends Marshal
@@ -55,7 +56,7 @@ public class LongValueMarshal
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return expr.eval(env).toLongValue();
+    return expr.eval(env, VHelper.noCtx()).getOne().toLongValue();
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

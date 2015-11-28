@@ -40,6 +40,9 @@ import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -546,21 +549,21 @@ abstract public class JavaInvoker
       if (i < _marshalArgs.length)
         arg = _marshalArgs[i];
       else if (_isRestReference) {
-        values[i] = args[i].evalVar(env);
+        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne();
         continue;
       }
       else {
-        values[i] = args[i].eval(env);
+        values[i] = args[i].eval(env, VHelper.noCtx()).getOne();
         continue;
       }
 
       if (arg == null)
-        values[i] = args[i].eval(env).copy();
+        values[i] = args[i].eval(env, VHelper.noCtx()).getOne().copy();
       else if (arg.isReference())
-        values[i] = args[i].evalRef(env);
+        values[i] = args[i].evalRef(env, VHelper.noCtx()).getOne();
       else {
         // php/0d04
-        values[i] = args[i].eval(env);
+        values[i] = args[i].eval(env, VHelper.noCtx()).getOne();
       }
     }
 
@@ -666,23 +669,23 @@ abstract public class JavaInvoker
   }
 
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
-    return callMethod(env, (QuercusClass) null, (Value) null, args);
+    return callMethod(env, ctx, (QuercusClass) null, (Value) null, args);
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
   {
     // php/3cl3
-    return callMethod(env, qClass, qThis, args);
+    return callMethod(env, ctx, qClass, qThis, args);
   }
 
   @Override
-  public Value callMethod(Env env,
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Value []args)
@@ -704,20 +707,20 @@ abstract public class JavaInvoker
 
     Value value = _unmarshalReturn.unmarshal(env, result);
 
-    return value;
+    return VHelper.toV(value);
   }
 
   @Override
-  public Value callNew(Env env,
-                       QuercusClass qClass,
-                       Value qThis,
-                       Value []args)
+  public V<? extends Value> callNew(Env env,
+                                    FeatureExpr ctx, QuercusClass qClass,
+                                    Value qThis,
+                                    Value[] args)
   {
     Object result = callJavaMethod(env, qClass, qThis, args);
 
     qThis.setJavaObject(result);
 
-    return qThis;
+    return VHelper.toV(qThis);
   }
 
   private Object callJavaMethod(Env env,

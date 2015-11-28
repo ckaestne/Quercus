@@ -30,9 +30,11 @@
 package com.caucho.quercus.function;
 
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.QuercusClass;
+import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -50,13 +52,13 @@ abstract public class CompiledMethodRef_0 extends CompiledMethodRef {
   }
 
   @Override
-  public Value callMethodRef(Env env, QuercusClass qClass, Value qThis,
-                             Value []args)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+                                          Value []args)
   {
-    return callMethodRef(env, qClass, qThis);
+    return callMethodRef(env, ctx, qClass, qThis);
   }
 
   @Override
-  abstract public Value callMethodRef(Env env, QuercusClass qClass, Value qThis);
+  abstract public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis);
 }
 

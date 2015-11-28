@@ -29,14 +29,17 @@
 
 package com.caucho.quercus.expr;
 
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.util.ArrayList;
 
 /**
  * A Foo::bar(...) method call expression.
@@ -86,9 +89,10 @@ public class ClassMethodExpr extends AbstractMethodExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);
 
@@ -96,7 +100,7 @@ public class ClassMethodExpr extends AbstractMethodExpr {
       throw env.createErrorException(L.l("{0} is an unknown class",
                                          _className));
 
-    Value []values = evalArgs(env, _args);
+    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
 
     Value oldThis = env.getThis();
 
@@ -120,7 +124,7 @@ public class ClassMethodExpr extends AbstractMethodExpr {
     try {
       env.checkTimeout();
 
-      return cl.callStaticMethod(env, qThis, _methodName, _hash, values);
+      return cl.callStaticMethod(env, ctx, qThis, _methodName, _hash, values);
     } finally {
       env.popCall();
       env.setThis(oldThis);

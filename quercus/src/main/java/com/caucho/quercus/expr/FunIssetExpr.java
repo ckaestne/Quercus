@@ -30,9 +30,12 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
+import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.BooleanValue;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP isset call
@@ -61,11 +64,12 @@ public class FunIssetExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _expr.evalIsset(env) ? BooleanValue.TRUE : BooleanValue.FALSE;
+    return _expr.evalIsset(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
   }
 
   public String toString()

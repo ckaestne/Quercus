@@ -31,11 +31,12 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ArgRef;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
-import com.caucho.quercus.lib.VariableModule;
 import com.caucho.quercus.parser.QuercusParser;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP reference argument.
@@ -76,14 +77,15 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     // quercus/0d28
-    Value value = getExpr().evalVar(env);
+    V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
     
-    return value.toRef();
+    return value.map((a)->a.toRef());
   }
 
   /**
@@ -91,14 +93,15 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    Value value = getExpr().evalVar(env);
+    V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
     
-    return value.toArgRef();
+    return value.map((a)->a.toArgRef());
   }
 
   /**
@@ -106,11 +109,12 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
-    Var value = getExpr().evalVar(env);
+    V<Var> value = getExpr().evalVar(env, VHelper.noCtx());
 
     // php/112d
     return value;

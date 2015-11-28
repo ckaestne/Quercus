@@ -29,23 +29,6 @@
 
 package com.caucho.quercus.env;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.function.AbstractFunction;
@@ -53,6 +36,18 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.L10N;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Represents a PHP expression value.
@@ -1472,140 +1467,140 @@ abstract public class Value implements java.io.Serializable
   /**
    * Evaluates the function.
    */
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     Callable call = toCallable(env, false);
 
     if (call != null)
-      return call.call(env, args);
+      return call.call(env, ctx, args);
     else
-      return env.warning(L.l("{0} is not a valid function",
-                             this));
+      return VHelper.toV(env.warning(L.l("{0} is not a valid function",
+                             this)));
   }
 
   /**
    * Evaluates the function, returning a reference.
    */
-  public Value callRef(Env env, Value []args)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
   {
     AbstractFunction fun = env.getFunction(this);
 
     if (fun != null)
-      return fun.callRef(env, args);
+      return fun.callRef(env, VHelper.noCtx(), args);
     else
-      return env.warning(L.l("{0} is not a valid function",
-                             this));
+      return VHelper.toV(env.warning(L.l("{0} is not a valid function",
+                             this)));
   }
 
   /**
    * Evaluates the function, returning a copy
    */
-  public Value callCopy(Env env, Value []args)
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
   {
     AbstractFunction fun = env.getFunction(this);
 
     if (fun != null)
-      return fun.callCopy(env, args);
+      return fun.callCopy(env, VHelper.noCtx(), args);
     else
-      return env.warning(L.l("{0} is not a valid function",
-                             this));
+      return VHelper.toV(env.warning(L.l("{0} is not a valid function",
+                             this)));
   }
 
   /**
    * Evaluates the function.
    */
-  public Value call(Env env)
+  public V<? extends Value> call(Env env, FeatureExpr ctx)
   {
-    return call(env, NULL_ARG_VALUES);
+    return call(env, VHelper.noCtx(), NULL_ARG_VALUES);
   }
 
   /**
    * Evaluates the function.
    */
-  public Value callRef(Env env)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx)
   {
-    return callRef(env, NULL_ARG_VALUES);
+    return callRef(env, VHelper.noCtx(), NULL_ARG_VALUES);
   }
 
   /**
    * Evaluates the function with an argument .
    */
-  public Value call(Env env, Value a1)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
-    return call(env, new Value[] { a1 });
+    return call(env, VHelper.noCtx(), new Value[] { a1 });
   }
 
   /**
    * Evaluates the function with an argument .
    */
-  public Value callRef(Env env, Value a1)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1)
   {
-    return callRef(env, new Value[] { a1 });
+    return callRef(env, VHelper.noCtx(), new Value[] { a1 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value call(Env env, Value a1, Value a2)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
-    return call(env, new Value[] { a1, a2 });
+    return call(env, VHelper.noCtx(), new Value[] { a1, a2 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value callRef(Env env, Value a1, Value a2)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
-    return callRef(env, new Value[] { a1, a2 });
+    return callRef(env, VHelper.noCtx(), new Value[] { a1, a2 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value call(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return call(env, new Value[] { a1, a2, a3 });
+    return call(env, VHelper.noCtx(), new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value callRef(Env env, Value a1, Value a2, Value a3)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return callRef(env, new Value[] { a1, a2, a3 });
+    return callRef(env, VHelper.noCtx(), new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value call(Env env, Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
-    return call(env, new Value[] { a1, a2, a3, a4 });
+    return call(env, VHelper.noCtx(), new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value callRef(Env env, Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
   {
-    return callRef(env, new Value[] { a1, a2, a3, a4 });
+    return callRef(env, VHelper.noCtx(), new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value call(Env env, Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return call(env, new Value[] { a1, a2, a3, a4, a5 });
+    return call(env, VHelper.noCtx(), new Value[] { a1, a2, a3, a4, a5 });
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public Value callRef(Env env,
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, 
                        Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return callRef(env, new Value[] { a1, a2, a3, a4, a5 });
+    return callRef(env, VHelper.noCtx(), new Value[] { a1, a2, a3, a4, a5 });
   }
 
   //
@@ -1615,321 +1610,321 @@ abstract public class Value implements java.io.Serializable
   /**
    * Evaluates a method.
    */
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
+                             Value[] args)
   {
     if (isNull()) {
-      return env.error(L.l("Method call '{0}' is not allowed for a null value.",
-                           methodName));
+      return VHelper.toV(env.error(L.l("Method call '{0}' is not allowed for a null value.",
+                           methodName)));
     }
     else {
-      return env.error(L.l("'{0}' is an unknown method of {1}.",
+      return VHelper.toV(env.error(L.l("'{0}' is an unknown method of {1}.",
                            methodName,
-                           toDebugString()));
+                           toDebugString())));
     }
   }
 
   /**
    * Evaluates a method.
    */
-  public final Value callMethod(Env env,
-                                StringValue methodName,
-                                Value []args)
+  public final V<? extends Value> callMethod(Env env,
+                                   FeatureExpr ctx, StringValue methodName,
+                                   Value[] args)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethod(env, methodName, hash, args);
+    return callMethod(env, ctx, methodName, hash, args);
   }
 
 
   /**
    * Evaluates a method.
    */
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
-                             Value []args)
+  public V<? extends Value> callMethodRef(Env env,
+                                FeatureExpr ctx, StringValue methodName, int hash,
+                                Value[] args)
   {
-    return callMethod(env, methodName, hash, args);
+    return callMethod(env, ctx, methodName, hash, args);
   }
 
   /**
    * Evaluates a method.
    */
-  public final Value callMethodRef(Env env,
-                                   StringValue methodName,
-                                   Value []args)
+  public final V<? extends Value> callMethodRef(Env env,
+                                      FeatureExpr ctx, StringValue methodName,
+                                      Value[] args)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethodRef(env, methodName, hash, args);
+    return callMethodRef(env, ctx, methodName, hash, args);
   }
 
   /**
    * Evaluates a method with 0 args.
    */
-  public Value callMethod(Env env, StringValue methodName, int hash)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
-    return callMethod(env, methodName, hash, NULL_ARG_VALUES);
+    return callMethod(env, ctx, methodName, hash, NULL_ARG_VALUES);
   }
 
   /**
    * Evaluates a method with 0 args.
    */
-  public final Value callMethod(Env env, StringValue methodName)
-  {
-    int hash = methodName.hashCodeCaseInsensitive();
-
-    return callMethod(env, methodName, hash);
-  }
-
-  /**
-   * Evaluates a method with 0 args.
-   */
-  public Value callMethodRef(Env env, StringValue methodName, int hash)
-  {
-    return callMethodRef(env, methodName, hash, NULL_ARG_VALUES);
-  }
-
-  /**
-   * Evaluates a method with 0 args.
-   */
-  public final Value callMethodRef(Env env, StringValue methodName)
+  public final V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethodRef(env, methodName, hash);
+    return callMethod(env, ctx, methodName, hash);
+  }
+
+  /**
+   * Evaluates a method with 0 args.
+   */
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  {
+    return callMethodRef(env, ctx, methodName, hash, NULL_ARG_VALUES);
+  }
+
+  /**
+   * Evaluates a method with 0 args.
+   */
+  public final V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName)
+  {
+    int hash = methodName.hashCodeCaseInsensitive();
+
+    return callMethodRef(env, ctx, methodName, hash);
   }
 
   /**
    * Evaluates a method with 1 arg.
    */
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1)
-  {
-    return callMethod(env, methodName, hash, new Value[] { a1 });
-  }
-
-  /**
-   * Evaluates a method with 1 arg.
-   */
-  public final Value callMethod(Env env,
-                                StringValue methodName,
-                                Value a1)
-  {
-    int hash = methodName.hashCodeCaseInsensitive();
-
-    return callMethod(env, methodName, hash, a1);
-  }
-
-  /**
-   * Evaluates a method with 1 arg.
-   */
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1)
   {
-    return callMethodRef(env, methodName, hash, new Value[] { a1 });
+    return callMethod(env, ctx, methodName, hash, new Value[] { a1 });
   }
 
   /**
    * Evaluates a method with 1 arg.
    */
-  public final Value callMethodRef(Env env,
-                                   StringValue methodName,
+  public final V<? extends Value> callMethod(Env env,
+                                   FeatureExpr ctx, StringValue methodName,
                                    Value a1)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethodRef(env, methodName, hash, a1);
+    return callMethod(env, ctx, methodName, hash, a1);
   }
 
   /**
-   * Evaluates a method with 2 args.
+   * Evaluates a method with 1 arg.
    */
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2)
+  public V<? extends Value> callMethodRef(Env env,
+                                FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1)
   {
-    return callMethod(env, methodName, hash, new Value[] { a1, a2 });
+    return callMethodRef(env, ctx, methodName, hash, new Value[] { a1 });
   }
 
   /**
-   * Evaluates a method with 2 args.
+   * Evaluates a method with 1 arg.
    */
-  public final Value callMethod(Env env,
-                                StringValue methodName,
-                                Value a1, Value a2)
+  public final V<? extends Value> callMethodRef(Env env,
+                                      FeatureExpr ctx, StringValue methodName,
+                                      Value a1)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethod(env, methodName, hash,
+    return callMethodRef(env, ctx, methodName, hash, a1);
+  }
+
+  /**
+   * Evaluates a method with 2 args.
+   */
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2)
+  {
+    return callMethod(env, ctx, methodName, hash, new Value[] { a1, a2 });
+  }
+
+  /**
+   * Evaluates a method with 2 args.
+   */
+  public final V<? extends Value> callMethod(Env env,
+                                   FeatureExpr ctx, StringValue methodName,
+                                   Value a1, Value a2)
+  {
+    int hash = methodName.hashCodeCaseInsensitive();
+
+    return callMethod(env, ctx, methodName, hash,
                       a1, a2);
   }
 
   /**
    * Evaluates a method with 2 args.
    */
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
-                             Value a1, Value a2)
+  public V<? extends Value> callMethodRef(Env env,
+                                FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2)
   {
-    return callMethodRef(env, methodName, hash, new Value[] { a1, a2 });
+    return callMethodRef(env, ctx, methodName, hash, new Value[] { a1, a2 });
   }
 
   /**
    * Evaluates a method with 2 args.
    */
-  public final Value callMethodRef(Env env,
-                                   StringValue methodName,
-                                   Value a1, Value a2)
+  public final V<? extends Value> callMethodRef(Env env,
+                                      FeatureExpr ctx, StringValue methodName,
+                                      Value a1, Value a2)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethodRef(env, methodName, hash,
+    return callMethodRef(env, ctx, methodName, hash,
                          a1, a2);
   }
 
   /**
    * Evaluates a method with 3 args.
    */
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3)
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3)
   {
-    return callMethod(env, methodName, hash, new Value[] { a1, a2, a3 });
+    return callMethod(env, ctx, methodName, hash, new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates a method with 3 args.
    */
-  public final Value callMethod(Env env,
-                                StringValue methodName,
-                                Value a1, Value a2, Value a3)
+  public final V<? extends Value> callMethod(Env env,
+                                   FeatureExpr ctx, StringValue methodName,
+                                   Value a1, Value a2, Value a3)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethod(env, methodName, hash,
+    return callMethod(env, ctx, methodName, hash,
                       a1, a2, a3);
   }
 
   /**
    * Evaluates a method with 3 args.
    */
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3)
+  public V<? extends Value> callMethodRef(Env env,
+                                FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3)
   {
-    return callMethodRef(env, methodName, hash, new Value[] { a1, a2, a3 });
+    return callMethodRef(env, ctx, methodName, hash, new Value[] { a1, a2, a3 });
   }
 
   /**
    * Evaluates a method with 3 args.
    */
-  public final Value callMethodRef(Env env,
-                                   StringValue methodName,
-                                   Value a1, Value a2, Value a3)
+  public final V<? extends Value> callMethodRef(Env env,
+                                      FeatureExpr ctx, StringValue methodName,
+                                      Value a1, Value a2, Value a3)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethodRef(env, methodName, hash,
+    return callMethodRef(env, ctx, methodName, hash,
                          a1, a2, a3);
   }
 
   /**
    * Evaluates a method with 4 args.
    */
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3, Value a4)
   {
-    return callMethod(env, methodName, hash,
+    return callMethod(env, ctx, methodName, hash,
                       new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates a method with 4 args.
    */
-  public final Value callMethod(Env env,
-                                StringValue methodName,
-                                Value a1, Value a2, Value a3, Value a4)
+  public final V<? extends Value> callMethod(Env env,
+                                   FeatureExpr ctx, StringValue methodName,
+                                   Value a1, Value a2, Value a3, Value a4)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethod(env, methodName, hash,
+    return callMethod(env, ctx, methodName, hash,
                       a1, a2, a3, a4);
   }
 
   /**
    * Evaluates a method with 4 args.
    */
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4)
+  public V<? extends Value> callMethodRef(Env env,
+                                FeatureExpr ctx, StringValue methodName, int hash,
+                                Value a1, Value a2, Value a3, Value a4)
   {
-    return callMethodRef(env, methodName, hash,
+    return callMethodRef(env, ctx, methodName, hash,
                          new Value[] { a1, a2, a3, a4 });
   }
 
   /**
    * Evaluates a method with 4 args.
    */
-  public final Value callMethodRef(Env env,
-                                   StringValue methodName,
-                                   Value a1, Value a2, Value a3, Value a4)
+  public final V<? extends Value> callMethodRef(Env env,
+                                      FeatureExpr ctx, StringValue methodName,
+                                      Value a1, Value a2, Value a3, Value a4)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethodRef(env, methodName, hash,
+    return callMethodRef(env, ctx, methodName, hash,
                          a1, a2, a3, a4);
   }
 
   /**
    * Evaluates a method with 5 args.
    */
-  public Value callMethod(Env env,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> callMethod(Env env,
+                             FeatureExpr ctx, StringValue methodName, int hash,
+                             Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return callMethod(env, methodName, hash,
+    return callMethod(env, ctx, methodName, hash,
                       new Value[] { a1, a2, a3, a4, a5 });
   }
 
   /**
    * Evaluates a method with 5 args.
    */
-  public final Value callMethod(Env env,
-                             StringValue methodName,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
+  public final V<? extends Value> callMethod(Env env,
+                                             FeatureExpr ctx, StringValue methodName,
+                                             Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethod(env, methodName, hash,
+    return callMethod(env, ctx, methodName, hash,
                          a1, a2, a3, a4, a5);
   }
 
   /**
    * Evaluates a method with 5 args.
    */
-  public Value callMethodRef(Env env,
-                             StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
+  public V<? extends Value> callMethodRef(Env env,
+                                          FeatureExpr ctx, StringValue methodName, int hash,
+                                          Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return callMethodRef(env, methodName, hash,
+    return callMethodRef(env, ctx, methodName, hash,
                          new Value[] { a1, a2, a3, a4, a5 });
   }
 
   /**
    * Evaluates a method with 5 args.
    */
-  public final Value callMethodRef(Env env,
-                             StringValue methodName,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
+  public final V<? extends Value> callMethodRef(Env env,
+                                                FeatureExpr ctx, StringValue methodName,
+                                                Value a1, Value a2, Value a3, Value a4, Value a5)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return callMethodRef(env, methodName, hash,
+    return callMethodRef(env, ctx, methodName, hash,
                          a1, a2, a3, a4, a5);
   }
 

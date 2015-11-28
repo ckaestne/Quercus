@@ -35,6 +35,9 @@ import com.caucho.quercus.env.ContinueValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a for statement.
@@ -67,16 +70,16 @@ public class ForStatement extends Statement {
     return true;
   }
 
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       if (_init != null)
-        _init.eval(env);
+        _init.eval(env, VHelper.noCtx());
 
-      while (_test == null || _test.evalBoolean(env)) {
+      while (_test == null || _test.evalBoolean(env, VHelper.noCtx()).getOne()) {
         env.checkTimeout();
 
-        Value value = _block.execute(env);
+        Value value = _block.execute(env, VHelper.noCtx()).getOne();
 
         if (value == null) {
         }
@@ -86,7 +89,7 @@ public class ForStatement extends Statement {
           int target = conValue.getTarget();
           
           if (target > 1) {
-            return new ContinueValue(target - 1);
+            return VHelper.toV(new ContinueValue(target - 1));
           }
         }
         else if (value instanceof BreakValue) {
@@ -95,15 +98,15 @@ public class ForStatement extends Statement {
           int target = breakValue.getTarget();
           
           if (target > 1)
-            return new BreakValue(target - 1);
+            return VHelper.toV(new BreakValue(target - 1));
           else
             break;
         }
         else
-          return value;
+          return VHelper.toV(value);
 
         if (_incr != null)
-          _incr.eval(env);
+          _incr.eval(env, VHelper.noCtx());
       }
     }
     catch (RuntimeException t) {

@@ -6,6 +6,7 @@ import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
 
@@ -40,7 +41,7 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
       _rewindFun = _qClass.getFunction(env.createString("rewind"));
       _validFun = _qClass.getFunction(env.createString("valid"));
 
-      _rewindFun.callMethod(_env, _qClass, _obj);
+      _rewindFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj);
 
       _needNext = false;
     }
@@ -48,12 +49,12 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
     public boolean hasNext()
     {
       if (_needNext) {
-        _nextFun.callMethod(_env, _qClass, _obj);
+        _nextFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj);
       }
 
       _needNext = true;
 
-      return _validFun.callMethod(_env, _qClass, _obj).toBoolean();
+      return _validFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne().toBoolean();
     }
 
     public T next()
@@ -65,12 +66,12 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
 
     protected Value getCurrentKey()
     {
-      return _keyFun.callMethod(_env, _qClass, _obj);
+      return _keyFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne();
     }
 
     protected Value getCurrentValue()
     {
-      return _currentFun.callMethod(_env, _qClass, _obj);
+      return _currentFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne();
     }
 
     public void remove()

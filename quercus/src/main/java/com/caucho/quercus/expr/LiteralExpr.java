@@ -29,11 +29,10 @@
 
 package com.caucho.quercus.expr;
 
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a literal expression.
@@ -127,20 +126,21 @@ public class LiteralExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _value;
+    return VHelper.toV(_value);
   }
 
   @Override
-  public QuercusClass evalQuercusClass(Env env)
+  public V<QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
-    String className = evalString(env);
+    V<String> className = evalString(env, VHelper.noCtx());
 
-    return env.getClass(className);
+    return className.map((a)->env.getClass(a));
   }
 
   public String toString()

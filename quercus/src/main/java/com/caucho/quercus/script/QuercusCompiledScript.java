@@ -36,13 +36,14 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.page.InterpretedPage;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.program.QuercusProgram;
-import com.caucho.vfs.*;
+import com.caucho.vfs.NullWriteStream;
+import com.caucho.vfs.WriteStream;
+import com.caucho.vfs.WriterStreamImpl;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-
 import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,7 +116,7 @@ public class QuercusCompiledScript extends CompiledScript {
       Object result = null;
 
       try {
-        Value value = _program.execute(env);
+        Value value = _program.execute(env).getOne();
 
         if (value != null) {
           //if (value instanceof JavaValue || value instanceof JavaAdapter) {

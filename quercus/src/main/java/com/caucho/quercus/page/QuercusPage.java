@@ -31,15 +31,12 @@ package com.caucho.quercus.page;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.QuercusLanguageException;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -161,7 +158,7 @@ abstract public class QuercusPage
     } catch (QuercusLanguageException e) {
       if (env.getExceptionHandler() != null) {
         try {
-          env.getExceptionHandler().call(env, e.getValue());
+          env.getExceptionHandler().call(env, VHelper.noCtx(), e.getValue());
         }
         catch (QuercusLanguageException e2) {
           uncaughtExceptionError(env, e2);

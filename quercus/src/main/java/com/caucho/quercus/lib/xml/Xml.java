@@ -33,28 +33,15 @@ import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.Reference;
 import com.caucho.quercus.annotation.ResourceType;
-import com.caucho.quercus.env.ArrayValueImpl;
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.CallbackObjectMethod;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import edu.cmu.cs.varex.VHelper;
+import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -869,7 +856,7 @@ public class Xml {
 
         sb.append(">");
 
-        _defaultHandler.call(_env, _parser, sb);
+        _defaultHandler.call(_env, VHelper.noCtx(), _parser, sb);
 
         return;
       }
@@ -896,7 +883,7 @@ public class Xml {
 
       try {
         if (_startElementHandler != null) {
-          _startElementHandler.call(_env, args);
+          _startElementHandler.call(_env, VHelper.noCtx(),args);
         }
         else {
           if (log.isLoggable(Level.FINER))
@@ -932,7 +919,7 @@ public class Xml {
             eName = eName.toUpperCase(Locale.ENGLISH);
           }
 
-          _endElementHandler.call(_env, _parser, _env.createString(eName));
+          _endElementHandler.call(_env, VHelper.noCtx(),_parser, _env.createString(eName));
         }
         else if (_defaultHandler != null) {
           StringValue sb = _env.createStringBuilder();
@@ -941,7 +928,7 @@ public class Xml {
           sb.append(eName);
           sb.append(">");
 
-          _defaultHandler.call(_env, _parser, sb);
+          _defaultHandler.call(_env,VHelper.noCtx(), _parser, sb);
         }
         else {
           if (log.isLoggable(Level.FINER))
@@ -994,9 +981,9 @@ public class Xml {
 
       try {
         if (_characterDataHandler != null)
-          _characterDataHandler.call(_env, _parser, value);
+          _characterDataHandler.call(_env, VHelper.noCtx(),_parser, value);
         else if (_defaultHandler != null)
-          _defaultHandler.call(_env, _parser, value);
+          _defaultHandler.call(_env, VHelper.noCtx(),_parser, value);
         else {
           if (log.isLoggable(Level.FINER))
             log.finer(this + " characters '" + value + "'");
@@ -1019,7 +1006,7 @@ public class Xml {
     {
       try {
         if (_processingInstructionHandler != null) {
-          _processingInstructionHandler.call(_env, _parser,
+          _processingInstructionHandler.call(_env,VHelper.noCtx(), _parser,
                                              _env.createString(target),
                                              _env.createString(data));
         }
@@ -1046,7 +1033,7 @@ public class Xml {
       try {
         if (_startNamespaceDeclHandler != null)
           _startNamespaceDeclHandler.call(
-              _env,
+              _env,    VHelper.noCtx(),
               _env.createString(prefix),
               _env.createString(uri));
         else {
@@ -1070,7 +1057,7 @@ public class Xml {
     {
       try {
         if (_endNamespaceDeclHandler != null)
-          _endNamespaceDeclHandler.call(_env, _env.createString(prefix));
+          _endNamespaceDeclHandler.call(_env,VHelper.noCtx(), _env.createString(prefix));
         else {
           if (log.isLoggable(Level.FINER))
             log.finer(this + " endPrefixMapping");
@@ -1088,7 +1075,7 @@ public class Xml {
     {
       try {
         if (_notationDeclHandler != null)
-          _notationDeclHandler.call(_env,
+          _notationDeclHandler.call(_env,  VHelper.noCtx(),
                                     _parser,
                                     _env.createString(name),
                                     _env.createString(""),
@@ -1130,7 +1117,7 @@ public class Xml {
 
       try {
         if (_unparsedEntityDeclHandler != null)
-          _unparsedEntityDeclHandler.call(_env, args);
+          _unparsedEntityDeclHandler.call(_env, VHelper.noCtx(),args);
         else {
           if (log.isLoggable(Level.FINER))
             log.finer(this + " unparsedEntity " + name);

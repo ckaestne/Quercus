@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 public class ReflectionFunction extends ReflectionFunctionAbstract
   implements Reflector
@@ -82,12 +83,12 @@ public class ReflectionFunction extends ReflectionFunctionAbstract
 
   public Value invoke(Env env, Value []args)
   {
-    return getCallable().call(env, args);
+    return getCallable().call(env, VHelper.noCtx(),args).getOne();
   }
 
   public Value invokeArgs(Env env, ArrayValue args)
   {
-    return getCallable().call(env, args.getValueArray(env));
+    return getCallable().call(env, VHelper.noCtx(),args.getValueArray(env)).getOne();
   }
 
   @Override

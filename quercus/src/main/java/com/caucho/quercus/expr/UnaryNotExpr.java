@@ -33,6 +33,8 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a PHP boolean negation
@@ -59,17 +61,17 @@ public class UnaryNotExpr extends AbstractUnaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _expr.evalBoolean(env) ? BooleanValue.FALSE : BooleanValue.TRUE;
+    return _expr.evalBoolean(env, ctx).map((a)->a ? BooleanValue.FALSE : BooleanValue.TRUE);
   }
 
   /**
    * Evaluates the equality as a boolean.
    */
-  public boolean evalBoolean(Env env)
+  public V<Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    return ! _expr.evalBoolean(env);
+    return  _expr.evalBoolean(env, ctx).map((a)->!a);
   }
 
   public String toString()

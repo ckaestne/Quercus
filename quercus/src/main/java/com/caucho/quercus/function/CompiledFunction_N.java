@@ -34,6 +34,8 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -76,7 +78,7 @@ abstract public class CompiledFunction_N extends CompiledFunction {
     return args;
   }
 
-  public final Value call(Env env, Value []argValues)
+  public final V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
   {
     /*
     Value []args = argValues;
@@ -92,7 +94,7 @@ abstract public class CompiledFunction_N extends CompiledFunction {
       System.arraycopy(argValues, 0, args, 0, argValues.length);
 
       for (int i = argValues.length; i < _defaultArgs.length; i++) {
-        args[i] = _defaultArgs[i].copy();
+        args[i] = _defaultArgs[i].map((a)->a.copy());
       }
     }
     */
@@ -101,10 +103,10 @@ abstract public class CompiledFunction_N extends CompiledFunction {
       env.warning("required argument missing");
     }
 
-    return callImpl(env, argValues);
+    return callImpl(env, ctx, argValues);
   }
 
-  abstract public Value callImpl(Env env, Value []args);
+  abstract public V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value[] args);
 
   public String toString()
   {

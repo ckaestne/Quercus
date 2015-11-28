@@ -34,6 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -53,7 +54,7 @@ public class BooleanMarshal extends Marshal {
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return expr.evalBoolean(env) ? Boolean.TRUE : Boolean.FALSE;
+    return expr.evalBoolean(env, VHelper.noCtx()).getOne() ? Boolean.TRUE : Boolean.FALSE;
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

@@ -34,6 +34,8 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
 
@@ -67,35 +69,35 @@ abstract public class CompiledFunction_2 extends CompiledFunction {
     return args;
   }
 
-  public Value call(Env env, Value []argValues)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
   {
     switch (argValues.length) {
     case 0:
-      return call(env,
+      return call(env, ctx,
                   _args[0].eval(env),
                   _args[1].eval(env));
     case 1:
-      return call(env,
+      return call(env, ctx,
                   argValues[0],
                   _args[1].eval(env));
     case 2:
     default:
-      return call(env,
+      return call(env, ctx,
                   argValues[0],
                   argValues[1]);
     }
   }
 
-  public Value call(Env env)
+  public V<? extends Value> call(Env env, FeatureExpr ctx)
   {
-    return call(env,
+    return call(env, ctx,
                 _args[0].eval(env),
                 _args[1].eval(env));
   }
 
-  public Value call(Env env, Value a0)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value a0)
   {
-    return call(env, a0, _args[1].eval(env));
+    return call(env, ctx, a0, _args[1].eval(env));
   }
 
   public String toString()

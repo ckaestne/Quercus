@@ -33,6 +33,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.parser.QuercusParser;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP string literal expression.
@@ -136,11 +139,12 @@ public class LiteralStringExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _value;
+    return VHelper.toV(_value);
   }
 
   /**
@@ -148,12 +152,13 @@ public class LiteralStringExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public StringValue evalStringValue(Env env)
+  public V<StringValue> evalStringValue(Env env, FeatureExpr ctx)
   {
-    return _value;
+    return VHelper.toV(_value);
   }
 
   @Override

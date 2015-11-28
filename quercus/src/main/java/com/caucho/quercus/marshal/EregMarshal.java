@@ -31,10 +31,10 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.lib.regexp.Ereg;
 import com.caucho.quercus.lib.regexp.RegexpModule;
-import com.caucho.quercus.lib.regexp.Regexp;
-import com.caucho.quercus.expr.Expr;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -44,7 +44,7 @@ public class EregMarshal extends StringMarshal {
 
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return RegexpModule.createEreg(env, expr.eval(env));
+    return RegexpModule.createEreg(env, expr.eval(env, VHelper.noCtx()).getOne());
   }
 
   public Object marshal(Env env, Value value, Class expectedClass)

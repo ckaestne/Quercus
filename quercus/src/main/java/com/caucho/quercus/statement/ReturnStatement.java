@@ -34,6 +34,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a return expression statement in a PHP program.
@@ -63,12 +66,12 @@ public class ReturnStatement extends Statement {
    * Executes the statement, returning the expression value.
    */
   @Override
-  public Value execute(Env env)
+  public V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     if (_expr != null)
-      return _expr.evalValue(env);
+      return _expr.evalValue(env, VHelper.noCtx());
     else
-      return NullValue.NULL;
+      return VHelper.toV(NullValue.NULL);
   }
 
   /**

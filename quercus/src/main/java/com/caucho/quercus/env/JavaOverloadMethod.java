@@ -32,6 +32,9 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents the introspected static function information.
@@ -168,20 +171,20 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
    * Evaluates the function.
    */
   @Override
-  public Value callMethod(Env env, QuercusClass qClass, Value qThis,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+                                       Value []args)
   {
     if (args.length < _methodTable.length) {
       AbstractJavaMethod []methods = _methodTable[args.length];
 
       if (methods != null) {
         if (methods.length == 1)
-          return methods[0].callMethod(env, qClass, qThis, args);
+          return methods[0].callMethod(env, ctx, qClass, qThis, args);
         else {
           AbstractJavaMethod method
             = getBestFitJavaMethod(methods, _restMethodTable, args);
 
-          return method.callMethod(env, qClass, qThis, args);
+          return method.callMethod(env, ctx,qClass, qThis, args);
         }
       }
       else {
@@ -192,13 +195,13 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
             getName(),
             args.length));
 
-          return NullValue.NULL;
+          return VHelper.toV(NullValue.NULL);
         }
 
         AbstractJavaMethod method
           = getBestFitJavaMethod(methods, _restMethodTable, args);
 
-        return method.callMethod(env, qClass, qThis, args);
+        return method.callMethod(env, ctx,qClass, qThis, args);
       }
     }
     else {
@@ -207,13 +210,13 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
           "'{0}' overloaded method call with {1} "
           + "arguments has too many arguments", getName(), args.length));
 
-        return NullValue.NULL;
+        return VHelper.toV(NullValue.NULL);
       }
       else {
         AbstractJavaMethod method
           = getBestFitJavaMethod(null, _restMethodTable, args);
 
-        return method.callMethod(env, qClass, qThis, args);
+        return method.callMethod(env, ctx,qClass, qThis, args);
       }
     }
   }

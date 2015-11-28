@@ -35,6 +35,8 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.statement.Statement;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents an expression that is assignable
@@ -120,32 +122,35 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  abstract public Value eval(Env env);
+  abstract public V<? extends Value> eval(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression as a reference (by RefExpr).
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  abstract public Var evalVar(Env env);
+  abstract public V<Var> evalVar(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression as a reference when possible.
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalRef(Env env)
+  public V<? extends Value> evalRef(Env env, FeatureExpr ctx)
   {
-    return evalVar(env);
+    return evalVar(env, ctx);
   }
 
   /**
@@ -153,12 +158,13 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArg(Env env, boolean isTop)
+  public V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return evalVar(env);
+    return evalVar(env, ctx);
   }
 
   /**
@@ -166,12 +172,13 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalCopy(Env env)
+  public V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env).copy();
+    return eval(env, ctx).map((a)->a.copy());
   }
 
   /**
@@ -179,12 +186,13 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalArray(Env env)
+  public V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    return evalVar(env).toAutoArray();
+    return evalVar(env, ctx).map((a)->a.toAutoArray());
   }
 
   /**
@@ -192,12 +200,13 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value evalObject(Env env)
+  public V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    return evalVar(env).toObject(env);
+    return evalVar(env, ctx).map((a)->a.toObject(env));
   }
 
   /**
@@ -214,12 +223,14 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignValue(Env env, Value value)
+  public V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    return evalAssignRef(env, value);
+    return evalAssignRef(env, ctx, value);
   }
 
   /**
@@ -227,8 +238,10 @@ abstract public class AbstractVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
-  abstract public Value evalAssignRef(Env env, Value value);
+  abstract public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value);
 }
 

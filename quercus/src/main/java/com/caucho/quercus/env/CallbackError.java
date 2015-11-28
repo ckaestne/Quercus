@@ -30,6 +30,9 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.Arg;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a call to an object's method
@@ -44,9 +47,9 @@ public class CallbackError extends Callback {
   }
 
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
-    return NullValue.NULL;
+    return VHelper.toV(NullValue.NULL);
   }
 
   @Override

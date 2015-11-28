@@ -33,6 +33,8 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.Arg;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 /**
  * Represents a compiled method with 0 args
@@ -52,72 +54,72 @@ abstract public class CompiledMethod extends CompiledAbstractFunction {
   }
 
   @Override
-  public Value call(Env env, Value []args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
     throw new IllegalStateException(getClass().getName());
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value []args)
   {
-    return callMethod(env, qClass, qThis, args).copyReturn();
+    return callMethod(env, ctx, qClass, qThis, args).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis)
   {
     // php/37a2
-    return callMethod(env, qClass, qThis).copyReturn();
+    return callMethod(env, ctx, qClass, qThis).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1)
   {
-    return callMethod(env, qClass, qThis, a1).copyReturn();
+    return callMethod(env, ctx, qClass, qThis, a1).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2)
   {
-    return callMethod(env, qClass, qThis, a1, a2).copyReturn();
+    return callMethod(env, ctx, qClass, qThis, a1, a2).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3)
   {
-    return callMethod(env, qClass, qThis, a1, a2, a3).copyReturn();
+    return callMethod(env, ctx, qClass, qThis, a1, a2, a3).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3, Value a4)
   {
-    return callMethod(env, qClass, qThis, a1, a2, a3, a4).copyReturn();
+    return callMethod(env, ctx, qClass, qThis, a1, a2, a3, a4).map((a)->a.copyReturn());
   }
 
   @Override
-  public Value callMethodRef(Env env,
+  public V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                              Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return callMethod(env, qClass, qThis, a1, a2, a3, a4, a5).copyReturn();
+    return callMethod(env, ctx, qClass, qThis, a1, a2, a3, a4, a5).map((a)->a.copyReturn());
   }
 }
 

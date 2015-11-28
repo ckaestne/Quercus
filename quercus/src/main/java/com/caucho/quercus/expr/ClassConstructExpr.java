@@ -29,13 +29,16 @@
 
 package com.caucho.quercus.expr;
 
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.util.ArrayList;
 
 /**
  * A Foo::__construct(...) method call expression.
@@ -75,9 +78,10 @@ public class ClassConstructExpr extends AbstractMethodExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);
 
@@ -85,7 +89,7 @@ public class ClassConstructExpr extends AbstractMethodExpr {
       env.error(L.l("no matching class {0}", _className), getLocation());
     }
 
-    Value []values = evalArgs(env, _args);
+    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
 
     Value oldThis = env.getThis();
 
@@ -97,7 +101,7 @@ public class ClassConstructExpr extends AbstractMethodExpr {
     try {
       env.checkTimeout();
 
-      return cl.callConstructor(env, qThis, values);
+      return VHelper.toV(cl.callConstructor(env, qThis, values));
     } finally {
       env.popCall();
       env.setThis(oldThis);

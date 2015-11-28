@@ -33,6 +33,9 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP bitwise not expression.
@@ -61,13 +64,14 @@ public class UnaryBitNotExpr extends AbstractUnaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    long lValue = _expr.evalLong(env);
+    V<Long> lValue = _expr.evalLong(env, VHelper.noCtx());
 
-    return LongValue.create(~ lValue);
+    return lValue.map((a)->LongValue.create(~ a.longValue()));
   }
 
   public String toString()

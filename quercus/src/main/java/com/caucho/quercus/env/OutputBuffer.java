@@ -30,12 +30,15 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.lib.OutputModule;
-import com.caucho.vfs.*;
+import com.caucho.vfs.TempBuffer;
+import com.caucho.vfs.TempStream;
+import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a PHP output buffer
@@ -274,8 +277,8 @@ public class OutputBuffer {
     if (_callback == null || ! _callback.isValid(_env))
       return false;
 
-    Value result = 
-      _callback.call(_env, getContents(), LongValue.create(_state));
+    Value result =
+      _callback.call(_env, VHelper.noCtx(), getContents(), LongValue.create(_state)).getOne();
 
     // special code to do nothing to the buffer
     if (result.toValue() != BooleanValue.FALSE) {

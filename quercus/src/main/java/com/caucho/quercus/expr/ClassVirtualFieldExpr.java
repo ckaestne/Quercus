@@ -29,9 +29,6 @@
 
 package com.caucho.quercus.expr;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
@@ -39,6 +36,12 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents a PHP static field reference.
@@ -78,14 +81,15 @@ public class ClassVirtualFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     Value qThis = env.getThis();
 
-    return qThis.getStaticFieldValue(env, _varName);
+    return VHelper.toV(qThis.getStaticFieldValue(env, _varName));
   }
 
   /**
@@ -93,14 +97,15 @@ public class ClassVirtualFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
   @Override
-  public Var evalVar(Env env)
+  public V<Var> evalVar(Env env, FeatureExpr ctx)
   {
     Value qThis = env.getThis();
 
-    return qThis.getStaticFieldVar(env, _varName);
+    return VHelper.toV(qThis.getStaticFieldVar(env, _varName));
   }
 
   /**
@@ -108,14 +113,16 @@ public class ClassVirtualFieldExpr extends AbstractVarExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
+   * @param value
    * @return the expression value.
    */
   @Override
-  public Value evalAssignRef(Env env, Value value)
+  public V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     Value qThis = env.getThis();
 
-    return qThis.setStaticFieldRef(env, _varName, value);
+    return VHelper.toV(qThis.setStaticFieldRef(env, _varName, value.getOne()));
   }
 
   /**

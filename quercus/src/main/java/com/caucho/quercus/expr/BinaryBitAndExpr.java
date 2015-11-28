@@ -31,8 +31,10 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP bitwise and expression.
@@ -61,14 +63,15 @@ public class BinaryBitAndExpr extends AbstractBinaryExpr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public Value eval(Env env)
+  public V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value lValue = _left.eval(env);
-    Value rValue = _right.eval(env);
+    V<? extends Value> lValue = _left.eval(env, ctx);
+    V<? extends Value> rValue = _right.eval(env, ctx);
 
-    return lValue.bitAnd(rValue);
+    return VHelper.mapAll(lValue,rValue,(l, r)-> l.bitAnd(r));
   }
 
   public String toString()
