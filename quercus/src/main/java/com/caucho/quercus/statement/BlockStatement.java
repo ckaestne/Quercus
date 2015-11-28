@@ -113,7 +113,7 @@ public class BlockStatement extends Statement {
       }
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

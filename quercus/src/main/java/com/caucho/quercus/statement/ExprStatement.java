@@ -72,7 +72,7 @@ public class ExprStatement extends Statement {
 
     env.setLocation(oldLocation);
 
-    return null;
+    return V.one(null);
   }
 }
 

@@ -389,7 +389,7 @@ public class CompiledClassDef extends ClassDef {
   @Override
   public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
   {
-    return null;
+    return V.one(null);
   }
 
   /**
@@ -398,7 +398,7 @@ public class CompiledClassDef extends ClassDef {
   @Override
   public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
   {
-    return null;
+    return V.one(null);
   }
 }
 

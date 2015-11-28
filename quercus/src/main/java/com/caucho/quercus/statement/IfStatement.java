@@ -91,7 +91,7 @@ public class IfStatement extends Statement {
       return _falseBlock.execute(env, VHelper.noCtx());
     }
     else
-      return null;
+      return V.one(null);
   }
 }
 
