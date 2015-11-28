@@ -7,7 +7,7 @@ import java.util.function.Function;
  * Created by ckaestne on 11/27/2015.
  */
 public class One<T> implements V<T> {
-    private final T value;
+    final T value;
 
     public One(T v) {
         this.value = v;

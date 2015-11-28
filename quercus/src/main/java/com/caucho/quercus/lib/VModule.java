@@ -35,7 +35,6 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
-import edu.cmu.cs.varex.Choice;
 import edu.cmu.cs.varex.V;
 
 import java.util.logging.Logger;
@@ -56,11 +55,11 @@ public class VModule extends AbstractQuercusModule {
     }
 
     public <T extends Value> V<T> create_conditional_value(FeatureExpr condition, T value, T elseValue) {
-        return new Choice<T>(condition, value, elseValue);
+        return V.choice(condition, value, elseValue);
     }
 
     public V<BooleanValue> create_conditional(StringValue condition) {
-        return new Choice<BooleanValue>(FeatureExprFactory.createDefinedExternal(condition.toString()), BooleanValue.TRUE, BooleanValue.FALSE);
+        return V.choice(FeatureExprFactory.createDefinedExternal(condition.toString()), BooleanValue.TRUE, BooleanValue.FALSE);
     }
 
 
