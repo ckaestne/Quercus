@@ -36,6 +36,19 @@ import edu.cmu.cs.varex.V;
  * Encapsulates an environment entry for a variable.  The EnvVar is a
  * container for Vars.
  *
+ * Varex Design Notes:
+ *
+ *  - A Var holds exactly one value (not variational); it is essentially a pointer
+ *    for pass by reference assignments
+ *
+ *  - A value represents exactly one value (not variational)
+ *
+ *  - A EnvVar represents the value of one variable (there is a map from
+ *    variable names to EnvVar in Env) and this can point to multiple variables.
+ *    This is where all the splitting and joining must happen for both
+ *    assign by value (set) and assign by reference (setVar)
+ *
+ *
  * One per name, usually no need for V<EnvVar>
  */
 abstract public class EnvVar

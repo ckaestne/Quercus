@@ -10,16 +10,19 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.13"
 
 libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.3.7"
 
-libraryDependencies += "de.fosd.typechef" % "conditionallib_2.11" % "0.3.7"
+libraryDependencies += "de.fosd.typechef" % "conditionallib_2.11" % "0.3.7" % "test"
 
 libraryDependencies += "net.liftweb" %% "lift-testkit" % "2.6.2" % "test"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 
-
 libraryDependencies += "org.bitbucket.cowwoc.diff-match-patch" % "diff-match-patch" % "1.0" % "test"
 
+libraryDependencies += "org.scala-lang.modules" % "scala-java8-compat_2.11" % "0.7.0" % "test"
+
 libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
+
+
 
 //libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
 //

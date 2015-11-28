@@ -59,4 +59,17 @@ public class One<T> implements V<T> {
     public FeatureExpr when(Predicate<T> condition) {
         return condition.test(value) ? FeatureExprFactory.True() : FeatureExprFactory.False();
     }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof One) {
+            return ((One)obj).value.equals(value);
+        }
+        return super.equals(obj);
+    }
 }
