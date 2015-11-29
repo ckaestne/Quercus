@@ -65,15 +65,15 @@ abstract public class Callback extends Value implements Callable {
 
     V<? extends Value> result;
 
-    if (a1 instanceof Var) {
-      a1 = new ArgRef((Var) a1);
+    if (a1.isVar()) {
+      a1 = new ArgRef(a1._var());
 
-      result = call(env, ctx, a1);
+      result = call(env, ctx, a1._value());
     }
     else {
-      Value aVar = new Var(a1);
+      Var aVar = new Var(V.one(a1._value()));
 
-      result = call(env, ctx, aVar);
+      result = call(env, ctx, aVar.toValue()); //TODO check V
 
       Value aNew = aVar.toValue();
 
@@ -105,13 +105,13 @@ abstract public class Callback extends Value implements Callable {
 
     V<? extends Value> result;
 
-    if (a1 instanceof Var) {
-      a1 = new ArgRef((Var) a1);
+    if (a1.isVar()) {
+      a1 = new ArgRef(a1._var());
 
       result = call(env, ctx, a1, a2);
     }
     else {
-      Value aVar = new Var(a1);
+      Value aVar = new Var(V.one(a1)).toValue();
 
       result = call(env, ctx, aVar, a2);
 
@@ -146,13 +146,13 @@ abstract public class Callback extends Value implements Callable {
 
     V<? extends Value> result;
 
-    if (a1 instanceof Var) {
-      a1 = new ArgRef((Var) a1);
+    if (a1.isVar()) {
+      a1 = new ArgRef(a1._var());
 
       result = call(env, ctx, a1, a2, a3);
     }
     else {
-      Value aVar = new Var(a1);
+      Value aVar = new Var(V.one(a1)).toValue();
 
       result = call(env, ctx, aVar, a2, a3);
 

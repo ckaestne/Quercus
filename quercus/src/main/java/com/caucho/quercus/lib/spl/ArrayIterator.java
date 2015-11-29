@@ -53,8 +53,8 @@ public class ArrayIterator
   private Value _value = NullValue.NULL;
   private int _flags;
 
-  private java.util.Iterator<Map.Entry<Value,Value>> _iterator;
-  private Map.Entry<Value, Value> _current;
+  private java.util.Iterator<Map.Entry<Value,EnvVar>> _iterator;
+  private Map.Entry<Value, EnvVar> _current;
 
   public ArrayIterator(Env env,
                        @This Value qThis,
@@ -96,7 +96,7 @@ public class ArrayIterator
   @Override
   public Value current(Env env)
   {
-    return _current == null ? UnsetValue.UNSET : _current.getValue();
+    return _current == null ? UnsetValue.UNSET : _current.getValue().getOne();
   }
 
   public Value getArrayCopy()
@@ -147,13 +147,13 @@ public class ArrayIterator
   @Override
   public boolean offsetExists(Env env, Value offset)
   {
-    return _value.get(offset).isset();
+    return _value.get(offset).getOne().isset();
   }
 
   @Override
   public Value offsetGet(Env env, Value offset)
   {
-    return _value.get(offset);
+    return _value.get(offset).getOne();
   }
 
   @Override
@@ -260,14 +260,14 @@ public class ArrayIterator
 
       depth++;
 
-      java.util.Iterator<Map.Entry<Value,Value>> iterator
+      java.util.Iterator<Map.Entry<Value,EnvVar>> iterator
         = arrayValue.getIterator(env);
 
       while (iterator.hasNext()) {
-        Map.Entry<Value, Value> entry = iterator.next();
+        Map.Entry<Value, EnvVar> entry = iterator.next();
 
         Value key = entry.getKey();
-        Value value = entry.getValue();
+        EnvVar value = entry.getValue();
 
         printDepth(out, 2 * depth);
 
@@ -282,7 +282,7 @@ public class ArrayIterator
 
         printDepth(out, 2 * depth);
 
-        value.varDump(env, out, depth, valueSet);
+        value.getOne().varDump(env, out, depth, valueSet);
 
         out.println(VHelper.noCtx());
       }

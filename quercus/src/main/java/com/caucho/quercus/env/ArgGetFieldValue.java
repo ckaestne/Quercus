@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.V;
+
 /**
  * Represents an field-get argument which might be a call to a reference.
  */
@@ -48,20 +50,20 @@ public class ArgGetFieldValue extends ArgValue {
    * Creates an argument which may create the given field.
    */
   @Override
-  public Value getArg(Value name, boolean isTop)
+  public EnvVar getArg(Value name, boolean isTop)
   {
     // php/3d1q
-    return new ArgGetValue(this, name);
+    return EnvVar._gen(new ArgGetValue(this, name));
   }
 
   /**
    * Creates an argument which may create the given field.
    */
   @Override
-  public Value getFieldArg(Env env, StringValue name, boolean isTop)
+  public Var getFieldArg(Env env, StringValue name, boolean isTop)
   {
     // php/3d2q
-    return new ArgGetFieldValue(env, this, name);
+    return new ArgGetFieldValue(env, this, name).toVar();
   }
 
   /**
@@ -71,7 +73,7 @@ public class ArgGetFieldValue extends ArgValue {
   public Var toLocalVarDeclAsRef()
   {
     // php/3d2t
-    return _obj.toAutoObject(_env).getFieldVar(_env, _name).toLocalVarDeclAsRef();
+    return _obj.toAutoObject(_env).getFieldVar(_env, _name)/*.toLocalVarDeclAsRef()*/;
   }
 
   /**
@@ -157,7 +159,7 @@ public class ArgGetFieldValue extends ArgValue {
   @Override
   public Value toRefValue()
   {
-    return _obj.getFieldVar(_env, _name);
+    return _obj.getFieldVar(_env, _name).getValue().getOne();
   }
 
   /**
@@ -165,14 +167,14 @@ public class ArgGetFieldValue extends ArgValue {
    */
   public Var toVar()
   {
-    return new Var(toValue());
+    return new Var(V.one(toValue()));
   }
 
   /**
    * Converts to a reference variable.
    */
   @Override
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
     return _obj.getFieldArray(_env, _name).getVar(index);
   }

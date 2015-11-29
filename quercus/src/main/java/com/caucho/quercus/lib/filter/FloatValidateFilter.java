@@ -60,7 +60,7 @@ public class FloatValidateFilter
       }
 
       if (options != null) {
-        Value decimalSeparator = options.get(env.createString("decimal"));
+        Value decimalSeparator = options.get(env.createString("decimal")).getOne();
 
         if (decimalSeparator.isString()) {
           if (decimalSeparator.length() > 1) {

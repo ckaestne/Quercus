@@ -132,12 +132,12 @@ abstract public class JavaAdapter extends ArrayValue
   {
     Value obj = env.createObject();
 
-    for (Map.Entry<Value,Value> entry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
       Value key = entry.getKey();
 
       if (key instanceof StringValue) {
         // XXX: intern?
-        obj.putField(env, key.toString(), entry.getValue());
+        obj.putField(env, key.toString(), entry.getValue().getOne());
       }
     }
 
@@ -257,7 +257,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Copy for serialization
    */
   @Override
-  abstract public Value copy(Env env, IdentityHashMap<Value,Value> map);
+  abstract public Value copy(Env env, IdentityHashMap<Value, EnvVar> map);
 
   /**
    * Returns the size.
@@ -316,7 +316,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     return get(index);
   }
@@ -348,7 +348,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Gets a new value.
    */
   @Override
-  abstract public Value get(Value key);
+  abstract public EnvVar get(Value key);
 
   /**
    * Removes a value.
@@ -360,15 +360,15 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns the array ref.
    */
   @Override
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
     // php/0ceg - Since Java does not support references, the adapter
     // just creates a new Var, but modifying the var will not modify
     // the field
 
-    Var var = new Var(new JavaAdapterVar(this, index));
+    Var var = new Var(V.one(new JavaAdapterVar(this, index)));
 
-    return var;
+    return new EnvVarImpl(V.one(var));
   }
 
   /**
@@ -384,7 +384,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns a set of all the entries.
    */
   @Override
-  abstract public Set<Map.Entry<Value,Value>> entrySet();
+  abstract public Set<Map.Entry<Value, EnvVar>> entrySet();
 
   /**
    * Returns a java object set of all the entries.
@@ -395,7 +395,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns a collection of the values.
    */
   @Override
-  public Collection<Value> values()
+  public Collection<EnvVar> values()
   {
     throw new UnimplementedException();
   }
@@ -406,7 +406,7 @@ abstract public class JavaAdapter extends ArrayValue
    * XXX: change name to appendArg
    */
   @Override
-  public ArrayValue append(Value key, Value value)
+  public ArrayValue append(Value key, EnvVar value)
   {
     put(key, value);
 
@@ -534,7 +534,7 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public Value contains(Value value)
   {
-    for (Map.Entry<Value,Value> entry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
       if (entry.getValue().equals(value))
         return entry.getKey();
     }
@@ -552,8 +552,8 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public Value containsStrict(Value value)
   {
-    for (Map.Entry<Value,Value> entry : entrySet()) {
-      if (entry.getValue().eql(value))
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+      if (entry.getValue().getOne().eql(value))
         return entry.getKey();
     }
 
@@ -579,11 +579,11 @@ abstract public class JavaAdapter extends ArrayValue
    *
    * @return an object array of this array
    */
-  @Override
-  public Map.Entry<Value, Value>[] toEntryArray()
-  {
-    throw new UnsupportedOperationException();
-  }
+//  @Override
+//  public Map.Entry<Value, EnvVar>[] toEntryArray()
+//  {
+//    throw new UnsupportedOperationException();
+//  }
 
   /**
    * Sorts this array based using the passed Comparator
@@ -593,13 +593,13 @@ abstract public class JavaAdapter extends ArrayValue
    * @param strict  true if alphabetic keys should not be preserved
    */
   @Override
-  public void sort(Comparator<Map.Entry<Value, Value>> comparator,
+  public void sort(Comparator<Map.Entry<Value, EnvVar>> comparator,
                    boolean resetKeys, boolean strict)
   {
-    Map.Entry<Value,Value>[] entries = new Map.Entry[getSize()];
+    Map.Entry<Value,EnvVar>[] entries = new Map.Entry[getSize()];
 
     int i = 0;
-    for (Map.Entry<Value,Value> entry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
       entries[i++] = entry;
     }
 
@@ -662,8 +662,8 @@ abstract public class JavaAdapter extends ArrayValue
 
     int i = 0;
 
-    for (Map.Entry<Value,Value> entry : entrySet()) {
-      values[i++] = entry.getValue();
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+      values[i++] = entry.getValue().getOne();
     }
 
     return values;
@@ -685,9 +685,9 @@ abstract public class JavaAdapter extends ArrayValue
 
     int i = 0;
 
-    for (Map.Entry<Value, Value> entry : entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : entrySet()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-                                                   entry.getValue(),
+                                                   entry.getValue().getOne(),
                                                    elementType));
     }
 
@@ -895,7 +895,7 @@ abstract public class JavaAdapter extends ArrayValue
 
     int nestedDepth = depth + 1;
 
-    for (Map.Entry<Value,Value> mapEntry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
       printDepth(out, nestedDepth * 2);
       out.print(VHelper.noCtx(), "[");
 
@@ -910,7 +910,7 @@ abstract public class JavaAdapter extends ArrayValue
 
       printDepth(out, nestedDepth * 2);
 
-      mapEntry.getValue().varDump(env, out, nestedDepth, valueSet);
+      mapEntry.getValue().getOne().varDump(env, out, nestedDepth, valueSet);
 
       out.println(VHelper.noCtx());
     }
@@ -931,14 +931,14 @@ abstract public class JavaAdapter extends ArrayValue
     printDepth(out, 8 * depth);
     out.println(VHelper.noCtx(), "(");
 
-    for (Map.Entry<Value,Value> mapEntry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
       printDepth(out, 8 * depth);
 
       out.print(VHelper.noCtx(), "    [");
       out.print(VHelper.noCtx(), mapEntry.getKey());
       out.print(VHelper.noCtx(), "] => ");
 
-      Value value = mapEntry.getValue();
+      Value value = mapEntry.getValue().getOne();
 
       if (value != null)
         value.printR(env, out, depth + 1, valueSet);

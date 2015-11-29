@@ -83,13 +83,13 @@ public class HtmlModule extends AbstractQuercusModule {
   {
     ArrayValueImpl copy = new ArrayValueImpl();
 
-    Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+    Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
 
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
       if (key.isString())
         key = key.toUnicodeValue(env);
@@ -453,7 +453,7 @@ public class HtmlModule extends AbstractQuercusModule {
         else if (ch == ';') {
           // If so substitute the entity and add it to result.
           StringValue entity = string.substring(htmlEntityStart, i + 1);
-          Value value = htmlEntities.get(entity);
+          Value value = htmlEntities.get(entity).getOne();
 
           if (value.isNull()) {
             result.append(entity);

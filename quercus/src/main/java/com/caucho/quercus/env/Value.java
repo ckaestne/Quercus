@@ -37,6 +37,7 @@ import com.caucho.quercus.program.ClassField;
 import com.caucho.util.L10N;
 import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -55,7 +56,7 @@ import java.util.*;
  * Represents a PHP expression value.
  */
 @SuppressWarnings("serial")
-abstract public class Value implements java.io.Serializable
+abstract public class Value implements java.io.Serializable, ValueOrVar
 {
   protected static final L10N L = new L10N(Value.class);
 
@@ -675,7 +676,7 @@ abstract public class Value implements java.io.Serializable
    */
   public ArrayValue toArray()
   {
-    return new ArrayValueImpl().append(this);
+    return new ArrayValueImpl().append(EnvVar._gen(this));
   }
 
   /**
@@ -1018,7 +1019,7 @@ abstract public class Value implements java.io.Serializable
    */
   public Var toLocalVarDeclAsRef()
   {
-    return new Var(this);
+    return new Var(V.one(this));
   }
 
   /**
@@ -1046,7 +1047,7 @@ abstract public class Value implements java.io.Serializable
    */
   public Var toVar()
   {
-    return new Var(this);
+    return new Var(V.one(this));
   }
 
   /**
@@ -1329,13 +1330,13 @@ abstract public class Value implements java.io.Serializable
    */
   public final Value copy(Env env)
   {
-    return copy(env, new IdentityHashMap<Value,Value>());
+    return copy(env, new IdentityHashMap<Value,EnvVar>());
   }
 
   /**
    * Copy for serialization
    */
-  public Value copy(Env env, IdentityHashMap<Value,Value> map)
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     return this;
   }
@@ -2246,7 +2247,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns an iterator for the key => value pairs.
    */
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
   {
     return getBaseIterator(env);
   }
@@ -2254,9 +2255,9 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns an iterator for the key => value pairs.
    */
-  public Iterator<Map.Entry<Value, Value>> getBaseIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getBaseIterator(Env env)
   {
-    Set<Map.Entry<Value, Value>> emptySet = Collections.emptySet();
+    Set<Map.Entry<Value, EnvVar>> emptySet = Collections.emptySet();
 
     return emptySet.iterator();
   }
@@ -2269,7 +2270,7 @@ abstract public class Value implements java.io.Serializable
    */
   public Iterator<Value> getKeyIterator(Env env)
   {
-    final Iterator<Map.Entry<Value, Value>> iter = getIterator(env);
+    final Iterator<Map.Entry<Value, EnvVar>> iter = getIterator(env);
 
     return new Iterator<Value>() {
       public boolean hasNext() { return iter.hasNext(); }
@@ -2300,13 +2301,13 @@ abstract public class Value implements java.io.Serializable
    * by {@link #getIterator(Env)}; derived classes may override and
    * provide a more efficient implementation.
    */
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
-    final Iterator<Map.Entry<Value, Value>> iter = getIterator(env);
+    final Iterator<Map.Entry<Value, EnvVar>> iter = getIterator(env);
 
-    return new Iterator<Value>() {
+    return new Iterator<EnvVar>() {
       public boolean hasNext() { return iter.hasNext(); }
-      public Value next()      { return iter.next().getValue(); }
+      public EnvVar next()      { return iter.next().getValue(); }
       public void remove()     { iter.remove(); }
     };
   }
@@ -2334,7 +2335,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns the field used as a method argument
    */
-  public Value getFieldArg(Env env, StringValue name, boolean isTop)
+  public Var getFieldArg(Env env, StringValue name, boolean isTop)
   {
     return getFieldVar(env, name);
   }
@@ -2342,7 +2343,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns the field ref for an argument.
    */
-  public Value getFieldArgRef(Env env, StringValue name)
+  public Var getFieldArgRef(Env env, StringValue name)
   {
     return getFieldVar(env, name);
   }
@@ -2381,7 +2382,7 @@ abstract public class Value implements java.io.Serializable
     }
     else if (array.isString()) {
       // php/0484
-      return getFieldVar(env, name);
+      return getFieldVar(env, name).getValue().getOne();
     }
     else {
       return v;
@@ -2463,7 +2464,8 @@ abstract public class Value implements java.io.Serializable
                                    Value value)
   {
     // php/03mm
-    return put(index, value);
+    throw new UnimplementedVException();
+//    return put(index, value);
   }
 
   /**
@@ -2485,7 +2487,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns the field used as a method argument
    */
-  public Value getThisFieldArg(Env env, StringValue name)
+  public Var getThisFieldArg(Env env, StringValue name)
   {
     return getThisFieldVar(env, name);
   }
@@ -2493,7 +2495,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns the field ref for an argument.
    */
-  public Value getThisFieldArgRef(Env env, StringValue name)
+  public Var getThisFieldArgRef(Env env, StringValue name)
   {
     return getThisFieldVar(env, name);
   }
@@ -2643,7 +2645,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Sets the static field.
    */
-  public Value setStaticFieldRef(Env env, StringValue name, Value value)
+  public Var setStaticFieldRef(Env env, StringValue name, Value value)
   {
     env.error(L.l("No calling class found for '{0}'", this));
 
@@ -2659,38 +2661,41 @@ abstract public class Value implements java.io.Serializable
     return putThisField(env, env.createString(name), value);
   }
 
+
+
   /**
    * Returns the array ref.
    */
-  public Value get(Value index)
+  public EnvVar get(Value index)
   {
-    return UnsetValue.UNSET;
+    return EnvVar._gen(UnsetValue.UNSET);
   }
 
   /**
    * Helper method that calls get(Value).
    */
-  final public Value get(long index) {
+  final public EnvVar get(long index) {
     return get(LongValue.create(index));
   }
 
   /**
    * Returns a reference to the array value.
    */
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
-    Value value = get(index);
-
-    if (value.isVar())
-      return (Var) value;
-    else
-      return new Var(value);
+    throw new UnimplementedVException();
+//    Value value = get(index);
+//
+//    if (value.isVar())
+//      return (Var) value;
+//    else
+//      return new Var(value);
   }
 
   /**
    * Returns a reference to the array value.
    */
-  public Value getRef(Value index)
+  public EnvVar getRef(Value index)
   {
     return get(index);
   }
@@ -2698,7 +2703,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns the array ref as a function argument.
    */
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     return get(index);
   }
@@ -2706,9 +2711,9 @@ abstract public class Value implements java.io.Serializable
   /**
    * Returns the array value, copying on write if necessary.
    */
-  public Value getDirty(Value index)
+  public V<? extends Value> getDirty(Value index)
   {
-    return get(index);
+    return get(index).getValue();
   }
 
   /**
@@ -2726,7 +2731,7 @@ abstract public class Value implements java.io.Serializable
    */
   public Value getArray(Value index)
   {
-    Value var = getVar(index);
+    Value var = getVar(index).getValue().getOne();
 
     return var.toAutoArray();
   }
@@ -2746,7 +2751,7 @@ abstract public class Value implements java.io.Serializable
    */
   public Value getObject(Env env, Value index)
   {
-    Value var = getVar(index);
+    Value var = getVar(index).getValue().getOne();
 
     if (var.isset())
       return var.toValue();
@@ -2770,10 +2775,16 @@ abstract public class Value implements java.io.Serializable
     return value;
   }
 
+  @Deprecated//for V transformation only
+  public Value put(Value index, Value value) {
+    put(index,EnvVar._gen(value));
+    return value;
+  }
+
   /**
    * Sets the array ref and returns the value
    */
-  public Value put(Value index, Value value)
+  public EnvVar put(Value index, EnvVar value)
   {
     Env.getCurrent().warning(L.l("{0} cannot be used as an array",
                                  toDebugString()));
@@ -2784,14 +2795,15 @@ abstract public class Value implements java.io.Serializable
   /**
    * Sets the array ref.
    */
-  public final Value put(Value index, Value value,
+  public final Value put(Value index, EnvVar value,
                          Value innerIndex, Value innerValue)
   {
-    Value result = value.append(innerIndex, innerValue);
+    V<? extends Value> result = value.getValue().map((a)->a.append(innerIndex, innerValue));
 
-    put(index, result);
+    throw new UnimplementedVException();
+//    put(index, result);
 
-    return innerValue;
+//    return innerValue;
   }
 
   /**
@@ -2846,7 +2858,7 @@ abstract public class Value implements java.io.Serializable
   /**
    * Sets the array tail, returning a reference to the tail.
    */
-  public Value getArgTail(Env env, boolean isTop)
+  public Var getArgTail(Env env, boolean isTop)
   {
     return putVar();
   }
@@ -3186,6 +3198,21 @@ abstract public class Value implements java.io.Serializable
   public int hashCode()
   {
     return 1021;
+  }
+
+  @Override
+  public Var _var() {
+    throw new UnsupportedOperationException("called _var on a Value");
+  }
+
+  @Override
+  public Value _value() {
+    return this;
+  }
+
+  @Deprecated //introduced for V transformation as warning
+  public Var makeVar() {
+    return toVar();
   }
 }
 

@@ -480,23 +480,23 @@ public class UnicodeModule extends AbstractQuercusModule {
 
       if (preferences != null) {
         Value tmp = env.createString("scheme");
-        if ((tmp = preferences.get(tmp)).isset())
+        if ((tmp = preferences.get(tmp).getOne()).isset())
           scheme = tmp.toString();
 
         tmp = env.createString("line-break-chars");
-        if ((tmp = preferences.get(tmp)).isset())
+        if ((tmp = preferences.get(tmp).getOne()).isset())
           lineBreakChars = tmp.toString();
 
         tmp = env.createString("input-charset");
-        if ((tmp = preferences.get(tmp)).isset())
+        if ((tmp = preferences.get(tmp).getOne()).isset())
           inCharset = tmp.toString();
 
         tmp = env.createString("output-charset");
-        if ((tmp = preferences.get(tmp)).isset())
+        if ((tmp = preferences.get(tmp).getOne()).isset())
           outCharset = tmp.toString();
 
         tmp = env.createString("line-length");
-        if ((tmp = preferences.get(tmp)).isset()) {
+        if ((tmp = preferences.get(tmp).getOne()).isset()) {
         if (tmp.isLongConvertible())
           lineLength = (int)tmp.toLong();
         }

@@ -210,7 +210,7 @@ public class Function extends AbstractFunction {
       if (arg == null)
         values[i] = args[i].eval(env, VHelper.noCtx()).getOne().copy();
       else if (arg.isReference())
-        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne();
+        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne().makeValue();
       else {
         // php/0d04
         values[i] = args[i].eval(env, VHelper.noCtx()).getOne();
@@ -252,7 +252,7 @@ public class Function extends AbstractFunction {
         values[i] = args[i].eval(env, VHelper.noCtx()).getOne().copy();
       }
       else if (arg.isReference()) {
-        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne();
+        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne().makeValue();
 
         map.put(arg.getName(), new EnvVarImpl(V.one(values[i].toLocalVarDeclAsRef())));
       }
@@ -277,7 +277,7 @@ public class Function extends AbstractFunction {
         return VHelper.toV(env.error("expected default expression"));
       else if (arg.isReference())
         map.put(arg.getName(),
-                new EnvVarImpl(V.one(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar())));
+                new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx())));
       else {
         map.put(arg.getName(),
                 new EnvVarImpl(V.one(defaultExpr.eval(env, VHelper.noCtx()).getOne().copy().toVar())));
@@ -300,8 +300,8 @@ public class Function extends AbstractFunction {
 
       if (value != null)
         return value;
-      else if (_info.isReturnsReference())
-        return VHelper.toV(new Var());
+//      else if (_info.isReturnsReference())      //TODO V not supported
+//        return VHelper.toV(new Var());
       else
         return VHelper.toV(NullValue.NULL);
       /*
@@ -370,7 +370,7 @@ public class Function extends AbstractFunction {
 
         if (arg.getExpectedClass() != null
             && arg.getDefault() instanceof ParamRequiredExpr) {
-          env.checkTypeHint(var,
+          env.checkTypeHint(var.getValue().getOne(),
                             arg.getExpectedClass(),
                             arg.getName().toString(),
                             getName());
@@ -390,7 +390,7 @@ public class Function extends AbstractFunction {
         if (defaultExpr == null)
           return VHelper.toV(env.error("expected default expression"));
         else if (arg.isReference())
-          map.put(arg.getName(), new EnvVarImpl(V.one(defaultExpr.evalVar(env, VHelper.noCtx()).getOne().toVar())));
+          map.put(arg.getName(), new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx())));
         else {
           map.put(arg.getName(), new EnvVarImpl(V.one(defaultExpr.eval(env, VHelper.noCtx()).getOne().toLocalVar())));
         }
@@ -416,9 +416,9 @@ public class Function extends AbstractFunction {
       V<? extends Value> value = _statement.execute(env, VHelper.noCtx());
 
       if (value == null) {
-        if (_isReturnsReference)
-          return VHelper.toV(new Var());
-        else
+//        if (_isReturnsReference) //TODO V not supported
+//          return VHelper.toV(new Var());
+//        else
           return VHelper.toV(NullValue.NULL);
       }
       else if (_isReturnsReference)

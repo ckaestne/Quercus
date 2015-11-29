@@ -41,6 +41,7 @@ import com.caucho.util.*;
 import com.caucho.vfs.ByteToChar;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
@@ -708,7 +709,7 @@ public class StringModule extends AbstractQuercusModule {
     StringValue sb = glue.createStringBuilder();
     boolean isFirst = true;
 
-    Iterator<Value> iter = pieces.getValueIterator(env);
+    Iterator<EnvVar> iter = pieces.getValueIterator(env);
 
     while (iter.hasNext()) {
       if (! isFirst)
@@ -1436,27 +1437,28 @@ public class StringModule extends AbstractQuercusModule {
   public static Value parse_str(Env env, StringValue str,
                                 @Optional @Reference Value ref)
   {
-    boolean isRef = ref instanceof Var;
-
-    ArrayValue result = null;
-
-    if (isRef) {
-      result = new ArrayValueImpl();
-      ref.set(result);
-    }
-    else if (ref instanceof ArrayValue) {
-      result = (ArrayValue) ref;
-      isRef = true;
-    }
-    else
-      result = new ArrayValueImpl();
-
-    return StringUtility.parseStr(env,
-                                  str,
-                                  result,
-                                  isRef,
-                                  env.getHttpInputEncoding(),
-                                  false);
+    throw new UnimplementedVException();
+//    boolean isRef = ref instanceof Var;
+//
+//    ArrayValue result = null;
+//
+//    if (isRef) {
+//      result = new ArrayValueImpl();
+//      ref.set(result);
+//    }
+//    else if (ref instanceof ArrayValue) {
+//      result = (ArrayValue) ref;
+//      isRef = true;
+//    }
+//    else
+//      result = new ArrayValueImpl();
+//
+//    return StringUtility.parseStr(env,
+//                                  str,
+//                                  result,
+//                                  isRef,
+//                                  env.getHttpInputEncoding(),
+//                                  false);
   }
 
   /**
@@ -1623,7 +1625,7 @@ public class StringModule extends AbstractQuercusModule {
     LocaleInfo localeInfo = env.getLocaleInfo();
 
     if (localeArg instanceof ArrayValue) {
-      for (Value value : ((ArrayValue) localeArg).values()) {
+      for (EnvVar value : ((ArrayValue) localeArg).values()) {
         QuercusLocale locale = setLocale(localeInfo,
                                          category,
                                          value.toString());
@@ -3140,9 +3142,9 @@ public class StringModule extends AbstractQuercusModule {
       ArrayValue subjectArray = subject.toArrayValue(env);
       ArrayValue resultArray = new ArrayValueImpl();
 
-      for (Map.Entry<Value, Value> entry : subjectArray.entrySet()) {
+      for (Map.Entry<Value, EnvVar> entry : subjectArray.entrySet()) {
         Value key = entry.getKey();
-        Value value = entry.getValue();
+        Value value = entry.getValue().getOne();
 
         if (value.isArray()) {
           resultArray.append(key, value);
@@ -3214,12 +3216,12 @@ public class StringModule extends AbstractQuercusModule {
       ArrayValue searchArray = search.toArrayValue(env);
       ArrayValue replaceArray = replace.toArrayValue(env);
 
-      Iterator<Value> searchIter = searchArray.values().iterator();
-      Iterator<Value> replaceIter = replaceArray.values().iterator();
+      Iterator<EnvVar> searchIter = searchArray.values().iterator();
+      Iterator<EnvVar> replaceIter = replaceArray.values().iterator();
 
       while (searchIter.hasNext()) {
-        Value searchItem = searchIter.next();
-        Value replaceItem = replaceIter.next();
+        Value searchItem = searchIter.next().getOne();
+        Value replaceItem = replaceIter.next().getOne();
 
         if (replaceItem == null) {
           replaceItem = NullValue.NULL;
@@ -3236,10 +3238,10 @@ public class StringModule extends AbstractQuercusModule {
     else {
       ArrayValue searchArray = search.toArrayValue(env);
 
-      Iterator<Value> searchIter = searchArray.values().iterator();
+      Iterator<EnvVar> searchIter = searchArray.values().iterator();
 
       while (searchIter.hasNext()) {
-        Value searchItem = searchIter.next();
+        Value searchItem = searchIter.next().getOne();
 
         subject = strReplaceImpl(env,
                                  searchItem.toStringValue(env),
@@ -4641,21 +4643,21 @@ public class StringModule extends AbstractQuercusModule {
     StringValue []fromList = new StringValue[size];
     StringValue []toList = new StringValue[size];
 
-    Map.Entry<Value,Value> [] entryArray = new Map.Entry[size];
+    Map.Entry<Value,EnvVar> [] entryArray = new Map.Entry[size];
 
     int i = 0;
-    for (Map.Entry<Value,Value> entry : map.entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : map.entrySet()) {
       entryArray[i++] = entry;
     }
 
     // sort entries in descending fashion
-    Arrays.sort(entryArray, new StrtrComparator<Map.Entry<Value,Value>>());
+    Arrays.sort(entryArray, new StrtrComparator<Map.Entry<Value,EnvVar>>());
 
     boolean []charSet = new boolean[256];
 
     for (i = 0; i < size; i++) {
       fromList[i] = entryArray[i].getKey().toStringValue(env);
-      toList[i] = entryArray[i].getValue().toStringValue(env);
+      toList[i] = entryArray[i].getValue().getOne().toStringValue(env);
 
       charSet[fromList[i].charAt(0)] = true;
     }
@@ -4702,7 +4704,7 @@ public class StringModule extends AbstractQuercusModule {
   /*
    * Comparator for sorting in descending fashion based on length.
    */
-  static class StrtrComparator<T extends Map.Entry<Value,Value>>
+  static class StrtrComparator<T extends Map.Entry<Value,EnvVar>>
     implements Comparator<T>
   {
     public int compare(T a, T b)
@@ -4866,12 +4868,12 @@ public class StringModule extends AbstractQuercusModule {
     if (!(startV.isNull() || startV.isArray()))
       start = startV.toInt();
 
-    Iterator<Value> startIterator =
+    Iterator<EnvVar> startIterator =
       startV.isArray()
       ? ((ArrayValue) startV).values().iterator()
       : null;
 
-    Iterator<Value> lengthIterator =
+    Iterator<EnvVar> lengthIterator =
       lengthV.isArray()
       ? ((ArrayValue) lengthV).values().iterator()
       : null;
@@ -4881,16 +4883,16 @@ public class StringModule extends AbstractQuercusModule {
 
       ArrayValue subjectArray = (ArrayValue) subjectV;
 
-      for (Value value : subjectArray.values()) {
+      for (EnvVar value : subjectArray.values()) {
 
         if (lengthIterator != null && lengthIterator.hasNext())
-          length = lengthIterator.next().toInt();
+          length = lengthIterator.next().getOne().toInt();
 
         if (startIterator != null && startIterator.hasNext())
-          start = startIterator.next().toInt();
+          start = startIterator.next().getOne().toInt();
 
         Value result = substrReplaceImpl(
-            value.toStringValue(env), replacement, start, length);
+            value.getOne().toStringValue(env), replacement, start, length);
 
         resultArray.append(result);
       }
@@ -4899,10 +4901,10 @@ public class StringModule extends AbstractQuercusModule {
     }
     else {
       if (lengthIterator != null && lengthIterator.hasNext())
-        length = lengthIterator.next().toInt();
+        length = lengthIterator.next().getOne().toInt();
 
       if (startIterator != null && startIterator.hasNext())
-        start = startIterator.next().toInt();
+        start = startIterator.next().getOne().toInt();
 
       return substrReplaceImpl(
           subjectV.toStringValue(env), replacement, start, length);
@@ -5058,8 +5060,8 @@ public class StringModule extends AbstractQuercusModule {
     if (array != null) {
       args = new Value[array.getSize()];
       int i = 0;
-      for (Value value : array.values())
-        args[i++] = value;
+      for (EnvVar value : array.values())
+        args[i++] = value.getOne();
     }
     else
       args = new Value[0];
@@ -5082,8 +5084,8 @@ public class StringModule extends AbstractQuercusModule {
     if (array != null) {
       args = new Value[array.getSize()];
       int i = 0;
-      for (Value value : array.values())
-        args[i++] = value;
+      for (EnvVar value : array.values())
+        args[i++] = value.getOne();
     }
     else
       args = new Value[0];

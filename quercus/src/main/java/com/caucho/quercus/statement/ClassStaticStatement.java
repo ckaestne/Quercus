@@ -80,8 +80,8 @@ public class ClassStaticStatement
 
       env.setVar(ctx, _var.getName(), V.one(var));
 
-      if (! var.isset() && _initValue != null)
-        var.set(_initValue.eval(env, VHelper.noCtx()).getOne());
+      if (! var.makeValue().isset() && _initValue != null)
+        var.set(VHelper.noCtx(), _initValue.eval(env, VHelper.noCtx()));
 
     }
     catch (RuntimeException e) {

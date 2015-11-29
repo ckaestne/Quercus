@@ -166,10 +166,10 @@ public class ExceptionClass
     StringValue sb = env.createUnicodeBuilder();
     sb.append("<trace>");
 
-    Iterator<Value> iter = trace.getValueIterator(env);
+    Iterator<EnvVar> iter = trace.getValueIterator(env);
 
     while (iter.hasNext()) {
-      Value value = iter.next();
+      Value value = iter.next().getOne();
 
       sb = sb.append('\n');
       sb = sb.append(value.get(env.createString("file")));

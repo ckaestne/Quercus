@@ -110,7 +110,7 @@ public class DateTimeZone implements Cloneable
     String name = tz.getDisplayName(isDST, TimeZone.SHORT);
     Value nameV = StringValue.create(name.toLowerCase(Locale.ENGLISH));
 
-    Value zones = array.get(nameV);
+    Value zones = array.get(nameV).getOne();
 
     if (zones.isNull()) {
       zones = new ArrayValueImpl();
@@ -220,10 +220,10 @@ public class DateTimeZone implements Cloneable
 
     ArrayValue array = listAbbreviations();
 
-    Value zones = array.get(abbr.toLowerCase());
+    Value zones = array.get(abbr.toLowerCase()).getOne();
 
     if (zones.isset())
-      return zones.get(LongValue.ZERO).get(StringValue.create("timezone_id"));
+      return zones.get(LongValue.ZERO).getOne().get(StringValue.create("timezone_id")).getOne();
     else
       return BooleanValue.FALSE;
   }
@@ -234,14 +234,14 @@ public class DateTimeZone implements Cloneable
   {
     ArrayValue array = listAbbreviations();
 
-    Value zones = array.get(abbr.toLowerCase());
+    Value zones = array.get(abbr.toLowerCase()).getOne();
 
     if (zones.isset() && zones.isArray()) {
       Value offsetStr = StringValue.create("offset");
 
-      for (Value zone : ((ArrayValue)zones).values()) {
-        if (zone.get(offsetStr).toInt() == offset)
-          return zone.get(StringValue.create("timezone_id"));
+      for (EnvVar zone : ((ArrayValue)zones).values()) {
+        if (zone.getOne().get(offsetStr).getOne().toInt() == offset)
+          return zone.getOne().get(StringValue.create("timezone_id")).getOne();
       }
     }
 

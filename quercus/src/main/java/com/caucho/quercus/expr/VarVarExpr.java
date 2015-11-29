@@ -145,11 +145,11 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<? extends Value> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
+    V<? extends Var> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
 
     return value.map((v)-> {
       if (v != null)
-        return v;
+        return v.makeValue();
       else
         return NullValue.NULL;
     });
@@ -168,9 +168,9 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
-    V<? extends Value> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
+    V<? extends Var> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
 
-    return value.map((a)->a.toAutoArray());
+    return value.map((a)->a.makeValue().toAutoArray());
   }
 
   public String toString()

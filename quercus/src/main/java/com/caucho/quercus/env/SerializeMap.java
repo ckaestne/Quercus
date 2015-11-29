@@ -28,6 +28,8 @@
  */
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.UnimplementedVException;
+
 import java.util.IdentityHashMap;
 
 /*
@@ -65,11 +67,12 @@ public final class SerializeMap {
   public Integer get(Value value)
   {
     Integer index = _varMap.get(value);
-    
-    if (index == null && value instanceof Var)
-      return _varMap.get(value.toValue());
-    
-    return index;
+
+    throw new UnimplementedVException();
+//    if (index == null && value instanceof Var)
+//      return _varMap.get(value.toValue());
+//
+//    return index;
   }
   
 }

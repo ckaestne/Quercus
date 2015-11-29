@@ -38,6 +38,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
@@ -458,7 +459,7 @@ public class ReflectionClass
 
   public void setStaticPropertyValue(Env env, StringValue name, Value value)
   {
-    _cls.getStaticFieldVar(env, name).set(value);
+    _cls.getStaticFieldVar(env, name).set(VHelper.noCtx(), V.one(value));
   }
 
   public ArrayValue getDefaultProperties(Env env)

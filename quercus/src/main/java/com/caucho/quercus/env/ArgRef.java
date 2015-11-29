@@ -57,7 +57,7 @@ public class ArgRef extends Value
   @Override
   public boolean hasCurrent()
   {
-    return _var.hasCurrent();
+    return _var.getValue().getOne().hasCurrent();
   }
 
   /**
@@ -66,7 +66,7 @@ public class ArgRef extends Value
   @Override
   public boolean isA(Env env, String name)
   {
-    return _var.isA(env, name);
+    return _var.getValue().getOne().isA(env, name);
   }
 
   /**
@@ -75,7 +75,7 @@ public class ArgRef extends Value
   @Override
   public boolean isLongConvertible()
   {
-    return _var.isLongConvertible();
+    return _var.getValue().getOne().isLongConvertible();
   }
 
   /**
@@ -84,7 +84,7 @@ public class ArgRef extends Value
   @Override
   public boolean isDoubleConvertible()
   {
-    return _var.isDoubleConvertible();
+    return _var.getValue().getOne().isDoubleConvertible();
   }
 
   /**
@@ -93,7 +93,7 @@ public class ArgRef extends Value
   @Override
   public boolean isNumberConvertible()
   {
-    return _var.isNumberConvertible();
+    return _var.getValue().getOne().isNumberConvertible();
   }
 
   /**
@@ -101,7 +101,7 @@ public class ArgRef extends Value
    */
   public boolean isLong()
   {
-    return _var.isLong();
+    return _var.getValue().getOne().isLong();
   }
 
   /**
@@ -109,14 +109,14 @@ public class ArgRef extends Value
    */
   public boolean isDouble()
   {
-    return _var.isDouble();
+    return _var.getValue().getOne().isDouble();
   }
 
   @Override
   public ArrayValue toArrayValue(Env env)
   {
     // php/3co1
-    return _var.toArrayValue(env);
+    return _var.getValue().getOne().toArrayValue(env);
   }
 
   /**
@@ -125,7 +125,7 @@ public class ArgRef extends Value
   @Override
   public boolean toBoolean()
   {
-    return _var.toBoolean();
+    return _var.getValue().getOne().toBoolean();
   }
 
   /**
@@ -134,7 +134,7 @@ public class ArgRef extends Value
   @Override
   public long toLong()
   {
-    return _var.toLong();
+    return _var.getValue().getOne().toLong();
   }
 
   /**
@@ -143,7 +143,7 @@ public class ArgRef extends Value
   @Override
   public double toDouble()
   {
-    return _var.toDouble();
+    return _var.getValue().getOne().toDouble();
   }
 
   /**
@@ -153,7 +153,7 @@ public class ArgRef extends Value
   @Override
   public StringValue toString(Env env)
   {
-    return _var.toString(env);
+    return _var.getValue().getOne().toString(env);
   }
 
   /**
@@ -162,7 +162,7 @@ public class ArgRef extends Value
   @Override
   public Value toObject(Env env)
   {
-    return _var.toObject(env);
+    return _var.getValue().getOne().toObject(env);
   }
 
   /**
@@ -171,7 +171,7 @@ public class ArgRef extends Value
   @Override
   public Object toJavaObject()
   {
-    return _var.toJavaObject();
+    return _var.getValue().getOne().toJavaObject();
   }
 
   /**
@@ -180,7 +180,7 @@ public class ArgRef extends Value
   @Override
   public Value toValue()
   {
-    return _var.toValue();
+    return _var.getValue().getOne().toValue();
   }
 
   /**
@@ -189,7 +189,7 @@ public class ArgRef extends Value
   @Override
   public boolean isObject()
   {
-    return _var.isObject();
+    return _var.getValue().getOne().isObject();
   }
 
   /**
@@ -198,7 +198,7 @@ public class ArgRef extends Value
   @Override
   public boolean isArray()
   {
-    return _var.isArray();
+    return _var.getValue().getOne().isArray();
   }
 
   /**
@@ -217,7 +217,7 @@ public class ArgRef extends Value
   @Override
   public Value toLocalValueReadOnly()
   {
-    return _var;
+    return _var.getValue().getOne();
   }
 
   /**
@@ -227,7 +227,7 @@ public class ArgRef extends Value
   public Value toLocalValue()
   {
     // php/0471, php/3d4a
-    return _var.toLocalValue();
+    return _var.getValue().getOne().toLocalValue();
   }
 
   /**
@@ -236,7 +236,7 @@ public class ArgRef extends Value
   @Override
   public Value toLocalRef()
   {
-    return _var;
+    return _var.getValue().getOne();
   }
 
   /**
@@ -254,7 +254,7 @@ public class ArgRef extends Value
   @Override
   public Value toRefValue()
   {
-    return _var;
+    return _var.getValue().getOne();
   }
 
   /**
@@ -278,109 +278,109 @@ public class ArgRef extends Value
   @Override
   public StringValue toStringValue()
   {
-    return _var.toStringValue();
+    return _var.getValue().getOne().toStringValue();
   }
 
   @Override
   public StringValue toBinaryValue(Env env)
   {
-    return _var.toBinaryValue(env);
+    return _var.getValue().getOne().toBinaryValue(env);
   }
 
   @Override
   public StringValue toUnicodeValue(Env env)
   {
-    return _var.toUnicodeValue(env);
+    return _var.getValue().getOne().toUnicodeValue(env);
   }
 
   @Override
   public StringValue toStringBuilder()
   {
-    return _var.toStringBuilder();
+    return _var.getValue().getOne().toStringBuilder();
   }
 
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    return _var.toStringBuilder(env);
+    return _var.getValue().getOne().toStringBuilder(env);
   }
 
   @Override
   public java.io.InputStream toInputStream()
   {
-    return _var.toInputStream();
+    return _var.getValue().getOne().toInputStream();
   }
 
   @Override
   public Value append(Value index, Value value)
   {
-    return _var.append(index, value);
+    return _var.getValue().getOne().append(index, value);
   }
 
   @Override
   public Value containsKey(Value key)
   {
-    return _var.containsKey(key);
+    return _var.getValue().getOne().containsKey(key);
   }
 
   @Override
   public Value copyArrayItem()
   {
-    return _var.copyArrayItem();
+    return _var.getValue().getOne().copyArrayItem();
   }
 
   @Override
   public Value current()
   {
-    return _var.current();
+    return _var.getValue().getOne().current();
   }
 
   @Override
   public Value getArray()
   {
-    return _var.getArray();
+    return _var.getValue().getOne().getArray();
   }
 
   @Override
   public Value getArray(Value index)
   {
-    return _var.getArray(index);
+    return _var.getValue().getOne().getArray(index);
   }
 
   @Override
   public int getCount(Env env)
   {
-    return _var.getCount(env);
+    return _var.getValue().getOne().getCount(env);
   }
 
   @Override
   public Value[] getKeyArray(Env env)
   {
-    return _var.getKeyArray(env);
+    return _var.getValue().getOne().getKeyArray(env);
   }
 
   @Override
   public Value key()
   {
-    return _var.key();
+    return _var.getValue().getOne().key();
   }
 
   @Override
   public Value next()
   {
-    return _var.next();
+    return _var.getValue().getOne().next();
   }
 
   @Override
   public ArrayValue toArray()
   {
-    return _var.toArray();
+    return _var.getValue().getOne().toArray();
   }
 
   @Override
   public Value toAutoArray()
   {
-    return _var.toAutoArray();
+    return _var.getValue().getOne().toAutoArray();
   }
 
   /**
@@ -389,7 +389,7 @@ public class ArgRef extends Value
   @Override
   public Value neg()
   {
-    return _var.neg();
+    return _var.getValue().getOne().neg();
   }
 
   /**
@@ -398,7 +398,7 @@ public class ArgRef extends Value
   @Override
   public Value add(Value rValue)
   {
-    return _var.add(rValue);
+    return _var.getValue().getOne().add(rValue);
   }
 
   /**
@@ -407,7 +407,7 @@ public class ArgRef extends Value
   @Override
   public Value add(long rValue)
   {
-    return _var.add(rValue);
+    return _var.getValue().getOne().add(rValue);
   }
 
   /**
@@ -416,7 +416,7 @@ public class ArgRef extends Value
   @Override
   public Value preincr(int incr)
   {
-    return _var.preincr(incr);
+    return _var.getValue().getOne().preincr(incr);
   }
 
   /**
@@ -425,7 +425,7 @@ public class ArgRef extends Value
   @Override
   public Value postincr(int incr)
   {
-    return _var.postincr(incr);
+    return _var.getValue().getOne().postincr(incr);
   }
 
   /**
@@ -434,7 +434,7 @@ public class ArgRef extends Value
   @Override
   public Value increment(int incr)
   {
-    return _var.increment(incr);
+    return _var.getValue().getOne().increment(incr);
   }
 
   /**
@@ -443,7 +443,7 @@ public class ArgRef extends Value
   @Override
   public Value sub(Value rValue)
   {
-    return _var.sub(rValue);
+    return _var.getValue().getOne().sub(rValue);
   }
 
   /**
@@ -452,7 +452,7 @@ public class ArgRef extends Value
   @Override
   public Value sub(long rValue)
   {
-    return _var.sub(rValue);
+    return _var.getValue().getOne().sub(rValue);
   }
 
   /**
@@ -461,7 +461,7 @@ public class ArgRef extends Value
   @Override
   public Value mul(Value rValue)
   {
-    return _var.mul(rValue);
+    return _var.getValue().getOne().mul(rValue);
   }
 
   /**
@@ -470,7 +470,7 @@ public class ArgRef extends Value
   @Override
   public Value mul(long lValue)
   {
-    return _var.mul(lValue);
+    return _var.getValue().getOne().mul(lValue);
   }
 
   /**
@@ -479,7 +479,7 @@ public class ArgRef extends Value
   @Override
   public Value div(Value rValue)
   {
-    return _var.div(rValue);
+    return _var.getValue().getOne().div(rValue);
   }
 
   /**
@@ -488,7 +488,7 @@ public class ArgRef extends Value
   @Override
   public Value lshift(Value rValue)
   {
-    return _var.lshift(rValue);
+    return _var.getValue().getOne().lshift(rValue);
   }
 
   /**
@@ -497,7 +497,7 @@ public class ArgRef extends Value
   @Override
   public Value rshift(Value rValue)
   {
-    return _var.rshift(rValue);
+    return _var.getValue().getOne().rshift(rValue);
   }
 
   /**
@@ -505,7 +505,7 @@ public class ArgRef extends Value
    */
   public Value abs()
   {
-    return _var.abs();
+    return _var.getValue().getOne().abs();
   }
 
   /**
@@ -514,7 +514,7 @@ public class ArgRef extends Value
   @Override
   public boolean eql(Value rValue)
   {
-    return _var.eql(rValue);
+    return _var.getValue().getOne().eql(rValue);
   }
 
   /**
@@ -523,43 +523,43 @@ public class ArgRef extends Value
   @Override
   public int getSize()
   {
-    return _var.getSize();
+    return _var.getValue().getOne().getSize();
   }
 
   @Override
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
   {
-    return _var.getIterator(env);
+    return _var.getValue().getOne().getIterator(env);
   }
 
   @Override
   public Iterator<Value> getKeyIterator(Env env)
   {
-    return _var.getKeyIterator(env);
+    return _var.getValue().getOne().getKeyIterator(env);
   }
 
   @Override
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
-    return _var.getValueIterator(env);
-  }
-
-  /**
-   * Returns the array ref.
-   */
-  @Override
-  public Value get(Value index)
-  {
-    return _var.get(index);
+    return _var.getValue().getOne().getValueIterator(env);
   }
 
   /**
    * Returns the array ref.
    */
   @Override
-  public Var getVar(Value index)
+  public EnvVar get(Value index)
   {
-    return _var.getVar(index);
+    return _var.getValue().getOne().get(index);
+  }
+
+  /**
+   * Returns the array ref.
+   */
+  @Override
+  public EnvVar getVar(Value index)
+  {
+    return _var.getValue().getOne().getVar(index);
   }
 
   /**
@@ -568,7 +568,7 @@ public class ArgRef extends Value
   @Override
   public Value put(Value index, Value value)
   {
-    return _var.put(index, value);
+    return _var.getValue().getOne().put(index, value);
   }
 
   /**
@@ -577,7 +577,7 @@ public class ArgRef extends Value
   @Override
   public Value put(Value value)
   {
-    return _var.put(value);
+    return _var.getValue().getOne().put(value);
   }
 
   /**
@@ -598,7 +598,7 @@ public class ArgRef extends Value
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value[] args)
   {
-    return _var.callMethod(env, ctx, methodName, hash, args);
+    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, args);
   }
 
   /**
@@ -607,7 +607,7 @@ public class ArgRef extends Value
   @Override
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
-    return _var.callMethod(env, ctx, methodName, hash);
+    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash);
   }
 
   /**
@@ -618,7 +618,7 @@ public class ArgRef extends Value
                              FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1)
   {
-    return _var.callMethod(env, ctx, methodName, hash, a1);
+    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, a1);
   }
 
   /**
@@ -628,7 +628,7 @@ public class ArgRef extends Value
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2)
   {
-    return _var.callMethod(env, ctx, methodName, hash, a1, a2);
+    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, a1, a2);
   }
 
   /**
@@ -638,7 +638,7 @@ public class ArgRef extends Value
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3)
   {
-    return _var.callMethod(env, ctx, methodName, hash,
+    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash,
                            a1, a2, a3);
   }
 
@@ -649,7 +649,7 @@ public class ArgRef extends Value
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3, Value a4)
   {
-    return _var.callMethod(env, ctx, methodName, hash,
+    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash,
                            a1, a2, a3, a4);
   }
 
@@ -660,7 +660,7 @@ public class ArgRef extends Value
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                              Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return _var.callMethod(env, ctx, methodName, hash,
+    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash,
                            a1, a2, a3, a4, a5);
   }
 
@@ -672,7 +672,7 @@ public class ArgRef extends Value
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                 Value[] args)
   {
-    return _var.callMethodRef(env, ctx, methodName, hash, args);
+    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, args);
   }
 
   /**
@@ -681,7 +681,7 @@ public class ArgRef extends Value
   @Override
   public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
-    return _var.callMethodRef(env, ctx, methodName, hash);
+    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash);
   }
 
   /**
@@ -692,7 +692,7 @@ public class ArgRef extends Value
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1)
   {
-    return _var.callMethodRef(env, ctx, methodName, hash, a1);
+    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, a1);
   }
 
   /**
@@ -702,7 +702,7 @@ public class ArgRef extends Value
   public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2)
   {
-    return _var.callMethodRef(env, ctx, methodName, hash,
+    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash,
                               a1, a2);
   }
 
@@ -713,7 +713,7 @@ public class ArgRef extends Value
   public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2, Value a3)
   {
-    return _var.callMethodRef(env, ctx, methodName, hash, a1, a2, a3);
+    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, a1, a2, a3);
   }
 
   /**
@@ -723,7 +723,7 @@ public class ArgRef extends Value
   public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                 Value a1, Value a2, Value a3, Value a4)
   {
-    return _var.callMethodRef(env, ctx, methodName, hash,
+    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash,
                               a1, a2, a3, a4);
   }
 
@@ -735,7 +735,7 @@ public class ArgRef extends Value
                                           FeatureExpr ctx, StringValue methodName, int hash,
                                           Value a1, Value a2, Value a3, Value a4, Value a5)
   {
-    return _var.callMethodRef(env, ctx, methodName, hash,
+    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash,
                               a1, a2, a3, a4, a5);
   }
 
@@ -746,7 +746,7 @@ public class ArgRef extends Value
   @Override
   public Value callClassMethod(Env env, AbstractFunction fun, Value []args)
   {
-    return _var.callClassMethod(env, fun, args);
+    return _var.getValue().getOne().callClassMethod(env, fun, args);
   }
   */
 
@@ -755,7 +755,7 @@ public class ArgRef extends Value
    */
   public void serialize(Env env, StringBuilder sb)
   {
-    _var.serialize(env, sb);
+    _var.getValue().getOne().serialize(env, sb);
   }
 
   /*
@@ -766,7 +766,7 @@ public class ArgRef extends Value
    */
   public void serialize(Env env, StringBuilder sb, SerializeMap serializeMap)
   {
-    _var.serialize(env, sb, serializeMap);
+    _var.getValue().getOne().serialize(env, sb, serializeMap);
   }
 
   /**
@@ -777,7 +777,7 @@ public class ArgRef extends Value
   @Override
   public void print(Env env, FeatureExpr ctx)
   {
-    _var.print(env, VHelper.noCtx());
+    _var.getValue().getOne().print(env, VHelper.noCtx());
   }
 
   @Override

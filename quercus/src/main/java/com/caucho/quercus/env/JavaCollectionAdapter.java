@@ -73,7 +73,7 @@ public class JavaCollectionAdapter extends JavaAdapter
    * Copy for serialization
    */
   @Override
-  public Value copy(Env env, IdentityHashMap<Value,Value> map)
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     return new JavaCollectionAdapter(_collection, getClassDef());
   }
@@ -112,21 +112,21 @@ public class JavaCollectionAdapter extends JavaAdapter
    * Gets a new value.
    */
   @Override
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
     int pos = key.toInt();
 
     if (pos < 0)
-      return UnsetValue.UNSET;
+      return EnvVar._gen(UnsetValue.UNSET);
 
     for (Object obj : _collection) {
       if (pos-- > 0)
         continue;
 
-      return wrapJava(obj);
+      return EnvVar._gen(wrapJava(obj));
     }
 
-    return UnsetValue.UNSET;
+    return EnvVar._gen(UnsetValue.UNSET);
   }
 
   /**
@@ -157,7 +157,7 @@ public class JavaCollectionAdapter extends JavaAdapter
    * Returns a set of all the of the entries.
    */
   @Override
-  public Set<Map.Entry<Value,Value>> entrySet()
+  public Set<Map.Entry<Value, EnvVar>> entrySet()
   {
     return new CollectionValueSet();
   }
@@ -175,13 +175,13 @@ public class JavaCollectionAdapter extends JavaAdapter
    * Returns a collection of the values.
    */
   @Override
-  public Collection<Value> values()
+  public Collection<EnvVar> values()
   {
     return new ValueCollection();
   }
 
   @Override
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
   {
     return new CollectionValueIterator();
   }
@@ -193,7 +193,7 @@ public class JavaCollectionAdapter extends JavaAdapter
   }
 
   @Override
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
     return new ValueIterator();
   }
@@ -279,7 +279,7 @@ public class JavaCollectionAdapter extends JavaAdapter
   }
 
   public class CollectionValueSet
-    extends AbstractSet<Map.Entry<Value,Value>>
+    extends AbstractSet<Map.Entry<Value,EnvVar>>
   {
     CollectionValueSet()
     {
@@ -292,14 +292,14 @@ public class JavaCollectionAdapter extends JavaAdapter
     }
 
     @Override
-    public Iterator<Map.Entry<Value,Value>> iterator()
+    public Iterator<Map.Entry<Value,EnvVar>> iterator()
     {
       return new CollectionValueIterator();
     }
   }
 
   public class CollectionValueIterator
-    implements Iterator<Map.Entry<Value,Value>>
+    implements Iterator<Map.Entry<Value,EnvVar>>
   {
     private int _index;
     private Iterator _iterator;
@@ -315,11 +315,11 @@ public class JavaCollectionAdapter extends JavaAdapter
       return _iterator.hasNext();
     }
 
-    public Map.Entry<Value,Value> next()
+    public Map.Entry<Value,EnvVar> next()
     {
        Value val = wrapJava(_iterator.next());
 
-       return new ArrayValue.Entry(LongValue.create(_index++), val);
+       return new ArrayValue.Entry(LongValue.create(_index++), EnvVar._gen(val));
     }
 
     public void remove()
@@ -329,7 +329,7 @@ public class JavaCollectionAdapter extends JavaAdapter
   }
 
   public class ValueCollection
-    extends AbstractCollection<Value>
+    extends AbstractCollection<EnvVar>
   {
     ValueCollection()
     {
@@ -342,7 +342,7 @@ public class JavaCollectionAdapter extends JavaAdapter
     }
 
     @Override
-    public Iterator<Value> iterator()
+    public Iterator<EnvVar> iterator()
     {
       return new ValueIterator();
     }
@@ -379,7 +379,7 @@ public class JavaCollectionAdapter extends JavaAdapter
   }
 
   public class ValueIterator
-    implements Iterator<Value>
+    implements Iterator<EnvVar>
   {
     private Iterator _iterator;
 
@@ -393,9 +393,9 @@ public class JavaCollectionAdapter extends JavaAdapter
       return _iterator.hasNext();
     }
 
-    public Value next()
+    public EnvVar next()
     {
-      return wrapJava(_iterator.next());
+      return EnvVar._gen(wrapJava(_iterator.next()));
     }
 
     public void remove()

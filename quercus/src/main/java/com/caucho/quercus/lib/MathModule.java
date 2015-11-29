@@ -480,12 +480,12 @@ public class MathModule extends AbstractQuercusModule {
   {
     if (args.length == 1 && args[0].isArray()) {
       ArrayValue array = args[0].toArrayValue(env);
-      Iterator<Value> iter = array.getValueIterator(env);
+      Iterator<EnvVar> iter = array.getValueIterator(env);
 
       Value max = NullValue.NULL;
 
       while (iter.hasNext()) {
-        Value value = iter.next();
+        Value value = iter.next().getOne();
 
         if (max.isNull()) {
           max = value;
@@ -519,12 +519,12 @@ public class MathModule extends AbstractQuercusModule {
   {
     if (args.length == 1 && args[0].isArray()) {
       ArrayValue array = args[0].toArrayValue(env);
-      Iterator<Value> iter = array.getValueIterator(env);
+      Iterator<EnvVar> iter = array.getValueIterator(env);
 
       Value min = NullValue.NULL;
 
       while (iter.hasNext()) {
-        Value value = iter.next();
+        Value value = iter.next().getOne();
 
         if (min.isNull()) {
           min = value;

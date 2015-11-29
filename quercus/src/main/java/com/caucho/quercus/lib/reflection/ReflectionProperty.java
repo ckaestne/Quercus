@@ -35,6 +35,8 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 public class ReflectionProperty
   implements Reflector
@@ -335,7 +337,7 @@ public class ReflectionProperty
     @Override
     public void setValue(Env env, Value obj, Value value)
     {
-      _cls.getStaticFieldVar(env, _name).set(obj);
+      _cls.getStaticFieldVar(env, _name).set(VHelper.noCtx(), V.one(obj));
     }
 
     @Override

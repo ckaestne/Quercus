@@ -170,7 +170,7 @@ public class JavaValue extends ObjectValue
   {
     ArrayValue array = new ArrayValueImpl();
 
-    for (Map.Entry<Value,Value> entry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
       array.put(entry.getKey(), entry.getValue());
     }
 
@@ -188,7 +188,7 @@ public class JavaValue extends ObjectValue
       return;
     }
 
-    Set<? extends Map.Entry<Value,Value>> entrySet = entrySet();
+    Set<? extends Map.Entry<Value,EnvVar>> entrySet = entrySet();
 
     if (entrySet == null) {
       out.print(VHelper.noCtx(), "resource(" + toString(env) + ")"); // XXX:
@@ -200,12 +200,12 @@ public class JavaValue extends ObjectValue
     printRDepth(out, depth);
     out.print(VHelper.noCtx(), "(");
 
-    for (Map.Entry<Value,Value> entry : entrySet) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet) {
       out.println(VHelper.noCtx());
       printRDepth(out, depth);
       out.print(VHelper.noCtx(), "    [" + entry.getKey() + "] => ");
 
-      entry.getValue().printRImpl(env, out, depth + 1, valueSet);
+      entry.getValue().getOne().printRImpl(env, out, depth + 1, valueSet);
     }
 
     out.println(VHelper.noCtx());
@@ -263,7 +263,7 @@ public class JavaValue extends ObjectValue
       return NullValue.NULL;
   }
 
-  public Set<? extends Map.Entry<Value, Value>> entrySet()
+  public Set<? extends Map.Entry<Value, EnvVar>> entrySet()
   {
     return _classDef.entrySet(_object);
   }
@@ -519,7 +519,7 @@ public class JavaValue extends ObjectValue
   {
     String name = _classDef.getSimpleName();
 
-    Set<? extends Map.Entry<Value,Value>> entrySet = entrySet();
+    Set<? extends Map.Entry<Value,EnvVar>> entrySet = entrySet();
 
     if (entrySet != null) {
       sb.append("O:");
@@ -530,9 +530,9 @@ public class JavaValue extends ObjectValue
       sb.append(entrySet.size());
       sb.append(":{");
 
-      for (Map.Entry<Value,Value> entry : entrySet) {
+      for (Map.Entry<Value,EnvVar> entry : entrySet) {
         entry.getKey().serialize(env, sb);
-        entry.getValue().serialize(env, sb, map);
+        entry.getValue().getOne().serialize(env, sb, map);
       }
 
       sb.append("}");
@@ -687,12 +687,12 @@ public class JavaValue extends ObjectValue
     _object = in.readObject();
   }
 
-  private static class EntryItem implements Map.Entry<Value,Value> {
+  private static class EntryItem implements Map.Entry<Value,EnvVar> {
     private Value _key;
-    private Value _value;
+    private EnvVar _value;
     private boolean _isArray;
 
-    EntryItem(Value key, Value value)
+    EntryItem(Value key, EnvVar value)
     {
       _key = key;
       _value = value;
@@ -703,33 +703,33 @@ public class JavaValue extends ObjectValue
       return _key;
     }
 
-    public Value getValue()
+    public EnvVar getValue()
     {
       return _value;
     }
 
-    public Value setValue(Value value)
+    public EnvVar setValue(EnvVar value)
     {
       return _value;
     }
 
-    void addValue(Value value)
-    {
-      ArrayValue array = null;
-
-      if (! _isArray) {
-        _isArray = true;
-        Value oldValue = _value;
-        _value = new ArrayValueImpl();
-        array = (ArrayValue) _value;
-        array.append(oldValue);
-      }
-      else {
-        array = (ArrayValue) _value;
-      }
-
-      array.append(value);
-    }
+//    void addValue(Value value)
+//    {
+//      ArrayValue array = null;
+//
+//      if (! _isArray) {
+//        _isArray = true;
+//        Value oldValue = _value;
+//        _value = new ArrayValueImpl();
+//        array = (ArrayValue) _value;
+//        array.append(oldValue);
+//      }
+//      else {
+//        array = (ArrayValue) _value;
+//      }
+//
+//      array.append(value);
+//    }
   }
 }
 

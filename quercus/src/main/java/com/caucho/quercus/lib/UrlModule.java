@@ -251,8 +251,8 @@ public class UrlModule
               value = env.getEmptyString();
 
 
-            if (result.get(key) != UnsetValue.UNSET)
-              values = (ArrayValue)result.get(key);
+            if (result.get(key).getOne() != UnsetValue.UNSET)
+              values = (ArrayValue)result.get(key).getOne();
             else {
               values = new ArrayValueImpl();
 
@@ -265,7 +265,7 @@ public class UrlModule
 
         // collapse single entries
         for (Value key : result.keySet()) {
-          Value value = result.get(key);
+          Value value = result.get(key).getOne();
 
           if (value.isArray() && ((ArrayValue)value).getSize() == 1)
             result.put(key, ((ArrayValue)value).get(LongValue.ZERO));
@@ -382,7 +382,7 @@ public class UrlModule
                                          StringValue numeric_prefix,
                                          StringValue separator)
   {
-    Set<? extends Map.Entry<Value,Value>> entrySet;
+    Set<? extends Map.Entry<Value, EnvVar>> entrySet;
 
     if (formdata.isArray()) {
       entrySet = ((ArrayValue) formdata).entrySet();
@@ -397,7 +397,7 @@ public class UrlModule
     }
 
     boolean isFirst = true;
-    for (Map.Entry<Value,Value> entry : entrySet) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet) {
       if (! isFirst) {
         if (separator != null)
           result.append(separator);
@@ -407,7 +407,7 @@ public class UrlModule
       isFirst = false;
 
       StringValue newPath = makeNewPath(path, entry.getKey(), numeric_prefix);
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       if (entryValue.isArray() || entryValue.isObject()) {
         // can always throw away the numeric prefix on recursive calls
@@ -416,7 +416,7 @@ public class UrlModule
       } else {
         result.append(newPath);
         result.append("=");
-        result.append(urlencode(entry.getValue().toStringValue()));
+        result.append(urlencode(entry.getValue().getOne().toStringValue()));
       }
     }
   }
@@ -463,7 +463,7 @@ public class UrlModule
     if (value instanceof ArrayValue) {
       ArrayValue array = (ArrayValue) value;
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
         Value keyValue = entry.getKey();
         Value v = entry.getValue();
 
@@ -499,7 +499,7 @@ public class UrlModule
                                 String prefix,
                                 ArrayValue array)
   {
-    for (Map.Entry<Value,Value> entry : array.entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
       Value keyValue = entry.getKey();
       Value v = entry.getValue();
 
@@ -534,21 +534,21 @@ public class UrlModule
 
     switch (component) {
       case PHP_URL_SCHEME:
-        return array.get(isUnicode ? SCHEME_U : SCHEME_V);
+        return array.get(isUnicode ? SCHEME_U : SCHEME_V).getOne();
       case PHP_URL_HOST:
-        return array.get(isUnicode ? HOST_U : HOST_V);
+        return array.get(isUnicode ? HOST_U : HOST_V).getOne();
       case PHP_URL_PORT:
-        return array.get(isUnicode ? PORT_U : PORT_V);
+        return array.get(isUnicode ? PORT_U : PORT_V).getOne();
       case PHP_URL_USER:
-        return array.get(isUnicode ? USER_U : USER_V);
+        return array.get(isUnicode ? USER_U : USER_V).getOne();
       case PHP_URL_PASS:
-        return array.get(isUnicode ? PASS_U : PASS_V);
+        return array.get(isUnicode ? PASS_U : PASS_V).getOne();
       case PHP_URL_PATH:
-        return array.get(isUnicode ? PATH_U : PATH_V);
+        return array.get(isUnicode ? PATH_U : PATH_V).getOne();
       case PHP_URL_QUERY:
-        return array.get(isUnicode ? QUERY_U : QUERY_V);
+        return array.get(isUnicode ? QUERY_U : QUERY_V).getOne();
       case PHP_URL_FRAGMENT:
-        return array.get(isUnicode ? FRAGMENT_U : FRAGMENT_V);
+        return array.get(isUnicode ? FRAGMENT_U : FRAGMENT_V).getOne();
     }
 
     return array;

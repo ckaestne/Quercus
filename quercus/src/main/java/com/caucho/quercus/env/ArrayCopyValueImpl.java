@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.V;
+
 /**
  * Represents a PHP array value copied as part of deserialization or APC.
  *
@@ -106,7 +108,7 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     // XXX:
     return super.getArg(index, isTop);
@@ -115,7 +117,7 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
   /**
    * Returns the value as an array, using copy on write if necessary.
    */
-  public Value getDirty(Value index)
+  public V<? extends Value> getDirty(Value index)
   {
     _root.setModified();
 
@@ -156,7 +158,7 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
   /**
    * Returns the array ref.
    */
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
     _root.setModified();
 

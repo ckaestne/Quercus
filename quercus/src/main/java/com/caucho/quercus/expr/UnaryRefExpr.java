@@ -86,7 +86,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
     // quercus/0d28
     V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
     
-    return value.map((a)->a.toRef());
+    return value.map((a)->a.makeValue().toRef());
   }
 
   /**
@@ -102,7 +102,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
   {
     V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
     
-    return value.map((a)->a.toArgRef());
+    return value.map((a)->a.makeValue().toArgRef());
   }
 
   /**

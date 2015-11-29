@@ -556,8 +556,8 @@ public class ImageModule extends AbstractQuercusModule {
     for (int y = 0; y < 3; y++) {
       for (int x = 0; x < 3; x++) {
             kernelValues[x + y * 3] =
-              (float) matrix.get(LongValue.create(y))
-                            .get(LongValue.create(x)).toDouble();
+              (float) matrix.get(LongValue.create(y)).getOne()
+                            .get(LongValue.create(x)).getOne().toDouble();
           }
     }
 
@@ -1742,11 +1742,11 @@ public class ImageModule extends AbstractQuercusModule {
   {
     Polygon polygon = new Polygon();
 
-    Iterator<Value> iter = points.getValueIterator(env);
+    Iterator<EnvVar> iter = points.getValueIterator(env);
 
     for (int i = 0; i < numPoints; i++) {
-      int x = iter.next().toInt();
-      int y = iter.next().toInt();
+      int x = iter.next().getOne().toInt();
+      int y = iter.next().getOne().toInt();
       polygon.addPoint(x, y);
     }
     return polygon;

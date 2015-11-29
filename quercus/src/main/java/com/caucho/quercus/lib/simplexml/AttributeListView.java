@@ -167,7 +167,7 @@ public class AttributeListView extends SimpleView
 
     Set<Map.Entry<Value,Value>> set = getEntrySet(env, cls);
 
-    for (Map.Entry<Value,Value> entry : set) {
+    for (Map.Entry<Value, Value> entry : set) {
       obj.putField(env, entry.getKey().toString(), entry.getValue());
     }
 

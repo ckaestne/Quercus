@@ -195,7 +195,7 @@ public class VarExpr
   @Override
   public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = env.getVar(ctx, _name);
+    V<? extends Value> value = env.getVar(ctx, _name).map(a->a.makeValue());
 
     value = value.map((a)->a.toAutoArray());
 
@@ -262,7 +262,7 @@ public class VarExpr
     // php/043k
     // php/0443
 
-    return env.getVar(ctx, _name);
+    return env.getVar(ctx, _name).map(a->a.makeValue());
   }
 
   /**

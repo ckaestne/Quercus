@@ -69,7 +69,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-    public Value getFieldArg(Env env, StringValue name, boolean isTop)
+    public Var getFieldArg(Env env, StringValue name, boolean isTop)
   {
     _root.setModified();
 
@@ -80,7 +80,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getThisFieldArg(Env env, StringValue name)
+  public Var getThisFieldArg(Env env, StringValue name)
   {
     _root.setModified();
 
@@ -91,7 +91,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getFieldArgRef(Env env, StringValue name)
+  public Var getFieldArgRef(Env env, StringValue name)
   {
     _root.setModified();
 
@@ -102,7 +102,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getThisFieldArgRef(Env env, StringValue name)
+  public Var getThisFieldArgRef(Env env, StringValue name)
   {
     _root.setModified();
 

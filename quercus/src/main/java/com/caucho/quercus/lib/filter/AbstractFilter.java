@@ -46,13 +46,13 @@ public class AbstractFilter implements Filter
     else if (flagsV.isArray()) {
       ArrayValue array = flagsV.toArrayValue(env);
 
-      Value optionsV = array.get(env.createString("options"));
+      Value optionsV = array.get(env.createString("options")).getOne();
 
       if (optionsV.isArray()) {
         options = optionsV.toArrayValue(env);
       }
 
-      flags = array.get(env.createString("flags")).toInt();
+      flags = array.get(env.createString("flags")).getOne().toInt();
     }
     else {
       flags = flagsV.toInt();
@@ -70,9 +70,9 @@ public class AbstractFilter implements Filter
     else if (flagsV.isArray()) {
       ArrayValue array = flagsV.toArrayValue(env);
 
-      Value optionsV = array.get(env.createString("options"));
+      Value optionsV = array.get(env.createString("options")).getOne();
 
-      flags = array.get(env.createString("flags")).toInt();
+      flags = array.get(env.createString("flags")).getOne().toInt();
     }
     else {
       flags = flagsV.toInt();

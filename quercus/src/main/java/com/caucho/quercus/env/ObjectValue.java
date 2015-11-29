@@ -147,7 +147,7 @@ abstract public class ObjectValue extends Callback {
    * Returns a Set of entries.
    */
   // XXX: remove entrySet() and use getIterator() instead
-  abstract public Set<? extends Map.Entry<Value,Value>> entrySet();
+  abstract public Set<? extends Map.Entry<Value,EnvVar>> entrySet();
 
   /**
    * Returns the class name.
@@ -404,20 +404,20 @@ abstract public class ObjectValue extends Callback {
    * Returns the array value with the given key.
    */
   @Override
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
     Env env = Env.getInstance();
 
     ArrayDelegate delegate = _quercusClass.getArrayDelegate();
 
     if (delegate != null) {
-      return delegate.get(env, this, key);
+      return EnvVar._gen(delegate.get(env, this, key));
     }
     else {
       // php/3d94
 
       // return getField(Env.getInstance(), key.toStringValue());
-      return env.error(L.l("Can't use object '{0}' as array", getName()));
+      return EnvVar._gen(env.error(L.l("Can't use object '{0}' as array", getName())));
     }
   }
 
@@ -537,7 +537,7 @@ abstract public class ObjectValue extends Callback {
    * Returns an iterator for the key => value pairs.
    */
   @Override
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
   {
     TraversableDelegate delegate = _quercusClass.getTraversableDelegate();
 
@@ -565,7 +565,7 @@ abstract public class ObjectValue extends Callback {
    * Returns an iterator for the values.
    */
   @Override
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
     TraversableDelegate delegate = _quercusClass.getTraversableDelegate();
 
@@ -700,7 +700,7 @@ abstract public class ObjectValue extends Callback {
    * Sets the static field.
    */
   @Override
-  public Value setStaticFieldRef(Env env, StringValue name, Value value)
+  public Var setStaticFieldRef(Env env, StringValue name, Value value)
   {
     return getQuercusClass().setStaticFieldRef(env, name, value);
   }
@@ -740,8 +740,8 @@ abstract public class ObjectValue extends Callback {
     if (result != 0)
       return result;
 
-    Set<? extends Map.Entry<Value,Value>> aSet = entrySet();
-    Set<? extends Map.Entry<Value,Value>> bSet = rValue.entrySet();
+    Set<? extends Map.Entry<Value,EnvVar>> aSet = entrySet();
+    Set<? extends Map.Entry<Value,EnvVar>> bSet = rValue.entrySet();
 
     if (aSet.equals(bSet))
       return 0;
@@ -750,25 +750,25 @@ abstract public class ObjectValue extends Callback {
     else if (aSet.size() < bSet.size())
       return -1;
     else {
-      TreeSet<Map.Entry<Value,Value>> aTree
-        = new TreeSet<Map.Entry<Value,Value>>(aSet);
+      TreeSet<Map.Entry<Value,EnvVar>> aTree
+        = new TreeSet<Map.Entry<Value,EnvVar>>(aSet);
 
-      TreeSet<Map.Entry<Value,Value>> bTree
-        = new TreeSet<Map.Entry<Value,Value>>(bSet);
+      TreeSet<Map.Entry<Value,EnvVar>> bTree
+        = new TreeSet<Map.Entry<Value,EnvVar>>(bSet);
 
-      Iterator<Map.Entry<Value,Value>> iterA = aTree.iterator();
-      Iterator<Map.Entry<Value,Value>> iterB = bTree.iterator();
+      Iterator<Map.Entry<Value,EnvVar>> iterA = aTree.iterator();
+      Iterator<Map.Entry<Value,EnvVar>> iterB = bTree.iterator();
 
       while (iterA.hasNext()) {
-        Map.Entry<Value,Value> a = iterA.next();
-        Map.Entry<Value,Value> b = iterB.next();
+        Map.Entry<Value,EnvVar> a = iterA.next();
+        Map.Entry<Value,EnvVar> b = iterB.next();
 
         result = a.getKey().cmp(b.getKey());
 
         if (result != 0)
           return result;
 
-        result = a.getValue().cmp(b.getValue());
+        result = a.getValue().getOne().cmp(b.getValue().getOne());
 
         if (result != 0)
           return result;
@@ -832,10 +832,10 @@ abstract public class ObjectValue extends Callback {
 
     ArrayValue sortedEntries = new ArrayValueImpl();
 
-    Iterator<Map.Entry<Value,Value>> iter = getIterator(env);
+    Iterator<Map.Entry<Value,EnvVar>> iter = getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
       sortedEntries.put(entry.getKey(), entry.getValue());
     }
 
@@ -844,10 +844,10 @@ abstract public class ObjectValue extends Callback {
     iter = sortedEntries.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
 
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      EnvVar value = entry.getValue();
 
       printDepth(out, 2 * depth);
       out.println(VHelper.noCtx(), "[\"" + key + "\"]=>");
@@ -856,7 +856,7 @@ abstract public class ObjectValue extends Callback {
 
       printDepth(out, 2 * depth);
 
-      value.varDump(env, out, depth, valueSet);
+      value.getOne().varDump(env, out, depth, valueSet);
 
       out.println(VHelper.noCtx());
 
@@ -892,13 +892,13 @@ abstract public class ObjectValue extends Callback {
 
       int length = 0;
 
-      Iterator<Map.Entry<Value,Value>> iter = getIterator(env);
+      Iterator<Map.Entry<Value,EnvVar>> iter = getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value,Value> entry = iter.next();
+        Map.Entry<Value,EnvVar> entry = iter.next();
 
         StringValue key = entry.getKey().toStringValue(env);
-        Value value = entry.getValue();
+        EnvVar value = entry.getValue();
 
         if (! ClassField.isPublic(key)) {
           continue;
@@ -910,7 +910,7 @@ abstract public class ObjectValue extends Callback {
 
         key.jsonEncode(env, context, sb);
         sb.append(':');
-        value.jsonEncode(env, context, sb);
+        value.getOne().jsonEncode(env, context, sb);
         length++;
       }
 

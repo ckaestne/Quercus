@@ -35,11 +35,14 @@ import com.caucho.quercus.annotation.ReadOnly;
 import com.caucho.quercus.annotation.Reference;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.UnimplementedVException;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * PDO object oriented API facade.
@@ -416,9 +419,9 @@ public class PDOStatement
       ColumnType[] types = new ColumnType[size];
       Value[] values = new Value[size];
 
-      for (Map.Entry<Value, Value> entry : parameters.entrySet()) {
+      for (Map.Entry<Value, EnvVar> entry : parameters.entrySet()) {
         Value key = entry.getKey();
-        Value value = entry.getValue();
+        Value value = entry.getValue().getOne();
 
         int index;
         if (key.isNumberConvertible()) {
@@ -629,7 +632,7 @@ public class PDOStatement
         int i = 0;
 
         for (Value key : argsArray.keySet())
-          ctorArgs[i++] = argsArray.getVar(key);
+          ctorArgs[i++] = argsArray.getVar(key).getOne();
       }
       else
         return fetchBoth(env, rs);
@@ -852,7 +855,7 @@ public class PDOStatement
         Value name = env.createString(rs.getColumnLabel(i));
         Value value = getColumnValue(env, i);
 
-        Value existingValue = array.get(name);
+        Value existingValue = array.get(name).getOne();
 
         if (! (existingValue instanceof UnsetValue)) {
           if (! existingValue.isArray()) {
@@ -929,12 +932,13 @@ public class PDOStatement
   {
     Value value = fetchAll(Env.getInstance(), 0, -1);
 
-    if (value instanceof ArrayValue)
-      return ((ArrayValue) value).values().iterator();
-    else {
-      Set<Value> emptySet = Collections.emptySet();
-      return emptySet.iterator();
-    }
+    throw new UnimplementedVException();
+//    if (value instanceof ArrayValue)
+//      return ((ArrayValue) value).values().iterator();
+//    else {
+//      Set<Value> emptySet = Collections.emptySet();
+//      return emptySet.iterator();
+//    }
   }
 
   public boolean nextRowset()

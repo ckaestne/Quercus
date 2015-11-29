@@ -905,7 +905,7 @@ public class OracleModule extends AbstractQuercusModule {
         String fieldName = entry.getKey();
         Value var = entry.getValue();
 
-        Value newValue = arrayValue.get(StringValue.create(fieldName));
+        Value newValue = arrayValue.get(StringValue.create(fieldName)).getOne();
         var.set(newValue);
       }
 
@@ -1503,7 +1503,7 @@ public class OracleModule extends AbstractQuercusModule {
 
       Value result = stmt.getResultBuffer();
 
-      return ((ArrayValueImpl)result).get(field);
+      return ((ArrayValueImpl)result).get(field).getOne();
     }
     catch (Exception e) {
       env.warning(e);

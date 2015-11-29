@@ -183,7 +183,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return VHelper.toV(obj.getThisFieldArg(env, _name));
+    return VHelper.toV(obj.getThisFieldArg(env, _name).makeValue());
   }
 
   /**

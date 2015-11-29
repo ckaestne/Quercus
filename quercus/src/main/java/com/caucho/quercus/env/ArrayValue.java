@@ -33,6 +33,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -45,7 +46,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Represents a PHP array value.
+ * Represents a PHP array value (one row!).
  */
 abstract public class ArrayValue extends Value {
   private static final Logger log
@@ -241,7 +242,7 @@ abstract public class ArrayValue extends Value {
       Value key = entry.getKey();
 
       // php/03oe
-      obj.putField(env, key.toString(), entry.getValue());
+      obj.putField(env, key.toString(), entry.getValue().getValue().getOne());
     }
 
     return obj;
@@ -274,7 +275,7 @@ abstract public class ArrayValue extends Value {
     }
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
-      coll.add(entry.getValue().toJavaObject());
+      coll.add(entry.getValue().getValue().getOne().toJavaObject());
     }
 
     return coll;
@@ -310,7 +311,7 @@ abstract public class ArrayValue extends Value {
     }
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
-      list.add(entry.getValue().toJavaObject());
+      list.add(entry.getValue().getOne().toJavaObject());
     }
 
     return list;
@@ -346,7 +347,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
       map.put(entry.getKey().toJavaObject(),
-              entry.getValue().toJavaObject());
+              entry.getValue().getOne().toJavaObject());
     }
 
     return map;
@@ -357,8 +358,8 @@ abstract public class ArrayValue extends Value {
   {
     //XXX: refactor to use toCallable()
 
-    Value obj = get(LongValue.ZERO);
-    Value nameV = get(LongValue.ONE);
+    Value obj = get(LongValue.ZERO).getOne();
+    Value nameV = get(LongValue.ONE).getOne();
 
     if (nameRef != null) {
       nameRef.set(NullValue.NULL);
@@ -458,8 +459,8 @@ abstract public class ArrayValue extends Value {
   @Override
   public Callable toCallable(Env env, boolean isOptional)
   {
-    Value obj = get(LongValue.ZERO);
-    Value nameV = get(LongValue.ONE);
+    Value obj = get(LongValue.ZERO).getOne();
+    Value nameV = get(LongValue.ONE).getOne();
 
     if (! nameV.isString()) {
       env.warning(L.l("'{0}' ({1}) is an unknown callback name",
@@ -508,79 +509,79 @@ abstract public class ArrayValue extends Value {
     }
   }
 
-  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key)
-  {
-    V<? extends Value> result;
-    Value value = getRaw(key);
+//  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, ValueOrVar key)
+//  {
+//    V<? extends Value> result;
+//    Value value = getRaw(key.toValue()).getOne();
+//
+//    if (value.isVar()) {
+//      value = new ArgRef(value._var());
+//
+//      result = call(env, ctx, value);
+//    }
+//    else {
+//      Var aVar = value._value().toVar();
+//
+//      result = callback.call(env, ctx, aVar.getValue().getOne());
+//
+//      Value aNew = aVar.getValue().getOne();
+//
+//      if (aNew != value)
+//        put(key.toValue(), EnvVar._gen(aNew));
+//    }
+//
+//    return result;
+//  }
 
-    if (value instanceof Var) {
-      value = new ArgRef((Var) value);
-
-      result = call(env, ctx, value);
-    }
-    else {
-      Value aVar = new Var(value);
-
-      result = callback.call(env, ctx, aVar);
-
-      Value aNew = aVar.toValue();
-
-      if (aNew != value)
-        put(key, aNew);
-    }
-
-    return result;
-  }
-
-  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key,
-                                  Value a2)
-  {
-    V<? extends Value> result;
-    Value value = getRaw(key);
-
-    if (value instanceof Var) {
-      value = new ArgRef((Var) value);
-
-      result = callback.call(env, ctx, value, a2);
-    }
-    else {
-      Value aVar = new Var(value);
-
-      result = callback.call(env, ctx, aVar, a2);
-
-      Value aNew = aVar.toValue();
-
-      if (aNew != value)
-        put(key, aNew);
-    }
-
-    return result;
-  }
-
-  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key,
-                                  Value a2, Value a3)
-  {
-    V<? extends Value> result;
-    Value value = getRaw(key);
-
-    if (value instanceof Var) {
-      value = new ArgRef((Var) value);
-
-      result = callback.call(env, ctx, value, a2, a3);
-    }
-    else {
-      Value aVar = new Var(value);
-
-      result = callback.call(env,ctx,  aVar, a2, a3);
-
-      Value aNew = aVar.toValue();
-
-      if (aNew != value)
-        put(key, aNew);
-    }
-
-    return result;
-  }
+//  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key,
+//                                  Value a2)
+//  {
+//    V<? extends Value> result;
+//    Value value = getRaw(key);
+//
+//    if (value instanceof Var) {
+//      value = new ArgRef((Var) value);
+//
+//      result = callback.call(env, ctx, value, a2);
+//    }
+//    else {
+//      Value aVar = new Var(value);
+//
+//      result = callback.call(env, ctx, aVar, a2);
+//
+//      Value aNew = aVar.toValue();
+//
+//      if (aNew != value)
+//        put(key, aNew);
+//    }
+//
+//    return result;
+//  }
+//
+//  public final V<? extends Value> callCallback(Env env, FeatureExpr ctx, Callable callback, Value key,
+//                                  Value a2, Value a3)
+//  {
+//    V<? extends Value> result;
+//    Value value = getRaw(key);
+//
+//    if (value instanceof Var) {
+//      value = new ArgRef((Var) value);
+//
+//      result = callback.call(env, ctx, value, a2, a3);
+//    }
+//    else {
+//      Value aVar = new Var(value);
+//
+//      result = callback.call(env,ctx,  aVar, a2, a3);
+//
+//      Value aNew = aVar.toValue();
+//
+//      if (aNew != value)
+//        put(key, aNew);
+//    }
+//
+//    return result;
+//  }
 
   /**
    * Returns true for an array.
@@ -616,7 +617,7 @@ abstract public class ArrayValue extends Value {
    * Copy for serialization
    */
   @Override
-  abstract public Value copy(Env env, IdentityHashMap<Value,Value> map);
+  abstract public Value copy(Env env, IdentityHashMap<Value, EnvVar> map);
 
   /**
    * Returns the size.
@@ -641,8 +642,8 @@ abstract public class ArrayValue extends Value {
   {
     int count = getCount(env);
 
-    for (Map.Entry<Value,Value> entry : entrySet()) {
-      Value value = entry.getValue();
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+      Value value = entry.getValue().getOne();
 
       if (value.isArray())
         count += value.getCountRecursive(env);
@@ -663,7 +664,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public boolean isEmpty(Env env, Value key)
   {
-    Value value = get(key);
+    Value value = get(key).getOne();
 
     return value.isEmpty();
   }
@@ -695,9 +696,9 @@ abstract public class ArrayValue extends Value {
     if (lSize != rSize)
       return lSize < rSize ? -1 : 1;
 
-    for (Map.Entry<Value,Value> entry : entrySet()) {
-      Value lElementValue = entry.getValue();
-      Value rElementValue = rValue.get(entry.getKey());
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+      Value lElementValue = entry.getValue().getOne();
+      Value rElementValue = rValue.get(entry.getKey()).getOne();
 
       if (!rElementValue.isset())
         return resultIfKeyMissing;
@@ -754,7 +755,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Adds a new value.
    */
-  @Override
+//  @Override
   public Value put(Value key, Value value)
   {
     append(key, value);
@@ -800,15 +801,15 @@ abstract public class ArrayValue extends Value {
   {
     ArrayValueImpl array = new ArrayValueImpl();
 
-    Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+    Iterator<Map.Entry<Value,EnvVar>> iter = array.getIterator(env);
 
     for (int i = 0; i < end && iter.hasNext(); i++) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
 
       if (start <= i) {
         Value key = entry.getKey();
 
-        Value value = entry.getValue();
+        Value value = entry.getValue().getOne();
 
         if ((key.isString()) || isPreserveKeys)
           array.put(key, value);
@@ -826,7 +827,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public Value getArray(Value index)
   {
-    Value value = get(index);
+    Value value = get(index).getOne();
 
     Value array = value.toAutoArray();
 
@@ -842,8 +843,8 @@ abstract public class ArrayValue extends Value {
   /**
    * Returns the value as an argument which may be a reference.
    */
-  @Override
-  abstract public Value getArg(Value index, boolean isTop);
+//  @Override
+//  abstract public Value getArg(Value index, boolean isTop);
 
   /**
    * Returns the field value, creating an object if it's unset.
@@ -851,7 +852,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public Value getObject(Env env, Value fieldName)
   {
-    Value value = get(fieldName);
+    Value value = get(fieldName).getOne();
 
     Value object = value.toAutoObject(env);
     if (value != object) {
@@ -891,10 +892,10 @@ abstract public class ArrayValue extends Value {
 
     ArrayValue result = new ArrayValueImpl(this);
 
-    for (Map.Entry<Value,Value> entry : ((ArrayValue) rValue).entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : ((ArrayValue) rValue).entrySet()) {
       Value key = entry.getKey();
 
-      if (result.get(key) == UnsetValue.UNSET) {
+      if (result.get(key).getOne() == UnsetValue.UNSET) {
         // php/330c drupal disabled textarea
         result.put(key, entry.getValue().copy());
       }
@@ -904,12 +905,12 @@ abstract public class ArrayValue extends Value {
   }
 
   @Override
-  public Iterator<Map.Entry<Value, Value>> getBaseIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getBaseIterator(Env env)
   {
     return new EntryIterator(getHead());
   }
 
-  public Iterator<Map.Entry<Value, Value>> getIterator()
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator()
   {
     return new EntryIterator(getHead());
   }
@@ -921,7 +922,7 @@ abstract public class ArrayValue extends Value {
   }
 
   @Override
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
     return new ValueIterator(getHead());
   }
@@ -930,13 +931,13 @@ abstract public class ArrayValue extends Value {
    * Gets a new value.
    */
   @Override
-  abstract public Value get(Value key);
+  abstract public EnvVar get(Value key);
 
   /**
    * Returns the value in the array as-is.
    * (i.e. without calling toValue() on it).
    */
-  public Value getRaw(Value key)
+  public EnvVar getRaw(Value key)
   {
     return get(key);
   }
@@ -947,10 +948,10 @@ abstract public class ArrayValue extends Value {
   @Override
   public boolean isset(Value key)
   {
-    Value value = get(key);
+    EnvVar value = get(key);
 
     // php/0d40
-    return value != null && value.isset();
+    return value != null && value.getValue().getOne().isset();
   }
 
   /**
@@ -959,7 +960,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public boolean keyExists(Value key)
   {
-    Value value = get(key);
+    Value value = get(key).getValue().getOne();
 
     // php/173m
     return value != UnsetValue.UNSET;
@@ -974,8 +975,8 @@ abstract public class ArrayValue extends Value {
   /**
    * Returns the array ref.
    */
-  @Override
-  abstract public Var getVar(Value index);
+//  @Override
+//  abstract public Var getVar(Value index);
 
   /**
    * Returns an iterator of the entries.
@@ -988,7 +989,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Returns a set of all the of the entries.
    */
-  public Set<Map.Entry<Value,Value>> entrySet()
+  public Set<Map.Entry<Value,EnvVar>> entrySet()
   {
     return new EntrySet();
   }
@@ -996,7 +997,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Returns a collection of the values.
    */
-  public Collection<Value> values()
+  public Collection<EnvVar> values()
   {
     return new ValueCollection();
   }
@@ -1095,18 +1096,26 @@ abstract public class ArrayValue extends Value {
    *
    * XXX: change name to appendArg
    */
-  abstract public ArrayValue append(Value key, Value value);
+  abstract public ArrayValue append(Value key, EnvVar value);
+
+  @Deprecated//V transformation
+  public ArrayValue append(Value value) {
+    put(value);
+
+    return this;
+  }
 
   /**
    * Appends as an argument - only called from compiled code
    *
    * XXX: change name to appendArg
    */
-  public ArrayValue append(Value value)
+  public ArrayValue append(EnvVar value)
   {
-    put(value);
-
-    return this;
+    throw new UnimplementedVException();
+//    put(value);
+//
+//    return this;
   }
 
   /**
@@ -1114,7 +1123,7 @@ abstract public class ArrayValue extends Value {
    */
   public void putAll(ArrayValue array)
   {
-    for (Map.Entry<Value, Value> entry : array.entrySet())
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet())
       put(entry.getKey(), entry.getValue());
   }
 
@@ -1171,7 +1180,7 @@ abstract public class ArrayValue extends Value {
   public Value current()
   {
     if (_current != null)
-      return _current.getValue();
+      return _current.getValue().getOne();
     else
       return BooleanValue.FALSE;
   }
@@ -1291,24 +1300,24 @@ abstract public class ArrayValue extends Value {
    */
   abstract public Value containsKey(Value key);
 
-  /**
-   * Returns an object array of this array.  This is a copy of this object's
-   * backing structure.  Null elements are not included.
-   *
-   * @return an object array of this array
-   */
-  public Map.Entry<Value, Value>[] toEntryArray()
-  {
-    ArrayList<Map.Entry<Value, Value>> array
-      = new ArrayList<Map.Entry<Value, Value>>(getSize());
-
-    for (Entry entry = getHead(); entry != null; entry = entry._next)
-      array.add(entry);
-
-    Map.Entry<Value, Value>[]result = new Entry[array.size()];
-
-    return array.toArray(result);
-  }
+//  /**
+//   * Returns an object array of this array.  This is a copy of this object's
+//   * backing structure.  Null elements are not included.
+//   *
+//   * @return an object array of this array
+//   */
+//  public Map.Entry<Value, EnvVar>[] toEntryArray()
+//  {
+//    ArrayList<Map.Entry<Value, Value>> array
+//      = new ArrayList<Map.Entry<Value, Value>>(getSize());
+//
+//    for (Entry entry = getHead(); entry != null; entry = entry._next)
+//      array.add(entry);
+//
+//    Map.Entry<Value, EnvVar>[]result = new Entry[array.size()];
+//
+//    return array.toArray(result);
+//  }
 
   /**
    * Sorts this array based using the passed Comparator
@@ -1317,7 +1326,7 @@ abstract public class ArrayValue extends Value {
    * @param resetKeys  true if the keys should not be preserved
    * @param strict  true if alphabetic keys should not be preserved
    */
-  public void sort(Comparator<Map.Entry<Value, Value>> comparator,
+  public void sort(Comparator<Map.Entry<Value, EnvVar>> comparator,
                    boolean resetKeys, boolean strict)
   {
     Entry []entries;
@@ -1365,7 +1374,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
       entry.getKey().serialize(env, sb);
-      entry.getRawValue().serialize(env, sb, serializeMap);
+      entry.getRawValue().getOne().serialize(env, sb, serializeMap);
     }
 
     sb.append("}");
@@ -1390,7 +1399,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
       for (int i = 0; i < level + 1; i++) {
         sb.append("  ");
@@ -1431,12 +1440,12 @@ abstract public class ArrayValue extends Value {
     sb.append('[');
 
     length = 0;
-    for (Value value : values()) {
+    for (EnvVar value : values()) {
       if (length > 0) {
         sb.append(',');
       }
 
-      value.jsonEncode(env, context, sb);
+      value.getOne().jsonEncode(env, context, sb);
       length++;
     }
 
@@ -1451,17 +1460,17 @@ abstract public class ArrayValue extends Value {
 
     int length = 0;
 
-    Iterator<Map.Entry<Value,Value>> iter = getIterator(env);
+    Iterator<Map.Entry<Value,EnvVar>> iter = getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
 
       if (length > 0)
         sb.append(',');
 
       entry.getKey().toStringValue(env).jsonEncode(env, context, sb);
       sb.append(':');
-      entry.getValue().jsonEncode(env, context, sb);
+      entry.getValue().getValue().foreach((a)->a.jsonEncode(env, context, sb));
       length++;
     }
 
@@ -1528,12 +1537,12 @@ abstract public class ArrayValue extends Value {
 
     rValue = rValue.toValue();
 
-    for (Map.Entry<Value, Value> entry : entrySet()) {
-      Value entryValue = entry.getValue();
+    for (Map.Entry<Value, EnvVar> entry : entrySet()) {
+      Value entryValue = entry.getValue().getValue().getOne();
 
       Value entryKey = entry.getKey();
 
-      Value rEntryValue = rValue.get(entryKey);
+      Value rEntryValue = rValue.get(entryKey).getValue().getOne();
 
       if ((rEntryValue instanceof ArrayValue)
           && ! entryValue.eq((ArrayValue) rEntryValue))
@@ -1575,17 +1584,17 @@ abstract public class ArrayValue extends Value {
 
     ArrayValue rArray = (ArrayValue) rValue;
 
-    Iterator<Map.Entry<Value,Value>> iterA = entrySet().iterator();
-    Iterator<Map.Entry<Value,Value>> iterB = rArray.entrySet().iterator();
+    Iterator<Map.Entry<Value,EnvVar>> iterA = entrySet().iterator();
+    Iterator<Map.Entry<Value,EnvVar>> iterB = rArray.entrySet().iterator();
 
     while (iterA.hasNext() && iterB.hasNext()) {
-      Map.Entry<Value,Value> entryA = iterA.next();
-      Map.Entry<Value,Value> entryB = iterB.next();
+      Map.Entry<Value,EnvVar> entryA = iterA.next();
+      Map.Entry<Value,EnvVar> entryB = iterB.next();
 
       if (! entryA.getKey().eql(entryB.getKey()))
         return false;
 
-      if (! entryA.getValue().eql(entryB.getValue()))
+      if (! entryA.getValue().getValue().getOne().eql(entryB.getValue().getValue().getOne()))
         return false;
     }
 
@@ -1612,7 +1621,7 @@ abstract public class ArrayValue extends Value {
   {
     out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
 
-    for (Map.Entry<Value,Value> mapEntry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
       varDumpEntry(env, out, depth + 1, valueSet, mapEntry);
 
       out.println(VHelper.noCtx());
@@ -1627,7 +1636,7 @@ abstract public class ArrayValue extends Value {
                               VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet,
-                              Map.Entry<Value, Value> mapEntry)
+                              Map.Entry<Value, EnvVar> mapEntry)
     throws IOException
   {
     ArrayValue.Entry entry = (ArrayValue.Entry) mapEntry;
@@ -1646,7 +1655,7 @@ abstract public class ArrayValue extends Value {
     printDepth(out, 4 * depth);
     out.println(VHelper.noCtx(), "(");
 
-    for (Map.Entry<Value,Value> mapEntry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
       ArrayValue.Entry entry = (ArrayValue.Entry) mapEntry;
 
       entry.printRImpl(env, out, depth, valueSet);
@@ -1660,7 +1669,7 @@ abstract public class ArrayValue extends Value {
                              VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet,
-                             Map.Entry<Value, Value> mapEntry)
+                             Map.Entry<Value, EnvVar> mapEntry)
     throws IOException
   {
     ArrayValue.Entry entry = (ArrayValue.Entry) mapEntry;
@@ -1669,11 +1678,11 @@ abstract public class ArrayValue extends Value {
   }
 
   public static final class Entry
-    implements Map.Entry<Value,Value>, Serializable
+    implements Map.Entry<Value,EnvVar>, Serializable
   {
     private final Value _key;
 
-    private Value _value;
+    private EnvVar _value;
     // Var _var;
 
     Entry _prev;
@@ -1684,10 +1693,10 @@ abstract public class ArrayValue extends Value {
     public Entry(Value key)
     {
       _key = key;
-      _value = NullValue.NULL;
+      _value = EnvVar._gen(NullValue.NULL);
     }
 
-    public Entry(Value key, Value value)
+    public Entry(Value key, EnvVar value)
     {
       _key = key;
       _value = value;
@@ -1697,7 +1706,7 @@ abstract public class ArrayValue extends Value {
     {
       _key = entry._key;
 
-      _value = entry._value.copyArrayItem();
+      _value = entry._value.copy();
     }
 
     public final Entry getNext()
@@ -1730,16 +1739,29 @@ abstract public class ArrayValue extends Value {
       _nextHash = next;
     }
 
-    public Value getRawValue()
+    public EnvVar getRawValue()
     {
       // return _var != null ? _var : _value;
       return _value;
     }
 
-    public Value getValue()
+    public EnvVar getValue()
     {
       // return _var != null ? _var.toValue() : _value;
-      return _value.toValue();
+      return _value;
+    }
+
+    @Override
+    public EnvVar setValue(EnvVar value) {
+      EnvVar oldValue = _value;
+      _value=value;
+      return oldValue;
+    }
+
+    public V<? extends Value> getValue_()
+    {
+      // return _var != null ? _var.toValue() : _value;
+      return _value.getValue();
     }
 
     public Value getKey()
@@ -1747,92 +1769,92 @@ abstract public class ArrayValue extends Value {
       return _key;
     }
 
-    public Value toValue()
+    public V<? extends Value> toValue()
     {
       // The value may be a var
       // XXX: need test
       // return _var != null ? _var.toValue() : _value;
 
-      return _value.toValue();
+      return _value.getValue();
     }
 
-    public Var toVar()
+    public V<? extends Var> toVar()
     {
-      Var var = _value.toVar();
-      _value = var;
+      V<? extends Var> var = _value.getVar();
 
       return var;
     }
 
-    /**
-     * Argument used/declared as a ref.
-     */
-    public Var toRefVar()
-    {
-      // php/376a
-
-      Var var = _value.toVar();
-      _value = var;
-
-      return var;
-
-      /*
-      if (_var != null)
-        return _var;
-      else {
-        _var = new Var(_value);
-
-        return _var;
-      }
-      */
-    }
-    /**
-     * Converts to an argument value.
-     */
-    public Value toArgValue()
-    {
-      // return _var != null ? _var.toValue() : _value;
-
-      return _value.toValue();
-    }
-
-    public Value setValue(Value value)
-    {
-      Value oldValue = _value;
-
-      _value = value;
-      // _var = null;
-
-      return oldValue;
-    }
+//    /**
+//     * Argument used/declared as a ref.
+//     */
+//    public Var toRefVar()
+//    {
+//      // php/376a
+//
+//      Var var = _value.toVar();
+//      _value = var;
+//
+//      return var;
+//
+//      /*
+//      if (_var != null)
+//        return _var;
+//      else {
+//        _var = new Var(_value);
+//
+//        return _var;
+//      }
+//      */
+//    }
+//    /**
+//     * Converts to an argument value.
+//     */
+//    public Value toArgValue()
+//    {
+//      // return _var != null ? _var.toValue() : _value;
+//
+//      return _value.toValue();
+//    }
+//
+//    public Value setValue(Value value)
+//    {
+//      Value oldValue = _value;
+//
+//      _value = value;
+//      // _var = null;
+//
+//      return oldValue;
+//    }
 
     public Value set(Value value)
     {
-      Value oldValue = _value;
-
-      // XXX: make OO
-      /*
-      if (value instanceof Var)
-        _var = (Var) value;
-      else if (_var != null)
-        _var.set(value);
-      else
-        _value = value;
-      */
-
-      if (value instanceof Var)
-        _value = (Var) value;
-      else {
-        _value = _value.set(value);
-      }
-
-      return oldValue;
+      throw new UnimplementedVException();
+//      Value oldValue = _value;
+//
+//      // XXX: make OO
+//      /*
+//      if (value instanceof Var)
+//        _var = (Var) value;
+//      else if (_var != null)
+//        _var.set(value);
+//      else
+//        _value = value;
+//      */
+//
+//      if (value instanceof Var)
+//        _value = (Var) value;
+//      else {
+//        _value = _value.set(value);
+//      }
+//
+//      return oldValue;
     }
 
     /**
      * Converts to a variable reference (for function  arguments)
      */
-    public Value toRef()
+    public ArgRef toRef()
     {
       /*
       if (_var == null)
@@ -1842,49 +1864,47 @@ abstract public class ArrayValue extends Value {
 
       */
 
-      Var var = _value.toVar();
-
-      _value = var;
+      Var var = _value.getVar().getOne();
 
       return new ArgRef(var);
     }
 
-    /**
-     * Converts to a variable reference (for function  arguments)
-     */
-    public Value toArgRef()
-    {
-      Var var = _value.toVar();
-
-      _value = var;
-
-      return new ArgRef(var);
-
-      /*
-      if (_var == null)
-        _var = new Var(_value);
-
-      return new RefVar(_var);
-      */
-    }
-
-    public Value toArg()
-    {
-      Var var = _value.toVar();
-
-      _value = var;
-
-      // php/0d14
-      return var;
-      // return new RefVar(var);
-
-      /*
-      if (_var == null)
-        _var = new Var(_value);
-
-      return _var;
-      */
-    }
+//    /**
+//     * Converts to a variable reference (for function  arguments)
+//     */
+//    public Value toArgRef()
+//    {
+//      Var var = _value.toVar();
+//
+//      _value = var;
+//
+//      return new ArgRef(var);
+//
+//      /*
+//      if (_var == null)
+//        _var = new Var(_value);
+//
+//      return new RefVar(_var);
+//      */
+//    }
+//
+//    public Value toArg()
+//    {
+//      Var var = _value.toVar();
+//
+//      _value = var;
+//
+//      // php/0d14
+//      return var;
+//      // return new RefVar(var);
+//
+//      /*
+//      if (_var == null)
+//        _var = new Var(_value);
+//
+//      return _var;
+//      */
+//    }
 
     public void varDumpImpl(Env env,
                             VWriteStream out,
@@ -1904,7 +1924,13 @@ abstract public class ArrayValue extends Value {
 
       printDepth(out, 2 * depth);
 
-      getRawValue().varDump(env, out, depth, valueSet);
+      getRawValue().getValue().foreach((a) -> {
+        try {
+          a.varDump(env, out, depth, valueSet);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      });
     }
 
     protected void printRImpl(Env env,
@@ -1918,7 +1944,13 @@ abstract public class ArrayValue extends Value {
       out.print(VHelper.noCtx(), _key);
       out.print(VHelper.noCtx(), "] => ");
       if (getRawValue() != null) {
-        getRawValue().printR(env, out, depth + 2, valueSet);
+        getRawValue().getValue().foreach((a) -> {
+          try {
+            a.printR(env, out, depth + 2, valueSet);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        });
       }
 
       out.println(VHelper.noCtx());
@@ -1963,10 +1995,10 @@ abstract public class ArrayValue extends Value {
     int len = getSize();
     Value []values = new Value[len];
 
-    Iterator<Value> iter = getValueIterator(env);
+    Iterator<EnvVar> iter = getValueIterator(env);
 
     for (int i = 0; i < len; i++) {
-      values[i] = iter.next();
+      values[i] = iter.next().getOne();
     }
 
     return values;
@@ -1996,7 +2028,7 @@ abstract public class ArrayValue extends Value {
 
     int i = 0;
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
-      values[i++] = ptr.getValue();
+      values[i++] = ptr.getValue().getValue().getOne();
     }
 
     return values;
@@ -2036,14 +2068,14 @@ abstract public class ArrayValue extends Value {
 
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-                                                   ptr.getValue(),
+                                                   ptr.getValue().getValue().getOne(),
                                                    elementType));
     }
 
     return array;
   }
 
-  public class EntrySet extends AbstractSet<Map.Entry<Value,Value>> {
+  public class EntrySet extends AbstractSet<Map.Entry<Value,EnvVar>> {
     EntrySet()
     {
     }
@@ -2055,7 +2087,7 @@ abstract public class ArrayValue extends Value {
     }
 
     @Override
-    public Iterator<Map.Entry<Value,Value>> iterator()
+    public Iterator<Map.Entry<Value,EnvVar>> iterator()
     {
       return new EntryIterator(getHead());
     }
@@ -2079,7 +2111,7 @@ abstract public class ArrayValue extends Value {
     }
   }
 
-  public class ValueCollection extends AbstractCollection<Value> {
+  public class ValueCollection extends AbstractCollection<EnvVar> {
     ValueCollection()
     {
     }
@@ -2091,14 +2123,14 @@ abstract public class ArrayValue extends Value {
     }
 
     @Override
-    public Iterator<Value> iterator()
+    public Iterator<EnvVar> iterator()
     {
       return new ValueIterator(getHead());
     }
   }
 
   public static class EntryIterator
-    implements Iterator<Map.Entry<Value,Value>> {
+    implements Iterator<Map.Entry<Value,EnvVar>> {
     private Entry _current;
 
     EntryIterator(Entry head)
@@ -2111,10 +2143,10 @@ abstract public class ArrayValue extends Value {
       return _current != null;
     }
 
-    public Map.Entry<Value,Value> next()
+    public Map.Entry<Value,EnvVar> next()
     {
       if (_current != null) {
-        Map.Entry<Value,Value> next = _current;
+        Map.Entry<Value,EnvVar> next = _current;
         _current = _current._next;
 
         return next;
@@ -2162,7 +2194,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static class ValueIterator
-    implements Iterator<Value> {
+    implements Iterator<EnvVar> {
     private Entry _current;
 
     ValueIterator(Entry head)
@@ -2175,10 +2207,10 @@ abstract public class ArrayValue extends Value {
       return _current != null;
     }
 
-    public Value next()
+    public EnvVar next()
     {
       if (_current != null) {
-        Value next = _current.getValue();
+        EnvVar next = _current.getValue();
         _current = _current._next;
 
         return next;
@@ -2194,7 +2226,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static class ValueComparator
-    implements Comparator<Map.Entry<Value,Value>>
+    implements Comparator<Map.Entry<Value,EnvVar>>
   {
     public static final ValueComparator CMP = new ValueComparator();
 
@@ -2202,12 +2234,12 @@ abstract public class ArrayValue extends Value {
     {
     }
 
-    public int compare(Map.Entry<Value,Value> aEntry,
-                       Map.Entry<Value,Value> bEntry)
+    public int compare(Map.Entry<Value,EnvVar> aEntry,
+                       Map.Entry<Value,EnvVar> bEntry)
     {
       try {
-        Value aValue = aEntry.getValue();
-        Value bValue = bEntry.getValue();
+        Value aValue = aEntry.getValue().getValue().getOne();
+        Value bValue = bEntry.getValue().getValue().getOne();
 
         if (aValue.eq(bValue))
           return 0;
@@ -2222,7 +2254,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static class KeyComparator
-    implements Comparator<Map.Entry<Value,Value>>
+    implements Comparator<Map.Entry<Value,EnvVar>>
   {
     public static final KeyComparator CMP = new KeyComparator();
 
@@ -2230,8 +2262,8 @@ abstract public class ArrayValue extends Value {
     {
     }
 
-    public int compare(Map.Entry<Value,Value> aEntry,
-                       Map.Entry<Value,Value> bEntry)
+    public int compare(Map.Entry<Value,EnvVar> aEntry,
+                       Map.Entry<Value,EnvVar> bEntry)
     {
       try {
         Value aKey = aEntry.getKey();
@@ -2250,7 +2282,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static abstract class AbstractGet {
-    public abstract Value get(Map.Entry<Value, Value> entry);
+    public abstract Value get(Map.Entry<Value, EnvVar> entry);
   }
 
   public static class GetKey extends AbstractGet
@@ -2262,7 +2294,7 @@ abstract public class ArrayValue extends Value {
     }
 
     @Override
-    public Value get(Map.Entry<Value, Value> entry)
+    public Value get(Map.Entry<Value, EnvVar> entry)
     {
       return entry.getKey();
     }
@@ -2276,9 +2308,9 @@ abstract public class ArrayValue extends Value {
     }
 
     @Override
-    public Value get(Map.Entry<Value, Value> entry)
+    public Value get(Map.Entry<Value, EnvVar> entry)
     {
-      return entry.getValue();
+      return entry.getValue().getOne();
     }
   }
 }

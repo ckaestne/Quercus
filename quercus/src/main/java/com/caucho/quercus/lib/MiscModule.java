@@ -332,7 +332,7 @@ public class MiscModule extends AbstractQuercusModule {
     StringValue patternMatched = env.getEmptyString();
     String regExpMatched = null;
 
-    for (Map.Entry<Value,Value> entry : browsers.entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : browsers.entrySet()) {
       StringValue pattern = entry.getKey().toStringValue();
 
       if (pattern.toString().equals(user_agent)) {
@@ -368,7 +368,7 @@ public class MiscModule extends AbstractQuercusModule {
                        String user_agent,
                        boolean return_array)
   {
-    ArrayValue capabilities = browsers.get(patternMatched).toArrayValue(env);
+    ArrayValue capabilities = browsers.get(patternMatched).getOne().toArrayValue(env);
 
     if (regExpMatched == null)
       capabilities.put(env.createString("browser_name_regex"),
@@ -378,7 +378,7 @@ public class MiscModule extends AbstractQuercusModule {
     capabilities.put(env.createString("browser_name_pattern"), patternMatched);
 
     addBrowserCapabilities(env, browsers,
-                           capabilities.get(env.createString("parent")),
+                           capabilities.get(env.createString("parent")).getOne(),
                            capabilities);
 
     if (return_array) {
@@ -388,8 +388,8 @@ public class MiscModule extends AbstractQuercusModule {
     }
 
     ObjectValue object = env.createObject();
-    for (Map.Entry<Value,Value> entry : capabilities.entrySet()) {
-      object.putField(env, entry.getKey().toString(), entry.getValue());
+    for (Map.Entry<Value,EnvVar> entry : capabilities.entrySet()) {
+      object.putField(env, entry.getKey().toString(), entry.getValue().getOne());
     }
 
     return object;
@@ -405,18 +405,18 @@ public class MiscModule extends AbstractQuercusModule {
       return;
 
     Value field = null;
-    if ((field = browsers.get(browser)) == UnsetValue.UNSET)
+    if ((field = browsers.get(browser).getOne()) == UnsetValue.UNSET)
       return;
 
     ArrayValue browserCapabilities = field.toArrayValue(env);
     StringValue parentString = env.createString("parent");
 
-    for (Map.Entry<Value,Value> entry : browserCapabilities.entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : browserCapabilities.entrySet()) {
       Value key = entry.getKey();
 
       if (key.equals(parentString)) {
         addBrowserCapabilities(
-            env, browsers, entry.getValue(), cap);
+            env, browsers, entry.getValue().getOne(), cap);
       }
       else if (cap.containsKey(key) == null)
         cap.put(key, entry.getValue());
@@ -748,7 +748,7 @@ public class MiscModule extends AbstractQuercusModule {
         envStrings = new String[size];
 
         int i = 0;
-        for (Map.Entry<Value,Value> entry : envArray.entrySet()) {
+        for (Map.Entry<Value,EnvVar> entry : envArray.entrySet()) {
           envStrings[i++] = entry.getKey() + "=" + entry.getValue();
         }
       }
@@ -767,12 +767,12 @@ public class MiscModule extends AbstractQuercusModule {
       pipes.set(array);
       array.clear();
 
-      for (Map.Entry<Value,Value> entry : descriptorArray.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : descriptorArray.entrySet()) {
         Value key = entry.getKey();
-        Value val = entry.getValue();
+        Value val = entry.getValue().getOne();
 
         String type = val.get(LongValue.ZERO).toString();
-        StringValue name = val.get(LongValue.ONE).toStringValue();
+        StringValue name = val.get(LongValue.ONE).getOne().toStringValue();
         String mode = val.get(LongValue.create(2)).toString();
 
         // input to the command

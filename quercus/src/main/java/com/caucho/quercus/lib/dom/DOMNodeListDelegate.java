@@ -46,12 +46,12 @@ public class DOMNodeListDelegate
     return new DOMNodeListKeyIterator((DOMNodeList) obj.toJavaObject());
   }
   
-  public Iterator<Value> getValueIterator(Env env, ObjectValue obj)
+  public Iterator<EnvVar> getValueIterator(Env env, ObjectValue obj)
   {
-    return new DOMNodeListValueIterator(env, (DOMNodeList) obj.toJavaObject());
+    return new DOMNodeListValueIterator(env,  (DOMNodeList) obj.toJavaObject());
   }
   
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env, ObjectValue obj)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env, ObjectValue obj)
   {
     return new DOMNodeListIterator(env, (DOMNodeList) obj.toJavaObject());
   }
@@ -84,7 +84,7 @@ public class DOMNodeListDelegate
   }
   
   public class DOMNodeListValueIterator
-    implements Iterator<Value>
+    implements Iterator<EnvVar>
   {
     private Env _env;
     private DOMNodeList _list;
@@ -101,9 +101,9 @@ public class DOMNodeListDelegate
       return _index < _list.getLength();
     }
 
-    public Value next()
+    public EnvVar next()
     {
-      return _env.wrapJava(_list.item(_index++));
+      return EnvVar._gen( _env.wrapJava(_list.item(_index++)));
     }
 
     public void remove()
@@ -113,7 +113,7 @@ public class DOMNodeListDelegate
   }
   
   public class DOMNodeListIterator
-    implements Iterator<Map.Entry<Value, Value>>
+    implements Iterator<Map.Entry<Value, EnvVar>>
   {
     private Env _env;
     private DOMNodeList _list;
@@ -130,9 +130,9 @@ public class DOMNodeListDelegate
       return _index < _list.getLength();
     }
 
-    public Map.Entry<Value, Value> next()
+    public Map.Entry<Value, EnvVar> next()
     {
-      return new DOMNodeListEntry(_index, _env.wrapJava(_list.item(_index++)));
+      return new DOMNodeListEntry(_index, EnvVar._gen(_env.wrapJava(_list.item(_index++))));
     }
 
     public void remove()
@@ -142,12 +142,12 @@ public class DOMNodeListDelegate
   }
   
   public class DOMNodeListEntry
-    implements Map.Entry<Value,Value>
+    implements Map.Entry<Value,EnvVar>
   {
     private int _key;
-    private Value _value;
+    private EnvVar _value;
     
-    public DOMNodeListEntry(int index, Value value)
+    public DOMNodeListEntry(int index, EnvVar value)
     {
       _key = index;
       _value = value;
@@ -158,12 +158,12 @@ public class DOMNodeListDelegate
       return LongValue.create(_key);
     }
     
-    public Value getValue()
+    public EnvVar getValue()
     {
       return _value;
     }
     
-    public Value setValue(Value value)
+    public EnvVar setValue(EnvVar value)
     {
       throw new UnsupportedOperationException();
     }

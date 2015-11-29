@@ -72,7 +72,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Copy for serialization
    */
-  public Value copy(Env env, IdentityHashMap<Value,Value> map)
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     if (_copyArray != null)
       return _copyArray.copy(env, map);
@@ -163,7 +163,7 @@ public class CopyArrayValue extends ArrayValue {
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     return getCopyArray().getArg(index, isTop);
   }
@@ -197,7 +197,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Add
    */
-  public ArrayValue append(Value key, Value value)
+  public ArrayValue append(Value key, EnvVar value)
   {
     return getCopyArray().append(key, value);
   }
@@ -213,7 +213,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Gets a new value.
    */
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
     if (_copyArray != null)
       return _copyArray.get(key);
@@ -277,7 +277,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Returns the array ref.
    */
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
     return getCopyArray().getVar(index);
   }

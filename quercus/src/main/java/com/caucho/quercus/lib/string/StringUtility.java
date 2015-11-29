@@ -132,7 +132,7 @@ public class StringUtility
             String arrayName = key.substring(0, openBracketIndex);
             arrayName = arrayName.replace('.', '_');
 
-            Value v = env.getVar(VHelper.noCtx(), arrayName).getOne().getRawValue();
+            Value v = env.getVar(VHelper.noCtx(), arrayName).getOne().makeValue();//TODO V .getRawValue();
             if (v instanceof ArrayValue) {
               //Check to make sure valid string (ie: foo[...])
               if (closeBracketIndex < 0) {
@@ -243,9 +243,9 @@ public class StringUtility
       Value part;
 
       if (array != null)
-        part = array.get(keyValue);
+        part = array.get(keyValue).getOne();
       else
-        part = env.getVar(VHelper.noCtx(), keyValue).getOne();
+        part = env.getVar(VHelper.noCtx(), keyValue).getOne().makeValue();
 
       if (! part.isArray())
         part = new ArrayValueImpl();

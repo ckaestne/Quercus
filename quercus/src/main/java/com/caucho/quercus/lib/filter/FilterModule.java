@@ -133,7 +133,7 @@ public class FilterModule extends AbstractQuercusModule
 
     Filter filter = getFilter(env, filterIdV);
 
-    Value value = array.get(name);
+    Value value = array.get(name).getOne();
 
     if (value == UnsetValue.UNSET) {
       int flags = AbstractFilter.getFlags(env, flagV);
@@ -177,9 +177,9 @@ public class FilterModule extends AbstractQuercusModule
 
     ArrayValue array = new ArrayValueImpl();
 
-    for (Map.Entry<Value,Value> entry : inputArray.entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : inputArray.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
       Value newKey = filter.filter(env, key, definition);
       Value newValue = filter.filter(env, value, definition);
@@ -201,7 +201,7 @@ public class FilterModule extends AbstractQuercusModule
       filterId = defaultFilterId;
     }
     else if (filterIdV.isArray()) {
-      Value value = filterIdV.get(env.createString("filter"));
+      Value value = filterIdV.get(env.createString("filter")).getOne();
 
       if (value.isNull()) {
         filterId = defaultFilterId;

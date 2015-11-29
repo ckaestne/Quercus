@@ -30,6 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.util.IntMap;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -79,7 +81,7 @@ public class LazyStaticMap extends AbstractMap<StringValue,Var> {
 
         Value value = _values[id].copy(env);
 
-        var.set(value);
+        var.set(VHelper.noCtx(), V.one(value));
       }
     }
     

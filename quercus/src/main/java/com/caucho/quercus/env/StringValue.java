@@ -975,7 +975,7 @@ abstract public class StringValue
       obj.putThisField(env, fieldName, newFieldValue);
     }
 
-    return newFieldValue.get(index);
+    return newFieldValue.get(index).getOne();
   }
 
   // Operations
@@ -983,18 +983,18 @@ abstract public class StringValue
   /**
    * Returns the character at an index
    */
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
-    return charValueAt(key.toLong());
+    return EnvVar._gen(charValueAt(key.toLong()));
   }
 
   /**
    * Returns the character at an index
    */
-  public Value getArg(Value key, boolean isTop)
+  public EnvVar getArg(Value key, boolean isTop)
   {
     // php/03ma
-    return charValueAt(key.toLong());
+    return EnvVar._gen(charValueAt(key.toLong()));
   }
 
   /**

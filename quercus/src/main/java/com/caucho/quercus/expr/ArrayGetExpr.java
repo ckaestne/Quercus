@@ -88,7 +88,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.mapAll(array, index,(a,i)-> a.get(i));
+    return VHelper.mapAll(array, index,(a,i)-> a.get(i).getOne());
   }
 
   /**
@@ -105,7 +105,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.mapAll(array, index,(a,i)-> a.get(i).copy());
+    return VHelper.mapAll(array, index,(a,i)-> a.get(i).getOne().copy());
   }
 
   /**
@@ -139,7 +139,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.mapAll(array, index,(a,i)-> a.getDirty(i));
+    return VHelper.mapAll(array, index,(a,i)-> a.getDirty(i).getOne());
   }
 
   /**
@@ -175,7 +175,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.evalArg(env, VHelper.noCtx(), false);
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    V<? extends Value> result = VHelper.mapAll(array, index,(a,i)-> a.getArg(i, isTop));
+    V<? extends Value> result = VHelper.mapAll(array, index,(a,i)-> a.getArg(i, isTop).getOne());
 
     return result;
   }
@@ -194,7 +194,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.mapAll(array, index,(a,i)-> a.getVar(i));
+    return VHelper.mapAll(array, index,(a,i)-> a.getVar(i).getVar().getOne());
   }
 
   /**

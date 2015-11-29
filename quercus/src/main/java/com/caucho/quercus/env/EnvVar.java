@@ -38,16 +38,18 @@ import edu.cmu.cs.varex.V;
  *
  * Varex Design Notes:
  *
- *  - A Var holds exactly one value (not variational); it is essentially a pointer
- *    for pass by reference assignments
+ *  - A value represents exactly one value (not variational, except for inner variations
+ *    in objects and arrays)
  *
- *  - A value represents exactly one value (not variational)
+ *  - A Var holds one or more values (variational); it is essentially a pointer
+ *    for pass by reference assignments. If a variable is passed by reference,
+ *    all values are passed. A var needs to be variational such that a value
+ *    can be partially changed on a shared reference.
  *
- *  - A EnvVar represents the value of one variable (there is a map from
- *    variable names to EnvVar in Env) and this can point to multiple variables.
- *    This is where all the splitting and joining must happen for both
- *    assign by value (set) and assign by reference (setVar)
- *
+ *  - A EnvVar represents the value of one variable or field (there is a map from
+ *    variable names to EnvVar in Env and EnvVar are now the structures returned by
+ *    arrays [and field (FIX)] access) and this can point to alternative variables
+ *    in different configurations.
  *
  * One per name, usually no need for V<EnvVar>
  */
@@ -57,7 +59,11 @@ abstract public class EnvVar
    * Returns the current value.
    * @param ctx
    */
-  abstract public V<? extends Value> get(FeatureExpr ctx);
+  abstract public V<? extends Value> getValue(FeatureExpr ctx);
+  abstract public V<? extends Value> getValue();
+
+  @Deprecated
+  public Value getOne() { return getValue().getOne(); }
 
   /**
    * Sets the current value.
@@ -69,6 +75,7 @@ abstract public class EnvVar
    * @param ctx
    */
   abstract public V<? extends Var> getVar(FeatureExpr ctx);
+  abstract public V<? extends Var> getVar();
 
   /**
    * Sets the var.
@@ -79,16 +86,23 @@ abstract public class EnvVar
    * Sets the value as a reference. If the value is a Var, it replaces
    * the current Var, otherwise it sets the value. 
    */
-  public V<? extends Var> setRef(FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends Var> setRef(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     value.vforeach(ctx, (c, v) -> {
       if (v.isVar())
-        setVar(c, V.one((Var) v));
+        setVar(c, V.one(v._var()));
       else
-        set(c, V.one(v));
+        set(c, V.one(v._value()));
     });
     
     return getVar(ctx);
   }
+
+  @Deprecated
+  public static EnvVar _gen(Value v) {
+    return new EnvVarImpl(V.one(new Var(V.one(v))));
+  }
+
+  public abstract EnvVar copy();
 }
 

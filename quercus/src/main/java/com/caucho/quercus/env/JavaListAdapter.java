@@ -90,14 +90,14 @@ public class JavaListAdapter
   /**
    * Gets a new value.
    */
-  public Value get(Value key)
+  public EnvVar get(Value key)
   { 
     int pos = key.toInt();
     
     if (0 <= pos && pos < getSize())
-      return wrapJava(_list.get(pos));
+      return EnvVar._gen( wrapJava(_list.get(pos)));
     else
-      return UnsetValue.UNSET;
+      return EnvVar._gen(UnsetValue.UNSET);
   }
 
   /**
@@ -136,7 +136,7 @@ public class JavaListAdapter
    */
   public Value contains(Value value)
   {
-    for (Map.Entry<Value,Value> entry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
       if (entry.getValue().equals(value))
         return entry.getKey();
     }
@@ -253,7 +253,7 @@ public class JavaListAdapter
    * Copy for serialization
    */
   @Override
-  public Value copy(Env env, IdentityHashMap<Value,Value> map)
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     return new JavaListAdapter(_list, getClassDef());
   }

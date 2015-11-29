@@ -104,7 +104,7 @@ public class SessionArrayValue extends ArrayValueWrapper
   /**
    * Copy for serialization
    */
-  public Value copy(Env env, IdentityHashMap<Value,Value> map)
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     long accessTime = _accessTime;
 
@@ -126,11 +126,11 @@ public class SessionArrayValue extends ArrayValueWrapper
     SerializeMap serializeMap = new SerializeMap();
     
     synchronized (array) {
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
         sb.append(entry.getKey().toString());
         sb.append("|");
 
-        entry.getValue().serialize(env, sb, serializeMap);
+        entry.getValue().getOne().serialize(env, sb, serializeMap);
       }
     }
 

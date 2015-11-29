@@ -92,10 +92,10 @@ public class FunctionModule extends AbstractQuercusModule {
 
       int i = 0;
 
-      for (Map.Entry<Value,Value> entry : argArray.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : argArray.entrySet()) {
         ArrayValue.Entry arrayEntry = (ArrayValue.Entry) entry;
 
-        args[i++] = arrayEntry.getRawValue();
+        args[i++] = arrayEntry.getRawValue().getOne();
       }
     }
     else {

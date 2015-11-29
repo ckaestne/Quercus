@@ -267,8 +267,8 @@ public class RegexpModule
       Regexp []regexpArray = new Regexp[array.getSize()];
 
       int i = 0;
-      for (Value value : array.values()) {
-        Regexp regexp = createRegexp(value.toStringValue());
+      for (EnvVar value : array.values()) {
+        Regexp regexp = createRegexp(value.getOne().toStringValue());
         regexpArray[i++] = regexp;
       }
 
@@ -903,9 +903,9 @@ public class RegexpModule
     if (subject instanceof ArrayValue) {
       ArrayValue result = new ArrayValueImpl();
 
-      for (Map.Entry<Value,Value> entry : ((ArrayValue) subject).entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : ((ArrayValue) subject).entrySet()) {
         Value key = entry.getKey();
-        Value value = entry.getValue();
+        Value value = entry.getValue().getOne();
 
         result.put(key, pregReplace(env,
                                     regexpList,
@@ -949,12 +949,12 @@ public class RegexpModule
     if (replacement.isArray()) {
       ArrayValue replacementArray = (ArrayValue) replacement;
 
-      Iterator<Value> replacementIter = replacementArray.values().iterator();
+      Iterator<EnvVar> replacementIter = replacementArray.values().iterator();
 
       StringValue replacementStr;
 
       if (replacementIter.hasNext())
-        replacementStr = replacementIter.next().toStringValue();
+        replacementStr = replacementIter.next().getOne().toStringValue();
       else
         replacementStr = env.getEmptyString();
 
@@ -1012,11 +1012,11 @@ public class RegexpModule
     if (subject instanceof ArrayValue) {
       ArrayValue result = new ArrayValueImpl();
 
-      for (Value value : ((ArrayValue) subject).values()) {
+      for (EnvVar value : ((ArrayValue) subject).values()) {
         result.put(pregReplace(env,
                                regexpList,
                                replacement,
-                               value.toStringValue(),
+                               value.getOne().toStringValue(),
                                limit,
                                count));
       }
@@ -1054,13 +1054,13 @@ public class RegexpModule
     if (replacement.isArray()) {
       ArrayValue replacementArray = (ArrayValue) replacement;
 
-      Iterator<Value> replacementIter = replacementArray.values().iterator();
+      Iterator<EnvVar> replacementIter = replacementArray.values().iterator();
 
       for (int i = 0; i < regexpList.length; i++) {
         StringValue replacementStr;
 
         if (replacementIter.hasNext())
-          replacementStr = replacementIter.next().toStringValue();
+          replacementStr = replacementIter.next().getOne().toStringValue();
         else
           replacementStr = env.getEmptyString();
 
@@ -1122,10 +1122,11 @@ public class RegexpModule
 
     while (regexpState.find() && numberOfMatches < limit) {
       // Increment countV (note: if countV != null, then it should be a Var)
-      if (countV != null && countV instanceof Var) {
-        long count = countV.toValue().toLong();
-        countV.set(LongValue.create(count + 1));
-      }
+      //TODO V fixme
+//      if (countV != null && countV instanceof Var) {
+//        long count = countV.toValue().toLong();
+//        countV.set(LongValue.create(count + 1));
+//      }
 
       int start = regexpState.start();
       if (tail < start)
@@ -1340,9 +1341,10 @@ public class RegexpModule
       isMatched = true;
 
       // Increment countV (note: if countV != null, then it should be a Var)
-      if (countV != null && countV instanceof Var) {
-        countV.set(LongValue.create(countV.toLong() + 1));
-      }
+      //TODO V fixme
+//      if (countV != null && countV instanceof Var) {
+//        countV.set(LongValue.create(countV.toLong() + 1));
+//      }
 
       // append all text up to match
       int start = regexpState.start();
@@ -1433,11 +1435,11 @@ public class RegexpModule
       if (subject instanceof ArrayValue) {
         ArrayValue result = new ArrayValueImpl();
 
-        for (Value value : ((ArrayValue) subject).values()) {
+        for (EnvVar value : ((ArrayValue) subject).values()) {
           result.put(pregReplaceCallback(env,
                                          regexp,
                                          fun,
-                                         value.toStringValue(),
+                                         value.getOne().toStringValue(),
                                          limit,
                                          count));
         }
@@ -1498,11 +1500,11 @@ public class RegexpModule
     if (subject instanceof ArrayValue) {
       ArrayValue result = new ArrayValueImpl();
 
-      for (Value value : ((ArrayValue) subject).values()) {
+      for (EnvVar value : ((ArrayValue) subject).values()) {
         result.put(pregReplaceCallback(env,
                                        regexpList,
                                        fun,
-                                       value.toStringValue(),
+                                       value.getOne().toStringValue(),
                                        limit,
                                        count));
       }
@@ -1872,10 +1874,10 @@ public class RegexpModule
          entry != null;
          entry = entry.getNext()) {
       // php/153v
-      Value entryValue = entry.getRawValue();
+      EnvVar entryValue = entry.getRawValue();
       Value entryKey = entry.getKey();
 
-      boolean found = regexpState.find(env, entryValue.toStringValue());
+      boolean found = regexpState.find(env, entryValue.getOne().toStringValue());
 
       if (! found && flag == PREG_GREP_INVERT)
         matchArray.append(entryKey, entryValue);

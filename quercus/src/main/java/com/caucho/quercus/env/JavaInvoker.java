@@ -550,7 +550,7 @@ abstract public class JavaInvoker
       if (i < _marshalArgs.length)
         arg = _marshalArgs[i];
       else if (_isRestReference) {
-        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne();
+        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne().makeValue();
         continue;
       }
       else {
@@ -796,7 +796,7 @@ abstract public class JavaInvoker
 
         for (int i = _marshalArgs.length; i < args.length; i++) {
           if (_isRestReference) {
-            rest[i - _marshalArgs.length] = args[i].toLocalVarDeclAsRef();
+            rest[i - _marshalArgs.length] = args[i].toLocalVarDeclAsRef().makeValue();
           }
           else
             rest[i - _marshalArgs.length] = args[i].toValue();

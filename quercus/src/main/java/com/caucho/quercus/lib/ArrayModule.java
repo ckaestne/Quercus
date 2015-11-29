@@ -43,6 +43,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.RandomUtil;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
@@ -156,7 +157,7 @@ public class ArrayModule
 
     ArrayValue newArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       Value keyValue = entry.getKey();
 
       if (keyValue instanceof StringValue) {
@@ -197,9 +198,9 @@ public class ArrayModule
     }
 
     int i = 0;
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
       if (i % size == 0) {
         currentArray = new ArrayValueImpl();
@@ -239,13 +240,13 @@ public class ArrayModule
       return BooleanValue.FALSE;
     }
 
-    Iterator<Value> keyIter = keys.values().iterator();
-    Iterator<Value> valueIter = values.values().iterator();
+    Iterator<EnvVar> keyIter = keys.values().iterator();
+    Iterator<EnvVar> valueIter = values.values().iterator();
 
     ArrayValue array = new ArrayValueImpl();
 
     while (keyIter.hasNext() && valueIter.hasNext()) {
-      array.put(keyIter.next(), valueIter.next());
+      array.put(keyIter.next().getOne(), valueIter.next().getOne());
     }
 
     return array;
@@ -262,8 +263,8 @@ public class ArrayModule
     ArrayValue array = (ArrayValue) value;
     ArrayValue copy = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
-      Value entryValue = entry.getValue();
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
+      Value entryValue = entry.getValue().getOne();
       Value entryKey = entry.getKey();
 
       copy.put(entryKey, array_copy_recursive(entryValue));
@@ -283,18 +284,18 @@ public class ArrayModule
 
     ArrayValue result = new ArrayValueImpl();
 
-    for (Value value : array.values()) {
-      if (! (value.isLongConvertible()) && ! (value instanceof StringValue))
+    for (EnvVar value : array.values()) {
+      if (! (value.getOne().isLongConvertible()) && ! (value.getOne() instanceof StringValue))
         env.warning("Can only count STRING and INTEGER values!");
       else {
-        Value count = result.get(value);
+        Value count = result.get(value.getOne()).getOne();
 
         if (count == null)
           count = LongValue.create(1);
         else
           count = count.add(1);
 
-        result.put(value, count);
+        result.put(value.getOne(), count);
       }
     }
 
@@ -326,10 +327,10 @@ public class ArrayModule
 
     ArrayValue diffArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean valueFound = false;
 
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       Value entryKey = entry.getKey();
 
@@ -376,7 +377,7 @@ public class ArrayModule
 
     ArrayValue diffArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean keyFound = false;
 
       Value entryKey = entry.getKey();
@@ -432,10 +433,10 @@ public class ArrayModule
 
     ArrayValue diffArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean ValueFound = false;
 
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       Value entryKey = entry.getKey();
 
@@ -494,7 +495,7 @@ public class ArrayModule
 
     ArrayValue diffArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean keyFound = false;
 
       Value entryKey = entry.getKey();
@@ -549,10 +550,10 @@ public class ArrayModule
 
     boolean valueFound;
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       valueFound = false;
 
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       for (int k = 0; k < arrays.length && ! valueFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -588,10 +589,10 @@ public class ArrayModule
   {
     ArrayValue array = new ArrayValueImpl();
 
-    Iterator<Value> iter = keyArray.getValueIterator(env);
+    Iterator<EnvVar> iter = keyArray.getValueIterator(env);
 
     while (iter.hasNext()) {
-      array.put(iter.next(), value.copy());
+      array.put(iter.next().getOne(), value.copy());
     }
 
     return array;
@@ -648,18 +649,18 @@ public class ArrayModule
       }
 
       try {
-        Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+        Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
 
         while (iter.hasNext()) {
-          Map.Entry<Value,Value> entry = iter.next();
+          Map.Entry<Value,EnvVar> entry = iter.next();
 
           Value key = entry.getKey();
           Value value;
 
           if (entry instanceof ArrayValue.Entry)
-            value = ((ArrayValue.Entry) entry).getRawValue();
+            value = ((ArrayValue.Entry) entry).getRawValue().getOne();
           else
-            value = entry.getValue();
+            value = entry.getValue().getOne();
 
           // php/1740
           boolean isMatch
@@ -677,8 +678,8 @@ public class ArrayModule
       }
     }
     else {
-      for (Map.Entry<Value, Value> entry : array.entrySet()) {
-        if (entry.getValue().toBoolean())
+      for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
+        if (entry.getValue().getOne().toBoolean())
           filteredArray.put(entry.getKey(), entry.getValue());
       }
     }
@@ -702,8 +703,8 @@ public class ArrayModule
 
     ArrayValue newArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
-      Value entryValue = entry.getValue();
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
+      Value entryValue = entry.getValue().getOne();
 
       if (entryValue.isLongConvertible()
           || entryValue instanceof StringValue)
@@ -742,12 +743,12 @@ public class ArrayModule
 
     ArrayValue interArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean valueFound = false;
 
       Value entryKey = entry.getKey();
 
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       for (int k = 0; k < arrays.length; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -799,7 +800,7 @@ public class ArrayModule
 
     ArrayValue interArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean keyFound = false;
 
       Value entryKey = entry.getKey();
@@ -859,12 +860,12 @@ public class ArrayModule
 
     ArrayValue interArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean valueFound = false;
 
       Value entryKey = entry.getKey();
 
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       for (int k = 0; k < arrays.length - 1; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -926,7 +927,7 @@ public class ArrayModule
 
     ArrayValue interArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean keyFound = false;
 
       Value entryKey = entry.getKey();
@@ -985,10 +986,10 @@ public class ArrayModule
 
     ArrayValue interArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       boolean valueFound = false;
 
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       for (int k = 0; k < arrays.length; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -1071,12 +1072,12 @@ public class ArrayModule
 
     int i = 0;
 
-    Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+    Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
       Value entryKey = entry.getKey();
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
 
       if (entryValue.eq(searchValue))
         newArray.append(LongValue.create(i++), entryKey);
@@ -1100,7 +1101,7 @@ public class ArrayModule
       return NullValue.NULL;
 
     // quercus/1730
-    Iterator<Map.Entry<Value, Value>> argIter = arg.entrySet().iterator();
+    Iterator<Map.Entry<Value, EnvVar>> argIter = arg.entrySet().iterator();
 
     Iterator []iters = new Iterator[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -1116,9 +1117,9 @@ public class ArrayModule
 
     Value []param = new Value[args.length + 1];
     while (argIter.hasNext()) {
-      Map.Entry<Value, Value> entry = argIter.next();
+      Map.Entry<Value, EnvVar> entry = argIter.next();
 
-      param[0] = entry.getValue();
+      param[0] = entry.getValue().getOne();
 
       for (int i = 0; i < iters.length; i++) {
         param[i + 1] = (Value) iters[i].next();
@@ -1183,25 +1184,26 @@ public class ArrayModule
 
       ArrayValue array = argValue.toArrayValue(env);
 
-      Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+      Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value,Value> entry = iter.next();
+        Map.Entry<Value,EnvVar> entry = iter.next();
 
         Value key = entry.getKey();
         Value value;
 
         if (entry instanceof ArrayValue.Entry) {
           // php/173z, php/1747
-          value = ((ArrayValue.Entry) entry).getRawValue();
+          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
         }
         else {
-          value = entry.getValue();
+          value = entry.getValue().getOne();
         }
 
-        if (! (value instanceof Var)) {
-          value = value.copy();
-        }
+        //TODO V
+//        if (! (value instanceof Var)) {
+//          value = value.copy();
+//        }
 
         // php/1745
         if (key.isNumberConvertible()) {
@@ -1233,34 +1235,35 @@ public class ArrayModule
                                               ArrayValue result,
                                               ArrayValue array)
   {
-    Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+    Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
 
       Value key = entry.getKey();
       Value value;
 
       if (entry instanceof ArrayValue.Entry) {
         // php/1744, php/1746
-        value = ((ArrayValue.Entry) entry).getRawValue();
+        value = ((ArrayValue.Entry) entry).getRawValue().getOne();
       }
       else {
-        value = entry.getValue();
+        value = entry.getValue().getOne();
       }
 
       // php/1746
-      if (! (value instanceof Var)) {
-        // php/174b
-        value = value.copy();
-      }
+      //TODO V
+//      if (! (value instanceof Var)) {
+//        // php/174b
+//        value = value.copy();
+//      }
 
       if (key.isNumberConvertible()) {
         // php/1744
         result.put(value);
       }
       else {
-        Value oldValue = result.getDirty(key).toValue();
+        Value oldValue = result.getDirty(key).getOne().toValue();
 
         if (oldValue != null && oldValue.isset()) {
           if (oldValue.isArray() && value.isArray()) {
@@ -1431,7 +1434,7 @@ public class ArrayModule
       else if ((! padFront) && ctr >= inputSize)
         newValue = padValue;
       else
-        newValue = input.get(keyIterator.next());
+        newValue = input.get(keyIterator.next()).getOne();
 
       paddedArray.put(LongValue.create(ctr), newValue);
     }
@@ -1464,8 +1467,8 @@ public class ArrayModule
 
     double product = 1;
 
-    for (Map.Entry<Value, Value> entry : array.entrySet())
-      product *= entry.getValue().toDouble();
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet())
+      product *= entry.getValue().getOne().toDouble();
 
     return DoubleValue.create(product);
   }
@@ -1571,9 +1574,9 @@ public class ArrayModule
 
     Value result = initialValue;
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
       try {
-        result = callable.call(env, VHelper.noCtx(), result, entry.getValue()).getOne();
+        result = callable.call(env, VHelper.noCtx(), result, entry.getValue().getOne()).getOne();
       }
       catch (Exception t) {
         log.log(Level.WARNING, t.toString(), t);
@@ -1605,13 +1608,13 @@ public class ArrayModule
                                        Value result,
                                        Value newValue)
   {
-    Iterator<Map.Entry<Value,Value>>iter =  newValue.toArray().getIterator(env);
+    Iterator<Map.Entry<Value, EnvVar>>iter =  newValue.toArray().getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
 
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
       if (value.isArray()) {
         replaceRecursive(env, result.getArray(key), value);
@@ -1631,10 +1634,10 @@ public class ArrayModule
     ArrayValue result = new ArrayValueImpl();
 
     for (int i = 0;i < args.length; i++) {
-      Iterator<Map.Entry<Value,Value>>iter =  args[i].toArray().getIterator(env);
+      Iterator<Map.Entry<Value, EnvVar>>iter =  args[i].toArray().getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value,Value> entry = iter.next();
+        Map.Entry<Value,EnvVar> entry = iter.next();
 
         result.put(entry.getKey(), entry.getValue());
       }
@@ -1664,7 +1667,7 @@ public class ArrayModule
       return newArray;
     }
 
-    Map.Entry<Value, Value>[] entryArray = new Map.Entry[inputArray.getSize()];
+    Map.Entry<Value, EnvVar>[] entryArray = new Map.Entry[inputArray.getSize()];
     inputArray.entrySet().toArray(entryArray);
 
     int newIndex = 0;
@@ -1672,7 +1675,7 @@ public class ArrayModule
     for (int index = entryArray.length - 1; index > -1; index--) {
       Value currentKey = entryArray[index].getKey();
 
-      Value currentValue = entryArray[index].getValue();
+      Value currentValue = entryArray[index].getValue().getOne();
 
       if (keyed || (currentKey instanceof StringValue))
         newArray.put(currentKey, currentValue);
@@ -1706,12 +1709,12 @@ public class ArrayModule
     if (array == null)
       return BooleanValue.FALSE;
 
-    Iterator<Map.Entry<Value, Value>> iterator = array.getIterator(env);
+    Iterator<Map.Entry<Value, EnvVar>> iterator = array.getIterator(env);
 
     while (iterator.hasNext()) {
-      Map.Entry<Value, Value> entry = iterator.next();
+      Map.Entry<Value, EnvVar> entry = iterator.next();
 
-      Value entryValue = entry.getValue();
+      Value entryValue = entry.getValue().getOne();
       Value entryKey = entry.getKey();
 
       if (needle.eq(entryValue)) {
@@ -1863,14 +1866,14 @@ public class ArrayModule
 
     var.set(newArray);
 
-    for (Map.Entry<Value,Value> entry : array.entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
       if (start == index && replace != null) {
-        Iterator<Value> replaceIter = replace.getValueIterator(env);
+        Iterator<EnvVar> replaceIter = replace.getValueIterator(env);
         while (replaceIter.hasNext()) {
-          newArray.put(replaceIter.next());
+          newArray.put(replaceIter.next().getOne());
         }
       }
 
@@ -1891,9 +1894,9 @@ public class ArrayModule
     }
 
     if (index <= start && replace != null) {
-      Iterator<Value> replaceIter = replace.getValueIterator(env);
+      Iterator<EnvVar> replaceIter = replace.getValueIterator(env);
       while (replaceIter.hasNext()) {
-        newArray.put(replaceIter.next());
+        newArray.put(replaceIter.next().getOne());
       }
     }
 
@@ -1914,8 +1917,8 @@ public class ArrayModule
 
     double sum = 0;
 
-    for (Map.Entry<Value, Value> entry : array.entrySet())
-      sum += entry.getValue().toDouble();
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet())
+      sum += entry.getValue().getOne().toDouble();
 
     return DoubleValue.create(sum);
   }
@@ -1959,7 +1962,7 @@ public class ArrayModule
     boolean isFound = false;
 
     for (Value entryKey : array.keySet()) {
-      Value entryValue = array.get(entryKey);
+      Value entryValue = array.get(entryKey).getOne();
 
       for (int k = 1; k < arrays.length - 1 && ! isFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -1970,14 +1973,14 @@ public class ArrayModule
 
         ArrayValue checkArray = (ArrayValue) arrays[k];
 
-        for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
+        for (Map.Entry<Value, EnvVar> entry : checkArray.entrySet()) {
           try {
             boolean keyFound = entryKey.eql(entry.getKey());
 
             boolean valueFound = false;
 
             if (keyFound)
-              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne()
+              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne()
                 .toLong() == 0;
 
             isFound = keyFound && valueFound;
@@ -2050,7 +2053,7 @@ public class ArrayModule
     boolean isFound = false;
 
     for (Value entryKey : array.keySet()) {
-      Value entryValue = array.get(entryKey);
+      Value entryValue = array.get(entryKey).getOne();
 
       for (int k = 1; k < arrays.length - 2 && ! isFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -2061,10 +2064,10 @@ public class ArrayModule
 
         ArrayValue checkArray = (ArrayValue) arrays[k];
 
-        for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
+        for (Map.Entry<Value, EnvVar> entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
 
             boolean keyFound = false;
 
@@ -2134,7 +2137,7 @@ public class ArrayModule
     boolean isFound = false;
 
     for (Value entryKey : array.keySet()) {
-      Value entryValue = array.get(entryKey);
+      Value entryValue = array.get(entryKey).getOne();
 
       for (int k = 1; k < arrays.length - 1 && ! isFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -2145,9 +2148,9 @@ public class ArrayModule
 
         ArrayValue checkArray = (ArrayValue) arrays[k];
 
-        for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
+        for (Map.Entry<Value, EnvVar> entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
           }
           catch (Exception t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -2210,7 +2213,7 @@ public class ArrayModule
     boolean isFound = true;
 
     for (Value entryKey : array.keySet()) {
-      Value entryValue = array.get(entryKey);
+      Value entryValue = array.get(entryKey).getOne();
 
       for (int k = 1; k < arrays.length - 1 && isFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -2221,14 +2224,14 @@ public class ArrayModule
 
         ArrayValue checkArray = (ArrayValue) arrays[k];
 
-        for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
+        for (Map.Entry<Value, EnvVar> entry : checkArray.entrySet()) {
           try {
             boolean keyFound = entryKey.eql(entry.getKey());
 
             boolean valueFound = false;
 
             if (keyFound)
-              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue())
+              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne())
                       .getOne().toLong() == 0;
 
             isFound = keyFound && valueFound;
@@ -2299,7 +2302,7 @@ public class ArrayModule
     boolean isFound = true;
 
     for (Value entryKey : array.keySet()) {
-      Value entryValue = array.get(entryKey);
+      Value entryValue = array.get(entryKey).getOne();
 
       for (int k = 1; k < arrays.length - 2 && isFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -2310,10 +2313,10 @@ public class ArrayModule
 
         ArrayValue checkArray = (ArrayValue) arrays[k];
 
-        for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
+        for (Map.Entry<Value, EnvVar> entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
 
             boolean keyFound = false;
 
@@ -2381,7 +2384,7 @@ public class ArrayModule
     boolean isFound = true;
 
     for (Value entryKey : array.keySet()) {
-      Value entryValue = array.get(entryKey);
+      Value entryValue = array.get(entryKey).getOne();
 
       for (int k = 1; k < arrays.length - 1 && isFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -2392,9 +2395,9 @@ public class ArrayModule
 
         ArrayValue checkArray = (ArrayValue) arrays[k];
 
-        for (Map.Entry<Value, Value> entry : checkArray.entrySet()) {
+        for (Map.Entry<Value, EnvVar> entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue()).getOne().toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
           }
           catch (Throwable t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -2430,12 +2433,12 @@ public class ArrayModule
 
     array.sort(CNO_VALUE_NORMAL, NO_KEY_RESET, NOT_STRICT);
 
-    Map.Entry<Value, Value> lastEntry = null;
+    Map.Entry<Value, EnvVar> lastEntry = null;
 
     ArrayValue uniqueArray = new ArrayValueImpl();
 
-    for (Map.Entry<Value, Value> entry : array.entrySet()) {
-      Value entryValue = entry.getValue();
+    for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
+      Value entryValue = entry.getValue().getOne();
 
       if (lastEntry == null) {
         uniqueArray.put(entry.getKey(), entryValue);
@@ -2445,7 +2448,7 @@ public class ArrayModule
         continue;
       }
 
-      Value lastEntryValue = lastEntry.getValue();
+      Value lastEntryValue = lastEntry.getValue().getOne();
 
       if (! entryValue.toString().equals(lastEntryValue.toString()))
         uniqueArray.put(entry.getKey(), entryValue);
@@ -2525,19 +2528,19 @@ public class ArrayModule
       return false;
 
     try {
-      Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+      Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value,Value> entry = iter.next();
+        Map.Entry<Value,EnvVar> entry = iter.next();
 
         Value key = entry.getKey();
         Value value;
 
         // php/1742
         if (entry instanceof ArrayValue.Entry)
-          value = ((ArrayValue.Entry) entry).getRawValue();
+          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
         else
-          value = entry.getValue();
+          value = entry.getValue().getOne();
 
         if (value.isArray()) {
           boolean result = array_walk_recursive(env,
@@ -2588,19 +2591,19 @@ public class ArrayModule
       return false;
 
     try {
-      Iterator<Map.Entry<Value,Value>> iter = array.getIterator(env);
+      Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value,Value> entry = iter.next();
+        Map.Entry<Value,EnvVar> entry = iter.next();
 
         Value key = entry.getKey();
         Value value;
 
         // php/1741
         if (entry instanceof ArrayValue.Entry)
-          value = ((ArrayValue.Entry) entry).getRawValue();
+          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
         else
-          value = entry.getValue();
+          value = entry.getValue().getOne();
 
         callback.callArray(env, VHelper.noCtx(),array, key, value, key, userData);
       }
@@ -2753,20 +2756,21 @@ public class ArrayModule
    */
   public static Value each(Env env, @Reference Value value)
   {
-    if (value instanceof Var) {
-      value = value.toValue();
-
-      if (value.isArray())
-        return value.toArrayValue(env).each();
-      else {
-        env.warning(L.l("each() requires argument to be an array"));
-
-        return NullValue.NULL;
-      }
-    }
-    else {
-      return env.error(L.l("each() argument must be a variable"));
-    }
+    throw new UnimplementedVException();
+//    if (value instanceof Var) {
+//      value = value.toValue();
+//
+//      if (value.isArray())
+//        return value.toArrayValue(env).each();
+//      else {
+//        env.warning(L.l("each() requires argument to be an array"));
+//
+//        return NullValue.NULL;
+//      }
+//    }
+//    else {
+//      return env.error(L.l("each() argument must be a variable"));
+//    }
   }
 
   /**
@@ -2801,7 +2805,7 @@ public class ArrayModule
     for (Value entryKey : array.keySet()) {
       Value entryValue;
 
-      entryValue = array.get(entryKey);
+      entryValue = array.get(entryKey).getOne();
 
       StringValue symbolName = entryKey.toStringValue();
 
@@ -2863,9 +2867,9 @@ public class ArrayModule
       Value entryValue;
 
       if (extrRefs)
-        entryValue = array.getVar(entryKey);
+        entryValue = array.getVar(entryKey).getOne();
       else
-        entryValue = array.get(entryKey);
+        entryValue = array.get(entryKey).getOne();
 
       StringValue symbolName = entryKey.toStringValue();
 
@@ -3118,8 +3122,8 @@ public class ArrayModule
   {
     if (array != null) {
 
-      for (Map.Entry<Value, Value> entry : array.entrySet()) {
-        Value entryValue = entry.getValue();
+      for (Map.Entry<Value, EnvVar> entry : array.entrySet()) {
+        Value entryValue = entry.getValue().getOne();
 
         if (entryValue instanceof StringValue)
           array.put(entry.getKey(),
@@ -3426,7 +3430,7 @@ public class ArrayModule
 
   private static class CompareString
     implements
-    Comparator<Map.Entry<Value, Value>>
+    Comparator<Map.Entry<Value, EnvVar>>
   {
     private AbstractGet _getter;
 
@@ -3438,8 +3442,8 @@ public class ArrayModule
       _order = order;
     }
 
-    public int compare(Map.Entry<Value, Value> aEntry,
-                       Map.Entry<Value, Value> bEntry)
+    public int compare(Map.Entry<Value, EnvVar> aEntry,
+                       Map.Entry<Value, EnvVar> bEntry)
     {
       String aElement = _getter.get(aEntry).toString();
       String bElement = _getter.get(bEntry).toString();
@@ -3450,7 +3454,7 @@ public class ArrayModule
 
   private static class CompareNumeric
     implements
-    Comparator<Map.Entry<Value, Value>>
+    Comparator<Map.Entry<Value, EnvVar>>
   {
     private AbstractGet _getter;
 
@@ -3462,8 +3466,8 @@ public class ArrayModule
       _order = order;
     }
 
-    public int compare(Map.Entry<Value, Value> aEntry,
-                       Map.Entry<Value, Value> bEntry)
+    public int compare(Map.Entry<Value, EnvVar> aEntry,
+                       Map.Entry<Value, EnvVar> bEntry)
     {
       try {
         // php/1756
@@ -3485,7 +3489,7 @@ public class ArrayModule
 
   private static class CompareLocale
     implements
-    Comparator<Map.Entry<Value, Value>>
+    Comparator<Map.Entry<Value, EnvVar>>
   {
     private AbstractGet _getter;
 
@@ -3500,8 +3504,8 @@ public class ArrayModule
       _collator = collator;
     }
 
-    public int compare(Map.Entry<Value, Value> aEntry,
-                       Map.Entry<Value, Value> bEntry)
+    public int compare(Map.Entry<Value, EnvVar> aEntry,
+                       Map.Entry<Value, EnvVar> bEntry)
     {
       String aElement = _getter.get(aEntry).toString();
       String bElement = _getter.get(bEntry).toString();
@@ -3511,7 +3515,7 @@ public class ArrayModule
   }
 
   private static class CompareNormal
-    implements Comparator<Map.Entry<Value, Value>>
+    implements Comparator<Map.Entry<Value, EnvVar>>
   {
     private AbstractGet _getter;
 
@@ -3523,8 +3527,8 @@ public class ArrayModule
       _order = order;
     }
 
-    public int compare(Map.Entry<Value, Value> aEntry,
-                       Map.Entry<Value, Value> bEntry)
+    public int compare(Map.Entry<Value, EnvVar> aEntry,
+                       Map.Entry<Value, EnvVar> bEntry)
     {
       if (_getter instanceof GetKey) {
         KeyComparator k = KeyComparator.CMP;
@@ -3540,7 +3544,7 @@ public class ArrayModule
 
   private static class CompareNatural
     implements
-    Comparator<Map.Entry<Value, Value>>
+    Comparator<Map.Entry<Value, EnvVar>>
   {
     private AbstractGet _getter;
 
@@ -3555,8 +3559,8 @@ public class ArrayModule
       _isCaseSensitive = isCaseSensitive;
     }
 
-    public int compare(Map.Entry<Value, Value> aEntry,
-                       Map.Entry<Value, Value> bEntry)
+    public int compare(Map.Entry<Value, EnvVar> aEntry,
+                       Map.Entry<Value, EnvVar> bEntry)
     {
       try {
         String aElement = _getter.get(aEntry).toString();
@@ -3607,7 +3611,7 @@ public class ArrayModule
   }
 
   private static class CompareCallBack
-    implements Comparator<Map.Entry<Value, Value>>
+    implements Comparator<Map.Entry<Value, EnvVar>>
   {
     private AbstractGet _getter;
 
@@ -3626,8 +3630,8 @@ public class ArrayModule
       _env = env;
     }
 
-    public int compare(Map.Entry<Value, Value> aEntry,
-                       Map.Entry<Value, Value> bEntry)
+    public int compare(Map.Entry<Value, EnvVar> aEntry,
+                       Map.Entry<Value, EnvVar> bEntry)
     {
       try {
         Value aElement = _getter.get(aEntry);
@@ -3708,8 +3712,8 @@ public class ArrayModule
 
         int cmp;
 
-        Value lValue = av.get(_rows[index1.toInt()]);
-        Value rValue = av.get(_rows[index2.toInt()]);
+        Value lValue = av.get(_rows[index1.toInt()]).getOne();
+        Value rValue = av.get(_rows[index2.toInt()]).getOne();
 
         if (mode == SORT_STRING) {
           // php/173g

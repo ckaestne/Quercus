@@ -58,7 +58,7 @@ public class JavaAdapterVar extends Value
 
   public Value getValue()
   {
-    return _adapter.get(_key);
+    return _adapter.get(_key).getOne();
   }
 
   public void setValue(Value value)
@@ -849,7 +849,7 @@ public class JavaAdapterVar extends Value
   }
 
   @Override
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
   {
     return getValue().getIterator(env);
   }
@@ -861,7 +861,7 @@ public class JavaAdapterVar extends Value
   }
 
   @Override
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
     return getValue().getValueIterator(env);
   }
@@ -900,7 +900,7 @@ public class JavaAdapterVar extends Value
    * Returns the array ref.
    */
   @Override
-  public Value get(Value index)
+  public EnvVar get(Value index)
   {
     return getValue().get(index);
   }
@@ -909,11 +909,11 @@ public class JavaAdapterVar extends Value
    * Returns the array ref.
    */
   @Override
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
     setRaw(getValue());
 
-    Var value = super.getVar(index);
+    EnvVar value = super.getVar(index);
 
     setValue(getRawValue());
 
@@ -924,11 +924,11 @@ public class JavaAdapterVar extends Value
    * Returns the array ref.
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     setRaw(getValue());
 
-    Value value = super.getArg(index, isTop);
+    EnvVar value = super.getArg(index, isTop);
 
     setValue(getRawValue());
 
@@ -954,7 +954,7 @@ public class JavaAdapterVar extends Value
    * Returns the value, doing a copy-on-write if needed.
    */
   @Override
-  public Value getDirty(Value index)
+  public V<? extends Value> getDirty(Value index)
   {
     return getValue().getDirty(index);
   }
@@ -1072,11 +1072,11 @@ public class JavaAdapterVar extends Value
    * Returns the array ref.
    */
   @Override
-  public Value getFieldArg(Env env, StringValue index, boolean isTop)
+  public Var getFieldArg(Env env, StringValue index, boolean isTop)
   {
     setRaw(getValue());
 
-    Value retValue = super.getFieldArg(env, index, isTop);
+    Var retValue = super.getFieldArg(env, index, isTop);
 
     setValue(getRawValue());
 

@@ -1082,7 +1082,7 @@ public class QuercusClass extends NullValue {
   }
 
   @Override
-  public Value setStaticFieldRef(Env env, StringValue name, Value value)
+  public Var setStaticFieldRef(Env env, StringValue name, Value value)
   {
     StringValue staticName = _staticFieldNameMap.get(name);
 
@@ -1445,7 +1445,7 @@ public class QuercusClass extends NullValue {
     // php/09km, php/09kn
     // push/pop to prevent infinite recursion
     if (issetField(env, name) && _fieldMap.get(name).isPublic()) {
-      Value v_current = this.get(name); // TODO: move to ObjectExtValue if possible
+      Value v_current = this.get(name).getOne(); // TODO: move to ObjectExtValue if possible
 
       if (v_current != NullValue.NULL && v_current != UnsetValue.UNSET) {
         return VHelper.toV(v_current);

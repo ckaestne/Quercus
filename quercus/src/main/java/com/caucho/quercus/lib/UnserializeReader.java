@@ -33,6 +33,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
@@ -414,10 +415,10 @@ public final class UnserializeReader {
       return value;
     }
     else {
-      Var var = new Var(value);
+      Var var = new Var(V.one(value));
 
-      _valueList.add(var);
-      return var;
+      _valueList.add(var.makeValue());
+      return var.makeValue();
     }
   }
 

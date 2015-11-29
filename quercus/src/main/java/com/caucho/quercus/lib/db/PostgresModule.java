@@ -500,7 +500,7 @@ public class PostgresModule extends AbstractQuercusModule {
         // Retrieve the original value to be converted
         String columnName = rs.getString("COLUMN_NAME");
         Value columnNameV = StringValue.create(columnName);
-        Value value = assocArray.get(columnNameV);
+        Value value = assocArray.get(columnNameV).getOne();
 
         // Check for column not passed in
         if (value == UnsetValue.UNSET)
@@ -727,7 +727,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
           //Value v = newArray.get(currValue);
 
-          Value fieldValue = arr.get(LongValue.create(i));
+          Value fieldValue = arr.get(LongValue.create(i)).getOne();
 
           if (fieldValue instanceof NullValue) {
             sb.append(nullAs);
@@ -799,9 +799,9 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,Value> entry : assocArray.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : assocArray.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue();
+        Value v = entry.getValue().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -1142,7 +1142,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       int fieldNumber = result.getColumnNumber(fieldNameOrNumber, 0);
 
-      return fetchRow.get(LongValue.create(fieldNumber));
+      return fetchRow.get(LongValue.create(fieldNumber)).getOne();
 
     } catch (Exception ex) {
       log.log(Level.FINE, ex.toString(), ex);
@@ -1683,7 +1683,7 @@ public class PostgresModule extends AbstractQuercusModule {
       ArrayValue arrayValue = pg_get_notify(env, conn, -1);
 
       LongValue pid = (LongValue) arrayValue
-          .get(StringValue.create(randomLabel));
+          .get(StringValue.create(randomLabel)).getOne();
 
       return pid.toInt();
 
@@ -1823,9 +1823,9 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,Value> entry : assocArray.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : assocArray.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue();
+        Value v = entry.getValue().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -3005,9 +3005,9 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,Value> entry : assocArray.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : assocArray.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue();
+        Value v = entry.getValue().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -3317,9 +3317,9 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,Value> entry : data.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : data.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue();
+        Value v = entry.getValue().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -3335,9 +3335,9 @@ public class PostgresModule extends AbstractQuercusModule {
 
       isFirst = true;
 
-      for (Map.Entry<Value,Value> entry : condition.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : condition.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue();
+        Value v = entry.getValue().getOne();
         if (isFirst) {
           isFirst = false;
         } else {

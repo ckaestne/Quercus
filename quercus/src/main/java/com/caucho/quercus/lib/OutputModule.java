@@ -498,7 +498,7 @@ public class OutputModule extends AbstractQuercusModule
   public static Value ob_gzhandler(Env env, StringValue buffer, int state)
   {
     Encoding encoding = Encoding.NONE;
-    Value _SERVER = env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne();
+    Value _SERVER = env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().makeValue();
 
     String [] acceptedList
       = _SERVER.get(env.createString("HTTP_ACCEPT_ENCODING")).toString().split(",");

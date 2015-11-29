@@ -93,7 +93,7 @@ public class ListHeadExpr extends Expr {
 
     for (int i = 0; i < len; i++) {
       if (_varList[i] != null)
-        _varList[i].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value.getOne().get(_keyList[i]).copy()));
+        _varList[i].evalAssignValue(env, VHelper.noCtx(), value.getOne().get(_keyList[i]).copy().getValue());
     }
 
     return value;

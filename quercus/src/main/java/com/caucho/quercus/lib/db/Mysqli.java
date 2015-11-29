@@ -817,10 +817,10 @@ public class Mysqli extends JdbcConnectionResource
       if (result.isArray()) {
         ArrayValue array = result.toArrayValue(env);
 
-        Value clientArray = array.get(env.createString("client"));
+        Value clientArray = array.get(env.createString("client")).getOne();
 
         if (clientArray.isArray()) {
-          Value charset = clientArray.get(env.createString("default-character-set"));
+          Value charset = clientArray.get(env.createString("default-character-set")).getOne();
 
           if (! charset.isNull()) {
             _charset = charset.toStringValue();

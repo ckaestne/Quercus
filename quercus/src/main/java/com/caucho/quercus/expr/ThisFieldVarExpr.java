@@ -103,7 +103,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
   {
     Value value = env.getThis();
 
-    return VHelper.toV(value.getThisFieldArg(env, evalName(env)));
+    return VHelper.toV(value.getThisFieldArg(env, evalName(env)).makeValue());
   }
 
   /**

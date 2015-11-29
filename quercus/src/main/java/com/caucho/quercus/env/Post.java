@@ -271,7 +271,7 @@ public class Post
 
         long maxFileSize = Long.MAX_VALUE;
 
-        Value maxFileSizeV = postArray.get(env.createString("MAX_FILE_SIZE"));
+        Value maxFileSizeV = postArray.get(env.createString("MAX_FILE_SIZE")).getOne();
         if (! maxFileSizeV.isNull())
           maxFileSize = maxFileSizeV.toLong();
 
@@ -370,7 +370,7 @@ public class Post
     name = name.replace("\u0000", "");
 
     StringValue nameValue = env.createString(name);
-    Value v = files.get(nameValue).toValue();
+    Value v = files.get(nameValue).getOne().toValue();
     ArrayValue entry = null;
     if (v instanceof ArrayValue)
       entry = (ArrayValue) v;
@@ -496,7 +496,7 @@ public class Post
         }
 
         StringValue currentKeyValue = env.createString(currentKey);
-        Value currentArray = array.get(currentKeyValue);
+        Value currentArray = array.get(currentKeyValue).getOne();
 
         if (! currentArray.isArray()) {
           currentArray = new ArrayValueImpl();
@@ -716,7 +716,7 @@ public class Post
 
     long maxFileSize = Long.MAX_VALUE;
 
-    Value maxFileSizeV = post.get(env.createString("MAX_FILE_SIZE"));
+    Value maxFileSizeV = post.get(env.createString("MAX_FILE_SIZE")).getOne();
     if (maxFileSizeV.isNull())
       maxFileSize = maxFileSizeV.toLong();
 

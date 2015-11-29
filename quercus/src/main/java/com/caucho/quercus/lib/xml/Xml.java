@@ -686,7 +686,7 @@ public class Xml {
       _level--;
 
       if (_isComplete) {
-        elementArray = _valueArray.get(LongValue.create(_valueArrayIndex - 1));
+        elementArray = _valueArray.get(LongValue.create(_valueArrayIndex - 1)).getOne();
 
         elementArray.put(_env.createString("type"),
                          _env.createString("complete"));
@@ -744,16 +744,16 @@ public class Xml {
         _valueArray.put(LongValue.create(_valueArrayIndex), elementArray);
 
         StringValue key = _env.createString(_paramHashMap.get(_level - 1));
-        Value indexArray = _indexArray.get(key);
+        Value indexArray = _indexArray.get(key).getOne();
         indexArray.put(LongValue.create(_valueArrayIndex));
 
         _valueArrayIndex++;
       } else {
-        Value elementArray = _valueArray.get(_valueArrayIndex - 1);
+        Value elementArray = _valueArray.get(_valueArrayIndex - 1).getOne();
 
         StringValue key = _env.createString("value");
 
-        Value value = elementArray.get(key);
+        Value value = elementArray.get(key).getOne();
         if (value.isString()) {
           // php/1h0l
           StringValue sb = _env.createStringBuilder();

@@ -100,11 +100,11 @@ public class JMSQueue
 
       ArrayValue array = (ArrayValue) value;
 
-      Set<Map.Entry<Value,Value>> entrySet = array.entrySet();
+      Set<Map.Entry<Value, EnvVar>> entrySet = array.entrySet();
 
-      for (Map.Entry<Value,Value> entry : entrySet) {
-        if (entry.getValue() instanceof BinaryValue) {
-          byte []bytes = ((BinaryValue) entry.getValue()).toBytes();
+      for (Map.Entry<Value,EnvVar> entry : entrySet) {
+        if (entry.getValue().getOne() instanceof BinaryValue) {
+          byte []bytes = ((BinaryValue) entry.getValue().getOne()).toBytes();
 
           ((MapMessage) message).setBytes(entry.getKey().toString(), bytes);
         } else {

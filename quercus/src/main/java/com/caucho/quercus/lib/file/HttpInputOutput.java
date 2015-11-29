@@ -29,10 +29,7 @@
 
 package com.caucho.quercus.lib.file;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvCleanup;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.resources.StreamContextResource;
 import com.caucho.vfs.*;
 
@@ -86,10 +83,10 @@ public class HttpInputOutput extends AbstractBinaryOutput
     _lineReader = new LineReader(env);
     
     if (context != null) {
-      Value options
+      EnvVar options
       = context.getOptions().get(env.createString(path.getScheme()));
 
-    String method = options.get(env.createString("method")).toString();
+    String method = options.getOne().get(env.createString("method")).toString();
     
     if (method.equals("POST")) {
       ReadWritePair pair = path.openReadWrite();
@@ -101,7 +98,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
     
     _httpStream = (HttpStreamWrapper) _is.getSource();
     
-    setOptions(env, options);
+    setOptions(env, options.getOne());
     
     if (_os != null && _bodyStart != null && _bodyStart.length > 0)
       _os.write(_bodyStart, 0, _bodyStart.length);
@@ -116,13 +113,13 @@ public class HttpInputOutput extends AbstractBinaryOutput
   private void setOptions(Env env, Value options)
     throws IOException
   {
-    Iterator<Map.Entry<Value,Value>> iter = options.getIterator(env);
+    Iterator<Map.Entry<Value, EnvVar>> iter = options.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,Value> entry = iter.next();
+      Map.Entry<Value,EnvVar> entry = iter.next();
     
       String optionName = entry.getKey().toString();
-      Value optionValue = entry.getValue();
+      Value optionValue = entry.getValue().getOne();
 
       if (optionName.equals("method"))
         _httpStream.setMethod(optionValue.toString());

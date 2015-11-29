@@ -52,7 +52,7 @@ public class IteratorAggregateDelegate
   private static final IteratorDelegate _iteratorDelegate
     = new IteratorDelegate();
 
-  public Iterator<Map.Entry<Value, Value>>
+  public Iterator<Map.Entry<Value, EnvVar>>
     getIterator(Env env, ObjectValue qThis)
   {
     Value target = getTarget(env, qThis);
@@ -77,7 +77,7 @@ public class IteratorAggregateDelegate
     }
   }
 
-  public Iterator<Value> getValueIterator(Env env, ObjectValue qThis)
+  public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis)
   {
     Value target = getTarget(env, qThis);
 

@@ -129,7 +129,7 @@ public class IniParser {
     value = parseIniValue(env, is);
 
     if (key != null) {
-      Value array = section.get(name);
+      Value array = section.get(name).getOne();
 
       if (array == UnsetValue.UNSET) {
         array = new ArrayValueImpl();

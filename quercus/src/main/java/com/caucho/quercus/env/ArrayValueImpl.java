@@ -30,6 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.util.RandomUtil;
+import edu.cmu.cs.varex.UnimplementedVException;
+import edu.cmu.cs.varex.V;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -98,7 +100,7 @@ public class ArrayValueImpl extends ArrayValue
       else
         entry._value = ptr._value.copyArrayItem();
       */
-      entry.setValue(ptr.getValue().copyArrayItem());
+      entry.setValue(ptr.getValue().copy());
     }
   }
 
@@ -142,16 +144,16 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   public ArrayValueImpl(Env env,
-                        IdentityHashMap<Value,Value> map,
+                        IdentityHashMap<Value,EnvVar> map,
                         ArrayValue copy)
   {
     this();
 
-    map.put(copy, this);
+    map.put(copy, EnvVar._gen(this));
 
     for (Entry ptr = copy.getHead(); ptr != null; ptr = ptr.getNext()) {
       // Value value = ptr._var != null ? ptr._var.toValue() : ptr._value;
-      Value value = ptr.toValue();
+      Value value = ptr.toValue().getOne();
 
       append(ptr.getKey(), value.copy(env, map));
     }
@@ -170,7 +172,7 @@ public class ArrayValueImpl extends ArrayValue
 
     for (Entry ptr = copy.getHead(); ptr != null; ptr = ptr.getNext()) {
       // Value value = ptr._var != null ? ptr._var.toValue() : ptr._value;
-      Value value = ptr.toValue();
+      Value value = ptr.toValue().getOne();
 
       append(ptr.getKey(), value.copyTree(env, root));
     }
@@ -197,21 +199,21 @@ public class ArrayValueImpl extends ArrayValue
     }
   }
 
-  public ArrayValueImpl(Env env, ArrayValueComponent[] components)
-  {
-    for (int i = 0; i < components.length; i++) {
-      components[i].init(env);
-      components[i].addTo(this);
-    }
-  }
-
-  public ArrayValueImpl(ArrayValueComponent[] components)
-  {
-    for (int i = 0; i < components.length; i++) {
-      components[i].init();
-      components[i].addTo(this);
-    }
-  }
+//  public ArrayValueImpl(Env env, ArrayValueComponent[] components)
+//  {
+//    for (int i = 0; i < components.length; i++) {
+//      components[i].init(env);
+//      components[i].addTo(this);
+//    }
+//  }
+//
+//  public ArrayValueImpl(ArrayValueComponent[] components)
+//  {
+//    for (int i = 0; i < components.length; i++) {
+//      components[i].init();
+//      components[i].addTo(this);
+//    }
+//  }
 
   protected Entry []getEntries()
   {
@@ -341,14 +343,15 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Copy for serialization
    */
-  public Value copy(Env env, IdentityHashMap<Value,Value> map)
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
-    Value oldValue = map.get(this);
-
-    if (oldValue != null)
-      return oldValue;
-
-    return new ArrayValueImpl(env, map, this);
+    throw new UnimplementedVException();
+//    Value oldValue = map.get(this);
+//
+//    if (oldValue != null)
+//      return oldValue;
+//
+//    return new ArrayValueImpl(env, map, this);
   }
 
   /**
@@ -494,7 +497,7 @@ public class ArrayValueImpl extends ArrayValue
 
     Value key = createTailKey();
 
-    Entry entry = new Entry(key, value.toLocalValue());
+    Entry entry = new Entry(key, EnvVar._gen(value.toLocalValue()));
 
     addEntry(entry);
 
@@ -550,7 +553,7 @@ public class ArrayValueImpl extends ArrayValue
         if (key.isString())
           result.put(key, ptr.getValue());
         else
-          result.put(ptr.getValue());
+          result.put(ptr.getValue().getOne());
       }
       else if (replace == null) {
         return result;
@@ -594,7 +597,7 @@ public class ArrayValueImpl extends ArrayValue
       for (Entry replaceEntry = replace.getHead();
            replaceEntry != null;
            replaceEntry = replaceEntry.getNext()) {
-        put(replaceEntry.getValue());
+        put(replaceEntry.getValue().getOne());
       }
     }
 
@@ -615,7 +618,7 @@ public class ArrayValueImpl extends ArrayValue
         continue;
 
         Value key = ptr.getKey();
-        Value value = ptr.getValue();
+        Value value = ptr.getValue().getOne();
 
         if (isPreserveKeys || key.isString())
           array.put(key, value);
@@ -630,7 +633,7 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     if (_isDirty) // XXX: needed?
       copyOnWrite();
@@ -643,19 +646,19 @@ public class ArrayValueImpl extends ArrayValue
 
     if (entry != null) {
       // php/3d48, php/39aj
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
       // php/3d42
       if (! isTop && value.isset())
-        return value;
+        return EnvVar._gen(value);
       else {
         // XXX: should probably have Entry extend ArgGetValue and return the Entry itself
-        return new ArgGetValue(this, index); // php/0d14, php/04b4
+        return EnvVar._gen(new ArgGetValue(this, index)); // php/0d14, php/04b4
       }
     }
     else {
       // php/3d49
-      return new ArgGetValue(this, index);
+      return EnvVar._gen(new ArgGetValue(this, index));
     }
   }
 
@@ -665,7 +668,7 @@ public class ArrayValueImpl extends ArrayValue
   @Override
   public Value getObject(Env env, Value fieldName)
   {
-    Value value = get(fieldName);
+    Value value = get(fieldName).getOne();
 
     if (! value.isset()) {
       value = env.createObject();
@@ -689,7 +692,7 @@ public class ArrayValueImpl extends ArrayValue
 
     Entry entry = createEntry(index);
 
-    Value value = entry.toValue();
+    Value value = entry.toValue().getOne();
     Value array = value.toAutoArray();
 
     if (value != array) {
@@ -711,12 +714,12 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns the value as an array, using copy on write if necessary.
    */
-  public Value getDirty(Value index)
+  public V<? extends Value> getDirty(Value index)
   {
     if (_isDirty)
       copyOnWrite();
 
-    return get(index);
+    return get(index).getValue();
   }
 
   /**
@@ -746,14 +749,14 @@ public class ArrayValueImpl extends ArrayValue
     // 0d0d
     Value tailKey = createTailKey();
 
-    return getVar(tailKey);
+    return getVar(tailKey).getVar().getOne();
   }
 
   /**
    * Sets the array tail, returning a reference to the tail.
    */
   @Override
-  public Value getArgTail(Env env, boolean isTop)
+  public Var getArgTail(Env env, boolean isTop)
   {
     if (_isDirty) {
       copyOnWrite();
@@ -761,7 +764,7 @@ public class ArrayValueImpl extends ArrayValue
 
     Value tail = createTailKey();
 
-    return new ArgGetValue(this, tail);
+    return new Var(V.one(new ArgGetValue(this, tail)));
   }
 
   /**
@@ -779,7 +782,7 @@ public class ArrayValueImpl extends ArrayValue
    * Gets a new value.
    */
   @Override
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
     key = key.toKey();
 
@@ -805,12 +808,12 @@ public class ArrayValueImpl extends ArrayValue
         // return entry._value.toValue(); // php/39a1
 
         // 4.0.4 - _value.toValue() is marginally faster than _var
-        return entry.toValue();
+        return EnvVar._gen(entry.toValue().getOne());
 
       }
     }
 
-    return UnsetValue.UNSET;
+    return EnvVar._gen(UnsetValue.UNSET);
   }
 
   /**
@@ -818,7 +821,7 @@ public class ArrayValueImpl extends ArrayValue
    * (i.e. without calling toValue() on it).
    */
   @Override
-  public Value getRaw(Value key)
+  public EnvVar getRaw(Value key)
   {
     key = key.toKey();
 
@@ -847,7 +850,7 @@ public class ArrayValueImpl extends ArrayValue
       }
     }
 
-    return UnsetValue.UNSET;
+    return EnvVar._gen(UnsetValue.UNSET);
   }
 
   /**
@@ -861,7 +864,7 @@ public class ArrayValueImpl extends ArrayValue
   public Value contains(Value value)
   {
     for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
-      if (entry.getValue().eq(value))
+      if (entry.getValue().getOne().eq(value))
         return entry.getKey();
     }
 
@@ -879,7 +882,7 @@ public class ArrayValueImpl extends ArrayValue
   public Value containsStrict(Value value)
   {
     for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
-      if (entry.getValue().eql(value))
+      if (entry.getValue().getOne().eql(value))
         return entry.getKey();
     }
 
@@ -899,7 +902,7 @@ public class ArrayValueImpl extends ArrayValue
     Entry entry = getEntry(key);
 
     if (entry != null)
-      return entry.getValue();
+      return entry.getValue().getOne();
     else
       return null;
   }
@@ -976,6 +979,11 @@ public class ArrayValueImpl extends ArrayValue
     return UnsetValue.UNSET;
   }
 
+  @Override
+  public ArrayValue append(Value key, EnvVar value) {
+    throw new UnimplementedVException();
+  }
+
   private Value removeEntry(Value key, Entry entry)
   {
     Entry next = entry.getNext();
@@ -998,7 +1006,7 @@ public class ArrayValueImpl extends ArrayValue
 
     _size--;
 
-    Value value = entry.getValue();
+    Value value = entry.getValue().getOne();
 
     if (key.nextIndex(-1) == _nextAvailableIndex) {
       _nextAvailableIndex = -1;
@@ -1011,7 +1019,7 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the array ref.
    */
   @Override
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
     if (_isDirty)
       copyOnWrite();
@@ -1019,14 +1027,14 @@ public class ArrayValueImpl extends ArrayValue
     Entry entry = createEntry(index);
     // quercus/0431
 
-    return entry.toVar(); // _value.toSimpleVar();
+    return new EnvVarImpl(entry.toVar()); // _value.toSimpleVar();
   }
 
   /**
    * Returns the array ref.
    */
   @Override
-  public Var getRef(Value index)
+  public EnvVar getRef(Value index)
   {
     if (_isDirty)
       copyOnWrite();
@@ -1034,7 +1042,7 @@ public class ArrayValueImpl extends ArrayValue
     Entry entry = createEntry(index);
     // quercus/0431
 
-    return entry.toVar(); // _value.toSimpleVar();
+    return new EnvVarImpl( entry.toVar()); // _value.toSimpleVar();
   }
 
   /**
@@ -1317,7 +1325,7 @@ public class ArrayValueImpl extends ArrayValue
   {
     out.writeInt(_size);
 
-    for (Map.Entry<Value,Value> entry : entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
       out.writeObject(entry.getKey());
       out.writeObject(entry.getValue());
     }
@@ -1356,7 +1364,7 @@ public class ArrayValueImpl extends ArrayValue
   {
     out.print("new ConstArrayValue(");
 
-    if (getSize() < ArrayValueComponent.MAX_SIZE) {
+//    if (getSize() < ArrayValueComponent.MAX_SIZE) {
       out.print("new Value[] {");
 
       for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
@@ -1375,14 +1383,14 @@ public class ArrayValueImpl extends ArrayValue
         if (entry != getHead())
       out.print(", ");
 
-        entry.getValue().generate(out);
+        entry.getValue().getOne().generate(out);
       }
 
       out.print("}");
-    }
-    else {
-      ArrayValueComponent.generate(out, this);
-    }
+//    }
+//    else {
+//      ArrayValueComponent.generate(out, this);
+//    }
 
     out.print(")");
   }

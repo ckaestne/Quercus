@@ -865,7 +865,7 @@ public class FileModule extends AbstractQuercusModule {
         return BooleanValue.FALSE;
       }
 
-      return array.get(env.createString("atime"));
+      return array.get(env.createString("atime")).getOne();
     }
 
     Path path = env.lookupPwd(filename);
@@ -903,7 +903,7 @@ public class FileModule extends AbstractQuercusModule {
         return BooleanValue.FALSE;
       }
 
-      return array.get(env.createString("ctime"));
+      return array.get(env.createString("ctime")).getOne();
     }
 
     Path path = env.lookupPwd(filename);
@@ -973,7 +973,7 @@ public class FileModule extends AbstractQuercusModule {
         return BooleanValue.FALSE;
       }
 
-      return array.get(env.createString("mtime"));
+      return array.get(env.createString("mtime")).getOne();
     }
 
     Path path = env.lookupPwd(filename);
@@ -1012,7 +1012,7 @@ public class FileModule extends AbstractQuercusModule {
         return BooleanValue.FALSE;
       }
 
-      Value owner = array.get(env.createString("uid"));
+      Value owner = array.get(env.createString("uid")).getOne();
 
       if (owner != UnsetValue.UNSET) {
         return owner.toLongValue();
@@ -1062,7 +1062,7 @@ public class FileModule extends AbstractQuercusModule {
         return BooleanValue.FALSE;
       }
 
-      return array.get(env.createString("size"));
+      return array.get(env.createString("size")).getOne();
     }
 
     Path path = env.lookupPwd(filename);
@@ -1225,8 +1225,8 @@ public class FileModule extends AbstractQuercusModule {
 
         if (data instanceof ArrayValue) {
 
-          for (Value item : ((ArrayValue) data).values()) {
-            InputStream is = item.toInputStream();
+          for (EnvVar item : ((ArrayValue) data).values()) {
+            InputStream is = item.getOne().toInputStream();
 
             dataWritten += os.write(is, Integer.MAX_VALUE);
 
@@ -1814,14 +1814,14 @@ public class FileModule extends AbstractQuercusModule {
       int writeLength = 0;
       boolean isFirst = true;
 
-      for (Value data : value.values()) {
+      for (EnvVar data : value.values()) {
         if (! isFirst) {
           os.print(comma);
           writeLength++;
         }
         isFirst = false;
 
-        StringValue s = data.toStringValue();
+        StringValue s = data.getOne().toStringValue();
         int strlen = s.length();
 
         writeLength++;
@@ -2279,11 +2279,11 @@ public class FileModule extends AbstractQuercusModule {
           if (result == null)
             result = subresult;
           else {
-            Iterator<Value> iter
+            Iterator<EnvVar> iter
               = subresult.getValueIterator(env);
 
             while (iter.hasNext())
-              result.put(iter.next());
+              result.put(iter.next().getOne());
           }
         }
       }
@@ -2323,7 +2323,7 @@ public class FileModule extends AbstractQuercusModule {
 
       Value array = wrapper.url_stat(env, filename, flags);
 
-      int mode = array.get(env.createString("mode")).toInt();
+      int mode = array.get(env.createString("mode")).getOne().toInt();
 
       // XXX: php 5.3.8 appears to check 040000 instead of 01000
       return (mode & 01000) != 0;

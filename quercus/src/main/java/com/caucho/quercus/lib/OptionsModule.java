@@ -364,8 +364,8 @@ public class OptionsModule extends AbstractQuercusModule {
    */
   public static Value getenv(Env env, StringValue key)
   {
-    Value serverVars = env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne();
-    Value val = serverVars.get(key);
+    Var serverVars = env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne();
+    Value val = serverVars.makeValue().get(key).getOne();
 
     if (val == null || ! val.isset())
       return BooleanValue.FALSE;
@@ -782,15 +782,15 @@ public class OptionsModule extends AbstractQuercusModule {
     }
 
     if (hasRequest(env)) {
-      phpinfoVariable(env, "_REQUEST", env.getGlobalVar(VHelper.noCtx(), "_REQUEST").getOne());
-      phpinfoVariable(env, "_GET", env.getGlobalVar(VHelper.noCtx(), "_GET").getOne());
-      phpinfoVariable(env, "_POST", env.getGlobalVar(VHelper.noCtx(), "_POST").getOne());
-      phpinfoVariable(env, "_COOKIE", env.getGlobalVar(VHelper.noCtx(), "_COOKIE").getOne());
-      phpinfoVariable(env, "_SESSION", env.getGlobalVar(VHelper.noCtx(), "_SESSION").getOne());
+      phpinfoVariable(env, "_REQUEST", env.getGlobalVar(VHelper.noCtx(), "_REQUEST").getOne().makeValue());
+      phpinfoVariable(env, "_GET", env.getGlobalVar(VHelper.noCtx(), "_GET").getOne().makeValue());
+      phpinfoVariable(env, "_POST", env.getGlobalVar(VHelper.noCtx(), "_POST").getOne().makeValue());
+      phpinfoVariable(env, "_COOKIE", env.getGlobalVar(VHelper.noCtx(), "_COOKIE").getOne().makeValue());
+      phpinfoVariable(env, "_SESSION", env.getGlobalVar(VHelper.noCtx(), "_SESSION").getOne().makeValue());
     }
 
-    phpinfoVariable(env, "_ENV", env.getGlobalVar(VHelper.noCtx(), "_ENV").getOne());
-    phpinfoVariable(env, "_SERVER", env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne());
+    phpinfoVariable(env, "_ENV", env.getGlobalVar(VHelper.noCtx(), "_ENV").getOne().makeValue());
+    phpinfoVariable(env, "_SERVER", env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().makeValue());
 
     if (hasRequest(env))
       env.print(VHelper.noCtx(), "</table>");
@@ -803,7 +803,7 @@ public class OptionsModule extends AbstractQuercusModule {
     if (value.isArray()) {
       ArrayValue array = value.toArrayValue(env);
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
         Value key = escape(env, entry.getKey());
 
         if (hasRequest(env))
@@ -816,7 +816,7 @@ public class OptionsModule extends AbstractQuercusModule {
         else
           env.print(VHelper.noCtx(), " => ");
 
-        phpinfoVariable(env, entry.getValue());
+        phpinfoVariable(env, entry.getValue().getOne());
 
         if (hasRequest(env))
           env.println(VHelper.noCtx(), "</td></tr>");
@@ -870,7 +870,7 @@ public class OptionsModule extends AbstractQuercusModule {
     StringValue key = settings.substring(0, eqIndex);
     StringValue val = settings.substring(eqIndex + 1);
 
-    env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().put(key, val);
+    env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().makeValue().put(key, val);
 
     return true;
   }
@@ -1044,9 +1044,9 @@ public class OptionsModule extends AbstractQuercusModule {
 
       ArrayValue result = new ArrayValueImpl();
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
         Value key = escape(env, entry.getKey());
-        Value val = escape(env, entry.getValue());
+        Value val = escape(env, entry.getValue().getOne());
 
         result.put(key, val);
       }
@@ -1058,9 +1058,9 @@ public class OptionsModule extends AbstractQuercusModule {
 
       ObjectValue result = new ObjectExtValue(env, obj.getQuercusClass());
 
-      for (Map.Entry<Value,Value> entry : obj.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : obj.entrySet()) {
         Value key = escape(env, entry.getKey());
-        Value val = escape(env, entry.getValue());
+        Value val = escape(env, entry.getValue().getOne());
 
         result.putField(env, key.toString(), val);
       }

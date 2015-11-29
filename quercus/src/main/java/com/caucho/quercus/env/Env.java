@@ -579,11 +579,11 @@ public class Env
 
   private void fillPost(ArrayValue array, ArrayValue postArray)
   {
-    for (Map.Entry<Value, Value> entry : postArray.entrySet()) {
+    for (Map.Entry<Value, EnvVar> entry : postArray.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue();
+      Value value = entry.getValue().getOne();
 
-      Value existingValue = array.get(key);
+      Value existingValue = array.get(key).getOne();
 
       if (existingValue.isArray() && value.isArray())
        existingValue.toArrayValue(this).putAll(value.toArrayValue(this));
@@ -1746,14 +1746,14 @@ public class Env
     }
 
     if (session != null) {
-      Value var = getGlobalVar(VHelper.noCtx(), sessionStr).getOne();
+      Var var = getGlobalVar(VHelper.noCtx(), sessionStr).getOne();
 
       if (! (var instanceof SessionVar)) {
         var = new SessionVar();
         setGlobalValue(VHelper.noCtx(), sessionStr, V.one(var));
       }
 
-      var.set(session);
+      var.set(VHelper.noCtx(),V.one(session));
 
       setGlobalValue(VHelper.noCtx(), "HTTP_SESSION_VARS", V.one(session));
 
@@ -1761,15 +1761,15 @@ public class Env
     }
     else {
       // php/1k0v
-      Value v = getGlobalVar(VHelper.noCtx(), sessionStr).getOne();
+      Var v = getGlobalVar(VHelper.noCtx(), sessionStr).getOne();
 
       if (v != null)
-        v.set(UnsetValue.UNSET);
+        v.set(VHelper.noCtx(),V.one(UnsetValue.UNSET));
 
       v = getGlobalVar(VHelper.noCtx(), "HTTP_SESSION_VARS").getOne();
 
       if (v != null)
-        v.set(UnsetValue.UNSET);
+        v.set(VHelper.noCtx(),V.one(UnsetValue.UNSET));
     }
   }
 
@@ -2012,7 +2012,7 @@ public class Env
     EnvVar var = getEnvVar(name, isAutoCreate, isOutputNotice);
 
     if (var != null)
-      return var.get(ctx);
+      return var.getValue(ctx);
     else
       return V.one(NullValue.NULL);
   }
@@ -2051,7 +2051,7 @@ public class Env
 
     // XXX: don't allocate?
 
-    return var.get(ctx);
+    return var.getValue(ctx);
 
     /*
     if (var != null)
@@ -2157,16 +2157,16 @@ public class Env
     return getEnvVar(name, true, true);
   }
 
-  public final EnvVar getLazyEnvVar(StringValue name)
-  {
-    EnvVar var = getEnvVar(name, false, false);
-
-    if (var == null) {
-      var = new LazyEnvVar(name);
-    }
-
-    return var;
-  }
+//  public final EnvVar getLazyEnvVar(StringValue name)
+//  {
+//    EnvVar var = getEnvVar(name, false, false);
+//
+//    if (var == null) {
+//      var = new LazyEnvVar(name);
+//    }
+//
+//    return var;
+//  }
 
   /**
    * Gets a variable
@@ -2350,7 +2350,7 @@ public class Env
     Var var = _staticMap.get(name);
 
     if (var != null) {
-      return var.toValue();
+      return var.getValue().getOne();
     }
     else
       return NullValue.NULL;
@@ -2361,10 +2361,10 @@ public class Env
    *
    * @param name the variable name
    */
-  public final Var setStaticRef(StringValue name, Value value)
+  public final Var setStaticRef(StringValue name, ValueOrVar value)
   {
     if (value.isVar()) {
-      Var var = (Var) value;
+      Var var = value._var();
 
       _staticMap.put(name, var);
 
@@ -2378,7 +2378,7 @@ public class Env
       _staticMap.put(name, var);
     }
 
-    var.set(value);
+    var.set(VHelper.noCtx(),V.one(value._value()));
 
     return var;
   }
@@ -2483,47 +2483,47 @@ public class Env
     return V.one(null);
   }
 
-  /**
-   * Gets a local
-   *
-   * @param var the current value of the variable
-   */
-  public static final Value getLocalVar(Value var)
-  {
-    if (var == null)
-      var = new Var();
+//  /**
+//   * Gets a local
+//   *
+//   * @param var the current value of the variable
+//   */
+//  public static final Value getLocalVar(Value var)
+//  {
+//    if (var == null)
+//      var = new Var();
+//
+//    return var;
+//  }
+//
+//  /**
+//   * Gets a local value
+//   *
+//   * @param var the current value of the variable
+//   */
+//  public static final Value getLocalValue(Value var)
+//  {
+//    if (var != null)
+//      return var;
+//    else
+//      return NullValue.NULL;
+//  }
 
-    return var;
-  }
-
-  /**
-   * Gets a local value
-   *
-   * @param var the current value of the variable
-   */
-  public static final Value getLocalValue(Value var)
-  {
-    if (var != null)
-      return var;
-    else
-      return NullValue.NULL;
-  }
-
-  /**
-   * Gets a local
-   *
-   * @param var the current value of the variable
-   */
-  public static final Value setLocalVar(Value var, Value value)
-  {
-    value = value.toValue();
-
-    if (var instanceof Var) {
-      var.set(value);
-    }
-
-    return value;
-  }
+//  /**
+//   * Gets a local
+//   *
+//   * @param var the current value of the variable
+//   */
+//  public static final Value setLocalVar(Value var, Value value)
+//  {
+//    value = value.toValue();
+//
+//    if (var instanceof Var) {
+//      var.set(value);
+//    }
+//
+//    return value;
+//  }
 
   private EnvVar getSuperGlobalRef(StringValue name, boolean isGlobal)
   {
@@ -2592,7 +2592,7 @@ public class Env
 
         Var array = getGlobalEnvVar(isUnicodeSemantics() ? S_ARGV_U : S_ARGV).getVar(VHelper.noCtx()).getOne();
 
-        int size = array.getSize();
+        int size = array.getValue().getOne().getSize();
 
         Var var = new Var();
         EnvVar envVar = new EnvVarImpl(V.one(var));
@@ -2624,7 +2624,7 @@ public class Env
 
         if (_variablesOrder.indexOf('P') >= 0
             && _inputPost.getSize() > 0) {
-          for (Map.Entry<Value, Value> entry : _inputPost.entrySet()) {
+          for (Map.Entry<Value, EnvVar> entry : _inputPost.entrySet()) {
             post.put(entry.getKey(), entry.getValue());
           }
         }
@@ -2648,7 +2648,7 @@ public class Env
         ArrayValue files = new ArrayValueImpl();
 
         if (_files != null) {
-          for (Map.Entry<Value, Value> entry : _files.entrySet()) {
+          for (Map.Entry<Value, EnvVar> entry : _files.entrySet()) {
             files.put(entry.getKey(), entry.getValue());
           }
         }
@@ -2743,7 +2743,7 @@ public class Env
 
         _globalMap.put(name, envVar);
 
-        var.set(_inputData);
+        var.set(VHelper.noCtx(),V.one(_inputData));
 
         return envVar;
       }
@@ -2779,7 +2779,7 @@ public class Env
           serverEnv = new ArrayValueImpl();
         }
 
-        var.set(serverEnv);
+        var.set(VHelper.noCtx(),V.one(serverEnv));
 
         return envVar;
       }
@@ -2790,7 +2790,7 @@ public class Env
 
         _globalMap.put(name, envVar);
 
-        var.set(new GlobalArrayValue(this));
+        var.set(VHelper.noCtx(),V.one(new GlobalArrayValue(this)));
 
         return envVar;
       }
@@ -2808,9 +2808,9 @@ public class Env
         _globalMap.put(name, envVar);
 
         if (_variablesOrder.indexOf('C') >= 0)
-          var.set(getCookies());
+          var.set(VHelper.noCtx(),V.one(getCookies()));
         else
-          var.set(new ArrayValueImpl());
+          var.set(VHelper.noCtx(),V.one(new ArrayValueImpl()));
 
         return envVar;
       }
@@ -2834,7 +2834,7 @@ public class Env
 
         _globalMap.put(name, envVar);
 
-        var.set(getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().get(isUnicodeSemantics() ? PHP_SELF_STRING_U : PHP_SELF_STRING));
+        var.set(VHelper.noCtx(),getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().getValue().<Value>map((a)->a.get(isUnicodeSemantics() ? PHP_SELF_STRING_U : PHP_SELF_STRING).getOne()));
 
         return envVar;
       }
@@ -3162,7 +3162,7 @@ public class Env
   /**
    * External calls to set a global value.
    */
-  public V<? extends Value> setGlobalValue(FeatureExpr ctx, String name, V<? extends Value> value)
+  public V<? extends ValueOrVar> setGlobalValue(FeatureExpr ctx, String name, V<? extends ValueOrVar> value)
   {
     return setGlobalValue(VHelper.noCtx(), createString(name), value);
   }
@@ -3170,7 +3170,7 @@ public class Env
   /**
    * External calls to set a global value.
    */
-  public V<? extends Value> setGlobalValue(FeatureExpr ctx, StringValue name, V<? extends Value> value)
+  public V<? extends ValueOrVar> setGlobalValue(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     EnvVar envVar = getGlobalEnvVar(name);
 
@@ -3433,10 +3433,10 @@ public class Env
   {
     StringBuilder sb = new StringBuilder();
 
-    for (Value item : value.values()) {
-      String function = item.get(createString("function")).toJavaString();
-      String file = item.get(createString("file")).toJavaString();
-      int line = item.get(createString("line")).toInt();
+    for (EnvVar item : value.values()) {
+      String function = item.getOne().get(createString("function")).getOne().toJavaString();
+      String file = item.getOne().get(createString("file")).getOne().toJavaString();
+      int line = item.getOne().get(createString("line")).getOne().toInt();
 
       if (function == null || "".equals(function))
         continue;
@@ -7153,37 +7153,37 @@ public class Env
   /**
    * Converts to a variable
    */
-  public static Var toVar(Value value)
+  public static Var toVar(ValueOrVar value)
   {
-    if (value instanceof Var)
-      return (Var) value;
+    if (value.isVar())
+      return value._var();
     else if (value == null)
       return new Var();
     else
-      return new Var(value);
+      return new Var(V.one(value._value()));
   }
 
-  /**
-   * Sets a vield variable
-   */
-  public static Value setFieldVar(Value oldValue, Value value)
-  {
-    if (value instanceof Var)
-      return value;
-    else if (oldValue instanceof Var)
-      return new Var(value);
-    else
-      return value;
-  }
+//  /**
+//   * Sets a vield variable
+//   */
+//  public static Value setFieldVar(Value oldValue, Value value)
+//  {
+//    if (value instanceof Var)
+//      return value;
+//    else if (oldValue instanceof Var)
+//      return new Var(value);
+//    else
+//      return value;
+//  }
 
   /**
    * Sets a reference
    */
-  public static Value setRef(Value oldValue, Value value)
+  public static Var setRef(ValueOrVar oldValue, ValueOrVar value)
   {
     // php/3243
     if (value instanceof Var)
-      return value;
+      return value._var();
     /*
     else if (oldValue instanceof Var) {
       oldValue.set(value);
@@ -7192,25 +7192,25 @@ public class Env
     }
     */
     else
-      return new Var(value);
+      return new Var(V.one(value._value()));
   }
 
-  /**
-   * Sets a reference
-   */
-  public static Var setEnvRef(Var oldVar, Value value)
-  {
-    // 3ab7
-    // XXX: need better test case, since that one isn't allowed by php
-
-    if (value instanceof Var)
-      return (Var) value;
-    else {
-      oldVar.set(value);
-
-      return oldVar;
-    }
-  }
+//  /**
+//   * Sets a reference
+//   */
+//  public static Var setEnvRef(Var oldVar, Value value)
+//  {
+//    // 3ab7
+//    // XXX: need better test case, since that one isn't allowed by php
+//
+//    if (value instanceof Var)
+//      return (Var) value;
+//    else {
+//      oldVar.set(value);
+//
+//      return oldVar;
+//    }
+//  }
 
   /**
    * Returns the last value.

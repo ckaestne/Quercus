@@ -23,6 +23,12 @@ public class VHelper {
                 b.map((bb) -> fun.apply(aa, bb)));
     }
 
+    public static <A, B, R> V<? extends R> flatMapAll(V<? extends A> a, V<? extends B> b, Function3<A, B, V<? extends R>> fun) {
+        return a.flatMap((aa) ->
+                b.flatMap((bb) -> fun.apply(aa, bb)));
+    }
+
+
     public static <T> V<T> toV(T v) {
         return V.one(v);
     }

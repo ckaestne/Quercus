@@ -59,9 +59,9 @@ public class ArgGetValue extends ArgValue
    * foo($a[0][1])
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
-    return new ArgGetValue(this, index); // php/3d1p
+    return EnvVar._gen(new ArgGetValue(this, index)); // php/3d1p
   }
 
   /**
@@ -69,9 +69,9 @@ public class ArgGetValue extends ArgValue
    * foo($a[0]->x)
    */
   @Override
-  public Value getFieldArg(Env env, StringValue index, boolean isTop)
+  public Var getFieldArg(Env env, StringValue index, boolean isTop)
   {
-    return new ArgGetFieldValue(env, this, index); // php/3d2p
+    return new ArgGetFieldValue(env, this, index).toVar(); // php/3d2p
   }
 
   /**
@@ -82,14 +82,14 @@ public class ArgGetValue extends ArgValue
   {
     // php/3d55, php/3d49, php/3921
 
-    return _obj.toAutoArray().getVar(_index).toLocalVarDeclAsRef();
+    return _obj.toAutoArray().getVar(_index).getVar().getOne()/*.toLocalVarDeclAsRef()*/;
   }
 
   @Override
   public Value toAutoArray()
   {
     Value parent = _obj.toAutoArray();
-    Value value = parent.get(_index);
+    Value value = parent.get(_index).getOne();
 
     Value array = value.toAutoArray();
 
@@ -106,7 +106,7 @@ public class ArgGetValue extends ArgValue
   public Value toAutoObject(Env env)
   {
     Value array = _obj.toAutoArray();
-    Value value = array.get(_index);
+    Value value = array.get(_index).getOne();
 
     if (value.isNull()) {
       value = env.createObject();
@@ -132,7 +132,7 @@ public class ArgGetValue extends ArgValue
   @Override
   public Value toLocalValueReadOnly()
   {
-    return _obj.get(_index);
+    return _obj.get(_index).getOne();
   }
 
   /**
@@ -141,7 +141,7 @@ public class ArgGetValue extends ArgValue
   @Override
   public Value toLocalValue()
   {
-    return _obj.get(_index).copy();
+    return _obj.get(_index).copy().getOne();
   }
 
   /**
@@ -150,7 +150,7 @@ public class ArgGetValue extends ArgValue
   @Override
   public Value toLocalRef()
   {
-    return _obj.get(_index).copy(); // php/0d14, php/04b4
+    return _obj.get(_index).copy().getOne(); // php/0d14, php/04b4
   }
 
   //

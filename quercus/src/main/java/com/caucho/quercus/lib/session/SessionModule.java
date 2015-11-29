@@ -226,7 +226,7 @@ public class SessionModule extends AbstractQuercusModule
   {
     SessionArrayValue session = env.getSession();
 
-    return session != null && session.get(name).isset();
+    return session != null && session.get(name).getOne().isset();
   }
 
   /**
@@ -324,19 +324,19 @@ public class SessionModule extends AbstractQuercusModule
     if (nameV instanceof StringValue) {
       String name = nameV.toString();
 
-      Value var = env.getGlobalVar(VHelper.noCtx(), name).getOne();
+      Var var = env.getGlobalVar(VHelper.noCtx(), name).getOne();
 
-      Value value = session.get(nameV);
+      EnvVar value = session.get(nameV);
 
-      if (value.isset())
-        var.set(value);
+      if (value.getOne().isset())
+        var.set(VHelper.noCtx(),value.getValue());
 
-      session.put(nameV, var);
+      session.put(nameV, var.makeValue());
     } else if (nameV.isArray()) {
       ArrayValue array = (ArrayValue) nameV.toValue();
 
-      for (Value subValue : array.values()) {
-        sessionRegisterImpl(env, session, subValue);
+      for (EnvVar subValue : array.values()) {
+        sessionRegisterImpl(env, session, subValue.getOne());
       }
     }
   }

@@ -234,7 +234,7 @@ public class ServerArrayValue extends ArrayValueImpl
   /**
    * Gets a new value.
    */
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
     if (! _isFilled)
       fillMap();
@@ -246,7 +246,7 @@ public class ServerArrayValue extends ArrayValueImpl
    * Gets a new value.
    */
   @Override
-  public Value getArg(Value key, boolean isTop)
+  public EnvVar getArg(Value key, boolean isTop)
   {
     if (! _isFilled)
       fillMap();
@@ -257,7 +257,7 @@ public class ServerArrayValue extends ArrayValueImpl
   /**
    * Returns the array ref.
    */
-  public Var getVar(Value key)
+  public EnvVar getVar(Value key)
   {
     if (! _isFilled)
       fillMap();
@@ -290,7 +290,7 @@ public class ServerArrayValue extends ArrayValueImpl
   /**
    * Returns an iterator of the entries.
    */
-  public Set<Map.Entry<Value,Value>> entrySet()
+  public Set<Map.Entry<Value, EnvVar>> entrySet()
   {
     if (! _isFilled)
       fillMap();
@@ -315,7 +315,7 @@ public class ServerArrayValue extends ArrayValueImpl
   @Override
   public boolean isset(Value key)
   {
-    return get(key).isset();
+    return get(key).getOne().isset();
   }
 
   @Override
@@ -354,7 +354,7 @@ public class ServerArrayValue extends ArrayValueImpl
 
     _isFilled = true;
 
-    for (Map.Entry<Value,Value> entry
+    for (Map.Entry<Value, Value> entry
            : _env.getQuercus().getServerEnvMap().entrySet()) {
       super.put(entry.getKey(), entry.getValue());
     }

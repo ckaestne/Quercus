@@ -59,7 +59,7 @@ public class InterpretedClosure extends Closure
         Arg arg = args[i];
 
         if (arg.isReference())
-          _args[i] = env.getRef(VHelper.noCtx(), arg.getName()).getOne();
+          _args[i] = env.getRef(VHelper.noCtx(), arg.getName()).getOne().getValue().getOne();
         else
           _args[i] = env.getValue(VHelper.noCtx(), arg.getName()).getOne();
       }

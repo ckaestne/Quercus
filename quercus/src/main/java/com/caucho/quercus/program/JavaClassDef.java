@@ -728,7 +728,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     return fun.callMethod(env, ctx, getQuercusClass(), qThis, a1, a2, a3, a4, a5);
   }
 
-  public Set<? extends Map.Entry<Value,Value>> entrySet(Object obj)
+  public Set<? extends Map.Entry<Value,EnvVar>> entrySet(Object obj)
   {
     try {
       if (_entrySet == null) {
@@ -1519,7 +1519,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iteratorMethod = iterator;
     }
 
-    public Iterator<Map.Entry<Value, Value>>
+    public Iterator<Map.Entry<Value, EnvVar>>
       getIterator(Env env, ObjectValue qThis)
     {
       try {
@@ -1550,7 +1550,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       }
     }
 
-    public Iterator<Value> getValueIterator(Env env, ObjectValue qThis)
+    public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis)
     {
       try {
         Object javaObj = qThis.toJavaObject();
@@ -1596,7 +1596,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   }
 
   private class JavaValueIterator
-    implements Iterator<Value>
+    implements Iterator<EnvVar>
   {
     private Env _env;
     private Iterator<?> _iterator;
@@ -1607,7 +1607,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iterator = iterator;
     }
 
-    public Value next()
+    public EnvVar next()
     {
       Object next = _iterator.next();
 
@@ -1617,14 +1617,14 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
         Object value = entry.getValue();
 
         if (value instanceof Value) {
-          return (Value) value;
+          return EnvVar._gen((Value) value);
         }
         else {
-          return _env.wrapJava(value);
+          return EnvVar._gen(_env.wrapJava(value));
         }
       }
       else {
-        return _env.wrapJava(next);
+        return EnvVar._gen(_env.wrapJava(next));
       }
     }
 
@@ -1643,7 +1643,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   }
 
   private class JavaIterator
-    implements Iterator<Map.Entry<Value, Value>>
+    implements Iterator<Map.Entry<Value, EnvVar>>
   {
     private Env _env;
     private Iterator<?> _iterator;
@@ -1656,7 +1656,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iterator = iterator;
     }
 
-    public Map.Entry<Value, Value> next()
+    public Map.Entry<Value, EnvVar> next()
     {
       Object next = _iterator.next();
       int index = _index++;
@@ -1669,21 +1669,21 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
 
         if (key instanceof Value
             && value instanceof Value) {
-          return (Map.Entry<Value, Value>) entry;
+          return (Map.Entry<Value, EnvVar>) entry;
         }
         else if (key instanceof Value) {
           Value v = _env.wrapJava(value);
 
-          return new JavaEntry((Value) key, v);
+          return new JavaEntry((Value) key, EnvVar._gen(v));
         }
         else {
           Value k = _env.wrapJava(key);
 
-          return new JavaEntry(k, _env.wrapJava(value));
+          return new JavaEntry(k,EnvVar._gen( _env.wrapJava(value)));
         }
       }
       else {
-        return new JavaEntry(LongValue.create(index), _env.wrapJava(next));
+        return new JavaEntry(LongValue.create(index),EnvVar._gen( _env.wrapJava(next)));
       }
     }
 
@@ -1702,12 +1702,12 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   }
 
   private class JavaEntry
-    implements Map.Entry<Value, Value>
+    implements Map.Entry<Value, EnvVar>
   {
     private Value _key;
-    private Value _value;
+    private EnvVar _value;
 
-    public JavaEntry(Value key, Value value)
+    public JavaEntry(Value key, EnvVar value)
     {
       _key = key;
       _value = value;
@@ -1718,12 +1718,12 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       return _key;
     }
 
-    public Value getValue()
+    public EnvVar getValue()
     {
       return _value;
     }
 
-    public Value setValue(Value value)
+    public EnvVar setValue(EnvVar value)
     {
       throw new UnsupportedOperationException();
     }

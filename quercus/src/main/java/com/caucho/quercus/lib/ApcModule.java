@@ -259,10 +259,10 @@ public class ApcModule extends AbstractQuercusModule
 
       valueMap.put(value, value);
 
-      Iterator<Value> iter = value.getValueIterator(env);
+      Iterator<EnvVar> iter = value.getValueIterator(env);
 
       while (iter.hasNext()) {
-        initObject(env, valueMap, iter.next());
+        initObject(env, valueMap, iter.next().getOne());
       }
     }
   }
@@ -279,9 +279,9 @@ public class ApcModule extends AbstractQuercusModule
     if (array == null)
       return false;
 
-    for (Map.Entry<Value,Value> entry : array.entrySet()) {
+    for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
       env.addConstant(entry.getKey().toStringValue(env),
-                      entry.getValue().copy(env),
+                      entry.getValue().getOne().copy(env),
                       ! caseSensitive);
     }
 

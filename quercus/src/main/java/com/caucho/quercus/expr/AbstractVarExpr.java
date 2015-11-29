@@ -151,7 +151,7 @@ abstract public class AbstractVarExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
   {
-    return evalVar(env, ctx);
+    return evalVar(env, ctx).map(v->v.makeValue());
   }
 
   /**
@@ -165,7 +165,7 @@ abstract public class AbstractVarExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return evalVar(env, ctx);
+    return evalVar(env, ctx).map((a)->a.makeValue());
   }
 
   /**
@@ -193,7 +193,7 @@ abstract public class AbstractVarExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    return evalVar(env, ctx).map((a)->a.toAutoArray());
+    return evalVar(env, ctx).map((a)->a.makeValue().toAutoArray());
   }
 
   /**
@@ -207,7 +207,7 @@ abstract public class AbstractVarExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    return evalVar(env, ctx).map((a)->a.toObject(env));
+    return evalVar(env, ctx).map((a)->a.makeValue().toObject(env));
   }
 
   /**

@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.UnimplementedVException;
+
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -75,7 +77,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Copy for serialization
    */
   @Override
-  public Value copy(Env env, IdentityHashMap<Value,Value> map)
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     return _array.copy(env, map);
   }
@@ -111,7 +113,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Adds a new value.
    */
   @Override
-  public ArrayValue append(Value key, Value value)
+  public Value append(Value key, Value value)
   {
     return _array.append(key, value);
   }
@@ -147,7 +149,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     return _array.getArg(index, isTop);
   }
@@ -174,7 +176,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Gets a new value.
    */
   @Override
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
     return _array.get(key);
   }
@@ -187,7 +189,12 @@ public class ArrayValueWrapper extends ArrayValue {
   {
     return _array.remove(key);
   }
-  
+
+  @Override
+  public ArrayValue append(Value key, EnvVar value) {
+    throw new UnimplementedVException();
+  }
+
   /**
    * Returns true if the index isset().
    */
@@ -201,7 +208,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the array ref.
    */
   @Override
-  public Var getVar(Value index)
+  public EnvVar getVar(Value index)
   {
     return _array.getVar(index);
   }
@@ -360,7 +367,7 @@ public class ArrayValueWrapper extends ArrayValue {
   }
 
   @Override
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
   {
     return _array.getIterator(env);
   }
@@ -372,7 +379,7 @@ public class ArrayValueWrapper extends ArrayValue {
   }
 
   @Override
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
     return _array.getValueIterator(env);
   }

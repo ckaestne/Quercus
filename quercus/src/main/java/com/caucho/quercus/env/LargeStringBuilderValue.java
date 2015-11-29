@@ -292,9 +292,9 @@ public class LargeStringBuilderValue
   /**
    * Returns the character at an index
    */
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
-    return charValueAt(key.toLong());
+    return EnvVar._gen(charValueAt(key.toLong()));
   }
 
   /**

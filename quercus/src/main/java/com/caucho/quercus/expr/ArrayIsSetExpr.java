@@ -91,7 +91,7 @@ public class ArrayIsSetExpr extends Expr {
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
     return VHelper.mapAll(array, index,(a,i)->
-      a.get(i) != UnsetValue.UNSET);
+      a.get(i).getOne() != UnsetValue.UNSET);
   }
 
   public String toString()

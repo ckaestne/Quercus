@@ -38,7 +38,6 @@ import com.caucho.util.LruCache;
 import com.caucho.vfs.StderrStream;
 import com.caucho.vfs.StringWriter;
 import com.caucho.vfs.WriteStream;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -198,14 +197,14 @@ public class VariableModule extends AbstractQuercusModule {
 
     for (Map.Entry<StringValue,EnvVar> entry : map.entrySet()) {
       result.append(entry.getKey(),
-                    entry.getValue().get(VHelper.noCtx()).getOne());
+                    entry.getValue().getOne());
     }
 
     Map<StringValue,EnvVar> globalMap = env.getGlobalEnv();
     if (map != globalMap) {
       for (Map.Entry<StringValue,EnvVar> entry : globalMap.entrySet()) {
         result.append(entry.getKey(),
-                      entry.getValue().get(VHelper.noCtx()).getOne());
+                      entry.getValue().getOne());
       }
     }
 
@@ -259,11 +258,11 @@ public class VariableModule extends AbstractQuercusModule {
 
       ArrayValue array = (ArrayValue) value;
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
         String key = entry.getKey().toString();
 
         env.setGlobalValue(VHelper.noCtx(), prefix + key,
-                         V.one(array.getVar(entry.getKey())));
+                         array.getVar(entry.getKey()).getValue());
       }
     }
 
@@ -801,8 +800,9 @@ public class VariableModule extends AbstractQuercusModule {
   {
     VWriteStream out = env.getOut();
 
-    if (v instanceof Var)
-      out.print(VHelper.noCtx(), "&");
+    //TODO V
+//    if (v instanceof Var)
+//      out.print(VHelper.noCtx(), "&");
 
     v = v.toValue();
 
@@ -813,12 +813,12 @@ public class VariableModule extends AbstractQuercusModule {
       printDepth(out, 2 * depth);
       out.println(VHelper.noCtx(), "(");
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
         printDepth(out, 2 * depth);
         out.print(VHelper.noCtx(), "    [");
         out.print(VHelper.noCtx(), entry.getKey());
         out.print(VHelper.noCtx(), "] => ");
-        debug_impl(env, entry.getValue(), depth + 1); // XXX: recursion
+        debug_impl(env, entry.getValue().getOne(), depth + 1); // XXX: recursion
       }
       printDepth(out, 2 * depth);
       out.println(VHelper.noCtx(), ")");

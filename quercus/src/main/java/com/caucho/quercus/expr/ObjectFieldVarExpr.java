@@ -100,7 +100,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
 
     // XXX: getFieldArg(isTop)
 
-    return value.map((a)->a.getFieldArg(env, _nameExpr.evalStringValue(env, VHelper.noCtx()).getOne(), isTop));
+    return value.map((a)->a.getFieldArg(env, _nameExpr.evalStringValue(env, VHelper.noCtx()).getOne(), isTop).makeValue());
   }
 
   /**

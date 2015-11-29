@@ -628,10 +628,10 @@ public class QuercusContext
       if (driverValue.isArray()) {
         ArrayValue array = driverValue.toArray();
 
-        for (Map.Entry<Value,Value> entry : array.entrySet()) {
+        for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
 
           Value key = entry.getKey();
-          Value value = entry.getValue();
+          Value value = entry.getValue().getOne();
 
           _jdbcDriverContext.setProtocol(key.toString(), value.toString());
         }
@@ -1822,9 +1822,9 @@ public class QuercusContext
       if (result instanceof ArrayValue) {
         ArrayValue array = (ArrayValue) result;
 
-        for (Map.Entry<Value,Value> entry : array.entrySet()) {
+        for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
           String key = entry.getKey().toString();
-          Value value = entry.getValue();
+          Value value = entry.getValue().getOne();
 
           setIni(key, value);
         }

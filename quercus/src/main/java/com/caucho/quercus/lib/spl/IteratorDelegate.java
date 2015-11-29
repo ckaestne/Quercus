@@ -29,10 +29,7 @@
 
 package com.caucho.quercus.lib.spl;
 
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.ObjectValue;
-import com.caucho.quercus.env.TraversableDelegate;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 
 import java.util.Iterator;
@@ -47,7 +44,7 @@ public class IteratorDelegate implements TraversableDelegate
 {
   private static final L10N L = new L10N(IteratorDelegate.class);
   
-  public Iterator<Map.Entry<Value, Value>>
+  public Iterator<Map.Entry<Value, EnvVar>>
     getIterator(Env env, ObjectValue qThis)
   {
     return new EntryIterator(env, qThis);
@@ -62,7 +59,7 @@ public class IteratorDelegate implements TraversableDelegate
     return new KeyIterator(env, qThis);
   }
 
-  public Iterator<Value> getValueIterator(Env env, ObjectValue qThis)
+  public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis)
   {
     return new ValueIterator(env, (ObjectValue) qThis);
   }

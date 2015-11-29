@@ -70,10 +70,10 @@ public class ClosureStaticStatement
     try {
       Var var = closure.getStaticVar(_var.getName());
 
-      env.setRef(ctx, _var.getName(), V.one(var));
+      env.setRef(ctx, _var.getName(), V.one(var.makeValue()));
 
-      if (! var.isset() && _initValue != null) {
-        var.set(_initValue.eval(env, VHelper.noCtx()).getOne());
+      if (! var.makeValue().isset() && _initValue != null) {
+        var.set(VHelper.noCtx(), _initValue.eval(env, VHelper.noCtx()));
       }
 
     }

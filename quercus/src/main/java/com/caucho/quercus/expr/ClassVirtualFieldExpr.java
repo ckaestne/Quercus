@@ -123,7 +123,7 @@ public class ClassVirtualFieldExpr extends AbstractVarExpr {
   {
     Value qThis = env.getThis();
 
-    return VHelper.toV(qThis.setStaticFieldRef(env, _varName, value.getOne()));
+    return VHelper.toV(qThis.setStaticFieldRef(env, _varName, value.getOne()).makeValue());
   }
 
   /**

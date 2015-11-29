@@ -676,9 +676,9 @@ public class StringBuilderValue
   /**
    * Returns the character at an index
    */
-  public final Value get(Value key)
+  public final EnvVar get(Value key)
   {
-    return charValueAt(key.toLong());
+    return EnvVar._gen(charValueAt(key.toLong()));
   }
 
   /**

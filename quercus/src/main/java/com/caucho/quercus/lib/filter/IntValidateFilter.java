@@ -40,8 +40,8 @@ public class IntValidateFilter extends AbstractFilter implements ValidateFilter
     long max = Long.MAX_VALUE;
 
     if (options != null) {
-      Value minV = options.get(env.createString("min_range"));
-      Value maxV = options.get(env.createString("max_range"));
+      Value minV = options.get(env.createString("min_range")).getOne();
+      Value maxV = options.get(env.createString("max_range")).getOne();
 
       if (minV != UnsetValue.UNSET) {
         min = minV.toLong();

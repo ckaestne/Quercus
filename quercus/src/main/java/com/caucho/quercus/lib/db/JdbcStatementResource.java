@@ -32,7 +32,6 @@ package com.caucho.quercus.lib.db;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
 import com.caucho.util.L10N;
 import com.caucho.util.Log;
 
@@ -105,10 +104,11 @@ public class JdbcStatementResource
     for (int i = 0; i < size; i++) {
       Value val = outParams[i];
 
-      if (! (val instanceof Var)) {
-        env.error(L.l("Only variables can be passed by reference"));
-        return false;
-      }
+      //TODO V
+//      if (! (val instanceof Var)) {
+//        env.error(L.l("Only variables can be passed by reference"));
+//        return false;
+//      }
     }
 
     if ((size == 0) || (size != numColumns)) {

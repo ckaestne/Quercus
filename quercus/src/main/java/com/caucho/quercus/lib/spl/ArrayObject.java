@@ -151,13 +151,13 @@ public class ArrayObject
   @Override
   public boolean offsetExists(Env env, Value offset)
   {
-    return _value.get(offset).isset();
+    return _value.get(offset).getOne().isset();
   }
 
   @Override
   public Value offsetGet(Env env, Value offset)
   {
-    return _value.get(offset);
+    return _value.get(offset).getOne();
   }
 
   @Override
@@ -197,7 +197,7 @@ public class ArrayObject
   public Value __getField(StringValue key)
   {
     if ((_flags & ARRAY_AS_PROPS) != 0)
-      return _value.get(key);
+      return _value.get(key).getOne();
     else
       return UnsetValue.UNSET;
   }
@@ -235,20 +235,20 @@ public class ArrayObject
       depth++;
 
 
-      java.util.Iterator<Map.Entry<Value,Value>> iterator
+      java.util.Iterator<Map.Entry<Value,EnvVar>> iterator
         = _value.getIterator(env);
 
       while (iterator.hasNext()) {
-        Map.Entry<Value, Value> entry = iterator.next();
+        Map.Entry<Value, EnvVar> entry = iterator.next();
 
         Value key = entry.getKey();
-        Value value = entry.getValue();
+        EnvVar value = entry.getValue();
 
         printDepth(out, 4 * depth);
 
         out.print(VHelper.noCtx(), "[" + key + "] => ");
 
-        value.printR(env, out, depth + 1, valueSet);
+        value.getOne().printR(env, out, depth + 1, valueSet);
 
         out.println(VHelper.noCtx());
       }
@@ -280,14 +280,14 @@ public class ArrayObject
 
       depth++;
 
-      java.util.Iterator<Map.Entry<Value,Value>> iterator
+      java.util.Iterator<Map.Entry<Value,EnvVar>> iterator
         = _value.getIterator(env);
 
       while (iterator.hasNext()) {
-        Map.Entry<Value, Value> entry = iterator.next();
+        Map.Entry<Value, EnvVar> entry = iterator.next();
 
         Value key = entry.getKey();
-        Value value = entry.getValue();
+        EnvVar value = entry.getValue();
 
         printDepth(out, 2 * depth);
 
@@ -302,7 +302,7 @@ public class ArrayObject
 
         printDepth(out, 2 * depth);
 
-        value.varDump(env, out, depth, valueSet);
+        value.getOne().varDump(env, out, depth, valueSet);
 
         out.println(VHelper.noCtx());
       }

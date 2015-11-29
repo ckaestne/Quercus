@@ -77,27 +77,27 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Gets a new value.
    */
-  public Value get(Value key)
+  public EnvVar get(Value key)
   {
-    return _env.getGlobalValue(VHelper.noCtx(), key.toStringValue()).getOne();
+    return new EnvVarImpl(V.one(new Var(_env.getGlobalValue(VHelper.noCtx(), key.toStringValue()))));
   }
   
   /**
    * Returns the array ref.
    */
   @Override
-  public Var getVar(Value key)
+  public EnvVar getVar(Value key)
   {
     // return _env.getGlobalRef(key.toStringValue());
 
-    return _env.getGlobalVar(VHelper.noCtx(), key.toStringValue()).getOne();
+    return new EnvVarImpl(_env.getGlobalVar(VHelper.noCtx(), key.toStringValue()));
   }
 
   /**
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Value getArg(Value index, boolean isTop)
+  public EnvVar getArg(Value index, boolean isTop)
   {
     return getVar(index);
   }
@@ -107,7 +107,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
    */
   public Value getArray(Value index)
   {
-    Value array = getVar(index).toAutoArray();
+    Value array = getVar(index).getOne().toAutoArray();
 
     return array;
   }
@@ -118,7 +118,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   @Override
   public Value remove(Value key)
   {
-    return _env.unsetGlobalVar(VHelper.noCtx(), key.toStringValue()).getOne();
+    return _env.unsetGlobalVar(VHelper.noCtx(), key.toStringValue()).getOne().toValue();
   }
   
   @Override
@@ -150,7 +150,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
     EnvVar var = _env.getGlobalEnv().get(key.toStringValue());
 
     if (var != null)
-      return var.get(VHelper.noCtx()).getOne();
+      return var.getOne();
     else
       return null;
   }
@@ -161,7 +161,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   @Override
   public boolean isset(Value key)
   {
-    return get(key).isset();
+    return get(key).getOne().isset();
   }
   
   /**
@@ -196,13 +196,13 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Returns an iterator of the entries.
    */
-  public Set<Map.Entry<Value,Value>> entrySet()
+  public Set<Map.Entry<Value,EnvVar>> entrySet()
   {
     return createAndFillArray().entrySet();
   }
   
   @Override
-  public Iterator<Map.Entry<Value, Value>> getIterator(Env env)
+  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
   {
     return createAndFillArray().getIterator(env);
   }
@@ -214,7 +214,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   }
 
   @Override
-  public Iterator<Value> getValueIterator(Env env)
+  public Iterator<EnvVar> getValueIterator(Env env)
   {
     return createAndFillArray().getValueIterator(env);
   }
@@ -226,7 +226,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
     for (Map.Entry<StringValue, EnvVar> entry : _env.getGlobalEnv()
       .entrySet()) {
       Value key = entry.getKey();
-      Value val = entry.getValue().get(VHelper.noCtx()).getOne();
+      Value val = entry.getValue().getOne();
       
       array.put(key, val);
     }

@@ -716,7 +716,7 @@ abstract public class Expr {
   {
     V<? extends Var> value = evalVar(env, ctx);
 
-    return value.map(a->a.postincr(incr));
+    return value.flatMap(a->a.getValue().map(v->v.postincr(incr)));
   }
 
   /**
@@ -726,7 +726,7 @@ abstract public class Expr {
   {
     V<? extends Var> value = evalVar(env, ctx);
 
-    return value.map(a->a.preincr(incr));
+    return value.flatMap(a->a.getValue().map(v->v.preincr(incr)));
   }
 
   /**

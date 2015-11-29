@@ -46,10 +46,10 @@ public class ConstArrayValue
     super.copyFrom(source);
   }
   
-  public ConstArrayValue(ArrayValueComponent[] components)
-  {
-    super(components);
-  }
+//  public ConstArrayValue(ArrayValueComponent[] components)
+//  {
+//    super(components);
+//  }
 
   public ConstArrayValue(Value []keys, Value []values)
   {

@@ -22,6 +22,7 @@ libraryDependencies += "org.scala-lang.modules" % "scala-java8-compat_2.11" % "0
 
 libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
 
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
 
 
 //libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"

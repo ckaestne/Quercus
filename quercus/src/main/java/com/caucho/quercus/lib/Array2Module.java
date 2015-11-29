@@ -54,7 +54,7 @@ public class Array2Module extends AbstractQuercusModule
 
     ArrayValue array = obj.toArrayValue(env);
 
-    Value value = array.get(key);
+    Value value = array.get(key).getOne();
 
     if (value == UnsetValue.UNSET) {
       return defaultValue;

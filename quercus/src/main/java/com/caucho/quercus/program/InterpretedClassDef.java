@@ -537,7 +537,7 @@ public class InterpretedClassDef extends ClassDef
 
       Var var = qClass.getStaticFieldVar(env, name);
 
-      var.set(field.getValue().eval(env, VHelper.noCtx()).getOne().copy());
+      var.set(VHelper.noCtx(),field.getValue().eval(env, VHelper.noCtx()).map((a)->a.copy()));
     }
   }
 

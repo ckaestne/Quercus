@@ -30,10 +30,7 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.BreakValue;
-import com.caucho.quercus.env.ContinueValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.AbstractVarExpr;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -95,10 +92,10 @@ public class ForeachStatement
     Value obj = origObj.copy(); // php/0669
 
     if (_key == null && ! _isRef) {
-      Iterator<Value> iter = obj.getValueIterator(env);
+      Iterator<EnvVar> iter = obj.getValueIterator(env);
 
       while (iter.hasNext()) {
-        Value value = iter.next();
+        Value value = iter.next().getOne();
 
         value = value.copy(); // php/0662
 
@@ -141,7 +138,7 @@ public class ForeachStatement
         if (_key != null)
           _key.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(key));
 
-        Value value = origObj.getVar(key);
+        Value value = origObj.getVar(key).getOne();
 
         // php/0667
         _value.evalAssignRef(env, VHelper.noCtx(), VHelper.toV(value));
@@ -174,12 +171,12 @@ public class ForeachStatement
       }
     }
     else {
-      Iterator<Map.Entry<Value,Value>> iter = obj.getIterator(env);
+      Iterator<Map.Entry<Value, EnvVar>> iter = obj.getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value, Value> entry = iter.next();
+        Map.Entry<Value, EnvVar> entry = iter.next();
         Value key = entry.getKey();
-        Value value = entry.getValue();
+        Value value = entry.getValue().getOne();
 
         value = value.copy(); // php/066w
 

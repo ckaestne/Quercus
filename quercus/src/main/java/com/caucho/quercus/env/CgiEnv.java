@@ -115,7 +115,7 @@ public class CgiEnv
       name = cookies.substring(start, eqIndex);
 
       StringValue nameV = cleanCookieName(name);
-      if (array.get(nameV) != UnsetValue.UNSET)
+      if (array.get(nameV).getOne() != UnsetValue.UNSET)
         return;
 
       value = cookies.substring(eqIndex + 1, end);
@@ -306,7 +306,7 @@ public class CgiEnv
       = serverEnv.get(createString("CONTENT_TYPE")).toString();
 
     int contentLength = Integer.MAX_VALUE;
-    Value contentLengthV = serverEnv.get(createString("CONTENT_LENGTH"));
+    Value contentLengthV = serverEnv.get(createString("CONTENT_LENGTH")).getOne();
 
     if (contentLengthV.isset())
       contentLength = contentLengthV.toInt();

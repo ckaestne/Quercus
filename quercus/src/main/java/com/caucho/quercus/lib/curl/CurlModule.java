@@ -650,8 +650,8 @@ public class CurlModule
     if (curl == null)
       return BooleanValue.FALSE;
 
-    for (Map.Entry<Value,Value> entry : options.entrySet()) {
-      if (! setOption(env, curl, entry.getKey().toInt(), entry.getValue()))
+    for (Map.Entry<Value,EnvVar> entry : options.entrySet()) {
+      if (! setOption(env, curl, entry.getKey().toInt(), entry.getValue().getOne()))
         return BooleanValue.FALSE;
     }
 
@@ -961,7 +961,7 @@ public class CurlModule
       case CURLOPT_HTTPHEADER:
         ArrayValue array = value.toArrayValue(env);
 
-        for (Map.Entry<Value,Value> entry : array.entrySet()) {
+        for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
           String header = entry.getValue().toString();
 
           String name = header;

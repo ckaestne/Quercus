@@ -285,7 +285,7 @@ public class MbstringModule
       ArrayList<String> list = new ArrayList<String>();
 
       if (encodingV.isArray()) {
-        Iterator<Value> iter = encodingV.getValueIterator(env);
+        Iterator<EnvVar> iter = encodingV.getValueIterator(env);
 
         while (iter.hasNext()) {
           list.add(iter.next().toString());
@@ -319,7 +319,7 @@ public class MbstringModule
       }
     }
     else if (encodingV.isArray()) {
-      Iterator<Value> iter = encodingV.getValueIterator(env);
+      Iterator<EnvVar> iter = encodingV.getValueIterator(env);
 
       while (iter.hasNext()) {
         list.add(iter.next().toString());
@@ -514,19 +514,19 @@ public class MbstringModule
     Value val;
     Var regVar = new Var();
 
-    val = RegexpModule.eregImpl(env, ereg, string, regVar);
+    val = RegexpModule.eregImpl(env, ereg, string, regVar.makeValue());
 
-    if (regVar.isset()) {
+    if (regVar.getValue().getOne().isset()) {
       regs.clear();
-      ArrayValue results = regVar.toArrayValue(env);
+      ArrayValue results = regVar.getValue().getOne().toArrayValue(env);
 
-      for (Map.Entry<Value,Value> entry : results.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : results.entrySet()) {
 
-        Value bytes = encodeAll(env, entry.getValue(), encoding);
+        Value bytes = encodeAll(env, entry.getValue().getOne(), encoding);
         regs.put(entry.getKey(), bytes);
       }
 
-      val = LongValue.create(regs.get(LongValue.ZERO).toStringValue().length());
+      val = LongValue.create(regs.get(LongValue.ZERO).getOne().toStringValue().length());
     }
 
     return val;
@@ -1372,7 +1372,7 @@ public class MbstringModule
       list.add(getEncoding(env));
     }
     else if (encodingV.isArray()) {
-      Iterator<Value> iter = encodingV.getValueIterator(env);
+      Iterator<EnvVar> iter = encodingV.getValueIterator(env);
 
       while (iter.hasNext()) {
         list.add(iter.next().toString());
@@ -1437,9 +1437,9 @@ public class MbstringModule
     else if (val.isArray()) {
       ArrayValue array = new ArrayValueImpl();
 
-      for (Map.Entry<Value,Value> entry : ((ArrayValue)val).entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : ((ArrayValue)val).entrySet()) {
         array.put(entry.getKey(),
-                  decodeAll(env, entry.getValue(), decoder));
+                  decodeAll(env, entry.getValue().getOne(), decoder));
       }
 
       return array;
@@ -1447,10 +1447,10 @@ public class MbstringModule
 
       ObjectValue obj = (ObjectValue) val.toObject(env);
 
-      for (Map.Entry<Value,Value> entry : obj.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : obj.entrySet()) {
         obj.putThisField(env,
                          entry.getKey().toStringValue(),
-                         decodeAll(env, entry.getValue(), decoder));
+                         decodeAll(env, entry.getValue().getOne(), decoder));
       }
 
       return obj;
@@ -1487,9 +1487,9 @@ public class MbstringModule
     else if (val.isArray()) {
       ArrayValue array = new ArrayValueImpl();
 
-      for (Map.Entry<Value,Value> entry : ((ArrayValue)val).entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : ((ArrayValue)val).entrySet()) {
         array.put(entry.getKey(),
-                  encodeAll(env, entry.getValue(), encoder));
+                  encodeAll(env, entry.getValue().getOne(), encoder));
       }
 
       return array;
@@ -1497,10 +1497,10 @@ public class MbstringModule
 
       ObjectValue obj = (ObjectValue)val;
 
-      for (Map.Entry<Value,Value> entry : obj.entrySet()) {
+      for (Map.Entry<Value,EnvVar> entry : obj.entrySet()) {
         obj.putThisField(env,
                          entry.getKey().toStringValue(),
-                         encodeAll(env, entry.getValue(), encoder));
+                         encodeAll(env, entry.getValue().getOne(), encoder));
       }
 
       return obj;
@@ -1569,7 +1569,7 @@ public class MbstringModule
       if (val == BooleanValue.FALSE)
         return BooleanValue.FALSE;
 
-      StringValue match = regs.get(LongValue.ZERO).toStringValue();
+      StringValue match = regs.get(LongValue.ZERO).getOne().toStringValue();
 
       int matchIndex = _string.indexOf(match, _position);
       int matchLength = match.length();

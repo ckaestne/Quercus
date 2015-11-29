@@ -39,7 +39,7 @@ public interface TraversableDelegate {
   /**
    * Returns an iterator over the object's &lt;key,value> entries. 
    */
-  public Iterator<Map.Entry<Value, Value>>
+  public Iterator<Map.Entry<Value, EnvVar>>
     getIterator(Env env, ObjectValue qThis);
   
   /**
@@ -50,5 +50,5 @@ public interface TraversableDelegate {
   /**
    * Returns an iterator over the object's values.
    */
-  public Iterator<Value> getValueIterator(Env env, ObjectValue qThis);
+  public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis);
 }

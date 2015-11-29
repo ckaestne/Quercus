@@ -588,8 +588,8 @@ public class StreamModule extends AbstractQuercusModule {
     if (read.isArray()) {
       ArrayValue array = read.toArrayValue(env);
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
-        Object obj = entry.getValue().toJavaObject();
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+        Object obj = entry.getValue().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
             && ((SocketInputOutput) obj).isConnected()) {
@@ -601,8 +601,8 @@ public class StreamModule extends AbstractQuercusModule {
     if (write.isArray()) {
       ArrayValue array = write.toArrayValue(env);
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
-        Object obj = entry.getValue().toJavaObject();
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+        Object obj = entry.getValue().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
             && ((SocketInputOutput) obj).isConnected()) {
@@ -614,8 +614,8 @@ public class StreamModule extends AbstractQuercusModule {
     if (except.isArray()) {
       ArrayValue array = except.toArrayValue(env);
 
-      for (Map.Entry<Value,Value> entry : array.entrySet()) {
-        Object obj = entry.getValue().toJavaObject();
+      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+        Object obj = entry.getValue().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
             && ((SocketInputOutput) obj).isConnected()) {

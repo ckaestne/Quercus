@@ -408,7 +408,7 @@ public class ZlibModule extends AbstractQuercusModule {
     }
 
     ServerArrayValue sav = new ServerArrayValue(env);
-    Value val = sav.get(env.createString("HTTP_ACCEPT_ENCODING"));
+    Value val = sav.get(env.createString("HTTP_ACCEPT_ENCODING")).getOne();
 
     if (!val.isset())
       return BooleanValue.FALSE;

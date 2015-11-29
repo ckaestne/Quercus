@@ -171,8 +171,8 @@ public class PDO implements EnvCleanup {
     _error = new PDOError();
 
     if (options != null) {
-      for (Map.Entry<Value,Value> entry : options.entrySet()) {
-        setAttribute(env, entry.getKey().toInt(), entry.getValue());
+      for (Map.Entry<Value,EnvVar> entry : options.entrySet()) {
+        setAttribute(env, entry.getKey().toInt(), entry.getValue().getOne());
       }
     }
 
@@ -805,7 +805,7 @@ public class PDO implements EnvCleanup {
    */
   private boolean setStatementClass(Env env, ArrayValue value)
   {
-    Value className = value.get(LongValue.ZERO);
+    Value className = value.get(LongValue.ZERO).getOne();
 
     if (! className.isString()) {
       return false;
@@ -813,7 +813,7 @@ public class PDO implements EnvCleanup {
 
     _statementClassName = className.toStringValue(env).toString();
 
-    Value argV = value.get(LongValue.ONE);
+    Value argV = value.get(LongValue.ONE).getOne();
 
     if (argV.isArray()) {
       ArrayValue array = argV.toArrayValue(env);
