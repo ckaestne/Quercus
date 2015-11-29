@@ -322,7 +322,7 @@ public class Env
   private LinkedList<FieldGetEntry> _unsetList
     = new LinkedList<FieldGetEntry>();
 
-  public enum OVERLOADING_TYPES {INVALID_FIRST, FIELDGET, FIELDSET, ISSET, UNSET, INVALID_LAST};
+  public enum OVERLOADING_TYPES {INVALID_FIRST, FIELDGET, FIELDSET, ISSET, UNSET, INVALID_LAST}
 
   private Path _selfPath;
   private Path _selfDirectory;
@@ -4410,134 +4410,134 @@ public class Env
     return getFunction(name).call(this, ctx, args);
   }
 
-  /**
-   * Evaluates the named function.
-   *
-   * @param name the function name
-   * @return the function value
-   */
-  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
-  {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.callRef(this, ctx);
-  }
-
-  /**
-   * EvalRefuates the named function.
-   *
-   * @param name the function name
-   * @param a0 the first argument
-   * @return the function value
-   */
-  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
-  {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.callRef(this, ctx, a0);
-  }
-
-  /**
-   * EvalRefuates the named function.
-   *
-   * @param name the function name
-   * @param a0 the first argument
-   * @param a1 the second argument
-   * @return the function value
-   */
-  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
-  {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.callRef(this, ctx, a0, a1);
-  }
-
-  /**
-   * EvalRefuates the named function.
-   *
-   * @param name the function name
-   * @param a0 the first argument
-   * @param a1 the second argument
-   * @param a2 the third argument
-   * @return the function value
-   */
-  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
-  {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.callRef(this, ctx, a0, a1, a2);
-  }
-
-  /**
-   * Evaluates the named function.
-   *
-   * @param name the function name
-   * @param a0 the first argument
-   * @param a1 the second argument
-   * @param a2 the third argument
-   * @param a3 the fourth argument
-   * @return the function value
-   */
-  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
-  {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.callRef(this, ctx, a0, a1, a2, a3);
-  }
-
-  /**
-   * Evaluates the named function.
-   *
-   * @param name the function name
-   * @param a0 the first argument
-   * @param a1 the second argument
-   * @param a2 the third argument
-   * @param a3 the fourth argument
-   * @param a4 the fifth argument
-   * @return the function value
-   */
-  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
-                       Value a2, Value a3, Value a4)
-  {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.callRef(this, ctx, a0, a1, a2, a3, a4);
-  }
-
-  /**
-   * Evaluates the named function.
-   *
-   * @param name the function name
-   * @param args the arguments
-   * @return the function value
-   */
-  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
-  {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.callRef(this, ctx, args);
-  }
+//  /**
+//   * Evaluates the named function.
+//   *
+//   * @param name the function name
+//   * @return the function value
+//   */
+//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
+//  {
+//    AbstractFunction fun = findFunction(name).getOne();
+//
+//    if (fun == null)
+//      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+//
+//    return fun.callRef(this, ctx);
+//  }
+//
+//  /**
+//   * EvalRefuates the named function.
+//   *
+//   * @param name the function name
+//   * @param a0 the first argument
+//   * @return the function value
+//   */
+//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
+//  {
+//    AbstractFunction fun = findFunction(name).getOne();
+//
+//    if (fun == null)
+//      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+//
+//    return fun.callRef(this, ctx, a0);
+//  }
+//
+//  /**
+//   * EvalRefuates the named function.
+//   *
+//   * @param name the function name
+//   * @param a0 the first argument
+//   * @param a1 the second argument
+//   * @return the function value
+//   */
+//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
+//  {
+//    AbstractFunction fun = findFunction(name).getOne();
+//
+//    if (fun == null)
+//      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+//
+//    return fun.callRef(this, ctx, a0, a1);
+//  }
+//
+//  /**
+//   * EvalRefuates the named function.
+//   *
+//   * @param name the function name
+//   * @param a0 the first argument
+//   * @param a1 the second argument
+//   * @param a2 the third argument
+//   * @return the function value
+//   */
+//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
+//  {
+//    AbstractFunction fun = findFunction(name).getOne();
+//
+//    if (fun == null)
+//      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+//
+//    return fun.callRef(this, ctx, a0, a1, a2);
+//  }
+//
+//  /**
+//   * Evaluates the named function.
+//   *
+//   * @param name the function name
+//   * @param a0 the first argument
+//   * @param a1 the second argument
+//   * @param a2 the third argument
+//   * @param a3 the fourth argument
+//   * @return the function value
+//   */
+//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
+//  {
+//    AbstractFunction fun = findFunction(name).getOne();
+//
+//    if (fun == null)
+//      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+//
+//    return fun.callRef(this, ctx, a0, a1, a2, a3);
+//  }
+//
+//  /**
+//   * Evaluates the named function.
+//   *
+//   * @param name the function name
+//   * @param a0 the first argument
+//   * @param a1 the second argument
+//   * @param a2 the third argument
+//   * @param a3 the fourth argument
+//   * @param a4 the fifth argument
+//   * @return the function value
+//   */
+//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
+//                       Value a2, Value a3, Value a4)
+//  {
+//    AbstractFunction fun = findFunction(name).getOne();
+//
+//    if (fun == null)
+//      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+//
+//    return fun.callRef(this, ctx, a0, a1, a2, a3, a4);
+//  }
+//
+//  /**
+//   * Evaluates the named function.
+//   *
+//   * @param name the function name
+//   * @param args the arguments
+//   * @return the function value
+//   */
+//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
+//  {
+//    AbstractFunction fun = findFunction(name).getOne();
+//
+//    if (fun == null)
+//      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+//
+//    return fun.callRef(this, ctx, args);
+//  }
 
   /**
    * Adds a class, e.g. from an include.
@@ -7679,6 +7679,11 @@ public class Env
     {
       _className = className;
       _fieldName = fieldName;
+    }
+
+    @Override
+    public int hashCode() {
+      return _className.hashCode()+_fieldName.hashCode();
     }
 
     public boolean equals(Object o)

@@ -203,14 +203,14 @@ public class CallExpr extends Expr {
     return _funId.vflatMap(_ctx, (ctx,funId)-> {
 
       if (funId <= 0) {
-        env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
+        env.error(ctx, L.l("'{0}' is an unknown function.", _name), getLocation());
         return V.one(NullValue.NULL);
       }
 
       AbstractFunction fun = env.getFunction(funId);
 
       if (fun == null) {
-        env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
+        env.error(ctx, L.l("'{0}' is an unknown function.", _name), getLocation());
 
         return VHelper.toV(NullValue.NULL);
       }
