@@ -24,6 +24,10 @@ libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
 
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
 
+jacoco.settings
+
+jacoco.reportFormats in jacoco.Config := Seq(
+  de.johoop.jacoco4sbt.XMLReport(encoding = "utf-8"))
 
 //libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
 //

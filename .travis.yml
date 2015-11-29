@@ -8,7 +8,7 @@ addons:
 scala: 2.11.7
 jdk: oraclejdk8
 sudo: false
-script: sbt coverage test
+script: sbt "project quercus" jacoco:cover coverage test
 after_success: "sbt coveralls"
 services:
   - mysql
