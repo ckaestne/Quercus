@@ -38,7 +38,14 @@ trait AbstractPhpTest extends ConditionalOutputInfrastructure {
     }
 
 
-    def eval(code: String) = Eval("<?php " + code)
+    def eval(code: String) = {
+        var script = "<?php "
+        if (code contains "$FOO")
+            script += "$FOO = create_conditional('foo');"
+        if (code contains "$BAR")
+            script += "$BAR = create_conditional('bar');"
+        Eval(script + code)
+    }
 
 
     private def toTypeChef(l: List[Opt[String]]): List[TOpt[String]] =
@@ -73,7 +80,7 @@ trait AbstractPhpTest extends ConditionalOutputInfrastructure {
 trait ConditionalOutputInfrastructure {
 
     sealed trait ConditionalOutput {
-        def +(that: ConditionalOutput) = new ConcatOutput(this, that)
+        def ~(that: ConditionalOutput) = new ConcatOutput(this, that)
         def toOptList: List[Opt[String]]
     }
 
@@ -89,12 +96,13 @@ trait ConditionalOutputInfrastructure {
 
 
     def c(f: FeatureExpr, output: String): ConditionalOutput = new OptionalOutput(f, output)
+    def o(output: String): ConditionalOutput = new OptionalOutput(FeatureExprFactory.True, output)
 
     def c(f: FeatureExpr, output: ConditionalOutput): ConditionalOutput = output match {
         case OptionalOutput(c, o) => new OptionalOutput(f and c, o)
         case ConcatOutput(a, b) => new ConcatOutput(c(f, a), c(f, b))
     }
 
-    implicit def _toOutput(o: String): ConditionalOutput = new OptionalOutput(FeatureExprFactory.True, o)
+    implicit def _toOutput(v: String): ConditionalOutput = o(v)
 
 }

@@ -78,7 +78,7 @@ public class BinaryAssignRefExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _var.evalAssignRef(env, VHelper.noCtx(), _value).map((a)->a.toValue());
+    return _var.evalAssignRef(env, ctx, _value).map((a)->a.toValue());
   }
 
   /**
