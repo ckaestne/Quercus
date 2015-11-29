@@ -59,7 +59,9 @@ import com.caucho.util.TimedCache;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.Vfs;
-import edu.cmu.cs.varex.VWriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.cache.Cache;
 import javax.sql.DataSource;
@@ -150,7 +152,7 @@ public class QuercusContext
   private Value []_constantMap = new Value[256];
 
   // protected to allow locking from pro
-  protected IntMap _functionNameMap = new IntMap(8192);
+  private final VMap<Object, Integer> _functionNameMap = new VHashMap<>(8192);
 
   private AbstractFunction []_functionMap = new AbstractFunction[256];
 
@@ -1339,14 +1341,17 @@ public class QuercusContext
 
   /**
    * Returns the id for a function name.
+   *
+   * ctx necessary, because this call may create a new function
    */
-  public int getFunctionId(StringValue name)
+  public V<? extends Integer> getFunctionId(FeatureExpr ctx, StringValue name)
   {
-    int id = _functionNameMap.get(name);
+    V<? extends Integer> vid = _functionNameMap.getOrDefault(name, V.one(-1));
 
-    if (id >= 0) {
-      return id;
-    }
+
+//    if (id >= 0) {
+//      return id;
+//    }
 
     if (! isStrict()) {
       name = name.toLowerCase(Locale.ENGLISH);
@@ -1356,30 +1361,30 @@ public class QuercusContext
       // php/0m18
       name = name.substring(1);
     }
+    final StringValue _name = name;
 
-    id = _functionNameMap.get(name);
+    vid = vid.flatMap(id -> id!=null && id >=0 ? V.one(id) : _functionNameMap.getOrDefault(_name, V.one(-1)));
 
-    if (id >= 0) {
-      return id;
-    }
+    return vid.vmap(ctx, (c,_id)-> {
+      int id=_id;
+      synchronized (_functionNameMap) {
+//        id = _functionNameMap.get(name);
+//
+//        if (id >= 0) {
+//          return id;
+//        }
 
-    synchronized (_functionNameMap) {
-      id = _functionNameMap.get(name);
+        // 0 is used for an undefined function
+        // php/1p0g
+        id = _functionNameMap.size() + 1;
 
-      if (id >= 0) {
-        return id;
+        _functionNameMap.put(c, _name, id);
+
+        extendFunctionMap(_name, id);
       }
 
-      // 0 is used for an undefined function
-      // php/1p0g
-      id = _functionNameMap.size() + 1;
-
-      _functionNameMap.put(name, id);
-
-      extendFunctionMap(name, id);
-    }
-
-    return id;
+      return id;
+    });
   }
 
   protected void extendFunctionMap(StringValue name, int id)
@@ -1394,7 +1399,7 @@ public class QuercusContext
     int globalId = -1;
     int ns = name.lastIndexOf('\\');
     if (ns > 0) {
-      globalId = getFunctionId(name.substring(ns + 1));
+      globalId = getFunctionId(VHelper.noCtx(), name.substring(ns + 1)).getOne();
     }
 
     _functionMap[id] = new UndefinedFunction(id, name.toString(), globalId);
@@ -1403,26 +1408,28 @@ public class QuercusContext
   /**
    * Returns the id for a function name.
    */
-  public int findFunctionId(StringValue name)
+  public @NonNull V<? extends Integer> findFunctionId(final StringValue name)
   {
-    int id = _functionNameMap.get(name);
+    V<? extends Integer> vid = _functionNameMap.getOrDefault(name,V.one(-1));
 
-    if (id >= 0) {
-      return id;
-    }
+    return vid.vflatMap(VHelper.noCtx(), (c,id)-> {
 
-    if (! isStrict()) {
-      name = name.toLowerCase(Locale.ENGLISH);
-    }
+      if (id==null || id < 0) {
 
-    if (name.startsWith("\\")) {
-      name = name.substring(1);
-    }
+        StringValue _name = name;
+        if (!isStrict()) {
+          _name = _name.toLowerCase(Locale.ENGLISH);
+        }
 
-    id = _functionNameMap.get(name);
+        if (_name.startsWith("\\")) {
+          _name = _name.substring(1);
+        }
 
-    // IntMap is internally synchronized
-    return id;
+        return _functionNameMap.getOrDefault(name,V.one(-1));
+      }
+      // IntMap is internally synchronized
+      return V.one(id);
+    }).map(i->i==null?-1:i);
   }
 
   /**
@@ -1441,11 +1448,11 @@ public class QuercusContext
     return _functionMap;
   }
 
-  public int setFunction(StringValue name, AbstractFunction fun)
+  public V<? extends Integer> setFunction(FeatureExpr ctx, StringValue name, AbstractFunction fun)
   {
-    int id = getFunctionId(name);
+    V<? extends Integer> id = getFunctionId(ctx, name);
 
-    _functionMap[id] = fun;
+    id.vmap(ctx, (c,i)->_functionMap[i] = fun);
 
     return id;
   }
@@ -1939,7 +1946,7 @@ public class QuercusContext
       _funMap.put(funNameV, fun);
       _lowerFunMap.put(funNameV.toLowerCase(Locale.ENGLISH), fun);
 
-      setFunction(funNameV, fun);
+      setFunction(VHelper.noCtx(), funNameV, fun);
     }
   }
 

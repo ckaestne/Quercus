@@ -413,18 +413,19 @@ public class Function extends AbstractFunction {
     }
 
     try {
-      V<? extends Value> value = _statement.execute(env, VHelper.noCtx());
+      V<? extends Value> value = _statement.execute(env, ctx);
 
-      if (value == null) {
+      return value.map(v-> {
+        if (v == null) {
 //        if (_isReturnsReference) //TODO V not supported
 //          return VHelper.toV(new Var());
 //        else
-          return VHelper.toV(NullValue.NULL);
-      }
-      else if (_isReturnsReference)
-        return value;
-      else
-        return value.map((a)->a.toValue().copy());
+          return NullValue.NULL;
+        } else if (_isReturnsReference)
+          return v;
+        else
+          return v.toValue().copy();
+      });
     } finally {
       env.restoreFunctionArgs(oldArgs);
       env.popEnv(oldMap);

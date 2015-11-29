@@ -58,16 +58,18 @@ public class FunctionDefStatement extends Statement {
     try {
       String name = _fun.getName();
 
-      if (env.findFunction(env.createString(name)) == null)
-        env.addFunction(name, _fun);
-      else
-        env.error(L.l("function {0}() is already defined.", name), getLocation());
+      env.findFunction(env.createString(name)).vforeach(ctx, (c,fun) -> {
+        if (fun == null)
+          env.addFunction(c, name, _fun);
+        else
+          env.error(c, L.l("function {0}() is already defined under condition {1}.", name, c), getLocation());
+      });
     }
     catch (RuntimeException e) {
       rethrow(e, RuntimeException.class);
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

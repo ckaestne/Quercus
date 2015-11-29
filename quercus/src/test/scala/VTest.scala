@@ -76,5 +76,20 @@ class VTest extends AbstractPhpTest {
             "echo $x; echo $y;") to c(bar, "2") ~ c(bar.not(), "1") ~ c(foo and bar, "2") ~ c(foo andNot bar, "1") ~ c(foo.not(), "1")
     }
 
+    @Test
+    def testVConditionalFunctionDef() {
+        eval("if ($FOO) { function fun() { echo 1; }} else { function fun() { echo 2; }} fun();")  to c(foo, "1") ~ c(foo.not(), "2")
+
+    }
+//    @Test
+//    def testVFunction() {
+//        val fun = "function fun($p) { echo $p; return $p+1; }; "
+//        val x = "$x = 1+$FOO;"
+//
+//        eval (fun +"echo fun(2);") to "23"
+//        eval (fun + x+"echo fun($x);") to  c(foo, "1") ~ c(foo.not(), "2") ~  c(foo, "2") ~ c(foo.not(), "3")
+//
+//    }
+
 
 }

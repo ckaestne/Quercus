@@ -53,7 +53,7 @@ public class CallExpr extends Expr {
   protected final StringValue _nsName;
   protected final Expr []_args;
 
-  private int _funId;
+  private V<? extends Integer> _funId;
 
   protected boolean _isRef;
 
@@ -142,7 +142,7 @@ public class CallExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return evalImpl(env, false, false);
+    return evalImpl(env, ctx, false, false);
   }
 
   /**
@@ -156,7 +156,7 @@ public class CallExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return evalImpl(env, false, true);
+    return evalImpl(env, ctx, false, true);
   }
 
   /**
@@ -170,7 +170,7 @@ public class CallExpr extends Expr {
   @Override
   public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
-    return evalImpl(env, true, true);
+    return evalImpl(env, ctx, true, true);
   }
 
 
@@ -187,73 +187,76 @@ public class CallExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  private V<? extends Value> evalImpl(Env env, boolean isRef, boolean isCopy)
+  private V<? extends Value> evalImpl(Env env, FeatureExpr _ctx, boolean isRef, boolean isCopy)
   {
 //    try {
 //      w.write(_name+" - "+this.getLocation().toString()+"\n");
 //      w.flush();
 //    } catch (IOException e) {
 //    }
-    if (_funId <= 0) {
-      _funId = env.findFunctionId(_name);
+    if (_funId==null)
+      _funId=lookupFunId(env);
 
-      if (_funId <= 0) {
-        if (_nsName != null) {
-          _funId = env.findFunctionId(_nsName);
-        }
+    return _funId.vflatMap(_ctx, (ctx,funId)-> {
 
-        if (_funId <= 0) {
-          env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
-
-          return VHelper.toV(NullValue.NULL);
-        }
+      if (funId <= 0) {
+        env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
+        return V.one(NullValue.NULL);
       }
-    }
 
-    AbstractFunction fun = env.getFunction(_funId);
+      AbstractFunction fun = env.getFunction(funId);
 
-    if (fun == null) {
-      env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
+      if (fun == null) {
+        env.error(L.l("'{0}' is an unknown function.", _name), getLocation());
 
-      return VHelper.toV(NullValue.NULL);
-    }
-
-    Value []args = evalArgs(env, _args, VHelper.noCtx()).getOne();
-
-    env.pushCall(this, NullValue.NULL, args);
-
-    // php/0249
-    QuercusClass oldCallingClass = env.setCallingClass(null);
-
-    // XXX: qa/1d14 Value oldThis = env.setThis(UnsetValue.NULL);
-    try {
-      env.checkTimeout();
-
-      /*
-      if (isRef)
-        return fun.callRef(env, args);
-      else if (isCopy)
-        return fun.callCopy(env, args);
-      else
-        return fun.call(env, args);
-        */
-
-      if (isRef)
-        return fun.callRef(env, VHelper.noCtx(), args);
-      else if (isCopy)
-        return fun.call(env, VHelper.noCtx(), args).map((a)->a.copyReturn());
-      else {
-        return fun.call(env, VHelper.noCtx(), args).map((a)->a.toValue());
+        return VHelper.toV(NullValue.NULL);
       }
-    //} catch (Exception e) {
-    //  throw QuercusException.create(e, env.getStackTrace());
-    } finally {
-      env.popCall();
-      env.setCallingClass(oldCallingClass);
-      // XXX: qa/1d14 env.setThis(oldThis);
-    }
+
+      Value[] args = evalArgs(env, _args, ctx).getOne();
+
+      env.pushCall(this, NullValue.NULL, args);
+
+      // php/0249
+      QuercusClass oldCallingClass = env.setCallingClass(null);
+
+      // XXX: qa/1d14 Value oldThis = env.setThis(UnsetValue.NULL);
+      try {
+        env.checkTimeout();
+
+        /*
+        if (isRef)
+          return fun.callRef(env, args);
+        else if (isCopy)
+          return fun.callCopy(env, args);
+        else
+          return fun.call(env, args);
+          */
+
+        if (isRef)
+          return fun.callRef(env, ctx, args);
+        else if (isCopy)
+          return fun.call(env, ctx, args).map((a) -> a.copyReturn());
+        else {
+          return fun.call(env, ctx, args).map((a) -> a.toValue());
+        }
+        //} catch (Exception e) {
+        //  throw QuercusException.create(e, env.getStackTrace());
+      } finally {
+        env.popCall();
+        env.setCallingClass(oldCallingClass);
+        // XXX: qa/1d14 env.setThis(oldThis);
+      }
+    });
+  }
+
+  private V<? extends Integer> lookupFunId(Env env) {
+    return VHelper.<Integer>vifTry(
+            () -> env.findFunctionId(_name),
+            () -> (_nsName != null) ? env.findFunctionId(_nsName) : V.one(0),
+            (id) -> id > 0);
   }
 
   // Return an array containing the Values to be
@@ -261,7 +264,7 @@ public class CallExpr extends Expr {
 
   public Value []evalArguments(Env env)
   {
-    AbstractFunction fun = env.findFunction(_name);
+    AbstractFunction fun = env.findFunction(_name).getOne();
 
     if (fun == null) {
       return null;

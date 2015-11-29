@@ -77,7 +77,7 @@ public class CallbackFunction extends Callback {
       return true;
     }
 
-    _fun = env.findFunction(_funName);
+    _fun = env.findFunction(_funName).getOne();
 
     return _fun != null;
   }

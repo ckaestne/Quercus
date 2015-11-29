@@ -106,7 +106,7 @@ public class BlockStatement extends Statement {
     for (int i = 0; i < _statements.length; i++) {
       Statement statement = _statements[i];
 
-      Value value = VHelper.nonNull(statement.execute(env, VHelper.noCtx())).getOne();
+      Value value = VHelper.nonNull(statement.execute(env, ctx)).getOne();
 
       if (value != null) {
         return VHelper.toV(value);

@@ -40,6 +40,7 @@ import com.caucho.quercus.statement.ExprStatement;
 import com.caucho.quercus.statement.ReturnStatement;
 import com.caucho.quercus.statement.Statement;
 import com.caucho.vfs.*;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -468,13 +469,13 @@ public class QuercusProgram {
   /**
    * Imports the page definitions.
    */
-  public void importDefinitions(Env env)
+  public void importDefinitions(Env env, FeatureExpr ctx)
   {
     for (Map.Entry<StringValue,Function> entry : _functionMap.entrySet()) {
       Function fun = entry.getValue();
 
       if (fun.isGlobal())
-        env.addFunction(entry.getKey(), fun);
+        env.addFunction(ctx, entry.getKey(), fun);
     }
 
     for (Map.Entry<String,InterpretedClassDef> entry : _classMap.entrySet()) {

@@ -423,7 +423,7 @@ public class ArrayModule
     }
 
     StringValue funName = arrays[arrays.length - 1].toStringValue(env);
-    AbstractFunction func = env.findFunction(funName);
+    AbstractFunction func = env.findFunction(funName).getOne();
 
     if (func == null) {
       env.warning("Invalid comparison function");
@@ -485,7 +485,7 @@ public class ArrayModule
     }
 
     StringValue funName = arrays[arrays.length - 1].toStringValue(env);
-    AbstractFunction func = env.findFunction(funName);
+    AbstractFunction func = env.findFunction(funName).getOne();
 
     if (func == null) {
       env.warning("Invalid comparison function");
@@ -850,7 +850,7 @@ public class ArrayModule
     }
 
     StringValue funName = arrays[arrays.length - 1].toStringValue(env);
-    AbstractFunction func = env.findFunction(funName);
+    AbstractFunction func = env.findFunction(funName).getOne();
 
     if (func == null) {
       env.warning("Invalid comparison function");
@@ -917,7 +917,7 @@ public class ArrayModule
     }
 
     StringValue funName = arrays[arrays.length - 1].toStringValue(env);
-    AbstractFunction func = env.findFunction(funName);
+    AbstractFunction func = env.findFunction(funName).getOne();
 
     if (func == null) {
       env.warning("Invalid comparison function");

@@ -123,13 +123,13 @@ public class InterpretedPage extends QuercusPage
     _program.init(env);
   }
 
-  /**
-   * Imports the page definitions.
-   */
-  public void importDefinitions(Env env)
-  {
-    _program.importDefinitions(env);
-  }
+//  /**
+//   * Imports the page definitions.
+//   */
+//  public void importDefinitions(Env env)
+//  {
+//    _program.importDefinitions(env);
+//  }
 
   /**
    * Finds the function

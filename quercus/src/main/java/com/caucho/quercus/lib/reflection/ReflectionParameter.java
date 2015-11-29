@@ -68,7 +68,7 @@ public class ReflectionParameter
                                                 StringValue funName,
                                                 StringValue paramName)
   {
-    AbstractFunction fun = env.findFunction(funName);
+    AbstractFunction fun = env.findFunction(funName).getOne();
 
     Arg []args = fun.getArgs(env);
 

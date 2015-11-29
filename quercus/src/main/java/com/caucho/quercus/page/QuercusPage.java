@@ -36,6 +36,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -226,13 +227,13 @@ abstract public class QuercusPage
   /**
    * Imports the page definitions.
    */
-  public void importDefinitions(Env env)
+  public void importDefinitions(Env env, FeatureExpr ctx)
   {
     for (Map.Entry<StringValue,AbstractFunction> entry : _funMap.entrySet()) {
       AbstractFunction fun = entry.getValue();
 
       if (fun.isGlobal())
-        env.addFunction(entry.getKey(), entry.getValue());
+        env.addFunction(ctx, entry.getKey(), entry.getValue());
     }
 
     for (Map.Entry<String,ClassDef> entry : _classMap.entrySet()) {

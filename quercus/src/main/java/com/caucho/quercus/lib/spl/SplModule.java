@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.spl;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -187,7 +188,7 @@ public class SplModule extends AbstractQuercusModule
       sb.append(filePrefix);
       sb.append(ext);
 
-      env.include(sb);
+      env.include(VHelper.noCtx(), sb);
 
       QuercusClass cls = env.findClass(className, false, true, true);
 

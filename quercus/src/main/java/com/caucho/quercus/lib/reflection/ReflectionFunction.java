@@ -62,7 +62,7 @@ public class ReflectionFunction extends ReflectionFunctionAbstract
       callable = (Callable) nameV;
     }
     else {
-      AbstractFunction fun = env.findFunction(nameV.toStringValue(env));
+      AbstractFunction fun = env.findFunction(nameV.toStringValue(env)).getOne();
 
       if (fun == null) {
         env.error(L.l("function '{0}' does not exist", nameV));

@@ -54,6 +54,7 @@ import com.caucho.vfs.*;
 import com.caucho.vfs.i18n.EncodingReader;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHashMap;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -224,7 +225,7 @@ public class Env
   public AbstractFunction []_fun;
 
   // anonymous functions created by create_function()
-  public HashMap<StringValue, AbstractFunction> _anonymousFunMap;
+  public VHashMap<StringValue, AbstractFunction> _anonymousFunMap;
 
   // Class map
   public ClassDef []_classDef;
@@ -482,7 +483,7 @@ public class Env
     _response = response;
 
     if (page != null) {
-      pageInit(page);
+      pageInit(VHelper.noCtx(), page);
     }
 
     // we need it for running scripts like the PDF generation
@@ -646,14 +647,14 @@ public class Env
   /**
    * Initialize the page, loading any functions and classes
    */
-  protected QuercusPage pageInit(QuercusPage page)
+  protected QuercusPage pageInit(FeatureExpr ctx, QuercusPage page)
   {
     if (page.getCompiledPage() != null)
       page = page.getCompiledPage();
 
     page.init(this);
 
-    page.importDefinitions(this);
+    page.importDefinitions(this, ctx);
 
     return page;
   }
@@ -3937,7 +3938,7 @@ public class Env
    * Compiled mode normally uses the _fun array directly, so this call
    * is rare.
    */
-  public int findFunctionId(StringValue name)
+  public V<? extends Integer> findFunctionId(StringValue name)
   {
     return _quercus.findFunctionId(name);
   }
@@ -3948,18 +3949,25 @@ public class Env
    * Compiled mode normally uses the _fun array directly, so this call
    * is rare.
    */
-  public AbstractFunction findFunction(StringValue name)
+  public V<? extends AbstractFunction> findFunction(StringValue name)
   {
-    int id = _quercus.findFunctionId(name);
+    V<? extends Integer> vid = _quercus.findFunctionId(name);
 
-    if (id >= 0) {
-      if (id < _fun.length && ! (_fun[id] instanceof UndefinedFunction)) {
-        return _fun[id];
-      }
-      else {
-        return null;
-      }
-    }
+    return vid.<AbstractFunction>flatMap((id)->{
+        if (id >= 0) {
+          if (id < _fun.length && ! (_fun[id] instanceof UndefinedFunction)) {
+            return V.one(_fun[id]);
+          }
+          else {
+            return V.one(null);
+          }
+        }
+
+        if (_anonymousFunMap != null)
+            return _anonymousFunMap.get(name);
+        else
+            return V.one(null);
+    });
 
     /*
     AbstractFunction fun = _quercus.findFunctionImpl(name);
@@ -3987,27 +3995,24 @@ public class Env
       return fun;
     */
 
-    if (_anonymousFunMap != null)
-      return _anonymousFunMap.get(name);
-    else
-      return null;
+
   }
+
 
   public AbstractFunction getFunction(int id)
   {
     return _fun[id];
   }
 
-  public AbstractFunction getFunction(StringValue name)
+  public V<? extends AbstractFunction> getFunction(FeatureExpr ctx, StringValue name)
   {
-    AbstractFunction fun = findFunction(name);
+    V<? extends AbstractFunction> fun = findFunction(name);
 
-    if (fun != null) {
-      return fun;
-    }
-    else {
-      throw createErrorException(L.l("'{0}' is an unknown function.", name));
-    }
+    FeatureExpr failCondition = fun.when(f -> f == null);
+    if (failCondition.and(ctx).isSatisfiable())
+      throw createErrorException(L.l("'{0}' is an unknown function under condition {1}.", name, failCondition.and(ctx)));
+
+    return fun;
   }
 
   public void updateFunction(int id, AbstractFunction fun)
@@ -4074,12 +4079,12 @@ public class Env
   }
   */
 
-  public Value addFunction(String name, AbstractFunction fun)
+  public Value addFunction(FeatureExpr ctx, String name, AbstractFunction fun)
   {
-    return addFunction(createString(name), fun);
+    return addFunction(ctx, createString(name), fun);
   }
 
-  public Value addFunction(StringValue name, AbstractFunction fun)
+  public Value addFunction(FeatureExpr ctx, StringValue name, AbstractFunction fun)
   {
     AbstractFunction staticFun
       = _quercus.findLowerFunctionImpl(name.toLowerCase(Locale.ENGLISH));
@@ -4087,7 +4092,7 @@ public class Env
     if (staticFun != null)
       throw new QuercusException(L.l("can't redefine function {0}", name));
 
-    int id = _quercus.getFunctionId(name);
+    int id = _quercus.getFunctionId(ctx, name).getOne();
 
     // XXX: anonymous/generated functions(?), e.g. like foo2431
 
@@ -4109,7 +4114,7 @@ public class Env
     throws IOException
   {
     if (_anonymousFunMap == null) {
-      _anonymousFunMap = new HashMap<StringValue, AbstractFunction>();
+      _anonymousFunMap = new VHashMap<StringValue, AbstractFunction>();
     }
 
     StringValue sb = createStringBuilder();
@@ -4131,7 +4136,7 @@ public class Env
     AbstractFunction fun
       = getQuercus().parseFunction(name.toString(), args, code);
 
-    _anonymousFunMap.put(name, fun);
+    _anonymousFunMap.put(VHelper.noCtx(), name, fun);
     return fun;
   }
 
@@ -4305,7 +4310,7 @@ public class Env
    */
   public @NonNull V<? extends Value> call(StringValue name, FeatureExpr ctx)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4326,7 +4331,7 @@ public class Env
    */
   public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4413,7 +4418,7 @@ public class Env
    */
   public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4430,7 +4435,7 @@ public class Env
    */
   public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4448,7 +4453,7 @@ public class Env
    */
   public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4467,7 +4472,7 @@ public class Env
    */
   public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4487,7 +4492,7 @@ public class Env
    */
   public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4509,7 +4514,7 @@ public class Env
   public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
                        Value a2, Value a3, Value a4)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -4526,7 +4531,7 @@ public class Env
    */
   public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
   {
-    AbstractFunction fun = findFunction(name);
+    AbstractFunction fun = findFunction(name).getOne();
 
     if (fun == null)
       return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
@@ -5271,7 +5276,7 @@ public class Env
 
           if (size == 0) {
             if (_autoload == null)
-              _autoload = findFunction(createString("__autoload"));
+              _autoload = findFunction(createString("__autoload")).getOne();
 
             if (_autoload != null) {
               _autoload.call(this, VHelper.noCtx(), nameString);
@@ -5290,7 +5295,7 @@ public class Env
     }
 
     if (useImport) {
-      if (importPhpClass(name)) {
+      if (importPhpClass(VHelper.noCtx(), name)) {
         return findClass(name, id, false, false, useAliasMap);
       }
       else {
@@ -5516,11 +5521,13 @@ public class Env
   /**
    * Imports a PHP class.
    *
+   *
+   * @param ctx
    * @param name of the PHP class
    *
    * @return true if matching php file was found and included.
    */
-  public boolean importPhpClass(String name)
+  public boolean importPhpClass(FeatureExpr ctx, String name)
   {
     if (_importMap == null)
       return false;
@@ -5544,7 +5551,7 @@ public class Env
     }
 
     if (url != null) {
-      includeOnce(createString(url.toString()));
+      includeOnce(ctx, createString(url.toString()));
       return true;
     }
     else {
@@ -5809,48 +5816,48 @@ public class Env
   /**
    * Evaluates an included file.
    */
-  public @NonNull V<? extends Value> requireOnce(StringValue include)
+  public V<? extends Value> requireOnce(FeatureExpr ctx, StringValue include)
   {
-    return include(getSelfDirectory(), include, true, true);
+    return include(ctx, getSelfDirectory(), include, true, true);
   }
 
   /**
    * Evaluates an included file.
    */
-  public @NonNull V<? extends Value> require(StringValue include)
+  public V<? extends Value> require(FeatureExpr ctx, StringValue include)
   {
-    return include(getSelfDirectory(), include, true, false);
+    return include(ctx, getSelfDirectory(), include, true, false);
   }
 
   /**
    * Evaluates an included file.
    */
-  public @NonNull V<? extends Value> include(StringValue include)
+  public V<? extends Value> include(FeatureExpr ctx, StringValue include)
   {
-    return include(getSelfDirectory(), include, false, false);
+    return include(ctx, getSelfDirectory(), include, false, false);
   }
 
   /**
    * Evaluates an included file.
    */
-  public @NonNull V<? extends Value> includeOnce(StringValue include)
+  public V<? extends Value> includeOnce(FeatureExpr ctx, StringValue include)
   {
-    return include(getSelfDirectory(), include, false, true);
+    return include(ctx, getSelfDirectory(), include, false, true);
   }
 
   /**
    * Evaluates an included file.
    */
-  public @NonNull V<? extends Value> includeOnce(Path scriptPwd, StringValue include,
+  public V<? extends Value> includeOnce(FeatureExpr ctx, Path scriptPwd, StringValue include,
                                         boolean isRequire)
   {
-    return include(scriptPwd, include, isRequire, true);
+    return include(ctx, scriptPwd, include, isRequire, true);
   }
 
   /**
    * Evaluates an included file.
    */
-  public @NonNull V<? extends Value> include(Path scriptPwd, StringValue include,
+  public V<? extends Value> include(FeatureExpr ctx, Path scriptPwd, StringValue include,
                                     boolean isRequire, boolean isOnce)
   {
     try {
@@ -5886,7 +5893,7 @@ public class Env
       else if (page == null || page.isModified()) {
         page = _quercus.parse(path);
 
-        pageInit(page);
+        pageInit(ctx, page);
 
         _includeMap.put(path, page);
       }
@@ -5906,7 +5913,7 @@ public class Env
     try {
       QuercusPage page = _quercus.parse(path);
 
-      pageInit(page);
+      pageInit(VHelper.noCtx(), page);
 
       executePage(page);
     } catch (IOException e) {
@@ -6479,10 +6486,16 @@ public class Env
   /**
    * A fatal runtime error.
    */
+  @Deprecated//use V method instead
   public Value error(String msg, Location location)
   {
-    return error(B_ERROR, msg, location);
+    return error(VHelper.noCtx(), msg, location);
   }
+
+  public Value error(FeatureExpr ctx, String msg, Location location) {
+    return error(ctx, B_ERROR, msg, location);
+  }
+
 
   /**
    * A warning with an exception.
@@ -6850,11 +6863,20 @@ public class Env
     return error(code, msg, getLocation());
   }
 
+
+  @Deprecated
+  public Value error(int code, String msg, Location location) {
+    return error(VHelper.noCtx(),code,msg,location);
+  }
+
   /**
    * Writes an error.
    */
-  public Value error(int code, String msg, Location location)
+  public Value error(FeatureExpr ctx, int code, String msg, Location location)
   {
+    if (ctx.isContradiction())
+      return NullValue.create();
+
     //System.err.println("Env.error0: " + code + " . " + msg + " . " + location);
     //Thread.dumpStack();
 

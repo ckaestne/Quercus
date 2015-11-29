@@ -91,7 +91,7 @@ public class FunIncludeExpr extends AbstractUnaryExpr {
       
     env.pushCall(this, NullValue.NULL, new Value[] { name });
     try {
-      return env.include(_dir, name, _isRequire, false);
+      return env.include(ctx, _dir, name, _isRequire, false);
     } finally {
       env.popCall();
     }
