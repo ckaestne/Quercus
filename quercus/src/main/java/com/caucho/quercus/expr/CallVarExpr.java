@@ -33,6 +33,7 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -104,7 +105,7 @@ public class CallVarExpr extends Expr {
   
   
   @Override
-  public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
+  public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, true, false);
   }

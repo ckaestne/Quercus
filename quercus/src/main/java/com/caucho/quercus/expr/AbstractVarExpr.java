@@ -32,6 +32,7 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.statement.Statement;
@@ -149,9 +150,9 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
+  public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
-    return evalVar(env, ctx).map(v->v.makeValue());
+    return evalVar(env, ctx);
   }
 
   /**
@@ -232,7 +233,7 @@ abstract public class AbstractVarExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    return evalAssignRef(env, ctx, value);
+    return evalAssignRef(env, ctx, value).map(v->v.toValue());
   }
 
   /**
@@ -244,6 +245,6 @@ abstract public class AbstractVarExpr extends Expr {
    * @param value
    * @return the expression value.
    */
-  abstract public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value);
+  abstract public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value);
 }
 

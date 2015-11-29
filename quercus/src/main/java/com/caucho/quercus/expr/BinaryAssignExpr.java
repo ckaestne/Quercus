@@ -32,9 +32,9 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -89,7 +89,7 @@ public class BinaryAssignExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _var.evalAssignValue(env, VHelper.noCtx(), _value);
+    return _var.evalAssignValue(env, ctx, _value);
   }
 
   /**
@@ -104,7 +104,7 @@ public class BinaryAssignExpr extends Expr {
   public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     // php/0d9e
-    return eval(env, VHelper.noCtx()).map((a)->a.copy());
+    return eval(env, ctx).map((a)->a.copy());
   }
 
   /**
@@ -116,14 +116,14 @@ public class BinaryAssignExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
+  public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = _value.evalCopy(env, VHelper.noCtx());
+    V<? extends Value> value = _value.evalCopy(env, ctx);
 
-    _var.evalAssignValue(env, VHelper.noCtx(), value);
+    _var.evalAssignValue(env, ctx, value);
 
     // php/03d9, php/03mk
-    return _var.eval(env, VHelper.noCtx());
+    return _var.eval(env, ctx);
   }
 
   public String toString()

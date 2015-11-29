@@ -2645,7 +2645,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Sets the static field.
    */
-  public Var setStaticFieldRef(Env env, StringValue name, Value value)
+  public Var setStaticFieldRef(Env env, StringValue name, ValueOrVar value)
   {
     env.error(L.l("No calling class found for '{0}'", this));
 
@@ -2778,6 +2778,15 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   @Deprecated//for V transformation only
   public Value put(Value index, Value value) {
     put(index,EnvVar._gen(value));
+    return value;
+  }
+
+  @Deprecated//for V transformation only
+  public ValueOrVar put(Value index, ValueOrVar value) {
+    if (value.isVar())
+      put(index,new EnvVarImpl(V.one(value._var())));
+    else
+      put(index,EnvVar._gen(value._value()));
     return value;
   }
 

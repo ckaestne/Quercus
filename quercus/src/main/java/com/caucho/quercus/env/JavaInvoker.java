@@ -561,7 +561,7 @@ abstract public class JavaInvoker
       if (arg == null)
         values[i] = args[i].eval(env, VHelper.noCtx()).getOne().copy();
       else if (arg.isReference())
-        values[i] = args[i].evalRef(env, VHelper.noCtx()).getOne();
+        values[i] = args[i].evalRef(env, VHelper.noCtx()).getOne().toValue();
       else {
         // php/0d04
         values[i] = args[i].eval(env, VHelper.noCtx()).getOne();

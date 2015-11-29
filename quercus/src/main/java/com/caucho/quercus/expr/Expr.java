@@ -496,7 +496,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
+  public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -609,9 +609,9 @@ abstract public class Expr {
    * Evaluates an assignment. If the value is a Var, it replaces the
    * current Var.
    */
-  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
+  public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
   {
-    V<? extends Value> value = valueExpr.evalRef(env, ctx);
+    V<? extends ValueOrVar> value = valueExpr.evalRef(env, ctx);
 
     return evalAssignRef(env, ctx, value);
   }
@@ -620,7 +620,7 @@ abstract public class Expr {
    * Evaluates an assignment. If the value is a Var, it replaces the
    * current Var.
    */
-  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     throw new RuntimeException(L.l(
       "{0} is an invalid left-hand side of an assignment.",
@@ -655,7 +655,7 @@ abstract public class Expr {
    * Evaluates as an array index assign ($a[index] = value).
    * @return what was assigned
    */
-  public @NonNull V<? extends Value> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
+  public V<? extends ValueOrVar> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // overrided in ThisFieldExpr and ThisFieldVarExpr
@@ -666,9 +666,9 @@ abstract public class Expr {
     V<? extends Value> array = evalArray(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    V<? extends Value> value = valueExpr.evalRef(env, ctx);
+    V<? extends ValueOrVar> value = valueExpr.evalRef(env, ctx);
 
-    V<? extends Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
+    V<? extends ValueOrVar> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -679,7 +679,7 @@ abstract public class Expr {
    * Evaluates as an array index assign ($a[index] = value).
    * @return what was assigned
    */
-  public @NonNull V<? extends Value> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, V<? extends Value> value)
+  public @NonNull V<? extends ValueOrVar> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, V<? extends ValueOrVar> value)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // overrided in ThisFieldExpr and ThisFieldVarExpr
@@ -690,7 +690,7 @@ abstract public class Expr {
     V<? extends Value> array = evalArray(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    V<? extends Value> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
+    V<? extends ValueOrVar> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
 
     //return array.get(index); // php/03mm php/03mn
 

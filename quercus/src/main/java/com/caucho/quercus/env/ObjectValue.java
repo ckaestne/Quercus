@@ -700,7 +700,7 @@ abstract public class ObjectValue extends Callback {
    * Sets the static field.
    */
   @Override
-  public Var setStaticFieldRef(Env env, StringValue name, Value value)
+  public Var setStaticFieldRef(Env env, StringValue name, ValueOrVar value)
   {
     return getQuercusClass().setStaticFieldRef(env, name, value);
   }

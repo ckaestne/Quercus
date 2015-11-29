@@ -77,8 +77,8 @@ public class FunEachExpr extends AbstractUnaryExpr {
       
       return VHelper.toV(NullValue.NULL);
     }
-    
-    Value var = getExpr().evalRef(env, VHelper.noCtx()).getOne();
+
+    ValueOrVar var = getExpr().evalRef(env, ctx).getOne();
     Value value = var.toValue();
 
     if (value instanceof ArrayValue) {

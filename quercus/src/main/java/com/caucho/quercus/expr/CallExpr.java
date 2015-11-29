@@ -168,7 +168,7 @@ public class CallExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalRef(Env env, FeatureExpr ctx)
+  public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, true, true);
   }

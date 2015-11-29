@@ -32,6 +32,7 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.env.Var;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -224,7 +225,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
+  public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, Expr valueExpr)
   {
     // php/03mk
     // php/04ai
@@ -232,7 +233,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
   }
 
   @Override
-  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     return _expr.evalArrayAssignRef(env, VHelper.noCtx(), _index, value);
   }

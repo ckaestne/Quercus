@@ -8,8 +8,12 @@ import org.junit.Test
   */
 class VTest extends AbstractPhpTest {
 
+    FeatureExprFactory.setDefault(FeatureExprFactory.bdd)
+
     val foo = FeatureExprFactory.createDefinedExternal("foo")
     val bar = FeatureExprFactory.createDefinedExternal("bar")
+
+
 
     @Test
     def testBasicValues() {
@@ -49,6 +53,21 @@ class VTest extends AbstractPhpTest {
     @Test
     def testVVar() {
         eval("$x = 1+create_conditional('foo'); echo 1+$x;") to c(foo, "3") + c(foo.not(), "2")
+        eval("$x = 1+create_conditional('foo'); " +
+            "$y = create_conditional('bar');" +
+            "echo $x + $y;") to c(foo.xor(bar), "2") + c(foo.and(bar), "3") + c(foo.not().and(bar.not()), "1")
+    }
+
+    @Test
+    def testVAssignment() {
+        eval("if (create_conditional('foo')) $x=1; else $x=2; echo $x;") to c(foo, "1") + c(foo.not(), "2")
+        eval("$x=2; if (create_conditional('foo')) $x=1; echo $x;") to c(foo, "1") + c(foo.not(), "2")
+    }
+
+    @Test
+    def testVAssignmentByRef() {
+//        eval("$x = 1; $y = $x; $x=2; echo $x; echo $y;") to "21"
+        eval("$x = 1; $y = &$x; $x=2; echo $x; echo $y;") to "22"
     }
 
 

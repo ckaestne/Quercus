@@ -3114,7 +3114,7 @@ public class Env
   /**
    * Sets a value.
    */
-  public V<? extends Var> setRef(FeatureExpr ctx, StringValue name, V<? extends Value> value)
+  public V<? extends Var> setRef(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     EnvVar envVar = getEnvVar(name, true, false);
 

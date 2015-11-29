@@ -32,6 +32,7 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.env.Var;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -114,12 +115,12 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    * @param value
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     Value obj = _objExpr.eval(env, VHelper.noCtx()).getOne();
 
     Value result = obj.setCharValueAt(_indexExpr.evalLong(env, VHelper.noCtx()).getOne(),
-                                      value.getOne());
+                                      value.getOne().toValue());
 
     _objExpr.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(result));
     

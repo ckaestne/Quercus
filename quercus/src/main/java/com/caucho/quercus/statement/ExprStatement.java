@@ -35,7 +35,6 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -68,7 +67,7 @@ public class ExprStatement extends Statement {
     Location oldLocation = env.setLocation(getLocation());
 
     // php/1a08
-    _expr.evalTop(env, VHelper.noCtx());
+    _expr.evalTop(env, ctx);
 
     env.setLocation(oldLocation);
 

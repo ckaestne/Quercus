@@ -1082,7 +1082,7 @@ public class QuercusClass extends NullValue {
   }
 
   @Override
-  public Var setStaticFieldRef(Env env, StringValue name, Value value)
+  public Var setStaticFieldRef(Env env, StringValue name, ValueOrVar value)
   {
     StringValue staticName = _staticFieldNameMap.get(name);
 

@@ -30,10 +30,7 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.ClassField;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -168,11 +165,11 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalAssignRef(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     Value obj = env.getThis();
 
-    obj.putThisField(env, evalName(env), value.getOne());
+    obj.putThisField(env, evalName(env), value.getOne().toValue());
 
     return value;
   }
@@ -200,16 +197,16 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * Evaluates as an array index assign ($a[index] = &value).
    */
   @Override
-  public @NonNull V<? extends Value> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
+  public V<? extends ValueOrVar> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     Value obj = env.getThis();
 
     StringValue name = evalName(env);
 
     Value fieldVar = obj.getThisFieldArray(env, name);
-    Value index = indexExpr.eval(env, VHelper.noCtx()).getOne();
+    Value index = indexExpr.eval(env, ctx).getOne();
 
-    Value value = valueExpr.evalRef(env, VHelper.noCtx()).getOne();
+    Value value = valueExpr.evalRef(env, ctx).getOne().toValue();
 
     // php/03mn
     return VHelper.toV(fieldVar.putThisFieldArray(env, obj, name, index, value));
