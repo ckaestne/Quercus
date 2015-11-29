@@ -29,7 +29,7 @@ class VImpl<T> implements V<T> {
             addVToMap(result, condition, a);
         else return b;
         if (condition.not().isSatisfiable())
-            addVToMap(result, condition.not(), a);
+            addVToMap(result, condition.not(), b);
         else return a;
 
         return createV(result);
@@ -167,6 +167,19 @@ class VImpl<T> implements V<T> {
 
 
         return out.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return this.values.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof VImpl) {
+            return ((VImpl)obj).values.equals(values);
+        }
+        return super.equals(obj);
     }
 }
 

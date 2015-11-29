@@ -2012,7 +2012,7 @@ public class Env
     EnvVar var = getEnvVar(name, isAutoCreate, isOutputNotice);
 
     if (var != null)
-      return var.getValue(ctx);
+      return var.getValue();
     else
       return V.one(NullValue.NULL);
   }
@@ -2051,7 +2051,7 @@ public class Env
 
     // XXX: don't allocate?
 
-    return var.getValue(ctx);
+    return var.getValue();
 
     /*
     if (var != null)
@@ -2103,7 +2103,7 @@ public class Env
 
     // XXX: can return null?
 
-    return envVar.getVar(ctx);
+    return envVar.getVar();
 
     /*
     Var var = _map.get(name);
@@ -2127,7 +2127,7 @@ public class Env
     EnvVar envVar = getEnvVar(name, isAutoCreate, true);
 
     if (envVar != null)
-      return envVar.getVar(ctx);
+      return envVar.getVar();
     else
       return null;
   }
@@ -2149,7 +2149,7 @@ public class Env
 
     // XXX: not create?
 
-    return envVar.getVar(ctx);
+    return envVar.getVar();
   }
 
   public final EnvVar getEnvVar(StringValue name)
@@ -2590,7 +2590,7 @@ public class Env
           return null;
         }
 
-        Var array = getGlobalEnvVar(isUnicodeSemantics() ? S_ARGV_U : S_ARGV).getVar(VHelper.noCtx()).getOne();
+        Var array = getGlobalEnvVar(isUnicodeSemantics() ? S_ARGV_U : S_ARGV).getVar().getOne();
 
         int size = array.getValue().getOne().getSize();
 
@@ -3045,7 +3045,7 @@ public class Env
     EnvVar envVar = getEnvVar(name, isAutoCreate, isOutputNotice);
 
     if (envVar != null) {
-      return envVar.getVar(ctx);
+      return envVar.getVar();
     }
     else {
       return null;
@@ -3059,7 +3059,7 @@ public class Env
   {
     EnvVar envVar = getEnvVar(name, true, false);
 
-    return envVar.getVar(ctx);
+    return envVar.getVar();
   }
 
   /**
@@ -3069,7 +3069,7 @@ public class Env
   {
     EnvVar envVar = getGlobalEnvVar(createString(name));
 
-    return envVar.getVar(ctx);
+    return envVar.getVar();
   }
 
   /**
@@ -3079,7 +3079,7 @@ public class Env
   {
     EnvVar envVar = getGlobalEnvVar(name);
 
-    return envVar.getVar(ctx);
+    return envVar.getVar();
   }
 
   public void setValue(FeatureExpr ctx, String name, V<? extends Value> value)
@@ -4649,7 +4649,7 @@ public class Env
       EnvVar newEnvVar = _globalMap.get(oldEntry.getKey());
 
       if (newEnvVar != null)
-        oldEnvVar.setVar(VHelper.noCtx(), newEnvVar.getVar(VHelper.noCtx()));
+        oldEnvVar.setVar(VHelper.noCtx(), newEnvVar.getVar());
     }
 
     // php/404j - include_once

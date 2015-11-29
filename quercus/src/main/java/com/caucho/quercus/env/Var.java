@@ -72,12 +72,8 @@ public class Var
 
   public Var set(FeatureExpr ctx, V<? extends Value> value)
   {
-    // assert(! value.isVar());
-    _value = value;
+    this._value = V.choice(ctx, value, _value);
 
-//    checkVar(value);
-
-    // php/151m
     return this;
   }
 

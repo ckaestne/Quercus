@@ -57,9 +57,7 @@ abstract public class EnvVar
 {
   /**
    * Returns the current value.
-   * @param ctx
    */
-  abstract public V<? extends Value> getValue(FeatureExpr ctx);
   abstract public V<? extends Value> getValue();
 
   @Deprecated
@@ -74,7 +72,6 @@ abstract public class EnvVar
    * Returns the current Var.
    * @param ctx
    */
-  abstract public V<? extends Var> getVar(FeatureExpr ctx);
   abstract public V<? extends Var> getVar();
 
   /**
@@ -95,7 +92,7 @@ abstract public class EnvVar
         set(c, V.one(v._value()));
     });
     
-    return getVar(ctx);
+    return getVar();
   }
 
   @Deprecated

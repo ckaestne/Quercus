@@ -51,11 +51,6 @@ public final class EnvVarImpl extends EnvVar
 
 
   @Override
-  public V<? extends Value> getValue(FeatureExpr ctx) {
-    return _var.flatMap(v->v.getValue());
-  }
-
-  @Override
   public V<? extends Value> getValue() {
     return _var.flatMap(v->v.getValue());
   }
@@ -65,23 +60,15 @@ public final class EnvVarImpl extends EnvVar
    */
   public V<? extends Value> set(FeatureExpr ctx, V<? extends Value> value)
   {
-    V<? extends Var> oldVar = _var;
-    assert ctx.isTautology() : "TODO implement conditional updates";
-    _var.foreach((a)->a.set(ctx, value));
-    return null;
-
-//    _var = V.choice(ctx, , oldVar)
+    V<? extends Value> oldVar = getValue();
+    _var.vforeach(ctx, (c, a)->a.set(c, value));
+    return oldVar;
   }
 
   /**
    * Returns the current Var.
    * @param ctx
    */
-  public V<? extends Var> getVar(FeatureExpr ctx)
-  {
-    return _var;
-  }
-
   @Override
   public V<? extends Var> getVar() {
     return _var;
@@ -92,9 +79,11 @@ public final class EnvVarImpl extends EnvVar
    */
   public V<? extends Var> setVar(FeatureExpr ctx, V<? extends Var> var)
   {
-    _var = var;
+    V<? extends Var> oldVar = _var;
 
-    return var;
+    this._var = V.choice(ctx, var, _var);
+
+    return oldVar;
   }
 
   @Override
