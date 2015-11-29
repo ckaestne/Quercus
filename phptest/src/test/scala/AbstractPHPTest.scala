@@ -6,10 +6,9 @@ import javax.servlet._
 import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse, Part}
 
 import com.caucho.quercus.TQuercus
-import com.caucho.util.CharBuffer
-import com.caucho.vfs.StringWriter
 import com.openbrace.obmimic.mimic.servlet.http.HttpServletRequestMimic
 import com.openbrace.obmimic.support.servlet.{EndPoint, URLEncodedRequestParameters}
+import edu.cmu.cs.varex.vio.VWriteStreamImpl
 import net.liftweb.mocks.MockHttpServletRequest
 import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
 
@@ -81,10 +80,9 @@ class AbstractPHPTest {
             replaceAll("\n?Deprecated: [^\\n]*\n", "").
             replaceAll("\n?Strict Standards:  [^\\n]*\n", "")
 
-        val out = new StringWriter(new CharBuffer())
-        out.openWrite()
-        TQuercus.mainFile(testedFile, out, request, ini.toMap[String, String])
-        val phpResult = out.getString.trim
+        val out = new VWriteStreamImpl()
+        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request)
+        val phpResult = out.getPlainOutput
 
         testedFile.deleteOnExit()
 

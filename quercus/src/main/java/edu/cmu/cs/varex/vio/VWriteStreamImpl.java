@@ -37,6 +37,19 @@ public class VWriteStreamImpl
         return Collections.unmodifiableList(_output);
     }
 
+    public String getPlainOutput() {
+        doFlush();
+        StringBuffer out = new StringBuffer();
+        FeatureExpr lastCond = FeatureExprFactory.True();
+        for (Opt<String> frag: _output) {
+            if (!frag.getCondition().equivalentTo(lastCond))
+                out.append("[#condition "+frag.getCondition().toTextExpr()+"]");
+            out.append(frag.getValue());
+            lastCond=frag.getCondition();
+        }
+        return out.toString();
+    }
+
     private void doFlush() {
         if (_buffer.length() > 0) {
             String c = _buffer.toString();

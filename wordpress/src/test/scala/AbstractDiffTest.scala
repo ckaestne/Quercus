@@ -3,11 +3,10 @@ package edu.cmu.cs.varex
 import java.io.{File, FileWriter}
 
 import com.caucho.quercus.TQuercus
-import com.caucho.util.CharBuffer
+import edu.cmu.cs.varex.vio.VWriteStreamImpl
 import net.liftweb.mocks.MockHttpServletRequest
 import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
 
-import scala.collection.JavaConversions._
 import scala.sys.process._
 
 class AbstractDiffTest {
@@ -23,10 +22,9 @@ class AbstractDiffTest {
 
 
         val request = new MockHttpServletRequest()
-        val out = new com.caucho.vfs.StringWriter(new CharBuffer())
-        out.openWrite()
-        TQuercus.mainFile(file, out, request, Map[String, String]())
-        var quercusResult = out.getString
+        val out = new VWriteStreamImpl()
+        new TQuercus().executeFile(file, out, request)
+        var quercusResult = out.getPlainOutput
         quercusResult = quercusResult.replace("\r\n","\n").trim
         writeFile(file, ".quercus.html", quercusResult)
 

@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -59,9 +60,19 @@ public class TQuercus
     private static final Logger log = Logger.getLogger(TQuercus.class.getName());
 
     public TQuercus() {
+        this(new HashMap<>());
+    }
+
+    public TQuercus(Map<String, String> ini) {
         super();
 
         init();
+
+        start();
+
+
+        for (Map.Entry<String, String> e : ini.entrySet())
+            setIni(e.getKey(), e.getValue());
     }
 
     //
@@ -80,16 +91,7 @@ public class TQuercus
 //        quercus.executeScript(script, os, request);
 //    }
 
-    private static TQuercus setup(Map<String, String> ini) {
-        TQuercus quercus = new TQuercus();
 
-        quercus.start();
-
-
-        for (Map.Entry<String, String> e : ini.entrySet())
-            quercus.setIni(e.getKey(), e.getValue());
-        return quercus;
-    }
 
     /**
      * Returns the SAPI (Server API) name.
@@ -104,7 +106,7 @@ public class TQuercus
             throws IOException {
         HttpServletRequest request = new MockHttpServletRequest((String) null, "");
         VWriteStreamImpl ws = new VWriteStreamImpl();
-        TQuercus quercus = setup(Collections.emptyMap());
+        TQuercus quercus = new TQuercus(Collections.emptyMap());
 
         quercus.executeScript(code, ws, request);
 
@@ -112,13 +114,13 @@ public class TQuercus
 
     }
 
-    void executeScript(String code, VWriteStream os, HttpServletRequest request)
+    public void executeScript(String code, VWriteStream os, HttpServletRequest request)
             throws IOException {
         Path path = new StringPath(code);
         execute(path, os, request);
     }
 
-    void executeFile(File file, VWriteStream os, HttpServletRequest request)
+    public void executeFile(File file, VWriteStream os, HttpServletRequest request)
             throws IOException {
         Path path = new FilePath(file.getPath());
         execute(path, os, request);

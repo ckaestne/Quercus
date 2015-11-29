@@ -2,10 +2,8 @@ import java.io.File
 import java.util.logging._
 
 import com.caucho.quercus.TQuercus
-import com.caucho.util.CharBuffer
+import edu.cmu.cs.varex.vio.VWriteStreamImpl
 import net.liftweb.mocks.MockHttpServletRequest
-
-import scala.collection.JavaConversions._
 
 /**
   * Created by ckaestne on 11/26/2015.
@@ -38,9 +36,8 @@ object TestDB extends App {
     //
     //
     val request = new MockHttpServletRequest()
-    val out = new com.caucho.vfs.StringWriter(new CharBuffer())
-    out.openWrite()
-    TQuercus.mainFile(new File("wordpress/src/main/webapp/wordpress-4.3.1/index.php"), out, request, Map[String, String]())
-    val phpResult = out.getString.trim
+    val out = new VWriteStreamImpl()
+    new TQuercus().executeFile(new File("wordpress/src/main/webapp/wordpress-4.3.1/index.php"), out, request)
+    val phpResult = out.getPlainOutput.trim
     println(phpResult)
 }
