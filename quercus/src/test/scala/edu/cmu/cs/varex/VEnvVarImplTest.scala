@@ -18,7 +18,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     val x = StringValue.create("x")
     val y = StringValue.create("y")
 
-    "A Value" should "be nonvariational" in {
+    "Value" should "be nonvariational" in {
         val x2 = StringValue.create("x")
 
         y.toString() should be("y")
@@ -26,7 +26,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
         x should equal( x2)
     }
 
-    "A Var" should "be variational" in {
+    "Var" should "be variational" in {
         val v1 = new Var()
 
         v1.getValue should equal(V.one(NullValue.create()))
@@ -49,7 +49,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
 
     }
 
-    "A EnvVar" should "hold conditional Vars" in {
+    "EnvVar" should "hold conditional Vars" in {
         val v1 = new Var()
         val v2 = new Var(V.one(x))
 
