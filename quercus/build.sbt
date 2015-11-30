@@ -1,5 +1,7 @@
 scalaVersion := "2.11.7"
 
+testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
+
 libraryDependencies += "junit" % "junit" % "4.12" % "test"
 
 libraryDependencies += "javax.jms" % "jms-api" % "1.1-rev-1"
