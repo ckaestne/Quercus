@@ -1434,13 +1434,13 @@ public class QuercusContext
     }).map(i->i==null?-1:i);
   }
 
-  /**
-   * Returns the number of functions
-   */
-  public int getFunctionIdCount()
-  {
-    return _functionNameMap.size();
-  }
+//  /**
+//   * Returns the number of functions
+//   */
+//  public int getFunctionIdCount()
+//  {
+//    return _functionNameMap.size();
+//  }
 
   /**
    * Returns the undefined functions

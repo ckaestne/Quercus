@@ -113,7 +113,6 @@ public class TQuercus
         quercus.executeScript(code, ws, request);
 
         return ws.getConditionalOutput();
-
     }
 
     public void executeScript( @NonNull String code, @NonNull VWriteStream os, @Nullable HttpServletRequest request)

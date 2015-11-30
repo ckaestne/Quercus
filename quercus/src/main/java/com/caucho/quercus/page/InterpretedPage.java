@@ -38,6 +38,7 @@ import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.InterpretedClassDef;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.vfs.Path;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -118,18 +119,20 @@ public class InterpretedPage extends QuercusPage
   /**
    * Imports the page definitions.
    */
+  @Override
   public void init(Env env)
   {
     _program.init(env);
   }
 
-//  /**
-//   * Imports the page definitions.
-//   */
-//  public void importDefinitions(Env env)
-//  {
-//    _program.importDefinitions(env);
-//  }
+  /**
+   * Imports the page definitions.
+   */
+  @Override
+  public void importDefinitions(Env env, FeatureExpr ctx)
+  {
+    _program.importDefinitions(env, ctx);
+  }
 
   /**
    * Finds the function

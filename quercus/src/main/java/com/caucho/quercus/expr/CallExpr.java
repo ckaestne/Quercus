@@ -53,7 +53,7 @@ public class CallExpr extends Expr {
   protected final StringValue _nsName;
   protected final Expr []_args;
 
-  private V<? extends Integer> _funId;
+  private V<? extends @NonNull Integer> _funId;
 
   protected boolean _isRef;
 
@@ -252,7 +252,7 @@ public class CallExpr extends Expr {
     });
   }
 
-  private V<? extends Integer> lookupFunId(Env env) {
+  private @NonNull V<? extends @NonNull Integer> lookupFunId(Env env) {
     return VHelper.<Integer>vifTry(
             () -> env.findFunctionId(_name),
             () -> (_nsName != null) ? env.findFunctionId(_nsName) : V.one(0),
