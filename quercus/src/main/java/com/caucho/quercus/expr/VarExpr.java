@@ -46,7 +46,7 @@ public class VarExpr
   private final VarInfo _var;
   protected final StringValue _name;
 
-  private VarState _varState = VarState.INIT;
+//  private VarState _varState = VarState.INIT;
 
   protected VarExpr(Location location, VarInfo var)
   {

@@ -88,7 +88,7 @@ public class ClassStaticStatement
       rethrow(e, RuntimeException.class);
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

@@ -1,6 +1,7 @@
 package edu.cmu.cs.varex;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.*;
 
@@ -9,6 +10,7 @@ import java.util.function.*;
  *
  * @param <T>
  */
+@NonNull
 public interface V<T> {
 
     @Deprecated

@@ -110,7 +110,7 @@ public class SwitchStatement extends Statement {
               if (target > 1)
                 return VHelper.toV(new BreakValue(target - 1));
               else
-                return null;
+                return V.one(null);
             }
             else if (retValue instanceof ContinueValue) {
               ContinueValue conValue = (ContinueValue) retValue;
@@ -120,7 +120,7 @@ public class SwitchStatement extends Statement {
               if (target > 1)
                 return VHelper.toV(new ContinueValue(target - 1));
               else
-                return null;
+                return V.one(null);
             }
             else
               return VHelper.toV(retValue);
@@ -132,7 +132,7 @@ public class SwitchStatement extends Statement {
         Value retValue = _defaultBlock.execute(env, VHelper.noCtx()).getOne();
 
         if (retValue instanceof BreakValue)
-          return null;
+          return V.one(null);
         else
           return VHelper.toV(retValue);
       }
@@ -142,7 +142,7 @@ public class SwitchStatement extends Statement {
       rethrow(e, RuntimeException.class);
     }
 
-    return null;
+    return V.one(null);
   }
 
   /**

@@ -52,7 +52,7 @@ public class NullStatement extends Statement {
    */
   public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    return null;
+    return V.one(null);
   }
 }
 

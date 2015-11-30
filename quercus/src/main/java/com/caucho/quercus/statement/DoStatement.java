@@ -105,7 +105,7 @@ public class DoStatement extends Statement {
       rethrow(e, RuntimeException.class);
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

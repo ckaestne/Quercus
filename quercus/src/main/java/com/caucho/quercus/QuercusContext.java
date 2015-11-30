@@ -62,6 +62,7 @@ import com.caucho.vfs.Vfs;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.cache.Cache;
 import javax.sql.DataSource;
@@ -1367,21 +1368,22 @@ public class QuercusContext
 
     return vid.vmap(ctx, (c,_id)-> {
       int id=_id;
-      synchronized (_functionNameMap) {
-//        id = _functionNameMap.get(name);
+      if (id<0)
+        synchronized (_functionNameMap) {
+//          id = _functionNameMap.get(_name);
 //
-//        if (id >= 0) {
-//          return id;
-//        }
+//          if (id >= 0) {
+//            return id;
+//          }
 
-        // 0 is used for an undefined function
-        // php/1p0g
-        id = _functionNameMap.size() + 1;
+          // 0 is used for an undefined function
+          // php/1p0g
+          id = _functionNameMap.size() + 1;
 
-        _functionNameMap.put(c, _name, id);
+          _functionNameMap.put(c, _name, id);
 
-        extendFunctionMap(_name, id);
-      }
+          extendFunctionMap(_name, id);
+        }
 
       return id;
     });
@@ -2155,10 +2157,10 @@ public class QuercusContext
     }
   }
 
-  public Env createEnv(QuercusPage page,
-                       VWriteStream out,
-                       QuercusHttpServletRequest request,
-                       QuercusHttpServletResponse response)
+  public Env createEnv(@NonNull QuercusPage page,
+                       @NonNull VWriteStream out,
+                       @Nullable QuercusHttpServletRequest request,
+                       @Nullable QuercusHttpServletResponse response)
   {
     return new Env(this, page, out, request, response);
   }

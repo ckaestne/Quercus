@@ -109,7 +109,7 @@ public class WhileStatement extends Statement {
       rethrow(e, RuntimeException.class);
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

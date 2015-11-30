@@ -81,7 +81,7 @@ public class ClosureStaticStatement
       rethrow(e, RuntimeException.class);
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

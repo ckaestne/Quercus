@@ -58,7 +58,7 @@ public class ClassDefStatement extends Statement {
   {
     env.addClass(_cl.getName(), _cl);
 
-    return null;
+    return V.one(null);
   }
 
   public String toString()

@@ -114,7 +114,7 @@ public class ForStatement extends Statement {
       rethrow(t, RuntimeException.class);
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

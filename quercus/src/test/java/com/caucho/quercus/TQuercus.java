@@ -40,6 +40,8 @@ import edu.cmu.cs.varex.VWriteStream;
 import edu.cmu.cs.varex.vio.VWriteStreamImpl;
 import net.liftweb.mocks.MockHttpServletRequest;
 import net.liftweb.mocks.MockHttpServletResponse;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +65,7 @@ public class TQuercus
         this(new HashMap<>());
     }
 
-    public TQuercus(Map<String, String> ini) {
+    public TQuercus(@NonNull Map<String, String> ini) {
         super();
 
         init();
@@ -114,19 +116,19 @@ public class TQuercus
 
     }
 
-    public void executeScript(String code, VWriteStream os, HttpServletRequest request)
+    public void executeScript( @NonNull String code, @NonNull VWriteStream os, @Nullable HttpServletRequest request)
             throws IOException {
         Path path = new StringPath(code);
         execute(path, os, request);
     }
 
-    public void executeFile(File file, VWriteStream os, HttpServletRequest request)
+    public void executeFile(@NonNull File file, @NonNull VWriteStream os, @Nullable HttpServletRequest request)
             throws IOException {
         Path path = new FilePath(file.getPath());
         execute(path, os, request);
     }
 
-    public void execute(Path path, VWriteStream ws, HttpServletRequest request)
+    public void execute(@NonNull Path path, @NonNull VWriteStream ws, @Nullable HttpServletRequest request)
             throws IOException {
         QuercusPage page = parse(path);
 

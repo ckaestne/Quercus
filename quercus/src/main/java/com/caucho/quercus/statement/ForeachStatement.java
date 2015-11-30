@@ -128,7 +128,7 @@ public class ForeachStatement
           return VHelper.toV(result);
       }
 
-      return null;
+      return V.one(null);
     } else if (_isRef) {
       Iterator<Value> iter = obj.getKeyIterator(env);
 
@@ -212,7 +212,7 @@ public class ForeachStatement
       }
     }
 
-    return null;
+    return V.one(null);
   }
 }
 

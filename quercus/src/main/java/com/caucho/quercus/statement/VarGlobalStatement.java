@@ -62,7 +62,7 @@ public class VarGlobalStatement extends Statement {
     
     name.flatMap((a)->env.getGlobalVar(ctx, a).map((b)->env.setRef(a, b)));
 
-    return null;
+    return V.one(null);
   }
 }
 
