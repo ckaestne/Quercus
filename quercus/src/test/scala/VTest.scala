@@ -1,7 +1,7 @@
 package edu.cmu.cs.varex
 
 import de.fosd.typechef.featureexpr.FeatureExprFactory
-import org.junit.Test
+import org.junit.{Ignore, Test}
 
 /**
   * Created by ckaestne on 11/27/2015.
@@ -77,20 +77,46 @@ class VTest extends AbstractPhpTest {
     }
 
     @Test
-    def testVConditionalFunctionDef() {
+    def testVFunctionDef() {
         eval("if ($FOO) { function fun() { echo 1; }} else { function fun() { echo 2; }} fun();")  to c(foo, "1") ~ c(foo.not(), "2")
 
     }
 
     @Test
-    def testVFunction() {
+    def testFunction() {
+        val fun = "function fun($p) { echo $p; return $p+1; }; "
+        val fun2 = "function fun2($p) { echo $p; return $p+1; }; "
+
+        eval(fun + "echo fun(2);") to "23"
+        eval(fun + fun2 + "echo fun(2); echo fun2(3);") to "2334"
+        eval(fun + "echo fun(2);" + fun2 + " echo fun2(3);") to "2334"
+    }
+
+    @Test
+    def testVFunctionCall() {
+        val fun = "function fun($p) { echo $p; return $p+1; }; "
+        val fun2 = "function fun2($p) { echo $p; return $p+1; }; "
+
+        eval(fun + "if ($FOO) echo fun(2);" + fun2 + " if ($BAR) echo fun2(3);") to c(foo,"23")~c(bar,"34")
+    }
+
+    @Test@Ignore("fixme")
+    def testFunctionVReturn() {
+        eval("function fun() { echo 1+$FOO; }; echo fun();") to c(foo, "2") ~ c(foo.not(), "1")
+    }
+
+
+    @Test@Ignore("fixme")
+    def testFunctionVParameter() {
         val fun = "function fun($p) { echo $p; return $p+1; }; "
         val x = "$x = 1+$FOO;"
 
-        eval(fun + "echo fun(2);") to "23"
-//        eval(fun + x + "echo fun($x);") to c(foo, "1") ~ c(foo.not(), "2") ~ c(foo, "2") ~ c(foo.not(), "3")
+        eval(fun + x + "echo fun($x);") to c(foo, "1") ~ c(foo.not(), "2") ~ c(foo, "2") ~ c(foo.not(), "3")
 
     }
+
+
+
 
 
 }

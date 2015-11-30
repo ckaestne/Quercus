@@ -35,7 +35,6 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -56,7 +55,7 @@ public class EchoStatement extends Statement {
 
   public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = _expr.eval(env, VHelper.noCtx());
+    V<? extends Value> value = _expr.eval(env, ctx);
 
     value.vforeach(ctx, (c, a)->a.print(env, c));
 
