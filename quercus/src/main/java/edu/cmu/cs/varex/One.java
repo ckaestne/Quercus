@@ -26,6 +26,11 @@ public class One<T> implements V<T> {
     }
 
     @Override
+    public T getOne(FeatureExpr ctx) {
+        return getOne();
+    }
+
+    @Override
     public <U> V<? extends U> map(Function<? super T, ? extends U> fun) {
         return new One(fun.apply(value));
     }

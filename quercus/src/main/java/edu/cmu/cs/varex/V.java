@@ -15,6 +15,8 @@ public interface V<T> {
 
     @Deprecated
     T getOne();
+    @Deprecated
+    T getOne(FeatureExpr ctx);
 
 
     <U> V<? extends U> map(Function<? super T, ? extends U> fun);

@@ -4092,7 +4092,7 @@ public class Env
     if (staticFun != null)
       throw new QuercusException(L.l("can't redefine function {0}", name));
 
-    int id = _quercus.getFunctionId(ctx, name).getOne();
+    int id = _quercus.getFunctionId(ctx, name).getOne(ctx);
 
     // XXX: anonymous/generated functions(?), e.g. like foo2431
 

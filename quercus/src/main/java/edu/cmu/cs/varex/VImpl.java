@@ -63,6 +63,20 @@ class VImpl<T> implements V<T> {
         return values.keySet().iterator().next();
     }
 
+    @Override
+    public T getOne(FeatureExpr ctx) {
+        T result = null;
+        boolean foundResult = false;
+        for (HashMap.Entry<T, FeatureExpr> e : values.entrySet())
+            if (ctx.and(e.getValue()).isSatisfiable()) {
+                assert !foundResult : "getOne("+ctx+") called on Choice with multiple matching values: " + this;
+                result = e.getKey();
+                foundResult=true;
+            }
+
+        return result;
+    }
+
 
     @Override
     public <U> V<? extends U> map(Function<? super T, ? extends U> fun) {
