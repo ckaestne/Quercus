@@ -4015,19 +4015,19 @@ public class Env
     return fun;
   }
 
-  public void updateFunction(int id, AbstractFunction fun)
-  {
-    if (_fun.length <= id) {
-      AbstractFunction []oldFun = _fun;
-
-      _fun = new AbstractFunction[id + 256];
-      System.arraycopy(oldFun, 0, _fun, 0, oldFun.length);
-    }
-
-    if (_fun[id] == null) {
-      _fun[id] = fun;
-    }
-  }
+//  public void updateFunction(int id, AbstractFunction fun)
+//  {
+//    if (_fun.length <= id) {
+//      AbstractFunction []oldFun = _fun;
+//
+//      _fun = new AbstractFunction[id + 256];
+//      System.arraycopy(oldFun, 0, _fun, 0, oldFun.length);
+//    }
+//
+//    if (_fun[id] == null) {
+//      _fun[id] = fun;
+//    }
+//  }
 
   /*
   public int getFunctionId(String name)
@@ -4059,17 +4059,18 @@ public class Env
    * Finds the java reflection method for the function with the given name.
    *
    * @param name the method name
+   * @param ctx
    * @return the found method or null if no method found.
    */
-  public AbstractFunction getFunction(Value name)
+  public V<? extends AbstractFunction> getFunction(Value name, FeatureExpr ctx)
   {
     name = name.toValue();
 
     if (name instanceof CallbackFunction) {
-      return ((CallbackFunction) name).getFunction(this);
+      return ((CallbackFunction) name).getFunction(this, ctx);
     }
 
-    return getFunction(name.toStringValue());
+    return getFunction(name.toStringValue(), ctx);
   }
 
   /*
@@ -4349,7 +4350,7 @@ public class Env
    */
   public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1)
   {
-    return getFunction(name).call(this, ctx, a0, a1);
+    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1);
   }
 
   /**
@@ -4363,7 +4364,7 @@ public class Env
    */
   public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
   {
-    return getFunction(name).call(this, ctx, a0, a1, a2);
+    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1, a2);
   }
 
   /**
@@ -4378,7 +4379,7 @@ public class Env
    */
   public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
   {
-    return getFunction(name).call(this, ctx, a0, a1, a2, a3);
+    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1, a2, a3);
   }
 
   /**
@@ -4395,7 +4396,7 @@ public class Env
   public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1,
                     Value a2, Value a3, Value a4)
   {
-    return getFunction(name).call(this, ctx, a0, a1, a2, a3, a4);
+    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1, a2, a3, a4);
   }
 
   /**
@@ -4407,7 +4408,7 @@ public class Env
    */
   public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value []args)
   {
-    return getFunction(name).call(this, ctx, args);
+    return getFunction(name, ctx).getOne().call(this, ctx, args);
   }
 
 //  /**

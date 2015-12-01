@@ -1486,7 +1486,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    */
   public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
   {
-    AbstractFunction fun = env.getFunction(this);
+    AbstractFunction fun = env.getFunction(this, ctx).getOne();
 
     if (fun != null)
       return fun.callRef(env, VHelper.noCtx(), args);
@@ -1500,7 +1500,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    */
   public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
   {
-    AbstractFunction fun = env.getFunction(this);
+    AbstractFunction fun = env.getFunction(this, ctx).getOne();
 
     if (fun != null)
       return fun.callCopy(env, VHelper.noCtx(), args);

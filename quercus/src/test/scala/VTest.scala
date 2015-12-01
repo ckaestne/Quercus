@@ -90,7 +90,11 @@ class VTest extends AbstractPhpTest {
         eval(fun + "echo fun(2);") to "23"
         eval(fun + fun2 + "echo fun(2); echo fun2(3);") to "2334"
         eval(fun + "echo fun(2);" + fun2 + " echo fun2(3);") to "2334"
+
+        eval(fun + "$f = 'fun'; echo $f(2);") to "23"
     }
+
+
 
     @Test
     def testVFunctionCall() {
@@ -113,6 +117,14 @@ class VTest extends AbstractPhpTest {
 
         eval(fun + x + "echo fun($x);") to c(foo, "1") ~ c(foo.not(), "2") ~ c(foo, "2") ~ c(foo.not(), "3")
 
+    }
+
+    @Test@Ignore("fixme")
+    def testDynamicFunctionCallVTarget() {
+        val fun = "function fun($p) { echo $p; return $p+1; }; "
+        val fun2 = "function fun2($p) { echo $p+1; return $p+2; }; "
+
+        eval(fun + fun2 + "if ($FOO) $f = 'fun'; else $f = 'fun2'; echo $f(2);") to c(foo,"23") ~ c(foo.not(), "34")
     }
 
 

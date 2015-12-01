@@ -82,7 +82,7 @@ public class OutputModule extends AbstractQuercusModule
     boolean isOutputBuffering = INI_OUTPUT_BUFFERING.getAsBoolean(env);
     StringValue handlerName = INI_OUTPUT_HANDLER.getAsStringValue(env);
 
-    if (handlerName.length() > 0 && env.getFunction(handlerName) != null) {
+    if (handlerName.length() > 0 && env.getFunction(handlerName, VHelper.noCtx()) != null) {
       Callable callback = handlerName.toCallable(env, false);
 
       ob_start(env, callback, 0, true);

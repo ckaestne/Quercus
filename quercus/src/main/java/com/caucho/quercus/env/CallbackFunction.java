@@ -33,7 +33,9 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Represents a call to a function.
@@ -44,7 +46,7 @@ public class CallbackFunction extends Callback {
   // = new CallbackFunction(null, "Invalid Callback");
 
   private StringValue _funName;
-  private AbstractFunction _fun;
+  private @NonNull V<? extends @Nullable AbstractFunction> _fun = V.one(null);
 
   public CallbackFunction(Env env, StringValue funName)
   {
@@ -53,12 +55,12 @@ public class CallbackFunction extends Callback {
 
   public CallbackFunction(AbstractFunction fun)
   {
-    _fun = fun;
+    _fun = V.one(fun);
   }
 
   public CallbackFunction(AbstractFunction fun, StringValue funName)
   {
-    _fun = fun;
+    _fun = V.one(fun);
     _funName = funName;
   }
 
@@ -67,19 +69,19 @@ public class CallbackFunction extends Callback {
    */
   protected void setFunction(AbstractFunction fun)
   {
-    _fun = fun;
+    _fun = V.one(fun);
   }
 
   @Override
   public boolean isValid(Env env)
   {
-    if (_fun != null) {
+    if (_fun.getOne() != null) {
       return true;
     }
 
-    _fun = env.findFunction(_funName).getOne();
+    _fun = env.findFunction(_funName);
 
-    return _fun != null;
+    return _fun.getOne() != null;
   }
 
   /**
@@ -89,8 +91,8 @@ public class CallbackFunction extends Callback {
   {
     CharSequence name;
 
-    if (_fun != null)
-      name = _fun.getName();
+    if (_fun.getOne() != null)
+      name = _fun.getOne().getName();
     else
       name = _funName;
 
@@ -110,7 +112,7 @@ public class CallbackFunction extends Callback {
   @Override
   public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
-    return getFunction(env).call(env, ctx);
+    return getFunction(env, ctx).getOne().call(env, ctx);
   }
 
   /**
@@ -122,7 +124,7 @@ public class CallbackFunction extends Callback {
   @Override
   public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
   {
-    return getFunction(env).call(env, ctx, a1);
+    return getFunction(env, ctx).getOne().call(env, ctx, a1);
   }
 
   /**
@@ -133,7 +135,7 @@ public class CallbackFunction extends Callback {
   @Override
   public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
   {
-    return getFunction(env).call(env, ctx, a1, a2);
+    return getFunction(env, ctx).getOne().call(env, ctx, a1, a2);
   }
 
   /**
@@ -144,7 +146,7 @@ public class CallbackFunction extends Callback {
   @Override
   public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
   {
-    return getFunction(env).call(env, ctx, a1, a2, a3);
+    return getFunction(env, ctx).getOne().call(env, ctx, a1, a2, a3);
   }
 
   /**
@@ -156,7 +158,7 @@ public class CallbackFunction extends Callback {
   public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
                     Value a4)
   {
-    return getFunction(env).call(env, ctx, a1, a2, a3, a4);
+    return getFunction(env, ctx).getOne().call(env, ctx, a1, a2, a3, a4);
   }
 
   /**
@@ -168,13 +170,13 @@ public class CallbackFunction extends Callback {
   public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
                     Value a4, Value a5)
   {
-    return getFunction(env).call(env, ctx, a1, a2, a3, a4, a5);
+    return getFunction(env, ctx).getOne().call(env, ctx, a1, a2, a3, a4, a5);
   }
 
   @Override
   public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
   {
-    return getFunction(env).call(env, ctx, args);
+    return getFunction(env, ctx).getOne().call(env, ctx, args);
   }
 
   public String getCallbackName()
@@ -182,11 +184,10 @@ public class CallbackFunction extends Callback {
     return _funName.toString();
   }
 
-  public AbstractFunction getFunction(Env env)
+  public V<? extends AbstractFunction> getFunction(Env env, FeatureExpr ctx)
   {
-    if (_fun == null) {
-      _fun = env.getFunction(_funName);
-    }
+    if (_fun==null || _fun.when(f->f==null).isSatisfiable())
+      _fun = _fun.vflatMap(ctx, (c,f)-> f==null ? env.getFunction(c, _funName):V.one(f ));
 
     return _fun;
   }
@@ -194,43 +195,43 @@ public class CallbackFunction extends Callback {
   @Override
   public boolean isInternal(Env env)
   {
-    return getFunction(env) instanceof JavaInvoker;
+    return getFunction(env, VHelper.noCtx()).getOne() instanceof JavaInvoker;
   }
 
   @Override
   public String getDeclFileName(Env env)
   {
-    return getFunction(env).getDeclFileName(env);
+    return getFunction(env, VHelper.noCtx()).getOne().getDeclFileName(env);
   }
 
   @Override
   public int getDeclStartLine(Env env)
   {
-    return getFunction(env).getDeclStartLine(env);
+    return getFunction(env, VHelper.noCtx()).getOne().getDeclStartLine(env);
   }
 
   @Override
   public int getDeclEndLine(Env env)
   {
-    return getFunction(env).getDeclEndLine(env);
+    return getFunction(env, VHelper.noCtx()).getOne().getDeclEndLine(env);
   }
 
   @Override
   public String getDeclComment(Env env)
   {
-    return getFunction(env).getDeclComment(env);
+    return getFunction(env, VHelper.noCtx()).getOne().getDeclComment(env);
   }
 
   @Override
   public boolean isReturnsReference(Env env)
   {
-    return getFunction(env).isReturnsReference(env);
+    return getFunction(env, VHelper.noCtx()).getOne().isReturnsReference(env);
   }
 
   @Override
   public Arg []getArgs(Env env)
   {
-    return getFunction(env).getArgs(env);
+    return getFunction(env, VHelper.noCtx()).getOne().getArgs(env);
   }
 
   /**
