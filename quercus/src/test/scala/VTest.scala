@@ -104,9 +104,9 @@ class VTest extends AbstractPhpTest {
         eval(fun + "if ($FOO) echo fun(2);" + fun2 + " if ($BAR) echo fun2(3);") to c(foo,"23")~c(bar,"34")
     }
 
-    @Test@Ignore("fixme")
+    @Test
     def testFunctionVReturn() {
-        eval("function fun() { echo 1+$FOO; }; echo fun();") to c(foo, "2") ~ c(foo.not(), "1")
+        eval("function fun() { return 1+create_conditional('foo'); }; echo fun();") to c(foo, "2") ~ c(foo.not(), "1")
     }
 
 
