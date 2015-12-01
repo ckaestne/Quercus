@@ -37,6 +37,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.Log;
+import edu.cmu.cs.varex.V;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -612,7 +613,7 @@ public class MysqliModule extends AbstractQuercusModule {
   public static Value mysqli_fetch_object(Env env,
                                           @NotNull MysqliResult result,
                                           @Optional String className,
-                                          @Optional Value[] args)
+                                          @Optional V<? extends ValueOrVar>[] args)
   {
     if (result == null) {
       return NullValue.NULL;

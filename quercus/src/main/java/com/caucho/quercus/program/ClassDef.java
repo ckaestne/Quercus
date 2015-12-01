@@ -369,7 +369,7 @@ abstract public class ClassDef implements InstanceInitializer {
   /**
    * Creates a new instance.
    */
-  public @NonNull V<? extends Value> callNew(Env env,  FeatureExpr ctx, Value []args)
+  public @NonNull V<? extends Value> callNew(Env env,  FeatureExpr ctx, V<? extends ValueOrVar> []args)
   {
     return null;
   }

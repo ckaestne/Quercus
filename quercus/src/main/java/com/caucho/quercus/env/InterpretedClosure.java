@@ -34,7 +34,6 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a closure
@@ -43,7 +42,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public class InterpretedClosure extends Closure
 {
   private final AbstractFunction _fun;
-  private final Value []_args;
+  private final V<? extends ValueOrVar> []_args;
 
   public InterpretedClosure(Env env, AbstractFunction fun, Value qThis)
   {
@@ -53,15 +52,15 @@ public class InterpretedClosure extends Closure
 
     Arg []args = fun.getClosureUseArgs();
     if (args != null && args.length > 0) {
-      _args = new Value[args.length];
+      _args = new V[args.length];
 
       for (int i = 0; i < args.length; i++) {
         Arg arg = args[i];
 
         if (arg.isReference())
-          _args[i] = env.getRef(VHelper.noCtx(), arg.getName()).getOne().getValue().getOne();
+          _args[i] = env.getRef(VHelper.noCtx(), arg.getName()).getOne().getValue();
         else
-          _args[i] = env.getValue(VHelper.noCtx(), arg.getName()).getOne();
+          _args[i] = env.getValue(VHelper.noCtx(), arg.getName());
       }
     }
     else {
@@ -112,7 +111,7 @@ public class InterpretedClosure extends Closure
   }
 
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     Value oldThis = env.setThis(getThis());
     Closure oldClosure = env.setClosure(this);

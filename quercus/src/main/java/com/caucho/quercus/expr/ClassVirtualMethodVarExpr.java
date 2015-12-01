@@ -134,7 +134,7 @@ public class ClassVirtualMethodVarExpr extends Expr {
     StringValue methodName = _methodName.evalStringValue(env, VHelper.noCtx()).getOne();
     int hash = methodName.hashCodeCaseInsensitive();
 
-    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar>[] values = evalArgs(env, _args, VHelper.noCtx());
 
     env.pushCall(this, cls, values);
 

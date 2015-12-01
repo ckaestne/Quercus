@@ -31,8 +31,8 @@ package com.caucho.quercus.function;
 
 import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a function
@@ -52,41 +52,44 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
-    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
-
-    return _call.call(env, ctx, _name, arrayArgs);
+    throw new UnimplementedVException();
+//    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
+//
+//    return _call.call(env, ctx, V.one(_name), V.one(arrayArgs));
   }
 
   /**
    * Evaluates the function.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
-                          QuercusClass qClass,
-                          Value qThis,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                       QuercusClass qClass,
+                                       Value qThis,
+                                       V<? extends ValueOrVar>[] args)
   {
-    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
-
-    return _call.callMethod(env, ctx, qClass, qThis,
-                            _name, arrayArgs);
+    throw new UnimplementedVException();
+//    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
+//
+//    return _call.callMethod(env, ctx, qClass, qThis,
+//                            _name, arrayArgs);
   }
 
   /**
    * Evaluates the function.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
-                             QuercusClass qClass,
-                             Value qThis,
-                             Value []args)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+                                          QuercusClass qClass,
+                                          Value qThis,
+                                          V<? extends ValueOrVar>[] args)
   {
-    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
-
-    return _call.callMethodRef(env, ctx, qClass, qThis,
-                               _name, arrayArgs);
+    throw new UnimplementedVException();
+//    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
+//
+//    return _call.callMethodRef(env, ctx, qClass, qThis,
+//                               _name, arrayArgs);
   }
 
   @Override

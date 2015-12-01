@@ -594,9 +594,9 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,
-                             FeatureExpr ctx, StringValue methodName, int hash,
-                             Value[] args)
+  public V<? extends Value> callMethod(Env env,
+                                       FeatureExpr ctx, StringValue methodName, int hash,
+                                       V<? extends ValueOrVar>[] args)
   {
     return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, args);
   }
@@ -614,63 +614,9 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,
-                             FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1)
-  {
-    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, a1);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2)
-  {
-    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, a1, a2);
-  }
-
-  /**
-   * Evaluates a method with 3 args.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3)
-  {
-    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash,
-                           a1, a2, a3);
-  }
-
-  /**
-   * Evaluates a method with 4 args.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4)
-  {
-    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash,
-                           a1, a2, a3, a4);
-  }
-
-  /**
-   * Evaluates a method with 5 args.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
-  {
-    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash,
-                           a1, a2, a3, a4, a5);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
   public @NonNull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
-                                Value[] args)
+                                                   V<? extends ValueOrVar>[] args)
   {
     return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, args);
   }
@@ -684,60 +630,6 @@ public class ArgRef extends Value
     return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash);
   }
 
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env,
-                                FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1)
-  {
-    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, a1);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1, Value a2)
-  {
-    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash,
-                              a1, a2);
-  }
-
-  /**
-   * Evaluates a method with 3 args.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1, Value a2, Value a3)
-  {
-    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, a1, a2, a3);
-  }
-
-  /**
-   * Evaluates a method with 4 args.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1, Value a2, Value a3, Value a4)
-  {
-    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash,
-                              a1, a2, a3, a4);
-  }
-
-  /**
-   * Evaluates a method with 5 args.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env,
-                                          FeatureExpr ctx, StringValue methodName, int hash,
-                                          Value a1, Value a2, Value a3, Value a4, Value a5)
-  {
-    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash,
-                              a1, a2, a3, a4, a5);
-  }
 
   /**
    * Evaluates a method.

@@ -30,10 +30,7 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -102,7 +99,7 @@ public class ClassConstructorExpr extends Expr {
 
     AbstractFunction fun = cl.getFunction(nameV);
 
-    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar>[] values = evalArgs(env, _args, VHelper.noCtx());
 
     Value qThis = env.getThis();
     env.pushCall(this, qThis, values);

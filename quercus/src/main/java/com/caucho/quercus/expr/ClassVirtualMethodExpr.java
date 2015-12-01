@@ -98,7 +98,7 @@ public class ClassVirtualMethodExpr extends Expr {
       return VHelper.toV(NullValue.NULL);
     }
 
-    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar> []values = evalArgs(env, _args, VHelper.noCtx());
 
     env.pushCall(this, cls, values);
 

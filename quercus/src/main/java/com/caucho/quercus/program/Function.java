@@ -239,7 +239,7 @@ public class Function extends AbstractFunction {
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>();
 
-    Value []values = new Value[args.length];
+    V<? extends ValueOrVar> []values = new V[args.length];
 
     for (int i = 0; i < args.length; i++) {
       Arg arg = null;
@@ -249,22 +249,22 @@ public class Function extends AbstractFunction {
       }
 
       if (arg == null) {
-        values[i] = args[i].eval(env, VHelper.noCtx()).getOne().copy();
+        values[i] = args[i].eval(env, ctx).map((a)->a.copy());
       }
       else if (arg.isReference()) {
-        values[i] = args[i].evalVar(env, VHelper.noCtx()).getOne().makeValue();
+        values[i] = args[i].evalVar(env, ctx);
 
-        map.put(arg.getName(), new EnvVarImpl(V.one(values[i].toLocalVarDeclAsRef())));
+        map.put(arg.getName(), new EnvVarImpl(values[i].map((a)->a.toLocalVarDeclAsRef())));
       }
       else {
         // php/0d04
-        values[i] = args[i].eval(env, VHelper.noCtx()).getOne();
+        values[i] = args[i].eval(env, ctx);
 
-        Var var = values[i].toVar();
+        V<? extends Var> var = values[i].map((a)->a.toVar());
 
-        map.put(arg.getName(), new EnvVarImpl(V.one(var)));
+        map.put(arg.getName(), new EnvVarImpl(var));
 
-        values[i] = var.toValue();
+        values[i] = var.flatMap((a)->a._getValues());
       }
     }
 
@@ -277,15 +277,15 @@ public class Function extends AbstractFunction {
         return VHelper.toV(env.error("expected default expression"));
       else if (arg.isReference())
         map.put(arg.getName(),
-                new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx())));
+                new EnvVarImpl(defaultExpr.evalVar(env, ctx)));
       else {
         map.put(arg.getName(),
-                new EnvVarImpl(V.one(defaultExpr.eval(env, VHelper.noCtx()).getOne().copy().toVar())));
+                new EnvVarImpl(defaultExpr.eval(env, ctx).map((a)->a.copy().toVar())));
       }
     }
 
     Map<StringValue,EnvVar> oldMap = env.pushEnv(map);
-    Value []oldArgs = env.setFunctionArgs(values); // php/0476
+    V<? extends ValueOrVar> []oldArgs = env.setFunctionArgs(values); // php/0476
     Value oldThis;
 
     if (isStatic()) {
@@ -296,7 +296,7 @@ public class Function extends AbstractFunction {
       oldThis = env.getThis();
 
     try {
-      V<? extends Value> value = _statement.execute(env, VHelper.noCtx());
+      V<? extends Value> value = _statement.execute(env, ctx);
 
       if (value != null)
         return value;
@@ -318,37 +318,37 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callImpl(env, ctx, args, false, null, null);
   }
 
   @Override
-  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callImpl(env, ctx, args, false, null, null).map((a)->a.copy());
   }
 
   @Override
-  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callImpl(env, ctx, args, true, null, null);
   }
 
   @Override
-  public @NonNull V<? extends Value> callClosure(Env env, FeatureExpr ctx, Value []args, Value []useArgs)
+  public V<? extends Value> callClosure(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args, V<? extends ValueOrVar>[] useArgs)
   {
     return callImpl(env, ctx, args, false, getClosureUseArgs(), useArgs).map((a)->a.copy());
   }
 
-  public @NonNull V<? extends Value> callImpl(Env env, FeatureExpr ctx, Value []args, boolean isRef,
-                        Arg []useParams, Value []useArgs)
+  public V<? extends Value> callImpl(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args, boolean isRef,
+                                     Arg []useParams, V<? extends ValueOrVar>[] useArgs)
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>(8);
 
     if (useParams != null) {
       for (int i = 0; i < useParams.length; i++) {
-        map.put(useParams[i].getName(), new EnvVarImpl(V.one(useArgs[i].toVar())));
+        map.put(useParams[i].getName(), new EnvVarImpl(useArgs[i].map((a)->a.toVar())));
       }
     }
 
@@ -362,22 +362,22 @@ public class Function extends AbstractFunction {
       if (arg == null) {
       }
       else if (arg.isReference()) {
-        map.put(arg.getName(), new EnvVarImpl(V.one(args[i].toLocalVarDeclAsRef())));
+        map.put(arg.getName(), new EnvVarImpl(args[i].map((a)->a.toLocalVarDeclAsRef())));
       }
       else {
         // XXX: php/1708, toVar() may be doing another copy()
-        Var var = args[i].toLocalVar();
+        V<? extends Var> var = args[i].map((a)->a.toLocalVar());
 
         if (arg.getExpectedClass() != null
             && arg.getDefault() instanceof ParamRequiredExpr) {
-          env.checkTypeHint(var.getValue().getOne(),
+          env.checkTypeHint(var.flatMap((a)->a._getValues()),
                             arg.getExpectedClass(),
                             arg.getName().toString(),
                             getName());
         }
 
         // quercus/0d04
-        map.put(arg.getName(), new EnvVarImpl(V.one(var)));
+        map.put(arg.getName(), new EnvVarImpl(var));
       }
     }
 
@@ -401,7 +401,7 @@ public class Function extends AbstractFunction {
     }
 
     Map<StringValue,EnvVar> oldMap = env.pushEnv(map);
-    Value []oldArgs = env.setFunctionArgs(args);
+    V<? extends ValueOrVar> []oldArgs = env.setFunctionArgs(args);
     Value oldThis;
 
     if (_info.isMethod()) {
@@ -438,10 +438,10 @@ public class Function extends AbstractFunction {
   //
 
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
-                          QuercusClass qClass,
-                          Value qThis,
-                          Value[] args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                       QuercusClass qClass,
+                                       Value qThis,
+                                       V<? extends ValueOrVar>[] args)
   {
     if (isStatic())
       qThis = qClass;
@@ -458,10 +458,10 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
-                             QuercusClass qClass,
-                             Value qThis,
-                             Value[] args)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+                                          QuercusClass qClass,
+                                          Value qThis,
+                                          V<? extends ValueOrVar>[] args)
   {
     Value oldThis = env.setThis(qThis);
     QuercusClass oldClass = env.setCallingClass(qClass);

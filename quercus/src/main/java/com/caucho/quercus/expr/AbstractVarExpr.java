@@ -164,7 +164,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return evalVar(env, ctx).map((a)->a.makeValue());
   }

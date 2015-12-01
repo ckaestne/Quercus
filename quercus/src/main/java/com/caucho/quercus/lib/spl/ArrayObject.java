@@ -122,7 +122,7 @@ public class ArrayObject
   {
     Value[] args = new Value[] { _value, LongValue.create(_flags) };
 
-    return (ObjectValue) _iteratorClass.callNew(_env, args);
+    return (ObjectValue) _iteratorClass.callNew(_env, VHelper.toVArray(args));
   }
 
   public String getIteratorClass()

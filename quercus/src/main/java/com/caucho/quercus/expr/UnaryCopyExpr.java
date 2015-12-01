@@ -32,6 +32,7 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
@@ -73,7 +74,7 @@ public class UnaryCopyExpr extends AbstractUnaryExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return eval(env, VHelper.noCtx());
   }

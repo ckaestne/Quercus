@@ -32,9 +32,11 @@ package com.caucho.quercus.lib;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.JavaValue;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.logging.Level;
@@ -55,7 +57,7 @@ public class JavaModule extends AbstractQuercusModule {
    */
   public static Object java(Env env,
                             String className,
-                            Value []args)
+                            V<? extends ValueOrVar>[]args)
   {
     try {
       JavaClassDef def = env.getJavaClassDefinition(className);

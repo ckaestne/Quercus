@@ -32,6 +32,7 @@ package com.caucho.quercus.lib;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Java object facade.
@@ -45,6 +46,6 @@ public class Java {
   public static Object __construct(Env env,
                                    String className, Value []args)
   {
-    return JavaModule.java(env, className, args);
+    return JavaModule.java(env, className, VHelper.toVArray(args));
   }
 }

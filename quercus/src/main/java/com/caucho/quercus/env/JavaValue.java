@@ -337,146 +337,24 @@ public class JavaValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,
-                             FeatureExpr ctx, StringValue methodName, int hash,
-                             Value[] args)
+  public V<? extends Value> callMethod(Env env,
+                                       FeatureExpr ctx, StringValue methodName, int hash,
+                                       V<? extends ValueOrVar>[] args)
   {
     return _classDef.callMethod(env, ctx, this, methodName, hash, args);
   }
 
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash, a1);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2, a3);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash,
-                                a1, a2, a3, a4);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                             Value a1, Value a2, Value a3, Value a4, Value a5)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash,
-                                a1, a2, a3, a4, a5);
-  }
 
   /**
    * Evaluates a method.
    */
   @Override
   public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value[] args)
+                                                   V<? extends ValueOrVar>[] args)
   {
     return _classDef.callMethod(env, ctx,  this, methodName, hash, args);
   }
 
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
-  {
-    V<? extends Value> value = _classDef.callMethod(env, ctx, this, methodName, hash);
-
-    return value;
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash, a1);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1, Value a2)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1, Value a2, Value a3)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash, a1, a2, a3);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                Value a1, Value a2, Value a3, Value a4)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash,
-                                a1, a2, a3, a4);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                          Value a1, Value a2, Value a3, Value a4, Value a5)
-  {
-    return _classDef.callMethod(env, ctx, this, methodName, hash,
-                                a1, a2, a3, a4, a5);
-  }
 
   @Override
   public Value clone(Env env)

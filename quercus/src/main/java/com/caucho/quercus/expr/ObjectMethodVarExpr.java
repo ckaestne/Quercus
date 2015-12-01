@@ -33,6 +33,7 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -101,10 +102,10 @@ public class ObjectMethodVarExpr extends Expr {
    */
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    Value []values = new Value[_args.length];
+    V<?extends ValueOrVar> []values = new V[_args.length];
 
     for (int i = 0; i < values.length; i++) {
-      values[i] = _args[i].evalArg(env, VHelper.noCtx(), true).getOne();
+      values[i] = _args[i].evalArg(env, VHelper.noCtx(), true);
     }
 
     StringValue methodName = _name.eval(env, VHelper.noCtx()).getOne().toStringValue(env);

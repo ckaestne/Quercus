@@ -110,7 +110,7 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
 
     _lineReader = new LineReader(env);
 
-    _wrapper = qClass.callNew(env, Value.NULL_ARGS);
+    _wrapper = qClass.callNew(env, Value.VNULL_ARGS);
 
     if (env.isUnicodeSemantics())
       _wrapper.callMethod(env, VHelper.noCtx(), STREAM_OPEN_U,

@@ -35,7 +35,6 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents the introspected static function information.
@@ -172,8 +171,8 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
    * Evaluates the function.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
-                                       Value []args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+                                       V<? extends ValueOrVar>[] args)
   {
     if (args.length < _methodTable.length) {
       AbstractJavaMethod []methods = _methodTable[args.length];
@@ -228,7 +227,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
   private AbstractJavaMethod
     getBestFitJavaMethod(AbstractJavaMethod []methods,
                          AbstractJavaMethod [][]restMethodTable,
-                         Value []args)
+                         V<? extends ValueOrVar> []args)
   {
 
     AbstractJavaMethod minCostJavaMethod = null;
@@ -238,7 +237,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
       for (int i = 0; i < methods.length; i++) {
         AbstractJavaMethod javaMethod = methods[i];
 
-        int cost = javaMethod.getMarshalingCost(args);
+        int cost = javaMethod.getMarshalingCost(VHelper.mapVArray(args, a->a.toValue()));
 
         if (cost == 0)
           return javaMethod;
@@ -259,7 +258,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
       for (int j = 0; j < restMethodTable[i].length; j++) {
         AbstractJavaMethod javaMethod = restMethodTable[i][j];
 
-        int cost = javaMethod.getMarshalingCost(args);
+        int cost = javaMethod.getMarshalingCost(VHelper.mapVArray(args, a->a.toValue()));
 
         if (cost == 0)
           return javaMethod;
@@ -337,7 +336,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
     }
 
     AbstractJavaMethod bestFitMethod
-      = getBestFitJavaMethod(methods, _restMethodTable, args);
+      = getBestFitJavaMethod(methods, _restMethodTable,VHelper.toVArray(args));
 
     return bestFitMethod.getMarshalingCost(args);
   }

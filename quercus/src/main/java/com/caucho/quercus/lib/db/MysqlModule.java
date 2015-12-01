@@ -35,6 +35,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.Log;
+import edu.cmu.cs.varex.V;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -629,7 +630,7 @@ public class MysqlModule extends AbstractQuercusModule {
   public static Value mysql_fetch_object(Env env,
                                          @NotNull MysqliResult result,
                                          @Optional String className,
-                                         @Optional Value[] args)
+                                         @Optional V<?extends ValueOrVar>[] args)
   {
     if (result == null) {
       return BooleanValue.FALSE;

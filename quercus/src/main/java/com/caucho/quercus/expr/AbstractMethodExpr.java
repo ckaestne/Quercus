@@ -33,6 +33,7 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
@@ -71,7 +72,7 @@ abstract public class AbstractMethodExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return eval(env, VHelper.noCtx()).map((a)->a.copy());
   }
@@ -88,7 +89,7 @@ abstract public class AbstractMethodExpr extends Expr {
                                     StringValue methodName, int hashCode,
                                     Expr[] argExprs)
   {
-    Value []args = evalArgs(env, argExprs, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar>[] args = evalArgs(env, argExprs, VHelper.noCtx());
 
     env.pushCall(this, qThis, args);
 

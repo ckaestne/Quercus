@@ -30,10 +30,7 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -101,7 +98,7 @@ public class ClassMethodExpr extends AbstractMethodExpr {
       throw env.createErrorException(L.l("{0} is an unknown class",
                                          _className));
 
-    Value []values = evalArgs(env, _args, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar>[] values = evalArgs(env, _args, VHelper.noCtx());
 
     Value oldThis = env.getThis();
 

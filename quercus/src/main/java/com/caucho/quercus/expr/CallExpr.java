@@ -215,7 +215,7 @@ public class CallExpr extends Expr {
         return VHelper.toV(NullValue.NULL);
       }
 
-      Value[] args = evalArgs(env, _args, ctx).getOne();
+      V<? extends ValueOrVar>[] args = evalArgs(env, _args, ctx);
 
       env.pushCall(this, NullValue.NULL, args);
 
@@ -262,7 +262,7 @@ public class CallExpr extends Expr {
   // Return an array containing the Values to be
   // passed in to this function.
 
-  public Value []evalArguments(Env env)
+  public ValueOrVar[] evalArguments(Env env)
   {
     AbstractFunction fun = env.findFunction(_name).getOne();
 

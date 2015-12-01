@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -59,29 +60,30 @@ abstract public class Callback extends Value implements Callable {
   final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
-                               Value a1)
+                                                     V<? extends ValueOrVar> a1)
   {
-    // php/1740
-
-    V<? extends Value> result;
-
-    if (a1.isVar()) {
-      a1 = new ArgRef(a1._var());
-
-      result = call(env, ctx, a1._value());
-    }
-    else {
-      Var aVar = new Var(V.one(a1._value()));
-
-      result = call(env, ctx, aVar.toValue()); //TODO check V
-
-      Value aNew = aVar.toValue();
-
-      if (aNew != a1)
-        array.put(key, aNew);
-    }
-
-    return result;
+    throw new UnimplementedVException();
+//    // php/1740
+//
+//    V<? extends Value> result;
+//
+//    if (a1.isVar()) {
+//      a1 = new ArgRef(a1._var());
+//
+//      result = call(env, ctx, a1._value());
+//    }
+//    else {
+//      Var aVar = new Var(V.one(a1._value()));
+//
+//      result = call(env, ctx, aVar.toValue()); //TODO check V
+//
+//      Value aNew = aVar.toValue();
+//
+//      if (aNew != a1)
+//        array.put(key, aNew);
+//    }
+//
+//    return result;
   }
 
   /**
@@ -98,30 +100,31 @@ abstract public class Callback extends Value implements Callable {
   final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
-                               Value a1,
-                               Value a2)
+                                                     V<? extends ValueOrVar> a1,
+                                                     V<? extends ValueOrVar> a2)
   {
-    // php/1740
-
-    V<? extends Value> result;
-
-    if (a1.isVar()) {
-      a1 = new ArgRef(a1._var());
-
-      result = call(env, ctx, a1, a2);
-    }
-    else {
-      Value aVar = new Var(V.one(a1)).toValue();
-
-      result = call(env, ctx, aVar, a2);
-
-      Value aNew = aVar.toValue();
-
-      if (aNew != a1)
-        array.put(key, aNew);
-    }
-
-    return result;
+    throw new UnimplementedVException();
+//    // php/1740
+//
+//    V<? extends Value> result;
+//
+//    if (a1.isVar()) {
+//      a1 = new ArgRef(a1._var());
+//
+//      result = call(env, ctx, a1, a2);
+//    }
+//    else {
+//      Value aVar = new Var(V.one(a1)).toValue();
+//
+//      result = call(env, ctx, aVar, a2);
+//
+//      Value aNew = aVar.toValue();
+//
+//      if (aNew != a1)
+//        array.put(key, aNew);
+//    }
+//
+//    return result;
   }
 
   /**
@@ -138,40 +141,40 @@ abstract public class Callback extends Value implements Callable {
   final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
-                               Value a1,
-                               Value a2,
-                               Value a3)
+                                                     V<? extends ValueOrVar> a1,
+                                                     V<? extends ValueOrVar> a2,
+                                                     V<? extends ValueOrVar> a3)
   {
     // php/1740
-
-    V<? extends Value> result;
-
-    if (a1.isVar()) {
-      a1 = new ArgRef(a1._var());
-
-      result = call(env, ctx, a1, a2, a3);
-    }
-    else {
-      Value aVar = new Var(V.one(a1)).toValue();
-
-      result = call(env, ctx, aVar, a2, a3);
-
-      Value aNew = aVar.toValue();
-
-      if (aNew != a1)
-        array.put(key, aNew);
-    }
-
-    return result;
+throw new UnimplementedVException();
+//    V<? extends Value> result;
+//
+//    if (a1.getOne().isVar()) {
+//      a1 = a1.map(a-> new ArgRef(a._var()));
+//
+//      result = call(env, ctx, a1, a2, a3);
+//    }
+//    else {
+//      V<? extends Var> aVar = a1.map(a-> new Var(V.one(a)).toValue());
+//
+//      result = call(env, ctx, aVar, a2, a3);
+//
+//      V<? extends Value> aNew = aVar.map(a->a.toValue());
+//
+//      if (aNew != a1)
+//        array.put(key, aNew.getOne());
+//    }
+//
+//    return result;
   }
 
   /**
    * Evaluates the callback with variable arguments.
-   *
-   * @param env the calling environment
+   *  @param env the calling environment
    * @param ctx
+   * @param args
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args);
 
   /**
    *

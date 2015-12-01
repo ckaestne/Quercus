@@ -36,6 +36,8 @@ import com.caucho.quercus.annotation.Reference;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import edu.cmu.cs.varex.UnimplementedVException;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -54,6 +56,7 @@ public class PDOStatement
   private static final L10N L = new L10N(PDOStatement.class);
 
   private static final Value[] NULL_VALUES = new Value[0];
+  private static final V<? extends ValueOrVar>[] VNULL_VALUES = new V[0];
 
   private final PDO _pdo;
   private final PDOError _error;
@@ -641,7 +644,7 @@ public class PDOStatement
       ctorArgs = NULL_VALUES;
     }
 
-    return fetchObject(env, className, ctorArgs);
+    return fetchObject(env, className, VHelper.toVArray(ctorArgs));
   }
 
   /**
@@ -794,7 +797,7 @@ public class PDOStatement
 
   private Value fetchObject(Env env, JdbcResultResource rs)
   {
-    Value value = rs.fetchObject(env, null, Value.NULL_ARGS);
+    Value value = rs.fetchObject(env, null, Value.VNULL_ARGS);
 
     if (value == NullValue.NULL) {
       return BooleanValue.FALSE;
@@ -841,7 +844,7 @@ public class PDOStatement
   private Value fetchLazy(Env env)
   {
     // XXX: need to check why lazy is no different than object
-    return fetchObject(env, null, NULL_VALUES);
+    return fetchObject(env, null, VNULL_VALUES);
   }
 
   private Value fetchNamed(Env env, JdbcResultResource rs)
@@ -882,7 +885,7 @@ public class PDOStatement
 
   public Value fetchObject(Env env,
                            @Optional String className,
-                           @Optional Value[] args)
+                           @Optional V<? extends ValueOrVar>[] args)
   {
     JdbcResultResource rs = getResultSet();
 

@@ -527,7 +527,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     return eval(env, ctx);
   }
@@ -862,15 +862,15 @@ abstract public class Expr {
   /**
    * Evaluates arguments
    */
-  public static V<Value[]> evalArgs(Env env, Expr[] exprs, FeatureExpr ctx)
+  public static V<? extends ValueOrVar>[] evalArgs(Env env, Expr[] exprs, FeatureExpr ctx)
   {
-    Value []args = new Value[exprs.length];
+    ValueOrVar []args = new ValueOrVar[exprs.length];
 
     for (int i = 0; i < args.length; i++) {
       args[i] = exprs[i].evalArg(env, ctx, true).getOne();
     }
 
-    return VHelper.toV(args);
+    return VHelper.toVArray(args);
   }
 
   /**
