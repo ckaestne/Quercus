@@ -150,7 +150,7 @@ public class CallbackClassMethod extends Callback {
   }
 
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash, args);
   }

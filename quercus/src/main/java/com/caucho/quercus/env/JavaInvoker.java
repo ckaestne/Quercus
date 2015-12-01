@@ -670,26 +670,26 @@ abstract public class JavaInvoker
   }
 
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callMethod(env, ctx, (QuercusClass) null, (Value) null, args);
   }
 
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
-                             QuercusClass qClass,
-                             Value qThis,
-                             Value []args)
+  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+                                          QuercusClass qClass,
+                                          Value qThis,
+                                          V<? extends ValueOrVar>[] args)
   {
     // php/3cl3
     return callMethod(env, ctx, qClass, qThis, args);
   }
 
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
-                          QuercusClass qClass,
-                          Value qThis,
-                          Value []args)
+  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                       QuercusClass qClass,
+                                       Value qThis,
+                                       V<? extends ValueOrVar>[] args)
   {
     Object result = callJavaMethod(env, qClass, qThis, args);
 

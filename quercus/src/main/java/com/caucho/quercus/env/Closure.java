@@ -160,11 +160,11 @@ abstract public class Closure extends Callback
 
   /**
    * Evaluates the callback with variable arguments.
-   *  @param env the calling environment
+   * @param env the calling environment
    * @param ctx
    * @param args
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args);
+  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args);
 
   @Override
   public String toString()

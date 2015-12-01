@@ -308,7 +308,7 @@ public class Env
 
   private QuercusClass _callingClass;
 
-  private Value [] _functionArgs;
+  private V<? extends ValueOrVar> [] _functionArgs;
 
   private LinkedList<FieldGetEntry> _fieldGetList
     = new LinkedList<FieldGetEntry>();
@@ -3489,15 +3489,15 @@ public class Env
   /**
    * Pushes a new environment.
    */
-  public final Value []setFunctionArgs(Value []args)
+  public final V<? extends ValueOrVar>[]setFunctionArgs(V<? extends ValueOrVar> []args)
   {
-    Value []oldArgs = _functionArgs;
+    V<? extends ValueOrVar> []oldArgs = _functionArgs;
 
-    Value []newArgs = new Value[args.length];
+    V<? extends ValueOrVar> []newArgs = new V[args.length];
 
     for (int i = 0; args != null && i < args.length; i++) {
       // php/3715, 3768
-      newArgs[i] = args[i].toValue().copySaveFunArg();
+      newArgs[i] = args[i].flatMap((a)->a.getValues().map((b)->b.copySaveFunArg()));
     }
 
     _functionArgs = newArgs;
@@ -3505,25 +3505,25 @@ public class Env
     return oldArgs;
   }
 
+//  /**
+//   * Pushes a new environment.
+//   */
+//  public final Value []setFunctionArgsNoCopy(Value []args)
+//  {
+//    Value []oldArgs = _functionArgs;
+//
+//    for (int i = 0; args != null && i < args.length; i++)
+//      args[i] = args[i].toValue();
+//
+//    _functionArgs = args;
+//
+//    return oldArgs;
+//  }
+
   /**
    * Pushes a new environment.
    */
-  public final Value []setFunctionArgsNoCopy(Value []args)
-  {
-    Value []oldArgs = _functionArgs;
-
-    for (int i = 0; args != null && i < args.length; i++)
-      args[i] = args[i].toValue();
-
-    _functionArgs = args;
-
-    return oldArgs;
-  }
-
-  /**
-   * Pushes a new environment.
-   */
-  public final void restoreFunctionArgs(Value []args)
+  public final void restoreFunctionArgs(V<? extends ValueOrVar> []args)
   {
     _functionArgs = args;
   }
@@ -3531,7 +3531,7 @@ public class Env
   /**
    * Returns the function args.
    */
-  public final Value []getFunctionArgs()
+  public final V<? extends ValueOrVar> []getFunctionArgs()
   {
     return _functionArgs;
   }
@@ -6443,20 +6443,21 @@ public class Env
   /**
    * Check for type hinting
    */
-  public void checkTypeHint(Value value,
+  public void checkTypeHint(V<? extends Value> value,
                             String type,
                             String argName,
                             String functionName)
   {
-    if (value.isNull()) {
+    value.foreach(v->  {
+    if (v.isNull()) {
       error(L.l(
         "'{0}' is an unexpected value for "
         + "arg '{1}' in function '{2}', expected '{3}'",
-        value,
+        v,
         argName,
         functionName,
         type));
-    }
+    } });
   }
 
   /**

@@ -174,7 +174,7 @@ public class CallbackFunction extends Callback {
   }
 
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return getFunction(env, ctx).getOne().call(env, ctx, args);
   }

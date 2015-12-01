@@ -125,23 +125,23 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   }
 
   @Override
-  abstract public @NonNull V<? extends Value> callMethod(Env env,
+  abstract public V<? extends Value> callMethod(Env env,
                                                 FeatureExpr ctx,
                                                 QuercusClass qClass,
-                                   Value qThis,
-                                   Value []args);
+                                                Value qThis,
+                                                V<? extends ValueOrVar>[] args);
 
   /**
    * Evaluates the function, returning a copy
    */
   @Override
-  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return call(env, VHelper.noCtx(), args);
   }
 
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null, args);
   }

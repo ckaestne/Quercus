@@ -138,7 +138,7 @@ public class CallbackObjectMethod extends Callback {
   }
 
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash, args);
   }

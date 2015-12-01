@@ -254,12 +254,12 @@ public class VarExpr
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     // php/043k
     // php/0443
 
-    return env.getVar(ctx, _name).map(a->a.makeValue());
+    return env.getVar(ctx, _name);
   }
 
   /**

@@ -94,7 +94,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalArg(Env env, FeatureExpr ctx, boolean isTop)
+  public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     if (isTop) {
       V<? extends Value> obj = _expr.evalArray(env, ctx);
