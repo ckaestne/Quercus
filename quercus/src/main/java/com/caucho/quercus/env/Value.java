@@ -63,7 +63,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   private static final  V<? extends ValueOrVar> []NULL_ARG_VALUES = new V[0];
 
   public static final Value []NULL_VALUE_ARRAY = new Value[0];
-  public static final Value []NULL_ARGS = new Value[0];
+  public static final V<? extends ValueOrVar> []NULL_ARGS = new V[0];
 
   //
   // Properties

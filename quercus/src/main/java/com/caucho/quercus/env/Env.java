@@ -4251,7 +4251,7 @@ public class Env
 
       if (getExceptionHandler() != null) {
         try {
-          getExceptionHandler().call(this, VHelper.noCtx(), e.toException(this));
+          getExceptionHandler().call(this, VHelper.noCtx(), V.one(e.toException(this)));
         }
         catch (QuercusLanguageException e2) {
           uncaughtExceptionError(e2);
@@ -4309,14 +4309,10 @@ public class Env
    * @param name the function name
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(StringValue name, FeatureExpr ctx)
+  public final @NonNull V<? extends Value> call(StringValue name, FeatureExpr ctx)
   {
-    AbstractFunction fun = findFunction(name).getOne();
+    return this.call(ctx, name, new V[]{});
 
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.call(this, ctx);
   }
 
   //
@@ -4330,14 +4326,9 @@ public class Env
    * @param a0 the first argument
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0)
+  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0)
   {
-    AbstractFunction fun = findFunction(name).getOne();
-
-    if (fun == null)
-      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
-
-    return fun.call(this, ctx, a0);
+    return this.call(ctx, name, new V[]{a0});
   }
 
   /**
@@ -4348,9 +4339,9 @@ public class Env
    * @param a1 the second argument
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1)
+  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1)
   {
-    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1);
+    return this.call(ctx, name, new V[]{a0,a1});
   }
 
   /**
@@ -4362,9 +4353,9 @@ public class Env
    * @param a2 the third argument
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
+  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
   {
-    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1, a2);
+    return this.call(ctx, name, new V[]{a0,a1,a2});
   }
 
   /**
@@ -4377,9 +4368,9 @@ public class Env
    * @param a3 the fourth argument
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
+  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
   {
-    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1, a2, a3);
+    return this.call(ctx, name, new V[]{a0,a1,a2,a3});
   }
 
   /**
@@ -4393,10 +4384,10 @@ public class Env
    * @param a4 the fifth argument
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value a0, Value a1,
-                    Value a2, Value a3, Value a4)
+  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1,
+                    V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
   {
-    return getFunction(name, ctx).getOne().call(this, ctx, a0, a1, a2, a3, a4);
+    return this.call(ctx, name, new V[]{a0,a1,a2,a3,a4});
   }
 
   /**
@@ -4406,9 +4397,13 @@ public class Env
    * @param args the arguments
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, Value []args)
+  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> []args)
   {
-    return getFunction(name, ctx).getOne().call(this, ctx, args);
+    AbstractFunction fun = findFunction(name).getOne();
+
+    if (fun == null)
+      return VHelper.toV(error(L.l("'{0}' is an unknown function.", name)));
+    return fun.call(this, ctx, args);
   }
 
 //  /**
@@ -4841,7 +4836,7 @@ public class Env
     QuercusClass cls = getClass(exceptionClass);
 
     StringValue messageV = createString(message);
-    Value []args = { messageV };
+    V<? extends Value> []args = new V[]{ V.one(messageV) };
 
     Value value = cls.callNew(this, args);
 
@@ -4858,10 +4853,10 @@ public class Env
   {
     QuercusClass cls = getClass(exceptionClass);
 
-    Value[] argsV = new Value[args.length];
+    V<? extends Value>[] argsV = new V[args.length];
 
     for (int i = 0; i < args.length; i++) {
-      argsV[i] = createString(args[i]);
+      argsV[i] = V.one(createString(args[i]));
     }
 
     Value value = cls.callNew(this, argsV);
@@ -4885,7 +4880,7 @@ public class Env
     StringValue message = createString(e.getMessage());
     Value []args = { message };
 
-    Value value = cls.callNew(this, args);
+    Value value = cls.callNew(this, VHelper.toVarray(args));
 
     StackTraceElement elt = e.getStackTrace()[0];
 
@@ -5266,7 +5261,7 @@ public class Env
           for (int i = 0; i < size; i++) {
             Callable cb = _autoloadList.get(i);
 
-            cb.call(this, VHelper.noCtx(), nameString);
+            cb.call(this, VHelper.noCtx(), V.one(nameString));
 
             // php/0977
             QuercusClass cls = findClass(name, id, false, useImport, useAliasMap);
@@ -5280,7 +5275,7 @@ public class Env
               _autoload = findFunction(createString("__autoload")).getOne();
 
             if (_autoload != null) {
-              _autoload.call(this, VHelper.noCtx(), nameString);
+              _autoload.call(this, VHelper.noCtx(), V.one(nameString));
 
               // php/0976
               QuercusClass cls = findClass(name, id, false, useImport, useAliasMap);
@@ -6927,8 +6922,8 @@ public class Env
 
         Value context = NullValue.NULL;
 
-        handler.call(this, VHelper.noCtx(),LongValue.create(mask), createString(msg),
-                     fileNameV, lineV, context);
+        handler.call(this, VHelper.noCtx(),V.one(LongValue.create(mask)), V.one(createString(msg)),
+                V.one(fileNameV), V.one(lineV), V.one(context));
 
         return NullValue.NULL;
       }

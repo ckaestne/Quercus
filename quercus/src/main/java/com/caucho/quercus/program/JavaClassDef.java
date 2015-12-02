@@ -496,12 +496,12 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     AbstractFunction phpGet = qThis.getQuercusClass().getFieldGet();
 
     if (phpGet != null) {
-      return phpGet.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, nameV).getOne();
+      return phpGet.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, V.one(nameV)).getOne();
     }
 
     if (__fieldGet != null) {
       try {
-        return __fieldGet.callMethod(env,VHelper.noCtx(),getQuercusClass(), qThis, nameV).getOne();
+        return __fieldGet.callMethod(env,VHelper.noCtx(),getQuercusClass(), qThis, V.one(nameV)).getOne();
       } catch (Exception e) {
         log.log(Level.FINE,  e.getMessage(), e);
 
@@ -522,7 +522,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     AbstractJavaMethod setter = _setMap.get(name);
     if (setter != null) {
       try {
-        return setter.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, value).getOne();
+        return setter.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, V.one(value)).getOne();
       } catch (Exception e) {
         log.log(Level.FINE, e.getMessage(), e);
 
@@ -553,7 +553,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
         qThis.setFieldInit(true);
 
         try {
-          return phpSet.callMethod(env, VHelper.noCtx(),getQuercusClass(), qThis, nameV, value).getOne();
+          return phpSet.callMethod(env, VHelper.noCtx(),getQuercusClass(), qThis, V.one(nameV), V.one(value)).getOne();
 
         } finally {
           qThis.setFieldInit(false);
@@ -567,8 +567,8 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
         return __fieldSet.callMethod(env,VHelper.noCtx(),
                                      getQuercusClass(),
                                      qThis,
-                                     nameV,
-                                     value).getOne();
+                V.one(nameV),
+                V.one(value)).getOne();
       } catch (Exception e) {
         log.log(Level.FINE, e.getMessage(), e);
 
@@ -591,7 +591,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    * Eval new
    */
   @Override
-  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
+  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args)
   {
     if (_cons != null) {
       if (__construct != null) {

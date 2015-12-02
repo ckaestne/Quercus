@@ -227,7 +227,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
   private AbstractJavaMethod
     getBestFitJavaMethod(AbstractJavaMethod []methods,
                          AbstractJavaMethod [][]restMethodTable,
-                         Value []args)
+                         V<? extends ValueOrVar> []args)
   {
 
     AbstractJavaMethod minCostJavaMethod = null;
@@ -237,7 +237,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
       for (int i = 0; i < methods.length; i++) {
         AbstractJavaMethod javaMethod = methods[i];
 
-        int cost = javaMethod.getMarshalingCost(args);
+        int cost = javaMethod.getMarshalingCost(VHelper.mapVArray(args, a->a.toValue()));
 
         if (cost == 0)
           return javaMethod;
@@ -258,7 +258,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
       for (int j = 0; j < restMethodTable[i].length; j++) {
         AbstractJavaMethod javaMethod = restMethodTable[i][j];
 
-        int cost = javaMethod.getMarshalingCost(args);
+        int cost = javaMethod.getMarshalingCost(VHelper.mapVArray(args, a->a.toValue()));
 
         if (cost == 0)
           return javaMethod;
@@ -336,7 +336,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
     }
 
     AbstractJavaMethod bestFitMethod
-      = getBestFitJavaMethod(methods, _restMethodTable, args);
+      = getBestFitJavaMethod(methods, _restMethodTable,VHelper.mapArray(args,a->V.one(a)));
 
     return bestFitMethod.getMarshalingCost(args);
   }

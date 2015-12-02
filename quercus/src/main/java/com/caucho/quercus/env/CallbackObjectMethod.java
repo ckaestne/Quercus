@@ -74,68 +74,6 @@ public class CallbackObjectMethod extends Callback {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash);
   }
 
-  /**
-   * Evaluates the callback with 1 argument.
-   *  @param env the calling environment
-   * @param ctx
-   * @param a1
-   */
-  @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1)
-  {
-    return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
-                           a1);
-  }
-
-  /**
-   * Evaluates the callback with 2 arguments.
-   *
-   * @param env the calling environment
-   */
-  @Override
-  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2)
-  {
-    return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
-                           a1, a2);
-  }
-
-  /**
-   * Evaluates the callback with 3 arguments.
-   *
-   * @param env the calling environment
-   */
-  @Override
-  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3)
-  {
-    return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
-                           a1, a2, a3);
-  }
-
-  /**
-   * Evaluates the callback with 3 arguments.
-   *
-   * @param env the calling environment
-   */
-  @Override
-  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
-                             Value a4)
-  {
-    return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
-                           a1, a2, a3, a4);
-  }
-
-  /**
-   * Evaluates the callback with 3 arguments.
-   *
-   * @param env the calling environment
-   */
-  @Override
-  public @NonNull V<? extends Value> call(Env env,  FeatureExpr ctx,Value a1, Value a2, Value a3,
-                    Value a4, Value a5)
-  {
-    return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash,
-                           a1, a2, a3, a4, a5);
-  }
 
   @Override
   public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)

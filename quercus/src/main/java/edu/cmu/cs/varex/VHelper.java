@@ -1,9 +1,12 @@
 package edu.cmu.cs.varex;
 
+import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -74,4 +77,21 @@ public class VHelper {
     return vifTry(() -> vifTry(solution1, solution2, predicate), solution3, predicate);
   }
 
-  }
+    public static <T> T[] arrayToOne(V<? extends T>[] a) {
+        return mapArray(a, x->x.getOne());
+    }
+    public static <T, U> T[] mapArray(U[] a, Function<U, T> f) {
+        T[] result = (T[]) new Object[a.length];
+        for (int i=0; i<a.length;i++)
+            result[i]=f.apply(a[i]);
+        return result;
+    }
+    public static <T, U> V<? extends T> [] mapVArray(V<? extends U>[] a, Function<U, T> f) {
+        return mapArray(a, x->x.map(y->f.apply(y)));
+    }
+
+
+    public static <T> V<? extends T>[] toVarray(T[] a) {
+        return mapArray(a, x->V.one(x));
+    }
+}
