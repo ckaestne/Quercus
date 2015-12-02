@@ -147,7 +147,7 @@ abstract public class Closure extends Callback
   @Override
   public V<? extends Value> callMethod(Env env,
                                        FeatureExpr ctx, StringValue methodName, int hash,
-                                       Value[] args)
+                                       V<? extends ValueOrVar>[] args)
   {
     if (methodName.equalsString("__invoke")) {
       return call(env, VHelper.noCtx(), args);

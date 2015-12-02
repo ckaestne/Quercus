@@ -615,9 +615,37 @@ abstract public class AbstractFunction extends Callback {
     return callMethodRef(env, ctx, qClass, qThis, NULL_ARG_VALUES);
   }
 
-  /**
-   * Evaluates the function as a method call.
-   */
+  @Deprecated
+  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                                      QuercusClass qClass,
+                                                      Value qThis,
+                                                      Value a1) {
+    return this.callMethod(env,ctx,qClass,qThis,V.one(a1));
+  }
+  @Deprecated
+  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                                      QuercusClass qClass,
+                                                      Value qThis,
+                                                      Value a1, Value a2) {
+    return this.callMethod(env,ctx,qClass,qThis,V.one(a1), V.one(a2));
+  }
+  @Deprecated
+  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                                      QuercusClass qClass,
+                                                      Value qThis,
+                                                      Value a1, Value a2, Value a3) {
+    return this.callMethod(env,ctx,qClass,qThis,V.one(a1), V.one(a2), V.one(a3));
+  }
+  @Deprecated
+  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+                                                      QuercusClass qClass,
+                                                      Value qThis,
+                                                      Value a1, Value a2, Value a3, Value a4) {
+    return this.callMethod(env,ctx,qClass,qThis,V.one(a1), V.one(a2), V.one(a3), V.one(a4));
+  }
+    /**
+     * Evaluates the function as a method call.
+     */
   public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,

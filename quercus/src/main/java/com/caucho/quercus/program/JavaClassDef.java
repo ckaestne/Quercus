@@ -650,7 +650,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    */
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                                        StringValue methodName, int hash,
-                                       Value []args)
+                                       V<? extends ValueOrVar> []args)
   {
     AbstractFunction fun = _functionMap.get(methodName, hash);
 
@@ -660,12 +660,20 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash)
   {
-    AbstractFunction fun = _functionMap.get(methodName, hash);
+    return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{});
+  }
 
-    return fun.callMethod(env, ctx, getQuercusClass(), qThis);
+  /**
+   * Eval a method
+   */
+  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+                          StringValue methodName, int hash,
+                          V<? extends ValueOrVar> a1)
+  {
+    return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{a1});
   }
 
   /**
@@ -673,11 +681,9 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    */
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
-                          Value a1)
+                          V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
   {
-    AbstractFunction fun = _functionMap.get(methodName, hash);
-
-    return fun.callMethod(env, ctx, getQuercusClass(), qThis, a1);
+    return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{a1, a2});
   }
 
   /**
@@ -685,11 +691,9 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    */
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
-                          Value a1, Value a2)
+                          V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
   {
-    AbstractFunction fun = _functionMap.get(methodName, hash);
-
-    return fun.callMethod(env, ctx, getQuercusClass(), qThis, a1, a2);
+    return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{a1, a2, a3});
   }
 
   /**
@@ -697,35 +701,19 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    */
   public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3)
+                          V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
   {
-    AbstractFunction fun = _functionMap.get(methodName, hash);
-
-    return fun.callMethod(env, ctx, getQuercusClass(), qThis, a1, a2, a3);
+    return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{a1, a2, a3, a4});
   }
 
   /**
    * Eval a method
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4)
+                          V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5)
   {
-    AbstractFunction fun = _functionMap.get(methodName, hash);
-
-    return fun.callMethod(env, ctx, getQuercusClass(), qThis, a1, a2, a3, a4);
-  }
-
-  /**
-   * Eval a method
-   */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
-                          StringValue methodName, int hash,
-                          Value a1, Value a2, Value a3, Value a4, Value a5)
-  {
-    AbstractFunction fun = _functionMap.get(methodName, hash);
-
-    return fun.callMethod(env, ctx, getQuercusClass(), qThis, a1, a2, a3, a4, a5);
+    return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{a1, a2, a3, a4, a5});
   }
 
   public Set<? extends Map.Entry<Value,EnvVar>> entrySet(Object obj)

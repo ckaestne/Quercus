@@ -264,7 +264,7 @@ public class Function extends AbstractFunction {
 
         map.put(arg.getName(), new EnvVarImpl(var));
 
-        values[i] = var.flatMap((a)->a.getValues());
+        values[i] = var.flatMap((a)->a._getValues());
       }
     }
 
@@ -370,7 +370,7 @@ public class Function extends AbstractFunction {
 
         if (arg.getExpectedClass() != null
             && arg.getDefault() instanceof ParamRequiredExpr) {
-          env.checkTypeHint(var.flatMap((a)->a.getValues()),
+          env.checkTypeHint(var.flatMap((a)->a._getValues()),
                             arg.getExpectedClass(),
                             arg.getName().toString(),
                             getName());

@@ -58,7 +58,7 @@ public class ClassesModule extends AbstractQuercusModule {
   public static V<? extends Value> call_user_method(Env env,   FeatureExpr ctx,
                                                     StringValue name,
                                                     Value obj,
-                                                    Value []args)
+                                                    V<? extends ValueOrVar> []args)
   {
     if (obj.isObject()) {
       return obj.callMethod(env, ctx, name, args);
@@ -83,7 +83,7 @@ public class ClassesModule extends AbstractQuercusModule {
   {
     Value []args = params.valuesToArray();
 
-    return call_user_method(env, ctx, methodName, obj, args);
+    return call_user_method(env, ctx, methodName, obj, VHelper.toVArray(args));
   }
 
   /**

@@ -78,7 +78,7 @@ public class FunctionArrayDelegate implements ArrayDelegate {
       return _arrayGet.callMethod(env, VHelper.noCtx(),
                                   _arrayGet.getQuercusClass(),
                                   qThis,
-                                  new Value[] { key }).getOne();
+                                  key ).getOne();
     }
     else
       return UnsetValue.UNSET;

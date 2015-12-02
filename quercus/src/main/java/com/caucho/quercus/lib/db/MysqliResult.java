@@ -33,6 +33,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ResourceType;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
 
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -218,7 +219,7 @@ public class MysqliResult extends JdbcResultResource {
    */
   public Value fetch_object(Env env,
                             @Optional String className,
-                            @Optional Value[] args)
+                            @Optional V<? extends ValueOrVar>[] args)
   {
     return fetchObject(env, className, args);
   }

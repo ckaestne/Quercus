@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP shutdown function.
@@ -49,7 +50,7 @@ public class Shutdown {
    */
   public void call(Env env, FeatureExpr ctx)
   {
-    _callback.call(env, ctx, _args);
+    _callback.call(env, ctx, VHelper.toVArray(_args));
   }
 }
 

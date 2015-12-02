@@ -89,7 +89,7 @@ public class FunIncludeExpr extends AbstractUnaryExpr {
   {
     StringValue name = _expr.eval(env, ctx).getOne().toStringValue();
       
-    env.pushCall(this, NullValue.NULL, new Value[] { name });
+    env.pushCall(this, NullValue.NULL, new V[] { V.one(name) });
     try {
       return env.include(ctx, _dir, name, _isRequire, false);
     } finally {

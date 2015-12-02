@@ -97,7 +97,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    V<? extends Value> value = _objExpr.evalArg(env, ctx, false);
+    V<? extends Value> value = _objExpr.evalArg(env, ctx, false).map(x->x.toValue());
 
     // XXX: getFieldArg(isTop)
 

@@ -119,12 +119,12 @@ public class FunArrayExpr extends Expr {
     for (int i = 0; i < _values.length; i++) {
       Expr keyExpr = _keys[i];
 
-      Value value = _values[i].evalArg(env, VHelper.noCtx(), true).getOne();
+      Value value = _values[i].evalArg(env, VHelper.noCtx(), true).getOne().toValue();
       // php/0471
       value = value.toRefValue();
 
       if (keyExpr != null) {
-        Value key = keyExpr.evalArg(env, VHelper.noCtx(), true).getOne().toLocalValue();
+        Value key = keyExpr.evalArg(env, VHelper.noCtx(), true).getOne().toValue().toLocalValue();
 
         array.put(key, value);
       }

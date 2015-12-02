@@ -336,7 +336,7 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
     }
 
     AbstractJavaMethod bestFitMethod
-      = getBestFitJavaMethod(methods, _restMethodTable,VHelper.mapArray(args,a->V.one(a)));
+      = getBestFitJavaMethod(methods, _restMethodTable,VHelper.toVArray(args));
 
     return bestFitMethod.getMarshalingCost(args);
   }

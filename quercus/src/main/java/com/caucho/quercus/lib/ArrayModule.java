@@ -664,7 +664,7 @@ public class ArrayModule
 
           // php/1740
           boolean isMatch
-            = callback.callArray(env, VHelper.noCtx(),array, key, value).getOne().toBoolean();
+            = callback.callArray(env, VHelper.noCtx(),array, key, V.one(value)).getOne().toBoolean();
 
           if (isMatch)
             filteredArray.put(key, value);
@@ -1103,7 +1103,7 @@ public class ArrayModule
     // quercus/1730
     Iterator<Map.Entry<Value, EnvVar>> argIter = arg.entrySet().iterator();
 
-    Iterator []iters = new Iterator[args.length];
+    Iterator<EnvVar> []iters = new Iterator[args.length];
     for (int i = 0; i < args.length; i++) {
       if (! (args[i] instanceof ArrayValue))
         throw env.createErrorException(L.l("expected array"));
@@ -1115,17 +1115,17 @@ public class ArrayModule
 
     ArrayValue resultArray = new ArrayValueImpl();
 
-    Value []param = new Value[args.length + 1];
+    V<? extends ValueOrVar> []param = new V[args.length + 1];
     while (argIter.hasNext()) {
       Map.Entry<Value, EnvVar> entry = argIter.next();
 
-      param[0] = entry.getValue().getOne();
+      param[0] = entry.getValue().getValue();
 
       for (int i = 0; i < iters.length; i++) {
-        param[i + 1] = (Value) iters[i].next();
+        param[i + 1] = iters[i].next().getValue();
 
         if (param[i + 1] == null)
-          param[i + 1] = NullValue.NULL;
+          param[i + 1] = V.one(NullValue.NULL);
       }
 
       resultArray.put(entry.getKey(), fun.call(env, VHelper.noCtx(), param).getOne());
@@ -2552,7 +2552,7 @@ public class ArrayModule
             return false;
         }
         else
-          callback.callArray(env, VHelper.noCtx(), array, key, value, key, extra);
+          callback.callArray(env, VHelper.noCtx(), array, key, V.one(value), V.one(key), V.one(extra));
       }
 
       return true;
@@ -2605,7 +2605,7 @@ public class ArrayModule
         else
           value = entry.getValue().getOne();
 
-        callback.callArray(env, VHelper.noCtx(),array, key, value, key, userData);
+        callback.callArray(env, VHelper.noCtx(),array, key, V.one(value), V.one(key), V.one(userData));
       }
 
       return true;

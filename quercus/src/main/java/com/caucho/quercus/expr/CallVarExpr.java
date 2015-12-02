@@ -100,21 +100,21 @@ public class CallVarExpr extends Expr {
   @Override
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return evalImpl(env, false, false);
+    return evalImpl(env, ctx, false, false);
   }
   
   
   @Override
   public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
-    return evalImpl(env, true, false);
+    return evalImpl(env, ctx, true, false);
   }
   
   
   @Override
   public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return evalImpl(env, false, true);
+    return evalImpl(env, ctx, false, true);
   }
   
   /**
@@ -122,13 +122,14 @@ public class CallVarExpr extends Expr {
    *
    * @param env the calling environment.
    *
+   * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalImpl(Env env, boolean isRef, boolean isCopy)
+  public V<? extends Value> evalImpl(Env env, FeatureExpr ctx, boolean isRef, boolean isCopy)
   {
     V<? extends Value> value = _name.eval(env, VHelper.noCtx());
     
-    V<Value[]> args = evalArgs(env, _args, VHelper.noCtx());
+    V<? extends ValueOrVar>[] args = evalArgs(env, _args, ctx);
 
     env.pushCall(this, NullValue.NULL, null);
 
@@ -136,11 +137,11 @@ public class CallVarExpr extends Expr {
       env.checkTimeout();
       
       if (isRef)
-        return value.flatMap((a)->a.callRef(env, VHelper.noCtx(), args.getOne()));
+        return value.flatMap((a)->a.callRef(env, VHelper.noCtx(), args));
       else if (isCopy)
-        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args.getOne()).map((b)->b.copyReturn()));
+        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args).map((b)->b.copyReturn()));
       else
-        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args.getOne()).map((b)->b.toValue()));
+        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args).map((b)->b.toValue()));
     } finally {
       env.popCall();
     }

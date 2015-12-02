@@ -30,10 +30,7 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.NullValue;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -94,10 +91,10 @@ public class ObjectNewVarExpr extends Expr {
 
     _fullArgs = _args;
 
-    Value []args = new Value[_args.length];
+    V<? extends ValueOrVar> []args = new V[_args.length];
 
     for (int i = 0; i < args.length; i++) {
-      args[i] = _args[i].eval(env, VHelper.noCtx()).getOne();
+      args[i] = _args[i].eval(env, VHelper.noCtx());
     }
 
     env.pushCall(this, NullValue.NULL, args);

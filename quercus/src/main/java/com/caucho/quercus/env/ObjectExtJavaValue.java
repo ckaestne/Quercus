@@ -135,7 +135,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
    */
   private Object createJavaObject(Env env)
   {
-    Value javaWrapper = _javaClassDef.callNew(env, VHelper.noCtx(), Value.NULL_ARGS).getOne();
+    Value javaWrapper = _javaClassDef.callNew(env, VHelper.noCtx(), Value.VNULL_ARGS).getOne();
     return javaWrapper.toJavaObject();
   }
 

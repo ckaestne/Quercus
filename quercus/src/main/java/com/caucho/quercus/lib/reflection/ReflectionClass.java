@@ -368,7 +368,7 @@ public class ReflectionClass
     return obj.isA(env, _name);
   }
 
-  public Value newInstance(Env env, @Optional Value []args)
+  public Value newInstance(Env env, @Optional V<? extends ValueOrVar> []args)
   {
     return _cls.callNew(env, args);
   }
@@ -376,10 +376,10 @@ public class ReflectionClass
   public Value newInstanceArgs(Env env, @Optional ArrayValue args)
   {
     if (args == null) {
-      return _cls.callNew(env, new Value []{});
+      return _cls.callNew(env, new V[]{});
     }
     else {
-      return _cls.callNew(env, args.getValueArray(env));
+      return _cls.callNew(env, VHelper.toVArray(args.getValueArray(env)));
     }
   }
 

@@ -1168,7 +1168,7 @@ public class QuercusClass extends NullValue {
 
     if (_isJavaWrapper) {
       // Java objects always need to call the constructor?
-      return _javaClassDef.callNew(env, VHelper.noCtx(), Value.NULL_ARGS).getOne();
+      return _javaClassDef.callNew(env, VHelper.noCtx(), Value.VNULL_ARGS).getOne();
     }
     else if (_javaClassDef != null && _javaClassDef.isDelegate()) {
       objectValue = new ObjectExtValue(env, this);

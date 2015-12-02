@@ -105,7 +105,7 @@ public class FunctionModule extends AbstractQuercusModule {
     // nam: 2012-04-30 this works for interpreted, but need to also work for compiled
     // chk: 2015-11-26 fix this, otherwise stackframes and consequently wordpress title is missing
     QuercusClass oldCallingClass = env.getCallingClass();
-    env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, args);
+    env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, VHelper.toVArray(args));
 
     try {
       return function.call(env, ctx, args).map((a)->a.copyReturn());
@@ -141,10 +141,10 @@ public class FunctionModule extends AbstractQuercusModule {
   @VariableArguments
   public static Value func_get_arg(Env env, int index)
   {
-    Value []args = env.getFunctionArgs();
+    V<? extends ValueOrVar>[] args = env.getFunctionArgs();
 
     if (0 <= index && index < args.length)
-      return args[index];
+      return args[index].getOne().toValue();
     else {
       // XXX: warning
       return NullValue.NULL;
@@ -157,12 +157,12 @@ public class FunctionModule extends AbstractQuercusModule {
   @VariableArguments
   public static Value func_get_args(Env env)
   {
-    Value []args = env.getFunctionArgs();
+    V<? extends ValueOrVar>[] args = env.getFunctionArgs();
 
     ArrayValue result = new ArrayValueImpl();
     if (args != null) {
       for (int i = 0; i < args.length; i++)
-        result.put(args[i]);
+        result.put(args[i].getOne().toValue());
     }
 
     return result;
@@ -174,7 +174,7 @@ public class FunctionModule extends AbstractQuercusModule {
   @VariableArguments
   public static Value func_num_args(Env env)
   {
-    Value []args = env.getFunctionArgs();
+    V<? extends ValueOrVar>[] args = env.getFunctionArgs();
 
     if (args != null && args.length > 0)
       return LongValue.create(args.length);

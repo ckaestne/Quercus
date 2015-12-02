@@ -33,6 +33,7 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.InterpretedClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -108,7 +109,7 @@ public class ThisMethodExpr extends ObjectMethodExpr {
   private Value evalPrivate(Env env, AbstractFunction fun, Value qThis,
                             Expr []argExprs)
   {
-    Value []args = evalArgs(env, argExprs, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar>[] args = evalArgs(env, argExprs, VHelper.noCtx());
 
     env.pushCall(this, qThis, args);
 
@@ -126,7 +127,7 @@ public class ThisMethodExpr extends ObjectMethodExpr {
                          StringValue methodName, int hashCode,
                          Expr []argExprs)
   {
-    Value []args = evalArgs(env, argExprs, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar>[] args = evalArgs(env, argExprs, VHelper.noCtx());
 
     env.pushCall(this, qThis, args);
 

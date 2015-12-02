@@ -38,6 +38,7 @@ import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.Arg;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class ReflectionMethod extends ReflectionFunctionAbstract
@@ -88,7 +89,7 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
     return null;
   }
 
-  public Value invoke(Env env, ObjectValue object, Value []args)
+  public Value invoke(Env env, ObjectValue object, V<? extends ValueOrVar>[]args)
   {
     return getFunction().callMethod(env, VHelper.noCtx(), object.getQuercusClass(), object, args).getOne();
   }
@@ -98,11 +99,11 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
     AbstractFunction fun = getFunction();
 
     Expr expr = new CallExpr(Location.UNKNOWN, env.createString(getName()), (Expr[]) null);
-    env.pushCall(expr, object, args.getValueArray(env));
+    env.pushCall(expr, object,VHelper.toVArray(args.getValueArray(env)));
 
     try {
       return fun.callMethod(env, VHelper.noCtx(), object.getQuercusClass(), object,
-                            args.getValueArray(env)).getOne();
+                           VHelper.toVArray(args.getValueArray(env))).getOne();
     }
     finally {
       env.popCall();

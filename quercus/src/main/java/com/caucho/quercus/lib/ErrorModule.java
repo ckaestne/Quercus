@@ -40,6 +40,7 @@ import com.caucho.quercus.module.IniDefinition;
 import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.util.L10N;
 import com.caucho.util.QDate;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -321,7 +322,7 @@ public class ErrorModule extends AbstractQuercusModule {
       //ArrayValueImpl args = evalArgsArray(env, callExpr);
 
       if (isPrintArgs) {
-        ArrayValueImpl args = new ArrayValueImpl(env.peekArgs(i));
+        ArrayValueImpl args = new ArrayValueImpl(VHelper.mapArray(Value.class, env.peekArgs(i), x->x.getOne().toValue()));
         call.put(env.createString("args"), args);
       }
     }
@@ -391,7 +392,7 @@ public class ErrorModule extends AbstractQuercusModule {
   {
     ArrayValueImpl args = new ArrayValueImpl();
 
-    Value []argsValues = callExpr.evalArguments(env);
+    ValueOrVar[] argsValues = callExpr.evalArguments(env);
 
     if (argsValues != null) {
       for (int index = 0; index < argsValues.length; index++) {

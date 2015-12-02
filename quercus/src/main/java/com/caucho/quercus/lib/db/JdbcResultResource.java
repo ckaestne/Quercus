@@ -31,6 +31,7 @@ package com.caucho.quercus.lib.db;
 
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -321,7 +322,7 @@ public class JdbcResultResource
    * @param env the PHP executing environment
    * @return an object representing the current fetched row
    */
-  protected Value fetchObject(Env env, String className, Value[] args)
+  protected Value fetchObject(Env env, String className, V<? extends ValueOrVar>[] args)
   {
     if (_rs == null) {
       return NullValue.NULL;
@@ -337,7 +338,7 @@ public class JdbcResultResource
           QuercusClass cls = env.findClass(className);
 
           if (args == null) {
-            args = Value.NULL_ARGS;
+            args = Value.VNULL_ARGS;
           }
 
           result = cls.callNew(env, args);

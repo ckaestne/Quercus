@@ -883,7 +883,7 @@ public class Xml {
 
       try {
         if (_startElementHandler != null) {
-          _startElementHandler.call(_env, VHelper.noCtx(),args);
+          _startElementHandler.call(_env, VHelper.noCtx(),VHelper.toVArray(args));
         }
         else {
           if (log.isLoggable(Level.FINER))

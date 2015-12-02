@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -99,6 +100,26 @@ public interface Callable {
     return call(env, ctx, new V[] {a1});
   }
 
+  @Deprecated
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2){
+    return this.call(env, ctx, V.one(a1), V.one(a2));
+  }
+  @Deprecated
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1){
+    return this.call(env, ctx, V.one(a1));
+  }
+  @Deprecated
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args){
+    return this.call(env, ctx, VHelper.toVArray(args));
+  }
+  @Deprecated
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3){
+    return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3));
+  }
+  @Deprecated
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5){
+    return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3), V.one(a4), V.one(a5));
+  }
   /**
    * Evaluates the callback with 2 arguments.
    *

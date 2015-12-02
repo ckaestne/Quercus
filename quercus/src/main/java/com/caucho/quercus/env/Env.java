@@ -303,7 +303,7 @@ public class Env
 
   private Expr [] _callStack;
   private Value [] _callThisStack;
-  private Value [][] _callArgStack;
+  private V<? extends ValueOrVar> [][] _callArgStack;
   private int _callStackTop;
 
   private QuercusClass _callingClass;
@@ -3183,12 +3183,12 @@ public class Env
   /**
    * Sets the calling function expression.
    */
-  public void pushCall(Expr call, Value obj, Value []args)
+  public void pushCall(Expr call, Value obj, V<? extends ValueOrVar>[] args)
   {
     if (_callStack == null) {
       _callStack = new Expr[256];
       _callThisStack = new Value[256];
-      _callArgStack = new Value[256][];
+      _callArgStack = new V[256][];
     }
 
     if (_callStack.length <= _callStackTop) {
@@ -3203,7 +3203,7 @@ public class Env
 
       _callThisStack = newThisStack;
 
-      Value [][]newArgStack = new Value[2 * _callArgStack.length][];
+      V<? extends ValueOrVar> [][]newArgStack = new V[2 * _callArgStack.length][];
       System.arraycopy(_callArgStack,
                        0, newArgStack,
                        0, _callArgStack.length);
@@ -3262,7 +3262,7 @@ public class Env
   /**
    * Peeks at the the top call.
    */
-  public Value []peekArgs(int depth)
+  public V<? extends ValueOrVar> []peekArgs(int depth)
   {
     if (_callStackTop - depth > 0)
       return _callArgStack[_callStackTop - depth - 1];
@@ -3497,7 +3497,7 @@ public class Env
 
     for (int i = 0; args != null && i < args.length; i++) {
       // php/3715, 3768
-      newArgs[i] = args[i].flatMap((a)->a.getValues().map((b)->b.copySaveFunArg()));
+      newArgs[i] = args[i].flatMap((a)->a._getValues().map((b)->b.copySaveFunArg()));
     }
 
     _functionArgs = newArgs;
@@ -4880,7 +4880,7 @@ public class Env
     StringValue message = createString(e.getMessage());
     Value []args = { message };
 
-    Value value = cls.callNew(this, VHelper.toVarray(args));
+    Value value = cls.callNew(this, VHelper.toVArray(args));
 
     StackTraceElement elt = e.getStackTrace()[0];
 

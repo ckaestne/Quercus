@@ -124,7 +124,7 @@ public class ClassVarMethodExpr extends Expr {
 
     return cl.callMethod(env, ctx, env.getThis(),
                          nameV, hash,
-                         evalArgs(env, _args, VHelper.noCtx()).getOne());
+                         evalArgs(env, _args, VHelper.noCtx()));
   }
 
   public String toString()

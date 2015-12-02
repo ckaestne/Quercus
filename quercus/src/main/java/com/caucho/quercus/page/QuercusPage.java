@@ -161,7 +161,7 @@ abstract public class QuercusPage
     } catch (QuercusLanguageException e) {
       if (env.getExceptionHandler() != null) {
         try {
-          env.getExceptionHandler().call(env, VHelper.noCtx(), e.getValue());
+          env.getExceptionHandler().call(env, VHelper.noCtx(), V.one(e.getValue()));
         }
         catch (QuercusLanguageException e2) {
           uncaughtExceptionError(env, e2);

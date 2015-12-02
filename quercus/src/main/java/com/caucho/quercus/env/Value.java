@@ -56,14 +56,14 @@ import java.util.*;
  * Represents a PHP expression value.
  */
 @SuppressWarnings("serial")
-abstract public class Value implements java.io.Serializable, ValueOrVar
-{
+abstract public class Value implements java.io.Serializable, ValueOrVar {
   protected static final L10N L = new L10N(Value.class);
 
-  private static final  V<? extends ValueOrVar> []NULL_ARG_VALUES = new V[0];
+  private static final V<? extends ValueOrVar>[] NULL_ARG_VALUES = new V[0];
 
-  public static final Value []NULL_VALUE_ARRAY = new Value[0];
-  public static final V<? extends ValueOrVar> []NULL_ARGS = new V[0];
+  public static final Value[] NULL_VALUE_ARRAY = new Value[0];
+  public static final Value[] NULL_ARGS = new Value[0];
+  public static final V<? extends ValueOrVar>[] VNULL_ARGS = new V[0];
 
   //
   // Properties
@@ -72,24 +72,21 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Returns the value's class name.
    */
-  public String getClassName()
-  {
+  public String getClassName() {
     return getType();
   }
 
   /**
    * Returns the backing QuercusClass.
    */
-  public QuercusClass getQuercusClass()
-  {
+  public QuercusClass getQuercusClass() {
     return null;
   }
 
   /**
    * Returns the Quercus class for this obj/name.
    */
-  public QuercusClass findQuercusClass(Env env)
-  {
+  public QuercusClass findQuercusClass(Env env) {
     QuercusClass cls = getQuercusClass();
 
     if (cls != null) {
@@ -104,8 +101,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Returns the called class
    */
-  public Value getCalledClass(Env env)
-  {
+  public Value getCalledClass(Env env) {
     QuercusClass qClass = getQuercusClass();
 
     if (qClass != null)
@@ -124,25 +120,21 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Returns true for an implementation of a class
    */
-  public boolean isA(Env env, String name)
-  {
+  public boolean isA(Env env, String name) {
     return false;
   }
 
   /**
    * Returns true for an implementation of a class
    */
-  final public boolean isA(Env env, Value value)
-  {
+  final public boolean isA(Env env, Value value) {
     if (value.isObject()) {
       // php/03p7
       return isA(env, value.getClassName());
-    }
-    else if (value instanceof QuercusClass) {
+    } else if (value instanceof QuercusClass) {
       // php/1277
       return isA(env, value.getClassName());
-    }
-    else {
+    } else {
       return isA(env, value.toJavaString());
     }
   }
@@ -150,142 +142,124 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Checks if 'this' is a valid protected call for 'className'
    */
-  public void checkProtected(Env env, String className)
-  {
+  public void checkProtected(Env env, String className) {
   }
 
   /**
    * Checks if 'this' is a valid private call for 'className'
    */
-  public void checkPrivate(Env env, String className)
-  {
+  public void checkPrivate(Env env, String className) {
   }
 
   /**
    * Returns the ValueType.
    */
-  public ValueType getValueType()
-  {
+  public ValueType getValueType() {
     return ValueType.VALUE;
   }
 
   /**
    * Returns true for an array.
    */
-  public boolean isArray()
-  {
+  public boolean isArray() {
     return false;
   }
 
   /**
    * Returns true for a double-value.
    */
-  public boolean isDoubleConvertible()
-  {
+  public boolean isDoubleConvertible() {
     return false;
   }
 
   /**
    * Returns true for a long-value.
    */
-  public boolean isLongConvertible()
-  {
+  public boolean isLongConvertible() {
     return false;
   }
 
   /**
    * Returns true for a long-value.
    */
-  public boolean isLong()
-  {
+  public boolean isLong() {
     return false;
   }
 
   /**
    * Returns true for a long-value.
    */
-  public boolean isDouble()
-  {
+  public boolean isDouble() {
     return false;
   }
 
   /**
    * Returns true for a null.
    */
-  public boolean isNull()
-  {
+  public boolean isNull() {
     return false;
   }
 
   /**
    * Returns true for a number.
    */
-  public boolean isNumberConvertible()
-  {
+  public boolean isNumberConvertible() {
     return isLongConvertible() || isDoubleConvertible();
   }
 
   /**
    * Matches is_numeric
    */
-  public boolean isNumeric()
-  {
+  public boolean isNumeric() {
     return false;
   }
 
   /**
    * Returns true for an object.
    */
-  public boolean isObject()
-  {
+  public boolean isObject() {
     return false;
   }
 
   /**
    * Returns true for a resource.
    */
-  public boolean isResource()
-  {
+  public boolean isResource() {
     return false;
   }
 
   /**
    * Returns true for a StringValue.
    */
-  public boolean isString()
-  {
+  public boolean isString() {
     return false;
   }
 
   /**
    * Returns true for a BinaryValue.
    */
-  public boolean isBinary()
-  {
+  public boolean isBinary() {
     return false;
   }
 
   /**
    * Returns true for a UnicodeValue.
    */
-  public boolean isUnicode()
-  {
+  public boolean isUnicode() {
     return false;
   }
 
   /**
    * Returns true for a BooleanValue
    */
-  public boolean isBoolean()
-  {
+  public boolean isBoolean() {
     return false;
   }
 
   /**
    * Returns true for a DefaultValue
    */
-  public boolean isDefault()
-  {
+  public boolean isDefault() {
     return false;
   }
 
@@ -296,120 +270,105 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Cost to convert to a boolean
    */
-  public int toBooleanMarshalCost()
-  {
+  public int toBooleanMarshalCost() {
     return Marshal.COST_TO_BOOLEAN;
   }
 
   /**
    * Cost to convert to a byte
    */
-  public int toByteMarshalCost()
-  {
+  public int toByteMarshalCost() {
     return Marshal.COST_INCOMPATIBLE;
   }
 
   /**
    * Cost to convert to a short
    */
-  public int toShortMarshalCost()
-  {
+  public int toShortMarshalCost() {
     return Marshal.COST_INCOMPATIBLE;
   }
 
   /**
    * Cost to convert to an integer
    */
-  public int toIntegerMarshalCost()
-  {
+  public int toIntegerMarshalCost() {
     return Marshal.COST_INCOMPATIBLE;
   }
 
   /**
    * Cost to convert to a long
    */
-  public int toLongMarshalCost()
-  {
+  public int toLongMarshalCost() {
     return Marshal.COST_INCOMPATIBLE;
   }
 
   /**
    * Cost to convert to a double
    */
-  public int toDoubleMarshalCost()
-  {
+  public int toDoubleMarshalCost() {
     return Marshal.COST_INCOMPATIBLE;
   }
 
   /**
    * Cost to convert to a float
    */
-  public int toFloatMarshalCost()
-  {
+  public int toFloatMarshalCost() {
     return toDoubleMarshalCost() + 10;
   }
 
   /**
    * Cost to convert to a character
    */
-  public int toCharMarshalCost()
-  {
+  public int toCharMarshalCost() {
     return Marshal.COST_TO_CHAR;
   }
 
   /**
    * Cost to convert to a string
    */
-  public int toStringMarshalCost()
-  {
+  public int toStringMarshalCost() {
     return Marshal.COST_TO_STRING;
   }
 
   /**
    * Cost to convert to a byte[]
    */
-  public int toByteArrayMarshalCost()
-  {
+  public int toByteArrayMarshalCost() {
     return Marshal.COST_TO_BYTE_ARRAY;
   }
 
   /**
    * Cost to convert to a char[]
    */
-  public int toCharArrayMarshalCost()
-  {
+  public int toCharArrayMarshalCost() {
     return Marshal.COST_TO_CHAR_ARRAY;
   }
 
   /**
    * Cost to convert to a Java object
    */
-  public int toJavaObjectMarshalCost()
-  {
+  public int toJavaObjectMarshalCost() {
     return Marshal.COST_TO_JAVA_OBJECT;
   }
 
   /**
    * Cost to convert to a binary value
    */
-  public int toBinaryValueMarshalCost()
-  {
+  public int toBinaryValueMarshalCost() {
     return Marshal.COST_TO_STRING + 1;
   }
 
   /**
    * Cost to convert to a StringValue
    */
-  public int toStringValueMarshalCost()
-  {
+  public int toStringValueMarshalCost() {
     return Marshal.COST_TO_STRING + 1;
   }
 
   /**
    * Cost to convert to a UnicodeValue
    */
-  public int toUnicodeValueMarshalCost()
-  {
+  public int toUnicodeValueMarshalCost() {
     return Marshal.COST_TO_STRING + 1;
   }
 
@@ -420,54 +379,47 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Returns true if the value is set.
    */
-  public boolean isset()
-  {
+  public boolean isset() {
     return true;
   }
 
   /**
    * Returns true if the value is empty
    */
-  public boolean isEmpty()
-  {
+  public boolean isEmpty() {
     return false;
   }
 
   /**
    * Returns true if the value is empty
    */
-  public boolean isEmpty(Env env, Value index)
-  {
+  public boolean isEmpty(Env env, Value index) {
     return isEmpty();
   }
 
   /**
    * Returns true if there are more elements.
    */
-  public boolean hasCurrent()
-  {
+  public boolean hasCurrent() {
     return false;
   }
 
   /**
    * Returns true for equality
    */
-  public Value eqValue(Value rValue)
-  {
+  public Value eqValue(Value rValue) {
     return eq(rValue) ? BooleanValue.TRUE : BooleanValue.FALSE;
   }
 
   /**
    * Returns true for equality
    */
-  public boolean eq(Value rValue)
-  {
+  public boolean eq(Value rValue) {
     if (rValue.isArray())
       return false;
     else if (rValue.isObject()) {
       return rValue.eq(this);
-    }
-    else if (rValue.isBoolean())
+    } else if (rValue.isBoolean())
       return toBoolean() == rValue.toBoolean();
     else if (isLongConvertible() && rValue.isLongConvertible())
       return toLong() == rValue.toLong();
@@ -480,8 +432,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Returns true for equality
    */
-  public boolean eql(Value rValue)
-  {
+  public boolean eql(Value rValue) {
     return this == rValue.toValue();
   }
 
@@ -489,8 +440,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    * Returns a negative/positive integer if this Value is
    * lessthan/greaterthan rValue.
    */
-  public int cmp(Value rValue)
-  {
+  public int cmp(Value rValue) {
     // This is tricky: implemented according to Table 15-5 of
     // http://us2.php.net/manual/en/language.operators.comparison.php
 
@@ -507,12 +457,11 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
       return ((StringValue) lVal).cmpString((StringValue) rVal);
 
     if (lVal instanceof NullValue
-        || lVal instanceof BooleanValue
-        || rVal instanceof NullValue
-        || rVal instanceof BooleanValue)
-    {
+            || lVal instanceof BooleanValue
+            || rVal instanceof NullValue
+            || rVal instanceof BooleanValue) {
       boolean lBool = toBoolean();
-      boolean rBool    = rValue.toBoolean();
+      boolean rBool = rValue.toBoolean();
 
       if (!lBool && rBool) return -1;
       if (lBool && !rBool) return 1;
@@ -523,9 +472,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
       return ((ObjectValue) lVal).cmpObject((ObjectValue) rVal);
 
     if ((lVal instanceof StringValue
-         || lVal instanceof NumberValue
-         || lVal instanceof ResourceValue)
-        && (rVal instanceof StringValue
+            || lVal instanceof NumberValue
+            || lVal instanceof ResourceValue)
+            && (rVal instanceof StringValue
             || rVal instanceof NumberValue
             || rVal instanceof ResourceValue))
       return NumberValue.compareNum(lVal, rVal);
@@ -537,38 +486,34 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
 
     // XXX: proper default case?
     throw new RuntimeException(
-      "values are incomparable: " + lVal + " <=> " + rVal);
+            "values are incomparable: " + lVal + " <=> " + rVal);
   }
 
   /**
    * Returns true for less than
    */
-  public boolean lt(Value rValue)
-  {
+  public boolean lt(Value rValue) {
     return cmp(rValue) < 0;
   }
 
   /**
    * Returns true for less than or equal to
    */
-  public boolean leq(Value rValue)
-  {
+  public boolean leq(Value rValue) {
     return cmp(rValue) <= 0;
   }
 
   /**
    * Returns true for greater than
    */
-  public boolean gt(Value rValue)
-  {
+  public boolean gt(Value rValue) {
     return cmp(rValue) > 0;
   }
 
   /**
    * Returns true for greater than or equal to
    */
-  public boolean geq(Value rValue)
-  {
+  public boolean geq(Value rValue) {
     return cmp(rValue) >= 0;
   }
 
@@ -576,83 +521,70 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   // Conversions
   //
 
-  public static long toLong(boolean b)
-  {
+  public static long toLong(boolean b) {
     return b ? 1 : 0;
   }
 
-  public static long toLong(double d)
-  {
+  public static long toLong(double d) {
     return (long) d;
   }
 
-  public static long toLong(long l)
-  {
+  public static long toLong(long l) {
     return l;
   }
 
-  public static long toLong(CharSequence s)
-  {
+  public static long toLong(CharSequence s) {
     return StringValue.parseLong(s);
   }
 
-  public static double toDouble(boolean b)
-  {
+  public static double toDouble(boolean b) {
     return b ? 1.0 : 0.0;
   }
 
-  public static double toDouble(double d)
-  {
+  public static double toDouble(double d) {
     return d;
   }
 
-  public static double toDouble(long l)
-  {
+  public static double toDouble(long l) {
     return l;
   }
 
-  public static double toDouble(CharSequence s)
-  {
+  public static double toDouble(CharSequence s) {
     return StringValue.toDouble(s.toString());
   }
 
   /**
    * Converts to a boolean.
    */
-  public boolean toBoolean()
-  {
+  public boolean toBoolean() {
     return true;
   }
 
   /**
    * Converts to a long.
    */
-  public long toLong()
-  {
+  public long toLong() {
     return toBoolean() ? 1 : 0;
   }
 
   /**
    * Converts to an int
    */
-  public int toInt()
-  {
+  public int toInt() {
     return (int) toLong();
   }
 
   /**
    * Converts to a double.
    */
-  public double toDouble()
-  {
+  public double toDouble() {
     return 0;
   }
 
   /**
    * Converts to a char
    */
-  public char toChar()
-  {
+  public char toChar() {
     String s = toString();
 
     if (s == null || s.length() < 1)
@@ -666,26 +598,23 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    *
    * @param env
    */
-  public StringValue toString(Env env)
-  {
+  public StringValue toString(Env env) {
     return toStringValue(env);
   }
 
   /**
    * Converts to an array.
    */
-  public ArrayValue toArray()
-  {
+  public ArrayValue toArray() {
     return new ArrayValueImpl().append(EnvVar._gen(this));
   }
 
   /**
    * Converts to an array if null.
    */
-  public Value toAutoArray()
-  {
+  public Value toAutoArray() {
     Env.getCurrent().warning(L.l("'{0}' cannot be used as an array.",
-                                 toDebugString()));
+            toDebugString()));
 
     return this;
   }
@@ -693,10 +622,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Casts to an array.
    */
-  public ArrayValue toArrayValue(Env env)
-  {
+  public ArrayValue toArrayValue(Env env) {
     env.warning(L.l("'{0}' ({1}) is not assignable to ArrayValue",
-                    this, getType()));
+            this, getType()));
 
     return null;
   }
@@ -704,16 +632,14 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to an object if null.
    */
-  public Value toAutoObject(Env env)
-  {
+  public Value toAutoObject(Env env) {
     return this;
   }
 
   /**
    * Converts to an object.
    */
-  public Value toObject(Env env)
-  {
+  public Value toObject(Env env) {
     ObjectValue obj = env.createObject();
 
     obj.putField(env, env.createString("scalar"), this);
@@ -724,18 +650,16 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a java object.
    */
-  public Object toJavaObject()
-  {
+  public Object toJavaObject() {
     return null;
   }
 
   /**
    * Converts to a java object.
    */
-  public Object toJavaObject(Env env, Class<?> type)
-  {
+  public Object toJavaObject(Env env, Class<?> type) {
     env.warning(L.l("Can't convert {0} to Java {1}",
-                    getClass().getName(), type.getName()));
+            getClass().getName(), type.getName()));
 
     return null;
   }
@@ -743,10 +667,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a java object.
    */
-  public Object toJavaObjectNotNull(Env env, Class<?> type)
-  {
+  public Object toJavaObjectNotNull(Env env, Class<?> type) {
     env.warning(L.l("Can't convert {0} to Java {1}",
-                    getClass().getName(), type.getName()));
+            getClass().getName(), type.getName()));
 
     return null;
   }
@@ -754,80 +677,70 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a java boolean object.
    */
-  public Boolean toJavaBoolean()
-  {
+  public Boolean toJavaBoolean() {
     return toBoolean() ? Boolean.TRUE : Boolean.FALSE;
   }
 
   /**
    * Converts to a java byte object.
    */
-  public Byte toJavaByte()
-  {
+  public Byte toJavaByte() {
     return new Byte((byte) toLong());
   }
 
   /**
    * Converts to a java short object.
    */
-  public Short toJavaShort()
-  {
+  public Short toJavaShort() {
     return new Short((short) toLong());
   }
 
   /**
    * Converts to a java Integer object.
    */
-  public Integer toJavaInteger()
-  {
+  public Integer toJavaInteger() {
     return new Integer((int) toLong());
   }
 
   /**
    * Converts to a java Long object.
    */
-  public Long toJavaLong()
-  {
+  public Long toJavaLong() {
     return new Long((int) toLong());
   }
 
   /**
    * Converts to a java Float object.
    */
-  public Float toJavaFloat()
-  {
+  public Float toJavaFloat() {
     return new Float((float) toDouble());
   }
 
   /**
    * Converts to a java Double object.
    */
-  public Double toJavaDouble()
-  {
+  public Double toJavaDouble() {
     return new Double(toDouble());
   }
 
   /**
    * Converts to a java Character object.
    */
-  public Character toJavaCharacter()
-  {
+  public Character toJavaCharacter() {
     return new Character(toChar());
   }
 
   /**
    * Converts to a java String object.
    */
-  public String toJavaString()
-  {
+  public String toJavaString() {
     return toString();
   }
 
   /**
    * Converts to a java Collection object.
    */
-  public Collection<?> toJavaCollection(Env env, Class<?> type)
-  {
+  public Collection<?> toJavaCollection(Env env, Class<?> type) {
     env.warning(L.l("Can't convert {0} to Java {1}",
             getClass().getName(), type.getName()));
 
@@ -837,8 +750,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a java List object.
    */
-  public List<?> toJavaList(Env env, Class<?> type)
-  {
+  public List<?> toJavaList(Env env, Class<?> type) {
     env.warning(L.l("Can't convert {0} to Java {1}",
             getClass().getName(), type.getName()));
 
@@ -848,8 +760,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a java Map object.
    */
-  public Map<?,?> toJavaMap(Env env, Class<?> type)
-  {
+  public Map<?, ?> toJavaMap(Env env, Class<?> type) {
     env.warning(L.l("Can't convert {0} to Java {1}",
             getClass().getName(), type.getName()));
 
@@ -859,8 +770,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a Java Calendar.
    */
-  public Calendar toJavaCalendar()
-  {
+  public Calendar toJavaCalendar() {
     Calendar cal = Calendar.getInstance();
 
     cal.setTimeInMillis(toLong());
@@ -871,20 +781,17 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a Java Date.
    */
-  public Date toJavaDate()
-  {
+  public Date toJavaDate() {
     return new Date(toLong());
   }
 
   /**
    * Converts to a Java URL.
    */
-  public URL toJavaURL(Env env)
-  {
+  public URL toJavaURL(Env env) {
     try {
       return new URL(toString());
-    }
-    catch (MalformedURLException e) {
+    } catch (MalformedURLException e) {
       env.warning(e.getMessage());
       return null;
     }
@@ -893,8 +800,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a Java Enum.
    */
-  public Enum toJavaEnum(Env env, Class cls)
-  {
+  public Enum toJavaEnum(Env env, Class cls) {
     String s = toString();
 
     if (s == null) {
@@ -903,8 +809,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
 
     try {
       return Enum.valueOf(cls, s);
-    }
-    catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       env.warning(e);
 
       return null;
@@ -914,24 +819,21 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a Java BigDecimal.
    */
-  public BigDecimal toBigDecimal()
-  {
+  public BigDecimal toBigDecimal() {
     return new BigDecimal(toString());
   }
 
   /**
    * Converts to a Java BigInteger.
    */
-  public BigInteger toBigInteger()
-  {
+  public BigInteger toBigInteger() {
     return new BigInteger(toString());
   }
 
   /**
    * Converts to an exception.
    */
-  public QuercusException toException(Env env, String file, int line)
-  {
+  public QuercusException toException(Env env, String file, int line) {
     putField(env, env.createString("file"), env.createString(file));
     putField(env, env.createString("line"), LongValue.create(line));
 
@@ -941,129 +843,117 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a raw value.
    */
-  public Value toValue()
-  {
+  public Value toValue() {
     return this;
   }
 
   /**
    * Converts to a key.
    */
-  public Value toKey()
-  {
+  public Value toKey() {
     throw new QuercusRuntimeException(L.l("{0} is not a valid key", this));
   }
 
   /**
    * Convert to a ref.
    */
-  public Value toRef()
-  {
+  public Value toRef() {
     return this;
   }
 
   /**
    * Convert to a function argument value, e.g. for
-   *
+   * <p>
    * function foo($a)
-   *
+   * <p>
    * where $a is never assigned or modified
    */
-  public Value toLocalValueReadOnly()
-  {
+  public Value toLocalValueReadOnly() {
     return this;
   }
 
   /**
    * Convert to a function argument value, e.g. for
-   *
+   * <p>
    * function foo($a)
-   *
+   * <p>
    * where $a is never assigned, but might be modified, e.g. $a[3] = 9
    */
-  public Value toLocalValue()
-  {
+  public Value toLocalValue() {
     return this;
   }
 
   /**
    * Convert to a function argument value, e.g. for
-   *
+   * <p>
    * function foo($a)
-   *
+   * <p>
    * where $a may be assigned.
    */
-  public Value toLocalRef()
-  {
+  public Value toLocalRef() {
     return this;
   }
 
   /**
    * Convert to a function argument value, e.g. for
-   *
+   * <p>
    * function foo($a)
-   *
+   * <p>
    * where $a is used as a variable in the function
    */
-  public Var toLocalVar()
-  {
+  public Var toLocalVar() {
     return toLocalRef().toVar();
   }
 
   /**
    * Convert to a function argument reference value, e.g. for
-   *
+   * <p>
    * function foo(&$a)
-   *
+   * <p>
    * where $a is used as a variable in the function
    */
-  public Var toLocalVarDeclAsRef()
-  {
+  public Var toLocalVarDeclAsRef() {
     return new Var(V.one(this));
   }
 
   /**
    * Converts to a local $this, which can depend on the calling class
    */
-  public Value toLocalThis(QuercusClass qClass)
-  {
+  public Value toLocalThis(QuercusClass qClass) {
     return this;
   }
 
   /**
    * Convert to a function argument reference value, e.g. for
-   *
+   * <p>
    * function foo(&$a)
-   *
+   * <p>
    * where $a is never assigned in the function
    */
-  public Value toRefValue()
-  {
+  public Value toRefValue() {
     return this;
   }
 
   /**
    * Converts to a Var.
    */
-  public Var toVar()
-  {
+  public Var toVar() {
     return new Var(V.one(this));
   }
 
   /**
    * Convert to a function argument reference value, e.g. for
-   *
+   * <p>
    * function foo(&$a)
-   *
+   * <p>
    * where $a is used as a variable in the function
    */
-  public Value toArgRef()
-  {
+  public Value toArgRef() {
     Env.getCurrent()
-      .warning(L.l(
-        "'{0}' is an invalid reference, because only "
-        + "variables may be passed by reference.",
-        this));
+            .warning(L.l(
+                    "'{0}' is an invalid reference, because only "
+                            + "variables may be passed by reference.",
+                    this));
 
     return NullValue.NULL;
   }
@@ -1071,16 +961,14 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a StringValue.
    */
-  public StringValue toStringValue()
-  {
+  public StringValue toStringValue() {
     return toStringValue(Env.getInstance());
   }
 
   /**
    * Converts to a StringValue.
    */
-  public StringValue toStringValue(Env env)
-  {
+  public StringValue toStringValue(Env env) {
     return toStringBuilder(env);
   }
 
@@ -1089,8 +977,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    * still return a StringValue. For unicode.semantics=true, this will
    * return a UnicodeStringValue.
    */
-  public StringValue toUnicode(Env env)
-  {
+  public StringValue toUnicode(Env env) {
     return toUnicodeValue(env);
   }
 
@@ -1098,8 +985,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    * Converts to a UnicodeValue for marshaling, so it will create a
    * UnicodeValue event when unicode.semantics=false.
    */
-  public StringValue toUnicodeValue()
-  {
+  public StringValue toUnicodeValue() {
     return toUnicodeValue(Env.getInstance());
   }
 
@@ -1107,8 +993,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    * Converts to a UnicodeValue for marshaling, so it will create a
    * UnicodeValue event when unicode.semantics=false.
    */
-  public StringValue toUnicodeValue(Env env)
-  {
+  public StringValue toUnicodeValue(Env env) {
     // php/0ci0
     return new UnicodeBuilderValue(env.createString(toString()));
   }
@@ -1116,24 +1001,21 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Converts to a BinaryValue.
    */
-  public StringValue toBinaryValue()
-  {
+  public StringValue toBinaryValue() {
     return toBinaryValue(Env.getInstance());
   }
 
   /**
    * Converts to a BinaryValue.
    */
-  public StringValue toBinaryValue(String charset)
-  {
+  public StringValue toBinaryValue(String charset) {
     return toBinaryValue();
   }
 
   /**
    * Converts to a BinaryValue.
    */
-  public StringValue toBinaryValue(Env env)
-  {
+  public StringValue toBinaryValue(Env env) {
     StringValue bb = env.createBinaryBuilder();
 
     bb.append(this);
@@ -1169,95 +1051,83 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    *
    * @return InputStream
    */
-  public InputStream toInputStream()
-  {
+  public InputStream toInputStream() {
     return new CharSequenceInputStream(toString());
   }
 
   /**
    * Converts to a string builder
    */
-  public StringValue toStringBuilder()
-  {
+  public StringValue toStringBuilder() {
     return toStringBuilder(Env.getInstance());
   }
 
   /**
    * Converts to a string builder
    */
-  public StringValue toStringBuilder(Env env)
-  {
+  public StringValue toStringBuilder(Env env) {
     return env.createUnicodeBuilder().appendUnicode(this);
   }
 
   /**
    * Converts to a string builder
    */
-  public StringValue toStringBuilder(Env env, Value value)
-  {
+  public StringValue toStringBuilder(Env env, Value value) {
     return toStringBuilder(env).appendUnicode(value);
   }
 
   /**
    * Converts to a string builder
    */
-  public StringValue toStringBuilder(Env env, StringValue value)
-  {
+  public StringValue toStringBuilder(Env env, StringValue value) {
     return toStringBuilder(env).appendUnicode(value);
   }
 
   /**
    * Converts to a string builder
    */
-  public StringValue copyStringBuilder()
-  {
+  public StringValue copyStringBuilder() {
     return toStringBuilder();
   }
 
   /**
    * Converts to a long vaule
    */
-  public LongValue toLongValue()
-  {
+  public LongValue toLongValue() {
     return LongValue.create(toLong());
   }
 
   /**
    * Converts to a double vaule
    */
-  public DoubleValue toDoubleValue()
-  {
+  public DoubleValue toDoubleValue() {
     return new DoubleValue(toDouble());
   }
 
   /**
    * Returns true for a callable object.
    */
-  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Value nameRef)
-  {
+  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Value nameRef) {
     return false;
   }
 
   /**
    * Returns the callable's name for is_callable()
    */
-  public String getCallableName()
-  {
+  public String getCallableName() {
     return null;
   }
 
   /**
    * Converts to a callable
    */
-  public Callable toCallable(Env env, boolean isOptional)
-  {
-    if (! isOptional) {
+  public Callable toCallable(Env env, boolean isOptional) {
+    if (!isOptional) {
       env.warning(L.l("Callable: '{0}' is not a valid callable argument",
-                      toString()));
+              toString()));
 
       return new CallbackError(toString());
-    }
-    else {
+    } else {
       return null;
     }
 
@@ -1270,56 +1140,49 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Append to a string builder.
    */
-  public StringValue appendTo(UnicodeBuilderValue sb)
-  {
+  public StringValue appendTo(UnicodeBuilderValue sb) {
     return sb.append(toString());
   }
 
   /**
    * Append to a binary builder.
    */
-  public StringValue appendTo(StringBuilderValue sb)
-  {
+  public StringValue appendTo(StringBuilderValue sb) {
     return sb.append(toString());
   }
 
   /**
    * Append to a binary builder.
    */
-  public StringValue appendTo(BinaryBuilderValue sb)
-  {
+  public StringValue appendTo(BinaryBuilderValue sb) {
     return sb.appendBytes(toString());
   }
 
   /**
    * Append to a binary builder.
    */
-  public StringValue appendTo(LargeStringBuilderValue sb)
-  {
+  public StringValue appendTo(LargeStringBuilderValue sb) {
     return sb.append(toString());
   }
 
   /**
    * Copy for assignment.
    */
-  public Value copy()
-  {
+  public Value copy() {
     return this;
   }
 
   /**
    * Copy as an array item
    */
-  public Value copyArrayItem()
-  {
+  public Value copyArrayItem() {
     return copy();
   }
 
   /**
    * Copy as a return value
    */
-  public Value copyReturn()
-  {
+  public Value copyReturn() {
     // php/3a5d
 
     return this;
@@ -1328,128 +1191,112 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Copy for serialization
    */
-  public final Value copy(Env env)
-  {
-    return copy(env, new IdentityHashMap<Value,EnvVar>());
+  public final Value copy(Env env) {
+    return copy(env, new IdentityHashMap<Value, EnvVar>());
   }
 
   /**
    * Copy for serialization
    */
-  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
-  {
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map) {
     return this;
   }
 
   /**
    * Copy for serialization
    */
-  public Value copyTree(Env env, CopyRoot root)
-  {
+  public Value copyTree(Env env, CopyRoot root) {
     return this;
   }
 
   /**
    * Clone for the clone keyword
    */
-  public Value clone(Env env)
-  {
+  public Value clone(Env env) {
     return this;
   }
 
   /**
    * Copy for saving a method's arguments.
    */
-  public Value copySaveFunArg()
-  {
+  public Value copySaveFunArg() {
     return copy();
   }
 
   /**
    * Returns the type.
    */
-  public String getType()
-  {
+  public String getType() {
     return "value";
   }
 
   /**
    * Returns the SPL object hash.
    */
-  public StringValue getObjectHash(Env env)
-  {
+  public StringValue getObjectHash(Env env) {
     return env.getEmptyString();
   }
 
   /**
    * Returns the resource type.
    */
-  public String getResourceType()
-  {
+  public String getResourceType() {
     return null;
   }
 
   /**
    * Returns the current key
    */
-  public Value key()
-  {
+  public Value key() {
     return BooleanValue.FALSE;
   }
 
   /**
    * Returns the current value
    */
-  public Value current()
-  {
+  public Value current() {
     return BooleanValue.FALSE;
   }
 
   /**
    * Returns the next value
    */
-  public Value next()
-  {
+  public Value next() {
     return BooleanValue.FALSE;
   }
 
   /**
    * Returns the previous value
    */
-  public Value prev()
-  {
+  public Value prev() {
     return BooleanValue.FALSE;
   }
 
   /**
    * Returns the end value.
    */
-  public Value end()
-  {
+  public Value end() {
     return BooleanValue.FALSE;
   }
 
   /**
    * Returns the array pointer.
    */
-  public Value reset()
-  {
+  public Value reset() {
     return BooleanValue.FALSE;
   }
 
   /**
    * Shuffles the array.
    */
-  public Value shuffle()
-  {
+  public Value shuffle() {
     return BooleanValue.FALSE;
   }
 
   /**
    * Pops the top array element.
    */
-  public Value pop(Env env)
-  {
+  public Value pop(Env env) {
     env.warning("cannot pop a non-array");
 
     return NullValue.NULL;
@@ -1458,8 +1305,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Finds the method name.
    */
-  public AbstractFunction findFunction(StringValue methodName)
-  {
+  public AbstractFunction findFunction(StringValue methodName) {
     return null;
   }
 
@@ -1470,133 +1316,125 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   /**
    * Evaluates the function.
    */
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
-  {
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
     Callable call = toCallable(env, false);
 
     if (call != null)
       return call.call(env, ctx, args);
     else
       return VHelper.toV(env.warning(L.l("{0} is not a valid function",
-                             this)));
+              this)));
   }
 
   /**
    * Evaluates the function, returning a reference.
    */
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
-  {
+  public V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
     AbstractFunction fun = env.getFunction(this, ctx).getOne();
 
     if (fun != null)
       return fun.callRef(env, VHelper.noCtx(), args);
     else
       return VHelper.toV(env.warning(L.l("{0} is not a valid function",
-                             this)));
+              this)));
   }
 
   /**
    * Evaluates the function, returning a copy
    */
-  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
-  {
+  public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
     AbstractFunction fun = env.getFunction(this, ctx).getOne();
 
     if (fun != null)
       return fun.callCopy(env, VHelper.noCtx(), args);
     else
       return VHelper.toV(env.warning(L.l("{0} is not a valid function",
-                             this)));
+              this)));
   }
 
 
   /**
    * Evaluates the function.
    */
-  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx)
-  {
+  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx) {
     return callRef(env, VHelper.noCtx(), Callable.NULL_ARG_VALUES);
   }
 
+
+
+  @Deprecated
+  public final V<? extends Value> call(Env env, FeatureExpr ctx, Value... args) {
+    return call(env, VHelper.noCtx(), VHelper.toVArray(args));
+  }
   /**
    * Evaluates the function with an argument .
    */
-  public final V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1)
-  {
-    return call(env, VHelper.noCtx(), new V[] { a1 });
+  public final V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1) {
+    return call(env, VHelper.noCtx(), new V[]{a1});
   }
 
   /**
    * Evaluates the function with an argument .
    */
-  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1)
-  {
-    return callRef(env, ctx, new V[] { a1 });
+  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1) {
+    return callRef(env, ctx, new V[]{a1});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
-  {
-    return call(env, ctx, new V[] { a1, a2 });
+  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2) {
+    return call(env, ctx, new V[]{a1, a2});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
-  {
-    return callRef(env, ctx, new V[] { a1, a2 });
+  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2) {
+    return callRef(env, ctx, new V[]{a1, a2});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
-  {
-    return call(env, ctx, new V[] { a1, a2, a3 });
+  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3) {
+    return call(env, ctx, new V[]{a1, a2, a3});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
-  {
-    return callRef(env, ctx, new V[] { a1, a2, a3 });
+  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3) {
+    return callRef(env, ctx, new V[]{a1, a2, a3});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
-  {
-    return call(env, ctx, new V[] { a1, a2, a3, a4 });
+  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4) {
+    return call(env, ctx, new V[]{a1, a2, a3, a4});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
-  {
-    return callRef(env, ctx, new V[] { a1, a2, a3, a4 });
+  public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4) {
+    return callRef(env, ctx, new V[]{a1, a2, a3, a4});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5)
-  {
-    return call(env, ctx, new V[] { a1, a2, a3, a4, a5 });
+  public final @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5) {
+    return call(env, ctx, new V[]{a1, a2, a3, a4, a5});
   }
 
   /**
    * Evaluates the function with arguments
    */
   public final @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx,
-                                                   V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5)
-  {
-    return callRef(env, ctx, new V[] { a1, a2, a3, a4, a5 });
+                                                   V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5) {
+    return callRef(env, ctx, new V[]{a1, a2, a3, a4, a5});
   }
 
   //
@@ -1608,19 +1446,24 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
    */
   public V<? extends Value> callMethod(Env env,
                                        FeatureExpr ctx, StringValue methodName, int hash,
-                                       V<? extends ValueOrVar>[] args)
-  {
+                                       V<? extends ValueOrVar>[] args) {
     if (isNull()) {
       return VHelper.toV(env.error(L.l("Method call '{0}' is not allowed for a null value.",
-                           methodName)));
-    }
-    else {
+              methodName)));
+    } else {
       return VHelper.toV(env.error(L.l("'{0}' is an unknown method of {1}.",
-                           methodName,
-                           toDebugString())));
+              methodName,
+              toDebugString())));
     }
   }
 
+
+  @Deprecated
+  public final V<? extends Value> callMethod(Env env,
+                                             FeatureExpr ctx, StringValue methodName,
+                                             Value... args)
+
+  { return this.callMethod(env, ctx, methodName, VHelper.toVArray(args));}
   /**
    * Evaluates a method.
    */
@@ -1745,6 +1588,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar
   {
     return callMethod(env, ctx, methodName, hash, new V[] { a1, a2 });
   }
+
+
+
 
   /**
    * Evaluates a method with 2 args.

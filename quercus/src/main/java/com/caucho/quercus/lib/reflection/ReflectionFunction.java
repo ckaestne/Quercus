@@ -30,12 +30,10 @@
 package com.caucho.quercus.lib.reflection;
 
 import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.env.ArrayValue;
-import com.caucho.quercus.env.Callable;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 public class ReflectionFunction extends ReflectionFunctionAbstract
@@ -81,7 +79,7 @@ public class ReflectionFunction extends ReflectionFunctionAbstract
     return null;
   }
 
-  public Value invoke(Env env, Value []args)
+  public Value invoke(Env env, V<?extends ValueOrVar>[]args)
   {
     return getCallable().call(env, VHelper.noCtx(),args).getOne();
   }

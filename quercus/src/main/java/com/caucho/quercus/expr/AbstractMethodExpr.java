@@ -89,7 +89,7 @@ abstract public class AbstractMethodExpr extends Expr {
                                     StringValue methodName, int hashCode,
                                     Expr[] argExprs)
   {
-    Value []args = evalArgs(env, argExprs, VHelper.noCtx()).getOne();
+    V<? extends ValueOrVar>[] args = evalArgs(env, argExprs, VHelper.noCtx());
 
     env.pushCall(this, qThis, args);
 

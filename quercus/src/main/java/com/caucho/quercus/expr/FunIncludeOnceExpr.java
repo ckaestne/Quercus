@@ -90,7 +90,7 @@ public class FunIncludeOnceExpr extends AbstractUnaryExpr {
 
     // return env.include(_dir, name);
     
-    env.pushCall(this, NullValue.NULL, new Value[] { name });
+    env.pushCall(this, NullValue.NULL, new V[] { V.one(name) });
     
     try {
       if (_dir != null)

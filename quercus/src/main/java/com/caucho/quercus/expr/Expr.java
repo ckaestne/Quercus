@@ -862,7 +862,7 @@ abstract public class Expr {
   /**
    * Evaluates arguments
    */
-  public static V<ValueOrVar[]> evalArgs(Env env, Expr[] exprs, FeatureExpr ctx)
+  public static V<? extends ValueOrVar>[] evalArgs(Env env, Expr[] exprs, FeatureExpr ctx)
   {
     ValueOrVar []args = new ValueOrVar[exprs.length];
 
@@ -870,7 +870,7 @@ abstract public class Expr {
       args[i] = exprs[i].evalArg(env, ctx, true).getOne();
     }
 
-    return VHelper.toV(args);
+    return VHelper.toVArray(args);
   }
 
   /**
