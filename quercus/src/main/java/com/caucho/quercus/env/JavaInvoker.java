@@ -57,7 +57,7 @@ abstract public class JavaInvoker
 {
   private static final L10N L = new L10N(JavaInvoker.class);
 
-  private static final Value []NULL_VALUES = new Value[0];
+  private static final V<? extends ValueOrVar> []NULL_VALUES = new V[0];
 
   private final ModuleContext _moduleContext;
   private final JavaClassDef _classDef;
@@ -715,7 +715,7 @@ abstract public class JavaInvoker
   public @NonNull V<? extends Value> callNew(Env env,
                                     FeatureExpr ctx, QuercusClass qClass,
                                     Value qThis,
-                                    Value[] args)
+                                             V<? extends ValueOrVar>[] args)
   {
     Object result = callJavaMethod(env, qClass, qThis, args);
 
@@ -727,7 +727,7 @@ abstract public class JavaInvoker
   private Object callJavaMethod(Env env,
                                 QuercusClass qClass,
                                 Value qThis,
-                                Value[] args)
+                                V<? extends ValueOrVar>[] args)
   {
     if (! _isInit) {
       init();
@@ -785,21 +785,21 @@ abstract public class JavaInvoker
       env.warning(warnMessage);
 
     if (_hasRestArgs) {
-      Value []rest;
+      V<? extends ValueOrVar> []rest;
 
       int restLen = args.length - _marshalArgs.length;
 
       if (restLen <= 0)
         rest = NULL_VALUES;
       else {
-        rest = new Value[restLen];
+        rest = new V[restLen];
 
         for (int i = _marshalArgs.length; i < args.length; i++) {
           if (_isRestReference) {
-            rest[i - _marshalArgs.length] = args[i].toLocalVarDeclAsRef().makeValue();
+            rest[i - _marshalArgs.length] = args[i].map(a->a.toLocalVarDeclAsRef().makeValue());
           }
           else
-            rest[i - _marshalArgs.length] = args[i].toValue();
+            rest[i - _marshalArgs.length] = args[i].map(a->a.toValue());
         }
       }
 

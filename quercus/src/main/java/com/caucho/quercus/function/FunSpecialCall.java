@@ -31,6 +31,7 @@ package com.caucho.quercus.function;
 
 import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 
 /**
@@ -53,9 +54,10 @@ public class FunSpecialCall extends AbstractFunction {
   @Override
   public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
-    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
-
-    return _call.call(env, ctx, _name, arrayArgs);
+    throw new UnimplementedVException();
+//    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
+//
+//    return _call.call(env, ctx, V.one(_name), V.one(arrayArgs));
   }
 
   /**
@@ -67,10 +69,11 @@ public class FunSpecialCall extends AbstractFunction {
                                        Value qThis,
                                        V<? extends ValueOrVar>[] args)
   {
-    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
-
-    return _call.callMethod(env, ctx, qClass, qThis,
-                            _name, arrayArgs);
+    throw new UnimplementedVException();
+//    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
+//
+//    return _call.callMethod(env, ctx, qClass, qThis,
+//                            _name, arrayArgs);
   }
 
   /**
@@ -82,10 +85,11 @@ public class FunSpecialCall extends AbstractFunction {
                                           Value qThis,
                                           V<? extends ValueOrVar>[] args)
   {
-    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
-
-    return _call.callMethodRef(env, ctx, qClass, qThis,
-                               _name, arrayArgs);
+    throw new UnimplementedVException();
+//    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
+//
+//    return _call.callMethodRef(env, ctx, qClass, qThis,
+//                               _name, arrayArgs);
   }
 
   @Override

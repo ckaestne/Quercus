@@ -31,6 +31,7 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -196,6 +197,11 @@ abstract public class Marshal {
   {
     return marshalImpl(env, value.toValue(), argClass);
   }
+  public Object marshal(Env env, V<? extends ValueOrVar> value, Class argClass)
+  {
+    return marshalImpl(env, value.getOne().toValue(), argClass);
+  }
+
 
   protected Object marshalImpl(Env env, Value value, Class<?> argClass)
   {

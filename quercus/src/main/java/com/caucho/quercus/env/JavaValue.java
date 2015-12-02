@@ -337,9 +337,9 @@ public class JavaValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,
-                             FeatureExpr ctx, StringValue methodName, int hash,
-                             Value[] args)
+  public V<? extends Value> callMethod(Env env,
+                                       FeatureExpr ctx, StringValue methodName, int hash,
+                                       Value[] args)
   {
     return _classDef.callMethod(env, ctx, this, methodName, hash, args);
   }

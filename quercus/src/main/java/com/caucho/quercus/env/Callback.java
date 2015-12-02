@@ -59,7 +59,7 @@ abstract public class Callback extends Value implements Callable {
   final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
-                               Value a1)
+                                                     V<? extends ValueOrVar> a1)
   {
     // php/1740
 
@@ -98,8 +98,8 @@ abstract public class Callback extends Value implements Callable {
   final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
-                               Value a1,
-                               Value a2)
+                                                     V<? extends ValueOrVar> a1,
+                                                     V<? extends ValueOrVar> a2)
   {
     // php/1740
 
@@ -138,28 +138,28 @@ abstract public class Callback extends Value implements Callable {
   final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
-                               Value a1,
-                               Value a2,
-                               Value a3)
+                                                     V<? extends ValueOrVar> a1,
+                                                     V<? extends ValueOrVar> a2,
+                                                     V<? extends ValueOrVar> a3)
   {
     // php/1740
 
     V<? extends Value> result;
 
-    if (a1.isVar()) {
-      a1 = new ArgRef(a1._var());
+    if (a1.getOne().isVar()) {
+      a1 = a1.map(a-> new ArgRef(a._var()));
 
       result = call(env, ctx, a1, a2, a3);
     }
     else {
-      Value aVar = new Var(V.one(a1)).toValue();
+      V<? extends Var> aVar = a1.map(a-> new Var(V.one(a)).toValue());
 
       result = call(env, ctx, aVar, a2, a3);
 
-      Value aNew = aVar.toValue();
+      V<? extends Value> aNew = aVar.map(a->a.toValue());
 
       if (aNew != a1)
-        array.put(key, aNew);
+        array.put(key, aNew.getOne());
     }
 
     return result;

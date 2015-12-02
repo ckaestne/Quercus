@@ -117,12 +117,12 @@ public class CallbackFunction extends Callback {
 
   /**
    * Evaluates the callback with 1 argument.
-   *
-   * @param env the calling environment
+   *  @param env the calling environment
    * @param ctx
+   * @param a1
    */
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1)
   {
     return getFunction(env, ctx).getOne().call(env, ctx, a1);
   }

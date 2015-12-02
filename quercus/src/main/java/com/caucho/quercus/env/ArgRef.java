@@ -594,9 +594,9 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,
-                             FeatureExpr ctx, StringValue methodName, int hash,
-                             Value[] args)
+  public V<? extends Value> callMethod(Env env,
+                                       FeatureExpr ctx, StringValue methodName, int hash,
+                                       Value[] args)
   {
     return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, args);
   }

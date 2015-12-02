@@ -78,56 +78,71 @@ public interface Callable {
    */
   public Arg[] getArgs(Env env);
 
+  static final V<? extends ValueOrVar> []NULL_ARG_VALUES = new V[0];
+
   /**
    * Evaluates the callback with no arguments.
    *
    * @param env the calling environment
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx);
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx) {
+    return call(env, ctx, NULL_ARG_VALUES);
+  }
 
   /**
    * Evaluates the callback with 1 arguments.
    *
    * @param env the calling environment
+   * @param a1
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1);
+  default V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1) {
+    return call(env, ctx, new V[] {a1});
+  }
 
   /**
    * Evaluates the callback with 2 arguments.
    *
    * @param env the calling environment
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2);
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2){
+    return call(env, ctx, new V[] {a1, a2});
+  }
 
   /**
    * Evaluates the callback with 3 arguments.
    *
    * @param env the calling environment
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3);
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3){
+    return call(env, ctx, new V[] {a1, a2, a3});
+  }
 
   /**
    * Evaluates the callback with 4 arguments.
    *
    * @param env the calling environment
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
-                             Value a4);
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3,
+                             V<? extends ValueOrVar> a4){
+    return call(env, ctx, new V[] {a1, a2, a3, a4});
+  }
 
   /**
    * Evaluates the callback with 5 arguments.
    *
    * @param env the calling environment
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3,
-                             Value a4, Value a5);
+  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3,
+                             V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5){
+    return call(env, ctx, new V[] {a1, a2, a3, a4, a5});
+  }
 
   /**
    * Evaluates the callback with variable arguments.
    *
    * @param env the calling environment
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value []args);
+  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -142,7 +157,7 @@ public interface Callable {
   abstract public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                   ArrayValue array,
                                   Value key,
-                                  Value a1);
+                                  V<? extends ValueOrVar> a1);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -158,8 +173,8 @@ public interface Callable {
   abstract public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                   ArrayValue array,
                                   Value key,
-                                  Value a1,
-                                  Value a2);
+                                  V<? extends ValueOrVar> a1,
+                                  V<? extends ValueOrVar> a2);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -176,8 +191,8 @@ public interface Callable {
   abstract public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                   ArrayValue array,
                                   Value key,
-                                  Value a1,
-                                  Value a2,
-                                  Value a3);
+                                  V<? extends ValueOrVar> a1,
+                                  V<? extends ValueOrVar> a2,
+                                  V<? extends ValueOrVar> a3);
 }
 
