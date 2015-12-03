@@ -392,7 +392,7 @@ public class Function extends AbstractFunction {
         else if (arg.isReference())
           map.put(arg.getName(), new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx())));
         else {
-          map.put(arg.getName(), new EnvVarImpl(V.one(defaultExpr.eval(env, VHelper.noCtx()).getOne().toLocalVar())));
+          map.put(arg.getName(), new EnvVarImpl(defaultExpr.eval(env, VHelper.noCtx()).map(x->x.toLocalVar())));
         }
       } catch (Exception e) {
         throw new QuercusException(getName() + ":arg(" + arg.getName() + ") "

@@ -128,6 +128,16 @@ class VTest extends AbstractPhpTest {
     }
 
 
+    @Test
+    def testVDefaultValue() {
+        eval("function foo($var=$FOO) {  echo $var; } foo(1); foo();") to "1"~c(foo,"1")
+    }
+
+    @Test@Ignore("fixme")
+    def testCallByReference(): Unit = {
+        eval("function foo(&$var) {  $var++; } $a=5; foo($a); echo $a;") to "6"
+    }
+
 
 
 
