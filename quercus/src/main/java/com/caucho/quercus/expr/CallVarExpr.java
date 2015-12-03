@@ -137,11 +137,11 @@ public class CallVarExpr extends Expr {
       env.checkTimeout();
       
       if (isRef)
-        return value.flatMap((a)->a.callRef(env, VHelper.noCtx(), args));
+        return value.vflatMap(ctx, (c,a)->a.callRef(env, c, args));
       else if (isCopy)
-        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args).map((b)->b.copyReturn()));
+        return value.vflatMap(ctx, (c,a)->a.call(env, c, args).map((b)->b.copyReturn()));
       else
-        return value.flatMap((a)->a.call(env, VHelper.noCtx(), args).map((b)->b.toValue()));
+        return value.vflatMap(ctx, (c,a)->a.call(env, c, args).map((b)->b.toValue()));
     } finally {
       env.popCall();
     }

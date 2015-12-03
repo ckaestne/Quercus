@@ -119,7 +119,7 @@ class VTest extends AbstractPhpTest {
 
     }
 
-    @Test@Ignore("fixme")
+    @Test
     def testDynamicFunctionCallVTarget() {
         val fun = "function fun($p) { echo $p; return $p+1; }; "
         val fun2 = "function fun2($p) { echo $p+1; return $p+2; }; "
