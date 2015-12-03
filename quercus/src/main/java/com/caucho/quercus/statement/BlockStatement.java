@@ -101,19 +101,19 @@ public class BlockStatement extends Statement {
     return FALL_THROUGH;
   }
 
-  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
-  {
+  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx) {
+    V<? extends Value> value = V.one(null);
     for (int i = 0; i < _statements.length; i++) {
       Statement statement = _statements[i];
 
-      Value value = VHelper.nonNull(statement.execute(env, ctx)).getOne();
+      if (!ctx.isSatisfiable())
+        break;
+      value = V.choice(ctx, statement.execute(env, ctx), value);
+      ctx = ctx.and(value.when(x -> x == null));
 
-      if (value != null) {
-        return VHelper.toV(value);
-      }
     }
 
-    return V.one(null);
+    return value;
   }
 }
 

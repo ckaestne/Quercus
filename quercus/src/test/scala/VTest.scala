@@ -110,12 +110,12 @@ class VTest extends AbstractPhpTest {
     }
 
 
-    @Test@Ignore("fixme")
+    @Test
     def testFunctionVParameter() {
         val fun = "function fun($p) { echo $p; return $p+1; }; "
         val x = "$x = 1+$FOO;"
 
-        eval(fun + x + "echo fun($x);") to c(foo, "1") ~ c(foo.not(), "2") ~ c(foo, "2") ~ c(foo.not(), "3")
+        eval(fun + x + "echo fun($x);") to c(foo, "2") ~ c(foo.not(), "1") ~ c(foo, "3") ~ c(foo.not(), "2")
 
     }
 
