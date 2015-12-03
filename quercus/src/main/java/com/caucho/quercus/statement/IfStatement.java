@@ -84,7 +84,7 @@ public class IfStatement extends Statement {
    */
   public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    FeatureExpr condition = _test.evalBoolean(env, VHelper.noCtx()).when((b)->b);
+    FeatureExpr condition = _test.evalBoolean(env, ctx).when((b)->b);
 
     V<? extends Value> trueResult = V.one(null);
     V<? extends Value> falseResult = V.one(null);

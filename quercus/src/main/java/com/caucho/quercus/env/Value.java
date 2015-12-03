@@ -1809,21 +1809,21 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return new DoubleValue(lLong + toDouble());
   }
 
-  /**
-   * Pre-increment the following value.
-   */
-  public Value preincr(int incr)
-  {
-    return increment(incr);
-  }
-
-  /**
-   * Post-increment the following value.
-   */
-  public Value postincr(int incr)
-  {
-    return increment(incr);
-  }
+//  /**
+//   * Pre-increment the following value.
+//   */
+//  public Value preincr(int incr)
+//  {
+//    return increment(incr);
+//  }
+//
+//  /**
+//   * Post-increment the following value.
+//   */
+//  public Value postincr(int incr)
+//  {
+//    return increment(incr);
+//  }
 
   /**
    * Return the next integer

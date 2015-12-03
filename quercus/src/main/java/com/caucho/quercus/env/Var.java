@@ -1121,29 +1121,29 @@ public class Var
 //   * Pre-increment the following value.
 //   */
 //
-//  public Value preincr(int incr)
-//  {
-//    _value = _value.increment(incr);
-//
+  public V<? extends Value> preincr(FeatureExpr ctx, int incr)
+  {
+    _value = _value.vflatMap(ctx, (c,x)->V.choice(c,x.increment(incr),x));
+
 //    checkVar(_value);
+
+    return _value;
+  }
 //
-//    return _value;
-//  }
-//
-//  /**
-//   * Post-increment the following value.
-//   */
-//
-//  public Value postincr(int incr)
-//  {
-//    Value value = _value;
-//
-//    _value = value.increment(incr);
-//
+  /**
+   * Post-increment the following value.
+   */
+
+  public V<? extends Value> postincr(FeatureExpr ctx, int incr)
+  {
+    V<? extends Value> value = _value;
+
+    _value = value.vflatMap(ctx, (c,x)->V.choice(c,x.increment(incr),x));
+
 //    checkVar(_value);
-//
-//    return value;
-//  }
+
+    return value;
+  }
 //
 //  /**
 //   * Pre-increment the following value.

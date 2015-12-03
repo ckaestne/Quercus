@@ -60,7 +60,7 @@ public class UnaryPostIncrementExpr extends AbstractUnaryExpr {
 
   public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _expr.evalPostIncrement(env, VHelper.noCtx(), _incr);
+    return _expr.evalPostIncrement(env, ctx, _incr);
   }
 
   /**

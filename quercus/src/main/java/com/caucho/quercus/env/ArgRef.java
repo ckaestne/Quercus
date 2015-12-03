@@ -410,23 +410,23 @@ public class ArgRef extends Value
     return _var.getValue().getOne().add(rValue);
   }
 
-  /**
-   * Pre-increment the following value.
-   */
-  @Override
-  public Value preincr(int incr)
-  {
-    return _var.getValue().getOne().preincr(incr);
-  }
-
-  /**
-   * Post-increment the following value.
-   */
-  @Override
-  public Value postincr(int incr)
-  {
-    return _var.getValue().getOne().postincr(incr);
-  }
+//  /**
+//   * Pre-increment the following value.
+//   */
+//  @Override
+//  public Value preincr(int incr)
+//  {
+//    return _var.getValue().getOne().preincr(incr);
+//  }
+//
+//  /**
+//   * Post-increment the following value.
+//   */
+//  @Override
+//  public Value postincr(int incr)
+//  {
+//    return _var.getValue().getOne().postincr(incr);
+//  }
 
   /**
    * Increment the following value.

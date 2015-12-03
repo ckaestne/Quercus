@@ -35,6 +35,7 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import com.caucho.quercus.program.JavaClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -362,13 +363,14 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public EnvVar getVar(Value index)
   {
-    // php/0ceg - Since Java does not support references, the adapter
-    // just creates a new Var, but modifying the var will not modify
-    // the field
-
-    Var var = new Var(V.one(new JavaAdapterVar(this, index)));
-
-    return new EnvVarImpl(V.one(var));
+    throw new UnimplementedVException();
+//    // php/0ceg - Since Java does not support references, the adapter
+//    // just creates a new Var, but modifying the var will not modify
+//    // the field
+//
+//    Var var = new Var(V.one(new JavaAdapterVar(this, index)));
+//
+//    return new EnvVarImpl(V.one(var));
   }
 
   /**

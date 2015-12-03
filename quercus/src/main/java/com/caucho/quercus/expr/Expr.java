@@ -714,9 +714,9 @@ abstract public class Expr {
    */
   public V<? extends Value> evalPostIncrement(Env env, FeatureExpr ctx, int incr)
   {
-    V<? extends Var> value = evalVar(env, ctx);
+    V<? extends Var> var = evalVar(env, ctx);
 
-    return value.flatMap(a->a.getValue().map(v->v.postincr(incr)));
+    return var.flatMap(a->a.postincr(ctx, incr));
   }
 
   /**
@@ -724,9 +724,9 @@ abstract public class Expr {
    */
   public V<? extends Value> evalPreIncrement(Env env, FeatureExpr ctx, int incr)
   {
-    V<? extends Var> value = evalVar(env, ctx);
+    V<? extends Var> var = evalVar(env, ctx);
 
-    return value.flatMap(a->a.getValue().map(v->v.preincr(incr)));
+    return var.flatMap(a->a.preincr(ctx, incr));
   }
 
   /**

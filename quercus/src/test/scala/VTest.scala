@@ -13,6 +13,8 @@ class VTest extends AbstractPhpTest {
     val foo = FeatureExprFactory.createDefinedExternal("foo")
     val bar = FeatureExprFactory.createDefinedExternal("bar")
 
+    val fooresult1 = c(foo, "2") ~ c(foo.not(), "1")
+    val fooresult = c(foo, "1")
 
     @Test
     def testBasicValues() {
@@ -133,9 +135,21 @@ class VTest extends AbstractPhpTest {
         eval("function foo($var=$FOO) {  echo $var; } foo(1); foo();") to "1"~c(foo,"1")
     }
 
-    @Test@Ignore("fixme")
+    @Test
+    def testVInc() {
+        eval("$i=1; $i++; echo $i;") to "2"
+        eval("$i=$FOO; echo ++$i;") to fooresult1
+        eval("$i=$FOO; echo $i++; echo $i") to fooresult ~ fooresult1
+        eval("$i=$FOO; $i++; echo $i;") to fooresult1
+        eval("$i=1; if ($FOO) $i++; echo $i;") to fooresult1
+    }
+
+    @Test
     def testCallByReference(): Unit = {
         eval("function foo(&$var) {  $var++; } $a=5; foo($a); echo $a;") to "6"
+        eval("function foo(&$var) {  $var++; } $a=$FOO; foo($a); echo $a;") to fooresult1
+        eval("function foo(&$var) {  if (create_conditional('bar')) $var++; } $a=$FOO; foo($a); echo $a;") to
+         c(foo and bar, "2") ~ c(foo andNot bar, "1") ~ c(foo.not and bar,"1") ~c(foo.not andNot bar,"")
     }
 
 
