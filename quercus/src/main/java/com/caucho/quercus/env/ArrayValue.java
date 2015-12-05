@@ -59,7 +59,7 @@ abstract public class ArrayValue extends Value {
 
   public static final StringValue ARRAY = new ConstStringValue("Array");
 
-  private @Nonnull V<? extends Entry> _current;
+  private @Nonnull V<? extends Entry> _current = V.one(null);
 
   protected ArrayValue()
   {

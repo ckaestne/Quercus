@@ -430,7 +430,7 @@ public class ArrayValueImpl extends ArrayValue
 
     _size = V.one(0);
     _head = _tail = null;
-    setCurrent(VHelper.noCtx(), null);
+    setCurrent(VHelper.noCtx(), V.one(null));
 
     _nextAvailableIndex = V.one(Long.valueOf(0));
   }
