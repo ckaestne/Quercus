@@ -32,7 +32,7 @@ package com.caucho.quercus.env;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a call to a function.
@@ -57,7 +57,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+  final public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
                                                      V<? extends ValueOrVar> a1)
@@ -97,7 +97,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+  final public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
                                                      V<? extends ValueOrVar> a1,
@@ -138,7 +138,7 @@ abstract public class Callback extends Value implements Callable {
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+  final public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                ArrayValue array,
                                Value key,
                                                      V<? extends ValueOrVar> a1,

@@ -33,7 +33,7 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a call to a function.
@@ -86,7 +86,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx) {
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx) {
     return call(env, ctx, NULL_ARG_VALUES);
   }
 
@@ -101,23 +101,23 @@ public interface Callable {
   }
 
   @Deprecated
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2){
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2){
     return this.call(env, ctx, V.one(a1), V.one(a2));
   }
   @Deprecated
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1){
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1){
     return this.call(env, ctx, V.one(a1));
   }
   @Deprecated
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args){
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args){
     return this.call(env, ctx, VHelper.toVArray(args));
   }
   @Deprecated
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3){
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3){
     return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3));
   }
   @Deprecated
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5){
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5){
     return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3), V.one(a4), V.one(a5));
   }
   /**
@@ -125,7 +125,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2){
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2){
     return call(env, ctx, new V[] {a1, a2});
   }
 
@@ -134,7 +134,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3){
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3){
     return call(env, ctx, new V[] {a1, a2, a3});
   }
 
@@ -143,7 +143,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3,
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3,
                              V<? extends ValueOrVar> a4){
     return call(env, ctx, new V[] {a1, a2, a3, a4});
   }
@@ -153,7 +153,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  default @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3,
+  default @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3,
                              V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5){
     return call(env, ctx, new V[] {a1, a2, a3, a4, a5});
   }
@@ -163,7 +163,7 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  abstract public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args);
+  abstract public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -175,7 +175,7 @@ public interface Callable {
    * @param key index of a1 in the array
    * @param a1 need to make a reference to this variable
    */
-  abstract public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+  abstract public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                   ArrayValue array,
                                   Value key,
                                   V<? extends ValueOrVar> a1);
@@ -191,7 +191,7 @@ public interface Callable {
    * @param a1 need to make a reference to this variable
    * @param a2 additional argument to pass to the callback
    */
-  abstract public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+  abstract public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                   ArrayValue array,
                                   Value key,
                                   V<? extends ValueOrVar> a1,
@@ -209,7 +209,7 @@ public interface Callable {
    * @param a2 additional argument to pass to the callback
    * @param a3 additional argument to pass to the callback
    */
-  abstract public @NonNull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+  abstract public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
                                   ArrayValue array,
                                   Value key,
                                   V<? extends ValueOrVar> a1,

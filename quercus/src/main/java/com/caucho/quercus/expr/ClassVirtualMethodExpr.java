@@ -35,7 +35,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -86,7 +86,7 @@ public class ClassVirtualMethodExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     Value qThis = env.getThis();
 

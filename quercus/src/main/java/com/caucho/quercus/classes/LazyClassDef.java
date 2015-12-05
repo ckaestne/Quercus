@@ -36,7 +36,7 @@
 //import com.caucho.quercus.program.ClassField;
 //import de.fosd.typechef.featureexpr.FeatureExpr;
 //import edu.cmu.cs.varex.V;
-//import org.checkerframework.checker.nullness.qual.NonNull;
+//import javax.annotation.Nonnull;
 //
 //import java.util.ArrayList;
 //import java.util.Map;
@@ -246,7 +246,7 @@
 //   * Creates a new instance.
 //   */
 //  @Override
-//  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
+//  public @Nonnull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
 //  {
 //    return getClassDef().callNew(env, ctx, args);
 //  }

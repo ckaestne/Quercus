@@ -2,9 +2,11 @@ package edu.cmu.cs.varex;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
+import edu.cmu.cs.varex.assertion.NullTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -104,6 +106,15 @@ public class VImplTest {
 
 
 
+  }
+
+  @Test
+  public void testNullCheck() {
+    new NullTestClass().testa(null);
+  }
+
+  public static void main(String[] args) {
+    new NullTestClass().testa(null);
   }
 
 

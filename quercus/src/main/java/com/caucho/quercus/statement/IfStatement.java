@@ -36,7 +36,7 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents an if statement.
@@ -82,7 +82,7 @@ public class IfStatement extends Statement {
   /**
    * Executes the 'if' statement, returning any value.
    */
-  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     FeatureExpr condition = _test.evalBoolean(env, ctx).when((b)->b);
 

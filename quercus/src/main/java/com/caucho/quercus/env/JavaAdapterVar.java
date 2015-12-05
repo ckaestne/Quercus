@@ -33,7 +33,7 @@
 //import edu.cmu.cs.varex.V;
 //import edu.cmu.cs.varex.VHelper;
 //import edu.cmu.cs.varex.VWriteStream;
-//import org.checkerframework.checker.nullness.qual.NonNull;
+//import javax.annotation.Nonnull;
 //
 //import java.io.IOException;
 //import java.math.BigDecimal;
@@ -1291,7 +1291,7 @@
 //   * Evaluates a method.
 //   */
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+//  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
 //  {
 //    return getValue().callMethod(env, ctx, methodName, hash);
 //  }
@@ -1302,7 +1302,7 @@
 //   * Evaluates a method.
 //   */
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,
 //                                FeatureExpr ctx, StringValue methodName, int hash,
 //                                                   V<?extends ValueOrVar>[] args)
 //  {
@@ -1313,7 +1313,7 @@
 //   * Evaluates a method.
 //   */
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+//  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
 //  {
 //    return getValue().callMethodRef(env, ctx, methodName, hash);
 //  }

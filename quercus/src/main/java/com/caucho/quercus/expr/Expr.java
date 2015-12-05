@@ -37,7 +37,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -459,7 +459,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  abstract public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx);
+  abstract public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression, always returning a variable.
@@ -482,7 +482,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalValue(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalValue(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -512,7 +512,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -540,7 +540,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalTop(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalTop(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -554,7 +554,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalDirty(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalDirty(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -567,7 +567,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -580,7 +580,7 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -588,7 +588,7 @@ abstract public class Expr {
   /**
    * Evaluates an assignment. The value must not be a Var.
    */
-  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, Expr valueExpr)
+  public @Nonnull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, Expr valueExpr)
   {
     V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
@@ -598,7 +598,7 @@ abstract public class Expr {
   /**
    * Evaluates an assignment. The value must not be a Var.
    */
-  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @Nonnull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     throw new RuntimeException(L.l(
       "{0} is an invalid left-hand side of an assignment.",
@@ -631,7 +631,7 @@ abstract public class Expr {
    * Evaluates as an array index assign ($a[index] = value).
    * @return what was assigned
    */
-  public @NonNull V<? extends Value> evalArrayAssign(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
+  public @Nonnull V<? extends Value> evalArrayAssign(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // overrided in ThisFieldExpr and ThisFieldVarExpr
@@ -679,7 +679,7 @@ abstract public class Expr {
    * Evaluates as an array index assign ($a[index] = value).
    * @return what was assigned
    */
-  public @NonNull V<? extends ValueOrVar> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, V<? extends ValueOrVar> value)
+  public @Nonnull V<? extends ValueOrVar> evalArrayAssignRef(Env env, FeatureExpr ctx, Expr indexExpr, V<? extends ValueOrVar> value)
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // overrided in ThisFieldExpr and ThisFieldVarExpr
@@ -701,7 +701,7 @@ abstract public class Expr {
    * Evaluates as an array tail assign ($a[] = value).
    * @return what was assigned
    */
-  public @NonNull V<? extends Value> evalArrayAssignTail(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @Nonnull V<? extends Value> evalArrayAssignTail(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     V<? extends Value> array = evalArray(env, ctx);
     array.map(a->a.put(VHelper.noCtx(), value));
@@ -825,7 +825,7 @@ abstract public class Expr {
   /**
    * Evaluates the expression as an isset() statement.
    */
-  public @NonNull V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }

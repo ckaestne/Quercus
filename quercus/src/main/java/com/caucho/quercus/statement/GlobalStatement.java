@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.VarExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a global statement in a PHP program.
@@ -53,7 +53,7 @@ public class GlobalStatement extends Statement {
     _var = var;
   }
   
-  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       env.setRef(_var.getName(), env.getGlobalVar(ctx, _var.getName()).getOne());

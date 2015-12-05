@@ -37,7 +37,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a PHP array is set expression.
@@ -72,7 +72,7 @@ public class ArrayIsSetExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
    return evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
   }
@@ -85,7 +85,7 @@ public class ArrayIsSetExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());

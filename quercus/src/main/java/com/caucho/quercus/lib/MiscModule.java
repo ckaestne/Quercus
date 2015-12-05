@@ -46,7 +46,7 @@ import com.caucho.vfs.Path;
 import com.caucho.vfs.WriteStream;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,7 +178,7 @@ public class MiscModule extends AbstractQuercusModule {
    * Comples and evaluates an expression.
    */
   @UsesSymbolTable
-  public @NonNull V<? extends Value> eval(Env env, StringValue code)
+  public @Nonnull V<? extends Value> eval(Env env, StringValue code)
   {
     try {
       if (log.isLoggable(Level.FINER))

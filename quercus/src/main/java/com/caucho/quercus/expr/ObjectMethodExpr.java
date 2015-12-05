@@ -36,7 +36,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -79,7 +79,7 @@ public class ObjectMethodExpr extends AbstractMethodExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
 

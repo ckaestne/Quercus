@@ -34,7 +34,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -73,7 +73,7 @@ public class ListHeadExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }
@@ -87,7 +87,7 @@ public class ListHeadExpr extends Expr {
    * @param value
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @Nonnull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     int len = _varList.length;
 

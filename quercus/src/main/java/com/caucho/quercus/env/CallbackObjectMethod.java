@@ -36,7 +36,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -69,7 +69,7 @@ public class CallbackObjectMethod extends Callback {
    * @param ctx
    */
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash);
   }

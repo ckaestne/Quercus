@@ -61,8 +61,8 @@ import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.Vfs;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.cache.Cache;
 import javax.sql.DataSource;
@@ -1410,7 +1410,7 @@ public class QuercusContext
   /**
    * Returns the id for a function name.
    */
-  public @NonNull V<? extends Integer> findFunctionId(final StringValue name)
+  public @Nonnull V<? extends Integer> findFunctionId(final StringValue name)
   {
     V<? extends Integer> vid = _functionNameMap.getOrDefault(name,V.one(-1));
 
@@ -2157,8 +2157,8 @@ public class QuercusContext
     }
   }
 
-  public Env createEnv(@NonNull QuercusPage page,
-                       @NonNull VWriteStream out,
+  public Env createEnv(@Nonnull QuercusPage page,
+                       @Nonnull VWriteStream out,
                        @Nullable QuercusHttpServletRequest request,
                        @Nullable QuercusHttpServletResponse response)
   {

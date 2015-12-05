@@ -36,7 +36,7 @@ import com.caucho.quercus.program.ClassField;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -129,7 +129,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     Value obj = env.getThis();
 
@@ -146,7 +146,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @Nonnull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     Value obj = env.getThis();
 
@@ -178,7 +178,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * Evaluates as an array index assign ($a[index] = value).
    */
   @Override
-  public @NonNull V<? extends Value> evalArrayAssign(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
+  public @Nonnull V<? extends Value> evalArrayAssign(Env env, FeatureExpr ctx, Expr indexExpr, Expr valueExpr)
   {
     Value obj = env.getThis();
 
@@ -220,7 +220,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     Value obj = env.getThis();
 
@@ -235,7 +235,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     Value obj = env.getThis();
 

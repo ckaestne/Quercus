@@ -43,7 +43,7 @@ import com.caucho.vfs.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -412,7 +412,7 @@ public class QuercusProgram {
    * @return null if there is no return value
    *
    */
-  public @NonNull V<? extends Value> execute(Env env)
+  public @Nonnull V<? extends Value> execute(Env env)
   {
     return _statement.execute(env, FeatureExprFactory.True());
   }

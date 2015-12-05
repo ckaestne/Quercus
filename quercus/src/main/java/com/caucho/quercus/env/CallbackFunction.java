@@ -34,8 +34,8 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a call to a function.
@@ -46,7 +46,7 @@ public class CallbackFunction extends Callback {
   // = new CallbackFunction(null, "Invalid Callback");
 
   private StringValue _funName;
-  private @NonNull V<? extends @Nullable AbstractFunction> _fun = V.one(null);
+  private @Nonnull V<? extends AbstractFunction> _fun = V.one(null);
 
   public CallbackFunction(Env env, StringValue funName)
   {
@@ -110,7 +110,7 @@ public class CallbackFunction extends Callback {
    * @param ctx
    */
   @Override
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx)
   {
     return getFunction(env, ctx).getOne().call(env, ctx);
   }

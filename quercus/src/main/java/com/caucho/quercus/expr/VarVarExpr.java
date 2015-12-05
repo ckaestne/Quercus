@@ -34,7 +34,7 @@ import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a PHP variable expression.
@@ -66,7 +66,7 @@ public class VarVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 
@@ -164,7 +164,7 @@ public class VarVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 

@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * A "$b - $a" subtract expression.
@@ -58,7 +58,7 @@ public class BinarySubExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the resulting value
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());
     V<? extends Value> rValue = _right.eval(env, VHelper.noCtx());

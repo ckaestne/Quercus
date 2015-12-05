@@ -33,7 +33,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -604,7 +604,7 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _var.getValue().getOne().callMethod(env, ctx, methodName, hash);
   }
@@ -613,7 +613,7 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                                    V<? extends ValueOrVar>[] args)
   {
@@ -624,7 +624,7 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash);
   }

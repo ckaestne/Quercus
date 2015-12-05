@@ -39,7 +39,7 @@ import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -759,7 +759,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _classDef.callMethod(env, ctx, this, methodName, hash);
   }
@@ -768,7 +768,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                                    V<? extends ValueOrVar>[] args)
   {
@@ -779,7 +779,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _classDef.callMethod(env, ctx, this, methodName, hash);
   }

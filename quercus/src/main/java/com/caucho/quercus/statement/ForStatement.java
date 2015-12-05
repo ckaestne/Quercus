@@ -38,7 +38,7 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a for statement.
@@ -71,7 +71,7 @@ public class ForStatement extends Statement {
     return true;
   }
 
-  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
       if (_init != null)

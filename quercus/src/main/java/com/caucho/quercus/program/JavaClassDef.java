@@ -48,7 +48,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -591,7 +591,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    * Eval new
    */
   @Override
-  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args)
+  public @Nonnull V<? extends Value> callNew(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args)
   {
     if (_cons != null) {
       if (__construct != null) {
@@ -648,7 +648,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                                        StringValue methodName, int hash,
                                        V<? extends ValueOrVar> []args)
   {
@@ -660,7 +660,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash)
   {
     return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{});
@@ -669,7 +669,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1)
   {
@@ -679,7 +679,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
   {
@@ -689,7 +689,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
   {
@@ -699,7 +699,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
   {
@@ -709,7 +709,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public final @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5)
   {

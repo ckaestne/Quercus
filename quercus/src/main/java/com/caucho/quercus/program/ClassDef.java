@@ -36,7 +36,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -361,7 +361,7 @@ abstract public class ClassDef implements InstanceInitializer {
   /**
    * Creates a new instance.
    */
-  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
+  public @Nonnull V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
   {
     return null;
   }
@@ -369,7 +369,7 @@ abstract public class ClassDef implements InstanceInitializer {
   /**
    * Creates a new instance.
    */
-  public @NonNull V<? extends Value> callNew(Env env,  FeatureExpr ctx, V<? extends ValueOrVar> []args)
+  public @Nonnull V<? extends Value> callNew(Env env,  FeatureExpr ctx, V<? extends ValueOrVar> []args)
   {
     return null;
   }

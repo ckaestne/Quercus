@@ -37,7 +37,7 @@
 //import com.caucho.util.IdentityIntMap;
 //import de.fosd.typechef.featureexpr.FeatureExpr;
 //import edu.cmu.cs.varex.V;
-//import org.checkerframework.checker.nullness.qual.NonNull;
+//import javax.annotation.Nonnull;
 //
 //import java.util.ArrayList;
 //import java.util.LinkedHashMap;
@@ -387,7 +387,7 @@
 //   * Eval new
 //   */
 //  @Override
-//  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
+//  public @Nonnull V<? extends Value> callNew(Env env, FeatureExpr ctx, Expr []args)
 //  {
 //    return V.one(null);
 //  }
@@ -396,7 +396,7 @@
 //   * Eval new
 //   */
 //  @Override
-//  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
+//  public @Nonnull V<? extends Value> callNew(Env env, FeatureExpr ctx, Value []args)
 //  {
 //    return V.one(null);
 //  }

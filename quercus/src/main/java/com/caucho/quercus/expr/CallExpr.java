@@ -36,7 +36,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -53,7 +53,7 @@ public class CallExpr extends Expr {
   protected final StringValue _nsName;
   protected final Expr []_args;
 
-  private V<? extends @NonNull Integer> _funId;
+  private V<? extends Integer> _funId;
 
   protected boolean _isRef;
 
@@ -140,7 +140,7 @@ public class CallExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, ctx, false, false);
   }
@@ -154,7 +154,7 @@ public class CallExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, ctx, false, true);
   }
@@ -252,7 +252,7 @@ public class CallExpr extends Expr {
     });
   }
 
-  private @NonNull V<? extends @NonNull Integer> lookupFunId(Env env) {
+  private @Nonnull V<? extends Integer> lookupFunId(Env env) {
     return VHelper.<Integer>vifTry(
             () -> env.findFunctionId(_name),
             () -> (_nsName != null) ? env.findFunctionId(_nsName) : V.one(0),

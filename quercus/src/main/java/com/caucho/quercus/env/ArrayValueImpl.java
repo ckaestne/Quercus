@@ -32,8 +32,8 @@ package com.caucho.quercus.env;
 import com.caucho.util.RandomUtil;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -69,12 +69,12 @@ public class ArrayValueImpl extends ArrayValue
    * _lookupMap is kept synchronous with the linked list
    * starting at _head; it is used for lookup operations
    */
-  private @NonNull VMap<Value, Entry> _lookupMap = new VHashMap<>();
+  private @Nonnull VMap<Value, Entry> _lookupMap = new VHashMap<>();
 
   /**
    * _size is is kept syncronous with the linked list
    */
-  private @NonNull V<? extends Integer> _size = V.one(Integer.valueOf(0));
+  private @Nonnull V<? extends Integer> _size = V.one(Integer.valueOf(0));
 
   /**
    * _nextAvailableIndex is null if it's not computed yet;
@@ -276,7 +276,7 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   private void addToLookupMap(Entry e) {
-    @NonNull V<? extends Entry> entries = _lookupMap.getOrDefault(e.getKey(), V.one(null));
+    @Nonnull V<? extends Entry> entries = _lookupMap.getOrDefault(e.getKey(), V.one(null));
     checkEntryInvariant(entries);
 
     entries = V.choice(e.getCondition(), V.one(e), entries);
@@ -804,7 +804,7 @@ public class ArrayValueImpl extends ArrayValue
    * also check that they have all the same key
    * @param entrySet
    */
-  private void checkEntryInvariant(@NonNull V<? extends Entry> entrySet) {
+  private void checkEntryInvariant(@Nonnull V<? extends Entry> entrySet) {
     assert entrySet != null : "entrySet is null";
     if (entrySet.equals(V.one(null)))
       return;
@@ -910,7 +910,7 @@ public class ArrayValueImpl extends ArrayValue
    */
   @Override
   public V<? extends Value> containsKey(Value key) {
-    @NonNull V<? extends Entry> entry = getEntry(key);
+    @Nonnull V<? extends Entry> entry = getEntry(key);
 
     return entry.flatMap((a) -> a == null ? V.one(null) : a.getEnvVar().getValue());
 
@@ -929,7 +929,7 @@ public class ArrayValueImpl extends ArrayValue
    * returns removed values
    */
   @Override
-  public V<? extends Value> remove(FeatureExpr ctx, @NonNull Value key) {
+  public V<? extends Value> remove(FeatureExpr ctx, @Nonnull Value key) {
     if (_isDirty)
       copyOnWrite();
 
@@ -1071,7 +1071,7 @@ public class ArrayValueImpl extends ArrayValue
 
     final Value key = _key.toKey();
 
-    @NonNull V<? extends Entry> existingEntries = getEntry(key);// _lookupMap.getOrDefault(key, V.one(null));
+    @Nonnull V<? extends Entry> existingEntries = getEntry(key);// _lookupMap.getOrDefault(key, V.one(null));
 
 
     return existingEntries.vflatMap(ctx, (c,e)->{

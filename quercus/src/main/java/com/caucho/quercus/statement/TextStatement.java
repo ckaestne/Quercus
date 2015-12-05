@@ -35,7 +35,7 @@ import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents static text in a PHP program.
@@ -58,7 +58,7 @@ public class TextStatement extends Statement {
     return _value;
   }
 
-  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     _value.print(env, ctx);
 

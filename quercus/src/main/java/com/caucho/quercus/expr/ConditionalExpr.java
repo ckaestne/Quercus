@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a conditional expression.
@@ -73,7 +73,7 @@ public class ConditionalExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
 
   {
     return _test.evalBoolean(env, ctx).vflatMap(ctx, (c, a)->
@@ -105,7 +105,7 @@ public class ConditionalExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
       return _trueExpr.evalCopy(env, VHelper.noCtx());

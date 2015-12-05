@@ -3,7 +3,7 @@ package edu.cmu.cs.varex;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.lang.reflect.Array;
 import java.util.function.Function;
@@ -74,10 +74,11 @@ public class VHelper {
    *   return x;
    *
    */
-  public static <T> @NonNull V<? extends T> vifTry(Supplier<@NonNull V<? extends T>> solution1,
-                                                   Supplier<@NonNull V<? extends T>> solution2,
+  @Nonnull
+  public static <T>  V<? extends T> vifTry(Supplier<V<? extends T>> solution1,
+                                                   Supplier<V<? extends T>> solution2,
                                                    Predicate<T> predicate) {
-    @NonNull V<? extends T> result = solution1.get();
+    @Nonnull V<? extends T> result = solution1.get();
     return result.flatMap(r1 ->
             predicate.test(r1) ?
                     V.one(r1) :

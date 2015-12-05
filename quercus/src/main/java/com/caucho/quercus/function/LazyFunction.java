@@ -37,7 +37,7 @@
 //import de.fosd.typechef.featureexpr.FeatureExpr;
 //import edu.cmu.cs.varex.V;
 //import edu.cmu.cs.varex.VHelper;
-//import org.checkerframework.checker.nullness.qual.NonNull;
+//import javax.annotation.Nonnull;
 //
 //import java.util.logging.Logger;
 //
@@ -127,37 +127,37 @@
 //  //
 //
 //  @Override
-//  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
+//  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] argValues)
 //  {
 //    return getFun(env).call(env, ctx, argValues);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value arg)
+//  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value arg)
 //  {
 //    return getFun(env).call(env, ctx, arg);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
+//  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2)
 //  {
 //    return getFun(env).call(env, ctx, a1, a2);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
+//  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3)
 //  {
 //    return getFun(env).call(env, ctx, a1, a2, a3);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
+//  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
 //  {
 //    return getFun(env).call(env, ctx, a1, a2, a3, a4);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2,
+//  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value a1, Value a2,
 //                    Value a3, Value a4, Value a5)
 //  {
 //    return getFun(env).call(env, ctx, a1, a2, a3, a4, a5);
@@ -168,37 +168,37 @@
 //  //
 //
 //  @Override
-//  public @NonNull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
+//  public @Nonnull V<? extends Value> callRef(Env env, FeatureExpr ctx, Value[] argValues)
 //  {
 //    return getFun(env).callRef(env, VHelper.noCtx(), argValues);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value arg)
+//  public @Nonnull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value arg)
 //  {
 //    return getFun(env).callRef(env, ctx, arg);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
+//  public @Nonnull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2)
 //  {
 //    return getFun(env).callRef(env, ctx, a1, a2);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
+//  public @Nonnull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3)
 //  {
 //    return getFun(env).callRef(env, ctx, a1, a2, a3);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
+//  public @Nonnull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4)
 //  {
 //    return getFun(env).callRef(env, ctx, a1, a2, a3, a4);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
+//  public @Nonnull V<? extends Value> callRef(Env env,  FeatureExpr ctx, Value a1, Value a2,
 //                       Value a3, Value a4, Value a5)
 //  {
 //    return getFun(env).callRef(env, ctx, a1, a2, a3, a4, a5);
@@ -209,7 +209,7 @@
 //  //
 //
 //  @Override
-//  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] argValues)
+//  public @Nonnull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Value[] argValues)
 //  {
 //    return getFun(env).callCopy(env, VHelper.noCtx(), argValues);
 //  }

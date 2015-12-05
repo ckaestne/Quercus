@@ -37,7 +37,7 @@ import com.caucho.quercus.env.Var;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a PHP array[] reference expression.
@@ -80,7 +80,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.error("Cannot use [] as a read-value.", getLocation()));
   }
@@ -133,7 +133,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _expr.evalArray(env, VHelper.noCtx());
 
@@ -148,7 +148,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
 
@@ -169,7 +169,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
+  public @Nonnull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     /*
     Value array = _expr.evalVar(env);

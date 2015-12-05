@@ -40,7 +40,7 @@ import com.caucho.vfs.*;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -96,7 +96,7 @@ public class QuercusEngine
   /**
    * Executes the script
    */
-  public @NonNull V<? extends Value> executeFile(String filename)
+  public @Nonnull V<? extends Value> executeFile(String filename)
     throws IOException
   {
     init();
@@ -109,7 +109,7 @@ public class QuercusEngine
   /**
    * Executes the script.
    */
-  public @NonNull V<? extends Value> execute(String script)
+  public @Nonnull V<? extends Value> execute(String script)
     throws IOException
   {
     return execute(new StringPath(script));
@@ -118,7 +118,7 @@ public class QuercusEngine
   /**
    * Executes the script.
    */
-  public @NonNull V<? extends Value> execute(Path path)
+  public @Nonnull V<? extends Value> execute(Path path)
     throws IOException
   {
     init();

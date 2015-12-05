@@ -34,7 +34,7 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -59,7 +59,7 @@ abstract public class ArrayValue extends Value {
 
   public static final StringValue ARRAY = new ConstStringValue("Array");
 
-  private @NonNull V<? extends Entry> _current;
+  private @Nonnull V<? extends Entry> _current;
 
   protected ArrayValue()
   {
@@ -202,7 +202,7 @@ abstract public class ArrayValue extends Value {
     return _current;
   }
 
-  protected void setCurrent(FeatureExpr ctx, @NonNull V<? extends Entry> entry)
+  protected void setCurrent(FeatureExpr ctx, @Nonnull V<? extends Entry> entry)
   {
     _current = V.choice(ctx, entry, _current);
   }

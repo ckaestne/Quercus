@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents the die expression
@@ -74,7 +74,7 @@ public class FunDieExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     if (_value != null) {
       V<? extends String> msg = _value.evalString(env, VHelper.noCtx());

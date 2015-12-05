@@ -41,7 +41,7 @@ import com.caucho.vfs.Path;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 
@@ -89,7 +89,7 @@ public class InterpretedPage extends QuercusPage
    *
    * @param env the calling environment
    */
-  public @NonNull V<? extends Value> execute(Env env)
+  public @Nonnull V<? extends Value> execute(Env env)
   {
     V<? extends Value> result = _program.execute(env);
 

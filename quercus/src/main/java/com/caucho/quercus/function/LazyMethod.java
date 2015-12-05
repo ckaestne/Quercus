@@ -35,7 +35,7 @@
 //import com.caucho.quercus.program.Arg;
 //import de.fosd.typechef.featureexpr.FeatureExpr;
 //import edu.cmu.cs.varex.V;
-//import org.checkerframework.checker.nullness.qual.NonNull;
+//import javax.annotation.Nonnull;
 //
 ///**
 // * Lazily load a compiled method.
@@ -206,7 +206,7 @@
 //  //
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+//  public @Nonnull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
 //                          QuercusClass qClass,
 //                          Value qThis,
 //                          Value []args)
@@ -215,7 +215,7 @@
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+//  public @Nonnull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
 //                          QuercusClass qClass,
 //                          Value qThis)
 //  {
@@ -223,7 +223,7 @@
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+//  public @Nonnull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
 //                          QuercusClass qClass,
 //                          Value qThis,
 //                          Value a1)
@@ -232,7 +232,7 @@
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+//  public @Nonnull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
 //                          QuercusClass qClass,
 //                          Value qThis,
 //                          Value a1, Value a2)
@@ -241,7 +241,7 @@
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+//  public @Nonnull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
 //                          QuercusClass qClass,
 //                          Value qThis,
 //                          Value a1, Value a2, Value a3)
@@ -250,7 +250,7 @@
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
+//  public @Nonnull V<? extends Value> callMethod(Env env,  FeatureExpr ctx,
 //                          QuercusClass qClass,
 //                          Value qThis,
 //                          Value a1, Value a2, Value a3, Value a4)
@@ -259,7 +259,7 @@
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
+//  public @Nonnull V<? extends Value> callMethod(Env env,  FeatureExpr ctx, QuercusClass qClass, Value qThis,
 //                          Value a1, Value a2, Value a3, Value a4, Value a5)
 //  {
 //    return getFun().callMethod(env, ctx, qClass, qThis, a1, a2, a3, a4, a5);
@@ -270,7 +270,7 @@
 //  //
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,
 //                             QuercusClass qClass,
 //                             Value qThis,
 //                             Value []args)
@@ -279,48 +279,48 @@
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis)
 //  {
 //    return getFun().callMethodRef(env, ctx, qClass, qThis);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 //                             Value a1)
 //  {
 //    return getFun().callMethodRef(env, ctx, qClass, qThis, a1);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 //                             Value a1, Value a2)
 //  {
 //    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 //                             Value a1, Value a2, Value a3)
 //  {
 //    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 //                             Value a1, Value a2, Value a3, Value a4)
 //  {
 //    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3, a4);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
+//  public @Nonnull V<? extends Value> callMethodRef(Env env,  FeatureExpr ctx,QuercusClass qClass, Value qThis,
 //                             Value a1, Value a2, Value a3, Value a4, Value a5)
 //  {
 //    return getFun().callMethodRef(env, ctx, qClass, qThis, a1, a2, a3, a4, a5);
 //  }
 //
 //  @Override
-//  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
+//  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Value[] args)
 //  {
 //    throw new UnsupportedOperationException(getClass().getName());
 //  }

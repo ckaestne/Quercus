@@ -37,7 +37,7 @@ import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -777,7 +777,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
@@ -789,7 +789,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                                    V<? extends ValueOrVar>[] args)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -801,7 +801,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 

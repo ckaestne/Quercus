@@ -40,7 +40,7 @@ import com.caucho.quercus.statement.Statement;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -220,17 +220,17 @@ public class Function extends AbstractFunction {
     return values;
   }
 
-  public @NonNull V<? extends Value> call(Env env, FeatureExpr ctx, Expr []args)
+  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Expr []args)
   {
     return callImpl(env, ctx, args, false);
   }
 
-  public @NonNull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Expr []args)
+  public @Nonnull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Expr []args)
   {
     return callImpl(env, ctx, args, false);
   }
 
-  public @NonNull V<? extends Value> callRef(Env env,FeatureExpr ctx,  Expr []args)
+  public @Nonnull V<? extends Value> callRef(Env env,FeatureExpr ctx,  Expr []args)
   {
     return callImpl(env, ctx, args, true);
   }

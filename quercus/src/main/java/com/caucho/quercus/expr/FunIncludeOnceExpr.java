@@ -38,7 +38,7 @@ import com.caucho.vfs.Path;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a PHP include statement
@@ -84,7 +84,7 @@ public class FunIncludeOnceExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     StringValue name = _expr.eval(env, VHelper.noCtx()).getOne().toStringValue();
 

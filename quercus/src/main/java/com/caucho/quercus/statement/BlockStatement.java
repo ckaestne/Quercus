@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -101,7 +101,7 @@ public class BlockStatement extends Statement {
     return FALL_THROUGH;
   }
 
-  public @NonNull V<? extends Value> execute(Env env, FeatureExpr ctx) {
+  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx) {
     V<? extends Value> value = V.one(null);
     for (int i = 0; i < _statements.length; i++) {
       Statement statement = _statements[i];

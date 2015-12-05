@@ -57,7 +57,7 @@ import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHashMap;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -4181,7 +4181,7 @@ public class Env
    * @param code the code to evalute
    * @return the result
    */
-  public @NonNull V<? extends Value> evalCode(StringValue code)
+  public @Nonnull V<? extends Value> evalCode(StringValue code)
     throws IOException
   {
     if (log.isLoggable(Level.FINER)) {
@@ -4242,7 +4242,7 @@ public class Env
    *
    * @return the result
    */
-  public @NonNull V<? extends Value> executeTop()
+  public @Nonnull V<? extends Value> executeTop()
   {
     try {
       return executePageTop(_page);
@@ -4309,7 +4309,7 @@ public class Env
    * @param name the function name
    * @return the function value
    */
-  public final @NonNull V<? extends Value> call(StringValue name, FeatureExpr ctx)
+  public final @Nonnull V<? extends Value> call(StringValue name, FeatureExpr ctx)
   {
     return this.call(ctx, name, new V[]{});
 
@@ -4326,7 +4326,7 @@ public class Env
    * @param a0 the first argument
    * @return the function value
    */
-  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0)
+  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0)
   {
     return this.call(ctx, name, new V[]{a0});
   }
@@ -4339,7 +4339,7 @@ public class Env
    * @param a1 the second argument
    * @return the function value
    */
-  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1)
+  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1)
   {
     return this.call(ctx, name, new V[]{a0,a1});
   }
@@ -4353,7 +4353,7 @@ public class Env
    * @param a2 the third argument
    * @return the function value
    */
-  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
+  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
   {
     return this.call(ctx, name, new V[]{a0,a1,a2});
   }
@@ -4368,7 +4368,7 @@ public class Env
    * @param a3 the fourth argument
    * @return the function value
    */
-  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
+  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
   {
     return this.call(ctx, name, new V[]{a0,a1,a2,a3});
   }
@@ -4384,7 +4384,7 @@ public class Env
    * @param a4 the fifth argument
    * @return the function value
    */
-  public final @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1,
+  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1,
                     V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
   {
     return this.call(ctx, name, new V[]{a0,a1,a2,a3,a4});
@@ -4397,7 +4397,7 @@ public class Env
    * @param args the arguments
    * @return the function value
    */
-  public @NonNull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> []args)
+  public @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> []args)
   {
     AbstractFunction fun = findFunction(name).getOne();
 
@@ -4412,7 +4412,7 @@ public class Env
 //   * @param name the function name
 //   * @return the function value
 //   */
-//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
+//  public @Nonnull V<? extends Value> callRef(FeatureExpr ctx, StringValue name)
 //  {
 //    AbstractFunction fun = findFunction(name).getOne();
 //
@@ -4429,7 +4429,7 @@ public class Env
 //   * @param a0 the first argument
 //   * @return the function value
 //   */
-//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
+//  public @Nonnull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0)
 //  {
 //    AbstractFunction fun = findFunction(name).getOne();
 //
@@ -4447,7 +4447,7 @@ public class Env
 //   * @param a1 the second argument
 //   * @return the function value
 //   */
-//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
+//  public @Nonnull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1)
 //  {
 //    AbstractFunction fun = findFunction(name).getOne();
 //
@@ -4466,7 +4466,7 @@ public class Env
 //   * @param a2 the third argument
 //   * @return the function value
 //   */
-//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
+//  public @Nonnull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2)
 //  {
 //    AbstractFunction fun = findFunction(name).getOne();
 //
@@ -4486,7 +4486,7 @@ public class Env
 //   * @param a3 the fourth argument
 //   * @return the function value
 //   */
-//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
+//  public @Nonnull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1, Value a2, Value a3)
 //  {
 //    AbstractFunction fun = findFunction(name).getOne();
 //
@@ -4507,7 +4507,7 @@ public class Env
 //   * @param a4 the fifth argument
 //   * @return the function value
 //   */
-//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
+//  public @Nonnull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value a0, Value a1,
 //                       Value a2, Value a3, Value a4)
 //  {
 //    AbstractFunction fun = findFunction(name).getOne();
@@ -4525,7 +4525,7 @@ public class Env
 //   * @param args the arguments
 //   * @return the function value
 //   */
-//  public @NonNull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
+//  public @Nonnull V<? extends Value> callRef(FeatureExpr ctx, StringValue name, Value []args)
 //  {
 //    AbstractFunction fun = findFunction(name).getOne();
 //

@@ -33,8 +33,9 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.vfs.*;
 import edu.cmu.cs.varex.VWriteStream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class Quercus
     startMain(args, quercus);
   }
 
-  public static void startMain(String []args, @NonNull Quercus quercus)
+  public static void startMain(String []args, @Nonnull Quercus quercus)
     throws IOException
   {
     if (! quercus.parseArgs(args)) {

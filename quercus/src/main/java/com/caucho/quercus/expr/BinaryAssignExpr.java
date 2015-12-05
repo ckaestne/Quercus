@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 /**
  * Represents a PHP assignment expression.
@@ -87,7 +87,7 @@ public class BinaryAssignExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
     return _var.evalAssignValue(env, ctx, _value);
   }
@@ -101,7 +101,7 @@ public class BinaryAssignExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @NonNull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
+  public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     // php/0d9e
     return eval(env, ctx).map((a)->a.copy());

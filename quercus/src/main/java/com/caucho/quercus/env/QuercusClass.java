@@ -40,7 +40,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import javax.annotation.Nonnull;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -1212,7 +1212,7 @@ public class QuercusClass extends NullValue {
     }
   }
 
-  public @NonNull V<? extends Value> callNew(Env env, FeatureExpr ctx, Object parentJavaObject, V<? extends ValueOrVar> ...args)
+  public @Nonnull V<? extends Value> callNew(Env env, FeatureExpr ctx, Object parentJavaObject, V<? extends ValueOrVar> ...args)
   {
     QuercusClass oldCallingClass = env.setCallingClass(this);
 
@@ -1440,7 +1440,7 @@ public class QuercusClass extends NullValue {
    * Implements the __get method call.
    * __get() is utilized for reading data from inaccessible properties.
    */
-  public @NonNull V<? extends Value> getField(Env env, FeatureExpr ctx, Value qThis, StringValue name)
+  public @Nonnull V<? extends Value> getField(Env env, FeatureExpr ctx, Value qThis, StringValue name)
   {
     // php/09km, php/09kn
     // push/pop to prevent infinite recursion
@@ -1626,7 +1626,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethod(Env env,
+  public @Nonnull V<? extends Value> callMethod(Env env,
                                        FeatureExpr ctx,
                           Value qThis,
                           StringValue methodName, int hash,
@@ -1652,7 +1652,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                           StringValue methodName, int hash)
   {
     if (qThis.isNull())
@@ -1672,7 +1672,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                           StringValue methodName, int hash,
                                                 V<? extends ValueOrVar> a1)
   {
@@ -1695,7 +1695,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                           StringValue methodName, int hash,
                                                 V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
   {
@@ -1718,7 +1718,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
   {
@@ -1741,7 +1741,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
   {
@@ -1764,7 +1764,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4, V<? extends ValueOrVar>a5)
   {
@@ -1788,7 +1788,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
                              StringValue methodName, int hash,
                                                    V<? extends ValueOrVar> []args)
   {
@@ -1811,7 +1811,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
                              StringValue methodName, int hash)
   {
     if (qThis.isNull())
@@ -1831,7 +1831,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
                              StringValue methodName, int hash,
                              V<? extends ValueOrVar>a1)
   {
@@ -1854,7 +1854,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
                              StringValue methodName, int hash,
                              V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2)
   {
@@ -1877,7 +1877,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
                              StringValue methodName, int hash,
                              V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
   {
@@ -1900,7 +1900,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
                              StringValue methodName, int hash,
                              V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
   {
@@ -1924,7 +1924,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function.
    */
-  public @NonNull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
+  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, Value qThis,
                              StringValue methodName, int hash,
                              V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4, V<? extends ValueOrVar>a5)
   {
@@ -1953,7 +1953,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName,
                                                       V<? extends ValueOrVar> []args)
@@ -1966,7 +1966,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName)
   {
@@ -1977,7 +1977,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName,
                                 V<? extends ValueOrVar>a1)
@@ -1990,7 +1990,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2)
@@ -2003,7 +2003,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
@@ -2016,7 +2016,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
@@ -2029,7 +2029,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4,
@@ -2043,7 +2043,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName, int hash,
                                                       V<? extends ValueOrVar> []args)
@@ -2060,7 +2060,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName, int hash)
   {
@@ -2076,7 +2076,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName, int hash,
                                 V<? extends ValueOrVar>a1)
@@ -2093,7 +2093,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName, int hash,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2)
@@ -2110,7 +2110,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName, int hash,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
@@ -2127,7 +2127,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName, int hash,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
@@ -2144,7 +2144,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethod(Env env, FeatureExpr ctx,
                                 Value qThis,
                                 StringValue methodName, int hash,
                                 V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4,
@@ -2162,7 +2162,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName,
                                                          V<? extends ValueOrVar> []args)
@@ -2175,7 +2175,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName)
   {
@@ -2186,7 +2186,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName,
                                    V<? extends ValueOrVar>a1)
@@ -2199,7 +2199,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2)
@@ -2212,7 +2212,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
@@ -2225,7 +2225,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
@@ -2238,7 +2238,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4,
@@ -2252,7 +2252,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName, int hash,
                                                          V<? extends ValueOrVar> []args)
@@ -2269,7 +2269,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName, int hash)
   {
@@ -2285,7 +2285,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName, int hash,
                                    V<? extends ValueOrVar>a1)
@@ -2302,7 +2302,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName, int hash,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2)
@@ -2319,7 +2319,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName, int hash,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
@@ -2336,7 +2336,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName, int hash,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
@@ -2353,7 +2353,7 @@ public class QuercusClass extends NullValue {
   /**
    * calls the function statically.
    */
-  public @NonNull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends Value> callStaticMethodRef(Env env, FeatureExpr ctx,
                                    Value qThis,
                                    StringValue methodName, int hash,
                                    V<? extends ValueOrVar>a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4,
@@ -2383,7 +2383,7 @@ public class QuercusClass extends NullValue {
    * calls the function.
    */
   @Override
-  public @NonNull V<? extends Value> callMethod(Env env,
+  public @Nonnull V<? extends Value> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash)
   {
     return callMethod(env, ctx, this, methodName, hash);
@@ -2394,7 +2394,7 @@ public class QuercusClass extends NullValue {
    * calls the function.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                                    V<? extends ValueOrVar>[] args)
   {
@@ -2405,7 +2405,7 @@ public class QuercusClass extends NullValue {
    * calls the function.
    */
   @Override
-  public @NonNull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends Value> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash)
   {
     return callMethodRef(env, ctx, this, methodName, hash);
