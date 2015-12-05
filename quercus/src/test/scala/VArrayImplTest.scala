@@ -138,5 +138,25 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         val a = new ArrayValueImpl()
         a.remove(t, x) should equal(V.one(UnsetValue.UNSET))
 
+        a.append(t, x, V.one(z))
+        a.remove(t, x) should equal(V.one(z))
+
+        a.append(t, x, V.one(z))
+        a.remove(foo, x) should equal(V.choice(foo, z, UnsetValue.UNSET))
+        a.get(x).getValue should equal(V.choice(foo, UnsetValue.UNSET, z))
+
+        a.clear()
+        a.append(foo, x, V.one(y))
+        a.append(t, y, V.one(x))
+        a.append(bar, x, V.one(z))
+        a.remove(t, x) should equal(V.choice(bar, V.one(z), V.choice(foo, y, UnsetValue.UNSET)))
+
+        a.clear()
+        a.append(foo, x, V.one(y))
+        a.append(t, y, V.one(x))
+        a.append(bar, x, V.one(z))
+        a.get(x).getValue should equal(V.choice(bar, V.one(z), V.choice(foo, y, UnsetValue.UNSET)))
+        a.remove(bar, x) should equal(V.choice(bar, z, UnsetValue.UNSET))
+        a.get(x).getValue should equal(V.choice(foo andNot bar, y, UnsetValue.UNSET))
     }
 }

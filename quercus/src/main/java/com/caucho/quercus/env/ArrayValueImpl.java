@@ -103,10 +103,12 @@ public class ArrayValueImpl extends ArrayValue
   ConstArrayValue _constSource;
 
   public ArrayValueImpl() {
+    checkInvariants();
   }
 
   public ArrayValueImpl(int size) {
     _lookupMap = new VHashMap<>(size);
+    checkInvariants();
   }
 
   public ArrayValueImpl(ArrayValue source) {
@@ -124,10 +126,12 @@ public class ArrayValueImpl extends ArrayValue
       */
       entry.setEnvVar(ptr.getEnvVar().copy());
     }
+    checkInvariants();
   }
 
   public ArrayValueImpl(ArrayValueImpl source) {
     copyFrom(source);
+    checkInvariants();
   }
 
   protected void copyFrom(ArrayValueImpl source) {
@@ -195,6 +199,7 @@ public class ArrayValueImpl extends ArrayValue
 
       append(ptr.getKey(), value.copyTree(env, root));
     }
+    checkInvariants();
   }
 
   public ArrayValueImpl(Value[] keys, Value[] values) {
@@ -464,6 +469,7 @@ public class ArrayValueImpl extends ArrayValue
 
       entry.vforeach(c, (cc, a) -> {if (cc.isSatisfiable()) a.set(cc, value);});
     });
+    checkInvariants();
 
     return this;
   }
@@ -729,6 +735,7 @@ public class ArrayValueImpl extends ArrayValue
     V<? extends Value> key = createTailKey(ctx);
 
     append(ctx, key, value);
+    checkInvariants();
 
     return value;
   }
@@ -821,6 +828,7 @@ public class ArrayValueImpl extends ArrayValue
 
     V<? extends Entry> entries = _lookupMap.getOrDefault(key, V.one(null));
     checkEntryInvariant(entries);
+    checkInvariants();
 
     V<? extends Var> v=entries.flatMap(e-> (e==null) ? V.one(new Var(V.one(UnsetValue.UNSET))) : e.getEnvVar().getVar()) ;
     return new EnvVarImpl(v);
@@ -941,45 +949,99 @@ public class ArrayValueImpl extends ArrayValue
 
   /**
    * Removes a value.
+   *
+   * returns removed values
    */
   @Override
-  public V<? extends Value> remove(FeatureExpr ctx, Value key) {
-    throw new UnimplementedVException();
-//    if (_isDirty)
-//      copyOnWrite();
-//
-//    key = key.toKey();
-//
-//    Entry[] entries = _entries;
-//    Entry entry;
-//
-//    int hash = key.hashCode() & _hashMask;
-//
-//    if (entries != null) {
-//      entry = entries[hash];
-//    } else
-//      entry = _head;
-//
-//    Entry prevHash = null;
-//
-//    for (; entry != null; entry = entry.getNextHash()) {
-//      Value entryKey = entry.getKey();
-//
-//      if (key == entryKey || key.equals(entryKey)) {
-//        if (prevHash != null)
-//          prevHash.setNextHash(entry.getNextHash());
-//        else if (entries != null)
-//          entries[hash] = entry.getNextHash();
-//        else
-//          _head = entry.getNextHash();
-//
-//        return removeEntry(key, entry);
-//      }
-//
-//      prevHash = entry;
-//    }
-//
-//    return UnsetValue.UNSET;
+  public V<? extends Value> remove(FeatureExpr ctx, @NonNull Value key) {
+    if (_isDirty)
+      copyOnWrite();
+
+    key = key.toKey();
+
+    //lookup doesn't really help, lookup is updated afterward
+
+    V<? extends Entry> remainingEntries = V.one(null);
+    V<? extends Value> removedValues = V.one(UnsetValue.UNSET);
+
+    Entry entry = _head;
+    Entry prevEntry = null;
+
+    for (; entry != null; entry = entry.getNext()) {
+      Value entryKey = entry.getKey();
+
+      //key matches and in relevant configuration space?
+      if (key == entryKey || key.equals(entryKey)) {
+        if (ctx.and(entry.getCondition()).isSatisfiable()) {
+
+          Entry next, prev;
+          //remove in all configurations?
+          if (entry.getCondition().implies(ctx).isTautology()) {
+            //remove entry
+            removedValues = V.choice(entry.getCondition(), entry.getEnvVar().getValue(), removedValues);
+            next = entry.getNext();
+            prev = prevEntry;
+            incSize(entry.getCondition(), -1);
+          } else {
+            //replace entry with one with restricted condition
+            removedValues = V.choice(entry.getCondition().and(ctx), entry.getEnvVar().getValue(), removedValues);
+            incSize(entry.getCondition().and(ctx), -1);
+            Entry newEntry = new Entry(entry.getCondition().andNot(ctx), entry.getKey(), entry.getEnvVar());
+            newEntry.setNext(entry.getNext());
+            newEntry.setPrev(entry.getPrev());
+            remainingEntries = V.choice(newEntry.getCondition(), V.one(newEntry), remainingEntries);
+            next = newEntry;
+            prev = newEntry;
+          }
+
+          //update linked list
+          if (prevEntry != null)
+            prevEntry.setNext(next);
+          else
+            _head = next;
+          if (entry.getNext() != null)
+            entry.getNext().setPrev(prev);
+          else
+            _tail = prev;
+
+
+        } else
+          remainingEntries = V.choice(entry.getCondition(), V.one(entry), remainingEntries);
+      }
+
+      prevEntry = entry;
+    }
+    checkEntryInvariant(remainingEntries);
+    _lookupMap.put(key, remainingEntries);
+    _nextAvailableIndex = null;
+    setCurrent(_head);
+    checkInvariants();
+
+    return removedValues;
+  }
+
+  private void checkInvariants() {
+    // check size
+    V<? extends Integer> expectedSize = foldRight(V.one(0), VHelper.True(), (c, e, v) -> V.choice(e.getCondition(), v + 1, v));
+    assert _size.equals(expectedSize) : "stored size " + _size + " different from actual size " + expectedSize;
+
+
+    //check lookup table and backward references
+    Entry entry = _head;
+    Entry last = null;
+    for (; entry != null; entry = entry.getNext()) {
+      assert entry.getCondition().isSatisfiable() : "entry with unsatisfiable condition";
+
+      V<? extends Entry> entries = _lookupMap.get(entry.getKey());
+      assert entries != null : "inconsistent lookup table, entry missing";
+      assert entries.getOne(entry.getCondition()) == entry : "inconsistent lookup table, entry not found in lookup table";
+
+      assert entry.getPrev() == last : "double linked list broken";
+      last = entry;
+    }
+    assert _tail == last : "_tail pointer incorrect";
+
+
   }
 
   @Override
@@ -987,36 +1049,6 @@ public class ArrayValueImpl extends ArrayValue
     throw new UnimplementedVException();
   }
 
-  private Value removeEntry(Value key, Entry entry) {
-    throw new UnimplementedVException();
-//    Entry next = entry.getNext();
-//    Entry prev = entry.getPrev();
-//
-//    if (prev != null)
-//      prev.setNext(next);
-//    else
-//      _head = next;
-//
-//    if (next != null)
-//      next.setPrev(prev);
-//    else
-//      _tail = prev;
-//
-//    entry.setPrev(null);
-//    entry.setNext(null);
-//
-//    setCurrent(_head);
-//
-//    _size--;
-//
-//    Value value = entry.getValue().getOne();
-//
-//    if (key.nextIndex(-1) == _nextAvailableIndex) {
-//      _nextAvailableIndex = -1;
-//    }
-//
-//    return value;
-  }
 
   /**
    * Returns the array ref.
@@ -1111,6 +1143,7 @@ public class ArrayValueImpl extends ArrayValue
       _tail.setNext(newEntry);
       _tail = newEntry;
     }
+    checkInvariants();
 
     return newEntry;
   }
