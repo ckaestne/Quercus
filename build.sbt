@@ -1,3 +1,6 @@
+import com.typesafe.sbt.SbtAspectj.{ Aspectj, aspectjSettings, compiledClasses }
+import com.typesafe.sbt.SbtAspectj.AspectjKeys.{ inputs, weave }
+
 
 scalaVersion := "2.11.7"
 
@@ -9,7 +12,8 @@ lazy val hessian = project
 
 lazy val kernel = project.dependsOn(hessian)
 
-lazy val quercus = project.dependsOn(kernel)
+lazy val quercus = project.dependsOn(kernel).
+    settings(aspectjSettings: _*)
 
 lazy val phptest = project.dependsOn(quercus % "test->test;compile->compile")
 

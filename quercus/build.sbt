@@ -1,3 +1,6 @@
+import com.typesafe.sbt.SbtAspectj.{ Aspectj, aspectjSettings, compiledClasses }
+import com.typesafe.sbt.SbtAspectj.AspectjKeys.{ inputs, weave }
+
 scalaVersion := "2.11.7"
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
@@ -24,7 +27,11 @@ libraryDependencies += "org.scala-lang.modules" % "scala-java8-compat_2.11" % "0
 
 libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
 
+libraryDependencies += "com.google.code.findbugs" % "jsr305" % "3.0.1"
+
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+
+
 
 jacoco.settings
 
@@ -38,3 +45,14 @@ jacoco.reportFormats in jacoco.Config := Seq(
 //javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint", "-implicit:class", "-processor",
 //    "org.checkerframework.checker.nullness.NullnessChecker", "-AprintErrorStack",
 //        "-Xbootclasspath/p:checker/dist/jdk8.jar")
+
+
+
+javacOptions ++= Seq("-g")
+
+inputs in Aspectj <+= compiledClasses
+
+// use the results of aspectj weaving
+products in Compile <<= products in Aspectj
+
+products in Runtime <<= products in Compile
