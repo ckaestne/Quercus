@@ -554,14 +554,15 @@ abstract public class JavaAdapter extends ArrayValue
    * @return the key if it is found in the array, NULL otherwise
    */
   @Override
-  public Value containsStrict(Value value)
+  public V<? extends Value> containsStrict(Value value)
   {
-    for (VEntry entry : entrySet()) {
-      if (entry.getEnvVar().getOne().eql(value))
-        return entry.getKey();
-    }
-
-    return NullValue.NULL;
+    throw new UnimplementedVException();
+//    for (VEntry entry : entrySet()) {
+//      if (entry.getEnvVar().getOne().eql(value))
+//        return entry.getKey();
+//    }
+//
+//    return NullValue.NULL;
   }
 
   /**

@@ -247,7 +247,7 @@ public class CopyArrayValue extends ArrayValue {
    *
    * @return the key if it is found in the array, NULL otherwise
    */
-  public Value containsStrict(Value value)
+  public V<? extends Value> containsStrict(Value value)
   {
     if (_copyArray != null)
       return _copyArray.containsStrict(value);

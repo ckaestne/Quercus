@@ -1292,7 +1292,7 @@ abstract public class ArrayValue extends Value {
    *
    * @return the key if it is found in the array, NULL otherwise
    */
-  abstract public Value containsStrict(Value value);
+  abstract public V<? extends Value> containsStrict(Value value);
 
   /**
    * Returns the corresponding value if this array contains the given key

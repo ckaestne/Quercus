@@ -340,12 +340,12 @@ public class ArrayValueWrapper extends ArrayValue {
   /**
    * Returns the corresponding key if this array contains the given value
    *
-   * @param value to search for in the array
+   * @param key to search for in the array
    *
    * @return the key if it is found in the array, NULL otherwise
    */
   @Override
-  public Value containsStrict(Value key)
+  public V<? extends Value> containsStrict(Value key)
   {
     return _array.containsStrict(key);
   }

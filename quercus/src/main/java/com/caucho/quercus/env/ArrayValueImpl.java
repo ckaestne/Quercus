@@ -880,10 +880,10 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   public V<? extends Value> contains(V<? extends Value> value) {
-    return this.<Value>foldRightUntil(V.one(NullValue.NULL), VHelper.noCtx(), (c, entry, result)->
-            result == NullValue.NULL ? VHelper.<Value, Value, Value>mapAll(entry.getEnvVar().getValue(), value, (v1, v2)->
-                    v1.eq(v2) ? entry.getKey() : result
-            ) : V.one(result)        ,
+    return this.<Value>foldRightUntil(V.one(NullValue.NULL), VHelper.noCtx(), (c, entry, result) ->
+                    result == NullValue.NULL ? VHelper.<Value, Value, Value>mapAll(entry.getEnvVar().getValue(), value, (v1, v2) ->
+                            v1.eq(v2) ? entry.getKey() : result
+                    ) : V.one(result),
             result -> result != NullValue.NULL
     );
   }
@@ -894,14 +894,19 @@ public class ArrayValueImpl extends ArrayValue
    * @param value to search for in the array
    * @return the key if it is found in the array, NULL otherwise
    */
+  @Deprecated
   @Override
-  public Value containsStrict(Value value) {
-    for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
-      if (entry.getEnvVar().getOne().eql(value))
-        return entry.getKey();
-    }
+  public V<? extends Value> containsStrict(Value value) {
+    return this.containsStrict(V.one(value));
+  }
 
-    return NullValue.NULL;
+  public V<? extends Value> containsStrict(V<? extends Value> value) {
+    return this.<Value>foldRightUntil(V.one(NullValue.NULL), VHelper.noCtx(), (c, entry, result) ->
+                    result == NullValue.NULL ? VHelper.<Value, Value, Value>mapAll(entry.getEnvVar().getValue(), value, (v1, v2) ->
+                            v1.eql(v2) ? entry.getKey() : result
+                    ) : V.one(result),
+            result -> result != NullValue.NULL
+    );
   }
 
   /**

@@ -2965,7 +2965,7 @@ public class ArrayModule
     Value result;
 
     if (strict)
-      result = stack.containsStrict(needle);
+      result = stack.containsStrict(needle).getOne();
     else
       result = stack.contains(needle).getOne();
 
