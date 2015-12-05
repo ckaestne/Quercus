@@ -779,7 +779,7 @@ abstract public class ArrayValue extends Value {
   }
 
   /**
-   * Add
+   * Add element to the end of an array
    */
   @Override
   abstract public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value);

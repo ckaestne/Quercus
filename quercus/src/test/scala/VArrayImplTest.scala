@@ -96,4 +96,41 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.append(bar, V.one(x), V.one(y))
         a.get(x).getValue should equal(V.choice(bar, V.one(y), V.choice(foo, z, UnsetValue.UNSET)))
     }
+
+    it should "support conditional append operations" in {
+        val a = new ArrayValueImpl()
+        a.get(x).getValue should equal(V.one(UnsetValue.UNSET))
+
+        a.put(t, V.one(z))
+        a.get(0).getValue should equal(V.one(z))
+
+        a.put(foo, V.one(x))
+        a.get(1).getValue should equal(V.choice(foo, x, UnsetValue.UNSET))
+
+        a.put(bar, V.one(y))
+        a.get(1).getValue should equal(V.choice(foo, V.one(x), V.choice(bar, y, UnsetValue.UNSET)))
+        a.get(2).getValue should equal(V.choice(foo and bar, y, UnsetValue.UNSET))
+
+        a.put(t, V.one(z))
+        a.get(1).getValue should equal(V.choice(foo, V.one(x), V.choice(bar, y, z)))
+        a.get(2).getValue should equal(V.choice(foo.not andNot bar, V.one(UnsetValue.UNSET), V.choice(foo and bar, y, z)))
+        a.get(3).getValue should equal(V.choice(foo and bar, z, UnsetValue.UNSET))
+
+
+        a.append(t, LongValue.create(5), V.one(z))
+        a.get(5).getValue should equal(V.one(z))
+
+        a.put(t, V.one(x))
+        a.get(6).getValue should equal(V.one(x))
+
+        a.put(foo, V.one(x))
+        a.get(7).getValue should equal(V.choice(foo, x, UnsetValue.UNSET))
+
+        a.append(foo, LongValue.create(10), V.one(z))
+        a.get(10).getValue should equal(V.choice(foo, z, UnsetValue.UNSET))
+
+        a.put(t, V.one(x))
+        a.get(11).getValue should equal(V.choice(foo, x, UnsetValue.UNSET))
+        a.get(7).getValue should equal(V.one(x))
+    }
 }

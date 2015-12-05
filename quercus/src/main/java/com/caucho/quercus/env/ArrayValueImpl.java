@@ -445,6 +445,10 @@ public class ArrayValueImpl extends ArrayValue
     return this.append(VHelper.noCtx(), V.one(key), V.one(value));
   }
 
+  public ArrayValue append(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value) {
+    return this.append(ctx, V.one(key), value);
+  }
+
   public ArrayValue append(FeatureExpr ctx, V<? extends Value> key, V<? extends ValueOrVar> value) {
     if (_isDirty) {
       copyOnWrite();
@@ -714,20 +718,19 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   /**
-   * Add
+   * Add element to the end
    */
   @Override
   public V<? extends Value> put(FeatureExpr ctx, V<?extends Value> value) {
-    throw new UnimplementedVException();
-//
-//    if (_isDirty)
-//      copyOnWrite();
-//
-//    Value key = createTailKey(VHelper.noCtx());
-//
-//    append(key, value);
-//
-//    return value;
+
+    if (_isDirty)
+      copyOnWrite();
+
+    V<? extends Value> key = createTailKey(ctx);
+
+    append(ctx, key, value);
+
+    return value;
   }
 
   /**
@@ -766,7 +769,7 @@ public class ArrayValueImpl extends ArrayValue
    * @param ctx
    */
   public V<? extends Value> createTailKey(FeatureExpr ctx) {
-    if (_nextAvailableIndex.when(x -> x < 0).and(ctx).isSatisfiable())
+    if (_nextAvailableIndex==null)
       updateNextAvailableIndex();
 
     return _nextAvailableIndex.map((a) -> LongValue.create(a));
@@ -1130,7 +1133,7 @@ public class ArrayValueImpl extends ArrayValue
 
     Entry newEntry = new Entry(ctx, key);
     if (_nextAvailableIndex != null)
-      _nextAvailableIndex = _nextAvailableIndex.<Long>map(k->key.nextIndex(k));
+      _nextAvailableIndex = _nextAvailableIndex.<Long>flatMap(k->V.choice(ctx, key.nextIndex(k), k));
     _lookupMap.put(ctx, key, newEntry);
 
     if (_head == null) {
@@ -1179,13 +1182,14 @@ public class ArrayValueImpl extends ArrayValue
    * Updates _nextAvailableIndex on a remove of the highest value
    */
   private void updateNextAvailableIndex() {
-    throw new UnimplementedVException();
 
-//    _nextAvailableIndex = 0;
-//
-//    for (Entry entry = _head; entry != null; entry = entry.getNext()) {
-//      _nextAvailableIndex = entry.getKey().nextIndex(_nextAvailableIndex);
-//    }
+    _nextAvailableIndex = V.one(Long.valueOf(0));
+
+    for (Entry entry = _head; entry != null; entry = entry.getNext()) {
+      final Entry e = entry;
+      _nextAvailableIndex = _nextAvailableIndex.flatMap(v->
+        V.choice(e.getCondition(), e.getKey().nextIndex(v), v));
+    }
   }
 
   /**
