@@ -450,6 +450,7 @@ public class ArrayValueImpl extends ArrayValue
     return this.append(VHelper.noCtx(), V.one(key), V.one(value));
   }
 
+  @Override
   public ArrayValue append(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value) {
     return this.append(ctx, V.one(key), value);
   }
@@ -721,6 +722,12 @@ public class ArrayValueImpl extends ArrayValue
       copyOnWrite();
 
     return get(index).getValue();
+  }
+
+
+  @Deprecated@Override
+  public EnvVar put(Value index, EnvVar value) {
+    return EnvVar.fromValues(this.put(VHelper.noCtx(), index, value.getVar()).map((a)->a.toValue()));
   }
 
   /**

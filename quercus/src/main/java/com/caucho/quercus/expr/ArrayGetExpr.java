@@ -211,7 +211,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
   {
     // php/03mk, php/03mm, php/03mn, php/04b3
     // php/04ah
-    V<? extends Value> array = _expr.evalArrayAssign(env, VHelper.noCtx(), _index, valueExpr);
+    V<? extends Value> array = _expr.evalArrayAssign(env, ctx, _index, valueExpr);
 
     return array;
   }

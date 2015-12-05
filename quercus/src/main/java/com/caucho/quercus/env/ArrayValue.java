@@ -755,10 +755,9 @@ abstract public class ArrayValue extends Value {
   /**
    * Adds a new value.
    */
-//  @Override
-  public Value put(Value key, Value value)
-  {
-    append(key, value);
+  @Override
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    append(ctx, index, value);
 
     return value;
   }

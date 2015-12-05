@@ -2635,9 +2635,16 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return value;
   }
 
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    Env.getCurrent().warning(L.l("{0} cannot be used as an array",
+            toDebugString()));
+    return value;
+  }
+
   /**
    * Sets the array ref and returns the value
    */
+  @Deprecated
   public EnvVar put(Value index, EnvVar value)
   {
     Env.getCurrent().warning(L.l("{0} cannot be used as an array",
@@ -2649,6 +2656,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Sets the array ref.
    */
+  @Deprecated
   public final Value put(Value index, EnvVar value,
                          Value innerIndex, Value innerValue)
   {
@@ -2685,12 +2693,22 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * string update ($a[0] = 'A').  Creates an array automatically if
    * necessary.
    */
+  @Deprecated //for transition to V implementation only
   public Value append(Value index, ValueOrVar value)
   {
     Value array = toAutoArray();
 
     if (array.isArray())
       return array.append(index, value);
+    else
+      return array;
+  }
+
+  public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    Value array = toAutoArray();
+
+    if (array.isArray())
+      return array.append(ctx, index, value);
     else
       return array;
   }
@@ -2707,6 +2725,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Appends a new array.
    */
+  @Deprecated //for transition to V implementation only
   public Value putArray(Env env)
   {
     Value value = new ArrayValueImpl();
