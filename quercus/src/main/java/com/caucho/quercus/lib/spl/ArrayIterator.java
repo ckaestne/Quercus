@@ -164,7 +164,7 @@ public class ArrayIterator
   @Override
   public Value offsetUnset(Env env, Value offset)
   {
-    return _value.remove(offset);
+    return _value.remove(VHelper.noCtx(), offset).getOne();
   }
 
   public void rewindJava(Env env)

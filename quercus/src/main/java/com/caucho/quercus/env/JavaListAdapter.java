@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.JavaClassDef;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 
@@ -104,26 +105,26 @@ public class JavaListAdapter
   /**
    * Removes a value.
    */
-  public Value remove(Value key)
+  public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
     int pos = key.toInt();
     
     if (0 <= pos && pos < getSize())
-      return wrapJava(_list.remove(pos));
+      return V.one(wrapJava(_list.remove(pos)));
     else
-      return UnsetValue.UNSET;
+      return V.one(UnsetValue.UNSET);
   }
 
   /**
    * Pops the top value.
    */
   @Override
-  public Value pop(Env env)
+  public V<? extends Value> pop(Env env, FeatureExpr ctx)
   {    
     if (getSize() == 0)
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
     
-    return wrapJava(_list.remove(0));
+    return V.one(wrapJava(_list.remove(0)));
   }
   
   /**

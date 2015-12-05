@@ -615,7 +615,7 @@ public class StringModule extends AbstractQuercusModule {
     array.append(chunk);
 
     while (array.getSize() > 0 && limit++ < 0) {
-      array.pop(env);
+      array.pop(env, VHelper.noCtx());
     }
 
     return array;

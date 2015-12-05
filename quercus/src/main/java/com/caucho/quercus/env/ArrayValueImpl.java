@@ -943,7 +943,7 @@ public class ArrayValueImpl extends ArrayValue
    * Removes a value.
    */
   @Override
-  public Value remove(Value key) {
+  public V<? extends Value> remove(FeatureExpr ctx, Value key) {
     throw new UnimplementedVException();
 //    if (_isDirty)
 //      copyOnWrite();
@@ -1154,14 +1154,15 @@ public class ArrayValueImpl extends ArrayValue
    * Pops the top value.
    */
   @Override
-  public Value pop(Env env) {
-    if (_isDirty)
-      copyOnWrite();
-
-    if (_tail != null)
-      return remove(_tail.getKey());
-    else
-      return NullValue.NULL;
+  public V<? extends Value> pop(Env env, FeatureExpr ctx) {
+    throw new UnimplementedVException();
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    if (_tail != null)
+//      return remove(ctx, _tail.getKey());
+//    else
+//      return V.one(NullValue.NULL);
   }
 
   public final Entry getHead() {

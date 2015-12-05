@@ -137,12 +137,12 @@ public class JavaCollectionAdapter extends JavaAdapter
    * Removes a value.
    */
   @Override
-  public Value remove(Value key)
+  public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
     int pos = key.toInt();
 
     if (pos < 0)
-      return UnsetValue.UNSET;
+      return V.one(UnsetValue.UNSET);
 
     for (Object obj : _collection) {
       if (pos-- > 0)
@@ -151,10 +151,10 @@ public class JavaCollectionAdapter extends JavaAdapter
       Value val = wrapJava(obj);
 
       _collection.remove(obj);
-      return val;
+      return V.one(val);
     }
 
-    return UnsetValue.UNSET;
+    return V.one(UnsetValue.UNSET);
   }
 
   /**

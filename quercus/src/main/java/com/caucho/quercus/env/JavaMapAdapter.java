@@ -148,7 +148,7 @@ public class JavaMapAdapter
    * Removes a value.
    */
   @Override
-  public Value remove(Value key)
+  public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
     updateNextAvailableIndex();
 
@@ -162,17 +162,17 @@ public class JavaMapAdapter
         if (pos + 1 == _nextAvailableIndex)
           updateNextAvailableIndex();
         
-        return wrapJava(value);
+        return V.one(wrapJava(value));
       }
     }
     else {
       Object value = _map.remove(key.toJavaObject());
       
       if (value != null)
-        return wrapJava(value);
+        return V.one(wrapJava(value));
     }
     
-    return UnsetValue.UNSET;
+    return V.one(UnsetValue.UNSET);
   }
   
   /**

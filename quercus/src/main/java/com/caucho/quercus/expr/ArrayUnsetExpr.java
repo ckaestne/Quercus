@@ -70,7 +70,7 @@ public class ArrayUnsetExpr extends Expr {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.mapAll(array, index, (a,i)-> a.remove(i));
+    return VHelper.flatMapAll(array, index, (a,i)-> a.remove(ctx, i));
   }
 
   public String toString()

@@ -116,9 +116,9 @@ public class GlobalArrayValue extends ArrayValueImpl {
    * Unsets a value.
    */
   @Override
-  public Value remove(Value key)
+  public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
-    return _env.unsetGlobalVar(VHelper.noCtx(), key.toStringValue()).getOne().toValue();
+    return _env.unsetGlobalVar(VHelper.noCtx(), key.toStringValue()).map((a)->a.toValue());
   }
   
   @Override

@@ -133,4 +133,10 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.get(11).getValue should equal(V.choice(foo, x, UnsetValue.UNSET))
         a.get(7).getValue should equal(V.one(x))
     }
+
+    it should "support conditional remove operations" in {
+        val a = new ArrayValueImpl()
+        a.remove(t, x) should equal(V.one(UnsetValue.UNSET))
+
+    }
 }

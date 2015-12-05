@@ -1296,10 +1296,10 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Pops the top array element.
    */
-  public Value pop(Env env) {
+  public V<? extends Value> pop(Env env, FeatureExpr ctx) {
     env.warning("cannot pop a non-array");
 
-    return NullValue.NULL;
+    return V.one(NullValue.NULL);
   }
 
   /**
@@ -2767,9 +2767,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Return unset the value.
    */
-  public Value remove(Value index)
+  public V<? extends Value> remove(FeatureExpr ctx, Value index)
   {
-    return UnsetValue.UNSET;
+    return V.one(UnsetValue.UNSET);
   }
 
   /**

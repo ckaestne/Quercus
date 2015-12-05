@@ -358,7 +358,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Removes a value.
    */
   @Override
-  abstract public Value remove(Value key);
+  abstract public V<? extends Value> remove(FeatureExpr ctx, Value key);
 
   /**
    * Returns the array ref.
@@ -423,7 +423,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Pops the top value.
    */
   @Override
-  public Value pop(Env env)
+  public V<? extends Value> pop(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }

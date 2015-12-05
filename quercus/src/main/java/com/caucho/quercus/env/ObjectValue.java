@@ -518,17 +518,17 @@ abstract public class ObjectValue extends Callback {
    * Unsets the array value
    */
   @Override
-  public Value remove(Value key)
+  public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
     ArrayDelegate delegate = _quercusClass.getArrayDelegate();
 
     if (delegate != null) {
       Env env = Env.getInstance();
 
-      return delegate.unset(env, this, key);
+      return V.one(delegate.unset(env, this, key));
     }
     else
-      return super.remove(key);
+      return super.remove(ctx, key);
   }
 
   //

@@ -576,7 +576,7 @@ public class ObjectExtValue extends ObjectValue
     //if (entry._visibility == FieldVisibility.PRIVATE)
       //return;
 
-    entry.toValue().getOne().remove(index);
+    entry.toValue().getOne().remove(VHelper.noCtx(), index);
   }
 
   /**
@@ -590,7 +590,7 @@ public class ObjectExtValue extends ObjectValue
 
     Entry entry = createEntry(name);
 
-    entry.toValue().getOne().remove(index);
+    entry.toValue().getOne().remove(VHelper.noCtx(), index);
   }
 
   /**

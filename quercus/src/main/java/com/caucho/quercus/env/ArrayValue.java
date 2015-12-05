@@ -976,7 +976,7 @@ abstract public class ArrayValue extends Value {
    * Removes a value.
    */
   @Override
-  abstract public Value remove(Value key);
+  abstract public V<? extends Value> remove(FeatureExpr ctx, Value key);
 
   /**
    * Returns the array ref.
@@ -1161,7 +1161,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Pops the top value.
    */
-  abstract public Value pop(Env env);
+  abstract public V<? extends Value> pop(Env env, FeatureExpr ctx);
 
   /**
    * Shuffles the array

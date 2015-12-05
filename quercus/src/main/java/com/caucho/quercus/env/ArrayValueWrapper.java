@@ -189,9 +189,9 @@ public class ArrayValueWrapper extends ArrayValue {
    * Removes a value.
    */
   @Override
-  public Value remove(Value key)
+  public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
-    return _array.remove(key);
+    return _array.remove(ctx, key);
   }
 
   @Override
@@ -221,9 +221,9 @@ public class ArrayValueWrapper extends ArrayValue {
    * Pops the top value.
    */
   @Override
-  public Value pop(Env env)
+  public V<? extends Value> pop(Env env, FeatureExpr ctx)
   {
-    return _array.pop(env);
+    return _array.pop(env, ctx);
   }
 
   /**

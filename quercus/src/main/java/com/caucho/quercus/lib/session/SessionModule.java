@@ -638,7 +638,7 @@ public class SessionModule extends AbstractQuercusModule
     if (session == null)
       return false;
 
-    session.remove(key);
+    session.remove(VHelper.noCtx(), key);
 
     return true;
   }

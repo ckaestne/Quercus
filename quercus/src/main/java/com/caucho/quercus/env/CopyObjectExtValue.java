@@ -209,11 +209,11 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Unsets the array value
    */
   @Override
-  public Value remove(Value key)
+  public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
     _root.setModified();
 
-    return super.remove(key);
+    return super.remove(ctx, key);
   }
 }
 

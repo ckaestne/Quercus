@@ -838,7 +838,7 @@ abstract public class Expr {
     V<? extends Value> array = evalDirty(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    array.map(a->a.remove(index.getOne()));
+    array.map(a->a.remove(ctx, index.getOne()));
   }
 
   /**

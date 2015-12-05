@@ -1446,7 +1446,7 @@ public class ArrayModule
    */
   public static Value array_pop(Env env, @Reference Value array)
   {
-    return array.pop(env);
+    return array.pop(env, VHelper.noCtx()).getOne();
   }
 
   /**
@@ -1751,7 +1751,7 @@ public class ArrayModule
 
     Iterator<Value> iter = array.getKeyIterator(env);
 
-    Value firstValue = array.remove(iter.next());
+    Value firstValue = array.remove(VHelper.noCtx(), iter.next()).getOne();
 
     array.keyReset(0, NOT_STRICT);
 
