@@ -6201,7 +6201,7 @@ public class Env
     Collections.sort(list);
 
     for (String pathName : list) {
-      array.put(createString(pathName));
+      array.put(VHelper.noCtx(), V.one(createString(pathName)));
     }
 
     return array;

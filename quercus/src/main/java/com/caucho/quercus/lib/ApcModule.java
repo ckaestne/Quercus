@@ -38,6 +38,7 @@ import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class ApcModule extends AbstractQuercusModule
 
         if (entryValue.isValid(env)) {
           ArrayValueImpl array = new ArrayValueImpl();
-          cacheList.put(array);
+          cacheList.put(VHelper.noCtx(), array);
 
           array.put(env.createString("info"), env.createString(key));
           array.put(env.createString("ttl"),

@@ -450,7 +450,7 @@ abstract public class ObjectValue extends Callback {
    * Appends a new array value
    */
   @Override
-  public Value put(Value value)
+  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
   {
     Env env = Env.getInstance();
 
@@ -459,11 +459,11 @@ abstract public class ObjectValue extends Callback {
     // php/0d94
 
     if (delegate != null)
-      return delegate.put(env, this, value);
+      return V.one(delegate.put(env, this, value.getOne()));
     else {
       // php/0d97
 
-      return env.error(L.l("Can't use object '{0}' as array", getName()));
+      return V.one(env.error(L.l("Can't use object '{0}' as array", getName())));
       // return super.put(key, value);
     }
   }

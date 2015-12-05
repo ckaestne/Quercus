@@ -1330,7 +1330,7 @@ public class QuercusContext
     ArrayValue internal = new ArrayValueImpl();
 
     for (StringValue name : _funMap.keySet()) {
-      internal.put(name);
+      internal.put(VHelper.noCtx(), V.one(name));
     }
 
     return internal;

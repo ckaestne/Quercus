@@ -2387,7 +2387,7 @@ public class StringModule extends AbstractQuercusModule {
       ScanfSegment segment = formatArray[fIndex];
 
       if (segment.isAssigned())
-        array.put(NullValue.NULL);
+        array.put(VHelper.noCtx(), NullValue.NULL);
     }
 
     return array;
@@ -2808,7 +2808,7 @@ public class StringModule extends AbstractQuercusModule {
     if (isAssignment)
       obj.set(val);
     else
-      obj.put(val);
+      obj.put(VHelper.noCtx(), val);
   }
 
   /**
@@ -3414,7 +3414,7 @@ public class StringModule extends AbstractQuercusModule {
     ArrayValue array = new ArrayValueImpl();
 
     if (string.length() == 0) {
-      array.put(string);
+      array.put(VHelper.noCtx(), string);
       return array;
     }
 
@@ -3433,7 +3433,7 @@ public class StringModule extends AbstractQuercusModule {
         value = string;
       }
 
-      array.put(value);
+      array.put(VHelper.noCtx(), value);
     }
 
     return array;
@@ -5945,7 +5945,7 @@ public class StringModule extends AbstractQuercusModule {
     void sscanfPut(Value var, Value val, boolean isReturnArray)
     {
       if (isReturnArray)
-        var.put(val);
+        var.put(VHelper.noCtx(), val);
       else
         var.set(val);
     }
@@ -6082,7 +6082,7 @@ public class StringModule extends AbstractQuercusModule {
       if (sb.length() > 0)
         sscanfPut(var, sb, isReturnArray);
       else if (isReturnArray)
-        var.put(NullValue.NULL);
+        var.put(VHelper.noCtx(), NullValue.NULL);
 
       return sIndex;
     }
@@ -6125,7 +6125,7 @@ public class StringModule extends AbstractQuercusModule {
       if (sb.length() > 0)
         sscanfPut(var, sb, isReturnArray);
       else if (isReturnArray)
-        var.put(NullValue.NULL);
+        var.put(VHelper.noCtx(), NullValue.NULL);
 
       return sIndex;
     }
@@ -6157,7 +6157,7 @@ public class StringModule extends AbstractQuercusModule {
     {
       if (i == strlen) {
         if (isReturnArray)
-          var.put(NullValue.NULL);
+          var.put(VHelper.noCtx(), NullValue.NULL);
 
         return i;
       }
@@ -6250,7 +6250,7 @@ public class StringModule extends AbstractQuercusModule {
     {
       if (sIndex == strlen) {
         if (isReturnArray)
-          var.put(NullValue.NULL);
+          var.put(VHelper.noCtx(), NullValue.NULL);
 
         return sIndex;
       }
@@ -6336,7 +6336,7 @@ public class StringModule extends AbstractQuercusModule {
     {
       if (sIndex == strlen) {
         if (isReturnArray)
-          var.put(NullValue.NULL);
+          var.put(VHelper.noCtx(), NullValue.NULL);
 
         return sIndex;
       }
@@ -6423,7 +6423,7 @@ public class StringModule extends AbstractQuercusModule {
     {
       if (sIndex == strlen) {
         if (isReturnArray)
-          var.put(NullValue.NULL);
+          var.put(VHelper.noCtx(), NullValue.NULL);
 
         return sIndex;
       }
@@ -6578,7 +6578,7 @@ public class StringModule extends AbstractQuercusModule {
     {
       if (sIndex == strlen) {
         if (isReturnArray)
-          var.put(NullValue.NULL);
+          var.put(VHelper.noCtx(), NullValue.NULL);
 
         return sIndex;
       }

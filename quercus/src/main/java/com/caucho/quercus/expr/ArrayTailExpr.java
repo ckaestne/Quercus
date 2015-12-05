@@ -154,7 +154,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
 
     Value value = env.createObject();
 
-    array.map((a)->a.put(value));
+    array.map((a)->a.put(VHelper.noCtx(), V.one(value)));
 
     return VHelper.toV(value);
   }
@@ -201,7 +201,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
   {
     V<? extends Value> array = _expr.evalArray(env, ctx);
 
-    array.map((a)->a.put(value.getOne().toValue()));
+    array.map((a)->a.put(VHelper.noCtx(), value.map((b)->b.toValue())));
 
     return value;
   }

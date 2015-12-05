@@ -41,6 +41,7 @@ import com.caucho.quercus.lib.file.TcpInputOutput;
 import com.caucho.quercus.lib.file.UdpInputOutput;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -728,7 +729,7 @@ public class NetworkModule extends AbstractQuercusModule {
           if (target != null)
             recordValue.put("target", target);
 
-          result.put(recordValue);
+          result.put(VHelper.noCtx(), recordValue);
         }
       }
     }

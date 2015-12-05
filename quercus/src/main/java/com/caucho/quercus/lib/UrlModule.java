@@ -38,6 +38,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.Base64;
 import com.caucho.util.CharBuffer;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.*;
 import java.net.Socket;
@@ -237,7 +238,7 @@ public class UrlModule
           ArrayValue values;
 
           if (colon < 0)
-            result.put(env.createString(line.trim()));
+            result.put(VHelper.noCtx(), env.createString(line.trim()));
           else {
             StringValue key =
               env.createString(line.substring(0, colon).trim());
@@ -258,7 +259,7 @@ public class UrlModule
               result.put(key, values);
             }
 
-            values.put(value);
+            values.put(VHelper.noCtx(), value);
           }
         }
 
@@ -278,7 +279,7 @@ public class UrlModule
           if (line.length() == 0)
             continue;
 
-          result.put(env.createString(line.trim()));
+          result.put(VHelper.noCtx(), env.createString(line.trim()));
         }
       }
 

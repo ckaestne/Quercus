@@ -34,6 +34,7 @@ import com.caucho.quercus.annotation.ResourceType;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -902,7 +903,7 @@ public class MysqliResult extends JdbcResultResource {
       int numColumns = getMetaData().getColumnCount();
 
       for (int i = 0; i < numColumns; i++) {
-        array.put(fetchFieldDirect(env, i));
+        array.put(VHelper.noCtx(), V.one(fetchFieldDirect(env, i)));
       }
 
       return array;

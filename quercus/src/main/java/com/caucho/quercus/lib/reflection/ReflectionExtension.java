@@ -36,6 +36,7 @@ import com.caucho.quercus.module.IniDefinition;
 import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.quercus.module.ModuleInfo;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class ReflectionExtension
         for (String functionName : moduleInfo.getFunctions().keySet()) {
           AbstractFunction fun = env.findFunction(env.createString(functionName)).getOne();
 
-          array.put(env.wrapJava(new ReflectionFunction(fun)));
+          array.put(VHelper.noCtx(), env.wrapJava(new ReflectionFunction(fun)));
         }
       }
     }

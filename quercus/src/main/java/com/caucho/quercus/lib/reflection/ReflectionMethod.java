@@ -194,7 +194,7 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
     Arg []args = fun.getArgs(env);
 
     for (int i = 0; i < args.length; i++) {
-      array.put(env.wrapJava(new ReflectionParameter(_clsName, fun, args[i])));
+      array.put(VHelper.noCtx(), env.wrapJava(new ReflectionParameter(_clsName, fun, args[i])));
     }
 
     return array;

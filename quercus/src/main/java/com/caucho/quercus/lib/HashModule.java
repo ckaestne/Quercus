@@ -36,6 +36,7 @@ import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -124,14 +125,14 @@ public class HashModule extends AbstractQuercusModule {
     ArrayValue array = new ArrayValueImpl();
 
     for (String name : _algorithmMap.keySet()) {
-      array.put(env.createString(name));
+      array.put(VHelper.noCtx(), env.createString(name));
     }
 
     Collection<String> values = _algorithmMap.values();
 
     for (String name : Security.getAlgorithms("MessageDigest")) {
       if (! values.contains(name))
-        array.put(env.createString(name));
+        array.put(VHelper.noCtx(), env.createString(name));
     }
 
     return array;

@@ -42,6 +42,7 @@ import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.quercus.resources.StreamContextResource;
 import com.caucho.util.L10N;
 import com.caucho.vfs.*;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -2102,7 +2103,7 @@ public class FileModule extends AbstractQuercusModule {
             && (((flags & GLOB_ONLYDIR) == 0)
             || (((flags & GLOB_ONLYDIR) != 0)
             && (entryPath != null && entryPath.isDirectory())))) {
-            result.put(sb);
+            result.put(VHelper.noCtx(), V.one(sb));
         }
       }
     }
@@ -2283,7 +2284,7 @@ public class FileModule extends AbstractQuercusModule {
               = subresult.getValueIterator(env);
 
             while (iter.hasNext())
-              result.put(iter.next().getOne());
+              result.put(VHelper.noCtx(), iter.next().getValue());
           }
         }
       }
@@ -3197,8 +3198,8 @@ public class FileModule extends AbstractQuercusModule {
       LongValue option = LongValue.create(StreamModule.PHP_STREAM_META_TOUCH);
 
       ArrayValue array = new ArrayValueImpl();
-      array.put(LongValue.create(time));
-      array.put(LongValue.create(atime));
+      array.put(VHelper.noCtx(), V.one(LongValue.create(time)));
+      array.put(VHelper.noCtx(), V.one(LongValue.create(atime)));
 
       return wrapper.stream_metadata(env, filename, option, array);
     }

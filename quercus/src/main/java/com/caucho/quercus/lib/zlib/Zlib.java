@@ -38,6 +38,7 @@ import com.caucho.quercus.lib.file.FileValue;
 import com.caucho.quercus.lib.string.StringModule;
 import com.caucho.util.L10N;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -280,7 +281,7 @@ public class Zlib {
     try {
       //read in String BuilderValue's initial capacity
       while ((line = gzgets(Integer.MAX_VALUE)) != BooleanValue.FALSE) {
-        array.put(line);
+        array.put(VHelper.noCtx(), line);
       }
 
       return array;

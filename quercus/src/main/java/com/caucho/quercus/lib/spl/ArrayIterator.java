@@ -75,7 +75,7 @@ public class ArrayIterator
 
   public void append(Value value)
   {
-    _value.put(value);
+    _value.put(VHelper.noCtx(), value);
   }
 
   public void asort(ArrayValue array, @Optional long sortFlag)

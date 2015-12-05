@@ -139,7 +139,7 @@ public class ErrorModule extends AbstractQuercusModule {
           continue;
 
         ArrayValue call = new ArrayValueImpl();
-        result.put(call);
+        result.put(VHelper.noCtx(), call);
 
         call.put(env.createString("file"), env.createString(fileName));
         call.put(env.createString("line"),
@@ -158,7 +158,7 @@ public class ErrorModule extends AbstractQuercusModule {
             .getQuercus().getPwd().lookup("./" + path).getNativePath();
 
         ArrayValue call = new ArrayValueImpl();
-        result.put(call);
+        result.put(VHelper.noCtx(), call);
 
         call.put(env.createString("file"), env.createString(fileName));
         call.put(env.createString("line"), LongValue.create(
@@ -188,12 +188,12 @@ public class ErrorModule extends AbstractQuercusModule {
         if (methodName.equals("includeOnce")) {
           call.put(env.createString("function"), env.createString("include_once"));
 
-          result.put(call);
+          result.put(VHelper.noCtx(), call);
         }
         else if (methodName.equals("include")) {
           call.put(env.createString("function"), env.createString("include"));
 
-          result.put(call);
+          result.put(VHelper.noCtx(), call);
         }
         else if (methodName.equals("callNew")) {
         }
@@ -207,7 +207,7 @@ public class ErrorModule extends AbstractQuercusModule {
           else {
             call.put(env.createString("function"), env.createString(fun));
 
-            result.put(call);
+            result.put(VHelper.noCtx(), call);
           }
         }
       }
@@ -253,7 +253,7 @@ public class ErrorModule extends AbstractQuercusModule {
       }
       else {
         ArrayValue call = new ArrayValueImpl();
-        result.put(call);
+        result.put(VHelper.noCtx(), call);
 
         call.put(env.createString("file"), env.createString(elt.getFileName()));
         call.put(env.createString("line"), LongValue.create(elt.getLineNumber()));
@@ -304,7 +304,7 @@ public class ErrorModule extends AbstractQuercusModule {
       }
 
       ArrayValue call = new ArrayValueImpl();
-      result.put(call);
+      result.put(VHelper.noCtx(), call);
 
       if (callExpr.getFileName() != null) {
         call.put(env.createString("file"),
@@ -330,7 +330,7 @@ public class ErrorModule extends AbstractQuercusModule {
       ObjectMethodExpr callExpr = (ObjectMethodExpr) expr;
 
       ArrayValue call = new ArrayValueImpl();
-      result.put(call);
+      result.put(VHelper.noCtx(), call);
 
       if (callExpr.getFileName() != null) {
         call.put(env.createString("file"),
@@ -353,7 +353,7 @@ public class ErrorModule extends AbstractQuercusModule {
     }
     else if (expr instanceof FunIncludeExpr) {
       ArrayValue call = new ArrayValueImpl();
-      result.put(call);
+      result.put(VHelper.noCtx(), call);
 
       if (expr.getFileName() != null) {
         call.put(env.createString("file"), env.createString(expr.getFileName()));
@@ -366,7 +366,7 @@ public class ErrorModule extends AbstractQuercusModule {
       boolean isRequire = ((FunIncludeOnceExpr) expr).isRequire();
 
       ArrayValue call = new ArrayValueImpl();
-      result.put(call);
+      result.put(VHelper.noCtx(), call);
 
       if (expr.getFileName() != null) {
         call.put(env.createString("file"), env.createString(expr.getFileName()));
@@ -397,7 +397,7 @@ public class ErrorModule extends AbstractQuercusModule {
     if (argsValues != null) {
       for (int index = 0; index < argsValues.length; index++) {
         Value ref = argsValues[index].toLocalVarDeclAsRef().makeValue();
-        args.put(ref);
+        args.put(VHelper.noCtx(), ref);
       }
     }
 

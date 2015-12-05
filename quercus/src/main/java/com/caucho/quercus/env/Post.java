@@ -35,6 +35,7 @@ import com.caucho.quercus.lib.string.StringUtility;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.util.L10N;
 import com.caucho.vfs.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -542,7 +543,7 @@ public class Post
           }
         }
         else
-          array.put(formValue);
+          array.put(VHelper.noCtx(), formValue);
       }
       else if ('0' <= key.charAt(0) && key.charAt(0) <= '9') {
         put(array,
@@ -581,7 +582,7 @@ public class Post
     }
 
     if (key == null)
-      array.put(value);
+      array.put(VHelper.noCtx(), value);
     else
       array.put(key, value);
   }

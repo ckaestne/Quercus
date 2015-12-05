@@ -2663,7 +2663,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Appends an array value
    */
-  public Value put(Value value)
+  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
   {
     /*
     Env.getCurrent().warning(L.l("{0} cannot be used as an array",
@@ -2673,6 +2673,12 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
 
     return value;
   }
+
+  @Deprecated //for transition to V implementation only
+  public V<? extends Value> put(FeatureExpr ctx, Value value) {
+    return this.put(ctx, V.one(value));
+  }
+
 
   /**
    * Sets the array value, returning the new array, e.g. to handle
@@ -2704,7 +2710,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   {
     Value value = new ArrayValueImpl();
 
-    put(value);
+    put(VHelper.noCtx(), V.one(value));
 
     return value;
   }
@@ -2724,7 +2730,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   {
     Value value = env.createObject();
 
-    put(value);
+    put(VHelper.noCtx(), V.one(value));
 
     return value;
   }

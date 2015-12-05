@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Callable;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.expr.ParamRequiredExpr;
 import com.caucho.quercus.program.Arg;
+import edu.cmu.cs.varex.VHelper;
 
 public abstract class ReflectionFunctionAbstract
 {
@@ -114,7 +115,7 @@ public abstract class ReflectionFunctionAbstract
     Arg []args = _callable.getArgs(env);
 
     for (int i = 0; i < args.length; i++) {
-      array.put(env.wrapJava(new ReflectionParameter(_callable, args[i])));
+      array.put(VHelper.noCtx(), env.wrapJava(new ReflectionParameter(_callable, args[i])));
     }
 
     return array;

@@ -32,6 +32,8 @@ package com.caucho.quercus.lib.i18n;
 import com.caucho.quercus.UnimplementedException;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.mail.Header;
 import javax.mail.MessagingException;
@@ -81,10 +83,10 @@ public class QuercusMimeUtility
         }
         else {
           inner = new ArrayValueImpl();
-          inner.put(headerName);
+          inner.put(VHelper.noCtx(), V.one(headerName));
         }
 
-        inner.put(val);
+        inner.put(VHelper.noCtx(), V.one(val));
         headers.put(name, inner);
       }
 

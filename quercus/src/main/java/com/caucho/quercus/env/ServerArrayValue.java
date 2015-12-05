@@ -32,6 +32,8 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusRequestAdapter;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.util.Base64;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -223,12 +225,12 @@ public class ServerArrayValue extends ArrayValueImpl
   /**
    * Adds a new value.
    */
-  public Value put(Value value)
+  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
   {
     if (! _isFilled)
       fillMap();
 
-    return super.put(value);
+    return super.put(ctx, value);
   }
 
   /**

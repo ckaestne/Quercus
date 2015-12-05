@@ -686,7 +686,7 @@ public class RegexpModule
       if (patternName != null)
         matches.put(patternName, values);
 
-      matches.put(values);
+      matches.put(VHelper.noCtx(), values);
       matchList[j] = values;
     }
 
@@ -712,7 +712,7 @@ public class RegexpModule
           }
           */
 
-          values.put(emptyStr);
+          values.put(VHelper.noCtx(), emptyStr);
 
           continue;
         }
@@ -724,15 +724,15 @@ public class RegexpModule
         if (groupValue != null) {
           if ((flags & PREG_OFFSET_CAPTURE) != 0) {
             result = new ArrayValueImpl();
-            result.put(groupValue);
+            result.put(VHelper.noCtx(), groupValue);
 
-            result.put(LongValue.create(regexpState.getBegin(j)));
+            result.put(VHelper.noCtx(), LongValue.create(regexpState.getBegin(j)));
           } else {
             result = groupValue;
           }
         }
 
-        values.put(result);
+        values.put(VHelper.noCtx(), result);
       }
     }
 
@@ -764,7 +764,7 @@ public class RegexpModule
       count++;
 
       ArrayValue matchResult = new ArrayValueImpl();
-      matches.put(matchResult);
+      matches.put(VHelper.noCtx(), matchResult);
 
       int groupCount = regexpState.groupCount();
 
@@ -805,8 +805,8 @@ public class RegexpModule
 
             result = new ArrayValueImpl();
 
-            result.put(groupValue);
-            result.put(LongValue.create(start));
+            result.put(VHelper.noCtx(), groupValue);
+            result.put(VHelper.noCtx(), LongValue.create(start));
           } else {
             // php/
             // add any unmatched groups that was skipped
@@ -818,7 +818,7 @@ public class RegexpModule
           }
         }
 
-        matchResult.put(result);
+        matchResult.put(VHelper.noCtx(), result);
       }
     } while (regexpState.find());
 
@@ -1012,7 +1012,7 @@ public class RegexpModule
       ArrayValue result = new ArrayValueImpl();
 
       for (EnvVar value : ((ArrayValue) subject).values()) {
-        result.put(pregReplace(env,
+        result.put(VHelper.noCtx(), pregReplace(env,
                                regexpList,
                                replacement,
                                value.getOne().toStringValue(),
@@ -1143,13 +1143,13 @@ public class RegexpModule
         // followed by a matching group
         // php/154b, php/154c
         for (int j = lastGroup + 1; j < i; j++) {
-          regs.put(empty);
+          regs.put(VHelper.noCtx(), empty);
         }
 
         lastGroup = i;
 
         StringValue group = regexpState.group(env, i);
-        regs.put(group);
+        regs.put(VHelper.noCtx(), group);
       }
 
       Value replacement = fun.call(env, VHelper.noCtx(), regs).getOne();
@@ -1435,7 +1435,7 @@ public class RegexpModule
         ArrayValue result = new ArrayValueImpl();
 
         for (EnvVar value : ((ArrayValue) subject).values()) {
-          result.put(pregReplaceCallback(env,
+          result.put(VHelper.noCtx(), pregReplaceCallback(env,
                                          regexp,
                                          fun,
                                          value.getOne().toStringValue(),
@@ -1500,7 +1500,7 @@ public class RegexpModule
       ArrayValue result = new ArrayValueImpl();
 
       for (EnvVar value : ((ArrayValue) subject).values()) {
-        result.put(pregReplaceCallback(env,
+        result.put(VHelper.noCtx(), pregReplaceCallback(env,
                                        regexpList,
                                        fun,
                                        value.getOne().toStringValue(),
@@ -1640,13 +1640,13 @@ public class RegexpModule
         if (isCaptureOffset) {
           ArrayValue part = new ArrayValueImpl();
 
-          part.put(unmatched);
-          part.put(LongValue.create(startPosition));
+          part.put(VHelper.noCtx(), unmatched);
+          part.put(VHelper.noCtx(), LongValue.create(startPosition));
 
-          result.put(part);
+          result.put(VHelper.noCtx(), part);
         }
         else {
-          result.put(unmatched);
+          result.put(VHelper.noCtx(), unmatched);
         }
 
         count++;
@@ -1679,13 +1679,13 @@ public class RegexpModule
               if (isCaptureOffset) {
                 ArrayValue part = new ArrayValueImpl();
 
-                part.put(empty);
-                part.put(LongValue.create(startPosition));
+                part.put(VHelper.noCtx(), empty);
+                part.put(VHelper.noCtx(), LongValue.create(startPosition));
 
-                result.put(part);
+                result.put(VHelper.noCtx(), part);
               }
               else
-                result.put(empty);
+                result.put(VHelper.noCtx(), empty);
             }
           }
 
@@ -1698,13 +1698,13 @@ public class RegexpModule
           if (isCaptureOffset) {
             ArrayValue part = new ArrayValueImpl();
 
-            part.put(groupValue);
-            part.put(LongValue.create(start));
+            part.put(VHelper.noCtx(), groupValue);
+            part.put(VHelper.noCtx(), LongValue.create(start));
 
-            result.put(part);
+            result.put(VHelper.noCtx(), part);
           }
           else {
-            result.put(groupValue);
+            result.put(VHelper.noCtx(), groupValue);
           }
         }
       }
@@ -1716,13 +1716,13 @@ public class RegexpModule
       if (isCaptureOffset) {
         ArrayValue part = new ArrayValueImpl();
 
-        part.put(regexpState.substring(env, head));
-        part.put(LongValue.create(head));
+        part.put(VHelper.noCtx(), regexpState.substring(env, head));
+        part.put(VHelper.noCtx(), LongValue.create(head));
 
-        result.put(part);
+        result.put(VHelper.noCtx(), part);
       }
       else {
-        result.put(regexpState.substring(env, head));
+        result.put(VHelper.noCtx(), regexpState.substring(env, head));
       }
     }
 
@@ -1830,13 +1830,13 @@ public class RegexpModule
         head = regexpState.end();
       }
 
-      result.put(value);
+      result.put(VHelper.noCtx(), value);
 
       count++;
     }
 
     if (head <= string.length() && count != limit) {
-      result.put(regexpState.substring(env, head));
+      result.put(VHelper.noCtx(), regexpState.substring(env, head));
     }
 
     env.freeRegexpState(regexpState);

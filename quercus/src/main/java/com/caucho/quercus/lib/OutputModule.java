@@ -264,9 +264,9 @@ public class OutputModule extends AbstractQuercusModule
     Callable callback = ob.getCallback();
 
     if (callback != null)
-      handlers.put(env.createString(callback.getCallbackName()));
+      handlers.put(VHelper.noCtx(), env.createString(callback.getCallbackName()));
     else
-      handlers.put(env.createString("default output handler"));
+      handlers.put(VHelper.noCtx(), env.createString("default output handler"));
   }
 
   /**
@@ -367,7 +367,7 @@ public class OutputModule extends AbstractQuercusModule
 
     putCommonStatus(element, ob, env, true);
 
-    result.put(element);
+    result.put(VHelper.noCtx(), element);
   }
 
   /**

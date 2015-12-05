@@ -129,7 +129,7 @@ public class FunArrayExpr extends Expr {
         array.put(key, value);
       }
       else
-        array.put(value);
+        array.put(VHelper.noCtx(), value);
     }
 
     return VHelper.toV(array);

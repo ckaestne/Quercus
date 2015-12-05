@@ -29,6 +29,7 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 
 /**
@@ -127,11 +128,11 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
   /**
    * Add
    */
-  public Value put(Value value)
+  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
   {
     _root.setModified();
 
-    return super.put(value);
+    return super.put(ctx, value);
   }
 
   /**

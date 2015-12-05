@@ -149,7 +149,7 @@ public class ZlibModule extends AbstractQuercusModule {
       StringValue line;
       while ((line = is.readLine(Integer.MAX_VALUE)) != null
           && line.length() > 0)
-        result.put(line);
+        result.put(VHelper.noCtx(), line);
 
       return result;
     } catch (IOException e) {

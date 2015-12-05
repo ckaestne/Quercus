@@ -36,6 +36,7 @@ import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.UnsetFunction;
 import com.caucho.util.Crc64;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -156,7 +157,7 @@ public final class DefinitionState {
 
     for (StringValue name : _funMap.keySet()) {
       if (! internal.contains(name).getOne().isset())
-        user.put(name);
+        user.put(VHelper.noCtx(), name);
     }
 
     return result;
@@ -344,7 +345,7 @@ public final class DefinitionState {
     ArrayValue array = new ArrayValueImpl();
 
     for (String name : names) {
-      array.put(env.createString(name));
+      array.put(VHelper.noCtx(), env.createString(name));
     }
 
     return array;

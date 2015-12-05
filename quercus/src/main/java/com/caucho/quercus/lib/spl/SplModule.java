@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.spl;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
@@ -134,7 +135,7 @@ public class SplModule extends AbstractQuercusModule
     for (int i = 0; i < size; i++) {
       Callable cb = funList.get(i);
 
-      array.put(env.createString(cb.toString()));
+      array.put(VHelper.noCtx(), V.one(env.createString(cb.toString())));
     }
 
     return array;

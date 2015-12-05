@@ -782,7 +782,8 @@ abstract public class ArrayValue extends Value {
    * Add
    */
   @Override
-  abstract public Value put(Value value);
+  abstract public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value);
+
 
   /**
    * Add to front.
@@ -799,26 +800,27 @@ abstract public class ArrayValue extends Value {
    */
   public ArrayValue slice(Env env, int start, int end, boolean isPreserveKeys)
   {
-    ArrayValueImpl array = new ArrayValueImpl();
-
-    Iterator<VEntry> iter = array.getIterator(env);
-
-    for (int i = 0; i < end && iter.hasNext(); i++) {
-      VEntry entry = iter.next();
-
-      if (start <= i) {
-        Value key = entry.getKey();
-
-        Value value = entry.getEnvVar().getOne();
-
-        if ((key.isString()) || isPreserveKeys)
-          array.put(key, value);
-        else
-          array.put(value);
-      }
-    }
-
-    return array;
+    throw new UnimplementedVException();
+//    ArrayValueImpl array = new ArrayValueImpl();
+//
+//    Iterator<VEntry> iter = array.getIterator(env);
+//
+//    for (int i = 0; i < end && iter.hasNext(); i++) {
+//      VEntry entry = iter.next();
+//
+//      if (start <= i) {
+//        Value key = entry.getKey();
+//
+//        Value value = entry.getEnvVar().getOne();
+//
+//        if ((key.isString()) || isPreserveKeys)
+//          array.put(key, value);
+//        else
+//          array.put(VHelper.noCtx(), value);
+//      }
+//    }
+//
+//    return array;
   }
 
   /**
@@ -883,7 +885,7 @@ abstract public class ArrayValue extends Value {
    * If the rValue is not an array, the returned union contains the elements
    * of this array only.
    *
-   * To append a value to this ArrayValue use the {@link #put(Value)} method.
+   * To append a value to this ArrayValue use the {@link Value#put(FeatureExpr, V)} method.
    */
   @Override
   public Value add(Value rValue)
@@ -1083,7 +1085,7 @@ abstract public class ArrayValue extends Value {
   public void put(String value)
   {
     // XXX: this needs an Env arg because of i18n
-    put(StringValue.create(value));
+    put(VHelper.noCtx(), V.one(StringValue.create(value)));
   }
 
   /**
@@ -1091,7 +1093,7 @@ abstract public class ArrayValue extends Value {
    */
   public void put(long value)
   {
-    put(LongValue.create(value));
+    put(VHelper.noCtx(), V.one(LongValue.create(value)));
   }
 
   /**
@@ -1103,7 +1105,7 @@ abstract public class ArrayValue extends Value {
 
   @Deprecated//V transformation
   public ArrayValue append(Value value) {
-    put(value);
+    put(VHelper.noCtx(), V.one(value));
 
     return this;
   }
@@ -1133,14 +1135,14 @@ abstract public class ArrayValue extends Value {
   /**
    * Convert to an array.
    */
-  public static Value toArray(Value value)
+  public static V<? extends Value> toArray(Value value)
   {
     value = value.toValue();
 
     if (value instanceof ArrayValue)
-      return value;
+      return V.one(value);
     else
-      return new ArrayValueImpl().put(value);
+      return new ArrayValueImpl().put(VHelper.noCtx(), V.one(value));
   }
 
 

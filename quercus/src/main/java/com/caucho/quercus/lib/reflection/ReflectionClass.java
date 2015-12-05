@@ -223,7 +223,7 @@ public class ReflectionClass
     MethodMap<AbstractFunction> map = _cls.getMethodMap();
 
     for (AbstractFunction method : map.values()) {
-      array.put(env.wrapJava(new ReflectionMethod(_cls.getName(), method)));
+      array.put(VHelper.noCtx(), env.wrapJava(new ReflectionMethod(_cls.getName(), method)));
     }
 
     return array;
@@ -250,7 +250,7 @@ public class ReflectionClass
       ReflectionProperty prop
         = ReflectionProperty.create(env, _cls, field.getName(), false);
 
-      array.put(env.wrapJava(prop));
+      array.put(VHelper.noCtx(), env.wrapJava(prop));
     }
 
     ArrayList<StringValue> staticFieldList = _cls.getStaticFieldNames();
@@ -259,7 +259,7 @@ public class ReflectionClass
       ReflectionProperty prop
         = ReflectionProperty.create(env, _cls, fieldName, true);
 
-      array.put(env.wrapJava(prop));
+      array.put(VHelper.noCtx(), env.wrapJava(prop));
     }
 
     return array;

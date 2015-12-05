@@ -203,7 +203,7 @@ public class ArrayModule
 
       if (i % size == 0) {
         currentArray = new ArrayValueImpl();
-        newArray.put(currentArray);
+        newArray.put(VHelper.noCtx(), currentArray);
       }
 
       if (preserveKeys)
@@ -1206,7 +1206,7 @@ public class ArrayModule
 
         // php/1745
         if (key.isNumberConvertible()) {
-          result.put(value);
+          result.put(VHelper.noCtx(), value);
         }
         else {
           result.append(key, value);
@@ -1259,7 +1259,7 @@ public class ArrayModule
 
       if (key.isNumberConvertible()) {
         // php/1744
-        result.put(value);
+        result.put(VHelper.noCtx(), value);
       }
       else {
         Value oldValue = result.getDirty(key).getOne().toValue();
@@ -1271,12 +1271,12 @@ public class ArrayModule
                                     value.toArrayValue(env));
           }
           else if (oldValue.isArray()) {
-            oldValue.put(value);
+            oldValue.put(VHelper.noCtx(), value);
           }
           else if (value.isArray()) {
             ArrayValueImpl newArray = new ArrayValueImpl();
 
-            newArray.put(oldValue);
+            newArray.put(VHelper.noCtx(), oldValue);
             newArray.putAll(value.toArrayValue(env));
 
             result.put(key, newArray);
@@ -1284,8 +1284,8 @@ public class ArrayModule
           else {
             ArrayValueImpl newArray = new ArrayValueImpl();
 
-            newArray.put(oldValue);
-            newArray.put(value);
+            newArray.put(VHelper.noCtx(), oldValue);
+            newArray.put(VHelper.noCtx(), value);
 
             result.put(key, newArray);
           }
@@ -1482,7 +1482,7 @@ public class ArrayModule
                                Value []values)
   {
     for (Value value : values) {
-      array.put(value);
+      array.put(VHelper.noCtx(), value);
     }
 
     return array.getSize();
@@ -1539,7 +1539,7 @@ public class ArrayModule
     ArrayValue randArray = new ArrayValueImpl();
 
     for (int i = 0; i < num; i++) {
-      randArray.put(keys[i]);
+      randArray.put(VHelper.noCtx(), keys[i]);
     }
 
     return randArray;
@@ -1873,7 +1873,7 @@ public class ArrayModule
       if (start == index && replace != null) {
         Iterator<EnvVar> replaceIter = replace.getValueIterator(env);
         while (replaceIter.hasNext()) {
-          newArray.put(replaceIter.next().getOne());
+          newArray.put(VHelper.noCtx(), replaceIter.next().getOne());
         }
       }
 
@@ -1881,13 +1881,13 @@ public class ArrayModule
         if (key.isString())
           result.put(key, value);
         else
-          result.put(value);
+          result.put(VHelper.noCtx(), value);
       }
       else {
         if (key.isString())
           newArray.put(key, value);
         else
-          newArray.put(value);
+          newArray.put(VHelper.noCtx(), value);
       }
 
       index++;
@@ -1896,7 +1896,7 @@ public class ArrayModule
     if (index <= start && replace != null) {
       Iterator<EnvVar> replaceIter = replace.getValueIterator(env);
       while (replaceIter.hasNext()) {
-        newArray.put(replaceIter.next().getOne());
+        newArray.put(VHelper.noCtx(), replaceIter.next().getOne());
       }
     }
 
@@ -3209,7 +3209,7 @@ public class ArrayModule
 
     do {
       if (isAppendChars) {
-        array.put(env.createString((char) start));
+        array.put(VHelper.noCtx(), env.createString((char) start));
       }
       else {
         array.put(start);

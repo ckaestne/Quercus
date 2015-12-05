@@ -198,22 +198,24 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   public ArrayValueImpl(Value[] keys, Value[] values) {
-    this();
-
-    for (int i = 0; i < keys.length; i++) {
-      if (keys[i] != null)
-        append(keys[i], values[i]);
-      else
-        put(values[i]);
-    }
+    throw new UnimplementedVException();
+//    this();
+//
+//    for (int i = 0; i < keys.length; i++) {
+//      if (keys[i] != null)
+//        append(keys[i], values[i]);
+//      else
+//        put(VHelper.noCtx(), values[i]);
+//    }
   }
 
   public ArrayValueImpl(Value[] values) {
-    this();
-
-    for (int i = 0; i < values.length; i++) {
-      put(values[i]);
-    }
+    throw new UnimplementedVException();
+//    this();
+//
+//    for (int i = 0; i < values.length; i++) {
+//      put(VHelper.noCtx(), values[i]);
+//    }
   }
 
 //  public ArrayValueImpl(Env env, ArrayValueComponent[] components)
@@ -619,31 +621,35 @@ public class ArrayValueImpl extends ArrayValue
    */
   @Override
   public EnvVar getArg(Value index, boolean isTop) {
-    throw new UnimplementedVException("easy?");
-//    if (_isDirty) // XXX: needed?
-//      copyOnWrite();
-//
-//    // php/3d42
-//    //if (isTop)
-//    //return new ArgGetValue(this, index);
-//
-//    Entry entry = getEntry(index);
-//
-//    if (entry != null) {
-//      // php/3d48, php/39aj
-//      Value value = entry.getEnvVar().getOne();
-//
-//      // php/3d42
-//      if (!isTop && value.isset())
-//        return EnvVar._gen(value);
-//      else {
-//        // XXX: should probably have Entry extend ArgGetValue and return the Entry itself
-//        return EnvVar._gen(new ArgGetValue(this, index)); // php/0d14, php/04b4
-//      }
-//    } else {
-//      // php/3d49
-//      return EnvVar._gen(new ArgGetValue(this, index));
-//    }
+    if (_isDirty) // XXX: needed?
+      copyOnWrite();
+
+    // php/3d42
+    //if (isTop)
+    //return new ArgGetValue(this, index);
+
+    V<? extends Entry> entries = getEntry(index);
+
+    return new EnvVarImpl(entries.<Var>flatMap(entry -> {
+      if (entry != null) {
+        // php/3d48, php/39aj
+        EnvVar value = entry.getEnvVar();
+
+        // php/3d42
+        return value.getValue().map(v -> {
+          if (!isTop && v.isset())
+            return new Var(V.one(v));
+          else {
+            // XXX: should probably have Entry extend ArgGetValue and return the Entry itself
+            return new Var(V.one(new ArgGetValue(this, index))); // php/0d14, php/04b4
+          }
+        });
+      } else {
+        // php/3d49
+        return V.one(new Var(V.one(new ArgGetValue(this, index))));
+      }
+    }));
+
   }
 
   /**
@@ -710,7 +716,8 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Add
    */
-  public Value put(Value value) {
+  @Override
+  public V<? extends Value> put(FeatureExpr ctx, V<?extends Value> value) {
     throw new UnimplementedVException();
 //
 //    if (_isDirty)
@@ -782,7 +789,7 @@ public class ArrayValueImpl extends ArrayValue
    * @param entrySet
    */
   private void checkEntryInvariant(@NonNull V<? extends Entry> entrySet) {
-    assert entrySet != null;
+    assert entrySet != null : "entrySet is null";
     if (entrySet.equals(V.one(null)))
       return;
 
@@ -810,7 +817,7 @@ public class ArrayValueImpl extends ArrayValue
   public EnvVar getRaw(Value key) {
     key = key.toKey();
 
-    V<? extends Entry> entries = _lookupMap.get(key);
+    V<? extends Entry> entries = _lookupMap.getOrDefault(key, V.one(null));
     checkEntryInvariant(entries);
 
     V<? extends Var> v=entries.flatMap(e-> (e==null) ? V.one(new Var(V.one(UnsetValue.UNSET))) : e.getEnvVar().getVar()) ;

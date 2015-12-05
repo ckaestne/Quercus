@@ -46,6 +46,8 @@ import com.caucho.quercus.module.IniDefinition;
 import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Encoding;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -834,7 +836,7 @@ public class MbstringModule
     Map<String,Charset> charsetMap = Charset.availableCharsets();
 
     for (String name : charsetMap.keySet()) {
-      array.put(env.createString(name));
+      array.put(VHelper.noCtx(), V.one(env.createString(name)));
     }
 
     return array;
@@ -1581,8 +1583,8 @@ public class MbstringModule
       if (isArrayReturn) {
         ArrayValue array = new ArrayValueImpl();
 
-        array.put(LongValue.create(matchIndex));
-        array.put(LongValue.create(matchLength));
+        array.put(VHelper.noCtx(), V.one(LongValue.create(matchIndex)));
+        array.put(VHelper.noCtx(), V.one(LongValue.create(matchLength)));
 
         return array;
 

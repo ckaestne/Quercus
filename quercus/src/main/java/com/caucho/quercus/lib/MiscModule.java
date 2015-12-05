@@ -242,14 +242,14 @@ public class MiscModule extends AbstractQuercusModule {
             line = sb.toString();
             sb.setLength(0);
             if (output != null)
-              output.put(env.createString(line));
+              output.put(VHelper.noCtx(), env.createString(line));
           }
           hasCr = false;
         }
         else if (ch == '\r') {
           line = sb.toString();
           sb.setLength(0);
-          output.put(env.createString(line));
+          output.put(VHelper.noCtx(), env.createString(line));
           hasCr = true;
         }
         else
@@ -259,7 +259,7 @@ public class MiscModule extends AbstractQuercusModule {
       if (sb.length() > 0) {
         line = sb.toString();
         sb.setLength(0);
-        output.put(env.createString(line));
+        output.put(VHelper.noCtx(), env.createString(line));
       }
 
       is.close();

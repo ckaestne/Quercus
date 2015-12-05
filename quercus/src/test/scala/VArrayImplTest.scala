@@ -85,4 +85,15 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.append(bar, V.one(x), V.one(y))
         a.containsKey(x) should equal(V.choice(bar, V.one(y), V.choice(foo, z, null)))
     }
+
+    it should "support conditional lookup with get" in {
+        val a = new ArrayValueImpl()
+        a.get(x).getValue should equal(V.one(UnsetValue.UNSET))
+
+        a.append(foo, V.one(x), V.one(z))
+        a.get(x).getValue should equal(V.choice(foo, z, UnsetValue.UNSET))
+
+        a.append(bar, V.one(x), V.one(y))
+        a.get(x).getValue should equal(V.choice(bar, V.one(y), V.choice(foo, z, UnsetValue.UNSET)))
+    }
 }

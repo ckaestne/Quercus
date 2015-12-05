@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.date;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReturnNullAsFalse;
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -118,7 +119,7 @@ public class DateTimeZone implements Cloneable
       array.put(nameV, zones);
     }
 
-    zones.put(zone);
+    zones.put(VHelper.noCtx(), zone);
   }
 
   public static ArrayValue listIdentifiers()
@@ -202,7 +203,7 @@ public class DateTimeZone implements Cloneable
         transition.put("isdst", isDST ? "1" : "");
         transition.put("abbr", _timeZone.getDisplayName(isDST,
                                                         TimeZone.SHORT));
-        array.put(transition);
+        array.put(VHelper.noCtx(), transition);
       }
     }
     return array;

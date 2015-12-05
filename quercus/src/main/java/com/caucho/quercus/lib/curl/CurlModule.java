@@ -42,6 +42,7 @@ import com.caucho.util.L10N;
 import com.caucho.util.QDate;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -1053,8 +1054,8 @@ public class CurlModule
 
     // supported protocols
     ArrayValue protocols = new ArrayValueImpl();
-    protocols.put(env.createString("http"));
-    protocols.put(env.createString("https"));
+    protocols.put(VHelper.noCtx(), env.createString("http"));
+    protocols.put(VHelper.noCtx(), env.createString("https"));
 
     array.put(env.createString("protocols"), protocols);
 

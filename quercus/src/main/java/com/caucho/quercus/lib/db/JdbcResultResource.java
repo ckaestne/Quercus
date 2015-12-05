@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.db;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -1184,7 +1185,7 @@ public class JdbcResultResource
       int numColumns = md.getColumnCount();
 
       for (int i = 1; i <= numColumns; i++) {
-        array.put(LongValue.create(_rs.getObject(i).toString().length()));
+        array.put(VHelper.noCtx(), V.one(LongValue.create(_rs.getObject(i).toString().length())));
       }
       result = array;
 

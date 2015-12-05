@@ -375,10 +375,10 @@ public class TokenModule extends AbstractQuercusModule {
 
     while ((token = lexer.nextToken()) >= 0) {
       if (0x20 <= token && token <= 0x7f) {
-        result.put(env.createString((char) token));
+        result.put(VHelper.noCtx(), env.createString((char) token));
       }
       else {
-        result.put(new ArrayValueImpl()
+        result.put(VHelper.noCtx(), new ArrayValueImpl()
                    .append(LongValue.create(token))
                    .append(lexer.getLexeme()));
       }

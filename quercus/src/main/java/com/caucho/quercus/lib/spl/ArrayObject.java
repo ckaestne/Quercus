@@ -81,7 +81,7 @@ public class ArrayObject
 
   public void append(Value value)
   {
-    _value.put(value);
+    _value.put(VHelper.noCtx(), value);
   }
 
   public void asort(@Optional long sortFlag)

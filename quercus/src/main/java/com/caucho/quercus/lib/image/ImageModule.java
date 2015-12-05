@@ -40,6 +40,8 @@ import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -179,9 +181,9 @@ public class ImageModule extends AbstractQuercusModule {
     if (imageArray == null)
       imageArray = new ArrayValueImpl();
 
-    imageArray.put(LongValue.create(info.getWidth()));
-    imageArray.put(LongValue.create(info.getHeight()));
-    imageArray.put(LongValue.create(info.getType()));
+    imageArray.put(VHelper.noCtx(), V.one(LongValue.create(info.getWidth())));
+    imageArray.put(VHelper.noCtx(), V.one(LongValue.create(info.getHeight())));
+    imageArray.put(VHelper.noCtx(), V.one(LongValue.create(info.getType())));
 
     StringValue sb = env.createStringBuilder();
 
@@ -191,7 +193,7 @@ public class ImageModule extends AbstractQuercusModule {
     sb.append(info.getHeight());
     sb.append("\"");
 
-    imageArray.put(sb);
+    imageArray.put(VHelper.noCtx(), V.one(sb));
 
     if (info.getBits() >= 0)
       imageArray.put(env.createString("bits"), LongValue.create(info.getBits()));
@@ -1073,17 +1075,17 @@ public class ImageModule extends AbstractQuercusModule {
       double y2 = rect.getY() + descent - 1;
 
       ArrayValue bbox = new ArrayValueImpl();
-      bbox.put(LongValue.create(Math.round(x1)));
-      bbox.put(LongValue.create(Math.round(y1)));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(x1))));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(y1))));
 
-      bbox.put(LongValue.create(Math.round(x2)));
-      bbox.put(LongValue.create(Math.round(y1)));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(x2))));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(y1))));
 
-      bbox.put(LongValue.create(Math.round(x2)));
-      bbox.put(LongValue.create(Math.round(y2)));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(x2))));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(y2))));
 
-      bbox.put(LongValue.create(Math.round(x1)));
-      bbox.put(LongValue.create(Math.round(y2)));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(x1))));
+      bbox.put(VHelper.noCtx(), V.one(LongValue.create(Math.round(y2))));
 
       return bbox;
     } catch (Exception e) {

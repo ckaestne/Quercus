@@ -276,9 +276,10 @@ abstract public class JavaAdapter extends ArrayValue
    * Adds a new value.
    */
   @Override
-  public final Value put(Value value)
+  public final V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
   {
-    return put(createTailKey(VHelper.noCtx()).getOne(), value);
+    throw new UnimplementedVException();
+//    return put(ctx, value);
   }
 
   /**

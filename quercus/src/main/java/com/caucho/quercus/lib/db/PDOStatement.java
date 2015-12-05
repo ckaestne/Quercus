@@ -570,7 +570,7 @@ public class PDOStatement
         break;
       }
 
-      rows.put(value);
+      rows.put(VHelper.noCtx(), V.one(value));
     }
 
     return rows;
@@ -863,12 +863,12 @@ public class PDOStatement
         if (! (existingValue instanceof UnsetValue)) {
           if (! existingValue.isArray()) {
             ArrayValue arrayValue = new ArrayValueImpl();
-            arrayValue.put(existingValue);
+            arrayValue.put(VHelper.noCtx(), V.one(existingValue));
             array.put(name, arrayValue);
             existingValue = arrayValue;
           }
 
-          existingValue.put(value);
+          existingValue.put(VHelper.noCtx(), V.one(value));
         }
         else
           array.put(name, value);

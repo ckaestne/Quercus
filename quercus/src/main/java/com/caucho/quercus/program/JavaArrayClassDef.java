@@ -83,7 +83,7 @@ public class JavaArrayClassDef extends JavaClassDef {
     for (int i = 0; i < length; i++) {
       Object component = Array.get(obj, i);
       
-      arrayValueImpl.put(componentClassMarshal.unmarshal(env, VHelper.noCtx(), component).getOne());
+      arrayValueImpl.put(VHelper.noCtx(), componentClassMarshal.unmarshal(env, VHelper.noCtx(), component));
     }
 
     return arrayValueImpl;

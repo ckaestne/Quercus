@@ -145,7 +145,7 @@ public class StringUtility
                                              key.indexOf(']'));
                 v.put(env.createString(index), env.createString(value));
               } else {
-                v.put(env.createString(value));
+                v.put(VHelper.noCtx(), env.createString(value));
               }
             } else {
               Post.addFormValue(env, result, key,
@@ -251,7 +251,7 @@ public class StringUtility
         part = new ArrayValueImpl();
 
       if (index.equals(""))
-        part.put(value);
+        part.put(VHelper.noCtx(), value);
       else
         part.put(env.createString(index), value);
 
