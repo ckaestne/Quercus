@@ -30,7 +30,6 @@
 package com.caucho.quercus.env;
 
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * A delegate that performs Iterator operations for Quercus objects.
@@ -39,7 +38,7 @@ public interface TraversableDelegate {
   /**
    * Returns an iterator over the object's &lt;key,value> entries. 
    */
-  public Iterator<Map.Entry<Value, EnvVar>>
+  public Iterator<VEntry>
     getIterator(Env env, ObjectValue qThis);
   
   /**

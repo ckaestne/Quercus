@@ -40,7 +40,10 @@ import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Represents a Quercus object value.
@@ -146,7 +149,7 @@ abstract public class ObjectValue extends Callback {
    * Returns a Set of entries.
    */
   // XXX: remove entrySet() and use getIterator() instead
-  abstract public Set<? extends Map.Entry<Value,EnvVar>> entrySet();
+  abstract public Set<? extends VEntry> entrySet();
 
   /**
    * Returns the class name.
@@ -536,7 +539,7 @@ abstract public class ObjectValue extends Callback {
    * Returns an iterator for the key => value pairs.
    */
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     TraversableDelegate delegate = _quercusClass.getTraversableDelegate();
 
@@ -739,8 +742,8 @@ abstract public class ObjectValue extends Callback {
     if (result != 0)
       return result;
 
-    Set<? extends Map.Entry<Value,EnvVar>> aSet = entrySet();
-    Set<? extends Map.Entry<Value,EnvVar>> bSet = rValue.entrySet();
+    Set<? extends VEntry> aSet = entrySet();
+    Set<? extends VEntry> bSet = rValue.entrySet();
 
     if (aSet.equals(bSet))
       return 0;
@@ -749,18 +752,18 @@ abstract public class ObjectValue extends Callback {
     else if (aSet.size() < bSet.size())
       return -1;
     else {
-      TreeSet<Map.Entry<Value,EnvVar>> aTree
-        = new TreeSet<Map.Entry<Value,EnvVar>>(aSet);
+      TreeSet<VEntry> aTree
+        = new TreeSet<VEntry>(aSet);
 
-      TreeSet<Map.Entry<Value,EnvVar>> bTree
-        = new TreeSet<Map.Entry<Value,EnvVar>>(bSet);
+      TreeSet<VEntry> bTree
+        = new TreeSet<VEntry>(bSet);
 
-      Iterator<Map.Entry<Value,EnvVar>> iterA = aTree.iterator();
-      Iterator<Map.Entry<Value,EnvVar>> iterB = bTree.iterator();
+      Iterator<VEntry> iterA = aTree.iterator();
+      Iterator<VEntry> iterB = bTree.iterator();
 
       while (iterA.hasNext()) {
-        Map.Entry<Value,EnvVar> a = iterA.next();
-        Map.Entry<Value,EnvVar> b = iterB.next();
+        VEntry a = iterA.next();
+        VEntry b = iterB.next();
 
         result = a.getKey().cmp(b.getKey());
 
@@ -831,10 +834,10 @@ abstract public class ObjectValue extends Callback {
 
     ArrayValue sortedEntries = new ArrayValueImpl();
 
-    Iterator<Map.Entry<Value,EnvVar>> iter = getIterator(env);
+    Iterator<VEntry> iter = getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,EnvVar> entry = iter.next();
+      VEntry entry = iter.next();
       sortedEntries.put(entry.getKey(), entry.getValue());
     }
 
@@ -843,7 +846,7 @@ abstract public class ObjectValue extends Callback {
     iter = sortedEntries.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,EnvVar> entry = iter.next();
+      VEntry entry = iter.next();
 
       Value key = entry.getKey();
       EnvVar value = entry.getValue();
@@ -891,10 +894,10 @@ abstract public class ObjectValue extends Callback {
 
       int length = 0;
 
-      Iterator<Map.Entry<Value,EnvVar>> iter = getIterator(env);
+      Iterator<VEntry> iter = getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value,EnvVar> entry = iter.next();
+        VEntry entry = iter.next();
 
         StringValue key = entry.getKey().toStringValue(env);
         EnvVar value = entry.getValue();

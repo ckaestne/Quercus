@@ -39,7 +39,6 @@ import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
-import java.util.Map;
 
 public class ArrayObject
   implements ArrayAccess,
@@ -235,11 +234,11 @@ public class ArrayObject
       depth++;
 
 
-      java.util.Iterator<Map.Entry<Value,EnvVar>> iterator
+      java.util.Iterator<VEntry> iterator
         = _value.getIterator(env);
 
       while (iterator.hasNext()) {
-        Map.Entry<Value, EnvVar> entry = iterator.next();
+        VEntry entry = iterator.next();
 
         Value key = entry.getKey();
         EnvVar value = entry.getValue();
@@ -280,11 +279,11 @@ public class ArrayObject
 
       depth++;
 
-      java.util.Iterator<Map.Entry<Value,EnvVar>> iterator
+      java.util.Iterator<VEntry> iterator
         = _value.getIterator(env);
 
       while (iterator.hasNext()) {
-        Map.Entry<Value, EnvVar> entry = iterator.next();
+        VEntry entry = iterator.next();
 
         Value key = entry.getKey();
         EnvVar value = entry.getValue();

@@ -53,7 +53,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -332,7 +331,7 @@ public class MiscModule extends AbstractQuercusModule {
     StringValue patternMatched = env.getEmptyString();
     String regExpMatched = null;
 
-    for (Map.Entry<Value,EnvVar> entry : browsers.entrySet()) {
+    for (VEntry entry : browsers.entrySet()) {
       StringValue pattern = entry.getKey().toStringValue();
 
       if (pattern.toString().equals(user_agent)) {
@@ -388,7 +387,7 @@ public class MiscModule extends AbstractQuercusModule {
     }
 
     ObjectValue object = env.createObject();
-    for (Map.Entry<Value,EnvVar> entry : capabilities.entrySet()) {
+    for (VEntry entry : capabilities.entrySet()) {
       object.putField(env, entry.getKey().toString(), entry.getValue().getOne());
     }
 
@@ -411,7 +410,7 @@ public class MiscModule extends AbstractQuercusModule {
     ArrayValue browserCapabilities = field.toArrayValue(env);
     StringValue parentString = env.createString("parent");
 
-    for (Map.Entry<Value,EnvVar> entry : browserCapabilities.entrySet()) {
+    for (VEntry entry : browserCapabilities.entrySet()) {
       Value key = entry.getKey();
 
       if (key.equals(parentString)) {
@@ -748,7 +747,7 @@ public class MiscModule extends AbstractQuercusModule {
         envStrings = new String[size];
 
         int i = 0;
-        for (Map.Entry<Value,EnvVar> entry : envArray.entrySet()) {
+        for (VEntry entry : envArray.entrySet()) {
           envStrings[i++] = entry.getKey() + "=" + entry.getValue();
         }
       }
@@ -767,7 +766,7 @@ public class MiscModule extends AbstractQuercusModule {
       pipes.set(array);
       array.clear();
 
-      for (Map.Entry<Value,EnvVar> entry : descriptorArray.entrySet()) {
+      for (VEntry entry : descriptorArray.entrySet()) {
         Value key = entry.getKey();
         Value val = entry.getValue().getOne();
 

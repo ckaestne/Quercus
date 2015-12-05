@@ -40,7 +40,6 @@ import com.caucho.vfs.i18n.EncodingWriter;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,10 +82,10 @@ public class HtmlModule extends AbstractQuercusModule {
   {
     ArrayValueImpl copy = new ArrayValueImpl();
 
-    Iterator<Map.Entry<Value, EnvVar>> iter = array.getIterator(env);
+    Iterator<VEntry> iter = array.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,EnvVar> entry = iter.next();
+      VEntry entry = iter.next();
 
       Value key = entry.getKey();
       Value value = entry.getValue().getOne();

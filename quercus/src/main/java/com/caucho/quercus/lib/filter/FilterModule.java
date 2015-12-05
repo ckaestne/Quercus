@@ -37,7 +37,6 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class FilterModule extends AbstractQuercusModule
 {
@@ -177,7 +176,7 @@ public class FilterModule extends AbstractQuercusModule
 
     ArrayValue array = new ArrayValueImpl();
 
-    for (Map.Entry<Value,EnvVar> entry : inputArray.entrySet()) {
+    for (VEntry entry : inputArray.entrySet()) {
       Value key = entry.getKey();
       Value value = entry.getValue().getOne();
 

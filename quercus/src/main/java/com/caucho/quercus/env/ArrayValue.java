@@ -642,7 +642,7 @@ abstract public class ArrayValue extends Value {
   {
     int count = getCount(env);
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       Value value = entry.getValue().getOne();
 
       if (value.isArray())
@@ -696,7 +696,7 @@ abstract public class ArrayValue extends Value {
     if (lSize != rSize)
       return lSize < rSize ? -1 : 1;
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       Value lElementValue = entry.getValue().getOne();
       Value rElementValue = rValue.get(entry.getKey()).getOne();
 
@@ -801,10 +801,10 @@ abstract public class ArrayValue extends Value {
   {
     ArrayValueImpl array = new ArrayValueImpl();
 
-    Iterator<Map.Entry<Value,EnvVar>> iter = array.getIterator(env);
+    Iterator<VEntry> iter = array.getIterator(env);
 
     for (int i = 0; i < end && iter.hasNext(); i++) {
-      Map.Entry<Value,EnvVar> entry = iter.next();
+      VEntry entry = iter.next();
 
       if (start <= i) {
         Value key = entry.getKey();
@@ -872,8 +872,9 @@ abstract public class ArrayValue extends Value {
 
   /**
    * Creatse a tail index.
+   * @param ctx
    */
-  abstract public Value createTailKey();
+  abstract public V<? extends Value> createTailKey(FeatureExpr ctx);
 
   /**
    * Returns a union of this array and the rValue as array.
@@ -892,7 +893,7 @@ abstract public class ArrayValue extends Value {
 
     ArrayValue result = new ArrayValueImpl(this);
 
-    for (Map.Entry<Value,EnvVar> entry : ((ArrayValue) rValue).entrySet()) {
+    for (VEntry entry : ((ArrayValue) rValue).entrySet()) {
       Value key = entry.getKey();
 
       if (result.get(key).getOne() == UnsetValue.UNSET) {
@@ -905,12 +906,12 @@ abstract public class ArrayValue extends Value {
   }
 
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getBaseIterator(Env env)
+  public Iterator<VEntry> getBaseIterator(Env env)
   {
     return new EntryIterator(getHead());
   }
 
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator()
+  public Iterator<VEntry> getIterator()
   {
     return new EntryIterator(getHead());
   }
@@ -989,7 +990,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Returns a set of all the of the entries.
    */
-  public Set<Map.Entry<Value,EnvVar>> entrySet()
+  public Set<VEntry> entrySet()
   {
     return new EntrySet();
   }
@@ -1123,7 +1124,7 @@ abstract public class ArrayValue extends Value {
    */
   public void putAll(ArrayValue array)
   {
-    for (Map.Entry<Value, EnvVar> entry : array.entrySet())
+    for (VEntry entry : array.entrySet())
       put(entry.getKey(), entry.getValue());
   }
 
@@ -1306,7 +1307,7 @@ abstract public class ArrayValue extends Value {
 //   *
 //   * @return an object array of this array
 //   */
-//  public Map.Entry<Value, EnvVar>[] toEntryArray()
+//  public VEntry[] toEntryArray()
 //  {
 //    ArrayList<Map.Entry<Value, Value>> array
 //      = new ArrayList<Map.Entry<Value, Value>>(getSize());
@@ -1314,7 +1315,7 @@ abstract public class ArrayValue extends Value {
 //    for (Entry entry = getHead(); entry != null; entry = entry._next)
 //      array.add(entry);
 //
-//    Map.Entry<Value, EnvVar>[]result = new Entry[array.size()];
+//    VEntry[]result = new Entry[array.size()];
 //
 //    return array.toArray(result);
 //  }
@@ -1326,7 +1327,7 @@ abstract public class ArrayValue extends Value {
    * @param resetKeys  true if the keys should not be preserved
    * @param strict  true if alphabetic keys should not be preserved
    */
-  public void sort(Comparator<Map.Entry<Value, EnvVar>> comparator,
+  public void sort(Comparator<VEntry> comparator,
                    boolean resetKeys, boolean strict)
   {
     Entry []entries;
@@ -1460,10 +1461,10 @@ abstract public class ArrayValue extends Value {
 
     int length = 0;
 
-    Iterator<Map.Entry<Value,EnvVar>> iter = getIterator(env);
+    Iterator<VEntry> iter = getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,EnvVar> entry = iter.next();
+      VEntry entry = iter.next();
 
       if (length > 0)
         sb.append(',');
@@ -1537,7 +1538,7 @@ abstract public class ArrayValue extends Value {
 
     rValue = rValue.toValue();
 
-    for (Map.Entry<Value, EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       Value entryValue = entry.getValue().getValue().getOne();
 
       Value entryKey = entry.getKey();
@@ -1584,12 +1585,12 @@ abstract public class ArrayValue extends Value {
 
     ArrayValue rArray = (ArrayValue) rValue;
 
-    Iterator<Map.Entry<Value,EnvVar>> iterA = entrySet().iterator();
-    Iterator<Map.Entry<Value,EnvVar>> iterB = rArray.entrySet().iterator();
+    Iterator<VEntry> iterA = entrySet().iterator();
+    Iterator<VEntry> iterB = rArray.entrySet().iterator();
 
     while (iterA.hasNext() && iterB.hasNext()) {
-      Map.Entry<Value,EnvVar> entryA = iterA.next();
-      Map.Entry<Value,EnvVar> entryB = iterB.next();
+      VEntry entryA = iterA.next();
+      VEntry entryB = iterB.next();
 
       if (! entryA.getKey().eql(entryB.getKey()))
         return false;
@@ -1621,7 +1622,7 @@ abstract public class ArrayValue extends Value {
   {
     out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
 
-    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
+    for (VEntry mapEntry : entrySet()) {
       varDumpEntry(env, out, depth + 1, valueSet, mapEntry);
 
       out.println(VHelper.noCtx());
@@ -1636,10 +1637,10 @@ abstract public class ArrayValue extends Value {
                               VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet,
-                              Map.Entry<Value, EnvVar> mapEntry)
+                              VEntry mapEntry)
     throws IOException
   {
-    ArrayValue.Entry entry = (ArrayValue.Entry) mapEntry;
+    Entry entry = (Entry) mapEntry;
 
     entry.varDumpImpl(env, out, depth, valueSet);
   }
@@ -1655,8 +1656,8 @@ abstract public class ArrayValue extends Value {
     printDepth(out, 4 * depth);
     out.println(VHelper.noCtx(), "(");
 
-    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
-      ArrayValue.Entry entry = (ArrayValue.Entry) mapEntry;
+    for (VEntry mapEntry : entrySet()) {
+      Entry entry = (Entry) mapEntry;
 
       entry.printRImpl(env, out, depth, valueSet);
     }
@@ -1669,17 +1670,16 @@ abstract public class ArrayValue extends Value {
                              VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet,
-                             Map.Entry<Value, EnvVar> mapEntry)
+                             VEntry mapEntry)
     throws IOException
   {
-    ArrayValue.Entry entry = (ArrayValue.Entry) mapEntry;
+    Entry entry = (Entry) mapEntry;
 
     entry.printRImpl(env, out, depth, valueSet);
   }
 
   public static final class Entry
-    implements Map.Entry<Value,EnvVar>, Serializable
-  {
+    implements /*VEntry,*/ Serializable, VEntry {
     private final Value _key;
 
     private EnvVar _value;
@@ -1751,7 +1751,7 @@ abstract public class ArrayValue extends Value {
       return _value;
     }
 
-    @Override
+//    @Override
     public EnvVar setValue(EnvVar value) {
       EnvVar oldValue = _value;
       _value=value;
@@ -1767,6 +1767,11 @@ abstract public class ArrayValue extends Value {
     public Value getKey()
     {
       return _key;
+    }
+
+    @Override
+    public FeatureExpr getCondition() {
+      return VHelper.noCtx();
     }
 
     public V<? extends Value> toValue()
@@ -1827,28 +1832,28 @@ abstract public class ArrayValue extends Value {
 //      return oldValue;
 //    }
 
-    public Value set(Value value)
+    public V<? extends Value> set(FeatureExpr ctx, V<? extends ValueOrVar> value)
     {
-      throw new UnimplementedVException();
-//      Value oldValue = _value;
-//
-//      // XXX: make OO
-//      /*
-//      if (value instanceof Var)
-//        _var = (Var) value;
-//      else if (_var != null)
-//        _var.set(value);
-//      else
-//        _value = value;
-//      */
-//
-//      if (value instanceof Var)
-//        _value = (Var) value;
+      EnvVar oldValue = _value;
+
+      // XXX: make OO
+      /*
+      if (value instanceof Var)
+        _var = (Var) value;
+      else if (_var != null)
+        _var.set(value);
+      else
+        _value = value;
+      */
+
+      _value.setRef(ctx, value);
+//      if (value.isVar())
+//        _value.setVar(VHelper.noCtx(), value._var());
 //      else {
 //        _value = _value.set(value);
 //      }
-//
-//      return oldValue;
+
+      return oldValue.getValue();
     }
 
     /**
@@ -1966,7 +1971,7 @@ abstract public class ArrayValue extends Value {
     @Override
     public String toString()
     {
-      return "ArrayValue.Entry[" + getKey() + "]";
+      return "VEntry[" + getKey() + "]";
     }
   }
 
@@ -2075,7 +2080,7 @@ abstract public class ArrayValue extends Value {
     return array;
   }
 
-  public class EntrySet extends AbstractSet<Map.Entry<Value,EnvVar>> {
+  public class EntrySet extends AbstractSet<VEntry> {
     EntrySet()
     {
     }
@@ -2087,7 +2092,7 @@ abstract public class ArrayValue extends Value {
     }
 
     @Override
-    public Iterator<Map.Entry<Value,EnvVar>> iterator()
+    public Iterator<VEntry> iterator()
     {
       return new EntryIterator(getHead());
     }
@@ -2130,7 +2135,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static class EntryIterator
-    implements Iterator<Map.Entry<Value,EnvVar>> {
+    implements Iterator<VEntry> {
     private Entry _current;
 
     EntryIterator(Entry head)
@@ -2143,10 +2148,10 @@ abstract public class ArrayValue extends Value {
       return _current != null;
     }
 
-    public Map.Entry<Value,EnvVar> next()
+    public Entry next()
     {
       if (_current != null) {
-        Map.Entry<Value,EnvVar> next = _current;
+        Entry next = _current;
         _current = _current._next;
 
         return next;
@@ -2226,7 +2231,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static class ValueComparator
-    implements Comparator<Map.Entry<Value,EnvVar>>
+    implements Comparator<VEntry>
   {
     public static final ValueComparator CMP = new ValueComparator();
 
@@ -2234,8 +2239,8 @@ abstract public class ArrayValue extends Value {
     {
     }
 
-    public int compare(Map.Entry<Value,EnvVar> aEntry,
-                       Map.Entry<Value,EnvVar> bEntry)
+    public int compare(VEntry aEntry,
+                       VEntry bEntry)
     {
       try {
         Value aValue = aEntry.getValue().getValue().getOne();
@@ -2254,7 +2259,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static class KeyComparator
-    implements Comparator<Map.Entry<Value,EnvVar>>
+    implements Comparator<VEntry>
   {
     public static final KeyComparator CMP = new KeyComparator();
 
@@ -2262,8 +2267,8 @@ abstract public class ArrayValue extends Value {
     {
     }
 
-    public int compare(Map.Entry<Value,EnvVar> aEntry,
-                       Map.Entry<Value,EnvVar> bEntry)
+    public int compare(VEntry aEntry,
+                       VEntry bEntry)
     {
       try {
         Value aKey = aEntry.getKey();
@@ -2282,7 +2287,7 @@ abstract public class ArrayValue extends Value {
   }
 
   public static abstract class AbstractGet {
-    public abstract Value get(Map.Entry<Value, EnvVar> entry);
+    public abstract Value get(VEntry entry);
   }
 
   public static class GetKey extends AbstractGet
@@ -2294,7 +2299,7 @@ abstract public class ArrayValue extends Value {
     }
 
     @Override
-    public Value get(Map.Entry<Value, EnvVar> entry)
+    public Value get(VEntry entry)
     {
       return entry.getKey();
     }
@@ -2308,7 +2313,7 @@ abstract public class ArrayValue extends Value {
     }
 
     @Override
-    public Value get(Map.Entry<Value, EnvVar> entry)
+    public Value get(VEntry entry)
     {
       return entry.getValue().getOne();
     }

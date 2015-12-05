@@ -196,13 +196,13 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Returns an iterator of the entries.
    */
-  public Set<Map.Entry<Value,EnvVar>> entrySet()
+  public Set<VEntry> entrySet()
   {
     return createAndFillArray().entrySet();
   }
   
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     return createAndFillArray().getIterator(env);
   }

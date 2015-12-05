@@ -31,6 +31,8 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.program.JavaClassDef;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -174,12 +176,13 @@ public class JavaMapAdapter
   
   /**
    * Creatse a tail index.
+   * @param ctx
    */
   @Override
-  public Value createTailKey()
+  public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
     updateNextAvailableIndex();
-    return LongValue.create(_nextAvailableIndex);
+    return V.one(LongValue.create(_nextAvailableIndex));
   }
   
   /**
@@ -229,7 +232,7 @@ public class JavaMapAdapter
   }
   
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     return new MapIterator();
   }
@@ -238,7 +241,7 @@ public class JavaMapAdapter
    * Returns a set of all the of the entries.
    */
   @Override
-  public Set<Map.Entry<Value, EnvVar>> entrySet()
+  public Set<VEntry> entrySet()
   {
     return new MapSet();
   }
@@ -287,7 +290,7 @@ public class JavaMapAdapter
   }
 
   public class MapSet
-    extends AbstractSet<Map.Entry<Value,EnvVar>>
+    extends AbstractSet<VEntry>
   {
     MapSet()
     {
@@ -300,14 +303,14 @@ public class JavaMapAdapter
     }
 
     @Override
-    public Iterator<Map.Entry<Value,EnvVar>> iterator()
+    public Iterator<VEntry> iterator()
     {
       return new MapIterator();
     }
   }
 
   public class MapIterator
-    implements Iterator<Map.Entry<Value,EnvVar>>
+    implements Iterator<VEntry>
   {
     private Iterator<Map.Entry<Object,Object>> _iterator;
 
@@ -321,14 +324,14 @@ public class JavaMapAdapter
       return _iterator.hasNext();
     }
 
-    public Map.Entry<Value,EnvVar> next()
+    public VEntry next()
     {
       Map.Entry entry = _iterator.next();
       
       Value key = wrapJava(entry.getKey());
       EnvVar value = EnvVar._gen(wrapJava(entry.getValue()));
 
-      return new ArrayValue.Entry(key, value);
+      return new Entry(key, value);
     }
 
     public void remove()

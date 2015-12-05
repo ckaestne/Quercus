@@ -30,6 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.JavaClassDef;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.*;
 
@@ -89,11 +91,12 @@ public class JavaCollectionAdapter extends JavaAdapter
 
   /**
    * Creatse a tail index.
+   * @param ctx
    */
   @Override
-  public Value createTailKey()
+  public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
-    return LongValue.create(getSize());
+    return V.one(LongValue.create(getSize()));
   }
 
   @Override
@@ -157,7 +160,7 @@ public class JavaCollectionAdapter extends JavaAdapter
    * Returns a set of all the of the entries.
    */
   @Override
-  public Set<Map.Entry<Value, EnvVar>> entrySet()
+  public Set<VEntry> entrySet()
   {
     return new CollectionValueSet();
   }
@@ -181,7 +184,7 @@ public class JavaCollectionAdapter extends JavaAdapter
   }
 
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     return new CollectionValueIterator();
   }
@@ -279,7 +282,7 @@ public class JavaCollectionAdapter extends JavaAdapter
   }
 
   public class CollectionValueSet
-    extends AbstractSet<Map.Entry<Value,EnvVar>>
+    extends AbstractSet<VEntry>
   {
     CollectionValueSet()
     {
@@ -292,14 +295,14 @@ public class JavaCollectionAdapter extends JavaAdapter
     }
 
     @Override
-    public Iterator<Map.Entry<Value,EnvVar>> iterator()
+    public Iterator<VEntry> iterator()
     {
       return new CollectionValueIterator();
     }
   }
 
   public class CollectionValueIterator
-    implements Iterator<Map.Entry<Value,EnvVar>>
+    implements Iterator<VEntry>
   {
     private int _index;
     private Iterator _iterator;
@@ -315,11 +318,11 @@ public class JavaCollectionAdapter extends JavaAdapter
       return _iterator.hasNext();
     }
 
-    public Map.Entry<Value,EnvVar> next()
+    public VEntry next()
     {
        Value val = wrapJava(_iterator.next());
 
-       return new ArrayValue.Entry(LongValue.create(_index++), EnvVar._gen(val));
+       return new Entry(LongValue.create(_index++), EnvVar._gen(val));
     }
 
     public void remove()

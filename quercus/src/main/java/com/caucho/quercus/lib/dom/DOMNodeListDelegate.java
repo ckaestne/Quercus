@@ -30,9 +30,10 @@
 package com.caucho.quercus.lib.dom;
 
 import com.caucho.quercus.env.*;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
-import java.util.Map;
 
 public class DOMNodeListDelegate
   implements TraversableDelegate
@@ -51,7 +52,7 @@ public class DOMNodeListDelegate
     return new DOMNodeListValueIterator(env,  (DOMNodeList) obj.toJavaObject());
   }
   
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env, ObjectValue obj)
+  public Iterator<VEntry> getIterator(Env env, ObjectValue obj)
   {
     return new DOMNodeListIterator(env, (DOMNodeList) obj.toJavaObject());
   }
@@ -113,7 +114,7 @@ public class DOMNodeListDelegate
   }
   
   public class DOMNodeListIterator
-    implements Iterator<Map.Entry<Value, EnvVar>>
+    implements Iterator<VEntry>
   {
     private Env _env;
     private DOMNodeList _list;
@@ -130,7 +131,7 @@ public class DOMNodeListDelegate
       return _index < _list.getLength();
     }
 
-    public Map.Entry<Value, EnvVar> next()
+    public VEntry next()
     {
       return new DOMNodeListEntry(_index, EnvVar._gen(_env.wrapJava(_list.item(_index++))));
     }
@@ -142,7 +143,7 @@ public class DOMNodeListDelegate
   }
   
   public class DOMNodeListEntry
-    implements Map.Entry<Value,EnvVar>
+    implements VEntry
   {
     private int _key;
     private EnvVar _value;
@@ -157,7 +158,12 @@ public class DOMNodeListDelegate
     {
       return LongValue.create(_key);
     }
-    
+
+    @Override
+    public FeatureExpr getCondition() {
+      return VHelper.noCtx();
+    }
+
     public EnvVar getValue()
     {
       return _value;

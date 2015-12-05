@@ -588,7 +588,7 @@ public class StreamModule extends AbstractQuercusModule {
     if (read.isArray()) {
       ArrayValue array = read.toArrayValue(env);
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         Object obj = entry.getValue().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
@@ -601,7 +601,7 @@ public class StreamModule extends AbstractQuercusModule {
     if (write.isArray()) {
       ArrayValue array = write.toArrayValue(env);
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         Object obj = entry.getValue().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
@@ -614,7 +614,7 @@ public class StreamModule extends AbstractQuercusModule {
     if (except.isArray()) {
       ArrayValue array = except.toArrayValue(env);
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         Object obj = entry.getValue().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput

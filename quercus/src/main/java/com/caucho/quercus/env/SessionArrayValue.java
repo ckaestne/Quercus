@@ -38,7 +38,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.IdentityHashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -126,7 +125,7 @@ public class SessionArrayValue extends ArrayValueWrapper
     SerializeMap serializeMap = new SerializeMap();
     
     synchronized (array) {
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         sb.append(entry.getKey().toString());
         sb.append("|");
 

@@ -44,7 +44,6 @@ import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class CurlModule
@@ -650,7 +649,7 @@ public class CurlModule
     if (curl == null)
       return BooleanValue.FALSE;
 
-    for (Map.Entry<Value,EnvVar> entry : options.entrySet()) {
+    for (VEntry entry : options.entrySet()) {
       if (! setOption(env, curl, entry.getKey().toInt(), entry.getValue().getOne()))
         return BooleanValue.FALSE;
     }
@@ -961,7 +960,7 @@ public class CurlModule
       case CURLOPT_HTTPHEADER:
         ArrayValue array = value.toArrayValue(env);
 
-        for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+        for (VEntry entry : array.entrySet()) {
           String header = entry.getValue().toString();
 
           String name = header;

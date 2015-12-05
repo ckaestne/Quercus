@@ -3142,7 +3142,7 @@ public class StringModule extends AbstractQuercusModule {
       ArrayValue subjectArray = subject.toArrayValue(env);
       ArrayValue resultArray = new ArrayValueImpl();
 
-      for (Map.Entry<Value, EnvVar> entry : subjectArray.entrySet()) {
+      for (VEntry entry : subjectArray.entrySet()) {
         Value key = entry.getKey();
         Value value = entry.getValue().getOne();
 
@@ -4638,73 +4638,74 @@ public class StringModule extends AbstractQuercusModule {
                                         StringValue string,
                                         ArrayValue map)
   {
-    int size = map.getSize();
-
-    StringValue []fromList = new StringValue[size];
-    StringValue []toList = new StringValue[size];
-
-    Map.Entry<Value,EnvVar> [] entryArray = new Map.Entry[size];
-
-    int i = 0;
-    for (Map.Entry<Value,EnvVar> entry : map.entrySet()) {
-      entryArray[i++] = entry;
-    }
-
-    // sort entries in descending fashion
-    Arrays.sort(entryArray, new StrtrComparator<Map.Entry<Value,EnvVar>>());
-
-    boolean []charSet = new boolean[256];
-
-    for (i = 0; i < size; i++) {
-      fromList[i] = entryArray[i].getKey().toStringValue(env);
-      toList[i] = entryArray[i].getValue().getOne().toStringValue(env);
-
-      charSet[fromList[i].charAt(0)] = true;
-    }
-
-    StringValue result = string.createStringBuilder();
-    int len = string.length();
-    int head = 0;
-
-    top:
-    while (head < len) {
-      char ch = string.charAt(head);
-
-      if (charSet.length <= ch || charSet[ch]) {
-        fromLoop:
-        for (i = 0; i < fromList.length; i++) {
-          StringValue from = fromList[i];
-          int fromLen = from.length();
-
-          if (head + fromLen > len)
-            continue;
-
-          if (ch != from.charAt(0))
-            continue;
-
-          for (int j = 0; j < fromLen; j++) {
-            if (string.charAt(head + j) != from.charAt(j))
-              continue fromLoop;
-          }
-
-          result = result.append(toList[i]);
-          head = head + fromLen;
-
-          continue top;
-        }
-      }
-
-      result.append(ch);
-      head++;
-    }
-
-    return result;
+    throw new UnimplementedVException();
+//    int size = map.getSize();
+//
+//    StringValue []fromList = new StringValue[size];
+//    StringValue []toList = new StringValue[size];
+//
+//    VEntry [] entryArray = new Map.Entry[size];
+//
+//    int i = 0;
+//    for (VEntry entry : map.entrySet()) {
+//      entryArray[i++] = entry;
+//    }
+//
+//    // sort entries in descending fashion
+//    Arrays.sort(entryArray, new StrtrComparator<VEntry>());
+//
+//    boolean []charSet = new boolean[256];
+//
+//    for (i = 0; i < size; i++) {
+//      fromList[i] = entryArray[i].getKey().toStringValue(env);
+//      toList[i] = entryArray[i].getValue().getOne().toStringValue(env);
+//
+//      charSet[fromList[i].charAt(0)] = true;
+//    }
+//
+//    StringValue result = string.createStringBuilder();
+//    int len = string.length();
+//    int head = 0;
+//
+//    top:
+//    while (head < len) {
+//      char ch = string.charAt(head);
+//
+//      if (charSet.length <= ch || charSet[ch]) {
+//        fromLoop:
+//        for (i = 0; i < fromList.length; i++) {
+//          StringValue from = fromList[i];
+//          int fromLen = from.length();
+//
+//          if (head + fromLen > len)
+//            continue;
+//
+//          if (ch != from.charAt(0))
+//            continue;
+//
+//          for (int j = 0; j < fromLen; j++) {
+//            if (string.charAt(head + j) != from.charAt(j))
+//              continue fromLoop;
+//          }
+//
+//          result = result.append(toList[i]);
+//          head = head + fromLen;
+//
+//          continue top;
+//        }
+//      }
+//
+//      result.append(ch);
+//      head++;
+//    }
+//
+//    return result;
   }
 
   /*
    * Comparator for sorting in descending fashion based on length.
    */
-  static class StrtrComparator<T extends Map.Entry<Value,EnvVar>>
+  static class StrtrComparator<T extends VEntry>
     implements Comparator<T>
   {
     public int compare(T a, T b)

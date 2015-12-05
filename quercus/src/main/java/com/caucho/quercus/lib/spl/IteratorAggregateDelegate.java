@@ -35,7 +35,6 @@ import com.caucho.util.L10N;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * A delegate that intercepts requests for iterator's and delegates
@@ -52,7 +51,7 @@ public class IteratorAggregateDelegate
   private static final IteratorDelegate _iteratorDelegate
     = new IteratorDelegate();
 
-  public Iterator<Map.Entry<Value, EnvVar>>
+  public Iterator<VEntry>
     getIterator(Env env, ObjectValue qThis)
   {
     Value target = getTarget(env, qThis);

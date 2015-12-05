@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Represents a reference to a PHP variable in a function call.
@@ -527,7 +526,7 @@ public class ArgRef extends Value
   }
 
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     return _var.getValue().getOne().getIterator(env);
   }

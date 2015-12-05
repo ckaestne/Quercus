@@ -2086,7 +2086,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns an iterator for the key => value pairs.
    */
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     return getBaseIterator(env);
   }
@@ -2094,9 +2094,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns an iterator for the key => value pairs.
    */
-  public Iterator<Map.Entry<Value, EnvVar>> getBaseIterator(Env env)
+  public Iterator<VEntry> getBaseIterator(Env env)
   {
-    Set<Map.Entry<Value, EnvVar>> emptySet = Collections.emptySet();
+    Set<VEntry> emptySet = Collections.emptySet();
 
     return emptySet.iterator();
   }
@@ -2109,7 +2109,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public Iterator<Value> getKeyIterator(Env env)
   {
-    final Iterator<Map.Entry<Value, EnvVar>> iter = getIterator(env);
+    final Iterator<VEntry> iter = getIterator(env);
 
     return new Iterator<Value>() {
       public boolean hasNext() { return iter.hasNext(); }
@@ -2142,7 +2142,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public Iterator<EnvVar> getValueIterator(Env env)
   {
-    final Iterator<Map.Entry<Value, EnvVar>> iter = getIterator(env);
+    final Iterator<VEntry> iter = getIterator(env);
 
     return new Iterator<EnvVar>() {
       public boolean hasNext() { return iter.hasNext(); }

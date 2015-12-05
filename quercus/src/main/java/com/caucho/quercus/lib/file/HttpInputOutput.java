@@ -38,7 +38,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -113,10 +112,10 @@ public class HttpInputOutput extends AbstractBinaryOutput
   private void setOptions(Env env, Value options)
     throws IOException
   {
-    Iterator<Map.Entry<Value, EnvVar>> iter = options.getIterator(env);
+    Iterator<VEntry> iter = options.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,EnvVar> entry = iter.next();
+      VEntry entry = iter.next();
     
       String optionName = entry.getKey().toString();
       Value optionValue = entry.getValue().getOne();

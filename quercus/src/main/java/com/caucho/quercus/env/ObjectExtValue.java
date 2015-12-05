@@ -710,7 +710,7 @@ public class ObjectExtValue extends ObjectValue
    * Returns an iterator for the key => value pairs.
    */
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     TraversableDelegate delegate = _quercusClass.getTraversableDelegate();
 
@@ -724,7 +724,7 @@ public class ObjectExtValue extends ObjectValue
    * Returns an iterator for the key => value pairs.
    */
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getBaseIterator(Env env)
+  public Iterator<VEntry> getBaseIterator(Env env)
   {
     return new KeyValueIterator(_fieldMap.values().iterator());
   }
@@ -1014,7 +1014,7 @@ public class ObjectExtValue extends ObjectValue
     sb.append(getName());
     sb.append("::__set_state(array(\n");
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       Value key = entry.getKey();
       Value value = entry.getValue().getOne();
 
@@ -1090,7 +1090,7 @@ public class ObjectExtValue extends ObjectValue
   {
     ArrayValue array = new ArrayValueImpl();
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       array.put(entry.getKey(), entry.getValue());
     }
 
@@ -1116,7 +1116,7 @@ public class ObjectExtValue extends ObjectValue
   }
 
   @Override
-  public Set<? extends Map.Entry<Value, EnvVar>> entrySet()
+  public Set<? extends VEntry> entrySet()
   {
     return new EntrySet();
   }
@@ -1152,7 +1152,7 @@ public class ObjectExtValue extends ObjectValue
       out.println(VHelper.noCtx());
     }
 
-    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
+    for (VEntry mapEntry : entrySet()) {
       ObjectExtValue.Entry entry = (ObjectExtValue.Entry) mapEntry;
 
       entry.varDumpImpl(env, out, depth + 1, valueSet);
@@ -1176,7 +1176,7 @@ public class ObjectExtValue extends ObjectValue
     printDepth(out, 4 * depth);
     out.println(VHelper.noCtx(), "(");
 
-    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
+    for (VEntry mapEntry : entrySet()) {
       ObjectExtValue.Entry entry = (ObjectExtValue.Entry) mapEntry;
 
       entry.printRImpl(env, out, depth + 1, valueSet);
@@ -1197,7 +1197,7 @@ public class ObjectExtValue extends ObjectValue
 
     out.writeInt(_fieldMap.size());
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       out.writeObject(entry.getKey());
       out.writeObject(entry.getValue());
     }
@@ -1304,7 +1304,7 @@ public class ObjectExtValue extends ObjectValue
              + "[" + _className + "]";
   }
 
-  public class EntrySet extends AbstractSet<Map.Entry<Value,EnvVar>> {
+  public class EntrySet extends AbstractSet<VEntry> {
     EntrySet()
     {
     }
@@ -1316,14 +1316,14 @@ public class ObjectExtValue extends ObjectValue
     }
 
     @Override
-    public Iterator<Map.Entry<Value,EnvVar>> iterator()
+    public Iterator<VEntry> iterator()
     {
       return new KeyValueIterator(_fieldMap.values().iterator());
     }
   }
 
   public static class KeyValueIterator
-    implements Iterator<Map.Entry<Value,EnvVar>>
+    implements Iterator<VEntry>
   {
     private final Iterator<Entry> _iter;
 
@@ -1337,7 +1337,7 @@ public class ObjectExtValue extends ObjectValue
       return _iter.hasNext();
     }
 
-    public Map.Entry<Value,EnvVar> next()
+    public VEntry next()
     {
       return _iter.next();
     }
@@ -1401,8 +1401,8 @@ public class ObjectExtValue extends ObjectValue
   }
 
   public final static class Entry
-    implements Map.Entry<Value,EnvVar>,
-               Comparable<Map.Entry<Value, EnvVar>>
+    implements VEntry,
+               Comparable<VEntry>
   {
     private final StringValue _key;
 
@@ -1442,6 +1442,11 @@ public class ObjectExtValue extends ObjectValue
     public StringValue getKey()
     {
       return _key;
+    }
+
+    @Override
+    public FeatureExpr getCondition() {
+      return VHelper.noCtx();
     }
 
     public boolean isPublic()
@@ -1547,7 +1552,7 @@ public class ObjectExtValue extends ObjectValue
       return new Entry(_key, EnvVar._gen(copy));
     }
 
-    public int compareTo(Map.Entry<Value, EnvVar> other)
+    public int compareTo(VEntry other)
     {
       if (other == null)
         return 1;

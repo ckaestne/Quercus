@@ -29,11 +29,13 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.UnimplementedVException;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.IdentityHashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Represents a PHP array value.
@@ -165,11 +167,12 @@ public class ArrayValueWrapper extends ArrayValue {
 
   /**
    * Creatse a tail index.
+   * @param ctx
    */
   @Override
-  public Value createTailKey()
+  public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
-    return _array.createTailKey();
+    return _array.createTailKey(VHelper.noCtx());
   }
 
   /**
@@ -367,7 +370,7 @@ public class ArrayValueWrapper extends ArrayValue {
   }
 
   @Override
-  public Iterator<Map.Entry<Value, EnvVar>> getIterator(Env env)
+  public Iterator<VEntry> getIterator(Env env)
   {
     return _array.getIterator(env);
   }

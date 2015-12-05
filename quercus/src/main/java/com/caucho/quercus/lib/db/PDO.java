@@ -171,7 +171,7 @@ public class PDO implements EnvCleanup {
     _error = new PDOError();
 
     if (options != null) {
-      for (Map.Entry<Value,EnvVar> entry : options.entrySet()) {
+      for (VEntry entry : options.entrySet()) {
         setAttribute(env, entry.getKey().toInt(), entry.getValue().getOne());
       }
     }

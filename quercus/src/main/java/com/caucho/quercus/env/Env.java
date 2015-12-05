@@ -580,7 +580,7 @@ public class Env
 
   private void fillPost(ArrayValue array, ArrayValue postArray)
   {
-    for (Map.Entry<Value, EnvVar> entry : postArray.entrySet()) {
+    for (VEntry entry : postArray.entrySet()) {
       Value key = entry.getKey();
       Value value = entry.getValue().getOne();
 
@@ -2625,7 +2625,7 @@ public class Env
 
         if (_variablesOrder.indexOf('P') >= 0
             && _inputPost.getSize() > 0) {
-          for (Map.Entry<Value, EnvVar> entry : _inputPost.entrySet()) {
+          for (VEntry entry : _inputPost.entrySet()) {
             post.put(entry.getKey(), entry.getValue());
           }
         }
@@ -2649,7 +2649,7 @@ public class Env
         ArrayValue files = new ArrayValueImpl();
 
         if (_files != null) {
-          for (Map.Entry<Value, EnvVar> entry : _files.entrySet()) {
+          for (VEntry entry : _files.entrySet()) {
             files.put(entry.getKey(), entry.getValue());
           }
         }

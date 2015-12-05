@@ -38,7 +38,6 @@ import com.caucho.vfs.TempBuffer;
 import javax.jms.*;
 import java.io.Serializable;
 import java.util.Enumeration;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -100,9 +99,9 @@ public class JMSQueue
 
       ArrayValue array = (ArrayValue) value;
 
-      Set<Map.Entry<Value, EnvVar>> entrySet = array.entrySet();
+      Set<VEntry> entrySet = array.entrySet();
 
-      for (Map.Entry<Value,EnvVar> entry : entrySet) {
+      for (VEntry entry : entrySet) {
         if (entry.getValue().getOne() instanceof BinaryValue) {
           byte []bytes = ((BinaryValue) entry.getValue().getOne()).toBytes();
 

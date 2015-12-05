@@ -33,7 +33,6 @@ import com.caucho.quercus.program.JavaClassDef;
 
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -136,7 +135,7 @@ public class JavaListAdapter
    */
   public Value contains(Value value)
   {
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       if (entry.getValue().equals(value))
         return entry.getKey();
     }

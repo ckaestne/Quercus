@@ -30,15 +30,28 @@
 package com.caucho.quercus.env;
 
 import com.caucho.util.RandomUtil;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.*;
 import java.util.IdentityHashMap;
-import java.util.Map;
 
 /**
  * Represents a PHP array value.
+ *
+ * A variational array is implemented as a linked list of optional entries.
+ * Every entry has a condition and exactly one key and a variational
+ * value (modeled as EnvVar) for that key, that may be null (not NullValue)
+ * to represent an entry that is not set in a configuration.
+ * Keys are only unique across the configuration space, but there
+ * can be multiple entries with the same key under different conditions
+ * (this is necessary to allow different orderings in different configurations).
+ *
+ * There is an additional hashmap that looks up a set of elements. This is
+ * only an additional structure for faster lookup, but otherwise not relevant
+ * for the storage. The main storage all follows from _head.
  */
 public class ArrayValueImpl extends ArrayValue
   implements Serializable
@@ -57,7 +70,7 @@ public class ArrayValueImpl extends ArrayValue
   private int _hashMask;
 
   private int _size;
-  private long _nextAvailableIndex;
+  private V<Long> _nextAvailableIndex;
   private boolean _isDirty;
 
   private Entry _head;
@@ -225,7 +238,7 @@ public class ArrayValueImpl extends ArrayValue
     return _hashMask;
   }
 
-  protected long getNextAvailableIndex()
+  protected V<Long> getNextAvailableIndex()
   {
     return _nextAvailableIndex;
   }
@@ -446,7 +459,7 @@ public class ArrayValueImpl extends ArrayValue
     _head = _tail = null;
     setCurrent(null);
 
-    _nextAvailableIndex = 0;
+    _nextAvailableIndex = V.one(Long.valueOf(0));
   }
 
   /**
@@ -460,23 +473,25 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Adds a new value.
    */
-  public ArrayValue append(Value key, Value value)
+  @Deprecated
+  public ArrayValue append(Value key, Value value) {return this.append(VHelper.noCtx(), V.one(key), V.one(value)).getOne(); }
+  public V<? extends ArrayValue> append(FeatureExpr ctx, V<? extends Value> key, V<? extends Value> value)
   {
-    if (_isDirty) {
-      copyOnWrite();
-    }
-
-    if (key instanceof UnsetValue) // php/4a4h
-      key = createTailKey();
-
-    Entry entry = createEntry(key);
-
-    // php/0434
-    // Var oldVar = entry._var;
-
-    entry.set(value);
-
-    return this;
+    throw new UnimplementedVException();
+//    if (_isDirty) {
+//      copyOnWrite();
+//    }
+//
+//    key = key.vflatMap(ctx, (c,k) -> k instanceof UnsetValue?createTailKey(c):k);
+//
+//    Entry entry = createEntry(key);
+//
+//    // php/0434
+//    // Var oldVar = entry._var;
+//
+//    entry.set(VHelper.noCtx(), value);
+//
+//    return this;
   }
 
   /**
@@ -484,33 +499,35 @@ public class ArrayValueImpl extends ArrayValue
    */
   public ArrayValue unshift(Value value)
   {
-    if (_isDirty)
-      copyOnWrite();
+    throw new UnimplementedVException();
 
-    _size++;
-
-    Entry []entries = _entries;
-    if ((entries == null && _size >= MIN_HASH)
-        || (entries != null && entries.length <= 2 * _size)) {
-      expand();
-    }
-
-    Value key = createTailKey();
-
-    Entry entry = new Entry(key, EnvVar._gen(value.toLocalValue()));
-
-    addEntry(entry);
-
-    if (_head != null) {
-      _head._prev = entry;
-      entry.setNext(_head);
-      _head = entry;
-    }
-    else {
-      _head = _tail = entry;
-    }
-
-    return this;
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    _size++;
+//
+//    Entry []entries = _entries;
+//    if ((entries == null && _size >= MIN_HASH)
+//        || (entries != null && entries.length <= 2 * _size)) {
+//      expand();
+//    }
+//
+//    Value key = createTailKey(VHelper.noCtx());
+//
+//    Entry entry = new Entry(key, EnvVar._gen(value.toLocalValue()));
+//
+//    addEntry(entry);
+//
+//    if (_head != null) {
+//      _head._prev = entry;
+//      entry.setNext(_head);
+//      _head = entry;
+//    }
+//    else {
+//      _head = _tail = entry;
+//    }
+//
+//    return this;
   }
 
   /**
@@ -518,90 +535,92 @@ public class ArrayValueImpl extends ArrayValue
    */
   public ArrayValue splice(int start, int end, ArrayValue replace)
   {
-    if (_isDirty)
-      copyOnWrite();
+    throw new UnimplementedVException();
 
-    int index = 0;
-
-    ArrayValueImpl result = new ArrayValueImpl();
-
-    Entry ptr = _head;
-    Entry nextPtr = null;
-    for (; ptr != null; ptr = nextPtr) {
-      nextPtr = ptr.getNext();
-
-      Value key = ptr.getKey();
-
-      if (index < start) {
-      }
-      else if (index < end) {
-        _size--;
-
-        Entry prev = ptr.getPrev();
-        Entry next = ptr.getNext();
-
-        if (prev != null)
-          prev.setNext(next);
-        else
-          _head = next;
-
-        if (next != null)
-          next.setPrev(prev);
-        else
-          _tail = prev;
-
-        if (key.isString())
-          result.put(key, ptr.getValue());
-        else
-          result.put(ptr.getValue().getOne());
-      }
-      else if (replace == null) {
-        return result;
-      }
-      else {
-        for (Entry replaceEntry = replace.getHead();
-             replaceEntry != null;
-             replaceEntry = replaceEntry.getNext()) {
-          _size++;
-
-          Entry []entries = _entries;
-          if ((entries == null && _size >= MIN_HASH)
-              || (entries != null && entries.length <= 2 * _size)) {
-            expand();
-          }
-
-          Entry entry = new Entry(createTailKey(), replaceEntry.getValue());
-
-          addEntry(entry);
-
-          Entry prev = ptr.getPrev();
-
-          entry.setNext(ptr);
-          entry.setPrev(prev);
-
-          if (prev != null)
-            prev.setNext(entry);
-          else
-            _head = entry;
-
-          ptr.setPrev(entry);
-        }
-
-        return result;
-      }
-
-      index++;
-    }
-
-    if (replace != null) {
-      for (Entry replaceEntry = replace.getHead();
-           replaceEntry != null;
-           replaceEntry = replaceEntry.getNext()) {
-        put(replaceEntry.getValue().getOne());
-      }
-    }
-
-    return result;
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    int index = 0;
+//
+//    ArrayValueImpl result = new ArrayValueImpl();
+//
+//    Entry ptr = _head;
+//    Entry nextPtr = null;
+//    for (; ptr != null; ptr = nextPtr) {
+//      nextPtr = ptr.getNext();
+//
+//      Value key = ptr.getKey();
+//
+//      if (index < start) {
+//      }
+//      else if (index < end) {
+//        _size--;
+//
+//        Entry prev = ptr.getPrev();
+//        Entry next = ptr.getNext();
+//
+//        if (prev != null)
+//          prev.setNext(next);
+//        else
+//          _head = next;
+//
+//        if (next != null)
+//          next.setPrev(prev);
+//        else
+//          _tail = prev;
+//
+//        if (key.isString())
+//          result.put(key, ptr.getValue());
+//        else
+//          result.put(ptr.getValue().getOne());
+//      }
+//      else if (replace == null) {
+//        return result;
+//      }
+//      else {
+//        for (Entry replaceEntry = replace.getHead();
+//             replaceEntry != null;
+//             replaceEntry = replaceEntry.getNext()) {
+//          _size++;
+//
+//          Entry []entries = _entries;
+//          if ((entries == null && _size >= MIN_HASH)
+//              || (entries != null && entries.length <= 2 * _size)) {
+//            expand();
+//          }
+//
+//          Entry entry = new Entry(createTailKey(VHelper.noCtx()), replaceEntry.getValue());
+//
+//          addEntry(entry);
+//
+//          Entry prev = ptr.getPrev();
+//
+//          entry.setNext(ptr);
+//          entry.setPrev(prev);
+//
+//          if (prev != null)
+//            prev.setNext(entry);
+//          else
+//            _head = entry;
+//
+//          ptr.setPrev(entry);
+//        }
+//
+//        return result;
+//      }
+//
+//      index++;
+//    }
+//
+//    if (replace != null) {
+//      for (Entry replaceEntry = replace.getHead();
+//           replaceEntry != null;
+//           replaceEntry = replaceEntry.getNext()) {
+//        put(replaceEntry.getValue().getOne());
+//      }
+//    }
+//
+//    return result;
   }
 
   /**
@@ -685,30 +704,32 @@ public class ArrayValueImpl extends ArrayValue
   @Override
   public Value getArray(Value index)
   {
-    // php/3482, php/3483
+    throw new UnimplementedVException();
 
-    if (_isDirty)
-      copyOnWrite();
-
-    Entry entry = createEntry(index);
-
-    Value value = entry.toValue().getOne();
-    Value array = value.toAutoArray();
-
-    if (value != array) {
-      value = array;
-
-      entry.set(array);
-
-      return array;
-    }
-    else if (array.isString()) {
-      // php/0482
-      return entry.toRef();
-    }
-    else {
-      return array;
-    }
+//    // php/3482, php/3483
+//
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    Entry entry = createEntry(index);
+//
+//    Value value = entry.toValue().getOne();
+//    Value array = value.toAutoArray();
+//
+//    if (value != array) {
+//      value = array;
+//
+//      entry.set(VHelper.noCtx(), array);
+//
+//      return array;
+//    }
+//    else if (array.isString()) {
+//      // php/0482
+//      return entry.toRef();
+//    }
+//    else {
+//      return array;
+//    }
   }
 
   /**
@@ -727,14 +748,16 @@ public class ArrayValueImpl extends ArrayValue
    */
   public Value put(Value value)
   {
-    if (_isDirty)
-      copyOnWrite();
-
-    Value key = createTailKey();
-
-    append(key, value);
-
-    return value;
+    throw new UnimplementedVException();
+//
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    Value key = createTailKey(VHelper.noCtx());
+//
+//    append(key, value);
+//
+//    return value;
   }
 
   /**
@@ -743,13 +766,15 @@ public class ArrayValueImpl extends ArrayValue
   @Override
   public Var putVar()
   {
-    if (_isDirty)
-      copyOnWrite();
+    throw new UnimplementedVException();
 
-    // 0d0d
-    Value tailKey = createTailKey();
-
-    return getVar(tailKey).getVar().getOne();
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    // 0d0d
+//    Value tailKey = createTailKey(VHelper.noCtx());
+//
+//    return getVar(tailKey).getVar().getOne();
   }
 
   /**
@@ -762,20 +787,21 @@ public class ArrayValueImpl extends ArrayValue
       copyOnWrite();
     }
 
-    Value tail = createTailKey();
+    Value tail = createTailKey(VHelper.noCtx()).getOne();
 
     return new Var(V.one(new ArgGetValue(this, tail)));
   }
 
   /**
    * Creatse a tail index.
+   * @param ctx
    */
-  public Value createTailKey()
+  public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
-    if (_nextAvailableIndex < 0)
+    if (_nextAvailableIndex.when(x->x < 0).and(ctx).isSatisfiable())
       updateNextAvailableIndex();
 
-    return LongValue.create(_nextAvailableIndex);
+    return _nextAvailableIndex.map((a)->LongValue.create(a));
   }
 
   /**
@@ -986,33 +1012,34 @@ public class ArrayValueImpl extends ArrayValue
 
   private Value removeEntry(Value key, Entry entry)
   {
-    Entry next = entry.getNext();
-    Entry prev = entry.getPrev();
-
-    if (prev != null)
-      prev.setNext(next);
-    else
-      _head = next;
-
-    if (next != null)
-      next.setPrev(prev);
-    else
-      _tail = prev;
-
-    entry.setPrev(null);
-    entry.setNext(null);
-
-    setCurrent(_head);
-
-    _size--;
-
-    Value value = entry.getValue().getOne();
-
-    if (key.nextIndex(-1) == _nextAvailableIndex) {
-      _nextAvailableIndex = -1;
-    }
-
-    return value;
+    throw new UnimplementedVException();
+//    Entry next = entry.getNext();
+//    Entry prev = entry.getPrev();
+//
+//    if (prev != null)
+//      prev.setNext(next);
+//    else
+//      _head = next;
+//
+//    if (next != null)
+//      next.setPrev(prev);
+//    else
+//      _tail = prev;
+//
+//    entry.setPrev(null);
+//    entry.setNext(null);
+//
+//    setCurrent(_head);
+//
+//    _size--;
+//
+//    Value value = entry.getValue().getOne();
+//
+//    if (key.nextIndex(-1) == _nextAvailableIndex) {
+//      _nextAvailableIndex = -1;
+//    }
+//
+//    return value;
   }
 
   /**
@@ -1050,128 +1077,132 @@ public class ArrayValueImpl extends ArrayValue
    */
   private Entry createEntry(Value key)
   {
-    // XXX: "A key may be either an integer or a string. If a key is
-    //       the standard representation of an integer, it will be
-    //       interpreted as such (i.e. "8" will be interpreted as 8,
-    //       while "08" will be interpreted as "08")."
-    //
-    //            http://us3.php.net/types.array
+    throw new UnimplementedVException();
 
-    key = key.toKey();
-
-    int hash = key.hashCode();
-
-    int hashMask = _hashMask;
-
-    hash = hash & hashMask;
-
-    Entry []entries = _entries;
-    Entry entry;
-
-    if (entries != null) {
-      entry = entries[hash];
-    }
-    else {
-      entry = _head;
-    }
-
-    for (; entry != null; entry = entry.getNextHash()) {
-      Value entryKey = entry.getKey();
-
-      if (key == entryKey)
-        return entry;
-
-      if (key.equals(entryKey))
-        return entry;
-    }
-
-    _size++;
-
-    Entry newEntry = new Entry(key);
-    if (_nextAvailableIndex >= 0)
-      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
-
-    if (_entries == null && _size < MIN_HASH) {
-      if (_tail != null)
-        _tail.setNextHash(newEntry);
-    }
-    else {
-      if (_entries == null || _entries.length <= 2 * _size) {
-        expand();
-        hash = key.hashCode() & _hashMask;
-      }
-
-      Entry head = _entries[hash];
-
-      newEntry.setNextHash(head);
-      _entries[hash] = newEntry;
-    }
-
-    if (_head == null) {
-      newEntry.setPrev(null);
-      newEntry.setNext(null);
-
-      _head = newEntry;
-      _tail = newEntry;
-      setCurrent(newEntry);
-    }
-    else {
-      newEntry.setPrev(_tail);
-      newEntry.setNext(null);
-
-      _tail.setNext(newEntry);
-      _tail = newEntry;
-    }
-
-    return newEntry;
+//    // XXX: "A key may be either an integer or a string. If a key is
+//    //       the standard representation of an integer, it will be
+//    //       interpreted as such (i.e. "8" will be interpreted as 8,
+//    //       while "08" will be interpreted as "08")."
+//    //
+//    //            http://us3.php.net/types.array
+//
+//    key = key.toKey();
+//
+//    int hash = key.hashCode();
+//
+//    int hashMask = _hashMask;
+//
+//    hash = hash & hashMask;
+//
+//    Entry []entries = _entries;
+//    Entry entry;
+//
+//    if (entries != null) {
+//      entry = entries[hash];
+//    }
+//    else {
+//      entry = _head;
+//    }
+//
+//    for (; entry != null; entry = entry.getNextHash()) {
+//      Value entryKey = entry.getKey();
+//
+//      if (key == entryKey)
+//        return entry;
+//
+//      if (key.equals(entryKey))
+//        return entry;
+//    }
+//
+//    _size++;
+//
+//    Entry newEntry = new Entry(key);
+//    if (_nextAvailableIndex >= 0)
+//      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
+//
+//    if (_entries == null && _size < MIN_HASH) {
+//      if (_tail != null)
+//        _tail.setNextHash(newEntry);
+//    }
+//    else {
+//      if (_entries == null || _entries.length <= 2 * _size) {
+//        expand();
+//        hash = key.hashCode() & _hashMask;
+//      }
+//
+//      Entry head = _entries[hash];
+//
+//      newEntry.setNextHash(head);
+//      _entries[hash] = newEntry;
+//    }
+//
+//    if (_head == null) {
+//      newEntry.setPrev(null);
+//      newEntry.setNext(null);
+//
+//      _head = newEntry;
+//      _tail = newEntry;
+//      setCurrent(newEntry);
+//    }
+//    else {
+//      newEntry.setPrev(_tail);
+//      newEntry.setNext(null);
+//
+//      _tail.setNext(newEntry);
+//      _tail = newEntry;
+//    }
+//
+//    return newEntry;
   }
 
   private Entry createNewEntry(Value key)
   {
-    key = key.toKey();
-
-    int hashMask = _hashMask;
-    int hash = key.hashCode() & hashMask;
-
-    _size++;
-
-    Entry newEntry = new Entry(key);
-    if (_nextAvailableIndex >= 0)
-      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
-
-    if (_entries == null && _size < MIN_HASH) {
-      if (_tail != null)
-        _tail.setNextHash(newEntry);
-    }
-    else {
-      if (_entries == null || _entries.length <= 2 * _size) {
-        expand();
-        hash = key.hashCode() & _hashMask;
-      }
-
-      Entry head = _entries[hash];
-
-      newEntry.setNextHash(head);
-      _entries[hash] = newEntry;
-    }
-
-    if (_head == null) {
-      newEntry._prev = null;
-      newEntry.setNext(null);
-
-      _head = newEntry;
-      _tail = newEntry;
-      setCurrent(newEntry);
-    }
-    else {
-      newEntry._prev = _tail;
-      newEntry.setNext(null);
-
-      _tail.setNext(newEntry);
-      _tail = newEntry;
-    }
-
-    return newEntry;
+    throw new UnimplementedVException();
+//
+//    key = key.toKey();
+//
+//    int hashMask = _hashMask;
+//    int hash = key.hashCode() & hashMask;
+//
+//    _size++;
+//
+//    Entry newEntry = new Entry(key);
+//    if (_nextAvailableIndex >= 0)
+//      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
+//
+//    if (_entries == null && _size < MIN_HASH) {
+//      if (_tail != null)
+//        _tail.setNextHash(newEntry);
+//    }
+//    else {
+//      if (_entries == null || _entries.length <= 2 * _size) {
+//        expand();
+//        hash = key.hashCode() & _hashMask;
+//      }
+//
+//      Entry head = _entries[hash];
+//
+//      newEntry.setNextHash(head);
+//      _entries[hash] = newEntry;
+//    }
+//
+//    if (_head == null) {
+//      newEntry._prev = null;
+//      newEntry.setNext(null);
+//
+//      _head = newEntry;
+//      _tail = newEntry;
+//      setCurrent(newEntry);
+//    }
+//    else {
+//      newEntry._prev = _tail;
+//      newEntry.setNext(null);
+//
+//      _tail.setNext(newEntry);
+//      _tail = newEntry;
+//    }
+//
+//    return newEntry;
   }
 
   private void expand()
@@ -1192,22 +1223,24 @@ public class ArrayValueImpl extends ArrayValue
 
   private void addEntry(Entry entry)
   {
-    Value key = entry.getKey();
+    throw new UnimplementedVException();
 
-    Entry []entries = _entries;
-
-    if (entries != null) {
-      int hash = key.hashCode() & _hashMask;
-
-      Entry head = entries[hash];
-
-      entry.setNextHash(head);
-
-      entries[hash] = entry;
-    }
-
-    if (_nextAvailableIndex >= 0)
-      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
+//    Value key = entry.getKey();
+//
+//    Entry []entries = _entries;
+//
+//    if (entries != null) {
+//      int hash = key.hashCode() & _hashMask;
+//
+//      Entry head = entries[hash];
+//
+//      entry.setNextHash(head);
+//
+//      entries[hash] = entry;
+//    }
+//
+//    if (_nextAvailableIndex >= 0)
+//      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
   }
 
   /**
@@ -1215,11 +1248,13 @@ public class ArrayValueImpl extends ArrayValue
    */
   private void updateNextAvailableIndex()
   {
-    _nextAvailableIndex = 0;
+    throw new UnimplementedVException();
 
-    for (Entry entry = _head; entry != null; entry = entry.getNext()) {
-      _nextAvailableIndex = entry.getKey().nextIndex(_nextAvailableIndex);
-    }
+//    _nextAvailableIndex = 0;
+//
+//    for (Entry entry = _head; entry != null; entry = entry.getNext()) {
+//      _nextAvailableIndex = entry.getKey().nextIndex(_nextAvailableIndex);
+//    }
   }
 
   /**
@@ -1325,7 +1360,7 @@ public class ArrayValueImpl extends ArrayValue
   {
     out.writeInt(_size);
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       out.writeObject(entry.getKey());
       out.writeObject(entry.getValue());
     }

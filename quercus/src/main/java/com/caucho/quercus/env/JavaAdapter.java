@@ -133,7 +133,7 @@ abstract public class JavaAdapter extends ArrayValue
   {
     Value obj = env.createObject();
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       Value key = entry.getKey();
 
       if (key instanceof StringValue) {
@@ -278,7 +278,7 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public final Value put(Value value)
   {
-    return put(createTailKey(), value);
+    return put(createTailKey(VHelper.noCtx()).getOne(), value);
   }
 
   /**
@@ -333,9 +333,10 @@ abstract public class JavaAdapter extends ArrayValue
 
   /**
    * Creatse a tail index.
+   * @param ctx
    */
   @Override
-  abstract public Value createTailKey();
+  abstract public V<? extends Value> createTailKey(FeatureExpr ctx);
 
   /**
    * Returns the field values.
@@ -386,7 +387,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns a set of all the entries.
    */
   @Override
-  abstract public Set<Map.Entry<Value, EnvVar>> entrySet();
+  abstract public Set<VEntry> entrySet();
 
   /**
    * Returns a java object set of all the entries.
@@ -536,7 +537,7 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public Value contains(Value value)
   {
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       if (entry.getValue().equals(value))
         return entry.getKey();
     }
@@ -554,7 +555,7 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public Value containsStrict(Value value)
   {
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       if (entry.getValue().getOne().eql(value))
         return entry.getKey();
     }
@@ -582,7 +583,7 @@ abstract public class JavaAdapter extends ArrayValue
    * @return an object array of this array
    */
 //  @Override
-//  public Map.Entry<Value, EnvVar>[] toEntryArray()
+//  public VEntry[] toEntryArray()
 //  {
 //    throw new UnsupportedOperationException();
 //  }
@@ -595,33 +596,34 @@ abstract public class JavaAdapter extends ArrayValue
    * @param strict  true if alphabetic keys should not be preserved
    */
   @Override
-  public void sort(Comparator<Map.Entry<Value, EnvVar>> comparator,
+  public void sort(Comparator<VEntry> comparator,
                    boolean resetKeys, boolean strict)
   {
-    Map.Entry<Value,EnvVar>[] entries = new Map.Entry[getSize()];
-
-    int i = 0;
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
-      entries[i++] = entry;
-    }
-
-    Arrays.sort(entries, comparator);
-
-    clear();
-
-    long base = 0;
-
-    if (! resetKeys)
-      strict = false;
-
-    for (int j = 0; j < entries.length; j++) {
-      Value key = entries[j].getKey();
-
-      if (resetKeys && (! (key instanceof StringValue) || strict))
-        put(LongValue.create(base++), entries[j].getValue());
-      else
-        put(entries[j].getKey(), entries[j].getValue());
-    }
+    throw new UnimplementedVException();
+//    VEntry[] entries = new Map.Entry[getSize()];
+//
+//    int i = 0;
+//    for (VEntry entry : entrySet()) {
+//      entries[i++] = entry;
+//    }
+//
+//    Arrays.sort(entries, comparator);
+//
+//    clear();
+//
+//    long base = 0;
+//
+//    if (! resetKeys)
+//      strict = false;
+//
+//    for (int j = 0; j < entries.length; j++) {
+//      Value key = entries[j].getKey();
+//
+//      if (resetKeys && (! (key instanceof StringValue) || strict))
+//        put(LongValue.create(base++), entries[j].getValue());
+//      else
+//        put(entries[j].getKey(), entries[j].getValue());
+//    }
   }
 
   /**
@@ -664,7 +666,7 @@ abstract public class JavaAdapter extends ArrayValue
 
     int i = 0;
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       values[i++] = entry.getValue().getOne();
     }
 
@@ -687,7 +689,7 @@ abstract public class JavaAdapter extends ArrayValue
 
     int i = 0;
 
-    for (Map.Entry<Value, EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       Array.set(array, i++, elementMarshal.marshal(env,
                                                    entry.getValue().getOne(),
                                                    elementType));
@@ -786,7 +788,7 @@ abstract public class JavaAdapter extends ArrayValue
 
     int nestedDepth = depth + 1;
 
-    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
+    for (VEntry mapEntry : entrySet()) {
       printDepth(out, nestedDepth * 2);
       out.print(VHelper.noCtx(), "[");
 
@@ -822,7 +824,7 @@ abstract public class JavaAdapter extends ArrayValue
     printDepth(out, 8 * depth);
     out.println(VHelper.noCtx(), "(");
 
-    for (Map.Entry<Value,EnvVar> mapEntry : entrySet()) {
+    for (VEntry mapEntry : entrySet()) {
       printDepth(out, 8 * depth);
 
       out.print(VHelper.noCtx(), "    [");

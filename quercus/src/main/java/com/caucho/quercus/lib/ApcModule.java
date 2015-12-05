@@ -40,7 +40,10 @@ import com.caucho.util.LruCache;
 import com.caucho.vfs.Path;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -279,7 +282,7 @@ public class ApcModule extends AbstractQuercusModule
     if (array == null)
       return false;
 
-    for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+    for (VEntry entry : array.entrySet()) {
       env.addConstant(entry.getKey().toStringValue(env),
                       entry.getValue().getOne().copy(env),
                       ! caseSensitive);

@@ -325,7 +325,7 @@ public class SplObjectStorage
     StringValue objStr = env.createString("obj");
     StringValue valueStr = env.createString("inf");
 
-    for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+    for (VEntry entry : array.entrySet()) {
       ArrayValue inner = entry.getValue().getOne().toArrayValue(env);
 
       Value obj = inner.get(objStr).getOne();

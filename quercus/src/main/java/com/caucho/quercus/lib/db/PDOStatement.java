@@ -422,7 +422,7 @@ public class PDOStatement
       ColumnType[] types = new ColumnType[size];
       Value[] values = new Value[size];
 
-      for (Map.Entry<Value, EnvVar> entry : parameters.entrySet()) {
+      for (VEntry entry : parameters.entrySet()) {
         Value key = entry.getKey();
         Value value = entry.getValue().getOne();
 

@@ -631,7 +631,7 @@ public class QuercusContext
       if (driverValue.isArray()) {
         ArrayValue array = driverValue.toArray();
 
-        for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+        for (VEntry entry : array.entrySet()) {
 
           Value key = entry.getKey();
           Value value = entry.getValue().getOne();
@@ -1831,7 +1831,7 @@ public class QuercusContext
       if (result instanceof ArrayValue) {
         ArrayValue array = (ArrayValue) result;
 
-        for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+        for (VEntry entry : array.entrySet()) {
           String key = entry.getKey().toString();
           Value value = entry.getValue().getOne();
 

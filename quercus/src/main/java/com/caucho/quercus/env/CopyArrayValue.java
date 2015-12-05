@@ -29,6 +29,10 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
 import java.util.IdentityHashMap;
 import java.util.logging.Logger;
 
@@ -293,10 +297,11 @@ public class CopyArrayValue extends ArrayValue {
 
   /**
    * Pops the top value.
+   * @param ctx
    */
-  public Value createTailKey()
+  public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
-    return getCopyArray().createTailKey();
+    return getCopyArray().createTailKey(VHelper.noCtx());
   }
 
   /**

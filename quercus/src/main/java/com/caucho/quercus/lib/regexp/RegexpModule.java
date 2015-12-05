@@ -41,7 +41,6 @@ import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -903,7 +902,7 @@ public class RegexpModule
     if (subject instanceof ArrayValue) {
       ArrayValue result = new ArrayValueImpl();
 
-      for (Map.Entry<Value,EnvVar> entry : ((ArrayValue) subject).entrySet()) {
+      for (VEntry entry : ((ArrayValue) subject).entrySet()) {
         Value key = entry.getKey();
         Value value = entry.getValue().getOne();
 

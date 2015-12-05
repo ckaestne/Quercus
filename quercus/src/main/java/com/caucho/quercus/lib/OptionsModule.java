@@ -51,7 +51,6 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -803,7 +802,7 @@ public class OptionsModule extends AbstractQuercusModule {
     if (value.isArray()) {
       ArrayValue array = value.toArrayValue(env);
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         Value key = escape(env, entry.getKey());
 
         if (hasRequest(env))
@@ -1044,7 +1043,7 @@ public class OptionsModule extends AbstractQuercusModule {
 
       ArrayValue result = new ArrayValueImpl();
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         Value key = escape(env, entry.getKey());
         Value val = escape(env, entry.getValue().getOne());
 
@@ -1058,7 +1057,7 @@ public class OptionsModule extends AbstractQuercusModule {
 
       ObjectValue result = new ObjectExtValue(env, obj.getQuercusClass());
 
-      for (Map.Entry<Value,EnvVar> entry : obj.entrySet()) {
+      for (VEntry entry : obj.entrySet()) {
         Value key = escape(env, entry.getKey());
         Value val = escape(env, entry.getValue().getOne());
 

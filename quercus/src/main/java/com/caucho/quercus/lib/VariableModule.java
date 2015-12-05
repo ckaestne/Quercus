@@ -258,7 +258,7 @@ public class VariableModule extends AbstractQuercusModule {
 
       ArrayValue array = (ArrayValue) value;
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         String key = entry.getKey().toString();
 
         env.setGlobalValue(VHelper.noCtx(), prefix + key,
@@ -813,7 +813,7 @@ public class VariableModule extends AbstractQuercusModule {
       printDepth(out, 2 * depth);
       out.println(VHelper.noCtx(), "(");
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         printDepth(out, 2 * depth);
         out.print(VHelper.noCtx(), "    [");
         out.print(VHelper.noCtx(), entry.getKey());

@@ -32,12 +32,11 @@ package com.caucho.quercus.lib.gae;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.ArrayValue;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvVar;
+import com.caucho.quercus.env.VEntry;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.module.AbstractQuercusModule;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class GaeUserServiceModule extends AbstractQuercusModule {
@@ -59,7 +58,7 @@ public class GaeUserServiceModule extends AbstractQuercusModule {
 
       ArrayValue array = attributesRequest.toArrayValue(env);
 
-      for (Map.Entry<Value,EnvVar> entrySet : array.entrySet()) {
+      for (VEntry entrySet : array.entrySet()) {
         attributeSet.add(entrySet.getValue().toString());
       }
     }

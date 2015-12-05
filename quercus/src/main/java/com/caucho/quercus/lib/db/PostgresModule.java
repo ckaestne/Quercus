@@ -49,7 +49,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -799,7 +798,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,EnvVar> entry : assocArray.entrySet()) {
+      for (VEntry entry : assocArray.entrySet()) {
         Value k = entry.getKey();
         Value v = entry.getValue().getOne();
         if (isFirst) {
@@ -1823,7 +1822,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,EnvVar> entry : assocArray.entrySet()) {
+      for (VEntry entry : assocArray.entrySet()) {
         Value k = entry.getKey();
         Value v = entry.getValue().getOne();
         if (isFirst) {
@@ -3005,7 +3004,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,EnvVar> entry : assocArray.entrySet()) {
+      for (VEntry entry : assocArray.entrySet()) {
         Value k = entry.getKey();
         Value v = entry.getValue().getOne();
         if (isFirst) {
@@ -3317,7 +3316,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       boolean isFirst = true;
 
-      for (Map.Entry<Value,EnvVar> entry : data.entrySet()) {
+      for (VEntry entry : data.entrySet()) {
         Value k = entry.getKey();
         Value v = entry.getValue().getOne();
         if (isFirst) {
@@ -3335,7 +3334,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       isFirst = true;
 
-      for (Map.Entry<Value,EnvVar> entry : condition.entrySet()) {
+      for (VEntry entry : condition.entrySet()) {
         Value k = entry.getKey();
         Value v = entry.getValue().getOne();
         if (isFirst) {

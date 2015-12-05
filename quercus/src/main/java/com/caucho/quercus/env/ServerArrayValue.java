@@ -290,7 +290,7 @@ public class ServerArrayValue extends ArrayValueImpl
   /**
    * Returns an iterator of the entries.
    */
-  public Set<Map.Entry<Value, EnvVar>> entrySet()
+  public Set<VEntry> entrySet()
   {
     if (! _isFilled)
       fillMap();

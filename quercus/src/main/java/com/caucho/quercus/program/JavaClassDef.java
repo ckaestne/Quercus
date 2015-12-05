@@ -716,7 +716,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{a1, a2, a3, a4, a5});
   }
 
-  public Set<? extends Map.Entry<Value,EnvVar>> entrySet(Object obj)
+  public Set<? extends VEntry> entrySet(Object obj)
   {
     try {
       if (_entrySet == null) {
@@ -1507,7 +1507,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iteratorMethod = iterator;
     }
 
-    public Iterator<Map.Entry<Value, EnvVar>>
+    public Iterator<VEntry>
       getIterator(Env env, ObjectValue qThis)
     {
       try {
@@ -1631,7 +1631,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   }
 
   private class JavaIterator
-    implements Iterator<Map.Entry<Value, EnvVar>>
+    implements Iterator<VEntry>
   {
     private Env _env;
     private Iterator<?> _iterator;
@@ -1644,7 +1644,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iterator = iterator;
     }
 
-    public Map.Entry<Value, EnvVar> next()
+    public VEntry next()
     {
       Object next = _iterator.next();
       int index = _index++;
@@ -1657,7 +1657,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
 
         if (key instanceof Value
             && value instanceof Value) {
-          return (Map.Entry<Value, EnvVar>) entry;
+          return (VEntry) entry;
         }
         else if (key instanceof Value) {
           Value v = _env.wrapJava(value);
@@ -1690,7 +1690,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   }
 
   private class JavaEntry
-    implements Map.Entry<Value, EnvVar>
+    implements VEntry
   {
     private Value _key;
     private EnvVar _value;
@@ -1704,6 +1704,11 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     public Value getKey()
     {
       return _key;
+    }
+
+    @Override
+    public FeatureExpr getCondition() {
+      return VHelper.noCtx();
     }
 
     public EnvVar getValue()

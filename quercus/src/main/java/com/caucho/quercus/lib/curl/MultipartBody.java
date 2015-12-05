@@ -31,8 +31,8 @@ package com.caucho.quercus.lib.curl;
 
 import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.EnvVar;
 import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.VEntry;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.servlet.api.QuercusServletContext;
 import com.caucho.util.L10N;
@@ -45,7 +45,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 public class MultipartBody extends PostBody
 {
@@ -63,10 +62,10 @@ public class MultipartBody extends PostBody
     _boundary = createBoundary();
     _boundaryBytes = _boundary.getBytes();
 
-    Iterator<Map.Entry<Value, EnvVar>> iter = body.getIterator(env);
+    Iterator<VEntry> iter = body.getIterator(env);
 
     while (iter.hasNext()) {
-      Map.Entry<Value,EnvVar> entry = iter.next();
+      VEntry entry = iter.next();
 
       StringValue key = entry.getKey().toString(env);
       StringValue value = entry.getValue().getOne().toString(env);

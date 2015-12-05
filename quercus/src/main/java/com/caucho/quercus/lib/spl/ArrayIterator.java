@@ -38,7 +38,6 @@ import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
-import java.util.Map;
 
 public class ArrayIterator
   implements SeekableIterator,
@@ -53,8 +52,8 @@ public class ArrayIterator
   private Value _value = NullValue.NULL;
   private int _flags;
 
-  private java.util.Iterator<Map.Entry<Value,EnvVar>> _iterator;
-  private Map.Entry<Value, EnvVar> _current;
+  private java.util.Iterator<VEntry> _iterator;
+  private VEntry _current;
 
   public ArrayIterator(Env env,
                        @This Value qThis,
@@ -260,11 +259,11 @@ public class ArrayIterator
 
       depth++;
 
-      java.util.Iterator<Map.Entry<Value,EnvVar>> iterator
+      java.util.Iterator<VEntry> iterator
         = arrayValue.getIterator(env);
 
       while (iterator.hasNext()) {
-        Map.Entry<Value, EnvVar> entry = iterator.next();
+        VEntry entry = iterator.next();
 
         Value key = entry.getKey();
         EnvVar value = entry.getValue();

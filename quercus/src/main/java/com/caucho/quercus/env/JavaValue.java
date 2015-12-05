@@ -170,7 +170,7 @@ public class JavaValue extends ObjectValue
   {
     ArrayValue array = new ArrayValueImpl();
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet()) {
+    for (VEntry entry : entrySet()) {
       array.put(entry.getKey(), entry.getValue());
     }
 
@@ -188,7 +188,7 @@ public class JavaValue extends ObjectValue
       return;
     }
 
-    Set<? extends Map.Entry<Value,EnvVar>> entrySet = entrySet();
+    Set<? extends VEntry> entrySet = entrySet();
 
     if (entrySet == null) {
       out.print(VHelper.noCtx(), "resource(" + toString(env) + ")"); // XXX:
@@ -200,7 +200,7 @@ public class JavaValue extends ObjectValue
     printRDepth(out, depth);
     out.print(VHelper.noCtx(), "(");
 
-    for (Map.Entry<Value,EnvVar> entry : entrySet) {
+    for (VEntry entry : entrySet) {
       out.println(VHelper.noCtx());
       printRDepth(out, depth);
       out.print(VHelper.noCtx(), "    [" + entry.getKey() + "] => ");
@@ -263,7 +263,7 @@ public class JavaValue extends ObjectValue
       return NullValue.NULL;
   }
 
-  public Set<? extends Map.Entry<Value, EnvVar>> entrySet()
+  public Set<? extends VEntry> entrySet()
   {
     return _classDef.entrySet(_object);
   }
@@ -397,7 +397,7 @@ public class JavaValue extends ObjectValue
   {
     String name = _classDef.getSimpleName();
 
-    Set<? extends Map.Entry<Value,EnvVar>> entrySet = entrySet();
+    Set<? extends VEntry> entrySet = entrySet();
 
     if (entrySet != null) {
       sb.append("O:");
@@ -408,7 +408,7 @@ public class JavaValue extends ObjectValue
       sb.append(entrySet.size());
       sb.append(":{");
 
-      for (Map.Entry<Value,EnvVar> entry : entrySet) {
+      for (VEntry entry : entrySet) {
         entry.getKey().serialize(env, sb);
         entry.getValue().getOne().serialize(env, sb, map);
       }
@@ -565,7 +565,7 @@ public class JavaValue extends ObjectValue
     _object = in.readObject();
   }
 
-  private static class EntryItem implements Map.Entry<Value,EnvVar> {
+  private static class EntryItem implements VEntry {
     private Value _key;
     private EnvVar _value;
     private boolean _isArray;
@@ -579,6 +579,11 @@ public class JavaValue extends ObjectValue
     public Value getKey()
     {
       return _key;
+    }
+
+    @Override
+    public FeatureExpr getCondition() {
+      return VHelper.noCtx();
     }
 
     public EnvVar getValue()

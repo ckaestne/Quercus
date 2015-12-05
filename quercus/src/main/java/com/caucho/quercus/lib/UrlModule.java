@@ -42,7 +42,6 @@ import com.caucho.util.L10N;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -382,7 +381,7 @@ public class UrlModule
                                          StringValue numeric_prefix,
                                          StringValue separator)
   {
-    Set<? extends Map.Entry<Value, EnvVar>> entrySet;
+    Set<? extends VEntry> entrySet;
 
     if (formdata.isArray()) {
       entrySet = ((ArrayValue) formdata).entrySet();
@@ -397,7 +396,7 @@ public class UrlModule
     }
 
     boolean isFirst = true;
-    for (Map.Entry<Value,EnvVar> entry : entrySet) {
+    for (VEntry entry : entrySet) {
       if (! isFirst) {
         if (separator != null)
           result.append(separator);
@@ -463,7 +462,7 @@ public class UrlModule
     if (value instanceof ArrayValue) {
       ArrayValue array = (ArrayValue) value;
 
-      for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+      for (VEntry entry : array.entrySet()) {
         Value keyValue = entry.getKey();
         Value v = entry.getValue();
 
@@ -499,7 +498,7 @@ public class UrlModule
                                 String prefix,
                                 ArrayValue array)
   {
-    for (Map.Entry<Value,EnvVar> entry : array.entrySet()) {
+    for (VEntry entry : array.entrySet()) {
       Value keyValue = entry.getKey();
       Value v = entry.getValue();
 

@@ -44,7 +44,6 @@ import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Quercus class information
@@ -265,15 +264,15 @@ public class ClassesModule extends AbstractQuercusModule {
     // #3253, php/4as7 - XXX: needs cleanup
 
     if (obj instanceof ObjectValue) {
-      for (Map.Entry<Value,EnvVar> entry : ((ObjectValue) obj).entrySet()) {
+      for (VEntry entry : ((ObjectValue) obj).entrySet()) {
         result.put(entry.getKey(), entry.getValue());
       }
     }
     else {
-      Iterator<Map.Entry<Value, EnvVar>> iter = obj.getIterator(env);
+      Iterator<VEntry> iter = obj.getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value,EnvVar> entry = iter.next();
+        VEntry entry = iter.next();
 
         result.put(entry.getKey(), entry.getValue());
       }

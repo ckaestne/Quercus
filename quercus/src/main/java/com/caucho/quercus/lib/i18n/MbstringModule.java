@@ -520,7 +520,7 @@ public class MbstringModule
       regs.clear();
       ArrayValue results = regVar.getValue().getOne().toArrayValue(env);
 
-      for (Map.Entry<Value,EnvVar> entry : results.entrySet()) {
+      for (VEntry entry : results.entrySet()) {
 
         Value bytes = encodeAll(env, entry.getValue().getOne(), encoding);
         regs.put(entry.getKey(), bytes);
@@ -1437,7 +1437,7 @@ public class MbstringModule
     else if (val.isArray()) {
       ArrayValue array = new ArrayValueImpl();
 
-      for (Map.Entry<Value,EnvVar> entry : ((ArrayValue)val).entrySet()) {
+      for (VEntry entry : ((ArrayValue)val).entrySet()) {
         array.put(entry.getKey(),
                   decodeAll(env, entry.getValue().getOne(), decoder));
       }
@@ -1447,7 +1447,7 @@ public class MbstringModule
 
       ObjectValue obj = (ObjectValue) val.toObject(env);
 
-      for (Map.Entry<Value,EnvVar> entry : obj.entrySet()) {
+      for (VEntry entry : obj.entrySet()) {
         obj.putThisField(env,
                          entry.getKey().toStringValue(),
                          decodeAll(env, entry.getValue().getOne(), decoder));
@@ -1487,7 +1487,7 @@ public class MbstringModule
     else if (val.isArray()) {
       ArrayValue array = new ArrayValueImpl();
 
-      for (Map.Entry<Value,EnvVar> entry : ((ArrayValue)val).entrySet()) {
+      for (VEntry entry : ((ArrayValue)val).entrySet()) {
         array.put(entry.getKey(),
                   encodeAll(env, entry.getValue().getOne(), encoder));
       }
@@ -1497,7 +1497,7 @@ public class MbstringModule
 
       ObjectValue obj = (ObjectValue)val;
 
-      for (Map.Entry<Value,EnvVar> entry : obj.entrySet()) {
+      for (VEntry entry : obj.entrySet()) {
         obj.putThisField(env,
                          entry.getKey().toStringValue(),
                          encodeAll(env, entry.getValue().getOne(), encoder));

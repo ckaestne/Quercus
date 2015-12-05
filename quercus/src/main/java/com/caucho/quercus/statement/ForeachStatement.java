@@ -39,7 +39,6 @@ import edu.cmu.cs.varex.VHelper;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Represents a foreach statement.
@@ -171,10 +170,10 @@ public class ForeachStatement
       }
     }
     else {
-      Iterator<Map.Entry<Value, EnvVar>> iter = obj.getIterator(env);
+      Iterator<VEntry> iter = obj.getIterator(env);
 
       while (iter.hasNext()) {
-        Map.Entry<Value, EnvVar> entry = iter.next();
+        VEntry entry = iter.next();
         Value key = entry.getKey();
         Value value = entry.getValue().getOne();
 

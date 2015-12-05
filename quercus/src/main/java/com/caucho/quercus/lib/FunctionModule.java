@@ -42,7 +42,6 @@ import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -92,7 +91,7 @@ public class FunctionModule extends AbstractQuercusModule {
 
       int i = 0;
 
-      for (Map.Entry<Value,EnvVar> entry : argArray.entrySet()) {
+      for (VEntry entry : argArray.entrySet()) {
         ArrayValue.Entry arrayEntry = (ArrayValue.Entry) entry;
 
         args[i++] = arrayEntry.getRawValue().getOne();
