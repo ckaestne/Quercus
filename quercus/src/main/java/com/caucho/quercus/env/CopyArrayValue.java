@@ -30,10 +30,13 @@
 package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.Function4;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.IdentityHashMap;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -394,5 +397,13 @@ public class CopyArrayValue extends ArrayValue {
     else
       return _constArray.equals(o);
   }
+
+  public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
+    if (_copyArray != null)
+      return _copyArray.foldRightUntil(init, ctx, op, stopCriteria);
+    else
+      return _constArray.foldRightUntil(init, ctx, op, stopCriteria);
+  }
+
 }
 

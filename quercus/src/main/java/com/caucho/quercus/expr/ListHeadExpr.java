@@ -109,10 +109,10 @@ public class ListHeadExpr extends Expr {
     ArrayValue array = value.toArrayValue(env);
 
     if (_varList.length > 0 && _varList[0] != null)
-      _varList[0].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.key()));
+      _varList[0].evalAssignValue(env, VHelper.noCtx(), array.key());
 
     if (_varList.length > 1 && _varList[1] != null)
-      _varList[1].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.current().copy()));
+      _varList[1].evalAssignValue(env, VHelper.noCtx(), array.current().map((a)->a.copy()));
 
     return array.each();
   }
@@ -126,16 +126,16 @@ public class ListHeadExpr extends Expr {
 
     ArrayValue array = value.toArrayValue(env);
 
-    if (! array.hasCurrent())
+    if (! array.hasCurrent().getOne())
       return false;
 
     if (_varList.length > 0 && _varList[0] != null)
-      _varList[0].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.key()));
+      _varList[0].evalAssignValue(env, VHelper.noCtx(), array.key());
 
     if (_varList.length > 1 && _varList[1] != null)
-      _varList[1].evalAssignValue(env, VHelper.noCtx(), VHelper.toV(array.current().copy()));
+      _varList[1].evalAssignValue(env, VHelper.noCtx(), array.current().map((a)->a.copy()));
 
-    array.next();
+    array.next(VHelper.noCtx());
 
     return true;
   }

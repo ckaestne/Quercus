@@ -400,8 +400,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns true if there are more elements.
    */
-  public boolean hasCurrent() {
-    return false;
+  public V<? extends Boolean> hasCurrent() {
+    return V.one(false);
   }
 
   /**
@@ -1247,43 +1247,47 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the current key
    */
-  public Value key() {
-    return BooleanValue.FALSE;
+  public V<? extends Value> key() {
+    return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the current value
    */
-  public Value current() {
-    return BooleanValue.FALSE;
+  public V<? extends Value> current() {
+    return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the next value
+   * @param ctx
    */
-  public Value next() {
-    return BooleanValue.FALSE;
+  public V<? extends Value> next(FeatureExpr ctx) {
+    return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the previous value
+   * @param ctx
    */
-  public Value prev() {
-    return BooleanValue.FALSE;
+  public V<? extends Value> prev(FeatureExpr ctx) {
+    return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the end value.
+   * @param ctx
    */
-  public Value end() {
-    return BooleanValue.FALSE;
+  public V<? extends Value> end(FeatureExpr ctx) {
+    return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the array pointer.
+   * @param ctx
    */
-  public Value reset() {
-    return BooleanValue.FALSE;
+  public V<? extends Value> reset(FeatureExpr ctx) {
+    return V.one(BooleanValue.FALSE);
   }
 
   /**

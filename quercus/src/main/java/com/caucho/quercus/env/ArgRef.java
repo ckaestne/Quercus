@@ -54,7 +54,7 @@ public class ArgRef extends Value
   }
 
   @Override
-  public boolean hasCurrent()
+  public V<? extends Boolean> hasCurrent()
   {
     return _var.getValue().getOne().hasCurrent();
   }
@@ -329,7 +329,7 @@ public class ArgRef extends Value
   }
 
   @Override
-  public Value current()
+  public V<? extends Value> current()
   {
     return _var.getValue().getOne().current();
   }
@@ -359,15 +359,15 @@ public class ArgRef extends Value
   }
 
   @Override
-  public Value key()
+  public V<? extends Value> key()
   {
     return _var.getValue().getOne().key();
   }
 
   @Override
-  public Value next()
+  public V<? extends Value> next(FeatureExpr ctx)
   {
-    return _var.getValue().getOne().next();
+    return _var.getValue().getOne().next(ctx);
   }
 
   @Override

@@ -30,12 +30,14 @@
 package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.Function4;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.IdentityHashMap;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * Represents a PHP array value.
@@ -257,7 +259,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the current value.
    */
   @Override
-  public Value current()
+  public V<? extends Value> current()
   {
     return _array.current();
   }
@@ -266,7 +268,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the current key
    */
   @Override
-  public Value key()
+  public V<? extends Value> key()
   {
     return _array.key();
   }
@@ -275,27 +277,29 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns true if there are more elements.
    */
   @Override
-  public boolean hasCurrent()
+  public V<? extends Boolean> hasCurrent()
   {
     return _array.hasCurrent();
   }
 
   /**
    * Returns the next value.
+   * @param ctx
    */
   @Override
-  public Value next()
+  public V<? extends Value> next(FeatureExpr ctx)
   {
-    return _array.next();
+    return _array.next(ctx);
   }
 
   /**
    * Returns the previous value.
+   * @param ctx
    */
   @Override
-  public Value prev()
+  public V<? extends Value> prev(FeatureExpr ctx)
   {
-    return _array.prev();
+    return _array.prev(ctx);
   }
 
   /**
@@ -309,20 +313,22 @@ public class ArrayValueWrapper extends ArrayValue {
 
   /**
    * Returns the first value.
+   * @param ctx
    */
   @Override
-  public Value reset()
+  public V<? extends Value> reset(FeatureExpr ctx)
   {
-    return _array.reset();
+    return _array.reset(ctx);
   }
 
   /**
    * Returns the last value.
+   * @param ctx
    */
   @Override
-  public Value end()
+  public V<? extends Value> end(FeatureExpr ctx)
   {
-    return _array.end();
+    return _array.end(ctx);
   }
   
   /**
@@ -386,6 +392,10 @@ public class ArrayValueWrapper extends ArrayValue {
   public Iterator<EnvVar> getValueIterator(Env env)
   {
     return _array.getValueIterator(env);
+  }
+
+  public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
+    return _array.foldRightUntil(init, ctx, op, stopCriteria);
   }
 }
 

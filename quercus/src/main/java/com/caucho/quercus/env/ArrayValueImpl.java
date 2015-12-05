@@ -30,10 +30,10 @@
 package com.caucho.quercus.env;
 
 import com.caucho.util.RandomUtil;
-import com.sun.istack.internal.Nullable;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -146,7 +146,7 @@ public class ArrayValueImpl extends ArrayValue
 //    _hashMask = source._hashMask;
 
     _head = source._head;
-    setCurrent(source.getCurrent());
+    setCurrent(VHelper.True(), source.getCurrent());
 
     _tail = source._tail;
     _nextAvailableIndex = source._nextAvailableIndex;
@@ -261,7 +261,7 @@ public class ArrayValueImpl extends ArrayValue
       addToLookupMap(ptrCopy);
 
       if (prev == null) {
-        setCurrent(ptrCopy);
+        setCurrent(VHelper.noCtx(), V.one(ptrCopy));
 
         _head = ptrCopy;
       } else {
@@ -319,7 +319,7 @@ public class ArrayValueImpl extends ArrayValue
   @Override
   public Value copy() {
     // php/1704
-    reset();
+    reset(VHelper.noCtx());
 
     Value copy = new ArrayValueImpl(this);
     // copy.reset();
@@ -378,7 +378,7 @@ public class ArrayValueImpl extends ArrayValue
     // php/1708
 
     Value copy = new ArrayValueImpl(this);
-    copy.reset();
+    copy.reset(VHelper.noCtx());
 
     return copy;
   }
@@ -391,7 +391,7 @@ public class ArrayValueImpl extends ArrayValue
     // php/1708
 
     Value copy = new ArrayValueImpl(this);
-    copy.reset();
+    copy.reset(VHelper.noCtx());
 
     return copy;
   }
@@ -430,7 +430,7 @@ public class ArrayValueImpl extends ArrayValue
 
     _size = V.one(0);
     _head = _tail = null;
-    setCurrent(null);
+    setCurrent(VHelper.noCtx(), null);
 
     _nextAvailableIndex = V.one(Long.valueOf(0));
   }
@@ -855,37 +855,6 @@ public class ArrayValueImpl extends ArrayValue
     return VList.foldRightUntil(new OptEntryIterator(_head), init, ctx, op, stopCriteria);
   }
 
-  private static class OptEntryIterator
-          implements Iterator<Opt<Entry>> {
-    private Entry _current;
-
-    OptEntryIterator(Entry head)
-    {
-      _current = head;
-    }
-
-    public boolean hasNext()
-    {
-      return _current != null;
-    }
-
-    public Opt<Entry> next()
-    {
-      if (_current != null) {
-        Entry next = _current;
-        _current = _current.getNext();
-
-        return Opt.create(next.getCondition(),next);
-      }
-      else
-        return null;
-    }
-
-    public void remove()
-    {
-      throw new UnsupportedOperationException();
-    }
-  }
 
 
 
@@ -1021,7 +990,7 @@ public class ArrayValueImpl extends ArrayValue
     checkEntryInvariant(remainingEntries);
     _lookupMap.put(key, remainingEntries);
     _nextAvailableIndex = null;
-    setCurrent(_head);
+    reset(ctx);
     checkInvariants();
 
     return removedValues;
@@ -1141,7 +1110,7 @@ public class ArrayValueImpl extends ArrayValue
 
       _head = newEntry;
       _tail = newEntry;
-      setCurrent(newEntry);
+      setCurrent(ctx, V.one(newEntry));
     }
     else {
       newEntry._prev = _tail;
@@ -1252,7 +1221,7 @@ public class ArrayValueImpl extends ArrayValue
         values[i].setNext(values[i + 1]);
     }
 
-    setCurrent(_head);
+    reset(VHelper.noCtx());
 
     return BooleanValue.TRUE;
   }

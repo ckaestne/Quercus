@@ -32,10 +32,10 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.program.JavaClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.*;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -412,5 +412,8 @@ public class JavaMapAdapter
       throw new UnsupportedOperationException();
     }
   }
-
+  public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
+    throw new UnimplementedVException();
+//    return VList.foldRightUntil(new OptEntryIterator(_head), init, ctx, op, stopCriteria);
+  }
 }

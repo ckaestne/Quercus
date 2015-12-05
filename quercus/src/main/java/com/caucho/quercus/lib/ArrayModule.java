@@ -2748,7 +2748,7 @@ public class ArrayModule
    */
   public static Value current(@ReadOnly Value value)
   {
-    return value.current();
+    return value.current().getOne();
   }
 
   /**
@@ -2778,7 +2778,7 @@ public class ArrayModule
    */
   public static Value end(@Reference Value value)
   {
-    return value.end();
+    return value.end(VHelper.noCtx()).getOne();
   }
 
   // Basically, the compiled mode uses Java variables to store PHP
@@ -2977,7 +2977,7 @@ public class ArrayModule
    */
   public static Value key(@ReadOnly Value value)
   {
-    return value.key();
+    return value.key().getOne();
   }
 
   /**
@@ -3137,7 +3137,7 @@ public class ArrayModule
    */
   public static Value next(@Reference Value value)
   {
-    return value.next();
+    return value.next(VHelper.noCtx()).getOne();
   }
 
   /**
@@ -3153,7 +3153,7 @@ public class ArrayModule
    */
   public static Value prev(@Reference Value array)
   {
-    return array.prev();
+    return array.prev(VHelper.noCtx()).getOne();
   }
 
   /**
@@ -3226,7 +3226,7 @@ public class ArrayModule
    */
   public static Value reset(@Reference Value array)
   {
-    return array.reset();
+    return array.reset(VHelper.noCtx()).getOne();
   }
 
   /**

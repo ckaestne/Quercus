@@ -459,7 +459,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns the current value.
    */
   @Override
-  public Value current()
+  public V<? extends Value> current()
   {
     throw new UnsupportedOperationException();
   }
@@ -468,7 +468,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns the current key
    */
   @Override
-  public Value key()
+  public V<? extends Value> key()
   {
     throw new UnsupportedOperationException();
   }
@@ -477,25 +477,27 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns true if there are more elements.
    */
   @Override
-  public boolean hasCurrent()
+  public V<? extends Boolean> hasCurrent()
   {
     throw new UnsupportedOperationException();
   }
 
   /**
    * Returns the next value.
+   * @param ctx
    */
   @Override
-  public Value next()
+  public V<? extends Value> next(FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }
 
   /**
    * Returns the previous value.
+   * @param ctx
    */
   @Override
-  public Value prev()
+  public V<? extends Value> prev(FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }
@@ -511,20 +513,22 @@ abstract public class JavaAdapter extends ArrayValue
 
   /**
    * Returns the first value.
+   * @param ctx
    */
   @Override
-  public Value reset()
+  public V<? extends Value> reset(FeatureExpr ctx)
   {
-    return BooleanValue.FALSE;
+    return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the last value.
+   * @param ctx
    */
   @Override
-  public Value end()
+  public V<? extends Value> end(FeatureExpr ctx)
   {
-    return BooleanValue.FALSE;
+    return V.one(BooleanValue.FALSE);
   }
 
   /**

@@ -33,15 +33,14 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.UnimplementedVException;
-import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import edu.cmu.cs.varex.VWriteStream;
+import edu.cmu.cs.varex.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,7 +59,7 @@ abstract public class ArrayValue extends Value {
 
   public static final StringValue ARRAY = new ConstStringValue("Array");
 
-  private Entry _current;
+  private @NonNull V<? extends Entry> _current;
 
   protected ArrayValue()
   {
@@ -198,14 +197,14 @@ abstract public class ArrayValue extends Value {
     return this;
   }
 
-  protected Entry getCurrent()
+  protected V<? extends Entry> getCurrent()
   {
     return _current;
   }
 
-  protected void setCurrent(Entry entry)
+  protected void setCurrent(FeatureExpr ctx, @NonNull V<? extends Entry> entry)
   {
-    _current = entry;
+    _current = V.choice(ctx, entry, _current);
   }
 
   //
@@ -1168,71 +1167,88 @@ abstract public class ArrayValue extends Value {
   abstract public Value shuffle();
 
   /**
-   * Returns the head.
+   * Returns the head. (the first conditional element)
    */
   // XX: php/153v getHead needed by grep for getRawValue()
   abstract public Entry getHead();
 
   /**
-   * Returns the tail.
+   * Returns the head. (the first element in each condition)
+   */
+  public V<? extends Entry> getVHead() {
+    return foldRightUntil(V.one(null), VHelper.True(),
+            (c, entry, result) -> result != null ? V.one(result) : V.one(entry),
+            r -> r != null);
+  }
+
+  protected abstract <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria);
+
+
+  /**
+   * Returns the tail.     (the last conditional element)
    */
   abstract protected Entry getTail();
+
+  /**
+   * Returns the tail.     (the last element in each condition)
+   */
+  public V<? extends Entry> getVTail() {
+    return foldRightUntil(V.one(null), VHelper.True(),
+            (c, entry, result) -> V.one(entry),
+            r -> false);
+  }
 
   /**
    * Returns the current value.
    */
   @Override
-  public Value current()
-  {
-    if (_current != null)
-      return _current.getEnvVar().getOne();
-    else
-      return BooleanValue.FALSE;
+  public V<? extends Value> current() {
+    return _current.flatMap(c ->
+            c != null ? c.getEnvVar().getValue() : V.one(BooleanValue.FALSE));
   }
 
   /**
    * Returns the current key
    */
   @Override
-  public Value key()
-  {
-    if (_current != null)
-      return _current.getKey();
-    else
-      return NullValue.NULL;
+  public V<? extends Value> key() {
+    return _current.map(c ->
+            c != null ? c.getKey() : NullValue.NULL);
   }
 
   /**
    * Returns true if there are more elements.
    */
   @Override
-  public boolean hasCurrent()
-  {
-    return _current != null;
+  public V<? extends Boolean> hasCurrent() {
+    return _current.map((a) -> a != null);
   }
 
   /**
    * Returns the next value.
+   * @param ctx
    */
   @Override
-  public Value next()
-  {
-    if (_current != null)
-      _current = _current._next;
-
-    return current();
+  public V<? extends Value> next(FeatureExpr ctx) {
+    throw new UnimplementedVException();
+//    if (_current != null)
+//      _current = _current._next;
+//
+//    return current();
   }
 
   /**
    * Returns the previous value.
+   * @param ctx
    */
   @Override
-  public Value prev()
-  {
-    if (_current != null)
-      _current = _current._prev;
+  public V<? extends Value> prev(FeatureExpr ctx) {
+    throw new UnimplementedVException();
 
-    return current();
+//    if (_current != null)
+//      _current = _current._prev;
+//
+//    return current();
   }
 
   /**
@@ -1245,35 +1261,35 @@ abstract public class ArrayValue extends Value {
 
     ArrayValue result = new ArrayValueImpl();
 
-    result.put(LongValue.ZERO, _current.getKey());
-    result.put(KEY, _current.getKey());
+    result.put(LongValue.ZERO, _current.getOne().getKey());
+    result.put(KEY, _current.getOne().getKey());
 
-    result.put(LongValue.ONE, _current.getEnvVar());
-    result.put(VALUE, _current.getEnvVar());
+    result.put(LongValue.ONE, _current.getOne().getEnvVar());
+    result.put(VALUE, _current.getOne().getEnvVar());
 
-    _current = _current._next;
+    next(VHelper.noCtx());
 
     return result;
   }
 
   /**
    * Returns the first value.
+   * @param ctx
    */
   @Override
-  public Value reset()
-  {
-    _current = getHead();
+  public V<? extends Value> reset(FeatureExpr ctx) {
+    _current = V.choice(ctx, getVHead(), _current);
 
     return current();
   }
 
   /**
    * Returns the last value.
+   * @param ctx
    */
   @Override
-  public Value end()
-  {
-    _current = getTail();
+  public V<? extends Value> end(FeatureExpr ctx) {
+    _current = V.choice(ctx, getVTail(), _current);
 
     return current();
   }
@@ -2324,6 +2340,39 @@ abstract public class ArrayValue extends Value {
     public Value get(VEntry entry)
     {
       return entry.getEnvVar().getOne();
+    }
+  }
+
+
+  protected static class OptEntryIterator
+          implements Iterator<Opt<Entry>> {
+    private Entry _current;
+
+    OptEntryIterator(Entry head)
+    {
+      _current = head;
+    }
+
+    public boolean hasNext()
+    {
+      return _current != null;
+    }
+
+    public Opt<Entry> next()
+    {
+      if (_current != null) {
+        Entry next = _current;
+        _current = _current.getNext();
+
+        return Opt.create(next.getCondition(),next);
+      }
+      else
+        return null;
+    }
+
+    public void remove()
+    {
+      throw new UnsupportedOperationException();
     }
   }
 }

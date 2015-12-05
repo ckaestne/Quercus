@@ -33,6 +33,7 @@ import com.caucho.quercus.program.JavaClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -150,53 +151,55 @@ public class JavaListAdapter
   /**
    * Returns the current value.
    */
-  public Value current()
+  public V<? extends Value> current()
   {
     if (_next < _list.size())
-      return wrapJava(_list.get(_next));
+      return V.one(wrapJava(_list.get(_next)));
     else
-      return BooleanValue.FALSE;
+      return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the current key
    */
-  public Value key()
+  public V<? extends Value> key()
   {    
     if (_next < _list.size())
-      return LongValue.create(_next);
+      return V.one(LongValue.create(_next));
     else
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
   }
 
   /**
    * Returns true if there are more elements.
    */
-  public boolean hasCurrent()
+  public V<? extends Boolean> hasCurrent()
   {
-    return _next < _list.size();
+    return V.one(_next < _list.size());
   }
 
   /**
    * Returns the next value.
+   * @param ctx
    */
-  public Value next()
+  public V<? extends Value> next(FeatureExpr ctx)
   {
     if (_next < _list.size())
-      return wrapJava(_list.get(_next++));
+      return V.one(wrapJava(_list.get(_next++)));
     else
-      return BooleanValue.FALSE;
+      return V.one(BooleanValue.FALSE);
   }
 
   /**
    * Returns the previous value.
+   * @param ctx
    */
-  public Value prev()
+  public V<? extends Value> prev(FeatureExpr ctx)
   {
     if (_next > 0)
-      return wrapJava(_list.get(_next--));
+      return V.one(wrapJava(_list.get(_next--)));
     else
-      return BooleanValue.FALSE;
+      return V.one(BooleanValue.FALSE);
   }
 
   /**
@@ -208,11 +211,11 @@ public class JavaListAdapter
     {
       ArrayValue result = new ArrayValueImpl();
 
-      result.put(LongValue.ZERO, key());
-      result.put(KEY, key());
+      result.put(VHelper.noCtx(),LongValue.ZERO, key());
+      result.put(VHelper.noCtx(),KEY, key());
 
-      result.put(LongValue.ONE, current());
-      result.put(VALUE, current());
+      result.put(VHelper.noCtx(),LongValue.ONE, current());
+      result.put(VHelper.noCtx(),VALUE, current());
 
       _next++;
 
@@ -224,8 +227,9 @@ public class JavaListAdapter
 
   /**
    * Returns the first value.
+   * @param ctx
    */
-  public Value reset()
+  public V<? extends Value> reset(FeatureExpr ctx)
   {
     _next = 0;
 
@@ -234,8 +238,9 @@ public class JavaListAdapter
 
   /**
    * Returns the last value.
+   * @param ctx
    */
-  public Value end()
+  public V<? extends Value> end(FeatureExpr ctx)
   {
     _next = _list.size();
     

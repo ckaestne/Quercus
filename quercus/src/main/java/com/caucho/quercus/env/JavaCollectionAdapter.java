@@ -31,10 +31,13 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.JavaClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.Function4;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Represents a marshalled Collection argument.
@@ -406,6 +409,10 @@ public class JavaCollectionAdapter extends JavaAdapter
     {
       throw new UnsupportedOperationException();
     }
+  }
+  public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
+    throw new UnimplementedVException();
+//    return VList.foldRightUntil(new OptEntryIterator(_head), init, ctx, op, stopCriteria);
   }
 
 }
