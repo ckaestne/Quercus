@@ -1,6 +1,5 @@
 package edu.cmu.cs.varex;
 
-import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -34,7 +33,7 @@ public interface V<T> {
     static <U> V<U> one(U v) {
         return new One(v);
     }
-    static <U> V<U> choice(FeatureExpr condition, U a, U b) {
+    static <U> V<? extends U> choice(FeatureExpr condition, U a, U b) {
         return VImpl.choice(condition, a, b);
     }
     static <U> V<? extends U> choice(FeatureExpr condition, V<? extends U> a, V<? extends U> b) {

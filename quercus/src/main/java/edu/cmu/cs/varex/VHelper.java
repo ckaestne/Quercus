@@ -1,14 +1,11 @@
 package edu.cmu.cs.varex;
 
 import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -99,4 +96,6 @@ public class VHelper {
     public static <T> V<? extends T>[] toVArray(T[] a) {
         return mapArray(V.class, a, x->V.one(x));
     }
+
+
 }

@@ -11,7 +11,7 @@ import java.util.function.*;
  */
 class VImpl<T> implements V<T> {
 
-    static <U> V<U> choice(FeatureExpr condition, U a, U b) {
+    static <U> V<? extends U> choice(FeatureExpr condition, U a, U b) {
         Map<U, FeatureExpr> result = new HashMap<>(2);
         if (condition.isSatisfiable())
             put(result, a, condition);
@@ -20,7 +20,7 @@ class VImpl<T> implements V<T> {
             put(result, b, condition.not());
         else return V.one(a);
 
-        return new VImpl<>(result);
+        return createV(result);
     }
 
     static <U> V<? extends U> choice(FeatureExpr condition, V<? extends U> a, V<? extends U> b) {
