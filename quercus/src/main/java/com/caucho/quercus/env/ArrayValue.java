@@ -1301,7 +1301,7 @@ abstract public class ArrayValue extends Value {
    *
    * @return the value if it is found in the array, NULL otherwise
    */
-  abstract public Value containsKey(Value key);
+  abstract public V<? extends Value> containsKey(Value key);
 
 //  /**
 //   * Returns an object array of this array.  This is a copy of this object's

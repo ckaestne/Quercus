@@ -262,7 +262,7 @@ public class CopyArrayValue extends ArrayValue {
    *
    * @return the value if it is found in the array, NULL otherwise
    */
-  public Value containsKey(Value key)
+  public V<? extends Value> containsKey(Value key)
   {
     if (_copyArray != null)
       return _copyArray.containsKey(key);

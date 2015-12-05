@@ -759,7 +759,7 @@ public class ArrayModule
         if (k > 0 && ! valueFound)
           break;
 
-        Value searchValue = ((ArrayValue) arrays[k]).containsKey(entryKey);
+        Value searchValue = ((ArrayValue) arrays[k]).containsKey(entryKey).getOne();
 
         if (searchValue != null)
           valueFound = searchValue.eq(entryValue);
@@ -876,7 +876,7 @@ public class ArrayModule
         if (k > 0 && ! valueFound)
           break;
 
-        Value searchValue = ((ArrayValue) arrays[k]).containsKey(entryKey);
+        Value searchValue = ((ArrayValue) arrays[k]).containsKey(entryKey).getOne();
 
         if (searchValue != null)
           valueFound = func.call(env, VHelper.noCtx(), searchValue, entryValue).getOne().toLong() == 0;

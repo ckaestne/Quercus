@@ -916,40 +916,18 @@ public class ArrayValueImpl extends ArrayValue
    * @return the value if it is found in the array, NULL otherwise
    */
   @Override
-  public Value containsKey(Value key) {
-    Entry entry = getEntry(key);
+  public V<? extends Value> containsKey(Value key) {
+    @NonNull V<? extends Entry> entry = getEntry(key);
 
-    if (entry != null)
-      return entry.getEnvVar().getOne();
-    else
-      return null;
+    return entry.flatMap((a) -> a == null ? V.one(null) : a.getEnvVar().getValue());
+
   }
 
   /**
    * Gets a new value.
    */
-  private Entry getEntry(Value key) {
-    throw new UnimplementedVException("TODO");
-//    key = key.toKey();
-//
-//    Entry[] entries = _entries;
-//    Entry entry;
-//
-//    if (entries != null) {
-//      int hash = key.hashCode() & _hashMask;
-//
-//      entry = entries[hash];
-//    } else
-//      entry = _head;
-//
-//    for (; entry != null; entry = entry.getNextHash()) {
-//      Value entryKey = entry.getKey();
-//
-//      if (key == entryKey || key.equals(entryKey))
-//        return entry;
-//    }
-//
-//    return null;
+  private V<? extends Entry> getEntry(Value key) {
+    return _lookupMap.getOrDefault(key, V.one(null));
   }
 
   /**
@@ -1076,7 +1054,7 @@ public class ArrayValueImpl extends ArrayValue
 
     final Value key = _key.toKey();
 
-    @NonNull V<? extends Entry> existingEntries = _lookupMap.getOrDefault(key, V.one(null));
+    @NonNull V<? extends Entry> existingEntries = getEntry(key);// _lookupMap.getOrDefault(key, V.one(null));
 
 
     return existingEntries.vflatMap(ctx, (c,e)->{

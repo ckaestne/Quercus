@@ -19,7 +19,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
     val y = StringValue.create("y")
     val z = StringValue.create("z")
 
-    def eval_a(c:String) = eval("$a = array();"+c+"; foreach ($a as $k=>$v) echo \"$k->$v;\";")
+    def eval_a(c: String) = eval("$a = array();" + c + "; foreach ($a as $k=>$v) echo \"$k->$v;\";")
 
     "ArrayValue" should "support basic addition without variation" in {
         eval_a("$a = array();") to ""
@@ -34,7 +34,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
     }
 
     "VArray" should "hold conditional elements" in {
-        eval_a("if ($FOO) $a[1]=2;") to c(foo,"1->2;")
+        eval_a("if ($FOO) $a[1]=2;") to c(foo, "1->2;")
 
     }
 
@@ -43,6 +43,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.append(t, V.one(x), V.one(y))
         a.get(x).getValue should equal(V.one(y))
     }
+
     it should "support conditional append" in {
         val a = new ArrayValueImpl()
         a.append(t, V.one(x), V.one(y))
@@ -50,6 +51,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.append(foo, V.one(x), V.one(z))
         a.get(x).getValue should equal(V.choice(foo, z, y))
     }
+
     it should "support conditional append to empty array" in {
         val a = new ArrayValueImpl()
         a.append(foo, V.one(x), V.one(z))
@@ -57,6 +59,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.append(bar, V.one(x), V.one(z))
         a.get(x).getValue should equal(V.choice(foo or bar, z, UnsetValue.UNSET))
     }
+
     it should "support conditional contains" in {
         val a = new ArrayValueImpl()
         a.append(foo, V.one(x), V.one(z))
@@ -70,5 +73,16 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 
         a.append(t, V.one(z), V.one(z))
         a.contains(V.one(z)) should equal(V.choice(foo, V.one(x), V.choice(bar, y, z)))
+    }
+
+    it should "support conditional containsKey" in {
+        val a = new ArrayValueImpl()
+        a.containsKey(x) should equal(V.one(null))
+
+        a.append(foo, V.one(x), V.one(z))
+        a.containsKey(x) should equal(V.choice(foo, z, null))
+
+        a.append(bar, V.one(x), V.one(y))
+        a.containsKey(x) should equal(V.choice(bar, V.one(y), V.choice(foo, z, null)))
     }
 }

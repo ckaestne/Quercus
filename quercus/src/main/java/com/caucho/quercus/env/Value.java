@@ -2752,7 +2752,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    *
    * @return the value if it is found in the array, NULL otherwise
    */
-  public Value containsKey(Value key)
+  public V<? extends Value> containsKey(Value key)
   {
     return null;
   }

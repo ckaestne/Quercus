@@ -354,11 +354,11 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the corresponding value if this array contains the given key
    * 
    * @param key to search for in the array
-   * 
+   *
    * @return the value if it is found in the array, NULL otherwise
    */
   @Override
-  public Value containsKey(Value key)
+  public V<? extends Value> containsKey(Value key)
   {
     return _array.containsKey(key);
   }

@@ -573,7 +573,7 @@ abstract public class JavaAdapter extends ArrayValue
    * @return the value if it is found in the array, NULL otherwise
    */
   @Override
-  public Value containsKey(Value key)
+  public V<? extends Value> containsKey(Value key)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }

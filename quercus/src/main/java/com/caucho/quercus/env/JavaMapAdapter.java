@@ -215,9 +215,9 @@ public class JavaMapAdapter
    *
    * @return the value if it is found in the array, NULL otherwise
    */
-  public Value containsKey(Value key)
+  public V<? extends Value> containsKey(Value key)
   {
-    return BooleanValue.create(_map.containsKey(key.toJavaObject()));
+    return V.one(BooleanValue.create(_map.containsKey(key.toJavaObject())));
   }
   
   @Override

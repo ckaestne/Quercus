@@ -317,7 +317,7 @@ public class ArgRef extends Value
   }
 
   @Override
-  public Value containsKey(Value key)
+  public V<? extends Value> containsKey(Value key)
   {
     return _var.getValue().getOne().containsKey(key);
   }

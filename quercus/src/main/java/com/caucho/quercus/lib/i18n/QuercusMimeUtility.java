@@ -70,7 +70,7 @@ public class QuercusMimeUtility
         = QuercusMimeUtility.decodeMime(env, header.getValue(), charset);
 
         Value headerName;
-        if ((headerName = headers.containsKey(name)) == null) {
+        if ((headerName = headers.containsKey(name).getOne()) == null) {
           headers.put(name, val);
           continue;
         }

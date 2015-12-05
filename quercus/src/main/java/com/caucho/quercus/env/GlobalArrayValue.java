@@ -145,14 +145,14 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Gets a new value.
    */
-  public Value containsKey(Value key)
+  public V<? extends Value> containsKey(Value key)
   {
     EnvVar var = _env.getGlobalEnv().get(key.toStringValue());
 
     if (var != null)
-      return var.getOne();
+      return var.getValue();
     else
-      return null;
+      return V.one(null);
   }
   
   /**
