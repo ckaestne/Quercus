@@ -115,7 +115,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Adds a new value.
    */
   @Override
-  public Value append(Value key, Value value)
+  public Value append(Value key, ValueOrVar value)
   {
     return _array.append(key, value);
   }
@@ -327,12 +327,12 @@ public class ArrayValueWrapper extends ArrayValue {
   /**
    * Returns the corresponding key if this array contains the given value
    *
-   * @param value to search for in the array
+   * @param key to search for in the array
    *
    * @return the key if it is found in the array, NULL otherwise
    */
   @Override
-  public Value contains(Value key)
+  public V<? extends Value> contains(Value key)
   {
     return _array.contains(key);
   }

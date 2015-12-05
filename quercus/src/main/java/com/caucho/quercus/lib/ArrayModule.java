@@ -167,10 +167,10 @@ public class ArrayModule
         else
           key = key.toLowerCase(Locale.ENGLISH);
 
-        newArray.put(env.createString(key), entry.getValue());
+        newArray.put(env.createString(key), entry.getEnvVar());
       }
       else
-        newArray.put(keyValue, entry.getValue());
+        newArray.put(keyValue, entry.getEnvVar());
     }
 
     return newArray;
@@ -199,7 +199,7 @@ public class ArrayModule
     int i = 0;
     for (VEntry entry : array.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       if (i % size == 0) {
         currentArray = new ArrayValueImpl();
@@ -263,7 +263,7 @@ public class ArrayModule
     ArrayValue copy = new ArrayValueImpl();
 
     for (VEntry entry : array.entrySet()) {
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
       Value entryKey = entry.getKey();
 
       copy.put(entryKey, array_copy_recursive(entryValue));
@@ -329,7 +329,7 @@ public class ArrayModule
     for (VEntry entry : array.entrySet()) {
       boolean valueFound = false;
 
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       Value entryKey = entry.getKey();
 
@@ -341,7 +341,7 @@ public class ArrayModule
         }
 
         valueFound =
-          ((ArrayValue) arrays[k]).contains(entryValue).eq(entryKey);
+          ((ArrayValue) arrays[k]).contains(entryValue).getOne().eq(entryKey);
       }
 
       if (! valueFound)
@@ -392,7 +392,7 @@ public class ArrayModule
       }
 
       if (! keyFound)
-        diffArray.put(entryKey, entry.getValue());
+        diffArray.put(entryKey, entry.getEnvVar());
     }
 
     return diffArray;
@@ -435,7 +435,7 @@ public class ArrayModule
     for (VEntry entry : array.entrySet()) {
       boolean ValueFound = false;
 
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       Value entryKey = entry.getKey();
 
@@ -446,7 +446,7 @@ public class ArrayModule
           return NullValue.NULL;
         }
 
-        Value searchKey = ((ArrayValue) arrays[k]).contains(entryValue);
+        Value searchKey = ((ArrayValue) arrays[k]).contains(entryValue).getOne();
 
         if (! searchKey.isNull())
           ValueFound = ((int) func.call(env, VHelper.noCtx(),searchKey, entryKey).getOne().toLong())
@@ -518,7 +518,7 @@ public class ArrayModule
       }
 
       if (! keyFound)
-        diffArray.put(entryKey, entry.getValue());
+        diffArray.put(entryKey, entry.getEnvVar());
     }
 
     return diffArray;
@@ -552,7 +552,7 @@ public class ArrayModule
     for (VEntry entry : array.entrySet()) {
       valueFound = false;
 
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       for (int k = 0; k < arrays.length && ! valueFound; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -562,7 +562,7 @@ public class ArrayModule
         }
 
         valueFound =
-          ! ((ArrayValue) arrays[k]).contains(entryValue).isNull();
+          ! ((ArrayValue) arrays[k]).contains(entryValue).getOne().isNull();
       }
 
       if (! valueFound)
@@ -659,7 +659,7 @@ public class ArrayModule
           if (entry instanceof VEntry)
             value = ((ArrayValue.Entry) entry).getRawValue().getOne();
           else
-            value = entry.getValue().getOne();
+            value = entry.getEnvVar().getOne();
 
           // php/1740
           boolean isMatch
@@ -678,8 +678,8 @@ public class ArrayModule
     }
     else {
       for (VEntry entry : array.entrySet()) {
-        if (entry.getValue().getOne().toBoolean())
-          filteredArray.put(entry.getKey(), entry.getValue());
+        if (entry.getEnvVar().getOne().toBoolean())
+          filteredArray.put(entry.getKey(), entry.getEnvVar());
       }
     }
 
@@ -703,7 +703,7 @@ public class ArrayModule
     ArrayValue newArray = new ArrayValueImpl();
 
     for (VEntry entry : array.entrySet()) {
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       if (entryValue.isLongConvertible()
           || entryValue instanceof StringValue)
@@ -747,7 +747,7 @@ public class ArrayModule
 
       Value entryKey = entry.getKey();
 
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       for (int k = 0; k < arrays.length; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -818,7 +818,7 @@ public class ArrayModule
       }
 
       if (keyFound)
-        interArray.put(entryKey, entry.getValue());
+        interArray.put(entryKey, entry.getEnvVar());
     }
 
     return interArray;
@@ -864,7 +864,7 @@ public class ArrayModule
 
       Value entryKey = entry.getKey();
 
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       for (int k = 0; k < arrays.length - 1; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -954,7 +954,7 @@ public class ArrayModule
       }
 
       if (keyFound)
-        interArray.put(entryKey, entry.getValue());
+        interArray.put(entryKey, entry.getEnvVar());
     }
 
     return interArray;
@@ -988,7 +988,7 @@ public class ArrayModule
     for (VEntry entry : array.entrySet()) {
       boolean valueFound = false;
 
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       for (int k = 0; k < arrays.length; k++) {
         if (! (arrays[k] instanceof ArrayValue)) {
@@ -1001,7 +1001,7 @@ public class ArrayModule
           break;
 
         valueFound =
-          ! ((ArrayValue) arrays[k]).contains(entryValue).isNull();
+          ! ((ArrayValue) arrays[k]).contains(entryValue).getOne().isNull();
       }
 
       if (valueFound)
@@ -1076,7 +1076,7 @@ public class ArrayModule
     while (iter.hasNext()) {
       VEntry entry = iter.next();
       Value entryKey = entry.getKey();
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       if (entryValue.eq(searchValue))
         newArray.append(LongValue.create(i++), entryKey);
@@ -1118,7 +1118,7 @@ public class ArrayModule
     while (argIter.hasNext()) {
       VEntry entry = argIter.next();
 
-      param[0] = entry.getValue().getValue();
+      param[0] = entry.getEnvVar().getValue();
 
       for (int i = 0; i < iters.length; i++) {
         param[i + 1] = iters[i].next().getValue();
@@ -1196,7 +1196,7 @@ public class ArrayModule
           value = ((ArrayValue.Entry) entry).getRawValue().getOne();
         }
         else {
-          value = entry.getValue().getOne();
+          value = entry.getEnvVar().getOne();
         }
 
         //TODO V
@@ -1247,7 +1247,7 @@ public class ArrayModule
         value = ((ArrayValue.Entry) entry).getRawValue().getOne();
       }
       else {
-        value = entry.getValue().getOne();
+        value = entry.getEnvVar().getOne();
       }
 
       // php/1746
@@ -1467,7 +1467,7 @@ public class ArrayModule
     double product = 1;
 
     for (VEntry entry : array.entrySet())
-      product *= entry.getValue().getOne().toDouble();
+      product *= entry.getEnvVar().getOne().toDouble();
 
     return DoubleValue.create(product);
   }
@@ -1575,7 +1575,7 @@ public class ArrayModule
 
     for (VEntry entry : array.entrySet()) {
       try {
-        result = callable.call(env, VHelper.noCtx(), result, entry.getValue().getOne()).getOne();
+        result = callable.call(env, VHelper.noCtx(), result, entry.getEnvVar().getOne()).getOne();
       }
       catch (Exception t) {
         log.log(Level.WARNING, t.toString(), t);
@@ -1613,7 +1613,7 @@ public class ArrayModule
       VEntry entry = iter.next();
 
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       if (value.isArray()) {
         replaceRecursive(env, result.getArray(key), value);
@@ -1638,7 +1638,7 @@ public class ArrayModule
       while (iter.hasNext()) {
         VEntry entry = iter.next();
 
-        result.put(entry.getKey(), entry.getValue());
+        result.put(entry.getKey(), entry.getEnvVar());
       }
     }
 
@@ -1714,7 +1714,7 @@ public class ArrayModule
     while (iterator.hasNext()) {
       VEntry entry = iterator.next();
 
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
       Value entryKey = entry.getKey();
 
       if (needle.eq(entryValue)) {
@@ -1868,7 +1868,7 @@ public class ArrayModule
 
     for (VEntry entry : array.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       if (start == index && replace != null) {
         Iterator<EnvVar> replaceIter = replace.getValueIterator(env);
@@ -1918,7 +1918,7 @@ public class ArrayModule
     double sum = 0;
 
     for (VEntry entry : array.entrySet())
-      sum += entry.getValue().getOne().toDouble();
+      sum += entry.getEnvVar().getOne().toDouble();
 
     return DoubleValue.create(sum);
   }
@@ -1980,7 +1980,7 @@ public class ArrayModule
             boolean valueFound = false;
 
             if (keyFound)
-              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne()
+              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne()
                 .toLong() == 0;
 
             isFound = keyFound && valueFound;
@@ -2067,7 +2067,7 @@ public class ArrayModule
         for (VEntry entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
 
             boolean keyFound = false;
 
@@ -2150,7 +2150,7 @@ public class ArrayModule
 
         for (VEntry entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
           }
           catch (Exception t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -2231,7 +2231,7 @@ public class ArrayModule
             boolean valueFound = false;
 
             if (keyFound)
-              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne())
+              valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne())
                       .getOne().toLong() == 0;
 
             isFound = keyFound && valueFound;
@@ -2316,7 +2316,7 @@ public class ArrayModule
         for (VEntry entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
 
             boolean keyFound = false;
 
@@ -2397,7 +2397,7 @@ public class ArrayModule
 
         for (VEntry entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getValue().getOne()).getOne().toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
           }
           catch (Throwable t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -2438,7 +2438,7 @@ public class ArrayModule
     ArrayValue uniqueArray = new ArrayValueImpl();
 
     for (VEntry entry : array.entrySet()) {
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       if (lastEntry == null) {
         uniqueArray.put(entry.getKey(), entryValue);
@@ -2448,7 +2448,7 @@ public class ArrayModule
         continue;
       }
 
-      Value lastEntryValue = lastEntry.getValue().getOne();
+      Value lastEntryValue = lastEntry.getEnvVar().getOne();
 
       if (! entryValue.toString().equals(lastEntryValue.toString()))
         uniqueArray.put(entry.getKey(), entryValue);
@@ -2540,7 +2540,7 @@ public class ArrayModule
         if (entry instanceof VEntry)
           value = ((ArrayValue.Entry) entry).getRawValue().getOne();
         else
-          value = entry.getValue().getOne();
+          value = entry.getEnvVar().getOne();
 
         if (value.isArray()) {
           boolean result = array_walk_recursive(env,
@@ -2603,7 +2603,7 @@ public class ArrayModule
         if (entry instanceof VEntry)
           value = ((ArrayValue.Entry) entry).getRawValue().getOne();
         else
-          value = entry.getValue().getOne();
+          value = entry.getEnvVar().getOne();
 
         callback.callArray(env, VHelper.noCtx(),array, key, V.one(value), V.one(key), V.one(userData));
       }
@@ -2967,7 +2967,7 @@ public class ArrayModule
     if (strict)
       result = stack.containsStrict(needle);
     else
-      result = stack.contains(needle);
+      result = stack.contains(needle).getOne();
 
     return ! result.isNull();
   }
@@ -3123,7 +3123,7 @@ public class ArrayModule
     if (array != null) {
 
       for (VEntry entry : array.entrySet()) {
-        Value entryValue = entry.getValue().getOne();
+        Value entryValue = entry.getEnvVar().getOne();
 
         if (entryValue instanceof StringValue)
           array.put(entry.getKey(),

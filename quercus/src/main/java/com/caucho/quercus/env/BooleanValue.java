@@ -231,7 +231,7 @@ public class BooleanValue extends Value
    * necessary.
    */
   @Override
-  public Value append(Value index, Value value)
+  public Value append(Value index, ValueOrVar value)
   {
     if (_value)
       return super.append(index, value);

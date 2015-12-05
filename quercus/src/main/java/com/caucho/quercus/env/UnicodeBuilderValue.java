@@ -620,10 +620,10 @@ public class UnicodeBuilderValue
    * Sets the array ref.
    */
   @Override
-  public Value append(Value index, Value value)
+  public Value append(Value index, ValueOrVar value)
   {
     if (_length > 0)
-      return setCharValueAt(index.toLong(), value);
+      return setCharValueAt(index.toLong(), value.toValue());
     else
       return new ArrayValueImpl().append(index, value);
   }

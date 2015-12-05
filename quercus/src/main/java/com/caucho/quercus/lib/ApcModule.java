@@ -284,7 +284,7 @@ public class ApcModule extends AbstractQuercusModule
 
     for (VEntry entry : array.entrySet()) {
       env.addConstant(entry.getKey().toStringValue(env),
-                      entry.getValue().getOne().copy(env),
+                      entry.getEnvVar().getOne().copy(env),
                       ! caseSensitive);
     }
 

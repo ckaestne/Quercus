@@ -589,7 +589,7 @@ public class StreamModule extends AbstractQuercusModule {
       ArrayValue array = read.toArrayValue(env);
 
       for (VEntry entry : array.entrySet()) {
-        Object obj = entry.getValue().getOne().toJavaObject();
+        Object obj = entry.getEnvVar().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
             && ((SocketInputOutput) obj).isConnected()) {
@@ -602,7 +602,7 @@ public class StreamModule extends AbstractQuercusModule {
       ArrayValue array = write.toArrayValue(env);
 
       for (VEntry entry : array.entrySet()) {
-        Object obj = entry.getValue().getOne().toJavaObject();
+        Object obj = entry.getEnvVar().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
             && ((SocketInputOutput) obj).isConnected()) {
@@ -615,7 +615,7 @@ public class StreamModule extends AbstractQuercusModule {
       ArrayValue array = except.toArrayValue(env);
 
       for (VEntry entry : array.entrySet()) {
-        Object obj = entry.getValue().getOne().toJavaObject();
+        Object obj = entry.getEnvVar().getOne().toJavaObject();
 
         if (obj instanceof SocketInputOutput
             && ((SocketInputOutput) obj).isConnected()) {

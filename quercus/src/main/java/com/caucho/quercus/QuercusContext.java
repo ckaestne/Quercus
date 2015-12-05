@@ -634,7 +634,7 @@ public class QuercusContext
         for (VEntry entry : array.entrySet()) {
 
           Value key = entry.getKey();
-          Value value = entry.getValue().getOne();
+          Value value = entry.getEnvVar().getOne();
 
           _jdbcDriverContext.setProtocol(key.toString(), value.toString());
         }
@@ -1833,7 +1833,7 @@ public class QuercusContext
 
         for (VEntry entry : array.entrySet()) {
           String key = entry.getKey().toString();
-          Value value = entry.getValue().getOne();
+          Value value = entry.getEnvVar().getOne();
 
           setIni(key, value);
         }

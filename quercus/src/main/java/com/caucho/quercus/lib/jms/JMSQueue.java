@@ -102,14 +102,14 @@ public class JMSQueue
       Set<VEntry> entrySet = array.entrySet();
 
       for (VEntry entry : entrySet) {
-        if (entry.getValue().getOne() instanceof BinaryValue) {
-          byte []bytes = ((BinaryValue) entry.getValue().getOne()).toBytes();
+        if (entry.getEnvVar().getOne() instanceof BinaryValue) {
+          byte []bytes = ((BinaryValue) entry.getEnvVar().getOne()).toBytes();
 
           ((MapMessage) message).setBytes(entry.getKey().toString(), bytes);
         } else {
           // every primitive except for bytes can be translated from a string
           ((MapMessage) message).setString(entry.getKey().toString(),
-                                           entry.getValue().toString());
+                                           entry.getEnvVar().toString());
         }
       }
     } else if (value instanceof BinaryValue) {

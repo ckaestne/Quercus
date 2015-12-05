@@ -582,14 +582,14 @@ public class Env
   {
     for (VEntry entry : postArray.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       Value existingValue = array.get(key).getOne();
 
       if (existingValue.isArray() && value.isArray())
        existingValue.toArrayValue(this).putAll(value.toArrayValue(this));
       else
-        array.put(entry.getKey(), entry.getValue().copy());
+        array.put(entry.getKey(), entry.getEnvVar().copy());
     }
   }
 
@@ -2626,7 +2626,7 @@ public class Env
         if (_variablesOrder.indexOf('P') >= 0
             && _inputPost.getSize() > 0) {
           for (VEntry entry : _inputPost.entrySet()) {
-            post.put(entry.getKey(), entry.getValue());
+            post.put(entry.getKey(), entry.getEnvVar());
           }
         }
 
@@ -2650,7 +2650,7 @@ public class Env
 
         if (_files != null) {
           for (VEntry entry : _files.entrySet()) {
-            files.put(entry.getKey(), entry.getValue());
+            files.put(entry.getKey(), entry.getEnvVar());
           }
         }
 

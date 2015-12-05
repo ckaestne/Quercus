@@ -67,7 +67,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Adds a new value.
    */
-  public ArrayValue append(Value key, Value value)
+  public ArrayValue append(Value key, ValueOrVar value)
   {
     _env.setGlobalValue(VHelper.noCtx(), key.toStringValue(), V.one(value));
 

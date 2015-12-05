@@ -95,7 +95,7 @@ public class ArrayIterator
   @Override
   public Value current(Env env)
   {
-    return _current == null ? UnsetValue.UNSET : _current.getValue().getOne();
+    return _current == null ? UnsetValue.UNSET : _current.getEnvVar().getOne();
   }
 
   public Value getArrayCopy()
@@ -266,7 +266,7 @@ public class ArrayIterator
         VEntry entry = iterator.next();
 
         Value key = entry.getKey();
-        EnvVar value = entry.getValue();
+        EnvVar value = entry.getEnvVar();
 
         printDepth(out, 2 * depth);
 

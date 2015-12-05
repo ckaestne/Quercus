@@ -818,7 +818,7 @@ public class VariableModule extends AbstractQuercusModule {
         out.print(VHelper.noCtx(), "    [");
         out.print(VHelper.noCtx(), entry.getKey());
         out.print(VHelper.noCtx(), "] => ");
-        debug_impl(env, entry.getValue().getOne(), depth + 1); // XXX: recursion
+        debug_impl(env, entry.getEnvVar().getOne(), depth + 1); // XXX: recursion
       }
       printDepth(out, 2 * depth);
       out.println(VHelper.noCtx(), ")");

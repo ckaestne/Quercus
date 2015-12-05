@@ -2,12 +2,12 @@ package edu.cmu.cs.varex
 
 import com.caucho.quercus.env._
 import de.fosd.typechef.featureexpr.FeatureExprFactory
-import org.scalatest.FlatSpec
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Created by ckaestne on 11/27/2015.
   */
-class VArrayImplTest extends FlatSpec  with AbstractPhpTest{
+class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 
     FeatureExprFactory.setDefault(FeatureExprFactory.bdd)
 
@@ -17,6 +17,7 @@ class VArrayImplTest extends FlatSpec  with AbstractPhpTest{
 
     val x = StringValue.create("x")
     val y = StringValue.create("y")
+    val z = StringValue.create("z")
 
     def eval_a(c:String) = eval("$a = array();"+c+"; foreach ($a as $k=>$v) echo \"$k->$v;\";")
 
@@ -37,4 +38,37 @@ class VArrayImplTest extends FlatSpec  with AbstractPhpTest{
 
     }
 
+    "ArrayValueImpl" should "support basic append" in {
+        val a = new ArrayValueImpl()
+        a.append(t, V.one(x), V.one(y))
+        a.get(x).getValue should equal(V.one(y))
+    }
+    it should "support conditional append" in {
+        val a = new ArrayValueImpl()
+        a.append(t, V.one(x), V.one(y))
+        a.get(x).getValue should equal(V.one(y))
+        a.append(foo, V.one(x), V.one(z))
+        a.get(x).getValue should equal(V.choice(foo, z, y))
+    }
+    it should "support conditional append to empty array" in {
+        val a = new ArrayValueImpl()
+        a.append(foo, V.one(x), V.one(z))
+        a.get(x).getValue should equal(V.choice(foo, z, UnsetValue.UNSET))
+        a.append(bar, V.one(x), V.one(z))
+        a.get(x).getValue should equal(V.choice(foo or bar, z, UnsetValue.UNSET))
+    }
+    it should "support conditional contains" in {
+        val a = new ArrayValueImpl()
+        a.append(foo, V.one(x), V.one(z))
+        a.contains(V.one(z)) should equal(V.choice(foo, x, NullValue.NULL))
+
+        a.append(foo, V.one(y), V.one(z))
+        a.contains(V.one(z)) should equal(V.choice(foo, x, NullValue.NULL))
+
+        a.append(bar, V.one(y), V.one(z))
+        a.contains(V.one(z)) should equal(V.choice(foo, V.one(x), V.choice(bar, y, NullValue.NULL)))
+
+        a.append(t, V.one(z), V.one(z))
+        a.contains(V.one(z)) should equal(V.choice(foo, V.one(x), V.choice(bar, y, z)))
+    }
 }

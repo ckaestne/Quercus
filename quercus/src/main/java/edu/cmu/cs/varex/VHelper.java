@@ -14,6 +14,12 @@ import java.util.function.Supplier;
  * Created by ckaestne on 11/27/2015.
  */
 public class VHelper {
+
+  public static FeatureExpr True() {
+    return FeatureExprFactory.True();
+  }
+
+  @Deprecated//use only as placeholder, use True instead if intentionally general context intended
     public static FeatureExpr noCtx() {
 //        System.err.println("missing context");
         return FeatureExprFactory.True();
@@ -35,8 +41,18 @@ public class VHelper {
                 b.flatMap((bb) -> fun.apply(aa, bb)));
     }
 
+  public static <A, B, R> V<? extends R> vmapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function4<FeatureExpr, A, B, R> fun) {
+    return a.vflatMap(ctx, (c, aa) ->
+            b.vmap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
+  }
 
-    public static <T> V<T> toV(T v) {
+  public static <A, B, R> V<? extends R> vflatMapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function4<FeatureExpr, A, B, V<? extends R>> fun) {
+    return a.vflatMap(ctx, (c, aa) ->
+            b.vflatMap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
+  }
+
+
+  public static <T> V<T> toV(T v) {
         return V.one(v);
     }
 

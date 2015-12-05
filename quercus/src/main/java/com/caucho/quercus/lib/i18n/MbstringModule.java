@@ -522,7 +522,7 @@ public class MbstringModule
 
       for (VEntry entry : results.entrySet()) {
 
-        Value bytes = encodeAll(env, entry.getValue().getOne(), encoding);
+        Value bytes = encodeAll(env, entry.getEnvVar().getOne(), encoding);
         regs.put(entry.getKey(), bytes);
       }
 
@@ -1439,7 +1439,7 @@ public class MbstringModule
 
       for (VEntry entry : ((ArrayValue)val).entrySet()) {
         array.put(entry.getKey(),
-                  decodeAll(env, entry.getValue().getOne(), decoder));
+                  decodeAll(env, entry.getEnvVar().getOne(), decoder));
       }
 
       return array;
@@ -1450,7 +1450,7 @@ public class MbstringModule
       for (VEntry entry : obj.entrySet()) {
         obj.putThisField(env,
                          entry.getKey().toStringValue(),
-                         decodeAll(env, entry.getValue().getOne(), decoder));
+                         decodeAll(env, entry.getEnvVar().getOne(), decoder));
       }
 
       return obj;
@@ -1489,7 +1489,7 @@ public class MbstringModule
 
       for (VEntry entry : ((ArrayValue)val).entrySet()) {
         array.put(entry.getKey(),
-                  encodeAll(env, entry.getValue().getOne(), encoder));
+                  encodeAll(env, entry.getEnvVar().getOne(), encoder));
       }
 
       return array;
@@ -1500,7 +1500,7 @@ public class MbstringModule
       for (VEntry entry : obj.entrySet()) {
         obj.putThisField(env,
                          entry.getKey().toStringValue(),
-                         encodeAll(env, entry.getValue().getOne(), encoder));
+                         encodeAll(env, entry.getEnvVar().getOne(), encoder));
       }
 
       return obj;

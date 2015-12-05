@@ -54,12 +54,6 @@ public class VImplTest {
 
   @Test
   public void testVFold() {
-//    List<Opt<Integer>> l = new ArrayList<>();
-//    l.add(Opt.create(t, 1));
-//    l.add(Opt.create(foo, 2));
-//    l.add(Opt.create(t, 3));
-//    l.add(Opt.create(bar, 4));
-//    l.add(Opt.create(t, 5));
 
     Assert.assertEquals(c3, VList.foldRight(
             list(Opt.create(t, 1), Opt.create(t, 2)), c0, t,
@@ -75,6 +69,39 @@ public class VImplTest {
             list(Opt.create(bar, 1), Opt.create(t, 1), Opt.create(foo, 2)), c0, t,
             (c, a, b) -> V.one(a + b)
     ));
+
+
+  }
+
+  @Test
+  public void testVFoldUntil() {
+
+    Assert.assertEquals(c3, VList.foldRightUntil(
+            list(Opt.create(t, 1), Opt.create(t, 2)), c0, t,
+            (c, a, b) -> V.one(a + b)      ,
+            x-> x>2
+    ));
+
+    Assert.assertEquals(c1, VList.foldRightUntil(
+            list(Opt.create(t, 1), Opt.create(foo, 2)), c0, t,
+            (c, a, b) -> V.one(a + b),
+            x-> x>=1
+    ));
+
+    Assert.assertEquals(V.choice(foo, 13, 1), VList.foldRightUntil(
+            list(Opt.create(t, 1), Opt.create(foo, 2), Opt.create(foo, 10)), c0, t,
+            (c, a, b) -> V.one(a + b),
+            x-> x>1
+    ));
+
+
+    Assert.assertEquals(V.choice(foo, 3, 11), VList.foldRightUntil(
+            list(Opt.create(t, 1), Opt.create(foo, 2), Opt.create(foo.not(), 10), Opt.create(t, 100)), c0, t,
+            (c, a, b) -> V.one(a + b),
+            x-> x>1
+    ));
+
+
 
 
   }

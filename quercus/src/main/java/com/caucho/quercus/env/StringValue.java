@@ -949,7 +949,7 @@ abstract public class StringValue
    * necessary.
    */
   @Override
-  public Value append(Value index, Value value)
+  public Value append(Value index, ValueOrVar value)
   {
     if (length() == 0)
       return new ArrayValueImpl().append(index, value);

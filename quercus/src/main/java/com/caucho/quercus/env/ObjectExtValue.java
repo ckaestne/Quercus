@@ -258,7 +258,7 @@ public class ObjectExtValue extends ObjectValue
     Var var = new Var(V.one(value));
 
     //TODO fix again from V
-    entry.setValue(new EnvVarImpl(V.one(var)));
+    entry.setEnvVar(new EnvVarImpl(V.one(var)));
 
     return var;
   }
@@ -306,7 +306,7 @@ public class ObjectExtValue extends ObjectValue
 
     Var var = new Var(V.one(value));
 
-    entry.setValue(new EnvVarImpl(V.one(var)));
+    entry.setEnvVar(new EnvVarImpl(V.one(var)));
 
     return var;
   }
@@ -320,7 +320,7 @@ public class ObjectExtValue extends ObjectValue
     Entry entry = getEntry(env, name);
 
     if (entry != null) {
-      EnvVar value = entry.getValue();
+      EnvVar value = entry.getEnvVar();
 
       if (isTop || ! value.getOne().isset())
         return entry.toArg().getOne();
@@ -905,7 +905,7 @@ public class ObjectExtValue extends ObjectValue
       Entry entry = iter.next();
 
       StringValue canonicalName = entry.getKey();
-      Value value = entry.getValue().getOne().copy();
+      Value value = entry.getEnvVar().getOne().copy();
 
       obj.initField(env, canonicalName, value);
     }
@@ -1016,7 +1016,7 @@ public class ObjectExtValue extends ObjectValue
 
     for (VEntry entry : entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       for (int i = 0; i < level; i++) {
         sb.append("  ");
@@ -1091,7 +1091,7 @@ public class ObjectExtValue extends ObjectValue
     ArrayValue array = new ArrayValueImpl();
 
     for (VEntry entry : entrySet()) {
-      array.put(entry.getKey(), entry.getValue());
+      array.put(entry.getKey(), entry.getEnvVar());
     }
 
     return array;
@@ -1199,7 +1199,7 @@ public class ObjectExtValue extends ObjectValue
 
     for (VEntry entry : entrySet()) {
       out.writeObject(entry.getKey());
-      out.writeObject(entry.getValue());
+      out.writeObject(entry.getEnvVar());
     }
   }
 
@@ -1234,7 +1234,7 @@ public class ObjectExtValue extends ObjectValue
 
       entry.getKey().toStringValue(env).jsonEncode(env, context, sb);
       sb.append(':');
-      entry.getValue().getOne().jsonEncode(env, context, sb);
+      entry.getEnvVar().getOne().jsonEncode(env, context, sb);
       length++;
     }
 
@@ -1365,7 +1365,7 @@ public class ObjectExtValue extends ObjectValue
 
     public EnvVar next()
     {
-      return _iter.next().getValue();
+      return _iter.next().getEnvVar();
     }
 
     public void remove()
@@ -1428,7 +1428,7 @@ public class ObjectExtValue extends ObjectValue
 //      _value = entry._value.copy(env, map);
     }
 
-    public EnvVar getValue()
+    public EnvVar getEnvVar()
     {
       return _value;
     }
@@ -1491,7 +1491,7 @@ public class ObjectExtValue extends ObjectValue
 //      return _value.toValue();
 //    }
 //
-    public EnvVar setValue(EnvVar value)
+    public EnvVar setEnvVar(EnvVar value)
     {
       EnvVar oldValue = _value;//TODO V was: toValue();
 

@@ -473,7 +473,7 @@ abstract public class ObjectValue extends Callback {
    * string update ($a[0] = 'A').  Creates an array automatically if
    * necessary.
    */
-  public Value append(Value index, Value value)
+  public Value append(Value index, ValueOrVar value)
   {
     put(index, value);
 
@@ -770,7 +770,7 @@ abstract public class ObjectValue extends Callback {
         if (result != 0)
           return result;
 
-        result = a.getValue().getOne().cmp(b.getValue().getOne());
+        result = a.getEnvVar().getOne().cmp(b.getEnvVar().getOne());
 
         if (result != 0)
           return result;
@@ -838,7 +838,7 @@ abstract public class ObjectValue extends Callback {
 
     while (iter.hasNext()) {
       VEntry entry = iter.next();
-      sortedEntries.put(entry.getKey(), entry.getValue());
+      sortedEntries.put(entry.getKey(), entry.getEnvVar());
     }
 
     ArrayModule.ksort(env, sortedEntries, ArrayModule.SORT_STRING);
@@ -849,7 +849,7 @@ abstract public class ObjectValue extends Callback {
       VEntry entry = iter.next();
 
       Value key = entry.getKey();
-      EnvVar value = entry.getValue();
+      EnvVar value = entry.getEnvVar();
 
       printDepth(out, 2 * depth);
       out.println(VHelper.noCtx(), "[\"" + key + "\"]=>");
@@ -900,7 +900,7 @@ abstract public class ObjectValue extends Callback {
         VEntry entry = iter.next();
 
         StringValue key = entry.getKey().toStringValue(env);
-        EnvVar value = entry.getValue();
+        EnvVar value = entry.getEnvVar();
 
         if (! ClassField.isPublic(key)) {
           continue;

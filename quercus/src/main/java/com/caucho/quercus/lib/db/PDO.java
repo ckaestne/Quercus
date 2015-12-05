@@ -172,7 +172,7 @@ public class PDO implements EnvCleanup {
 
     if (options != null) {
       for (VEntry entry : options.entrySet()) {
-        setAttribute(env, entry.getKey().toInt(), entry.getValue().getOne());
+        setAttribute(env, entry.getKey().toInt(), entry.getEnvVar().getOne());
       }
     }
 

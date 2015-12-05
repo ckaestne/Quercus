@@ -171,7 +171,7 @@ public class JavaValue extends ObjectValue
     ArrayValue array = new ArrayValueImpl();
 
     for (VEntry entry : entrySet()) {
-      array.put(entry.getKey(), entry.getValue());
+      array.put(entry.getKey(), entry.getEnvVar());
     }
 
     return array;
@@ -205,7 +205,7 @@ public class JavaValue extends ObjectValue
       printRDepth(out, depth);
       out.print(VHelper.noCtx(), "    [" + entry.getKey() + "] => ");
 
-      entry.getValue().getOne().printRImpl(env, out, depth + 1, valueSet);
+      entry.getEnvVar().getOne().printRImpl(env, out, depth + 1, valueSet);
     }
 
     out.println(VHelper.noCtx());
@@ -410,7 +410,7 @@ public class JavaValue extends ObjectValue
 
       for (VEntry entry : entrySet) {
         entry.getKey().serialize(env, sb);
-        entry.getValue().getOne().serialize(env, sb, map);
+        entry.getEnvVar().getOne().serialize(env, sb, map);
       }
 
       sb.append("}");
@@ -586,12 +586,12 @@ public class JavaValue extends ObjectValue
       return VHelper.noCtx();
     }
 
-    public EnvVar getValue()
+    public EnvVar getEnvVar()
     {
       return _value;
     }
 
-    public EnvVar setValue(EnvVar value)
+    public EnvVar setEnvVar(EnvVar value)
     {
       return _value;
     }

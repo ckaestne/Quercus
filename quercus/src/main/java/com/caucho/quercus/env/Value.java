@@ -2146,7 +2146,10 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
 
     return new Iterator<EnvVar>() {
       public boolean hasNext() { return iter.hasNext(); }
-      public EnvVar next()      { return iter.next().getValue(); }
+
+      public EnvVar next() {
+        return iter.next().getEnvVar();
+      }
       public void remove()     { iter.remove(); }
     };
   }
@@ -2588,17 +2591,20 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Returns the value for a field, creating an object if the field
    * is unset.
    */
-  public Value getObject(Env env, Value index)
+  public V<? extends Value> getObject(Env env, FeatureExpr ctx, Value index)
   {
-    Value var = getVar(index).getValue().getOne();
+    final EnvVar var = getVar(index);
 
-    if (var.isset())
-      return var.toValue();
+    return var.getValue().vflatMap(ctx, (c, v) -> {
+      if (v.isset())
+        return V.one(v.toValue());
     else {
-      var.set(env.createObject());
+        V<ObjectValue> r = V.one(env.createObject());
+        var.set(c, r);
 
-      return var.toValue();
-    }
+        return r;
+      }
+    });
   }
 
   public boolean isVar()
@@ -2673,7 +2679,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * string update ($a[0] = 'A').  Creates an array automatically if
    * necessary.
    */
-  public Value append(Value index, Value value)
+  public Value append(Value index, ValueOrVar value)
   {
     Value array = toAutoArray();
 

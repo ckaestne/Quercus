@@ -157,7 +157,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.mapAll(array, index,(a,i)-> a.getObject(env, i));
+    return VHelper.flatMapAll(array, index,(a,i)-> a.getObject(env, VHelper.noCtx(), i));
   }
 
   /**

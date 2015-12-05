@@ -164,12 +164,12 @@ public class DOMNodeListDelegate
       return VHelper.noCtx();
     }
 
-    public EnvVar getValue()
+    public EnvVar getEnvVar()
     {
       return _value;
     }
     
-    public EnvVar setValue(EnvVar value)
+    public EnvVar setEnvVar(EnvVar value)
     {
       throw new UnsupportedOperationException();
     }

@@ -406,7 +406,7 @@ public class UrlModule
       isFirst = false;
 
       StringValue newPath = makeNewPath(path, entry.getKey(), numeric_prefix);
-      Value entryValue = entry.getValue().getOne();
+      Value entryValue = entry.getEnvVar().getOne();
 
       if (entryValue.isArray() || entryValue.isObject()) {
         // can always throw away the numeric prefix on recursive calls
@@ -415,7 +415,7 @@ public class UrlModule
       } else {
         result.append(newPath);
         result.append("=");
-        result.append(urlencode(entry.getValue().getOne().toStringValue()));
+        result.append(urlencode(entry.getEnvVar().getOne().toStringValue()));
       }
     }
   }

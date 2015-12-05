@@ -265,7 +265,7 @@ public class ClassesModule extends AbstractQuercusModule {
 
     if (obj instanceof ObjectValue) {
       for (VEntry entry : ((ObjectValue) obj).entrySet()) {
-        result.put(entry.getKey(), entry.getValue());
+        result.put(entry.getKey(), entry.getEnvVar());
       }
     }
     else {
@@ -274,7 +274,7 @@ public class ClassesModule extends AbstractQuercusModule {
       while (iter.hasNext()) {
         VEntry entry = iter.next();
 
-        result.put(entry.getKey(), entry.getValue());
+        result.put(entry.getKey(), entry.getEnvVar());
       }
     }
 

@@ -30,6 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.JavaClassDef;
+import edu.cmu.cs.varex.UnimplementedVException;
+import edu.cmu.cs.varex.V;
 
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -133,14 +135,15 @@ public class JavaListAdapter
    *
    * @throws NullPointerException
    */
-  public Value contains(Value value)
+  public V<? extends Value> contains(Value value)
   {
-    for (VEntry entry : entrySet()) {
-      if (entry.getValue().equals(value))
-        return entry.getKey();
-    }
-    
-    return NullValue.NULL;
+    throw new UnimplementedVException();
+//    for (VEntry entry : entrySet()) {
+//      if (entry.getEnvVar().equals(value))
+//        return entry.getKey();
+//    }
+//
+//    return NullValue.NULL;
   }
   
   /**

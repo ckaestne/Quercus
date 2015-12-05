@@ -242,7 +242,7 @@ abstract public class ArrayValue extends Value {
       Value key = entry.getKey();
 
       // php/03oe
-      obj.putField(env, key.toString(), entry.getValue().getValue().getOne());
+      obj.putField(env, key.toString(), entry.getEnvVar().getValue().getOne());
     }
 
     return obj;
@@ -275,7 +275,7 @@ abstract public class ArrayValue extends Value {
     }
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
-      coll.add(entry.getValue().getValue().getOne().toJavaObject());
+      coll.add(entry.getEnvVar().getValue().getOne().toJavaObject());
     }
 
     return coll;
@@ -311,7 +311,7 @@ abstract public class ArrayValue extends Value {
     }
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
-      list.add(entry.getValue().getOne().toJavaObject());
+      list.add(entry.getEnvVar().getOne().toJavaObject());
     }
 
     return list;
@@ -347,7 +347,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
       map.put(entry.getKey().toJavaObject(),
-              entry.getValue().getOne().toJavaObject());
+              entry.getEnvVar().getOne().toJavaObject());
     }
 
     return map;
@@ -643,7 +643,7 @@ abstract public class ArrayValue extends Value {
     int count = getCount(env);
 
     for (VEntry entry : entrySet()) {
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       if (value.isArray())
         count += value.getCountRecursive(env);
@@ -697,7 +697,7 @@ abstract public class ArrayValue extends Value {
       return lSize < rSize ? -1 : 1;
 
     for (VEntry entry : entrySet()) {
-      Value lElementValue = entry.getValue().getOne();
+      Value lElementValue = entry.getEnvVar().getOne();
       Value rElementValue = rValue.get(entry.getKey()).getOne();
 
       if (!rElementValue.isset())
@@ -809,7 +809,7 @@ abstract public class ArrayValue extends Value {
       if (start <= i) {
         Value key = entry.getKey();
 
-        Value value = entry.getValue().getOne();
+        Value value = entry.getEnvVar().getOne();
 
         if ((key.isString()) || isPreserveKeys)
           array.put(key, value);
@@ -850,18 +850,20 @@ abstract public class ArrayValue extends Value {
    * Returns the field value, creating an object if it's unset.
    */
   @Override
-  public Value getObject(Env env, Value fieldName)
+  public V<? extends Value> getObject(Env env, FeatureExpr ctx, Value fieldName)
   {
-    Value value = get(fieldName).getOne();
+    EnvVar value = get(fieldName);
 
-    Value object = value.toAutoObject(env);
-    if (value != object) {
-      value = object;
+    return value.getValue().map((Value v) -> {
+      Value object = v.toAutoObject(env);
+      if (v != object) {
+        v = object;
 
-      put(fieldName, value);
-    }
+        put(fieldName, v);
+      }
 
-    return value;
+      return v;
+    });
   }
 
   /**
@@ -898,7 +900,7 @@ abstract public class ArrayValue extends Value {
 
       if (result.get(key).getOne() == UnsetValue.UNSET) {
         // php/330c drupal disabled textarea
-        result.put(key, entry.getValue().copy());
+        result.put(key, entry.getEnvVar().copy());
       }
     }
 
@@ -1125,7 +1127,7 @@ abstract public class ArrayValue extends Value {
   public void putAll(ArrayValue array)
   {
     for (VEntry entry : array.entrySet())
-      put(entry.getKey(), entry.getValue());
+      put(entry.getKey(), entry.getEnvVar());
   }
 
   /**
@@ -1181,7 +1183,7 @@ abstract public class ArrayValue extends Value {
   public Value current()
   {
     if (_current != null)
-      return _current.getValue().getOne();
+      return _current.getEnvVar().getOne();
     else
       return BooleanValue.FALSE;
   }
@@ -1244,8 +1246,8 @@ abstract public class ArrayValue extends Value {
     result.put(LongValue.ZERO, _current.getKey());
     result.put(KEY, _current.getKey());
 
-    result.put(LongValue.ONE, _current.getValue());
-    result.put(VALUE, _current.getValue());
+    result.put(LongValue.ONE, _current.getEnvVar());
+    result.put(VALUE, _current.getEnvVar());
 
     _current = _current._next;
 
@@ -1281,7 +1283,7 @@ abstract public class ArrayValue extends Value {
    *
    * @return the key if it is found in the array, NULL otherwise
    */
-  abstract public Value contains(Value value);
+  abstract public V<? extends Value> contains(Value value);
 
   /**
    * Returns the corresponding key if this array contains the given value
@@ -1352,9 +1354,9 @@ abstract public class ArrayValue extends Value {
       Value key = entries[j].getKey();
 
       if (resetKeys && (! (key instanceof StringValue) || strict))
-        put(LongValue.create(base++), entries[j].getValue());
+        put(LongValue.create(base++), entries[j].getEnvVar());
       else
-        put(entries[j].getKey(), entries[j].getValue());
+        put(entries[j].getKey(), entries[j].getEnvVar());
     }
   }
 
@@ -1400,7 +1402,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       for (int i = 0; i < level + 1; i++) {
         sb.append("  ");
@@ -1471,7 +1473,7 @@ abstract public class ArrayValue extends Value {
 
       entry.getKey().toStringValue(env).jsonEncode(env, context, sb);
       sb.append(':');
-      entry.getValue().getValue().foreach((a)->a.jsonEncode(env, context, sb));
+      entry.getEnvVar().getValue().foreach((a) -> a.jsonEncode(env, context, sb));
       length++;
     }
 
@@ -1501,9 +1503,9 @@ abstract public class ArrayValue extends Value {
       Value key = entries[j].getKey();
 
       if (! (key instanceof StringValue) || strict)
-        put(LongValue.create(base++), entries[j].getValue());
+        put(LongValue.create(base++), entries[j].getEnvVar());
       else
-        put(entries[j].getKey(), entries[j].getValue());
+        put(entries[j].getKey(), entries[j].getEnvVar());
     }
 
     return true;
@@ -1539,7 +1541,7 @@ abstract public class ArrayValue extends Value {
     rValue = rValue.toValue();
 
     for (VEntry entry : entrySet()) {
-      Value entryValue = entry.getValue().getValue().getOne();
+      Value entryValue = entry.getEnvVar().getValue().getOne();
 
       Value entryKey = entry.getKey();
 
@@ -1595,7 +1597,7 @@ abstract public class ArrayValue extends Value {
       if (! entryA.getKey().eql(entryB.getKey()))
         return false;
 
-      if (! entryA.getValue().getValue().getOne().eql(entryB.getValue().getValue().getOne()))
+      if (!entryA.getEnvVar().getValue().getOne().eql(entryB.getEnvVar().getValue().getOne()))
         return false;
     }
 
@@ -1681,6 +1683,7 @@ abstract public class ArrayValue extends Value {
   public static final class Entry
     implements /*VEntry,*/ Serializable, VEntry {
     private final Value _key;
+    private final FeatureExpr _condition;
 
     private EnvVar _value;
     // Var _var;
@@ -1688,18 +1691,20 @@ abstract public class ArrayValue extends Value {
     Entry _prev;
     private Entry _next;
 
-    private Entry _nextHash;
+//    private Entry _nextHash;
 
-    public Entry(Value key)
+    public Entry(FeatureExpr condition, Value key)
     {
       _key = key;
       _value = EnvVar._gen(NullValue.NULL);
+      _condition = condition;
     }
 
-    public Entry(Value key, EnvVar value)
+    public Entry(FeatureExpr condition, Value key, EnvVar value)
     {
       _key = key;
       _value = value;
+      _condition = condition;
     }
 
     public Entry(Entry entry)
@@ -1707,6 +1712,7 @@ abstract public class ArrayValue extends Value {
       _key = entry._key;
 
       _value = entry._value.copy();
+      _condition = entry._condition;
     }
 
     public final Entry getNext()
@@ -1729,15 +1735,15 @@ abstract public class ArrayValue extends Value {
       _prev = prev;
     }
 
-    public final Entry getNextHash()
-    {
-      return _nextHash;
-    }
-
-    public final void setNextHash(Entry next)
-    {
-      _nextHash = next;
-    }
+//    public final Entry getNextHash()
+//    {
+//      return _nextHash;
+//    }
+//
+//    public final void setNextHash(Entry next)
+//    {
+//      _nextHash = next;
+//    }
 
     public EnvVar getRawValue()
     {
@@ -1745,14 +1751,14 @@ abstract public class ArrayValue extends Value {
       return _value;
     }
 
-    public EnvVar getValue()
+    public EnvVar getEnvVar()
     {
       // return _var != null ? _var.toValue() : _value;
       return _value;
     }
 
 //    @Override
-    public EnvVar setValue(EnvVar value) {
+    public EnvVar setEnvVar(EnvVar value) {
       EnvVar oldValue = _value;
       _value=value;
       return oldValue;
@@ -1771,7 +1777,7 @@ abstract public class ArrayValue extends Value {
 
     @Override
     public FeatureExpr getCondition() {
-      return VHelper.noCtx();
+      return _condition;
     }
 
     public V<? extends Value> toValue()
@@ -2033,7 +2039,7 @@ abstract public class ArrayValue extends Value {
 
     int i = 0;
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
-      values[i++] = ptr.getValue().getValue().getOne();
+      values[i++] = ptr.getEnvVar().getValue().getOne();
     }
 
     return values;
@@ -2073,7 +2079,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-                                                   ptr.getValue().getValue().getOne(),
+              ptr.getEnvVar().getValue().getOne(),
                                                    elementType));
     }
 
@@ -2215,7 +2221,7 @@ abstract public class ArrayValue extends Value {
     public EnvVar next()
     {
       if (_current != null) {
-        EnvVar next = _current.getValue();
+        EnvVar next = _current.getEnvVar();
         _current = _current._next;
 
         return next;
@@ -2243,8 +2249,8 @@ abstract public class ArrayValue extends Value {
                        VEntry bEntry)
     {
       try {
-        Value aValue = aEntry.getValue().getValue().getOne();
-        Value bValue = bEntry.getValue().getValue().getOne();
+        Value aValue = aEntry.getEnvVar().getValue().getOne();
+        Value bValue = bEntry.getEnvVar().getValue().getOne();
 
         if (aValue.eq(bValue))
           return 0;
@@ -2315,7 +2321,7 @@ abstract public class ArrayValue extends Value {
     @Override
     public Value get(VEntry entry)
     {
-      return entry.getValue().getOne();
+      return entry.getEnvVar().getOne();
     }
   }
 }

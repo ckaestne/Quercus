@@ -241,7 +241,7 @@ public class ArrayObject
         VEntry entry = iterator.next();
 
         Value key = entry.getKey();
-        EnvVar value = entry.getValue();
+        EnvVar value = entry.getEnvVar();
 
         printDepth(out, 4 * depth);
 
@@ -286,7 +286,7 @@ public class ArrayObject
         VEntry entry = iterator.next();
 
         Value key = entry.getKey();
-        EnvVar value = entry.getValue();
+        EnvVar value = entry.getEnvVar();
 
         printDepth(out, 2 * depth);
 

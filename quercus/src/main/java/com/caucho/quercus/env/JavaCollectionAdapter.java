@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.program.JavaClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.*;
 
@@ -322,7 +323,7 @@ public class JavaCollectionAdapter extends JavaAdapter
     {
        Value val = wrapJava(_iterator.next());
 
-       return new Entry(LongValue.create(_index++), EnvVar._gen(val));
+       return new Entry(VHelper.noCtx(), LongValue.create(_index++), EnvVar._gen(val));
     }
 
     public void remove()

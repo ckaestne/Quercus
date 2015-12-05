@@ -59,7 +59,7 @@ public class GaeUserServiceModule extends AbstractQuercusModule {
       ArrayValue array = attributesRequest.toArrayValue(env);
 
       for (VEntry entrySet : array.entrySet()) {
-        attributeSet.add(entrySet.getValue().toString());
+        attributeSet.add(entrySet.getEnvVar().toString());
       }
     }
 

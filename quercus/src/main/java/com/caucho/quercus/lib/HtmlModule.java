@@ -88,7 +88,7 @@ public class HtmlModule extends AbstractQuercusModule {
       VEntry entry = iter.next();
 
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       if (key.isString())
         key = key.toUnicodeValue(env);

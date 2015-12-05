@@ -155,7 +155,7 @@ public final class DefinitionState {
     result.put(new StringBuilderValue("user"), user);
 
     for (StringValue name : _funMap.keySet()) {
-      if (! internal.contains(name).isset())
+      if (! internal.contains(name).getOne().isset())
         user.put(name);
     }
 

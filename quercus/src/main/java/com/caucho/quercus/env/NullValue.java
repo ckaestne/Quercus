@@ -445,7 +445,7 @@ public class NullValue extends Value
    * string update ($a[0] = 'A').  Creates an array automatically if
    * necessary.
    */
-  public Value append(Value index, Value value)
+  public Value append(Value index, ValueOrVar value)
   {
     return new ArrayValueImpl().append(index, value);
   }

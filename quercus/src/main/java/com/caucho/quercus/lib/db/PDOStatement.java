@@ -424,7 +424,7 @@ public class PDOStatement
 
       for (VEntry entry : parameters.entrySet()) {
         Value key = entry.getKey();
-        Value value = entry.getValue().getOne();
+        Value value = entry.getEnvVar().getOne();
 
         int index;
         if (key.isNumberConvertible()) {

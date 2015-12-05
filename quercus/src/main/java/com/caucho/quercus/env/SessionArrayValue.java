@@ -129,7 +129,7 @@ public class SessionArrayValue extends ArrayValueWrapper
         sb.append(entry.getKey().toString());
         sb.append("|");
 
-        entry.getValue().getOne().serialize(env, sb, serializeMap);
+        entry.getEnvVar().getOne().serialize(env, sb, serializeMap);
       }
     }
 

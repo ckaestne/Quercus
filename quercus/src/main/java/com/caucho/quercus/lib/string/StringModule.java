@@ -3144,7 +3144,7 @@ public class StringModule extends AbstractQuercusModule {
 
       for (VEntry entry : subjectArray.entrySet()) {
         Value key = entry.getKey();
-        Value value = entry.getValue().getOne();
+        Value value = entry.getEnvVar().getOne();
 
         if (value.isArray()) {
           resultArray.append(key, value);

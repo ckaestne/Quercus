@@ -73,6 +73,7 @@ public class One<T> implements V<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof One) {
+            if (((One) obj).value == null) return value == null;
             return ((One)obj).value.equals(value);
         }
         return super.equals(obj);

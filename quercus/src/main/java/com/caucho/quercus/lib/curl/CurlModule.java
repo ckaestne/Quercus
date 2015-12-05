@@ -650,7 +650,7 @@ public class CurlModule
       return BooleanValue.FALSE;
 
     for (VEntry entry : options.entrySet()) {
-      if (! setOption(env, curl, entry.getKey().toInt(), entry.getValue().getOne()))
+      if (! setOption(env, curl, entry.getKey().toInt(), entry.getEnvVar().getOne()))
         return BooleanValue.FALSE;
     }
 
@@ -961,7 +961,7 @@ public class CurlModule
         ArrayValue array = value.toArrayValue(env);
 
         for (VEntry entry : array.entrySet()) {
-          String header = entry.getValue().toString();
+          String header = entry.getEnvVar().toString();
 
           String name = header;
           String body = "";

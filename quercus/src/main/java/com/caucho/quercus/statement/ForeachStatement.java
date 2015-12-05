@@ -175,7 +175,7 @@ public class ForeachStatement
       while (iter.hasNext()) {
         VEntry entry = iter.next();
         Value key = entry.getKey();
-        Value value = entry.getValue().getOne();
+        Value value = entry.getEnvVar().getOne();
 
         value = value.copy(); // php/066w
 

@@ -185,9 +185,9 @@ public class CopyArrayValue extends ArrayValue {
    * Returns the field value, creating an object if it's unset.
    */
   @Override
-  public Value getObject(Env env, Value fieldName)
+  public V<? extends Value> getObject(Env env, FeatureExpr ctx, Value fieldName)
   {
-    return getCopyArray().getObject(env, fieldName);
+    return getCopyArray().getObject(env, VHelper.noCtx(), fieldName);
   }
 
   /**
@@ -232,7 +232,7 @@ public class CopyArrayValue extends ArrayValue {
    *
    * @return the key if it is found in the array, NULL otherwise
    */
-  public Value contains(Value value)
+  public V<? extends Value> contains(Value value)
   {
     if (_copyArray != null)
       return _copyArray.contains(value);

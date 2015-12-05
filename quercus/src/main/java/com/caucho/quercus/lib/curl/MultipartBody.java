@@ -68,7 +68,7 @@ public class MultipartBody extends PostBody
       VEntry entry = iter.next();
 
       StringValue key = entry.getKey().toString(env);
-      StringValue value = entry.getValue().getOne().toString(env);
+      StringValue value = entry.getEnvVar().getOne().toString(env);
 
       if (value.length() > 0 && value.charAt(0) == '@') {
         StringValue fileName = value.substring(1);

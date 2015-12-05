@@ -800,7 +800,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       for (VEntry entry : assocArray.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue().getOne();
+        Value v = entry.getEnvVar().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -1824,7 +1824,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       for (VEntry entry : assocArray.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue().getOne();
+        Value v = entry.getEnvVar().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -3006,7 +3006,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       for (VEntry entry : assocArray.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue().getOne();
+        Value v = entry.getEnvVar().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -3318,7 +3318,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       for (VEntry entry : data.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue().getOne();
+        Value v = entry.getEnvVar().getOne();
         if (isFirst) {
           isFirst = false;
         } else {
@@ -3336,7 +3336,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       for (VEntry entry : condition.entrySet()) {
         Value k = entry.getKey();
-        Value v = entry.getValue().getOne();
+        Value v = entry.getEnvVar().getOne();
         if (isFirst) {
           isFirst = false;
         } else {

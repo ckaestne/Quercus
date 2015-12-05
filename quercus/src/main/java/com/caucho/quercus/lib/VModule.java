@@ -54,11 +54,11 @@ public class VModule extends AbstractQuercusModule {
         return new String[]{"v"};
     }
 
-    public <T extends Value> V<T> create_conditional_value(FeatureExpr condition, T value, T elseValue) {
+    public <T extends Value> V<? extends T> create_conditional_value(FeatureExpr condition, T value, T elseValue) {
         return V.choice(condition, value, elseValue);
     }
 
-    public V<BooleanValue> create_conditional(StringValue condition) {
+    public V<? extends BooleanValue> create_conditional(StringValue condition) {
         return V.choice(FeatureExprFactory.createDefinedExternal(condition.toString()), BooleanValue.TRUE, BooleanValue.FALSE);
     }
 

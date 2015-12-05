@@ -311,7 +311,7 @@ public class ArgRef extends Value
   }
 
   @Override
-  public Value append(Value index, Value value)
+  public Value append(Value index, ValueOrVar value)
   {
     return _var.getValue().getOne().append(index, value);
   }

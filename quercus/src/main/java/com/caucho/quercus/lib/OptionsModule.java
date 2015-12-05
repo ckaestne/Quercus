@@ -815,7 +815,7 @@ public class OptionsModule extends AbstractQuercusModule {
         else
           env.print(VHelper.noCtx(), " => ");
 
-        phpinfoVariable(env, entry.getValue().getOne());
+        phpinfoVariable(env, entry.getEnvVar().getOne());
 
         if (hasRequest(env))
           env.println(VHelper.noCtx(), "</td></tr>");
@@ -1045,7 +1045,7 @@ public class OptionsModule extends AbstractQuercusModule {
 
       for (VEntry entry : array.entrySet()) {
         Value key = escape(env, entry.getKey());
-        Value val = escape(env, entry.getValue().getOne());
+        Value val = escape(env, entry.getEnvVar().getOne());
 
         result.put(key, val);
       }
@@ -1059,7 +1059,7 @@ public class OptionsModule extends AbstractQuercusModule {
 
       for (VEntry entry : obj.entrySet()) {
         Value key = escape(env, entry.getKey());
-        Value val = escape(env, entry.getValue().getOne());
+        Value val = escape(env, entry.getEnvVar().getOne());
 
         result.putField(env, key.toString(), val);
       }

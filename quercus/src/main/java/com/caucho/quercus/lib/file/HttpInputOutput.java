@@ -118,7 +118,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
       VEntry entry = iter.next();
     
       String optionName = entry.getKey().toString();
-      Value optionValue = entry.getValue().getOne();
+      Value optionValue = entry.getEnvVar().getOne();
 
       if (optionName.equals("method"))
         _httpStream.setMethod(optionValue.toString());

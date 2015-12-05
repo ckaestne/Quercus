@@ -138,7 +138,7 @@ abstract public class JavaAdapter extends ArrayValue
 
       if (key instanceof StringValue) {
         // XXX: intern?
-        obj.putField(env, key.toString(), entry.getValue().getOne());
+        obj.putField(env, key.toString(), entry.getEnvVar().getOne());
       }
     }
 
@@ -535,14 +535,15 @@ abstract public class JavaAdapter extends ArrayValue
    * @throws NullPointerException
    */
   @Override
-  public Value contains(Value value)
+  public V<? extends Value> contains(Value value)
   {
-    for (VEntry entry : entrySet()) {
-      if (entry.getValue().equals(value))
-        return entry.getKey();
-    }
-
-    return NullValue.NULL;
+                     throw new UnimplementedVException();
+//    for (VEntry entry : entrySet()) {
+//      if (entry.getEnvVar().equals(value))
+//        return entry.getKey();
+//    }
+//
+//    return NullValue.NULL;
   }
 
   /**
@@ -556,7 +557,7 @@ abstract public class JavaAdapter extends ArrayValue
   public Value containsStrict(Value value)
   {
     for (VEntry entry : entrySet()) {
-      if (entry.getValue().getOne().eql(value))
+      if (entry.getEnvVar().getOne().eql(value))
         return entry.getKey();
     }
 
@@ -667,7 +668,7 @@ abstract public class JavaAdapter extends ArrayValue
     int i = 0;
 
     for (VEntry entry : entrySet()) {
-      values[i++] = entry.getValue().getOne();
+      values[i++] = entry.getEnvVar().getOne();
     }
 
     return values;
@@ -691,7 +692,7 @@ abstract public class JavaAdapter extends ArrayValue
 
     for (VEntry entry : entrySet()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-                                                   entry.getValue().getOne(),
+                                                   entry.getEnvVar().getOne(),
                                                    elementType));
     }
 
@@ -803,7 +804,7 @@ abstract public class JavaAdapter extends ArrayValue
 
       printDepth(out, nestedDepth * 2);
 
-      mapEntry.getValue().getOne().varDump(env, out, nestedDepth, valueSet);
+      mapEntry.getEnvVar().getOne().varDump(env, out, nestedDepth, valueSet);
 
       out.println(VHelper.noCtx());
     }
@@ -831,7 +832,7 @@ abstract public class JavaAdapter extends ArrayValue
       out.print(VHelper.noCtx(), mapEntry.getKey());
       out.print(VHelper.noCtx(), "] => ");
 
-      Value value = mapEntry.getValue().getOne();
+      Value value = mapEntry.getEnvVar().getOne();
 
       if (value != null)
         value.printR(env, out, depth + 1, valueSet);

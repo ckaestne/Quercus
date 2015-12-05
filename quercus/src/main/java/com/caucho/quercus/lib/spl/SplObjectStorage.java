@@ -326,7 +326,7 @@ public class SplObjectStorage
     StringValue valueStr = env.createString("inf");
 
     for (VEntry entry : array.entrySet()) {
-      ArrayValue inner = entry.getValue().getOne().toArrayValue(env);
+      ArrayValue inner = entry.getEnvVar().getOne().toArrayValue(env);
 
       Value obj = inner.get(objStr).getOne();
       Value value = inner.get(valueStr).getOne();

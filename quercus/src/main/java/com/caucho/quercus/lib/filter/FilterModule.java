@@ -178,7 +178,7 @@ public class FilterModule extends AbstractQuercusModule
 
     for (VEntry entry : inputArray.entrySet()) {
       Value key = entry.getKey();
-      Value value = entry.getValue().getOne();
+      Value value = entry.getEnvVar().getOne();
 
       Value newKey = filter.filter(env, key, definition);
       Value newValue = filter.filter(env, value, definition);

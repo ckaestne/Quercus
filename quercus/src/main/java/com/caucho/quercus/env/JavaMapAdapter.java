@@ -33,6 +33,7 @@ import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.program.JavaClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -331,7 +332,7 @@ public class JavaMapAdapter
       Value key = wrapJava(entry.getKey());
       EnvVar value = EnvVar._gen(wrapJava(entry.getValue()));
 
-      return new Entry(key, value);
+      return new Entry(VHelper.noCtx(), key, value);
     }
 
     public void remove()

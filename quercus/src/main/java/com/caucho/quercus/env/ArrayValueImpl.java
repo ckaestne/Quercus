@@ -30,82 +30,91 @@
 package com.caucho.quercus.env;
 
 import com.caucho.util.RandomUtil;
+import com.sun.istack.internal.Nullable;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.UnimplementedVException;
-import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.*;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * Represents a PHP array value.
- *
+ * <p>
  * A variational array is implemented as a linked list of optional entries.
  * Every entry has a condition and exactly one key and a variational
- * value (modeled as EnvVar) for that key, that may be null (not NullValue)
- * to represent an entry that is not set in a configuration.
- * Keys are only unique across the configuration space, but there
+ * value (modeled as EnvVar) for that key.
+ * <p>
+ * Invariant: Under all configurations
+ * allowed by the configuration, EnvVar is assumed to hold a value.
+ * <p>
+ * Invariant: Keys are only unique across the configuration space, but there
  * can be multiple entries with the same key under different conditions
  * (this is necessary to allow different orderings in different configurations).
- *
- * There is an additional hashmap that looks up a set of elements. This is
+ * <p>
+ * There is an additional vhashmap that looks up a set of elements. This is
  * only an additional structure for faster lookup, but otherwise not relevant
  * for the storage. The main storage all follows from _head.
+ * <p>
+ * The _size variable is also synchronized with the linked list to keep the
+ * variational length of the list.
  */
 public class ArrayValueImpl extends ArrayValue
-  implements Serializable
-{
+        implements Serializable {
   private static final int DEFAULT_SIZE = 16;
 
-  private static final int SORT_REGULAR = 0;
-  private static final int SORT_NUMERIC = 1;
-  private static final int SORT_STRING = 2;
-  private static final int SORT_LOCALE_STRING = 5;
+  /**
+   * _lookupMap is kept synchronous with the linked list
+   * starting at _head; it is used for lookup operations
+   */
+  private @NonNull VMap<Value, Entry> _lookupMap = new VHashMap<>();
 
-  // save memory on short arrays
-  private static final int MIN_HASH = 4;
+  /**
+   * _size is is kept syncronous with the linked list
+   */
+  private @NonNull V<? extends Integer> _size = V.one(Integer.valueOf(0));
 
-  private Entry []_entries;
-  private int _hashMask;
-
-  private int _size;
-  private V<Long> _nextAvailableIndex;
+  /**
+   * _nextAvailableIndex is null if it's not computed yet;
+   * will be computed on demand
+   */
+  private
+  @Nullable
+  V<? extends Long> _nextAvailableIndex;
   private boolean _isDirty;
 
+  /**
+   * start and end of the linked list
+   */
   private Entry _head;
   private Entry _tail;
 
-  private ConstArrayValue _constSource;
+//  private Entry[] _entries;
+//  private int _hashMask;
 
-  public ArrayValueImpl()
-  {
-    /*
-    _entries = new Entry[DEFAULT_SIZE];
-    _hashMask = _entries.length - 1;
-    */
+
+  /**
+   * possible delegation to other object if not null
+   */
+  private
+  @Nullable
+  ConstArrayValue _constSource;
+
+  public ArrayValueImpl() {
   }
 
-  public ArrayValueImpl(int size)
-  {
-    /*
-    int capacity = DEFAULT_SIZE;
-
-    while (capacity < 4 * size)
-      capacity *= 2;
-
-    _entries = new Entry[capacity];
-    _hashMask = _entries.length - 1;
-    */
+  public ArrayValueImpl(int size) {
+    _lookupMap = new VHashMap<>(size);
   }
 
-  public ArrayValueImpl(ArrayValue source)
-  {
+  public ArrayValueImpl(ArrayValue source) {
     // this(copy.getSize());
 
     for (Entry ptr = source.getHead(); ptr != null; ptr = ptr.getNext()) {
       // php/0662 for copy
-      Entry entry = createNewEntry(ptr.getKey());
+      Entry entry = createNewEntry(ptr.getCondition(), ptr.getKey());
 
       /*
       if (ptr._var != null)
@@ -113,25 +122,24 @@ public class ArrayValueImpl extends ArrayValue
       else
         entry._value = ptr._value.copyArrayItem();
       */
-      entry.setValue(ptr.getValue().copy());
+      entry.setEnvVar(ptr.getEnvVar().copy());
     }
   }
 
-  public ArrayValueImpl(ArrayValueImpl source)
-  {
+  public ArrayValueImpl(ArrayValueImpl source) {
     copyFrom(source);
   }
 
-  protected void copyFrom(ArrayValueImpl source)
-  {
-    if (! source._isDirty)
+  protected void copyFrom(ArrayValueImpl source) {
+    if (!source._isDirty)
       source._isDirty = true;
 
     _isDirty = true;
 
     _size = source._size;
-    _entries = source._entries;
-    _hashMask = source._hashMask;
+    _lookupMap = source._lookupMap;
+//    _entries = source._entries;
+//    _hashMask = source._hashMask;
 
     _head = source._head;
     setCurrent(source.getCurrent());
@@ -140,45 +148,43 @@ public class ArrayValueImpl extends ArrayValue
     _nextAvailableIndex = source._nextAvailableIndex;
   }
 
-  public ArrayValueImpl(ConstArrayValue source)
-  {
-    _constSource = source;
-
-    _isDirty = true;
-
-    _size = source.getSize();
-    _entries = source.getEntries();
-    _hashMask = source.getHashMask();
-
-    _head = source.getHead();
-    setCurrent(source.getCurrent());
-    _tail = source.getTail();
-    _nextAvailableIndex = source.getNextAvailableIndex();
+  public ArrayValueImpl(ConstArrayValue source) {
+    throw new UnimplementedVException();
+//    _constSource = source;
+//
+//    _isDirty = true;
+//
+//    _size = source.getSize();
+//    _lookupMap = source._lookupMap;
+//
+//    _head = source.getHead();
+//    setCurrent(source.getCurrent());
+//    _tail = source.getTail();
+//    _nextAvailableIndex = source.getNextAvailableIndex();
   }
 
-  public ArrayValueImpl(Env env,
-                        IdentityHashMap<Value,EnvVar> map,
-                        ArrayValue copy)
-  {
-    this();
-
-    map.put(copy, EnvVar._gen(this));
-
-    for (Entry ptr = copy.getHead(); ptr != null; ptr = ptr.getNext()) {
-      // Value value = ptr._var != null ? ptr._var.toValue() : ptr._value;
-      Value value = ptr.toValue().getOne();
-
-      append(ptr.getKey(), value.copy(env, map));
-    }
-  }
+//  public ArrayValueImpl(Env env,
+//                        IdentityHashMap<Value,EnvVar> map,
+//                        ArrayValue copy)
+//  {
+//    this();
+//
+//    map.put(copy, EnvVar._gen(this));
+//
+//    for (Entry ptr = copy.getHead(); ptr != null; ptr = ptr.getNext()) {
+//      // Value value = ptr._var != null ? ptr._var.toValue() : ptr._value;
+//      Value value = ptr.toValue().getOne();
+//
+//      append(ptr.getKey(), value.copy(env, map));
+//    }
+//  }
 
   /**
    * Copy for unserialization.
-   *
+   * <p>
    * XXX: need to update for references
    */
-  protected ArrayValueImpl(Env env, ArrayValue copy, CopyRoot root)
-  {
+  protected ArrayValueImpl(Env env, ArrayValue copy, CopyRoot root) {
     this();
 
     root.putCopy(copy, this);
@@ -191,8 +197,7 @@ public class ArrayValueImpl extends ArrayValue
     }
   }
 
-  public ArrayValueImpl(Value []keys, Value []values)
-  {
+  public ArrayValueImpl(Value[] keys, Value[] values) {
     this();
 
     for (int i = 0; i < keys.length; i++) {
@@ -203,8 +208,7 @@ public class ArrayValueImpl extends ArrayValue
     }
   }
 
-  public ArrayValueImpl(Value []values)
-  {
+  public ArrayValueImpl(Value[] values) {
     this();
 
     for (int i = 0; i < values.length; i++) {
@@ -228,62 +232,32 @@ public class ArrayValueImpl extends ArrayValue
 //    }
 //  }
 
-  protected Entry []getEntries()
-  {
-    return _entries;
-  }
 
-  protected int getHashMask()
-  {
-    return _hashMask;
-  }
-
-  protected V<Long> getNextAvailableIndex()
-  {
+  protected V<? extends Long> getNextAvailableIndex() {
     return _nextAvailableIndex;
   }
 
-  private void copyOnWrite()
-  {
-    if (! _isDirty)
+  private void copyOnWrite() {
+    if (!_isDirty)
       return;
 
     _constSource = null;
 
     _isDirty = false;
 
-    Entry []entries = _entries;
-
-    if (entries != null)
-      entries = new Entry[entries.length];
-    else
-      entries = null;
+    _lookupMap = new VHashMap<>(_lookupMap.size());
 
     Entry prev = null;
     for (Entry ptr = _head; ptr != null; ptr = ptr.getNext()) {
       Entry ptrCopy = new Entry(ptr);
 
-      if (entries != null) {
-        int hash = ptr.getKey().hashCode() & _hashMask;
-
-        Entry head = entries[hash];
-
-        if (head != null) {
-          ptrCopy.setNextHash(head);
-        }
-
-        entries[hash] = ptrCopy;
-      }
-      else if (prev != null) {
-        prev.setNextHash(ptrCopy);
-      }
+      addToLookupMap(ptrCopy);
 
       if (prev == null) {
         setCurrent(ptrCopy);
 
         _head = ptrCopy;
-      }
-      else {
+      } else {
         prev.setNext(ptrCopy);
         ptrCopy.setPrev(prev);
       }
@@ -292,40 +266,43 @@ public class ArrayValueImpl extends ArrayValue
     }
 
     _tail = prev;
+  }
 
-    _entries = entries;
+  private void addToLookupMap(Entry e) {
+    @NonNull V<? extends Entry> entries = _lookupMap.getOrDefault(e.getKey(), V.one(null));
+    checkEntryInvariant(entries);
+
+    entries = V.choice(e.getCondition(), V.one(e), entries);
+    _lookupMap.put(e.getKey(), entries);
   }
 
   /**
    * Returns the type.
    */
-  public String getType()
-  {
+  public String getType() {
     return "array";
   }
 
   /**
    * Converts to a boolean.
    */
-  public boolean toBoolean()
-  {
-    return _size != 0;
+  public boolean toBoolean() {
+    return _size.getOne() != 0;
   }
 
   /**
    * Converts to a string.
+   *
    * @param env
    */
-  public StringValue toString(Env env)
-  {
+  public StringValue toString(Env env) {
     return env.createString("Array");
   }
 
   /**
    * Converts to an object.
    */
-  public Object toObject()
-  {
+  public Object toObject() {
     return null;
   }
 
@@ -333,8 +310,7 @@ public class ArrayValueImpl extends ArrayValue
    * Copy the value.
    */
   @Override
-  public Value copy()
-  {
+  public Value copy() {
     // php/1704
     reset();
 
@@ -348,16 +324,14 @@ public class ArrayValueImpl extends ArrayValue
    * Copy for return.
    */
   @Override
-  public Value copyReturn()
-  {
+  public Value copyReturn() {
     return new ArrayValueImpl(this);
   }
 
   /**
    * Copy for serialization
    */
-  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
-  {
+  public Value copy(Env env, IdentityHashMap<Value, EnvVar> map) {
     throw new UnimplementedVException();
 //    Value oldValue = map.get(this);
 //
@@ -371,8 +345,7 @@ public class ArrayValueImpl extends ArrayValue
    * Copy for serialization
    */
   @Override
-  public Value copyTree(Env env, CopyRoot root)
-  {
+  public Value copyTree(Env env, CopyRoot root) {
     // php/420d
 
     Value copy = root.getCopy(this);
@@ -386,8 +359,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Copy for saving a method's arguments.
    */
-  public Value copySaveFunArg()
-  {
+  public Value copySaveFunArg() {
     return new ArrayValueImpl(this);
   }
 
@@ -395,8 +367,7 @@ public class ArrayValueImpl extends ArrayValue
    * Convert to an argument value.
    */
   @Override
-  public Value toLocalValue()
-  {
+  public Value toLocalValue() {
     // php/1708
 
     Value copy = new ArrayValueImpl(this);
@@ -409,8 +380,7 @@ public class ArrayValueImpl extends ArrayValue
    * Convert to an argument value.
    */
   @Override
-  public Value toLocalRef()
-  {
+  public Value toLocalRef() {
     // php/1708
 
     Value copy = new ArrayValueImpl(this);
@@ -423,39 +393,35 @@ public class ArrayValueImpl extends ArrayValue
    * Convert to an argument declared as a reference
    */
   @Override
-  public Value toRefValue()
-  {
+  public Value toRefValue() {
     return this;
   }
 
   /**
    * Returns the size.
    */
-  public int size()
-  {
-    return _size;
+  public int size() {
+    return _size.getOne();
   }
 
   /**
    * Returns the size.
    */
-  public int getSize()
-  {
+  public int getSize() {
     return size();
   }
 
   /**
    * Clears the array
    */
-  public void clear()
-  {
+  public void clear() {
     if (_isDirty) {
       _isDirty = false;
     }
 
-    _entries = null;
+    _lookupMap = new VHashMap<>();
 
-    _size = 0;
+    _size = V.one(0);
     _head = _tail = null;
     setCurrent(null);
 
@@ -465,40 +431,41 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns true for an array.
    */
-  public boolean isArray()
-  {
+  public boolean isArray() {
     return true;
   }
 
   /**
    * Adds a new value.
    */
-  @Deprecated
-  public ArrayValue append(Value key, Value value) {return this.append(VHelper.noCtx(), V.one(key), V.one(value)).getOne(); }
-  public V<? extends ArrayValue> append(FeatureExpr ctx, V<? extends Value> key, V<? extends Value> value)
-  {
-    throw new UnimplementedVException();
-//    if (_isDirty) {
-//      copyOnWrite();
-//    }
-//
-//    key = key.vflatMap(ctx, (c,k) -> k instanceof UnsetValue?createTailKey(c):k);
-//
-//    Entry entry = createEntry(key);
-//
-//    // php/0434
-//    // Var oldVar = entry._var;
-//
-//    entry.set(VHelper.noCtx(), value);
-//
-//    return this;
+  @Deprecated@Override
+  public ArrayValue append(Value key, ValueOrVar value) {
+    return this.append(VHelper.noCtx(), V.one(key), V.one(value));
+  }
+
+  public ArrayValue append(FeatureExpr ctx, V<? extends Value> key, V<? extends ValueOrVar> value) {
+    if (_isDirty) {
+      copyOnWrite();
+    }
+
+    key = key.<Value>vflatMap(ctx, (c, k) -> k instanceof UnsetValue ? createTailKey(c) : V.one(k));
+
+    key.vforeach(ctx, (c, k) -> {
+      V<? extends Entry> entry = createEntry(c, k);
+
+      // php/0434
+      // Var oldVar = entry._var;
+
+      entry.vforeach(c, (cc, a) -> {if (cc.isSatisfiable()) a.set(cc, value);});
+    });
+
+    return this;
   }
 
   /**
    * Add to the beginning
    */
-  public ArrayValue unshift(Value value)
-  {
+  public ArrayValue unshift(Value value) {
     throw new UnimplementedVException();
 
 //    if (_isDirty)
@@ -533,8 +500,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Replace a section of the array.
    */
-  public ArrayValue splice(int start, int end, ArrayValue replace)
-  {
+  public ArrayValue splice(int start, int end, ArrayValue replace) {
     throw new UnimplementedVException();
 
 //    if (_isDirty)
@@ -627,83 +593,82 @@ public class ArrayValueImpl extends ArrayValue
    * Slices.
    */
   @Override
-  public ArrayValue slice(Env env, int start, int end, boolean isPreserveKeys)
-  {
-    ArrayValueImpl array = new ArrayValueImpl();
-
-    int i = 0;
-    for (Entry ptr = _head; i < end && ptr != null; ptr = ptr.getNext()) {
-      if (start > i++)
-        continue;
-
-        Value key = ptr.getKey();
-        Value value = ptr.getValue().getOne();
-
-        if (isPreserveKeys || key.isString())
-          array.put(key, value);
-        else
-          array.put(value);
-    }
-
-    return array;
+  public ArrayValue slice(Env env, int start, int end, boolean isPreserveKeys) {
+    throw new UnimplementedVException();
+//    ArrayValueImpl array = new ArrayValueImpl();
+//
+//    int i = 0;
+//    for (Entry ptr = _head; i < end && ptr != null; ptr = ptr.getNext()) {
+//      if (start > i++)
+//        continue;
+//
+//      Value key = ptr.getKey();
+//      Value value = ptr.getEnvVar().getOne();
+//
+//      if (isPreserveKeys || key.isString())
+//        array.put(key, value);
+//      else
+//        array.put(value);
+//    }
+//
+//    return array;
   }
 
   /**
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public EnvVar getArg(Value index, boolean isTop)
-  {
-    if (_isDirty) // XXX: needed?
-      copyOnWrite();
-
-    // php/3d42
-    //if (isTop)
-      //return new ArgGetValue(this, index);
-
-    Entry entry = getEntry(index);
-
-    if (entry != null) {
-      // php/3d48, php/39aj
-      Value value = entry.getValue().getOne();
-
-      // php/3d42
-      if (! isTop && value.isset())
-        return EnvVar._gen(value);
-      else {
-        // XXX: should probably have Entry extend ArgGetValue and return the Entry itself
-        return EnvVar._gen(new ArgGetValue(this, index)); // php/0d14, php/04b4
-      }
-    }
-    else {
-      // php/3d49
-      return EnvVar._gen(new ArgGetValue(this, index));
-    }
+  public EnvVar getArg(Value index, boolean isTop) {
+    throw new UnimplementedVException("easy?");
+//    if (_isDirty) // XXX: needed?
+//      copyOnWrite();
+//
+//    // php/3d42
+//    //if (isTop)
+//    //return new ArgGetValue(this, index);
+//
+//    Entry entry = getEntry(index);
+//
+//    if (entry != null) {
+//      // php/3d48, php/39aj
+//      Value value = entry.getEnvVar().getOne();
+//
+//      // php/3d42
+//      if (!isTop && value.isset())
+//        return EnvVar._gen(value);
+//      else {
+//        // XXX: should probably have Entry extend ArgGetValue and return the Entry itself
+//        return EnvVar._gen(new ArgGetValue(this, index)); // php/0d14, php/04b4
+//      }
+//    } else {
+//      // php/3d49
+//      return EnvVar._gen(new ArgGetValue(this, index));
+//    }
   }
 
   /**
    * Returns the field value, creating an object if it's unset.
    */
   @Override
-  public Value getObject(Env env, Value fieldName)
-  {
-    Value value = get(fieldName).getOne();
+  public V<? extends Value> getObject(Env env, FeatureExpr ctx, Value fieldName) {
+    EnvVar value = get(fieldName);
 
-    if (! value.isset()) {
-      value = env.createObject();
+    return value.getValue().map((Value v)-> {
+      if (!v.isset()) {
+        v = env.createObject();
 
-      put(fieldName, value);
-    }
+        put(fieldName, v);
+      }
 
-    return value;
+      return v;
+    });
   }
 
   /**
    * Returns the value as an array.
    */
   @Override
-  public Value getArray(Value index)
-  {
+  public Value getArray(Value index) {
     throw new UnimplementedVException();
 
 //    // php/3482, php/3483
@@ -735,8 +700,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns the value as an array, using copy on write if necessary.
    */
-  public V<? extends Value> getDirty(Value index)
-  {
+  public V<? extends Value> getDirty(Value index) {
     if (_isDirty)
       copyOnWrite();
 
@@ -746,8 +710,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Add
    */
-  public Value put(Value value)
-  {
+  public Value put(Value value) {
     throw new UnimplementedVException();
 //
 //    if (_isDirty)
@@ -764,8 +727,7 @@ public class ArrayValueImpl extends ArrayValue
    * Sets the array ref.
    */
   @Override
-  public Var putVar()
-  {
+  public Var putVar() {
     throw new UnimplementedVException();
 
 //    if (_isDirty)
@@ -781,8 +743,7 @@ public class ArrayValueImpl extends ArrayValue
    * Sets the array tail, returning a reference to the tail.
    */
   @Override
-  public Var getArgTail(Env env, boolean isTop)
-  {
+  public Var getArgTail(Env env, boolean isTop) {
     if (_isDirty) {
       copyOnWrite();
     }
@@ -794,52 +755,51 @@ public class ArrayValueImpl extends ArrayValue
 
   /**
    * Creatse a tail index.
+   *
    * @param ctx
    */
-  public V<? extends Value> createTailKey(FeatureExpr ctx)
-  {
-    if (_nextAvailableIndex.when(x->x < 0).and(ctx).isSatisfiable())
+  public V<? extends Value> createTailKey(FeatureExpr ctx) {
+    if (_nextAvailableIndex.when(x -> x < 0).and(ctx).isSatisfiable())
       updateNextAvailableIndex();
 
-    return _nextAvailableIndex.map((a)->LongValue.create(a));
+    return _nextAvailableIndex.map((a) -> LongValue.create(a));
   }
 
   /**
    * Gets a new value.
+   *
+   * If there are multiple conditional values/vars, they are merged into this EnvVar
    */
   @Override
-  public EnvVar get(Value key)
-  {
-    key = key.toKey();
+  public EnvVar get(Value key) {
+    return EnvVar.fromValues(this.getRaw(key).getValue());
+  }
 
-    Entry []entries = _entries;
-    Entry entry;
+  /**
+   * checking that multiple entries have nonoverlapping conditions
+   *
+   * also check that they have all the same key
+   * @param entrySet
+   */
+  private void checkEntryInvariant(@NonNull V<? extends Entry> entrySet) {
+    assert entrySet != null;
+    if (entrySet.equals(V.one(null)))
+      return;
 
-    if (entries != null) {
-      int hash = key.hashCode() & _hashMask;
-
-      entry = entries[hash];
-    }
-    else {
-      entry = _head;
-    }
-
-    for (; entry != null; entry = entry.getNextHash()) {
-      Value entryKey = entry.getKey();
-
-      if (key == entryKey || key.equals(entryKey)) {
-        //Var var = entry._var;
-
-        //return var != null ? var.toValue() : entry._value;
-        // return entry._value.toValue(); // php/39a1
-
-        // 4.0.4 - _value.toValue() is marginally faster than _var
-        return EnvVar._gen(entry.toValue().getOne());
-
+    Ref sharedKey = new Ref();
+    entrySet.vforeach(VHelper.True(), (c, e) -> {
+      if (e != null) {
+        if (sharedKey.v == null)
+          sharedKey.v = e.getKey();
+        else
+          assert sharedKey.v.equals(e.getKey()) : "entry set with different keys found";
+        assert c.equivalentTo(e.getCondition()) : "entries with unexpected/inconsistent condition: entry has condition " + e.getCondition() + " but used in context " + c;
       }
-    }
+    });
+  }
 
-    return EnvVar._gen(UnsetValue.UNSET);
+  private static class Ref {
+    Value v = null;
   }
 
   /**
@@ -847,68 +807,97 @@ public class ArrayValueImpl extends ArrayValue
    * (i.e. without calling toValue() on it).
    */
   @Override
-  public EnvVar getRaw(Value key)
-  {
+  public EnvVar getRaw(Value key) {
     key = key.toKey();
 
-    Entry []entries = _entries;
-    Entry entry;
+    V<? extends Entry> entries = _lookupMap.get(key);
+    checkEntryInvariant(entries);
 
-    if (entries != null) {
-      int hashMask = _hashMask;
-      int hash = key.hashCode() & hashMask;
+    V<? extends Var> v=entries.flatMap(e-> (e==null) ? V.one(new Var(V.one(UnsetValue.UNSET))) : e.getEnvVar().getVar()) ;
+    return new EnvVarImpl(v);
+  }
 
-      entry = entries[hash];
+  /**
+   * conditional fold over all entries in this array
+   *
+   * feature expression of the op function already includes the current context
+   * of the entry
+   */
+  public <T> V<? extends T> foldRight(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op) {
+    return VList.foldRight(new OptEntryIterator(_head), init, ctx, op);
+  }
+
+  public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
+    return VList.foldRightUntil(new OptEntryIterator(_head), init, ctx, op, stopCriteria);
+  }
+
+  private static class OptEntryIterator
+          implements Iterator<Opt<Entry>> {
+    private Entry _current;
+
+    OptEntryIterator(Entry head)
+    {
+      _current = head;
     }
-    else
-      entry = _head;
 
-    for (; entry != null; entry = entry.getNextHash()) {
-      Value entryKey = entry.getKey();
+    public boolean hasNext()
+    {
+      return _current != null;
+    }
 
-      if (key == entryKey || key.equals(entryKey)) {
-        return entry.getRawValue();
-        /*
-          Var var = entry._var;
+    public Opt<Entry> next()
+    {
+      if (_current != null) {
+        Entry next = _current;
+        _current = _current.getNext();
 
-          return var != null ? var : entry._value;
-        */
+        return Opt.create(next.getCondition(),next);
       }
+      else
+        return null;
     }
 
-    return EnvVar._gen(UnsetValue.UNSET);
+    public void remove()
+    {
+      throw new UnsupportedOperationException();
+    }
+  }
+
+
+
+
+
+
+  /**
+   * Returns the corresponding key if this array contains the given value
+   *
+   * @param value to search for in the array
+   * @return the key if it is found in the array, NULL otherwise
+   */
+  @Override@Deprecated
+  public V<? extends Value> contains(Value value) {
+    return this.contains(V.one(value));
+  }
+
+  public V<? extends Value> contains(V<? extends Value> value) {
+    return this.<Value>foldRightUntil(V.one(NullValue.NULL), VHelper.noCtx(), (c, entry, result)->
+            result == NullValue.NULL ? VHelper.<Value, Value, Value>mapAll(entry.getEnvVar().getValue(), value, (v1, v2)->
+                    v1.eq(v2) ? entry.getKey() : result
+            ) : V.one(result)        ,
+            result -> result != NullValue.NULL
+    );
   }
 
   /**
    * Returns the corresponding key if this array contains the given value
    *
    * @param value to search for in the array
-   *
    * @return the key if it is found in the array, NULL otherwise
    */
   @Override
-  public Value contains(Value value)
-  {
+  public Value containsStrict(Value value) {
     for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
-      if (entry.getValue().getOne().eq(value))
-        return entry.getKey();
-    }
-
-    return NullValue.NULL;
-  }
-
-  /**
-   * Returns the corresponding key if this array contains the given value
-   *
-   * @param value to search for in the array
-   *
-   * @return the key if it is found in the array, NULL otherwise
-   */
-  @Override
-  public Value containsStrict(Value value)
-  {
-    for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
-      if (entry.getValue().getOne().eql(value))
+      if (entry.getEnvVar().getOne().eql(value))
         return entry.getKey();
     }
 
@@ -919,16 +908,14 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the corresponding value if this array contains the given key
    *
    * @param key to search for in the array
-   *
    * @return the value if it is found in the array, NULL otherwise
    */
   @Override
-  public Value containsKey(Value key)
-  {
+  public Value containsKey(Value key) {
     Entry entry = getEntry(key);
 
     if (entry != null)
-      return entry.getValue().getOne();
+      return entry.getEnvVar().getOne();
     else
       return null;
   }
@@ -936,73 +923,71 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Gets a new value.
    */
-  private Entry getEntry(Value key)
-  {
-    key = key.toKey();
-
-    Entry []entries = _entries;
-    Entry entry;
-
-    if (entries != null) {
-      int hash = key.hashCode() & _hashMask;
-
-      entry = entries[hash];
-    }
-    else
-      entry = _head;
-
-    for (; entry != null; entry = entry.getNextHash()) {
-      Value entryKey = entry.getKey();
-
-      if (key == entryKey || key.equals(entryKey))
-        return entry;
-    }
-
-    return null;
+  private Entry getEntry(Value key) {
+    throw new UnimplementedVException("TODO");
+//    key = key.toKey();
+//
+//    Entry[] entries = _entries;
+//    Entry entry;
+//
+//    if (entries != null) {
+//      int hash = key.hashCode() & _hashMask;
+//
+//      entry = entries[hash];
+//    } else
+//      entry = _head;
+//
+//    for (; entry != null; entry = entry.getNextHash()) {
+//      Value entryKey = entry.getKey();
+//
+//      if (key == entryKey || key.equals(entryKey))
+//        return entry;
+//    }
+//
+//    return null;
   }
 
   /**
    * Removes a value.
    */
   @Override
-  public Value remove(Value key)
-  {
-    if (_isDirty)
-      copyOnWrite();
-
-    key = key.toKey();
-
-    Entry []entries = _entries;
-    Entry entry;
-
-    int hash = key.hashCode() & _hashMask;
-
-    if (entries != null) {
-      entry = entries[hash];
-    }
-    else
-      entry = _head;
-
-    Entry prevHash = null;
-
-    for (; entry != null; entry = entry.getNextHash()) {
-      Value entryKey = entry.getKey();
-
-      if (key == entryKey || key.equals(entryKey)) {
-        if (prevHash != null)
-          prevHash.setNextHash(entry.getNextHash());
-        else if (entries != null)
-          entries[hash] = entry.getNextHash();
-        else
-          _head = entry.getNextHash();
-
-        return removeEntry(key, entry);
-      }
-
-      prevHash = entry;
-    }
-
-    return UnsetValue.UNSET;
+  public Value remove(Value key) {
+    throw new UnimplementedVException();
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    key = key.toKey();
+//
+//    Entry[] entries = _entries;
+//    Entry entry;
+//
+//    int hash = key.hashCode() & _hashMask;
+//
+//    if (entries != null) {
+//      entry = entries[hash];
+//    } else
+//      entry = _head;
+//
+//    Entry prevHash = null;
+//
+//    for (; entry != null; entry = entry.getNextHash()) {
+//      Value entryKey = entry.getKey();
+//
+//      if (key == entryKey || key.equals(entryKey)) {
+//        if (prevHash != null)
+//          prevHash.setNextHash(entry.getNextHash());
+//        else if (entries != null)
+//          entries[hash] = entry.getNextHash();
+//        else
+//          _head = entry.getNextHash();
+//
+//        return removeEntry(key, entry);
+//      }
+//
+//      prevHash = entry;
+//    }
+//
+//    return UnsetValue.UNSET;
   }
 
   @Override
@@ -1010,8 +995,7 @@ public class ArrayValueImpl extends ArrayValue
     throw new UnimplementedVException();
   }
 
-  private Value removeEntry(Value key, Entry entry)
-  {
+  private Value removeEntry(Value key, Entry entry) {
     throw new UnimplementedVException();
 //    Entry next = entry.getNext();
 //    Entry prev = entry.getPrev();
@@ -1046,73 +1030,57 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value index)
-  {
+  public EnvVar getVar(Value index) {
     if (_isDirty)
       copyOnWrite();
 
-    Entry entry = createEntry(index);
+    V<? extends Entry> entry = createEntry(VHelper.noCtx(), index);
     // quercus/0431
 
-    return new EnvVarImpl(entry.toVar()); // _value.toSimpleVar();
+    return new EnvVarImpl(entry.flatMap((a) -> a.toVar())); // _value.toSimpleVar();
   }
 
   /**
    * Returns the array ref.
    */
   @Override
-  public EnvVar getRef(Value index)
-  {
-    if (_isDirty)
-      copyOnWrite();
-
-    Entry entry = createEntry(index);
-    // quercus/0431
-
-    return new EnvVarImpl( entry.toVar()); // _value.toSimpleVar();
+  public EnvVar getRef(Value index) {
+    return getVar(index);
+//    if (_isDirty)
+//      copyOnWrite();
+//
+//    Entry entry = createEntry(VHelper.noCtx(),index);
+//    // quercus/0431
+//
+//    return new EnvVarImpl(entry.toVar()); // _value.toSimpleVar();
   }
 
   /**
    * Creates the entry for a key.
+   *
+   * looks up existing entries if they exist or creates a new one at the end if necessary
    */
-  private Entry createEntry(Value key)
-  {
-    throw new UnimplementedVException();
+  private V<? extends Entry> createEntry(FeatureExpr ctx, Value _key) {
+//    throw new UnimplementedVException();
+    // XXX: "A key may be either an integer or a string. If a key is
+    //       the standard representation of an integer, it will be
+    //       interpreted as such (i.e. "8" will be interpreted as 8,
+    //       while "08" will be interpreted as "08")."
+    //
+    //            http://us3.php.net/types.array
 
-//    // XXX: "A key may be either an integer or a string. If a key is
-//    //       the standard representation of an integer, it will be
-//    //       interpreted as such (i.e. "8" will be interpreted as 8,
-//    //       while "08" will be interpreted as "08")."
-//    //
-//    //            http://us3.php.net/types.array
-//
-//    key = key.toKey();
-//
-//    int hash = key.hashCode();
-//
-//    int hashMask = _hashMask;
-//
-//    hash = hash & hashMask;
-//
-//    Entry []entries = _entries;
-//    Entry entry;
-//
-//    if (entries != null) {
-//      entry = entries[hash];
-//    }
-//    else {
-//      entry = _head;
-//    }
-//
-//    for (; entry != null; entry = entry.getNextHash()) {
-//      Value entryKey = entry.getKey();
-//
-//      if (key == entryKey)
-//        return entry;
-//
-//      if (key.equals(entryKey))
-//        return entry;
-//    }
+    final Value key = _key.toKey();
+
+    @NonNull V<? extends Entry> existingEntries = _lookupMap.getOrDefault(key, V.one(null));
+
+
+    return existingEntries.vflatMap(ctx, (c,e)->{
+
+      if (e==null)
+        return V.choice(c,createNewEntry(c, key), e);
+        else return V.one(e);
+    });
+
 //
 //    _size++;
 //
@@ -1123,8 +1091,7 @@ public class ArrayValueImpl extends ArrayValue
 //    if (_entries == null && _size < MIN_HASH) {
 //      if (_tail != null)
 //        _tail.setNextHash(newEntry);
-//    }
-//    else {
+//    } else {
 //      if (_entries == null || _entries.length <= 2 * _size) {
 //        expand();
 //        hash = key.hashCode() & _hashMask;
@@ -1143,8 +1110,7 @@ public class ArrayValueImpl extends ArrayValue
 //      _head = newEntry;
 //      _tail = newEntry;
 //      setCurrent(newEntry);
-//    }
-//    else {
+//    } else {
 //      newEntry.setPrev(_tail);
 //      newEntry.setNext(null);
 //
@@ -1155,74 +1121,50 @@ public class ArrayValueImpl extends ArrayValue
 //    return newEntry;
   }
 
-  private Entry createNewEntry(Value key)
-  {
-    throw new UnimplementedVException();
-//
-//    key = key.toKey();
-//
-//    int hashMask = _hashMask;
-//    int hash = key.hashCode() & hashMask;
-//
-//    _size++;
-//
-//    Entry newEntry = new Entry(key);
-//    if (_nextAvailableIndex >= 0)
-//      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
-//
-//    if (_entries == null && _size < MIN_HASH) {
-//      if (_tail != null)
-//        _tail.setNextHash(newEntry);
-//    }
-//    else {
-//      if (_entries == null || _entries.length <= 2 * _size) {
-//        expand();
-//        hash = key.hashCode() & _hashMask;
-//      }
-//
-//      Entry head = _entries[hash];
-//
-//      newEntry.setNextHash(head);
-//      _entries[hash] = newEntry;
-//    }
-//
-//    if (_head == null) {
-//      newEntry._prev = null;
-//      newEntry.setNext(null);
-//
-//      _head = newEntry;
-//      _tail = newEntry;
-//      setCurrent(newEntry);
-//    }
-//    else {
-//      newEntry._prev = _tail;
-//      newEntry.setNext(null);
-//
-//      _tail.setNext(newEntry);
-//      _tail = newEntry;
-//    }
-//
-//    return newEntry;
+  private void incSize(FeatureExpr ctx, int increment) {
+    _size = _size.<Integer>flatMap((Integer s)->V.choice(ctx, increment+s, s));
   }
 
-  private void expand()
-  {
-    Entry []entries = _entries;
+  /**
+   * creates an empty new entry under that condition
+   *
+   * assuming that an entry does not already exist with the same
+   * key (not checked)
+   */
+  private Entry createNewEntry(FeatureExpr ctx, Value _key) {
+//    throw new UnimplementedVException();
 
-    if (entries == null)
-      _entries = new Entry[8];
-    else
-      _entries = new Entry[2 * entries.length];
+    final Value key = _key.toKey();
 
-    _hashMask = _entries.length - 1;
+    incSize(ctx, 1);
 
-    for (Entry entry = _head; entry != null; entry = entry.getNext()) {
-      addEntry(entry);
+    Entry newEntry = new Entry(ctx, key);
+    if (_nextAvailableIndex != null)
+      _nextAvailableIndex = _nextAvailableIndex.<Long>map(k->key.nextIndex(k));
+    _lookupMap.put(ctx, key, newEntry);
+
+    if (_head == null) {
+      newEntry._prev = null;
+      newEntry.setNext(null);
+
+      _head = newEntry;
+      _tail = newEntry;
+      setCurrent(newEntry);
     }
+    else {
+      newEntry._prev = _tail;
+      newEntry.setNext(null);
+
+      _tail.setNext(newEntry);
+      _tail = newEntry;
+    }
+
+    return newEntry;
   }
 
-  private void addEntry(Entry entry)
-  {
+//
+
+  private void addEntry(Entry entry) {
     throw new UnimplementedVException();
 
 //    Value key = entry.getKey();
@@ -1246,8 +1188,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Updates _nextAvailableIndex on a remove of the highest value
    */
-  private void updateNextAvailableIndex()
-  {
+  private void updateNextAvailableIndex() {
     throw new UnimplementedVException();
 
 //    _nextAvailableIndex = 0;
@@ -1261,8 +1202,7 @@ public class ArrayValueImpl extends ArrayValue
    * Pops the top value.
    */
   @Override
-  public Value pop(Env env)
-  {
+  public Value pop(Env env) {
     if (_isDirty)
       copyOnWrite();
 
@@ -1272,25 +1212,22 @@ public class ArrayValueImpl extends ArrayValue
       return NullValue.NULL;
   }
 
-  public final Entry getHead()
-  {
+  public final Entry getHead() {
     return _head;
   }
 
-  protected final Entry getTail()
-  {
+  protected final Entry getTail() {
     return _tail;
   }
 
   /**
    * Shuffles the array
    */
-  public Value shuffle()
-  {
+  public Value shuffle() {
     if (_isDirty)
       copyOnWrite();
 
-    Entry []values = new Entry[size()];
+    Entry[] values = new Entry[size()];
 
     int length = values.length;
 
@@ -1331,8 +1268,7 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the array keys.
    */
   @Override
-  public Value getKeys()
-  {
+  public Value getKeys() {
     if (_constSource != null)
       return _constSource.getKeys();
     else
@@ -1343,8 +1279,7 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the array keys.
    */
   @Override
-  public Value getValues()
-  {
+  public Value getValues() {
     if (_constSource != null)
       return _constSource.getValues();
     else
@@ -1356,33 +1291,32 @@ public class ArrayValueImpl extends ArrayValue
   //
 
   private void writeObject(ObjectOutputStream out)
-    throws IOException
-  {
-    out.writeInt(_size);
+          throws IOException {
+    out.writeInt(_size.getOne());
 
     for (VEntry entry : entrySet()) {
       out.writeObject(entry.getKey());
-      out.writeObject(entry.getValue());
+      out.writeObject(entry.getEnvVar());
     }
   }
 
   private void readObject(ObjectInputStream in)
-    throws ClassNotFoundException, IOException
-  {
-    int size = in.readInt();
-
-    int capacity = DEFAULT_SIZE;
-
-    while (capacity < 4 * size) {
-      capacity *= 2;
-    }
-
-    _entries = new Entry[capacity];
-    _hashMask = _entries.length - 1;
-
-    for (int i = 0; i < size; i++) {
-      put((Value) in.readObject(), (Value) in.readObject());
-    }
+          throws ClassNotFoundException, IOException {
+    throw new UnimplementedVException();
+//    int size = in.readInt();
+//
+//    int capacity = DEFAULT_SIZE;
+//
+//    while (capacity < 4 * size) {
+//      capacity *= 2;
+//    }
+//
+//    _entries = new Entry[capacity];
+//    _hashMask = _entries.length - 1;
+//
+//    for (int i = 0; i < size; i++) {
+//      put((Value) in.readObject(), (Value) in.readObject());
+//    }
   }
 
   //
@@ -1395,33 +1329,32 @@ public class ArrayValueImpl extends ArrayValue
    * @param out the writer to the Java source code.
    */
   public void generate(PrintWriter out)
-    throws IOException
-  {
+          throws IOException {
     out.print("new ConstArrayValue(");
 
 //    if (getSize() < ArrayValueComponent.MAX_SIZE) {
-      out.print("new Value[] {");
+    out.print("new Value[] {");
 
-      for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
-        if (entry != getHead())
-          out.print(", ");
+    for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
+      if (entry != getHead())
+        out.print(", ");
 
-            if (entry.getKey() != null)
-          entry.getKey().generate(out);
-            else
-          out.print("null");
-      }
+      if (entry.getKey() != null)
+        entry.getKey().generate(out);
+      else
+        out.print("null");
+    }
 
-      out.print("}, new Value[] {");
+    out.print("}, new Value[] {");
 
-      for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
-        if (entry != getHead())
-      out.print(", ");
+    for (Entry entry = getHead(); entry != null; entry = entry.getNext()) {
+      if (entry != getHead())
+        out.print(", ");
 
-        entry.getValue().getOne().generate(out);
-      }
+      entry.getEnvVar().getOne().generate(out);
+    }
 
-      out.print("}");
+    out.print("}");
 //    }
 //    else {
 //      ArrayValueComponent.generate(out, this);

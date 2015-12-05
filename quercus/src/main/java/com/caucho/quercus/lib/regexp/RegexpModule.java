@@ -904,7 +904,7 @@ public class RegexpModule
 
       for (VEntry entry : ((ArrayValue) subject).entrySet()) {
         Value key = entry.getKey();
-        Value value = entry.getValue().getOne();
+        Value value = entry.getEnvVar().getOne();
 
         result.put(key, pregReplace(env,
                                     regexpList,

@@ -9,9 +9,9 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
  */
 public interface VEntry {
 
-  EnvVar getValue();
+  EnvVar getEnvVar();
 
-  EnvVar setValue(EnvVar value);
+  EnvVar setEnvVar(EnvVar value);
 
   Value getKey();
 

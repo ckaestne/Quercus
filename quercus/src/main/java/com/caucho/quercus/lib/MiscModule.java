@@ -388,7 +388,7 @@ public class MiscModule extends AbstractQuercusModule {
 
     ObjectValue object = env.createObject();
     for (VEntry entry : capabilities.entrySet()) {
-      object.putField(env, entry.getKey().toString(), entry.getValue().getOne());
+      object.putField(env, entry.getKey().toString(), entry.getEnvVar().getOne());
     }
 
     return object;
@@ -415,10 +415,10 @@ public class MiscModule extends AbstractQuercusModule {
 
       if (key.equals(parentString)) {
         addBrowserCapabilities(
-            env, browsers, entry.getValue().getOne(), cap);
+            env, browsers, entry.getEnvVar().getOne(), cap);
       }
       else if (cap.containsKey(key) == null)
-        cap.put(key, entry.getValue());
+        cap.put(key, entry.getEnvVar());
     }
   }
 
@@ -748,7 +748,7 @@ public class MiscModule extends AbstractQuercusModule {
 
         int i = 0;
         for (VEntry entry : envArray.entrySet()) {
-          envStrings[i++] = entry.getKey() + "=" + entry.getValue();
+          envStrings[i++] = entry.getKey() + "=" + entry.getEnvVar();
         }
       }
 
@@ -768,7 +768,7 @@ public class MiscModule extends AbstractQuercusModule {
 
       for (VEntry entry : descriptorArray.entrySet()) {
         Value key = entry.getKey();
-        Value val = entry.getValue().getOne();
+        Value val = entry.getEnvVar().getOne();
 
         String type = val.get(LongValue.ZERO).toString();
         StringValue name = val.get(LongValue.ONE).getOne().toStringValue();
