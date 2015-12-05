@@ -1,12 +1,14 @@
 package edu.cmu.cs.varex.assertion;
 
-import org.aspectj.lang.*;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.CodeSignature;
+import org.aspectj.lang.reflect.FieldSignature;
 import org.aspectj.lang.reflect.MethodSignature;
+
 import javax.annotation.Nonnull;
-
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +68,10 @@ public class NullMonitor {
 
   }
 
+  Class<? extends Annotation> nonNull = Nonnull.class;
+
   @Before("execution(* *(.., @javax.annotation.Nonnull (*), ..))")
-  public void nullCheck(JoinPoint joinPoint) {
+  public void nullCheckParameter(JoinPoint joinPoint) {
     MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
     for (MethodArgument argument : MethodArgument.of(joinPoint))
       if (argument.hasAnnotation(Nonnull.class) && argument.getValue() == null)
@@ -75,9 +79,28 @@ public class NullMonitor {
                 methodSignature.getMethod(), argument.getName(), argument.getIndex()));
   }
 
-//    @Before("execution(* *.*(..))")
-//  public void printSample() {
-//    System.out.println("Printing sample:");
-//  }
+  @Before("set(@javax.annotation.Nonnull * *.*)")
+  public void nullCheckFieldAssignment(JoinPoint joinPoint) {
+    FieldSignature sig = (FieldSignature) joinPoint.getStaticPart().getSignature();
+//    boolean isNonnull = false;
+//    for (Annotation a : sig.getField().getAnnotations())
+//      if (a.annotationType().equals(nonNull))
+//        isNonnull = true;
+//    if (isNonnull) {
+    Object value = joinPoint.getArgs()[0];
+    if (value == null)
+      throw new NullPointerException(String.format("%s: field cannot be assigned with null",
+              sig.getField()));
+//    }
+  }
+
+  @AfterReturning(pointcut = "execution(@javax.annotation.Nonnull * *(..))", returning = "result")
+  public void nullCheckReturn(JoinPoint joinPoint, Object result) {
+    MethodSignature methodSignature = (MethodSignature) joinPoint.getStaticPart().getSignature();
+    if (result == null)
+      throw new NullPointerException(String.format("%s: cannot return null",
+              methodSignature.getMethod()));
+  }
+
 
 }

@@ -108,14 +108,5 @@ public class VImplTest {
 
   }
 
-  @Test
-  public void testNullCheck() {
-    new NullTestClass().testa(null);
-  }
-
-  public static void main(String[] args) {
-    new NullTestClass().testa(null);
-  }
-
 
 }
