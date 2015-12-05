@@ -734,33 +734,32 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   /**
-   * Sets the array ref.
+   * Adds a new variable to the end of the array
+   * @param ctx
    */
   @Override
-  public Var putVar() {
-    throw new UnimplementedVException();
+  public V<? extends Var> putVar(FeatureExpr ctx) {
+    if (_isDirty)
+      copyOnWrite();
 
-//    if (_isDirty)
-//      copyOnWrite();
-//
-//    // 0d0d
-//    Value tailKey = createTailKey(VHelper.noCtx());
-//
-//    return getVar(tailKey).getVar().getOne();
+    // 0d0d
+    V<? extends Value> tailKey = createTailKey(VHelper.noCtx());
+
+    return tailKey.flatMap(key->getVar(key).getVar());
   }
 
   /**
    * Sets the array tail, returning a reference to the tail.
    */
   @Override
-  public Var getArgTail(Env env, boolean isTop) {
+  public V<? extends Var> getArgTail(Env env, FeatureExpr ctx, boolean isTop) {
     if (_isDirty) {
       copyOnWrite();
     }
 
-    Value tail = createTailKey(VHelper.noCtx()).getOne();
+    V<? extends Value> tail = createTailKey(ctx);
 
-    return new Var(V.one(new ArgGetValue(this, tail)));
+    return tail.map(t->new Var(V.one(new ArgGetValue(this, t))));
   }
 
   /**
@@ -1073,45 +1072,6 @@ public class ArrayValueImpl extends ArrayValue
         return V.choice(c,createNewEntry(c, key), e);
         else return V.one(e);
     });
-
-//
-//    _size++;
-//
-//    Entry newEntry = new Entry(key);
-//    if (_nextAvailableIndex >= 0)
-//      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
-//
-//    if (_entries == null && _size < MIN_HASH) {
-//      if (_tail != null)
-//        _tail.setNextHash(newEntry);
-//    } else {
-//      if (_entries == null || _entries.length <= 2 * _size) {
-//        expand();
-//        hash = key.hashCode() & _hashMask;
-//      }
-//
-//      Entry head = _entries[hash];
-//
-//      newEntry.setNextHash(head);
-//      _entries[hash] = newEntry;
-//    }
-//
-//    if (_head == null) {
-//      newEntry.setPrev(null);
-//      newEntry.setNext(null);
-//
-//      _head = newEntry;
-//      _tail = newEntry;
-//      setCurrent(newEntry);
-//    } else {
-//      newEntry.setPrev(_tail);
-//      newEntry.setNext(null);
-//
-//      _tail.setNext(newEntry);
-//      _tail = newEntry;
-//    }
-//
-//    return newEntry;
   }
 
   private void incSize(FeatureExpr ctx, int increment) {
@@ -1157,9 +1117,7 @@ public class ArrayValueImpl extends ArrayValue
 
 //
 
-  private void addEntry(Entry entry) {
-    throw new UnimplementedVException();
-
+//  private void addEntry(Entry entry) {
 //    Value key = entry.getKey();
 //
 //    Entry []entries = _entries;
@@ -1176,7 +1134,7 @@ public class ArrayValueImpl extends ArrayValue
 //
 //    if (_nextAvailableIndex >= 0)
 //      _nextAvailableIndex = key.nextIndex(_nextAvailableIndex);
-  }
+//  }
 
   /**
    * Updates _nextAvailableIndex on a remove of the highest value

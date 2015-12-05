@@ -2697,10 +2697,11 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
 
   /**
    * Sets the array tail, returning the Var of the tail.
+   * @param ctx
    */
-  public Var putVar()
+  public V<? extends Var> putVar(FeatureExpr ctx)
   {
-    return new Var();
+    return V.one(new Var());
   }
 
   /**
@@ -2718,9 +2719,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Sets the array tail, returning a reference to the tail.
    */
-  public Var getArgTail(Env env, boolean isTop)
+  public V<? extends Var> getArgTail(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return putVar();
+    return putVar(ctx);
   }
 
   /**

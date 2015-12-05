@@ -870,9 +870,10 @@ abstract public class ArrayValue extends Value {
 
   /**
    * Sets the array ref.
+   * @param ctx
    */
   @Override
-  abstract public Var putVar();
+  abstract public V<? extends Var> putVar(FeatureExpr ctx);
 
   /**
    * Creatse a tail index.

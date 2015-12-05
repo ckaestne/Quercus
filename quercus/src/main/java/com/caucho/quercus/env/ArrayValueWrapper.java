@@ -158,11 +158,12 @@ public class ArrayValueWrapper extends ArrayValue {
 
   /**
    * Sets the array ref.
+   * @param ctx
    */
   @Override
-  public Var putVar()
+  public V<? extends Var> putVar(FeatureExpr ctx)
   {
-    return _array.putVar();
+    return _array.putVar(ctx);
   }
 
   /**

@@ -325,9 +325,10 @@ abstract public class JavaAdapter extends ArrayValue
 
   /**
    * Sets the array ref.
+   * @param ctx
    */
   @Override
-  public Var putVar()
+  public V<? extends Var> putVar(FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }

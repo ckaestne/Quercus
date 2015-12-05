@@ -99,13 +99,13 @@ public class ArrayTailExpr extends AbstractVarExpr {
     if (isTop) {
       V<? extends Value> obj = _expr.evalArray(env, ctx);
 
-      return obj.map((a)->a.putVar().makeValue());
+      return obj.flatMap((a)->a.putVar(ctx).map((b)->b.makeValue()));
     }
     else {
       // php/0d4e need to do a toValue()
       V<? extends Value> obj = _expr.evalArray(env, ctx).map((a)->a.toValue());
 
-      return obj.map((a)->a.getArgTail(env, isTop).makeValue());
+      return obj.flatMap((a)->a.getArgTail(env, ctx, isTop).map((b)->b.makeValue()));
     }
   }
 

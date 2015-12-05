@@ -192,10 +192,11 @@ public class CopyArrayValue extends ArrayValue {
 
   /**
    * Sets the array ref.
+   * @param ctx
    */
-  public Var putVar()
+  public V<? extends Var> putVar(FeatureExpr ctx)
   {
-    return getCopyArray().putVar();
+    return getCopyArray().putVar(ctx);
   }
 
   /**

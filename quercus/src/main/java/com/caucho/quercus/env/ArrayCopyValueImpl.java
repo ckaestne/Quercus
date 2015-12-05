@@ -137,12 +137,13 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
 
   /**
    * Sets the array ref.
+   * @param ctx
    */
-  public Var putVar()
+  public V<? extends Var> putVar(FeatureExpr ctx)
   {
     _root.setModified();
 
-    return super.putVar();
+    return super.putVar(ctx);
   }
 
   /**
