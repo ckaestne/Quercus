@@ -21,6 +21,10 @@ public class NullTestClass {
     System.out.println(o);
   }
 
+  public static void testParameterStatic(@Nonnull Object o) {
+    System.out.println(o);
+  }
+
   public void testField(@Nullable Object o) {
     this.field = o;
   }
@@ -39,4 +43,8 @@ public class NullTestClass {
   }
 
 
+  public static class Inner {
+    public Inner(@Nonnull Object o) {
+    }
+  }
 }

@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.CodeSignature;
+import org.aspectj.lang.reflect.ConstructorSignature;
 import org.aspectj.lang.reflect.FieldSignature;
 import org.aspectj.lang.reflect.MethodSignature;
 
@@ -58,8 +59,14 @@ public class NullMonitor {
       List<MethodArgument> arguments = new ArrayList<>();
       CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
       String[] names = codeSignature.getParameterNames();
-      MethodSignature methodSignature = (MethodSignature) joinPoint.getStaticPart().getSignature();
-      Annotation[][] annotations = methodSignature.getMethod().getParameterAnnotations();
+      Annotation[][] annotations;
+      if (joinPoint.getStaticPart().getSignature() instanceof MethodSignature) {
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getStaticPart().getSignature();
+        annotations = methodSignature.getMethod().getParameterAnnotations();
+      } else {
+        ConstructorSignature methodSignature = (ConstructorSignature) joinPoint.getStaticPart().getSignature();
+        annotations = methodSignature.getConstructor().getParameterAnnotations();
+      }
       Object[] values = joinPoint.getArgs();
       for (int i = 0; i < values.length; i++)
         arguments.add(new MethodArgument(i, names[i], Arrays.asList(annotations[i]), values[i]));
@@ -77,6 +84,15 @@ public class NullMonitor {
       if (argument.hasAnnotation(Nonnull.class) && argument.getValue() == null)
         throw new NullPointerException(String.format("%s: argument \"%s\" (at position %d) cannot be null",
                 methodSignature.getMethod(), argument.getName(), argument.getIndex()));
+  }
+
+  @Before("execution(new(.., @javax.annotation.Nonnull (*), ..))")
+  public void nullCheckConstructorParameter(JoinPoint joinPoint) {
+    ConstructorSignature methodSignature = (ConstructorSignature) joinPoint.getSignature();
+    for (MethodArgument argument : MethodArgument.of(joinPoint))
+      if (argument.hasAnnotation(Nonnull.class) && argument.getValue() == null)
+        throw new NullPointerException(String.format("%s: argument \"%s\" (at position %d) cannot be null",
+                methodSignature.getConstructor(), argument.getName(), argument.getIndex()));
   }
 
   @Before("set(@javax.annotation.Nonnull * *.*)")

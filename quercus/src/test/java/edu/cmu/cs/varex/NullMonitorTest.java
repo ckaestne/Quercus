@@ -20,6 +20,16 @@ public class NullMonitorTest {
   }
 
   @Test(expected = NullPointerException.class)
+  public void testNullCheckParameterStatic() {
+    NullTestClass.testParameterStatic(null);
+  }
+
+  @Test
+  public void testNullCheckParameterStaticOk() {
+    NullTestClass.testParameterStatic("foo");
+  }
+
+  @Test(expected = NullPointerException.class)
   public void testNullCheckField() {
     new NullTestClass().testField(null);
   }
@@ -51,5 +61,14 @@ public class NullMonitorTest {
     new NullTestClass().testReturn2("foo");
   }
 
+  @Test(expected = NullPointerException.class)
+  public void testNullCheckConstructor() {
+    new NullTestClass.Inner(null);
+  }
+
+  @Test()
+  public void testNullCheckConstructorOk() {
+    new NullTestClass.Inner("foo");
+  }
 
 }
