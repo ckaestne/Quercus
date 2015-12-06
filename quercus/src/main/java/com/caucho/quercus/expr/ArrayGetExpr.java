@@ -86,10 +86,10 @@ public class ArrayGetExpr extends AbstractVarExpr {
   @Override
   public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
-    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
+    V<? extends Value> array = _expr.eval(env, ctx);
+    V<? extends Value> index = _index.eval(env, ctx);
 
-    return VHelper.mapAll(array, index,(a,i)-> a.get(i).getOne());
+    return VHelper.flatMapAll(array, index,(a,i)-> a.get(i).getValue());
   }
 
   /**

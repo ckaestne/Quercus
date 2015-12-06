@@ -639,20 +639,18 @@ public class Var
 //    return _value.toArrayValue(env);
 //  }
 //
-//  /**
-//   * Converts to an array
-//   */
-////
-////  public Value toAutoArray()
-////  {
-////    _value = _value.toAutoArray();
-////
-////    checkVar(_value);
-////
-////    // php/03mg
-////
-////    return this;
-////  }
+  /**
+   * Converts to an array
+   */
+
+  public Var toAutoArray()
+  {
+    _value = _value.map((a)->a.toAutoArray());
+
+    // php/03mg
+
+    return this;
+  }
 //
 //  /**
 //   * Converts to an object.

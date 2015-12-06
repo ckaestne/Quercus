@@ -192,11 +192,11 @@ public class VarExpr
   @Override
   public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = env.getVar(ctx, _name).map(a->a.makeValue());
+    V<? extends Var> value = env.getVar(ctx, _name);
 
     value = value.map((a)->a.toAutoArray());
 
-    return value;
+    return value.flatMap(r->r.getValue());
   }
 
   /**

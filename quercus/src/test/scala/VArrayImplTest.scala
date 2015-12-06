@@ -37,9 +37,13 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         eval_a("if ($FOO) $a[1]=2;") to c(foo, "1->2;")
         eval_a("if ($FOO) $a[1]=2; if ($BAR) $a[2]=3;") to c(foo, "1->2;") ~ c(bar, "2->3;")
         eval_a("if ($FOO) $a[]=2; if ($BAR) $a[]=3;") to c(foo, "0->2;") ~ c(bar andNot foo, "0->3;")  ~ c(bar and foo, "1->3;")
-
     }
 
+    "VArray" should "manipulate conditional elements" in {
+        eval("if (1) $a[]=2; if (1) $a[]=3; echo $a[0]; echo $a[1];") to "23"
+        eval("if ($FOO) $a[]=2; if ($BAR) $a[]=3; echo $a[0]; echo $a[1];") to c(foo, "2") ~ c(bar andNot foo, "3")  ~ c(bar and foo, "3")
+
+    }
 
     "ArrayValueImpl" should "support basic append" in {
         val a = new ArrayValueImpl()
