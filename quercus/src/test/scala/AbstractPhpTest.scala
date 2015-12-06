@@ -11,7 +11,7 @@ import scala.collection.JavaConverters._
 
 
 /**
-  * Created by ckaestne on 11/27/2015.
+  * Test infrastructure for variational execution of PHP
   */
 trait AbstractPhpTest extends ConditionalOutputInfrastructure {
 

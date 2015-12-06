@@ -5,7 +5,7 @@ import de.fosd.typechef.featureexpr.FeatureExprFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
-  * Created by ckaestne on 11/27/2015.
+  * Tests for variational arrays and their internals
   */
 class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 

@@ -4,7 +4,7 @@ import de.fosd.typechef.featureexpr.FeatureExprFactory
 import org.junit.{Ignore, Test}
 
 /**
-  * Created by ckaestne on 11/27/2015.
+  * Various tests of variational execution
   */
 class VTest extends AbstractPhpTest {
 
