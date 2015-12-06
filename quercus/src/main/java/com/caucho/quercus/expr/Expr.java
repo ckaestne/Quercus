@@ -704,7 +704,7 @@ abstract public class Expr {
   public @Nonnull V<? extends Value> evalArrayAssignTail(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     V<? extends Value> array = evalArray(env, ctx);
-    array.map(a->a.put(VHelper.noCtx(), value));
+    array.vmap(ctx, (c,a)->a.put(c, value));
 
     return value;
   }

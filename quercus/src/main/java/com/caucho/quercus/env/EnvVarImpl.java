@@ -90,7 +90,7 @@ public final class EnvVarImpl extends EnvVar
 
   @Override
   public EnvVar copy() {
-    return null;
+    return EnvVar.fromValues(getValue().map(r->r.copy()));
   }
 }
 

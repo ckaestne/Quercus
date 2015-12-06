@@ -36,8 +36,8 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 /**
@@ -89,6 +89,8 @@ public class ForeachStatement
   {
     Value origObj = _objExpr.eval(env, VHelper.noCtx()).getOne();
     Value obj = origObj.copy(); // php/0669
+
+    V<? extends Value> forEachResult = V.one(null);
 
     if (_key == null && ! _isRef) {
       Iterator<EnvVar> iter = obj.getValueIterator(env);
@@ -172,46 +174,50 @@ public class ForeachStatement
     else {
       Iterator<VEntry> iter = obj.getIterator(env);
 
-      while (iter.hasNext()) {
+      while (iter.hasNext() && ctx.isSatisfiable()) {
         VEntry entry = iter.next();
         Value key = entry.getKey();
-        Value value = entry.getEnvVar().getOne();
+        EnvVar value = entry.getEnvVar();
+        FeatureExpr innerCtx = ctx.and(entry.getCondition());
 
         value = value.copy(); // php/066w
 
-        _key.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(key));
+        _key.evalAssignValue(env, innerCtx, VHelper.toV(key));
 
-        _value.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value));
+        _value.evalAssignValue(env, innerCtx, value.getValue());
 
-        Value result = _block.execute(env, VHelper.noCtx()).getOne();
+        V<? extends Value> result = _block.execute(env, innerCtx);
 
-        if (result == null) {
-        }
-        else if (result instanceof ContinueValue) {
-          ContinueValue conValue = (ContinueValue) result;
-
-          int target = conValue.getTarget();
-
-          if (target > 1) {
-            return VHelper.toV(new ContinueValue(target - 1));
-          }
-        }
-        else if (result instanceof BreakValue) {
-          BreakValue breakValue = (BreakValue) result;
-
-          int target = breakValue.getTarget();
-
-          if (target > 1)
-            return VHelper.toV(new BreakValue(target - 1));
-          else
-            break;
-        }
-        else
-          return VHelper.toV(result);
+        forEachResult = forEachResult.<Value>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
+                result.<Value>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), fer)));
       }
     }
 
-    return V.one(null);
+    return forEachResult;
+  }
+
+  private Value evalReturn(Value r) {
+    if (r == null) return r;
+    else if (r instanceof ContinueValue) {
+      ContinueValue conValue = (ContinueValue) r;
+
+      int target = conValue.getTarget();
+
+      if (target > 1)
+        return new ContinueValue(target - 1);
+      else
+        return null;
+    } else if (r instanceof BreakValue) {
+      BreakValue breakValue = (BreakValue) r;
+
+      int target = breakValue.getTarget();
+
+      if (target > 1)
+        return new BreakValue(target - 1);
+      else
+        return null;
+    } else
+      return r;
   }
 }
 

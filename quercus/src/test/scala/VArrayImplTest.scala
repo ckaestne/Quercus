@@ -33,10 +33,12 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         eval_a("$a['a']=5;$a[]=1") to "a->5;0->1;"
     }
 
-    //    "VArray" should "hold conditional elements" in {
-    //        eval_a("if ($FOO) $a[1]=2;") to c(foo, "1->2;")
-    //
-    //    }
+    "VArray" should "hold conditional elements" in {
+        eval_a("if ($FOO) $a[1]=2;") to c(foo, "1->2;")
+        eval_a("if ($FOO) $a[1]=2; if ($BAR) $a[2]=3;") to c(foo, "1->2;") ~ c(bar, "2->3;")
+        eval_a("if ($FOO) $a[]=2; if ($BAR) $a[]=3;") to c(foo, "0->2;") ~ c(bar andNot foo, "0->3;")  ~ c(bar and foo, "1->3;")
+
+    }
 
 
     "ArrayValueImpl" should "support basic append" in {
