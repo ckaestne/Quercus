@@ -151,7 +151,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
+    V<? extends Value> obj = _objExpr.evalObject(env, ctx);
 
     obj.map((a)->a.putField(env, _name, value.getOne().toValue()));
 
