@@ -33,10 +33,10 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         eval_a("$a['a']=5;$a[]=1") to "a->5;0->1;"
     }
 
-    "VArray" should "hold conditional elements" in {
-        eval_a("if ($FOO) $a[1]=2;") to c(foo, "1->2;")
-
-    }
+    //    "VArray" should "hold conditional elements" in {
+    //        eval_a("if ($FOO) $a[1]=2;") to c(foo, "1->2;")
+    //
+    //    }
 
 
     "ArrayValueImpl" should "support basic append" in {
@@ -160,4 +160,53 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.remove(bar, x) should equal(V.choice(bar, z, UnsetValue.UNSET))
         a.get(x).getValue should equal(V.choice(foo andNot bar, y, UnsetValue.UNSET))
     }
+
+    it should "support basic cursors" in {
+        val a = new ArrayValueImpl()
+        a.put(t, V.one(x))
+        a.put(t, V.one(y))
+        a.put(t, V.one(z))
+        a.current() should equal(V.one(x))
+        a.getHead.getEnvVar.getValue should equal(V.one(x))
+        a.next(t) should equal(V.one(y))
+        a.next(t) should equal(V.one(z))
+        a.key() should equal(V.one(LongValue.create(2)))
+        a.next(t) should equal(V.one(BooleanValue.FALSE))
+        a.getVTail().getOne().getEnvVar.getValue should equal(V.one(z))
+        a.reset(t) should equal(V.one(x))
+        a.current() should equal(V.one(x))
+        a.next(t) should equal(V.one(y))
+        a.prev(t) should equal(V.one(x))
+        a.prev(t) should equal(V.one(BooleanValue.FALSE))
+        a.end(t) should equal(V.one(z))
+        a.put(t, V.one(x))
+        a.next(t) should equal(V.one(x))
+    }
+
+    it should "support conditional cursor movement" in {
+        val a = new ArrayValueImpl()
+        a.put(t, V.one(x))
+        a.put(t, V.one(y))
+        a.put(t, V.one(z))
+        a.current() should equal(V.one(x))
+        a.next(foo) should equal(V.choice(foo, y, x))
+        a.next(t) should equal(V.choice(foo, z, y))
+        a.prev(t) should equal(V.choice(foo, y, x))
+        a.next(foo) should equal(V.choice(foo, z, x))
+        a.next(bar) should equal(V.choice(foo, V.choice(bar, BooleanValue.FALSE, z), V.choice(bar, y, x)))
+        a.reset(bar) should equal(V.choice(bar, V.one(x), V.choice(foo, z, x)))
+        a.end(foo) should equal(V.choice(bar, V.choice(foo, z, x), V.choice(foo, z, x)))
+    }
+    it should "support cursor movement on conditional entries" in {
+        val a = new ArrayValueImpl()
+        a.put(foo, V.one(x))
+        a.put(bar, V.one(y))
+        a.put(t, V.one(z))
+        a.put(foo, V.one(x))
+        a.current() should equal(V.choice(foo, V.one(x), V.choice(bar, y, z)))
+        a.next(foo) should equal(V.choice(bar, y, z))
+        a.end(t) should equal(V.choice(foo, x, z))
+
+    }
+
 }

@@ -1110,7 +1110,6 @@ public class ArrayValueImpl extends ArrayValue
 
       _head = newEntry;
       _tail = newEntry;
-      setCurrent(ctx, V.one(newEntry));
     }
     else {
       newEntry._prev = _tail;
@@ -1119,6 +1118,9 @@ public class ArrayValueImpl extends ArrayValue
       _tail.setNext(newEntry);
       _tail = newEntry;
     }
+    FeatureExpr noCurrent = getCurrent().when(e -> e == null);
+    if (noCurrent.and(ctx).isSatisfiable())
+      setCurrent(noCurrent.and(ctx), V.one(newEntry));
     checkInvariants();
 
     return newEntry;

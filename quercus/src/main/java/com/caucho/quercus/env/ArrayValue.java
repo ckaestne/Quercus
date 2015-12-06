@@ -34,8 +34,8 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -1230,11 +1230,19 @@ abstract public class ArrayValue extends Value {
    */
   @Override
   public V<? extends Value> next(FeatureExpr ctx) {
-    throw new UnimplementedVException();
-//    if (_current != null)
-//      _current = _current._next;
-//
-//    return current();
+    _current = getNext(ctx, _current, false);
+
+    return current();
+  }
+
+  private V<? extends Entry> getNext(FeatureExpr ctx, @Nonnull V<? extends Entry> entry, boolean isPrev) {
+    if (ctx.isContradiction()) return V.one(null);
+    return entry.vflatMap(ctx, (c, e) -> {
+      Entry next = isPrev ? e.getPrev() : e.getNext();
+      return V.choice(c,
+              next == null ? V.one(null) : V.choice(next.getCondition(), V.one(next), getNext(c.andNot(next.getCondition()), V.one(next), isPrev)),
+              V.one(e));
+    });
   }
 
   /**
@@ -1243,12 +1251,9 @@ abstract public class ArrayValue extends Value {
    */
   @Override
   public V<? extends Value> prev(FeatureExpr ctx) {
-    throw new UnimplementedVException();
+    _current = getNext(ctx, _current, true);
 
-//    if (_current != null)
-//      _current = _current._prev;
-//
-//    return current();
+    return current();
   }
 
   /**
