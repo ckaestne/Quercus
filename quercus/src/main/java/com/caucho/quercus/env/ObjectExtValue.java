@@ -33,12 +33,14 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.CurrentTime;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -47,17 +49,37 @@ import java.util.*;
 
 /**
  * Represents a PHP object value.
+ *
+ * Variational design:
+ * for now we assume that classes do not have any structural variation.
+ * Methods cannot be added at runtime, thus the method map is not variational,
+ * neither is the pointer to the class structure or any content in the class
+ * structure (pointers in ObjectValue not here).
+ * The thing that can be added and manipulated at runtime are fields and
+ * those are variational.
+ *
+ * We use a variational map internally, but map this to VEntry entries for outside
+ * users through iterators (for compatibility with arrays).
+ *
  */
 @SuppressWarnings("serial")
 public class ObjectExtValue extends ObjectValue
   implements Serializable
 {
+  @Nonnull
   private MethodMap<AbstractFunction> _methodMap;
 
-  private LinkedHashMap<StringValue,Entry> _fieldMap
-    = new LinkedHashMap<StringValue,Entry>();
+  /**
+   * additional invariant here: EnvVar entries in fieldmap are never null
+   * and neither are the values in those EnvVar. They are all initialized with
+   * UnsetValue in all configurations even if those configurations are not
+   * triggered yet
+   */
+  @Nonnull
+  private Map<StringValue, EnvVar> _fieldMap = new HashMap<>();
 
-  private HashMap<StringValue,Entry> _protectedFieldMap;
+  @Nonnull
+  private Map<StringValue, EnvVar> _protectedFieldMap = new HashMap<>();
 
   private boolean _isFieldInit;
 
@@ -78,8 +100,8 @@ public class ObjectExtValue extends ObjectValue
 
     _isFieldInit = copy._isFieldInit;
 
-    for (Map.Entry<StringValue,Entry> entry : copy._fieldMap.entrySet()) {
-      Entry entryCopy = entry.getValue().copyTree(env, root);
+    for (Map.Entry<StringValue, EnvVar> entry : copy._fieldMap.entrySet()) {
+      EnvVar entryCopy = _copyTree(entry.getValue(), env, root);
 
       _fieldMap.put(entry.getKey(), entryCopy);
     }
@@ -92,23 +114,24 @@ public class ObjectExtValue extends ObjectValue
                         ObjectExtValue copy)
   {
     super(env, copy.getQuercusClass());
-
-    _methodMap = copy._methodMap;
-
-    _isFieldInit = copy._isFieldInit;
-
-    for (Map.Entry<StringValue,Entry> entry : copy._fieldMap.entrySet()) {
-      Entry entryCopy = new Entry(env, copyMap, entry.getValue());
-
-      _fieldMap.put(entry.getKey(), entryCopy);
-    }
-
-    _incompleteObjectName = copy._incompleteObjectName;
+    throw new UnimplementedVException();
+//
+//    _methodMap = copy._methodMap;
+//
+//    _isFieldInit = copy._isFieldInit;
+//
+//    for (Map.Entry<StringValue, V<? extends EnvVar>> entry : copy._fieldMap.entrySet()) {
+//      Entry entryCopy = new Entry(env, copyMap, entry.getValue());
+//
+//      _fieldMap.put(entry.getKey(), entryCopy);
+//    }
+//
+//    _incompleteObjectName = copy._incompleteObjectName;
   }
 
   private void init()
   {
-    _fieldMap = new LinkedHashMap<StringValue,Entry>();
+    _fieldMap = new HashMap<>();
   }
 
   @Override
@@ -123,23 +146,22 @@ public class ObjectExtValue extends ObjectValue
    * Initializes the incomplete class.
    */
   @Override
-  public void initObject(Env env, QuercusClass cls)
+  public void initObject(Env env, FeatureExpr ctx, QuercusClass cls)
   {
     setQuercusClass(cls);
     _incompleteObjectName = null;
 
-    LinkedHashMap<StringValue,Entry> existingFields = _fieldMap;
-    _fieldMap = new LinkedHashMap<StringValue,Entry>();
+    Map<StringValue, EnvVar> existingFields = _fieldMap;
+    _fieldMap = new HashMap<>();
 
     cls.initObject(env, this);
 
-    Iterator<Entry> iter = existingFields.values().iterator();
+    Iterator<Map.Entry<StringValue, EnvVar>> iter = existingFields.entrySet().iterator();
 
     while (iter.hasNext()) {
-      Entry newField = iter.next();
+      Map.Entry<StringValue, EnvVar> newField = iter.next();
 
-      Entry entry = createEntryFromInit(newField.getKey());
-      entry._value = newField._value;
+      setFieldValue_init(ctx, newField.getKey(), newField.getValue());
 
       /*
       Entry entry = getThisEntry(newField._key);
@@ -154,258 +176,198 @@ public class ObjectExtValue extends ObjectValue
     }
   }
 
+
   /**
    * Returns the number of entries.
    */
   @Override
   public int getSize()
   {
-    return _fieldMap.size();
+    throw new UnimplementedVException("need variational implementation returning only not unset fields in each configuration");
+//    return _fieldMap.size();
   }
 
   /**
    * Gets a field value.
    */
   @Override
-  public final Value getField(Env env, StringValue name)
+  public final V<? extends Value> getField(Env env, StringValue name)
   {
-    Value returnValue = getFieldExt(env, name);
+    EnvVar returnValue = getFieldExt(env, name);
 
-    if (returnValue == UnsetValue.UNSET) {
-      // __get didn't work, lets look in the class itself
-      Entry entry = _fieldMap.get(name);
+    //V: this looks entirely redundant; didn't getField try that already?
+//    if (returnValue == UnsetValue.UNSET) {
+//      // __get didn't work, lets look in the class itself
+//      EnvVar entry = _fieldMap.get(name);
+//
+//      if (entry != null) {
+//        // php/09ks vs php/091m
+//        return entry.getValue()._value.getOne().toValue();
+//      }
+//    }
 
-      if (entry != null) {
-        // php/09ks vs php/091m
-        return entry._value.getOne().toValue();
+    return returnValue.getValue();
+  }
+
+  /**
+   * Gets a field value.
+   */
+  @Override
+  public V<? extends Value> getThisField(Env env, StringValue name)
+  {
+    EnvVar entry = getThisEntry(name);
+
+    return entry.getValue().<Value>flatMap(v -> {
+      if (v != null) {
+        return V.one(v);
       }
-    }
 
-    return returnValue;
-  }
+      return getFieldExt(env, name).getValue();
+    });
 
-  /**
-   * Gets a field value.
-   */
-  @Override
-  public Value getThisField(Env env, StringValue name)
-  {
-    Entry entry = getThisEntry(name);
 
-    if (entry != null) {
-      return entry._value.getOne().toValue();
-    }
-
-    return getFieldExt(env, name);
   }
 
   /**
    * Returns fields not explicitly specified by this value.
    */
-  protected Value getFieldExt(Env env, StringValue name)
+  protected @Nonnull EnvVar getFieldExt(Env env, StringValue name)
   {
-    Entry e = getEntry(env, name);
-
-    if (e != null
-        && e._value.getOne() != NullValue.NULL
-        && e._value.getOne() != UnsetValue.UNSET) {
-      return e._value.getOne();
-    }
-
-    return _quercusClass.getField(env, VHelper.noCtx(), this, name).getOne();
+    EnvVar entry = getEntry(env, name);
+    if (entry==null) entry = EnvVar.fromValue(UnsetValue.UNSET);
+    FeatureExpr hasValue = entry.getValue().when(v -> v == null || v == UnsetValue.UNSET || v == NullValue.NULL).not();
+    return new EnvVarImpl(V.choice(hasValue,
+            entry.getVar(),
+            V.one(new Var(_quercusClass.getField(env, VHelper.noCtx().and(hasValue.not()), this, name)))));
   }
 
   /**
    * Returns the array ref.
    */
   @Override
-  public Var getFieldVar(Env env, StringValue name)
+  public V<? extends Var> getFieldVar(Env env, StringValue name)
   {
-    Entry entry = getEntry(env, name);
-
-    if (entry != null) {
-      Value value = entry._value.getOne();
-
-      //TODO fix again from V
-//      if (value instanceof Var)
-//        return (Var) value;
-
-      Var var = new Var(V.one(value));
-      entry._value = new EnvVarImpl(V.one(var));
-
-      return var;
-    }
-
-    Value value = getFieldExt(env, name);
-
-    if (value != UnsetValue.UNSET) {
-      //TODO fix again from V
-//      if (value instanceof Var)
-//        return (Var) value;
-//      else
-        return new Var(V.one(value));
-    }
-
-    // php/3d28
-    entry = createEntry(name);
-
-    value = entry._value.getOne();
-
-    //TODO fix again from V
-//    if (value instanceof Var)
-//      return (Var) value;
-
-    Var var = new Var(V.one(value));
-
-    //TODO fix again from V
-    entry.setEnvVar(new EnvVarImpl(V.one(var)));
-
-    return var;
+    return getFieldExt(env, name).getVar();
   }
 
   /**
    * Returns the array ref.
    */
   @Override
-  public Var getThisFieldVar(Env env, StringValue name)
+  public V<? extends Var> getThisFieldVar(Env env, StringValue name)
   {
-    Entry entry = getThisEntry(name);
+    EnvVar entry = getThisEntry(name);
+    if (entry==null) entry = EnvVar.fromValue(UnsetValue.UNSET);
+    FeatureExpr hasValue = entry.getValue().when(v -> v == null || v == UnsetValue.UNSET || v == NullValue.NULL).not();
+    return V.choice(hasValue,
+            entry.getVar(),
+            getFieldExt(env, name).getVar());
+  }
 
-    if (entry != null) {
-      Value value = entry._value.getOne();
+  /**
+   * Returns the value as an argument which may be a reference.
+   */
+  @Override
+  public V<? extends Var> getFieldArg(Env env, StringValue name, boolean isTop)
+  {
+    EnvVar entry = getFieldExt(env, name);
+    return entry.getVar();
 
-      //TODO fix again from V
-//      if (value instanceof Var)
-//        return (Var) value;
-
-      Var var = new Var(V.one(value));
-      entry._value = new EnvVarImpl(V.one(var));
-
-      return var;
-    }
-
-    Value value = getFieldExt(env, name);
-
-    if (value != UnsetValue.UNSET) {
-      //TODO fix again from V
-
-//      if (value instanceof Var)
-//        return (Var) value;
+    //TODO V incomplete
+//    if (entry != null) {
+//      EnvVar value = entry.getEnvVar();
+//
+//      if (isTop || ! value.getOne().isset())
+//        return entry.toArg().getOne();
 //      else
-        return new Var(V.one(value));
-    }
-
-    entry = createEntry(name);
-
-    value = entry._value.getOne();
-
-    //TODO fix again from V
-//    if (value instanceof Var) {
-//      return (Var) value;
+//        return value.getVar().getOne();
 //    }
-
-    Var var = new Var(V.one(value));
-
-    entry.setEnvVar(new EnvVarImpl(V.one(var)));
-
-    return var;
+//
+//    Value value = getFieldExt(env, name);
+//
+//    if (value != UnsetValue.UNSET)
+//      return value.makeVar();
+//
+//    return new ArgGetFieldValue(env, this, name).makeVar();
   }
 
   /**
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Var getFieldArg(Env env, StringValue name, boolean isTop)
+  public V<? extends Var> getThisFieldArg(Env env, StringValue name)
   {
-    Entry entry = getEntry(env, name);
-
-    if (entry != null) {
-      EnvVar value = entry.getEnvVar();
-
-      if (isTop || ! value.getOne().isset())
-        return entry.toArg().getOne();
-      else
-        return value.getVar().getOne();
-    }
-
-    Value value = getFieldExt(env, name);
-
-    if (value != UnsetValue.UNSET)
-      return value.makeVar();
-
-    return new ArgGetFieldValue(env, this, name).makeVar();
+    throw new UnimplementedVException();
+//
+//    Entry entry = getThisEntry(name);
+//
+//    //TODO fix again from V
+//    if (entry != null)
+//      return entry.toArg().getOne();
+//
+//    Value value = getFieldExt(env, name);
+//
+//    if (value != UnsetValue.UNSET)
+//      return value.makeVar();
+//
+//    return new ArgGetFieldValue(env, this, name).makeVar();
   }
 
   /**
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Var getThisFieldArg(Env env, StringValue name)
+  public V<? extends Var> getFieldArgRef(Env env, StringValue name)
   {
-    Entry entry = getThisEntry(name);
-
-    //TODO fix again from V
-    if (entry != null)
-      return entry.toArg().getOne();
-
-    Value value = getFieldExt(env, name);
-
-    if (value != UnsetValue.UNSET)
-      return value.makeVar();
-
-    return new ArgGetFieldValue(env, this, name).makeVar();
+    throw new UnimplementedVException();
+//
+//    Entry entry = getEntry(env, name);
+//
+//    if (entry != null)
+//      return entry.toArg().getOne();
+//
+//    Value value = getFieldExt(env, name);
+//
+//    if (value != UnsetValue.UNSET)
+//      return value.makeVar();
+//
+//    return new ArgGetFieldValue(env, this, name).makeVar();
   }
 
   /**
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Var getFieldArgRef(Env env, StringValue name)
+  public V<? extends Var> getThisFieldArgRef(Env env, StringValue name)
   {
-    Entry entry = getEntry(env, name);
+    throw new UnimplementedVException();
 
-    if (entry != null)
-      return entry.toArg().getOne();
-
-    Value value = getFieldExt(env, name);
-
-    if (value != UnsetValue.UNSET)
-      return value.makeVar();
-
-    return new ArgGetFieldValue(env, this, name).makeVar();
-  }
-
-  /**
-   * Returns the value as an argument which may be a reference.
-   */
-  @Override
-  public Var getThisFieldArgRef(Env env, StringValue name)
-  {
-    Entry entry = getThisEntry(name);
-
-    if (entry != null)
-      return entry.toArg().getOne();
-
-    Value value = getFieldExt(env, name);
-
-    if (value != UnsetValue.UNSET)
-      return value.makeVar();
-
-    return new ArgGetFieldValue(env, this, name).makeVar();
+//    Entry entry = getThisEntry(name);
+//
+//    if (entry != null)
+//      return entry.toArg().getOne();
+//
+//    Value value = getFieldExt(env, name);
+//
+//    if (value != UnsetValue.UNSET)
+//      return value.makeVar();
+//
+//    return new ArgGetFieldValue(env, this, name).makeVar();
   }
 
   /**
    * Adds a new value.
    */
   @Override
-  public Value putField(Env env, StringValue name, Value value)
+  public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    Entry entry = getEntry(env, name);
+    @Nullable EnvVar entry = getEntry(env, name);
 
     // XXX: php/09ks, need visibility check
     if (entry == null) {
-      Value oldValue = putFieldExt(env, name, value);
+      @Nullable V<? extends Value> oldValue = putFieldExt(env, ctx, name, value);
 
+      //TODO V
       if (oldValue != null)
         return oldValue;
 
@@ -414,48 +376,33 @@ public class ObjectExtValue extends ObjectValue
 
         if (fieldSet != null) {
           _isFieldInit = true;
-          Value retVal = _quercusClass.setField(env, this, name, value);
+          Value retVal = _quercusClass.setField(env, this, name, value.getOne().toValue());
           _isFieldInit = false;
           if(retVal != UnsetValue.UNSET)
-            return retVal;
+            return V.one(retVal);
         }
       }
 
-      entry = createEntry(name);
+      entry = setFieldValue_init(ctx, name, EnvVar.fromValue(UnsetValue.UNSET));
     }
 
-    Value oldValue = entry._value.getOne();
+    entry.setRef(ctx, value);
 
-    //TODO update for V
-//    if (value instanceof Var) {
-//      Var var = (Var) value;
-//
-//      // for function return optimization
-//      // var.setReference();
-//
-//      entry._value = var;
-//    }
-//    else if (oldValue instanceof Var) {
-//      oldValue.set(value);
-//    }
-//    else {
-      entry._value = EnvVar._gen(value);
-//    }
-
-    return value;
+    return entry.getValue();
   }
 
   /**
    * Sets/adds field to this object.
    */
   @Override
-  public Value putThisField(Env env, StringValue name, Value value)
+  public V<? extends Value> putThisField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    Entry entry = getThisEntry(name);
+    EnvVar entry = getThisEntry(name);
     
     if (entry == null) {
-      Value oldValue = putFieldExt(env, name, value);
+      V<? extends Value> oldValue = putFieldExt(env, ctx, name, value);
 
+      //TODO V
       if (oldValue != null)
         return oldValue;
 
@@ -465,14 +412,14 @@ public class ObjectExtValue extends ObjectValue
         if (fieldSet != null) {
           //php/09k7
           _isFieldInit = true;
-          Value retValue = NullValue.NULL;
+          V<? extends Value> retValue = V.one(NullValue.NULL);
 
           try {
-            retValue = fieldSet.callMethod(env,   VHelper.noCtx(),
+            retValue = fieldSet.callMethod(env, ctx,
                                            _quercusClass,
                                            this,
-                                           name,
-                                           value).getOne();
+                    V.one(name),
+                    value);
           } finally {
             _isFieldInit = false;
           }
@@ -480,32 +427,17 @@ public class ObjectExtValue extends ObjectValue
           return retValue;
         }
       }
-      
-      entry = createEntry(name);
+
+      entry = setFieldValue_init(ctx, name, EnvVar.fromValue(UnsetValue.UNSET));
     }
 
-    Value oldValue = entry._value.getOne();
+    entry.setRef(ctx, value);
 
-    //TODO update for V
-//    if (value instanceof Var) {
-//      Var var = (Var) value;
-//
-//      // for function return optimization
-//      // var.setReference();
-//
-//      entry._value = var;
-//    }
-//    else if (oldValue instanceof Var) {
-//      oldValue.set(value);
-//    }
-//    else {
-      entry._value = EnvVar._gen(value);
-//    }
-
-    return value;
+    return entry.getValue();
   }
 
-  protected Value putFieldExt(Env env, StringValue name, Value value)
+  @Nullable
+  protected V<? extends Value> putFieldExt(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     return null;
   }
@@ -531,32 +463,33 @@ public class ObjectExtValue extends ObjectValue
    */
   @Override
   public void initField(Env env,
-                        StringValue name,
+                        FeatureExpr ctx, StringValue name,
                         StringValue canonicalName,
-                        Value value)
+                        V<? extends Value> value)
   {
-    Entry entry;
-
-    entry = createEntryFromInit(name, canonicalName);
-
-    entry._value = EnvVar._gen(value);
+    setFieldValue_init(ctx, name, canonicalName, EnvVar.fromValues(value));
   }
 
   /**
    * Removes a value.
    */
   @Override
-  public void unsetField(StringValue name)
+  public void unsetField(FeatureExpr ctx, StringValue name)
   {
     Value returnValue = _quercusClass.unsetField(Env.getCurrent(),this,name);
     if(returnValue == UnsetValue.UNSET || returnValue == NullValue.NULL) {
       // __unset didn't work, lets look in the class itself
-
-      _fieldMap.remove(name);
+      EnvVar val = _fieldMap.get(name);
+      val.set(ctx, V.one(UnsetValue.UNSET));
+      cleanFieldIfEmpty(name, val);
     }
 
     return;
+  }
 
+  private void cleanFieldIfEmpty(StringValue name, EnvVar val) {
+    if (val.getValue().when(v -> v == null || v == UnsetValue.UNSET || v == NullValue.NULL).isTautology())
+      _fieldMap.remove(name);
   }
 
 
@@ -564,41 +497,37 @@ public class ObjectExtValue extends ObjectValue
    * Removes the field array ref.
    */
   @Override
-  public void unsetArray(Env env, StringValue name, Value index)
+  public void unsetArray(Env env, FeatureExpr ctx, StringValue name, Value index)
   {
     // php/022b
     if (_quercusClass.getFieldGet() != null)
       return;
 
-    Entry entry = createEntry(name);
+    V<? extends Value> entry = getField(env, name);
 
     // XXX
     //if (entry._visibility == FieldVisibility.PRIVATE)
       //return;
 
-    entry.toValue().getOne().remove(VHelper.noCtx(), index);
+    entry.vforeach(ctx, (c, e) -> e.toValue().remove(c, index));
   }
 
   /**
    * Removes the field array ref.
    */
-  public void unsetThisArray(Env env, StringValue name, Value index)
+  public void unsetThisArray(Env env, FeatureExpr ctx, StringValue name, Value index)
   {
-    if (_quercusClass.getFieldGet() != null) {
-      return;
-    }
-
-    Entry entry = createEntry(name);
-
-    entry.toValue().getOne().remove(VHelper.noCtx(), index);
+    unsetArray(env, ctx, name, index);
   }
 
   /**
    * Gets a new value.
    */
-  private Entry getEntry(Env env, StringValue name)
+  private
+  @Nullable
+  EnvVar getEntry(Env env, StringValue name)
   {
-    Entry entry = _fieldMap.get(name);
+    @Nullable EnvVar entry = _fieldMap.get(name);
 
     if (entry == null) {
       entry = getThisProtectedEntry(name);
@@ -608,7 +537,8 @@ public class ObjectExtValue extends ObjectValue
       return null;
     }
 
-    if (entry.isPrivate()) {
+
+    if (ClassField.isPrivate(name)) {
       QuercusClass cls = env.getCallingClass();
 
       // XXX: this really only checks access from outside of class scope
@@ -636,9 +566,9 @@ public class ObjectExtValue extends ObjectValue
   /**
    * Gets a new value.
    */
-  private Entry getThisEntry(StringValue name)
+  private EnvVar getThisEntry(StringValue name)
   {
-    Entry entry = _fieldMap.get(name);
+    EnvVar entry = _fieldMap.get(name);
     
     if (entry == null) {
       entry = getThisProtectedEntry(name);
@@ -650,7 +580,9 @@ public class ObjectExtValue extends ObjectValue
   /**
    * Returns the field with protected visibility.
    */
-  private Entry getThisProtectedEntry(StringValue name)
+  private
+  @Nullable
+  EnvVar getThisProtectedEntry(StringValue name)
   {
     if (_protectedFieldMap == null) {
       return null;
@@ -659,48 +591,46 @@ public class ObjectExtValue extends ObjectValue
     return _protectedFieldMap.get(name);
   }
 
-  private Entry createEntryFromInit(StringValue canonicalName)
-  {
+
+  private EnvVar setFieldValue_init(FeatureExpr ctx, StringValue canonicalName, EnvVar value) {
     StringValue name = ClassField.getOrdinaryName(canonicalName);
 
-    return createEntryFromInit(name, canonicalName);
+    return setFieldValue_init(ctx, name, canonicalName, value);
   }
 
-  private Entry createEntryFromInit(StringValue name,
-                                    StringValue canonicalName)
-  {
-    Entry entry = _fieldMap.get(canonicalName);
+  private EnvVar setFieldValue_init(FeatureExpr ctx, StringValue name,
+                                    StringValue canonicalName, EnvVar value) {
+    EnvVar entry = _fieldMap.get(canonicalName);
 
     if (entry == null) {
-      entry = new Entry(canonicalName);
+      entry = EnvVar.fromValues(V.choice(ctx, value.getValue(), V.one(UnsetValue.UNSET)));
       _fieldMap.put(canonicalName, entry);
 
       if (ClassField.isProtected(canonicalName)) {
         if (_protectedFieldMap == null) {
-          _protectedFieldMap = new HashMap<StringValue,Entry>();
+          _protectedFieldMap = new HashMap<>();
         }
 
         _protectedFieldMap.put(name, entry);
       }
     }
-
     return entry;
   }
 
-  /**
-   * Creates the entry for a key.
-   */
-  private Entry createEntry(StringValue canonicalName)
-  {
-    Entry entry = _fieldMap.get(canonicalName);
-
-    if (entry == null) {
-      entry = new Entry(canonicalName);
-      _fieldMap.put(canonicalName, entry);
-    }
-
-    return entry;
-  }
+//  /**
+//   * Creates the entry for a key.
+//   */
+//  private Entry createEntry(StringValue canonicalName)
+//  {
+//    Entry entry = _fieldMap.get(canonicalName);
+//
+//    if (entry == null) {
+//      entry = new Entry(canonicalName);
+//      _fieldMap.put(canonicalName, entry);
+//    }
+//
+//    return entry;
+//  }
 
   //
   // Foreach/Traversable functions
@@ -726,7 +656,7 @@ public class ObjectExtValue extends ObjectValue
   @Override
   public Iterator<VEntry> getBaseIterator(Env env)
   {
-    return new KeyValueIterator(_fieldMap.values().iterator());
+    return new KeyValueIterator(_fieldMap.entrySet().iterator());
   }
 
   /**
@@ -754,7 +684,7 @@ public class ObjectExtValue extends ObjectValue
     if (delegate != null)
       return delegate.getValueIterator(env, this);
 
-    return new ValueIterator(_fieldMap.values().iterator());
+    return Collections.unmodifiableCollection(_fieldMap.values()).iterator();
   }
 
   //
@@ -899,15 +829,15 @@ public class ObjectExtValue extends ObjectValue
   protected void clone(Env env, ObjectExtValue obj) {
     _quercusClass.initObject(env, obj);
 
-    Iterator<Entry> iter = _fieldMap.values().iterator();
+    Iterator<Map.Entry<StringValue, EnvVar>> iter = _fieldMap.entrySet().iterator();
 
     while (iter.hasNext()) {
-      Entry entry = iter.next();
+      Map.Entry<StringValue, EnvVar> entry = iter.next();
 
       StringValue canonicalName = entry.getKey();
-      Value value = entry.getEnvVar().getOne().copy();
+      V<? extends Value> value = entry.getValue().getValue().map((a) -> a.copy());
 
-      obj.initField(env, canonicalName, value);
+      obj.initField(env, VHelper.noCtx(), canonicalName, value);
     }
   }
 
@@ -970,10 +900,10 @@ public class ObjectExtValue extends ObjectValue
     sb.append(getSize());
     sb.append(":{");
 
-    Iterator<Entry> iter = _fieldMap.values().iterator();
+    Iterator<Map.Entry<StringValue, EnvVar>> iter = _fieldMap.entrySet().iterator();
 
     while (iter.hasNext()) {
-      Entry entry = iter.next();
+      Map.Entry<StringValue, EnvVar> entry = iter.next();
 
       sb.append("s:");
 
@@ -989,7 +919,7 @@ public class ObjectExtValue extends ObjectValue
 
       sb.append(';');
 
-      Value value = ((Entry) entry).getRawValue().getOne();
+      Value value = entry.getValue().getOne();
 
       value.serialize(env, sb, serializeMap);
     }
@@ -1219,12 +1149,12 @@ public class ObjectExtValue extends ObjectValue
 
     int length = 0;
 
-    Iterator<Entry> iter = _fieldMap.values().iterator();
+    Iterator<Map.Entry<StringValue, EnvVar>> iter = _fieldMap.entrySet().iterator();
 
     while (iter.hasNext()) {
-      Entry entry = iter.next();
+      Map.Entry<StringValue, EnvVar> entry = iter.next();
 
-      if (! entry.isPublic()) {
+      if (! isPublic(entry.getKey())) {
         continue;
       }
 
@@ -1234,7 +1164,7 @@ public class ObjectExtValue extends ObjectValue
 
       entry.getKey().toStringValue(env).jsonEncode(env, context, sb);
       sb.append(':');
-      entry.getEnvVar().getOne().jsonEncode(env, context, sb);
+      entry.getValue().getOne().jsonEncode(env, context, sb);
       length++;
     }
 
@@ -1266,29 +1196,28 @@ public class ObjectExtValue extends ObjectValue
 
     for (int i = 0; i < size; i++) {
       putThisField(env,
-                   (StringValue) in.readObject(),
-                   (Value) in.readObject());
+              VHelper.noCtx(), (StringValue) in.readObject(),
+                   V.one((Value) in.readObject()));
     }
   }
 
   @Override
-  public boolean issetField(Env env, StringValue name)
+  public V<? extends Boolean> issetField(Env env, StringValue name)
   {
-    Entry entry = getThisEntry(name);
+    EnvVar entry = getThisEntry(name);
 
-    if (entry != null && entry.isPublic()) {
-      return entry._value.getOne().isset();
+    if (entry != null && isPublic(name)) {
+      return entry.getValue().map(v->v.isset());
     }
 
-    boolean result = getQuercusClass().issetField(env, this, name);
-
-    return result;
+    return V.one(getQuercusClass().issetField(env, this, name));
   }
 
   @Override
   public boolean isFieldExists(Env env, StringValue name)
   {
-    Entry entry = getThisEntry(name);
+    //TODO V
+    EnvVar entry = getThisEntry(name);
 
     return entry != null;
   }
@@ -1318,16 +1247,16 @@ public class ObjectExtValue extends ObjectValue
     @Override
     public Iterator<VEntry> iterator()
     {
-      return new KeyValueIterator(_fieldMap.values().iterator());
+      return new KeyValueIterator(_fieldMap.entrySet().iterator());
     }
   }
 
   public static class KeyValueIterator
     implements Iterator<VEntry>
   {
-    private final Iterator<Entry> _iter;
+    private final Iterator<Map.Entry<StringValue, EnvVar>> _iter;
 
-    KeyValueIterator(Iterator<Entry> iter)
+    KeyValueIterator(Iterator<Map.Entry<StringValue, EnvVar>> iter)
     {
       _iter = iter;
     }
@@ -1339,40 +1268,45 @@ public class ObjectExtValue extends ObjectValue
 
     public VEntry next()
     {
-      return _iter.next();
+      return new EntryWrapper(_iter.next());
     }
 
     public void remove()
     {
       throw new UnsupportedOperationException();
     }
+
+    private static class EntryWrapper implements VEntry {
+      private final Map.Entry<StringValue, EnvVar> e;
+
+      private EntryWrapper(Map.Entry<StringValue, EnvVar> e) {
+        this.e = e;
+      }
+
+      @Override
+      public EnvVar getEnvVar() {
+        return e.getValue();
+      }
+
+      @Override
+      public EnvVar setEnvVar(EnvVar value) {
+        e.getValue().setVar(VHelper.noCtx(), value.getVar());
+        return value;
+      }
+
+      @Override
+      public Value getKey() {
+        return e.getKey();
+      }
+
+      @Override
+      public FeatureExpr getCondition() {
+        return e.getValue().getValue().when(v -> v == null || v == UnsetValue.UNSET || v == NullValue.NULL).not();
+      }
+    }
   }
 
-  public static class ValueIterator
-    implements Iterator<EnvVar>
-  {
-    private final Iterator<Entry> _iter;
 
-    ValueIterator(Iterator<Entry> iter)
-    {
-      _iter = iter;
-    }
-
-    public boolean hasNext()
-    {
-      return _iter.hasNext();
-    }
-
-    public EnvVar next()
-    {
-      return _iter.next().getEnvVar();
-    }
-
-    public void remove()
-    {
-      throw new UnsupportedOperationException();
-    }
-  }
 
   public static class KeyIterator
     implements Iterator<Value>
@@ -1632,5 +1566,32 @@ public class ObjectExtValue extends ObjectValue
       return "ObjectExtValue.Entry[" + getKey() + "]";
     }
   }
+
+
+  static private
+  @Nonnull
+  EnvVar _copyTree(@Nonnull EnvVar _value, Env env, CopyRoot root) {
+    return EnvVar.fromValues(_value.getValue().map(a -> {
+      Value copy = root.getCopy(a);
+      if (copy == null) {
+        copy = a.copyTree(env, root);
+      }
+      return copy;
+    }));
+  }
+
+
+  static boolean isPublic(StringValue _key) {
+    return !isPrivate(_key) && !isProtected(_key);
+  }
+
+  static boolean isProtected(StringValue _key) {
+    return ClassField.isProtected(_key);
+  }
+
+  static boolean isPrivate(StringValue _key) {
+    return ClassField.isPrivate(_key);
+  }
+
 }
 

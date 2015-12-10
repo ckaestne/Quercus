@@ -30,6 +30,7 @@
 package com.caucho.quercus.lib.simplexml;
 
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.*;
 
@@ -263,7 +264,7 @@ public class ChildrenView extends SimpleView
 
         StringValue nodeName = env.createString(child.getNodeName());
 
-        obj.putField(env, nodeName, childValue);
+        obj.putField(env, VHelper.noCtx(), nodeName, childValue);
 
         /*
         Value existing = obj.getField(env, nodeName);
@@ -295,7 +296,7 @@ public class ChildrenView extends SimpleView
         array.append(attrName, attrValue);
       }
 
-      obj.putField(env, env.createString("@attributes"), array);
+      obj.putField(env, VHelper.noCtx(), env.createString("@attributes"), array);
     }
 
     return obj;

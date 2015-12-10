@@ -30,6 +30,7 @@
 package com.caucho.quercus.lib.simplexml;
 
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 import org.w3c.dom.Attr;
 
 import java.util.Map;
@@ -117,7 +118,7 @@ public class AttributeView extends SimpleView
 
     StringValue value = env.createString(getNodeValue());
 
-    obj.putField(env, env.createString("0"), value);
+    obj.putField(env, VHelper.noCtx(), env.createString("0"), value);
 
     return obj;
   }

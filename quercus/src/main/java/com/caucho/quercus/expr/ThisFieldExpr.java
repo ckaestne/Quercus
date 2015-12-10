@@ -113,7 +113,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return VHelper.toV(obj.getThisField(env, _name));
+    return obj.getThisField(env, _name);
   }
 
   /**
@@ -134,7 +134,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return VHelper.toV(obj.getThisField(env, _name).copy());
+    return obj.getThisField(env, _name).map((a)->a.copy());
   }
 
   /**
@@ -158,7 +158,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(new Var());
     }
 
-    return VHelper.toV(obj.getThisFieldVar(env, _name));
+    return obj.getThisFieldVar(env, _name);
   }
 
   /**
@@ -180,7 +180,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return VHelper.toV(obj.getThisFieldArg(env, _name).makeValue());
+    return obj.getThisFieldArg(env, _name);
   }
 
   /**
@@ -203,7 +203,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    obj.putThisField(env, _name, value.getOne());
+    obj.putThisField(env, VHelper.noCtx(), _name, value);
 
     return value;
   }
@@ -228,7 +228,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    obj.putThisField(env, _name, value.getOne().toValue());
+    obj.putThisField(env, VHelper.noCtx(), _name, value.map((a)->a.toValue()));
 
     return value;
   }
@@ -248,12 +248,12 @@ public class ThisFieldExpr extends AbstractVarExpr {
     }
 
     // php/044i
-    Value fieldVar = obj.getThisFieldArray(env, _name);
+    V<? extends Value> fieldVar = obj.getThisFieldArray(env, ctx, _name);
     V<? extends Value> index = indexExpr.eval(env, VHelper.noCtx());
 
     V<? extends Value> value = valueExpr.evalCopy(env, VHelper.noCtx());
 
-    return VHelper.mapAll(index, value, (i,v)-> fieldVar.putThisFieldArray(env, obj, _name, i, v));
+    return VHelper.mapAll(index, value, fieldVar, (i,v, fv)-> fv.putThisFieldArray(env, obj, _name, i, v));
   }
 
   /**
@@ -271,12 +271,12 @@ public class ThisFieldExpr extends AbstractVarExpr {
     }
 
     // php/044i
-    Value fieldVar = obj.getThisFieldArray(env, _name);
+    V<? extends Value> fieldVar = obj.getThisFieldArray(env, VHelper.noCtx(), _name);
     V<? extends Value> index = indexExpr.eval(env, VHelper.noCtx());
 
     V<? extends ValueOrVar> value = valueExpr.evalRef(env, VHelper.noCtx());
 
-    return  VHelper.mapAll(index, value, (i,v)-> fieldVar.putThisFieldArray(env, obj, _name, i, v.toValue()));
+    return  VHelper.mapAll(index, value, fieldVar, (i,v, fv)-> fv.putThisFieldArray(env, obj, _name, i, v.toValue()));
   }
 
   /**
@@ -297,7 +297,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return VHelper.toV(obj.getThisFieldArray(env, _name));
+    return obj.getThisFieldArray(env, VHelper.noCtx(), _name);
   }
 
   /**
@@ -318,7 +318,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return VHelper.toV(obj.getThisFieldObject(env, _name));
+    return obj.getThisFieldObject(env, VHelper.noCtx(), _name);
   }
 
   /**

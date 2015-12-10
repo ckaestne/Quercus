@@ -30,6 +30,7 @@
 package com.caucho.quercus.lib.simplexml;
 
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.*;
 
@@ -260,12 +261,12 @@ public class SelectedView extends SimpleView
         Value childValue = child.toDumpValue(env, cls, false);
 
         if (_nodeName != null) {
-          obj.putField(env, env.createString(i), childValue);
+          obj.putField(env, VHelper.noCtx(), env.createString(i), childValue);
         }
         else {
           StringValue nodeName = env.createString(child.getNodeName());
 
-          obj.putField(env, nodeName, childValue);
+          obj.putField(env, VHelper.noCtx(), nodeName, childValue);
         }
 
         /*
@@ -298,7 +299,7 @@ public class SelectedView extends SimpleView
         array.append(attrName, attrValue);
       }
 
-      obj.putField(env, env.createString("@attributes"), array);
+      obj.putField(env, VHelper.noCtx(), env.createString("@attributes"), array);
     }
 
     return obj;

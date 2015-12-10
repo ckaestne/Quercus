@@ -89,7 +89,7 @@ public class QuercusLanguageException extends QuercusException
    */
   public String getMessage(Env env)
   {
-    Value field = _value.getField(env, MESSAGE);
+    Value field = _value.getField(env, MESSAGE).getOne();
 
     String msg;
 
@@ -106,8 +106,8 @@ public class QuercusLanguageException extends QuercusException
    */
   public Location getLocation(Env env)
   {
-    Value file = _value.getField(env, FILE);
-    Value line = _value.getField(env, LINE);
+    Value file = _value.getField(env, FILE).getOne();
+    Value line = _value.getField(env, LINE).getOne();
 
     if (file.isNull() || line.isNull())
       return Location.UNKNOWN;

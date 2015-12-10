@@ -552,7 +552,7 @@ public class InterpretedClassDef extends ClassDef
     for (Map.Entry<StringValue,ClassField> entry : _fieldMap.entrySet()) {
       ClassField field = entry.getValue();
 
-      object.initField(env, field, isInitFieldValues);
+      object.initField(env, VHelper.noCtx(), field, isInitFieldValues);
     }
 
     if (_destructor != null) {

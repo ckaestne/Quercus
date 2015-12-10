@@ -50,7 +50,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the array ref.
    */
   @Override
-  public Var getFieldVar(Env env, StringValue name)
+  public V<? extends Var> getFieldVar(Env env, StringValue name)
   {
     _root.setModified();
 
@@ -61,7 +61,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the array ref.
    */
   @Override
-  public Var getThisFieldVar(Env env, StringValue name)
+  public V<? extends Var> getThisFieldVar(Env env, StringValue name)
   {
     _root.setModified();
 
@@ -72,7 +72,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-    public Var getFieldArg(Env env, StringValue name, boolean isTop)
+    public V<? extends Var> getFieldArg(Env env, StringValue name, boolean isTop)
   {
     _root.setModified();
 
@@ -83,7 +83,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Var getThisFieldArg(Env env, StringValue name)
+  public V<? extends Var> getThisFieldArg(Env env, StringValue name)
   {
     _root.setModified();
 
@@ -94,7 +94,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Var getFieldArgRef(Env env, StringValue name)
+  public V<? extends Var> getFieldArgRef(Env env, StringValue name)
   {
     _root.setModified();
 
@@ -105,7 +105,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Returns the value as an argument which may be a reference.
    */
   @Override
-  public Var getThisFieldArgRef(Env env, StringValue name)
+  public V<? extends Var> getThisFieldArgRef(Env env, StringValue name)
   {
     _root.setModified();
 
@@ -116,25 +116,27 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Adds a new value.
    */
   @Override
-  public Value putField(Env env, StringValue name, Value value)
+  public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     _root.setModified();
 
-    return super.putField(env, name, value);
+    return super.putField(env, ctx, name, value);
   }
 
   /**
    * Sets/adds field to this object.
    */
   @Override
-  public Value putThisField(Env env, StringValue name, Value value)
+  public V<? extends Value> putThisField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     _root.setModified();
 
-    return super.putThisField(env, name, value);
+    return super.putThisField(env, ctx, name, value);
   }
 
-  protected Value putFieldExt(Env env, StringValue name, Value value)
+  protected
+  @javax.annotation.Nullable
+  V<? extends Value> putFieldExt(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     return null;
   }
@@ -143,44 +145,44 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Adds a new value to the object.
    */
   @Override
-  public void initField(Env env, StringValue name,
-                        StringValue canonicalName, Value value)
+  public void initField(Env env, FeatureExpr ctx, StringValue name,
+                        StringValue canonicalName, V<? extends Value> value)
   {
     _root.setModified();
 
-    super.initField(env, canonicalName, value);
+    super.initField(env, ctx, canonicalName, value);
   }
 
   /**
    * Removes a value.
    */
   @Override
-  public void unsetField(StringValue name)
+  public void unsetField(FeatureExpr ctx, StringValue name)
   {
     _root.setModified();
 
-    super.unsetField(name);
+    super.unsetField(ctx, name);
   }
 
   /**
    * Removes the field ref.
    */
   @Override
-  public void unsetArray(Env env, StringValue name, Value index)
+  public void unsetArray(Env env, FeatureExpr ctx, StringValue name, Value index)
   {
     _root.setModified();
 
-    super.unsetArray(env, name, index);
+    super.unsetArray(env, ctx, name, index);
   }
 
   /**
    * Removes the field ref.
    */
-  public void unsetThisArray(Env env, StringValue name, Value index)
+  public void unsetThisArray(Env env, FeatureExpr ctx, StringValue name, Value index)
   {
     _root.setModified();
 
-    super.unsetThisArray(env, name, index);
+    super.unsetThisArray(env, ctx, name, index);
   }
 
   /**

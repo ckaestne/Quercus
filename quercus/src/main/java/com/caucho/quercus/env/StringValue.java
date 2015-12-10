@@ -38,6 +38,8 @@ import com.caucho.util.ByteAppendable;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.*;
@@ -972,7 +974,7 @@ abstract public class StringValue
     Value newFieldValue = setCharValueAt(index.toLong(), value);
 
     if (newFieldValue != this) {
-      obj.putThisField(env, fieldName, newFieldValue);
+      obj.putThisField(env, VHelper.noCtx(), fieldName, V.one(newFieldValue));
     }
 
     return newFieldValue.get(index).getOne();

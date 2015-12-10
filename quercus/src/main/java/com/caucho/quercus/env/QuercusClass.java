@@ -1444,7 +1444,7 @@ public class QuercusClass extends NullValue {
   {
     // php/09km, php/09kn
     // push/pop to prevent infinite recursion
-    if (issetField(env, name) && _fieldMap.get(name).isPublic()) {
+    if (_issetField(env, name) && _fieldMap.get(name).isPublic()) {
       Value v_current = this.get(name).getOne(); // TODO: move to ObjectExtValue if possible
 
       if (v_current != NullValue.NULL && v_current != UnsetValue.UNSET) {
@@ -1499,17 +1499,12 @@ public class QuercusClass extends NullValue {
     return false;
   }
 
-  @Override
-  public boolean issetField(Env env, StringValue name) {
-    if(_fieldMap.containsKey(name)) {
-      return true;
-    }
-
-    return false;
+  public boolean _issetField(Env env, StringValue name) {
+    return _fieldMap.containsKey(name);
   }
 
   @Override
-  public void unsetField(StringValue name) {
+  public void unsetField(FeatureExpr ctx, StringValue name) {
     if(_fieldMap.containsKey(name))
       _fieldMap.remove(name);
   }
@@ -1520,9 +1515,9 @@ public class QuercusClass extends NullValue {
    */
   public Value unsetField(Env env, Value qThis, StringValue name)
   {
-    if(issetField(env, name) && _fieldMap.get(name).isPublic()){
+    if(_issetField(env, name) && _fieldMap.get(name).isPublic()){
       // TODO: move to ObjectExtValue if possible
-      unsetField(name);
+      unsetField(VHelper.noCtx(), name);
       return NullValue.NULL;
     }
 
@@ -1538,7 +1533,7 @@ public class QuercusClass extends NullValue {
       }
     }
     else
-      unsetField(name);
+      unsetField(VHelper.noCtx(), name);
 
     return NullValue.NULL;
   }

@@ -239,28 +239,28 @@ public class JavaValue extends ObjectValue
    * Returns the field value.
    */
   @Override
-  public Value getField(Env env, StringValue name)
+  public V<? extends Value> getField(Env env, StringValue name)
   {
     Value value = _classDef.getField(env, this, name);
 
     if (value != null)
-      return value;
+      return V.one(value);
     else
-      return UnsetValue.NULL;
+      return V.one(UnsetValue.NULL);
   }
 
   /**
    * Sets the field value.
    */
   @Override
-  public Value putField(Env env, StringValue name, Value value)
+  public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    Value oldValue = _classDef.putField(env, this, name, value);
+    Value oldValue = _classDef.putField(env, this, name, value.getOne().toValue());
 
     if (oldValue != null)
-      return oldValue;
+      return V.one(oldValue);
     else
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
   }
 
   public Set<? extends VEntry> entrySet()

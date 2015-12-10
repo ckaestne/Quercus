@@ -226,12 +226,12 @@ public class ReflectionProperty
 
     public Value getValue(Env env, ObjectValue obj)
     {
-      return obj.getField(env, _nameV);
+      return obj.getField(env, _nameV).getOne();
     }
 
     public void setValue(Env env, Value obj, Value value)
     {
-      obj.putField(env, _nameV, value);
+      obj.putField(env, VHelper.noCtx(), _nameV, value);
     }
 
     public void setAccessible(boolean isAccessible)

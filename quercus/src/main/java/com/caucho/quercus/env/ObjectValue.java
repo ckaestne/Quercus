@@ -116,7 +116,7 @@ abstract public class ObjectValue extends Callback {
   /**
    * Initializes the incomplete class.
    */
-  public void initObject(Env env, QuercusClass cls)
+  public void initObject(Env env, FeatureExpr ctx, QuercusClass cls)
   {
     setQuercusClass(cls);
     _incompleteObjectName = null;
@@ -602,50 +602,50 @@ abstract public class ObjectValue extends Callback {
   // Convenience field methods
   //
 
+//  /**
+//   * Adds a new value.
+//   * @Deprecated
+//   */
+//  public Value putField(String key, String value)
+//  {
+//    Env env = Env.getInstance();
+//
+//    return putThisField(env, VHelper.noCtx(), env.createString(key), V.env.createString(value));
+//  }
+//
+//  /**
+//   * Adds a new value.
+//   */
+//  public Value putField(Env env, String key, String value)
+//  {
+//    return putThisField(env, VHelper.noCtx(), env.createString(key), env.createString(value));
+//  }
+
+//  /**
+//   * Adds a new value.
+//   * @Deprecated
+//   */
+//  public Value putField(String key, long value)
+//  {
+//    Env env = Env.getInstance();
+//
+//    return putThisField(env, VHelper.noCtx(), env.createString(key), LongValue.create(value));
+//  }
+//
+//  /**
+//   * Adds a new value.
+//   */
+//  public Value putField(Env env, String key, long value)
+//  {
+//    return putThisField(env, VHelper.noCtx(), env.createString(key), LongValue.create(value));
+//  }
+
   /**
    * Adds a new value.
-   * @Deprecated
    */
-  public Value putField(String key, String value)
+  public V<?extends Value> putField(Env env,FeatureExpr ctx, String key, V<?extends ValueOrVar> value)
   {
-    Env env = Env.getInstance();
-
-    return putThisField(env, env.createString(key), env.createString(value));
-  }
-
-  /**
-   * Adds a new value.
-   */
-  public Value putField(Env env, String key, String value)
-  {
-    return putThisField(env, env.createString(key), env.createString(value));
-  }
-
-  /**
-   * Adds a new value.
-   * @Deprecated
-   */
-  public Value putField(String key, long value)
-  {
-    Env env = Env.getInstance();
-
-    return putThisField(env, env.createString(key), LongValue.create(value));
-  }
-
-  /**
-   * Adds a new value.
-   */
-  public Value putField(Env env, String key, long value)
-  {
-    return putThisField(env, env.createString(key), LongValue.create(value));
-  }
-
-  /**
-   * Adds a new value.
-   */
-  public Value putField(Env env, String key, Value value)
-  {
-    return putThisField(env, env.createString(key), value);
+    return putThisField(env, ctx, env.createString(key), value);
   }
 
   /**
@@ -653,11 +653,11 @@ abstract public class ObjectValue extends Callback {
    */
   @Override
   public void initField(Env env,
-                        StringValue name,
+                        FeatureExpr ctx, StringValue name,
                         StringValue canonicalName,
-                        Value value)
+                        V<? extends Value> value)
   {
-    putThisField(env, canonicalName, value);
+    putThisField(env, VHelper.noCtx(), canonicalName, value);
   }
 
   @Override
@@ -666,19 +666,19 @@ abstract public class ObjectValue extends Callback {
                                   Value value,
                                   FieldVisibility visibility)
   {
-    initField(env, name, value);
+    initField(env, VHelper.noCtx(), name, V.one(value));
   }
 
-  /**
-   * Adds a new value.
-   * @Deprecated
-   */
-  public Value putField(String key, double value)
-  {
-    Env env = Env.getInstance();
-
-    return putThisField(env, env.createString(key), DoubleValue.create(value));
-  }
+//  /**
+//   * Adds a new value.
+//   * @Deprecated
+//   */
+//  public Value putField(String key, double value)
+//  {
+//    Env env = Env.getInstance();
+//
+//    return putThisField(env, VHelper.noCtx(), env.createString(key), DoubleValue.create(value));
+//  }
 
   /**
    * Returns the static field.

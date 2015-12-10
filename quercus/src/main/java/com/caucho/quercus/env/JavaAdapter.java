@@ -707,17 +707,17 @@ abstract public class JavaAdapter extends ArrayValue
   }
 
   @Override
-  public Value getField(Env env, StringValue name)
+  public V<? extends Value> getField(Env env, StringValue name)
   {
-    return _classDef.getField(env, this, name);
+    return V.one(_classDef.getField(env, this, name));
   }
 
   @Override
-  public Value putField(Env env,
-                        StringValue name,
-                        Value value)
+  public V<? extends Value> putField(Env env,
+                                     FeatureExpr ctx, StringValue name,
+                                     V<? extends ValueOrVar> value)
   {
-    return _classDef.putField(env, this, name, value);
+    return V.one(_classDef.putField(env, this, name, value.getOne().toValue()));
   }
 
   /**

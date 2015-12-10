@@ -38,6 +38,7 @@ import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.util.L10N;
 import com.caucho.util.SQLExceptionWrapper;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -1260,16 +1261,16 @@ public class Mysqli extends JdbcConnectionResource
 
     ObjectValue obj = env.createObject();
 
-    obj.putField(env, env.createString("charset"), _charset);
-    obj.putField(env, env.createString("collation"), _collation);
-    obj.putField(env, env.createString("dir"), env.getEmptyString());
+    obj.putField(env, VHelper.noCtx(), env.createString("charset"), _charset);
+    obj.putField(env, VHelper.noCtx(), env.createString("collation"), _collation);
+    obj.putField(env, VHelper.noCtx(), env.createString("dir"), env.getEmptyString());
 
-    obj.putField(env, env.createString("min_length"), LongValue.ONE);
-    obj.putField(env, env.createString("max_length"), LongValue.create(maxBytes));
-    obj.putField(env, env.createString("number"), LongValue.create(charsetIndex));
+    obj.putField(env, VHelper.noCtx(), env.createString("min_length"), LongValue.ONE);
+    obj.putField(env, VHelper.noCtx(), env.createString("max_length"), LongValue.create(maxBytes));
+    obj.putField(env, VHelper.noCtx(), env.createString("number"), LongValue.create(charsetIndex));
 
-    obj.putField(env, env.createString("state"), LongValue.ONE);
-    obj.putField(env, env.createString("comment"), env.createString(description));
+    obj.putField(env, VHelper.noCtx(), env.createString("state"), LongValue.ONE);
+    obj.putField(env, VHelper.noCtx(), env.createString("comment"), env.createString(description));
 
     return obj;
   }

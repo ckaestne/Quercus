@@ -36,6 +36,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.Log;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -566,27 +567,27 @@ public class MysqlModule extends AbstractQuercusModule {
 
       ObjectValue fieldResult = env.createObject();
 
-      fieldResult.putThisField(env, SV_NAME, env.createString(columnLabel));
-      fieldResult.putThisField(env, SV_TABLE, env.createString(tableName));
-      fieldResult.putThisField(env, SV_DEF, env.getEmptyString());
-      fieldResult.putThisField(env, SV_MAX_LENGTH,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_NAME, env.createString(columnLabel));
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_TABLE, env.createString(tableName));
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_DEF, env.getEmptyString());
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_MAX_LENGTH,
                                LongValue.create(maxLength));
-      fieldResult.putThisField(env, SV_NOT_NULL,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_NOT_NULL,
                                LongValue.create(notNull));
-      fieldResult.putThisField(env, SV_PRIMARY_KEY,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_PRIMARY_KEY,
                                LongValue.create(primaryKey));
-      fieldResult.putThisField(env, SV_MULTIPLE_KEY,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_MULTIPLE_KEY,
                                LongValue.create(multipleKey));
-      fieldResult.putThisField(env, SV_UNIQUE_KEY,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_UNIQUE_KEY,
                                LongValue.create(uniqueKey));
-      fieldResult.putThisField(env, SV_NUMERIC,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_NUMERIC,
                                LongValue.create(numeric));
-      fieldResult.putThisField(env, SV_BLOB,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_BLOB,
                                LongValue.create(blob));
-      fieldResult.putThisField(env, SV_TYPE, env.createString(type));
-      fieldResult.putThisField(env, SV_UNSIGNED,
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_TYPE, env.createString(type));
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_UNSIGNED,
                                LongValue.create(unsigned));
-      fieldResult.putThisField(env, SV_ZEROFILL, LongValue.create(zerofill));
+      fieldResult.putThisField(env, VHelper.noCtx(), SV_ZEROFILL, LongValue.create(zerofill));
 
       return fieldResult;
     } catch (SQLException e) {

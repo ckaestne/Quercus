@@ -215,12 +215,11 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   public ArrayValueImpl(Value[] values) {
-    throw new UnimplementedVException();
-//    this();
-//
-//    for (int i = 0; i < values.length; i++) {
-//      put(VHelper.noCtx(), values[i]);
-//    }
+    this();
+
+    for (int i = 0; i < values.length; i++) {
+      put(VHelper.noCtx(), values[i]);
+    }
   }
 
 //  public ArrayValueImpl(Env env, ArrayValueComponent[] components)

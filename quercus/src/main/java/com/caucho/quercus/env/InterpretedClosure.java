@@ -35,6 +35,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
+
 /**
  * Represents a closure
  */
@@ -111,7 +113,7 @@ public class InterpretedClosure extends Closure
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends Value> call(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args)
   {
     Value oldThis = env.setThis(getThis());
     Closure oldClosure = env.setClosure(this);

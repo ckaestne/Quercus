@@ -254,7 +254,7 @@ public class ApcModule extends AbstractQuercusModule
       QuercusClass cls = env.findClass(className);
 
       if (cls != null) {
-        obj.initObject(env, cls);
+        obj.initObject(env, VHelper.noCtx(), cls);
       }
     }
     else if (value.isArray()) {

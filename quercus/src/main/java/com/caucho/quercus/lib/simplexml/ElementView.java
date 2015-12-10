@@ -30,6 +30,7 @@
 package com.caucho.quercus.lib.simplexml;
 
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 import org.w3c.dom.*;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -690,7 +691,7 @@ public class ElementView extends SimpleView
         array.append(attrName, attrValue);
       }
 
-      obj.putField(env, env.createString("@attributes"), array);
+      obj.putField(env, VHelper.noCtx(), env.createString("@attributes"), array);
     }
 
     if (elementList.size() == 0) {
@@ -699,7 +700,7 @@ public class ElementView extends SimpleView
       if (text != null && text.length() > 0) {
         if (isChildren) {
           StringValue value = env.createString(text);
-          obj.putField(env, env.createString("0"), value);
+          obj.putField(env, VHelper.noCtx(), env.createString("0"), value);
 
           return obj;
         }
@@ -718,10 +719,10 @@ public class ElementView extends SimpleView
         SimpleXMLElement e = new SimpleXMLElement(cls, view);
 
         Value value = e.wrapJava(env);
-        Value oldValue = obj.getField(env, name);
+        Value oldValue = obj.getField(env, name).getOne();
 
         if (oldValue == UnsetValue.UNSET) {
-          obj.putField(env, name, value);
+          obj.putField(env, VHelper.noCtx(), name, value);
         }
         else if (oldValue.isArray()) {
           oldValue.toArrayValue(env).append(value);
@@ -732,7 +733,7 @@ public class ElementView extends SimpleView
           array.append(oldValue);
           array.append(value);
 
-          obj.putField(env, name, array);
+          obj.putField(env, VHelper.noCtx(), name, array);
         }
       }
 

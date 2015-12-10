@@ -1451,7 +1451,7 @@ public class MbstringModule
 
       for (VEntry entry : obj.entrySet()) {
         obj.putThisField(env,
-                         entry.getKey().toStringValue(),
+                VHelper.noCtx(), entry.getKey().toStringValue(),
                          decodeAll(env, entry.getEnvVar().getOne(), decoder));
       }
 
@@ -1501,7 +1501,7 @@ public class MbstringModule
 
       for (VEntry entry : obj.entrySet()) {
         obj.putThisField(env,
-                         entry.getKey().toStringValue(),
+                VHelper.noCtx(), entry.getKey().toStringValue(),
                          encodeAll(env, entry.getEnvVar().getOne(), encoder));
       }
 

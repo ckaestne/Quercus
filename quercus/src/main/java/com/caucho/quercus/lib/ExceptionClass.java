@@ -56,7 +56,7 @@ public class ExceptionClass
   {
     value.putField(env, "message", message);
 
-    if (! value.issetField(env, env.createString("code"))) {
+    if (! value.issetField(env, env.createString("code")).getOne()) {
       value.putField(env, "code", LongValue.create(code));
     }
 
@@ -105,7 +105,7 @@ public class ExceptionClass
    */
   public static Value getMessage(Env env, @This ObjectValue obj)
   {
-    return obj.getField(env, env.createString("message"));
+    return obj.getField(env, env.createString("message")).getOne();
   }
 
   /**
@@ -113,7 +113,7 @@ public class ExceptionClass
    */
   public static Value getCode(Env env, @This ObjectValue obj)
   {
-    return obj.getField(env, env.createString("code"));
+    return obj.getField(env, env.createString("code")).getOne();
   }
 
   /**
@@ -121,7 +121,7 @@ public class ExceptionClass
    */
   public static Value getFile(Env env, @This ObjectValue obj)
   {
-    return obj.getField(env, env.createString("file"));
+    return obj.getField(env, env.createString("file")).getOne();
   }
 
   /**
@@ -129,7 +129,7 @@ public class ExceptionClass
    */
   public static Value getLine(Env env, @This ObjectValue obj)
   {
-    return obj.getField(env, env.createString("line"));
+    return obj.getField(env, env.createString("line")).getOne();
   }
 
   /**
@@ -137,7 +137,7 @@ public class ExceptionClass
    */
   public static Value getTrace(Env env, @This Value obj)
   {
-    return obj.getField(env, env.createString("trace"));
+    return obj.getField(env, env.createString("trace")).getOne();
   }
 
   /**
@@ -145,7 +145,7 @@ public class ExceptionClass
    */
   public static Value getPrevious(Env env, @This Value obj)
   {
-    return obj.getField(env, env.createString("previous"));
+    return obj.getField(env, env.createString("previous")).getOne();
   }
 
   /**
@@ -153,7 +153,7 @@ public class ExceptionClass
    */
   public static Value getJavaException(Env env, @This Value obj)
   {
-    return obj.getField(env, env.createString("__javaException"));
+    return obj.getField(env, env.createString("__javaException")).getOne();
   }
 
   /**

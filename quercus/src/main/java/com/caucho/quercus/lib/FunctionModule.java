@@ -41,6 +41,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -56,17 +57,18 @@ public class FunctionModule extends AbstractQuercusModule {
   /**
    * Calls a user function
    */
-  public static V<? extends Value> call_user_func(Env env, FeatureExpr ctx,
+  public static V<? extends Value> call_user_func(Env env,
                                                   Callable function,
-                                                  Value []args)
+                                                  @Nonnull V<? extends Value> []args)
   {
-    return function.call(env, ctx, args).map((a)->a.copyReturn());
+    return function.call(env,
+            VHelper.noCtx(), args).map((a)->a.copyReturn());
   }
 
   /**
    * Calls a user function
    */
-  public static V<? extends Value> call_user_func_array(Env env, FeatureExpr ctx,
+  public static V<? extends Value> call_user_func_array(Env env,
                                            Callable function,
                                            Value arg)
   {
@@ -107,7 +109,7 @@ public class FunctionModule extends AbstractQuercusModule {
     env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, VHelper.toVArray(args));
 
     try {
-      return function.call(env, ctx, args).map((a)->a.copyReturn());
+      return function.call(env, VHelper.noCtx(), args).map((a)->a.copyReturn());
     }
     finally {
       env.popCall();

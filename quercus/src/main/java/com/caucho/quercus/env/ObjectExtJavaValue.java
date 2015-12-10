@@ -32,6 +32,9 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusException;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.JavaClassDef;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -69,43 +72,46 @@ public class ObjectExtJavaValue extends ObjectExtValue
    * Returns fields not explicitly specified by this value.
    */
   @Override
-  protected Value getFieldExt(Env env, StringValue name)
+  protected EnvVar getFieldExt(Env env, StringValue name)
   {
-    if (_object == null) {
-      _object = createJavaObject(env);
-    }
-
-    Value parentValue = super.getFieldExt(env, name);
-    
-    if (parentValue != NullValue.NULL && parentValue != UnsetValue.UNSET) {
-      return parentValue;
-    }
-
-    Value value = _javaClassDef.getField(env, this, name);
-    Value quercusValue = _quercusClass.getField(env, VHelper.noCtx(), this, name).getOne();
-
-    if (quercusValue != null
-        && quercusValue != UnsetValue.UNSET 
-        && quercusValue != NullValue.NULL) {
-      return quercusValue;
-    }
-
-    if (value != null)
-      return value;
-    else
-      return super.getFieldExt(env, name);
+    throw new UnimplementedVException();
+//    if (_object == null) {
+//      _object = createJavaObject(env);
+//    }
+//
+//    Value parentValue = super.getFieldExt(env, name).getOne();
+//
+//    if (parentValue != NullValue.NULL && parentValue != UnsetValue.UNSET) {
+//      return parentValue;
+//    }
+//
+//    Value value = _javaClassDef.getField(env, this, name);
+//    Value quercusValue = _quercusClass.getField(env, VHelper.noCtx(), this, name).getOne();
+//
+//    if (quercusValue != null
+//        && quercusValue != UnsetValue.UNSET
+//        && quercusValue != NullValue.NULL) {
+//      return quercusValue;
+//    }
+//
+//    if (value != null)
+//      return value;
+//    else
+//      return super.getFieldExt(env, name).getOne();
   }
 
   /**
    * Sets fields not specified by the value.
    */
-  protected Value putFieldExt(Env env, StringValue name, Value value)
+  protected
+  @javax.annotation.Nullable
+  V<? extends Value> putFieldExt(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     if (_object == null) {
       createJavaObject(env);
     }
 
-    return _javaClassDef.putField(env, this, name, value);
+    return V.one(_javaClassDef.putField(env, this, name, value.getOne().toValue()));
   }
 
   /**

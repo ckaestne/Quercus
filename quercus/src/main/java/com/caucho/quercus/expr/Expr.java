@@ -864,13 +864,13 @@ abstract public class Expr {
    */
   public static V<? extends ValueOrVar>[] evalArgs(Env env, Expr[] exprs, FeatureExpr ctx)
   {
-    ValueOrVar []args = new ValueOrVar[exprs.length];
+    V<? extends ValueOrVar> []args = new V[exprs.length];
 
     for (int i = 0; i < args.length; i++) {
-      args[i] = exprs[i].evalArg(env, ctx, true).getOne();
+      args[i] = exprs[i].evalArg(env, ctx, true);
     }
 
-    return VHelper.toVArray(args);
+    return args;
   }
 
   /**

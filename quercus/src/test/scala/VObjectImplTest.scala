@@ -24,6 +24,9 @@ class VObjectImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         eval("class F{} $f=new F();") to ""
         eval("class F{ public $x; } $f=new F(); $f->x=2; echo $f->x;") to "2"
         eval("class F{ public $x; } $f=new F(); if (1) $f->x=2; echo $f->x;") to "2"
+        eval("class F{ } $f=new F(); $f->y=2; echo $f->y;") to "2"
+        eval("$f=new stdClass; $f->y=2; echo $f->y;") to "2"
+        eval("$f=new stdClass; $f->y=function(){echo 'x';}; echo call_user_func($f->y);") to "x"
         eval("class F{ function x() { echo 'x'; } } $f=new F(); $f->x();") to "x"
     }
 

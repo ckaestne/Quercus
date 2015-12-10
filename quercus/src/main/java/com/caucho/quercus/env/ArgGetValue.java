@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.V;
+
 import java.io.Serializable;
 
 /**
@@ -69,9 +71,9 @@ public class ArgGetValue extends ArgValue
    * foo($a[0]->x)
    */
   @Override
-  public Var getFieldArg(Env env, StringValue index, boolean isTop)
+  public V<? extends Var> getFieldArg(Env env, StringValue index, boolean isTop)
   {
-    return new ArgGetFieldValue(env, this, index).toVar(); // php/3d2p
+    return V.one(new ArgGetFieldValue(env, this, index).toVar()); // php/3d2p
   }
 
   /**

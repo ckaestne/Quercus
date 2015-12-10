@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents an field-get argument which might be a call to a reference.
@@ -60,10 +61,10 @@ public class ArgGetFieldValue extends ArgValue {
    * Creates an argument which may create the given field.
    */
   @Override
-  public Var getFieldArg(Env env, StringValue name, boolean isTop)
+  public V<? extends Var> getFieldArg(Env env, StringValue name, boolean isTop)
   {
     // php/3d2q
-    return new ArgGetFieldValue(env, this, name).toVar();
+    return V.one(new ArgGetFieldValue(env, this, name).toVar());
   }
 
   /**
@@ -73,7 +74,7 @@ public class ArgGetFieldValue extends ArgValue {
   public Var toLocalVarDeclAsRef()
   {
     // php/3d2t
-    return _obj.toAutoObject(_env).getFieldVar(_env, _name)/*.toLocalVarDeclAsRef()*/;
+    return _obj.toAutoObject(_env).getFieldVar(_env, _name).getOne()/*.toLocalVarDeclAsRef()*/;
   }
 
   /**
@@ -82,7 +83,7 @@ public class ArgGetFieldValue extends ArgValue {
   @Override
   public Value toValue()
   {
-    return _obj.getField(_env, _name);
+    return _obj.getField(_env, _name).getOne();
   }
 
   /**
@@ -109,19 +110,19 @@ public class ArgGetFieldValue extends ArgValue {
   @Override
   public Value toLocalRef()
   {
-    return _obj.getField(_env, _name);
+    return _obj.getField(_env, _name).getOne();
   }
 
   @Override
   public Value toAutoArray()
   {
     Value parent = _obj.toAutoObject(_env);
-    Value value = parent.getField(_env, _name);
+    Value value = parent.getField(_env, _name).getOne();
 
     Value array = value.toAutoArray();
 
     if (array != value) {
-      parent.putField(_env, _name, array);
+      parent.putField(_env, VHelper.noCtx(), _name, array);
 
       value = array;
     }
@@ -133,18 +134,18 @@ public class ArgGetFieldValue extends ArgValue {
   public Value toAutoObject(Env env)
   {
     Value parent = _obj.toAutoObject(env);
-    Value value = parent.getField(env, _name);
+    Value value = parent.getField(env, _name).getOne();
 
     if (value.isNull()) {
       value = env.createObject();
 
-      parent.putField(env, _name, value);
+      parent.putField(env, VHelper.noCtx(), _name, value);
     }
     else {
       Value obj = value.toAutoObject(env);
 
       if (obj != value) {
-        parent.putField(env, _name, obj);
+        parent.putField(env, VHelper.noCtx(), _name, obj);
       }
 
       value = obj;
@@ -159,7 +160,7 @@ public class ArgGetFieldValue extends ArgValue {
   @Override
   public Value toRefValue()
   {
-    return _obj.getFieldVar(_env, _name).getValue().getOne();
+    return _obj.getFieldVar(_env, _name).getOne().getValue().getOne();
   }
 
   /**
@@ -183,7 +184,7 @@ public class ArgGetFieldValue extends ArgValue {
    * Converts to a reference variable.
    */
   @Override
-  public Var getFieldVar(Env env, StringValue name)
+  public V<? extends Var> getFieldVar(Env env, StringValue name)
   {
     // php/3d2q
     return _obj.getFieldObject(_env, _name).getFieldVar(_env, name);

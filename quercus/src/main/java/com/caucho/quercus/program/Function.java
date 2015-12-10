@@ -336,12 +336,12 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callClosure(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args, V<? extends ValueOrVar>[] useArgs)
+  public V<? extends Value> callClosure(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args, V<? extends ValueOrVar>[] useArgs)
   {
     return callImpl(env, ctx, args, false, getClosureUseArgs(), useArgs).map((a)->a.copy());
   }
 
-  public V<? extends Value> callImpl(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args, boolean isRef,
+  public V<? extends Value> callImpl(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args, boolean isRef,
                                      Arg []useParams, V<? extends ValueOrVar>[] useArgs)
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>(8);

@@ -41,8 +41,8 @@ import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -642,7 +642,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   public Value toObject(Env env) {
     ObjectValue obj = env.createObject();
 
-    obj.putField(env, env.createString("scalar"), this);
+    obj.putField(env, VHelper.noCtx(), env.createString("scalar"), V.one(this));
 
     return obj;
   }
@@ -834,8 +834,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Converts to an exception.
    */
   public QuercusException toException(Env env, String file, int line) {
-    putField(env, env.createString("file"), env.createString(file));
-    putField(env, env.createString("line"), LongValue.create(line));
+    putField(env, VHelper.noCtx(), env.createString("file"), V.one(env.createString(file)));
+    putField(env, VHelper.noCtx(), env.createString("line"), V.one(LongValue.create(line)));
 
     return new QuercusLanguageException(this);
   }
@@ -2165,23 +2165,23 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the field value
    */
-  public Value getField(Env env, StringValue name)
+  public V<? extends Value> getField(Env env, StringValue name)
   {
-    return NullValue.NULL;
+    return V.one(NullValue.NULL);
   }
 
   /**
    * Returns the field ref.
    */
-  public Var getFieldVar(Env env, StringValue name)
+  public V<? extends Var> getFieldVar(Env env, StringValue name)
   {
-    return getField(env, name).toVar();
+    return getField(env, name).map((a)->a.toVar());
   }
 
   /**
    * Returns the field used as a method argument
    */
-  public Var getFieldArg(Env env, StringValue name, boolean isTop)
+  public V<? extends Var> getFieldArg(Env env, StringValue name, boolean isTop)
   {
     return getFieldVar(env, name);
   }
@@ -2189,7 +2189,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the field ref for an argument.
    */
-  public Var getFieldArgRef(Env env, StringValue name)
+  public V<? extends Var> getFieldArgRef(Env env, StringValue name)
   {
     return getFieldVar(env, name);
   }
@@ -2200,12 +2200,12 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public Value getFieldObject(Env env, StringValue name)
   {
-    Value v = getField(env, name);
+    Value v = getField(env, name).getOne();
 
     if (! v.isset()) {
       v = env.createObject();
 
-      putField(env, name, v);
+      putField(env, VHelper.noCtx(), name, v);
     }
 
     return v;
@@ -2217,38 +2217,42 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public Value getFieldArray(Env env, StringValue name)
   {
-    Value v = getField(env, name);
+    Value v = getField(env, name).getOne();
 
     Value array = v.toAutoArray();
 
     if (v != array) {
-      putField(env, name, array);
+      putField(env, VHelper.noCtx(), name, array);
 
       return array;
     }
     else if (array.isString()) {
       // php/0484
-      return getFieldVar(env, name).getValue().getOne();
+      return getFieldVar(env, name).getOne().getValue().getOne();
     }
     else {
       return v;
     }
   }
 
+  @Deprecated    //for V transformation only
+  public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, ValueOrVar object) {
+    return putField(env, ctx, name, V.one(object));
+  }
   /**
    * Returns the field ref.
    */
-  public Value putField(Env env, StringValue name, Value object)
+  public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> object)
   {
-    return NullValue.NULL;
+    return V.one(NullValue.NULL);
   }
 
-  public final Value putField(Env env, StringValue name, Value value,
-                              Value innerIndex, Value innerValue)
+  public final V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, Value value,
+                                           Value innerIndex, V<? extends ValueOrVar> innerValue)
   {
-    Value result = value.append(innerIndex, innerValue);
+    Value result = value.append(ctx, innerIndex, innerValue);
 
-    return putField(env, name, result);
+    return putField(env, ctx, name, V.one(result));
   }
 
   public void setFieldInit(boolean isInit)
@@ -2274,29 +2278,29 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns true if the field is set
    */
-  public boolean issetField(Env env, StringValue name)
+  public V<? extends Boolean> issetField(Env env, StringValue name)
   {
-    return false;
+    return V.one(false);
   }
 
   /**
    * Removes the field ref.
    */
-  public void unsetField(StringValue name)
-  {
-  }
-
-  /**
-   * Removes the field ref.
-   */
-  public void unsetArray(Env env, StringValue name, Value index)
+  public void unsetField(FeatureExpr ctx, StringValue name)
   {
   }
 
   /**
    * Removes the field ref.
    */
-  public void unsetThisArray(Env env, StringValue name, Value index)
+  public void unsetArray(Env env, FeatureExpr ctx, StringValue name, Value index)
+  {
+  }
+
+  /**
+   * Removes the field ref.
+   */
+  public void unsetThisArray(Env env, FeatureExpr ctx, StringValue name, Value index)
   {
   }
 
@@ -2317,7 +2321,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the field as a Var or Value.
    */
-  public Value getThisField(Env env, StringValue name)
+  public V<? extends Value> getThisField(Env env, StringValue name)
   {
     return getField(env, name);
   }
@@ -2325,15 +2329,15 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the field as a Var.
    */
-  public Var getThisFieldVar(Env env, StringValue name)
+  public V<? extends Var> getThisFieldVar(Env env, StringValue name)
   {
-    return getThisField(env, name).toVar();
+    return getThisField(env, name).map((a) -> a.toVar());
   }
 
   /**
    * Returns the field used as a method argument
    */
-  public Var getThisFieldArg(Env env, StringValue name)
+  public V<? extends Var> getThisFieldArg(Env env, StringValue name)
   {
     return getThisFieldVar(env, name);
   }
@@ -2341,7 +2345,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the field ref for an argument.
    */
-  public Var getThisFieldArgRef(Env env, StringValue name)
+  public V<? extends Var> getThisFieldArgRef(Env env, StringValue name)
   {
     return getThisFieldVar(env, name);
   }
@@ -2350,40 +2354,42 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Returns the value for a field, creating an object if the field
    * is unset.
    */
-  public Value getThisFieldObject(Env env, StringValue name)
+  public V<? extends Value> getThisFieldObject(Env env, FeatureExpr ctx, StringValue name)
   {
-    Value v = getThisField(env, name);
+    V<? extends Value> v = getThisField(env, name);
 
-    if (! v.isset()) {
-      v = env.createObject();
+    v.vforeach(ctx, (c, vv) -> {
+      if (!vv.isset()) {
+        putThisField(env, c, name, V.one(env.createObject()));
+      }
+    });
 
-      putThisField(env, name, v);
-    }
-
-    return v;
+    return getThisField(env, name);
   }
 
   /**
    * Returns the value for a field, creating an object if the field
    * is unset.
    */
-  public Value getThisFieldArray(Env env, StringValue name)
+  public V<? extends Value> getThisFieldArray(Env env, FeatureExpr ctx, StringValue name)
   {
-    Value v = getThisField(env, name);
+    V<? extends Value> vv = getThisField(env, name);
 
-    Value array = v.toAutoArray();
+    return vv.vmap(ctx, (c, v) -> {
+      Value array = v.toAutoArray();
 
-    if (v == array)
-      return v;
-    else {
-      putField(env, name, array);
+      if (v == array)
+        return v;
+      else {
+        putField(env, c, name, V.one(array));
 
-      return array;
-    }
+        return array;
+      }
+    });
   }
 
   public final void initField(Env env,
-                              ClassField field,
+                              FeatureExpr ctx, ClassField field,
                               boolean isInitFieldValues)
   {
     Value value = NullValue.NULL;
@@ -2392,24 +2398,24 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
       value = field.evalInitExpr(env);
     }
 
-    initField(env, field.getName(), field.getCanonicalName(), value);
+    initField(env, ctx, field.getName(), field.getCanonicalName(), V.one(value));
   }
 
   public final void initField(Env env,
-                              StringValue canonicalName,
-                              Value value)
+                              FeatureExpr ctx, StringValue canonicalName,
+                              V<? extends Value>  value)
   {
     StringValue name = ClassField.getOrdinaryName(canonicalName);
 
-    initField(env, name, canonicalName, value);
+    initField(env, ctx, name, canonicalName, value);
   }
 
   public void initField(Env env,
-                        StringValue name,
+                        FeatureExpr ctx, StringValue name,
                         StringValue canonicalName,
-                        Value value)
+                        V<? extends Value> value)
   {
-    putThisField(env, canonicalName, value);
+    putThisField(env, ctx, canonicalName, value);
   }
 
   public void initIncompleteField(Env env,
@@ -2417,56 +2423,62 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
                                   Value value,
                                   FieldVisibility visibility)
   {
-    putThisField(env, name, value);
+    putThisField(env, VHelper.noCtx(), name, V.one(value));
   }
+
+  @Deprecated//V transformation
+  public V<? extends Value> putThisField(Env env, FeatureExpr ctx, StringValue name, ValueOrVar value) {
+    return putThisField(env, ctx, name, V.one(value));
+  }
+
 
   /**
    * Returns the field ref.
    */
-  public Value putThisField(Env env, StringValue name, Value object)
+  public V<? extends Value> putThisField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    return putField(env, name, object);
+    return putField(env, VHelper.noCtx(), name, value);
   }
 
-  /**
-   * Sets an array field ref.
-   */
-  public Value putThisField(Env env,
-                            StringValue name,
-                            Value array,
-                            Value index,
-                            Value value)
-  {
-    Value result = array.append(index, value);
+//  /**
+//   * Sets an array field ref.
+//   */
+//  public Value putThisField(Env env,
+//                            StringValue name,
+//                            Value array,
+//                            Value index,
+//                            Value value)
+//  {
+//    Value result = array.append(index, value);
+//
+//    putThisField(env, name, result);
+//
+//    return value;
+//  }
 
-    putThisField(env, name, result);
-
-    return value;
-  }
-
-  /**
-   * Returns true if the field is set
-   */
-  public boolean issetThisField(Env env, StringValue name)
-  {
-    return issetField(env, name);
-  }
+//  /**
+//   * Returns true if the field is set
+//   */
+//  public boolean issetThisField(Env env, StringValue name)
+//  {
+//    return issetField(env, name);
+//  }
 
   /**
    * Removes the field ref.
    */
   public void unsetThisField(StringValue name)
   {
-    unsetField(name);
+    unsetField(VHelper.noCtx(), name);
   }
 
-  /**
-   * Removes the field ref.
-   */
-  public void unsetThisPrivateField(String className, StringValue name)
-  {
-    unsetField(name);
-  }
+//  /**
+//   * Removes the field ref.
+//   */
+//  public void unsetThisPrivateField(String className, StringValue name)
+//  {
+//    unsetField(name);
+//  }
 
   /**
    * Returns the static field.
@@ -2502,9 +2514,15 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   // field convenience
   //
 
+
+  @Deprecated // V transformation
   public Value putField(Env env, String name, Value value)
   {
-    return putThisField(env, env.createString(name), value);
+    return putThisField(env, VHelper.noCtx(), env.createString(name), V.one(value)).getOne();
+  }
+
+  public V<? extends Value> putField(Env env, FeatureExpr ctx, String name, V<? extends ValueOrVar> value) {
+    return putThisField(env, ctx, env.createString(name), value);
   }
 
 
