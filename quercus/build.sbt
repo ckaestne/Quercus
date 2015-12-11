@@ -31,7 +31,7 @@ libraryDependencies += "com.google.code.findbugs" % "jsr305" % "3.0.1"
 
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
 
-
+parallelExecution in Test := false
 
 jacoco.settings
 
