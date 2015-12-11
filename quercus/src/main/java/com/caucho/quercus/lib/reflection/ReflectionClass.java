@@ -428,7 +428,7 @@ public class ReflectionClass
       return;
 
     for (StringValue name : cls.getStaticFieldNames()) {
-      Value field = cls.getStaticFieldValue(env, name);
+      Value field = cls.getStaticFieldValue(env, name).getOne();
       array.put(name, field.toValue());
     }
 
@@ -439,7 +439,7 @@ public class ReflectionClass
                                       StringValue name,
                                       @Optional Value defaultV)
   {
-    Value field = _cls.getStaticFieldInternal(env, name);
+    Value field = _cls.getStaticFieldInternal(env, name).getOne();
 
     if (field == null) {
       if (! defaultV.isDefault())
@@ -459,7 +459,7 @@ public class ReflectionClass
 
   public void setStaticPropertyValue(Env env, StringValue name, Value value)
   {
-    _cls.getStaticFieldVar(env, name).set(VHelper.noCtx(), V.one(value));
+    _cls.getStaticFieldVar(env, name).getOne().set(VHelper.noCtx(), V.one(value));
   }
 
   public ArrayValue getDefaultProperties(Env env)

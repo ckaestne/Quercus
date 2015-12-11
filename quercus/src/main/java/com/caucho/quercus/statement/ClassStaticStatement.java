@@ -75,13 +75,17 @@ public class ClassStaticStatement
 
       // Var var = qClass.getStaticFieldVar(env, env.createString(staticName));
       // Var var = qClass.getStaticFieldVar(env, staticName);
-      Var var = env.getStaticVar(env.createString(className
+      V<? extends Var> var = env.getStaticVar(env.createString(className
                                                   + "::" + staticName));
 
-      env.setVar(ctx, _var.getName(), V.one(var));
+      env.setVar(ctx, _var.getName(), var);
 
-      if (! var.makeValue().isset() && _initValue != null)
-        var.set(VHelper.noCtx(), _initValue.eval(env, VHelper.noCtx()));
+      var.vforeach(ctx, (cc, va) ->
+              va.getValue().vforeach(cc, (c, v) -> {
+                if (!v.isset() && _initValue != null) {
+                  va.set(c, _initValue.eval(env, c));
+                }
+              }));
 
     }
     catch (RuntimeException e) {

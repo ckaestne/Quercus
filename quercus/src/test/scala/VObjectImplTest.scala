@@ -28,6 +28,8 @@ class VObjectImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         eval("$f=new stdClass; $f->y=2; echo $f->y;") to "2"
         eval("$f=new stdClass; $f->y=function(){echo 'x';}; echo call_user_func($f->y);") to "x"
         eval("class F{ function x() { echo 'x'; } } $f=new F(); $f->x();") to "x"
+        eval("$obj = (object) array('foo' => '1', 'property' => '2'); echo $obj->foo; echo $obj->property;") to "12"
+        eval("class F{ public static $x = 1; } F::$x=2; echo F::$x;") to "2"
     }
 
     it should "support the wikipedia example" in {
@@ -72,6 +74,8 @@ class VObjectImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 
     "VClass" should "support variational fields" in {
         eval("class F{ public $x = 0; } $f=new F(); if ($FOO) $f->x=2; echo $f->x;") to c(foo, "2") ~ c(foo.not, "0")
+        eval("class F{ public static $x = 0; } if ($FOO) F::$x=2; echo F::$x;") to c(foo, "2") ~ c(foo.not, "0")
+        eval("class F{ } $f=new F(); if ($FOO) $f->x=2; echo $f->x;") to c(foo, "2")
 
     }
 

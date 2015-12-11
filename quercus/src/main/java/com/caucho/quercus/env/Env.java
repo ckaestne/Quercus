@@ -57,8 +57,8 @@ import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHashMap;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.sql.DataSource;
@@ -243,8 +243,7 @@ public class Env
   private EnvVar []_globalList;
 
   // Statics
-  private Map<StringValue, Var> _staticMap
-    = new HashMap<StringValue, Var>();
+  private Map<StringValue, EnvVar> _staticMap = new HashMap<>();
 
   // Current env
   private Map<StringValue, EnvVar> _map = _globalMap;
@@ -2329,15 +2328,18 @@ public class Env
    *
    * @param name the variable name
    */
-  public final Var getStaticVar(StringValue name)
+  public final V<? extends Var> getStaticVar(StringValue name)
   {
-    Var var = _staticMap.get(name);
+    return getOrCreateStaticVar(name).getVar();
+  }
+
+  private EnvVar getOrCreateStaticVar(StringValue name) {
+    EnvVar var = _staticMap.get(name);
 
     if (var == null) {
-      var = new Var();
+      var = new EnvVarImpl(V.one(new Var()));
       _staticMap.put(name, var);
     }
-
     return var;
   }
 
@@ -2346,42 +2348,24 @@ public class Env
    *
    * @param name the variable name
    */
-  public final Value getStaticValue(StringValue name)
+  public final V<? extends Value> getStaticValue(StringValue name)
   {
-    Var var = _staticMap.get(name);
+    EnvVar var = _staticMap.getOrDefault(name, new EnvVarImpl(V.one(new Var())));
 
-    if (var != null) {
-      return var.getValue().getOne();
-    }
-    else
-      return NullValue.NULL;
+    return var.getValue().map(v -> v == null ? NullValue.NULL : v);
   }
 
   /**
    * Gets a static variable
-   *
+   *  @param ctx
    * @param name the variable name
+   * @param value
    */
-  public final Var setStaticRef(StringValue name, ValueOrVar value)
+  public final V<? extends Var> setStaticRef(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    if (value.isVar()) {
-      Var var = value._var();
-
-      _staticMap.put(name, var);
-
-      return var;
-    }
-
-    Var var = _staticMap.get(name);
-
-    if (var == null) {
-      var = new Var();
-      _staticMap.put(name, var);
-    }
-
-    var.set(VHelper.noCtx(),V.one(value._value()));
-
-    return var;
+    EnvVar var = getOrCreateStaticVar(name);
+    var.setRef(ctx, value);
+    return var.getVar();
   }
 
   /**

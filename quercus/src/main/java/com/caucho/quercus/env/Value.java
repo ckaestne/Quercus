@@ -2483,17 +2483,17 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the static field.
    */
-  public Value getStaticFieldValue(Env env, StringValue name)
+  public V<? extends Value> getStaticFieldValue(Env env, StringValue name)
   {
     env.error(L.l("No calling class found for '{0}'", this));
 
-    return NullValue.NULL;
+    return V.one(NullValue.NULL);
   }
 
   /**
   * Returns the static field reference.
   */
-  public Var getStaticFieldVar(Env env, StringValue name)
+  public V<? extends Var> getStaticFieldVar(Env env, StringValue name)
   {
     env.error(L.l("No calling class found for '{0}'", this));
 
@@ -2503,7 +2503,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Sets the static field.
    */
-  public Var setStaticFieldRef(Env env, StringValue name, ValueOrVar value)
+  public V<? extends Var> setStaticFieldRef(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     env.error(L.l("No calling class found for '{0}'", this));
 

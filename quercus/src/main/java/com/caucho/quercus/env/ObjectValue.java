@@ -684,7 +684,7 @@ abstract public class ObjectValue extends Callback {
    * Returns the static field.
    */
   @Override
-  public Value getStaticFieldValue(Env env, StringValue name)
+  public V<? extends Value> getStaticFieldValue(Env env, StringValue name)
   {
     return getQuercusClass().getStaticFieldValue(env, name);
   }
@@ -693,7 +693,7 @@ abstract public class ObjectValue extends Callback {
   * Returns the static field reference.
   */
   @Override
-  public Var getStaticFieldVar(Env env, StringValue name)
+  public V<? extends Var> getStaticFieldVar(Env env, StringValue name)
   {
     return getQuercusClass().getStaticFieldVar(env, name);
   }
@@ -702,9 +702,9 @@ abstract public class ObjectValue extends Callback {
    * Sets the static field.
    */
   @Override
-  public Var setStaticFieldRef(Env env, StringValue name, ValueOrVar value)
+  public V<? extends Var> setStaticFieldRef(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    return getQuercusClass().setStaticFieldRef(env, name, value);
+    return getQuercusClass().setStaticFieldRef(env, VHelper.noCtx(), name, value);
   }
 
   /**

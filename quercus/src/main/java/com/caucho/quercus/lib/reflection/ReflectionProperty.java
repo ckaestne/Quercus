@@ -140,7 +140,7 @@ public class ReflectionProperty
 
   public Value getValue(Env env, @Optional ObjectValue obj)
   {
-    return _prop.getValue(env, obj);
+    return _prop.getValue(env, obj).getOne();
   }
 
   public void setValue(Env env, Value obj, @Optional Value value)
@@ -224,9 +224,9 @@ public class ReflectionProperty
       return _nameV;
     }
 
-    public Value getValue(Env env, ObjectValue obj)
+    public V<? extends Value> getValue(Env env, ObjectValue obj)
     {
-      return obj.getField(env, _nameV).getOne();
+      return obj.getField(env, _nameV);
     }
 
     public void setValue(Env env, Value obj, Value value)
@@ -329,7 +329,7 @@ public class ReflectionProperty
     }
 
     @Override
-    public Value getValue(Env env, ObjectValue obj)
+    public V<? extends Value> getValue(Env env, ObjectValue obj)
     {
       return _cls.getStaticFieldValue(env, _name);
     }
@@ -337,7 +337,7 @@ public class ReflectionProperty
     @Override
     public void setValue(Env env, Value obj, Value value)
     {
-      _cls.getStaticFieldVar(env, _name).set(VHelper.noCtx(), V.one(obj));
+      _cls.getStaticFieldVar(env, _name).getOne().set(VHelper.noCtx(), V.one(obj));
     }
 
     @Override

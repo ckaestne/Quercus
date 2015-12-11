@@ -66,7 +66,7 @@ public class SaveState {
             ClassDef []classDef,
             QuercusClass []qClass,
             Value []constants,
-            Map<StringValue,Var> staticMap,
+            Map<StringValue,EnvVar> staticMap,
             Map<StringValue,EnvVar> globalMap,
             HashMap<Path,QuercusPage> includeMap,
             ImportMap importMap)
@@ -177,14 +177,14 @@ public class SaveState {
     return false;
   }
   
-  private void saveStatics(Env env, Map<StringValue,Var> staticMap)
+  private void saveStatics(Env env, Map<StringValue,EnvVar> staticMap)
   {
     _staticValues = new Value[staticMap.size()];
 
-    for (Map.Entry<StringValue,Var> entry : staticMap.entrySet()) {
+    for (Map.Entry<StringValue,EnvVar> entry : staticMap.entrySet()) {
       int id = addStaticName(entry.getKey());
 
-      _staticValues[id] = entry.getValue().toValue().copy(env);
+      _staticValues[id] = entry.getValue().getOne().toValue().copy(env);
     }
   }
 

@@ -101,7 +101,7 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     sb.append("::");
     sb.append(varName);
 
-    return VHelper.toV(env.getStaticValue(sb));
+    return env.getStaticValue(sb);
   }
 
   /**
@@ -123,7 +123,7 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     var.append("::");
     var.append(varName);
 
-    return VHelper.toV(env.getStaticVar(var));
+    return env.getStaticVar(var);
   }
 
   /**
@@ -146,7 +146,7 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     var.append("::");
     var.append(varName);
 
-    env.setStaticRef(var, value.getOne());
+    env.setStaticRef(ctx, var, value);
 
     return value;
   }

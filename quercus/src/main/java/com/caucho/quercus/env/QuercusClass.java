@@ -1044,7 +1044,7 @@ public class QuercusClass extends NullValue {
         fullName.append("::");
         fullName.append(field._name);
 
-        env.setStaticRef(fullName, val);
+        env.setStaticRef(VHelper.noCtx(), fullName, V.one(val));
       }
 
       env.addInitializedClass(map.getKey());
@@ -1052,7 +1052,7 @@ public class QuercusClass extends NullValue {
   }
 
   @Override
-  public Value getStaticFieldValue(Env env, StringValue name)
+  public V<? extends Value> getStaticFieldValue(Env env, StringValue name)
   {
     StringValue staticName = _staticFieldNameMap.get(name);
 
@@ -1060,14 +1060,14 @@ public class QuercusClass extends NullValue {
       env.error(L.l("{0}::${1} is an undeclared static field",
                     _className, name));
 
-      return NullValue.NULL;
+      return V.one(NullValue.NULL);
     }
 
     return env.getStaticValue(staticName);
   }
 
   @Override
-  public Var getStaticFieldVar(Env env, StringValue name)
+  public V<? extends Var> getStaticFieldVar(Env env, StringValue name)
   {
     StringValue staticName = _staticFieldNameMap.get(name);
 
@@ -1082,7 +1082,7 @@ public class QuercusClass extends NullValue {
   }
 
   @Override
-  public Var setStaticFieldRef(Env env, StringValue name, ValueOrVar value)
+  public V<? extends Var> setStaticFieldRef(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
     StringValue staticName = _staticFieldNameMap.get(name);
 
@@ -1093,20 +1093,20 @@ public class QuercusClass extends NullValue {
       throw new IllegalStateException();
     }
 
-    return env.setStaticRef(staticName, value);
+    return env.setStaticRef(ctx, staticName, value);
   }
 
   /**
    * For Reflection.
    */
-  public Value getStaticFieldInternal(Env env, StringValue name)
+  public @Nonnull V<? extends Value> getStaticFieldInternal(Env env, StringValue name)
   {
     StringValue staticName = _staticFieldNameMap.get(name);
 
     if (staticName != null)
       return env.getStaticValue(staticName);
     else
-      return null;
+      return V.one(null);
   }
 
   //

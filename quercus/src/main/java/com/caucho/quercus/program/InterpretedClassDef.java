@@ -535,7 +535,7 @@ public class InterpretedClassDef extends ClassDef
 
       StaticFieldEntry field = entry.getValue();
 
-      Var var = qClass.getStaticFieldVar(env, name);
+      Var var = qClass.getStaticFieldVar(env, name).getOne();
 
       var.set(VHelper.noCtx(),field.getValue().eval(env, VHelper.noCtx()).map((a)->a.copy()));
     }

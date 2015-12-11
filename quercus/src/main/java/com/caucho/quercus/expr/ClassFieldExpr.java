@@ -86,7 +86,7 @@ public class ClassFieldExpr extends AbstractVarExpr {
   @Override
   public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getClass(_className).getStaticFieldValue(env, _varName));
+    return env.getClass(_className).getStaticFieldValue(env, _varName);
   }
 
   /**
@@ -100,7 +100,7 @@ public class ClassFieldExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getClass(_className).getStaticFieldVar(env, _varName));
+    return env.getClass(_className).getStaticFieldVar(env, _varName);
   }
 
   /**
@@ -115,7 +115,7 @@ public class ClassFieldExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    env.getClass(_className).setStaticFieldRef(env, _varName, value.getOne());
+    env.getClass(_className).setStaticFieldRef(env, ctx, _varName, value);
 
     return value;
   }

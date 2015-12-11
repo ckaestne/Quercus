@@ -92,7 +92,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
 
     StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
 
-    return VHelper.toV(qClass.getStaticFieldValue(env, varName));
+    return qClass.getStaticFieldValue(env, varName);
   }
 
   /**
@@ -112,7 +112,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
 
     StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
 
-    return VHelper.toV(qClass.getStaticFieldVar(env, varName));
+    return qClass.getStaticFieldVar(env, varName);
   }
 
   /**
@@ -133,7 +133,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
 
     StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
 
-    return VHelper.toV(qClass.setStaticFieldRef(env, varName, value.getOne()).makeValue());
+    return qClass.setStaticFieldRef(env, VHelper.noCtx(), varName, value).map((a)->a.makeValue());
   }
 
   /**

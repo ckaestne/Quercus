@@ -38,7 +38,7 @@ import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -69,13 +69,16 @@ public class StaticStatement extends Statement {
   public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     try {
-      Var var = env.getStaticVar(_uniqueStaticName);
+      V<? extends Var> var = env.getStaticVar(_uniqueStaticName);
 
-      env.setRef(ctx, _var.getName(), V.one(var.makeValue()));
+      env.setRef(ctx, _var.getName(), var);
 
-      if (! var.makeValue().isset() && _initValue != null) {
-        var.set(VHelper.noCtx(),_initValue.eval(env, VHelper.noCtx()));
-      }
+      var.vforeach(ctx, (cc, va) ->
+              va.getValue().vforeach(cc, (c, v) -> {
+                if (!v.isset() && _initValue != null) {
+                  va.set(c, _initValue.eval(env, c));
+                }
+              }));
 
     }
     catch (RuntimeException e) {
