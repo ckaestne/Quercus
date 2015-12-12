@@ -58,7 +58,7 @@ trait AbstractPhpTest extends ConditionalOutputInfrastructure {
 
         val allExpected = ConditionalLib.explodeOptList(expected).map(_.mkString)
         val allFound = ConditionalLib.explodeOptList(result).map(_.mkString)
-        ConditionalLib.mapCombinationF(allExpected, allFound, FeatureExprFactory.True, compareOne)
+        ConditionalLib.vmapCombinationOp(allExpected, allFound, FeatureExprFactory.True, compareOne)
     }
 
     private def render(result: List[TOpt[String]]): String =

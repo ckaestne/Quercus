@@ -13,9 +13,9 @@ libraryDependencies += "com.google.appengine" % "appengine-api-1.0-sdk" % "1.9.1
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.13"
 
-libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.3.7"
+libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.4.1"
 
-libraryDependencies += "de.fosd.typechef" % "conditionallib_2.11" % "0.3.7" % "test"
+libraryDependencies += "de.fosd.typechef" % "conditionallib_2.11" % "0.4.1" % "test"
 
 libraryDependencies += "net.liftweb" %% "lift-testkit" % "2.6.2" % "test"
 
@@ -30,8 +30,6 @@ libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
 libraryDependencies += "com.google.code.findbugs" % "jsr305" % "3.0.1"
 
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
-
-parallelExecution in Test := false
 
 jacoco.settings
 
@@ -48,11 +46,13 @@ jacoco.reportFormats in jacoco.Config := Seq(
 
 
 
+/**
+  * AOP used for runtime checking of @Notnull annotations
+  */
 javacOptions ++= Seq("-g")
 
 inputs in Aspectj <+= compiledClasses
 
-// use the results of aspectj weaving
 products in Compile <<= products in Aspectj
 
 products in Runtime <<= products in Compile
