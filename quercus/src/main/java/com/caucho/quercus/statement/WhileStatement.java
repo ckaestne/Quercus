@@ -70,46 +70,55 @@ public class WhileStatement extends Statement {
 
   public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
+    V<? extends Value> value = V.one(null);
     try {
       env.setLocation(getLocation());
-      
-      while (_test.evalBoolean(env, VHelper.noCtx()).getOne()) {
+
+      V<? extends Boolean> conditionValue = _test.evalBoolean(env, ctx);
+      ctx = ctx.and(conditionValue.when(k -> k));
+      while (ctx.isSatisfiable()) {
         env.checkTimeout();
 
-        Value value = _block.execute(env, VHelper.noCtx()).getOne();
-        
-        if (value == null) {
-        }
-        else if (value instanceof BreakValue) {
-          BreakValue breakValue = (BreakValue) value;
-          
-          int target = breakValue.getTarget();
-          
-          if (target > 1)
-            return VHelper.toV(new BreakValue(target - 1));
-          else
-            break;
-        }
-        else if (value instanceof ContinueValue) {
-          ContinueValue conValue = (ContinueValue) value;
-          
-          int target = conValue.getTarget();
-          
-          if (target > 1) {
-            return VHelper.toV(new ContinueValue(target - 1));
+        value = V.choice(ctx, _block.execute(env, ctx), value);
+        value = value.vmap(ctx, (c,v)->{
+          if (v instanceof BreakValue) {
+            BreakValue breakValue = (BreakValue) v;
+
+            int target = breakValue.getTarget();
+
+            if (target > 1)
+              return new BreakValue(target - 1);
+            else
+              return new BreakValue(target);
           }
-        }
-        else
-          return VHelper.toV(value);
-        
+          else if (v instanceof ContinueValue) {
+            ContinueValue conValue = (ContinueValue) v;
+
+            int target = conValue.getTarget();
+
+            if (target > 1) {
+              return new ContinueValue(target - 1);
+            } else
+              return null;
+          }
+          return v;
+        });
+
+
+        ctx = ctx.and(value.when(x -> x == null));
+
         env.setLocation(getLocation());
+
+        conditionValue = _test.evalBoolean(env, ctx);
+        ctx = ctx.and(conditionValue.when(k -> k));
       }
     }
     catch (RuntimeException e) {
       rethrow(e, RuntimeException.class);
     }
 
-    return V.one(null);
+    return value.map(x->
+            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()==0)?null:x);
   }
 }
 

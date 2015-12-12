@@ -25,6 +25,23 @@ object TestGen extends App {
     assert(resourceRoot.exists(), "resource directory not found")
     assert(targetDir.exists(), "target directory not found")
 
+
+    //expand the  resourceRoot/misc.phpt file into multiple test files
+    val miscFragments = Source.fromFile(new File(resourceRoot, "misc.phpt")).mkString.split("====").map(_.trim).filter(_.size > 0)
+    var frags = Set[String]()
+    for (frag <- miscFragments) {
+        val firstBreak = frag.indexOf("\n")
+        val name = frag.take(firstBreak-1)
+        val writer = new FileWriter(new File(resourceRoot, "misc/" + name + ".php"))
+        writer.write("<?php \n")
+        writer.write(frag.drop(firstBreak+1))
+        writer.close
+        assert(!frags.contains(name),s"fragment $name redefined")
+        frags += name
+    }
+
+
+
     for (dir <- resourceRoot.listFiles(); if dir.isDirectory) {
         val classname = "Generated" + dir.getName.capitalize + "Tests"
         val writer = new FileWriter(new File(targetDir, classname + ".scala"))
@@ -49,7 +66,7 @@ object TestGen extends App {
                 writer.append("\n\t\t       |" + line)
             writer.append("\"\"\".stripMargin) to ")
 
-            val tmpFile = File.createTempFile(testname, ".php")
+            val tmpFile = File.createTempFile("test" + testname, ".php")
             tmpFile.deleteOnExit()
 
             var first = true
@@ -57,11 +74,11 @@ object TestGen extends App {
                 var content = phpContent
                 var fexprList: List[String] = Nil
                 for (f<-config._1) {
-                    content = content.replace("@" + f, "1")
+                    content = content.replace("@" + f, "True")
                     fexprList ::= "f"+f
                 }
                 for (f<-config._2) {
-                    content = content.replace("@" + f, "0")
+                    content = content.replace("@" + f, "False")
                     fexprList ::= "f"+f+".not"
                 }
                 if (fexprList.isEmpty) fexprList ::= "True"
@@ -73,6 +90,7 @@ object TestGen extends App {
 
                 import scala.sys.process._
 
+//                println(tmpFile.getAbsolutePath)
                 val output = (phpExecutable+" "+tmpFile.getAbsolutePath).!!
 
                 if (!first)
@@ -84,6 +102,7 @@ object TestGen extends App {
             }
 
             writer.append(s"\n\t}\n")
+            writer.flush()
 
         }
 
@@ -105,7 +124,8 @@ object TestGen extends App {
     type Config = (List[Feature], List[Feature])
 
     def explode(fs: List[Feature]): List[Config] = {
-        if (fs.size == 1) List((List(fs.head), Nil), (Nil, List(fs.head)))
+        if (fs.isEmpty) List((Nil,Nil))
+        else if (fs.size == 1) List((List(fs.head), Nil), (Nil, List(fs.head)))
         else {
             val r = explode(fs.tail)
             r.map(x => (fs.head :: x._1, x._2)) ++ r.map(x => (x._1, fs.head :: x._2))
