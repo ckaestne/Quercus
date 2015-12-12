@@ -82,7 +82,7 @@ public class ObjectMethodExpr extends AbstractMethodExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
+    V<? extends Value> obj = _objExpr.eval(env, ctx);
 
     StringValue methodName = _methodName;
 

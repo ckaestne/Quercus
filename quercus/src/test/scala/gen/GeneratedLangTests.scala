@@ -460,4 +460,13 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not, "11")
 	}
 
+	@Test def testFunction_exists() {
+		eval("""<?php 
+		       |function foo() { echo "x"; }
+		       |echo function_exists("foo");
+		       |echo function_exists("bar");
+		       |foo();""".stripMargin) to 
+			c(True, "1x")
+	}
+
 }

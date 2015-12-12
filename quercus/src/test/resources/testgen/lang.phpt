@@ -304,3 +304,9 @@ function bar() {
 }
 foo();
 bar();
+
+==== function_exists
+function foo() { echo "x"; }
+echo function_exists("foo");
+echo function_exists("bar");
+foo();
