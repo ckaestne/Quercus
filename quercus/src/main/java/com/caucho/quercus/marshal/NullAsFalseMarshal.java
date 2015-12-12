@@ -37,6 +37,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
+
 public class NullAsFalseMarshal extends Marshal
 {
   protected Marshal _marshal;
@@ -86,7 +88,9 @@ public class NullAsFalseMarshal extends Marshal
     return _marshal.marshal(env, value, argClass);
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     // php/1427
     if (value == null) {

@@ -36,6 +36,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
+
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
  */
@@ -89,7 +91,9 @@ public class ExtValueMarshal extends Marshal
   }
 
   @Override
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return V.one((Value) value);
   }

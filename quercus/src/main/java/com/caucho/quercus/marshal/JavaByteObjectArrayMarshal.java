@@ -35,13 +35,17 @@ import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 
+import javax.annotation.Nonnull;
+
 public class JavaByteObjectArrayMarshal extends JavaArrayMarshal
 {
   public static final Marshal MARSHAL
     = new JavaByteObjectArrayMarshal();
 
   @Override
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     Byte []byteValue = (Byte []) value;
 

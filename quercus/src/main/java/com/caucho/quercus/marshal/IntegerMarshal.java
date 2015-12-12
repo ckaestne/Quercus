@@ -37,6 +37,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
+
 public class IntegerMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new IntegerMarshal();
@@ -61,7 +63,9 @@ public class IntegerMarshal extends Marshal
     return new Integer((int) value.toLong());
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
       return V.one(LongValue.ZERO);

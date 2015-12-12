@@ -39,6 +39,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
+
 public class PathMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new PathMarshal();
@@ -58,7 +60,9 @@ public class PathMarshal extends Marshal
     return env.lookupPwd(value);
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     // XXX: need test
     String className = value.getClass().getName();

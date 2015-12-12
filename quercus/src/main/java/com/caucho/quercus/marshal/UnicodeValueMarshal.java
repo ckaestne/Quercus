@@ -37,6 +37,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
+
 public class UnicodeValueMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new UnicodeValueMarshal();
@@ -65,7 +67,9 @@ public class UnicodeValueMarshal extends Marshal
     return value.toUnicodeValue(env);
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof UnicodeValue)
       return V.one((UnicodeValue) value);

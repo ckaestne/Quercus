@@ -36,6 +36,8 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 
+import javax.annotation.Nonnull;
+
 public class VoidMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new VoidMarshal();
@@ -50,7 +52,9 @@ public class VoidMarshal extends Marshal
     throw new UnsupportedOperationException();
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return V.one(NullValue.NULL);
   }

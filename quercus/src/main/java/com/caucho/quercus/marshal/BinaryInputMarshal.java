@@ -39,6 +39,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
 import java.io.InputStream;
 
 public class BinaryInputMarshal extends Marshal
@@ -89,7 +90,9 @@ public class BinaryInputMarshal extends Marshal
       return new ReadStreamInput(env, value.toInputStream());
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return V.one((Value) value);
   }

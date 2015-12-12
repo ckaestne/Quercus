@@ -36,6 +36,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
+
 public class ExpectMarshal extends Marshal
 {
   protected enum Type {
@@ -90,7 +92,9 @@ public class ExpectMarshal extends Marshal
     return expect(env, value.toValue());
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return V.one((Value) value);
   }

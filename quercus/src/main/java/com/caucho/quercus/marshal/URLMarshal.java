@@ -37,6 +37,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
 import java.net.URL;
 
 public class URLMarshal extends Marshal
@@ -58,7 +59,9 @@ public class URLMarshal extends Marshal
     return value.toJavaURL(env);
   }
 
-  public @org.checkerframework.checker.nullness.qual.NonNull V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public
+  @Nonnull
+  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return V.one(env.wrapJava((URL)value));
   }
