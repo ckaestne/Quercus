@@ -296,20 +296,10 @@ public class ObjectExtValue extends ObjectValue
   @Override
   public V<? extends Var> getThisFieldArg(Env env, StringValue name)
   {
-    throw new UnimplementedVException();
-//
-//    Entry entry = getThisEntry(name);
-//
-//    //TODO fix again from V
-//    if (entry != null)
-//      return entry.toArg().getOne();
-//
-//    Value value = getFieldExt(env, name);
-//
-//    if (value != UnsetValue.UNSET)
-//      return value.makeVar();
-//
-//    return new ArgGetFieldValue(env, this, name).makeVar();
+    EnvVar value = getFieldExt(env, name);
+
+    FeatureExpr whenUnset = value.getValue().when(k -> k == UnsetValue.UNSET);
+    return V.choice(whenUnset, V.one(new ArgGetFieldValue(env, this, name).toVar()), value.getVar());
   }
 
   /**
@@ -318,19 +308,7 @@ public class ObjectExtValue extends ObjectValue
   @Override
   public V<? extends Var> getFieldArgRef(Env env, StringValue name)
   {
-    throw new UnimplementedVException();
-//
-//    Entry entry = getEntry(env, name);
-//
-//    if (entry != null)
-//      return entry.toArg().getOne();
-//
-//    Value value = getFieldExt(env, name);
-//
-//    if (value != UnsetValue.UNSET)
-//      return value.makeVar();
-//
-//    return new ArgGetFieldValue(env, this, name).makeVar();
+    return getThisFieldArg(env, name);
   }
 
   /**
@@ -339,19 +317,8 @@ public class ObjectExtValue extends ObjectValue
   @Override
   public V<? extends Var> getThisFieldArgRef(Env env, StringValue name)
   {
-    throw new UnimplementedVException();
+    return getThisFieldArg(env, name);
 
-//    Entry entry = getThisEntry(name);
-//
-//    if (entry != null)
-//      return entry.toArg().getOne();
-//
-//    Value value = getFieldExt(env, name);
-//
-//    if (value != UnsetValue.UNSET)
-//      return value.makeVar();
-//
-//    return new ArgGetFieldValue(env, this, name).makeVar();
   }
 
   /**

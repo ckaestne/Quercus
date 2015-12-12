@@ -100,7 +100,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
   {
     Value value = env.getThis();
 
-    return value.getThisFieldArg(env, evalName(env)).map((a)->a.makeValue());
+    return value.getThisFieldArg(env, evalName(env));
   }
 
   /**
