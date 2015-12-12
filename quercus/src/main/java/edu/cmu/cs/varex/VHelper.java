@@ -115,11 +115,11 @@ public class VHelper {
         return mapArray(V.class, a, x->V.one(x));
     }
 
-  public static V<? extends Value> getValues(V<? extends ValueOrVar> v) {
-    return v.flatMap(a -> a == null ? null : (a.isVar() ? a._var()._getValues() : V.one(a._value())));
+  public static V<? extends Value> getValues(@Nonnull V<? extends ValueOrVar> v) {
+    return v.flatMap(a -> a == null ? V.one(null) : (a.isVar() ? a._var()._getValues() : V.one(a._value())));
   }
   @Deprecated //use when further investigation is required
-  public static V<? extends Value> _getValues(V<? extends ValueOrVar> v) {
+  public static V<? extends Value> _getValues(@Nonnull V<? extends ValueOrVar> v) {
     return getValues(v);
   }
 

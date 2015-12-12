@@ -71,4 +71,27 @@ public class NullMonitorTest {
     new NullTestClass.Inner("foo");
   }
 
+  @Test(expected = NullPointerException.class)
+  public void testVReturn() {
+    new NullTestClass().testVReturn(null);
+  }
+
+  @Test
+  public void testVReturn3() {
+    new NullTestClass().testVReturn2(V.one(null));
+  }
+
+  @Test
+  public void testVReturn4() {
+    new NullTestClass().testVReturnNullable(null);
+  }
+
+
+  @Test(expected = NullPointerException.class)
+  public void testVReturn2() {
+    new NullTestClass().testVReturn2(null);
+  }
+
+
+
 }

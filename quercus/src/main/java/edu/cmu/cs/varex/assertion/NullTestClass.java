@@ -1,5 +1,7 @@
 package edu.cmu.cs.varex.assertion;
 
+import edu.cmu.cs.varex.V;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -42,6 +44,11 @@ public class NullTestClass {
     return o;
   }
 
+  public V<? extends Object> testVReturn(@Nullable V<? extends Object> o) { return null; }
+
+  public V<? extends Object> testVReturnNullable(@Nullable V<? extends Object> o) { return V.one(o); }
+
+  public V<? extends Object> testVReturn2(@Nonnull V<? extends Object> o) { return V.one(o); }
 
   public static class Inner {
     public Inner(@Nonnull Object o) {
