@@ -32,9 +32,6 @@ package com.caucho.quercus.marshal;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
-
-import javax.annotation.Nonnull;
 
 public class JavaByteArrayMarshal extends JavaArrayMarshal
 {
@@ -42,11 +39,9 @@ public class JavaByteArrayMarshal extends JavaArrayMarshal
     = new JavaByteArrayMarshal();
 
   @Override
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return V.one(env.createBinaryBuilder((byte[]) value));
+    return env.createBinaryBuilder((byte[]) value);
   }
 
   @Override

@@ -34,10 +34,7 @@ import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class CharacterMarshal extends Marshal
 {
@@ -58,14 +55,12 @@ public class CharacterMarshal extends Marshal
     return new Character(value.toChar());
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
-      return V.one(NullValue.NULL);
+      return NullValue.NULL;
     else
-      return V.one(env.createString(value.toString()));
+      return env.createString(value.toString());
   }
 
   @Override

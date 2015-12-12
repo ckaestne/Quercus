@@ -34,10 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class FloatObjectMarshal extends Marshal
 {
@@ -59,14 +56,12 @@ public class FloatObjectMarshal extends Marshal
     return value.toJavaFloat();
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
-      return V.one(DoubleValue.ZERO);
+      return DoubleValue.ZERO;
     else
-      return V.one(new DoubleValue(((Number) value).doubleValue()));
+      return new DoubleValue(((Number) value).doubleValue());
   }
 
   @Override

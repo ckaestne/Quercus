@@ -34,10 +34,8 @@ import com.caucho.quercus.env.JavaURLValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
-import javax.annotation.Nonnull;
 import java.net.URL;
 
 public class URLMarshal extends Marshal
@@ -59,11 +57,9 @@ public class URLMarshal extends Marshal
     return value.toJavaURL(env);
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return V.one(env.wrapJava((URL)value));
+    return env.wrapJava((URL) value);
   }
   
   @Override

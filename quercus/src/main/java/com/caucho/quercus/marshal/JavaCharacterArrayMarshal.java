@@ -33,9 +33,6 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
-
-import javax.annotation.Nonnull;
 
 public class JavaCharacterArrayMarshal extends JavaArrayMarshal
 {
@@ -43,16 +40,14 @@ public class JavaCharacterArrayMarshal extends JavaArrayMarshal
     = new JavaCharacterArrayMarshal();
 
   @Override
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     char []buffer = (char []) value;
 
     if (buffer != null)
-      return V.one(env.createString(buffer, 0, buffer.length));
+      return env.createString(buffer, 0, buffer.length);
     else
-      return V.one(NullValue.NULL);
+      return NullValue.NULL;
   }
 
   @Override

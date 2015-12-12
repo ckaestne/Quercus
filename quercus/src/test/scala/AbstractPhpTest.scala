@@ -6,6 +6,7 @@ import com.caucho.quercus.TQuercus
 import de.fosd.typechef.conditional.ConditionalLib
 import de.fosd.typechef.featureexpr.{FeatureExpr, FeatureExprFactory}
 import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
+import org.junit.Assert
 
 import scala.collection.JavaConverters._
 
@@ -34,6 +35,16 @@ trait AbstractPhpTest extends ConditionalOutputInfrastructure {
             compare(toTypeChef(expected.toOptList), toTypeChef(result.asScala.toList))
 //            assert(expected.toString.trim == result.toString.trim, explainResult(expected.toString, result.toString))
 
+        }
+
+        def toError(): Unit = {
+            try {
+                val result = TQuercus.executeScript(code)
+                Assert.fail("expected error, but execution succeeded with result "+toTypeChef(result.asScala.toList))
+            } catch {
+                case e: Exception =>
+                case e: AssertionError =>
+            }
         }
     }
 

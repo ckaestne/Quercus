@@ -29,14 +29,17 @@
 
 package com.caucho.quercus.lib;
 
-import com.caucho.quercus.env.BooleanValue;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.annotation.VParamType;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
+import com.caucho.quercus.annotation.VSideeffectFree;
+import com.caucho.quercus.annotation.VVariational;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
+import javax.annotation.Nonnull;
 import java.util.logging.Logger;
 
 /**
@@ -54,14 +57,31 @@ public class VModule extends AbstractQuercusModule {
         return new String[]{"v"};
     }
 
-    public <T extends Value> V<? extends T> create_conditional_value(FeatureExpr condition, T value, T elseValue) {
-        return V.choice(condition, value, elseValue);
+//    public <T extends Value> V<? extends T> create_conditional_value(FeatureExpr condition, T value, T elseValue) {
+//        return V.choice(condition, value, elseValue);
+//    }
+
+    @VVariational@VParamType(BooleanValue.class)
+    public V<? extends BooleanValue> create_conditional(@Nonnull@VParamType(StringValue.class) V<? extends StringValue> condition) {
+        //assuming that condition is not variational!
+        return V.choice(FeatureExprFactory.createDefinedExternal(condition.getOne().toString()), BooleanValue.TRUE, BooleanValue.FALSE);
     }
 
-    public V<? extends BooleanValue> create_conditional(StringValue condition) {
-        return V.choice(FeatureExprFactory.createDefinedExternal(condition.toString()), BooleanValue.TRUE, BooleanValue.FALSE);
+    @VSideeffectFree
+    public Value vtest_add(Value a, Value b) {
+        return LongValue.create(a.toLong() + b.toLong());
     }
 
+    @VVariational@VParamType(Value.class)
+    public V<? extends Value> vtest_addandprint(Env env, FeatureExpr ctx, @VParamType(Value.class) V<? extends Value> a, @VParamType(Value.class) V<? extends Value> b) {
+        V<? extends LongValue> result = VHelper.mapAll(a, b, (x, y) -> LongValue.create(x.toLong() + y.toLong()));
+        result.vforeach(ctx, (c, v) -> env.print(c, v));
+        return result;
+    }
+
+    public Value vtest_unlifted(Value a, Value b) {
+        return LongValue.create(a.toLong() + b.toLong());
+    }
 
 }
 

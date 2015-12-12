@@ -34,10 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class NullAsFalseMarshal extends Marshal
 {
@@ -88,20 +85,18 @@ public class NullAsFalseMarshal extends Marshal
     return _marshal.marshal(env, value, argClass);
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     // php/1427
     if (value == null) {
-      return V.one(BooleanValue.FALSE);
+      return BooleanValue.FALSE;
     }
 
-    V<? extends Value> result = _marshal.unmarshal(env, VHelper.noCtx(), value);
+    Value result = _marshal.unmarshal(env, VHelper.noCtx(), value);
 
     if (result == null)
-      return V.one(BooleanValue.FALSE);
-    return result.map((a)-> a.isNull()? BooleanValue.FALSE : a);
+      return BooleanValue.FALSE;
+    return result.isNull() ? BooleanValue.FALSE : result;
   }
 
   public String toString()

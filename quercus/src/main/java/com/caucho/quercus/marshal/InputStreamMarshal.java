@@ -34,10 +34,8 @@ import com.caucho.quercus.env.JavaValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
-import javax.annotation.Nonnull;
 import java.io.InputStream;
 
 public class InputStreamMarshal extends Marshal
@@ -59,11 +57,9 @@ public class InputStreamMarshal extends Marshal
     return value.toInputStream();
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return V.one(env.wrapJava((InputStream) value));
+    return env.wrapJava((InputStream) value);
   }
 
   @Override

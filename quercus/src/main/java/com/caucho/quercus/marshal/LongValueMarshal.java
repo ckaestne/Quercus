@@ -34,10 +34,7 @@ import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class LongValueMarshal
   extends Marshal
@@ -68,16 +65,14 @@ public class LongValueMarshal
     return value.toLongValue();
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof LongValue)
-      return V.one((LongValue) value);
+      return (LongValue) value;
     else if (value instanceof Value)
-      return V.one(((Value) value).toLongValue());
+      return ((Value) value).toLongValue();
     else
-      return V.one(null);
+      return null;
   }
 
   @Override

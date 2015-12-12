@@ -33,10 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class ValueMarshal extends Marshal
 {
@@ -76,11 +73,9 @@ public class ValueMarshal extends Marshal
     return value.toLocalValueReadOnly(); // non-copy
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return V.one((Value) value);
+    return (Value) value;
   }
 
   @Override

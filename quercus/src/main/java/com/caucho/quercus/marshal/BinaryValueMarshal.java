@@ -32,10 +32,7 @@ package com.caucho.quercus.marshal;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class BinaryValueMarshal extends Marshal
 {
@@ -72,18 +69,16 @@ public class BinaryValueMarshal extends Marshal
     return arg;
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof BinaryBuilderValue)
-      return V.one((BinaryBuilderValue) value);
+      return (BinaryBuilderValue) value;
     else if (value instanceof Value)
-      return V.one(((Value) value).toBinaryValue(env));
+      return ((Value) value).toBinaryValue(env);
     else {
       StringValue ret =  env.createBinaryBuilder();
       ret.append(value);
-      return V.one(ret);
+      return ret;
     }
   }
 

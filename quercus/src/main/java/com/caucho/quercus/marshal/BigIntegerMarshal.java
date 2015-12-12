@@ -35,10 +35,8 @@ import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
-import javax.annotation.Nonnull;
 import java.math.BigInteger;
 
 /**
@@ -57,11 +55,9 @@ public class BigIntegerMarshal extends Marshal {
     return value.toBigInteger();
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return V.one(env.wrapJava((BigInteger) value));
+    return env.wrapJava((BigInteger) value);
   }
   
   @Override

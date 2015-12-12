@@ -35,10 +35,8 @@ import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
-import javax.annotation.Nonnull;
 import java.util.Date;
 
 public class DateMarshal extends Marshal
@@ -60,11 +58,9 @@ public class DateMarshal extends Marshal
     return value.toJavaDate();
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return V.one(env.wrapJava((Date)value));
+    return env.wrapJava((Date) value);
   }
   
   @Override

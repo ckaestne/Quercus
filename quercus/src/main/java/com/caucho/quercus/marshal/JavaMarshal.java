@@ -36,10 +36,7 @@ import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 /**
  * Code for marshaling arguments.
@@ -104,11 +101,9 @@ public class JavaMarshal extends Marshal {
   }
 
   @Override
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return V.one(env.wrapJava(value, _def, _isUnmarshalNullAsFalse));
+    return env.wrapJava(value, _def, _isUnmarshalNullAsFalse);
   }
 
   @Override

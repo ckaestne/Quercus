@@ -34,10 +34,7 @@ import com.caucho.quercus.env.UnicodeValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class UnicodeValueMarshal extends Marshal
 {
@@ -67,16 +64,14 @@ public class UnicodeValueMarshal extends Marshal
     return value.toUnicodeValue(env);
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof UnicodeValue)
-      return V.one((UnicodeValue) value);
+      return (UnicodeValue) value;
     else if (value instanceof Value)
-      return V.one(((Value) value).toUnicodeValue(env));
+      return ((Value) value).toUnicodeValue(env);
     else
-      return V.one(env.createString(String.valueOf(value)));
+      return env.createString(String.valueOf(value));
   }
   
   @Override

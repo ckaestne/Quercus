@@ -247,9 +247,6 @@ public class MarshalFactory {
     else if (Enum.class.isAssignableFrom(argType)) {
       marshal = new EnumMarshal(argType);
     }
-    else if (V.class.isAssignableFrom(argType)) {
-      marshal = new VMarshal();
-    }
     else {
       String typeName = argType.getName();
 

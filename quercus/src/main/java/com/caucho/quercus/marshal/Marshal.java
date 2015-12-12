@@ -31,13 +31,9 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
-
-import javax.annotation.Nonnull;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -193,26 +189,21 @@ abstract public class Marshal {
     return false;
   }
 
+  @Deprecated
+//Do not call anymore, evaluate first and use other marshal function instead. This won't be maintained for V implementation.
   abstract public Object marshal(Env env, Expr expr, Class argClass);
 
   public Object marshal(Env env, Value value, Class argClass)
   {
     return marshalImpl(env, value.toValue(), argClass);
   }
-  public Object marshal(Env env, V<? extends ValueOrVar> value, Class argClass)
-  {
-    return marshalImpl(env, value.getOne().toValue(), argClass);
-  }
-
 
   protected Object marshalImpl(Env env, Value value, Class<?> argClass)
   {
     return value;
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }

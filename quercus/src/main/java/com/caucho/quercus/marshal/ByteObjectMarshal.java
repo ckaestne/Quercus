@@ -34,10 +34,7 @@ import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class ByteObjectMarshal extends Marshal
 {
@@ -59,14 +56,12 @@ public class ByteObjectMarshal extends Marshal
     return value.toJavaByte();
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
-      return V.one(LongValue.ZERO);
+      return LongValue.ZERO;
     else
-      return V.one(LongValue.create(((Number) value).longValue()));
+      return LongValue.create(((Number) value).longValue());
   }
 
   @Override

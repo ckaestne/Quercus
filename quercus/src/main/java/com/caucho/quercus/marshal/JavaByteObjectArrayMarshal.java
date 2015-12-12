@@ -33,9 +33,6 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
-
-import javax.annotation.Nonnull;
 
 public class JavaByteObjectArrayMarshal extends JavaArrayMarshal
 {
@@ -43,20 +40,18 @@ public class JavaByteObjectArrayMarshal extends JavaArrayMarshal
     = new JavaByteObjectArrayMarshal();
 
   @Override
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     Byte []byteValue = (Byte []) value;
 
     if (byteValue == null)
-      return V.one(NullValue.NULL);
+      return NullValue.NULL;
 
     byte []data = new byte[byteValue.length];
     for (int i = 0; i < data.length; i++)
       data[i] = byteValue[i];
 
-    return V.one(env.createBinaryBuilder(data));
+    return env.createBinaryBuilder(data);
   }
 
   @Override

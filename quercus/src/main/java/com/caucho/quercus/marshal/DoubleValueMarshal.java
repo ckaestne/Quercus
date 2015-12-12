@@ -34,10 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 public class DoubleValueMarshal
   extends Marshal
@@ -68,14 +65,12 @@ public class DoubleValueMarshal
     return value.toDoubleValue();
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof DoubleValue)
-      return V.one((DoubleValue) value);
+      return (DoubleValue) value;
     else if (value instanceof Value)
-      return V.one(((Value) value).toDoubleValue());
+      return ((Value) value).toDoubleValue();
     else
       return null;
   }

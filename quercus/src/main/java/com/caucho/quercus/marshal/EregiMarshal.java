@@ -35,10 +35,7 @@ import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.lib.regexp.Eregi;
 import com.caucho.quercus.lib.regexp.RegexpModule;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-
-import javax.annotation.Nonnull;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -56,9 +53,7 @@ public class EregiMarshal extends StringMarshal {
     return RegexpModule.createEregi(env, value);
   }
 
-  public
-  @Nonnull
-  V<? extends Value> unmarshal(Env env, FeatureExpr ctx, Object value)
+  public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }

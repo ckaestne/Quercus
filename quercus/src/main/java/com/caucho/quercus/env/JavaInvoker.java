@@ -43,8 +43,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -57,7 +57,7 @@ abstract public class JavaInvoker
 {
   private static final L10N L = new L10N(JavaInvoker.class);
 
-  private static final V<? extends ValueOrVar> []NULL_VALUES = new V[0];
+  private static final V<? extends Value>[] NULL_VALUES = new V[0];
 
   private final ModuleContext _moduleContext;
   private final JavaClassDef _classDef;
@@ -75,6 +75,7 @@ abstract public class JavaInvoker
   private int _maxArgumentLength;
 
   private boolean _hasEnv;
+  private boolean _hasCtx;
   private boolean _hasThis;
   private Expr [] _defaultExprs;
   private Marshal []_marshalArgs;
@@ -85,6 +86,8 @@ abstract public class JavaInvoker
 
   private boolean _isCallUsesVariableArgs;
   private boolean _isCallUsesSymbolTable;
+  private boolean _vsideeffectFree = false;
+  private boolean _vvariational = false;
 
   /**
    * Creates the statically introspected function.
@@ -166,6 +169,7 @@ abstract public class JavaInvoker
         boolean callUsesVariableArgs = false;
         boolean callUsesSymbolTable = false;
         boolean returnNullAsFalse = false;
+        Class<?> vretType = null;
 
         for (Annotation ann : methodAnn) {
           if (VariableArguments.class.isAssignableFrom(ann.annotationType()))
@@ -176,6 +180,15 @@ abstract public class JavaInvoker
 
           if (ReturnNullAsFalse.class.isAssignableFrom(ann.annotationType()))
             returnNullAsFalse = true;
+
+          if (VSideeffectFree.class.isAssignableFrom(ann.annotationType()))
+            _vsideeffectFree = true;
+
+          if (VVariational.class.isAssignableFrom(ann.annotationType()))
+            _vvariational = true;
+
+          if (VParamType.class.isAssignableFrom(ann.annotationType()))
+            vretType = ((VParamType)ann).value();
         }
 
         _isCallUsesVariableArgs = callUsesVariableArgs;
@@ -183,6 +196,9 @@ abstract public class JavaInvoker
 
         _hasEnv = _param.length > 0 && _param[0].equals(Env.class);
         int envOffset = _hasEnv ? 1 : 0;
+        _hasCtx = envOffset < _param.length && _param[envOffset].equals(FeatureExpr.class);
+        if (_hasCtx)
+          envOffset++;
 
         if (envOffset < _param.length)
           _hasThis = hasThis(_param[envOffset], paramAnn[envOffset]);
@@ -232,7 +248,10 @@ abstract public class JavaInvoker
           boolean isExpectNumeric = false;
           boolean isExpectBoolean = false;
 
+          boolean isVariational = false;
+
           Class<?> argType = _param[i + envOffset];
+          Class<?> vargType = null;
 
           for (Annotation ann : paramAnn[i + envOffset]) {
             if (Optional.class.isAssignableFrom(ann.annotationType())) {
@@ -285,8 +304,26 @@ abstract public class JavaInvoker
               else if (type == Expect.Type.BOOLEAN) {
                 isExpectBoolean = true;
               }
+            } else if (VParamType.class.isAssignableFrom(ann.annotationType())) {
+              vargType = ((VParamType) ann).value();
             }
+
           }
+          isVariational = V.class.isAssignableFrom(argType);
+          if (_vvariational && !isVariational)
+            throw new QuercusException(L.l(
+                    "Expect variational type for {0}, parameter {1}",
+                    _name, i));
+          if (!_vvariational && isVariational)
+            throw new QuercusException(L.l(
+                    "Unexpected variational type for {0}",
+                    _name));
+          if (isVariational && vargType == null)
+            throw new QuercusException(L.l(
+                    "Variational parameter without @VParamType annotation not supported for {0}",
+                    _name));
+          if (isVariational && vargType != null)
+            argType=vargType;
 
           if (isReference) {
             _marshalArgs[i] = marshalFactory.createReference();
@@ -311,7 +348,25 @@ abstract public class JavaInvoker
           }
         }
 
-        _unmarshalReturn = marshalFactory.create(_retType,
+        Class<?> retType = _retType;
+        if (_vvariational && !V.class.isAssignableFrom(_retType))
+          throw new QuercusException(L.l(
+                  "Expect variational return type for {0}",
+                  _name));
+        if (!_vvariational && V.class.isAssignableFrom(_retType))
+          throw new QuercusException(L.l(
+                  "Unexpected variational return type for {0}",
+                  _name));
+        if (_vvariational) {
+          if (vretType==null)
+            throw new QuercusException(L.l(
+                    "Variational method without @VParamType annotation for its return type not supported for {0}",
+                    _name));
+          retType=vretType;
+        }
+
+
+        _unmarshalReturn = marshalFactory.create(retType,
                                                  false,
                                                  returnNullAsFalse,
                                                  false);
@@ -692,7 +747,7 @@ abstract public class JavaInvoker
                                             Value qThis,
                                             V<? extends ValueOrVar>[] args)
   {
-    Object result = callJavaMethod(env, qClass, qThis, args);
+    V<? extends Object> result = callJavaMethod(env, ctx, qClass, qThis, args);
 
     // php/0k45
     if (qThis != null && isConstructor()) {
@@ -702,12 +757,12 @@ abstract public class JavaInvoker
         ClassDef classDef = getDeclaringClass();
 
         if (classDef != null && qThis.isA(env, classDef.getName())) {
-          qThis.setJavaObject(result);
+          qThis.setJavaObject(result);     //TODO V
         }
       }
     }
 
-    V<? extends Value> value = _unmarshalReturn.unmarshal(env, VHelper.noCtx(), result);
+    V<? extends Value> value = result.map((a) -> _unmarshalReturn.unmarshal(env, ctx, a));
 
     return value;
   }
@@ -719,17 +774,17 @@ abstract public class JavaInvoker
                                   Value qThis,
                                   V<? extends ValueOrVar>[] args)
   {
-    Object result = callJavaMethod(env, qClass, qThis, args);
+    Object result = callJavaMethod(env, ctx, qClass, qThis, args);
 
     qThis.setJavaObject(result);
 
     return VHelper.toV(qThis);
   }
 
-  private Object callJavaMethod(Env env,
-                                QuercusClass qClass,
-                                Value qThis,
-                                V<? extends ValueOrVar>[] args)
+  private V<? extends Object> callJavaMethod(Env env,
+                                             FeatureExpr ctx, QuercusClass qClass,
+                                             Value qThis,
+                                             V<? extends ValueOrVar>[] args)
   {
     if (! _isInit) {
       init();
@@ -744,6 +799,9 @@ abstract public class JavaInvoker
     if (_hasEnv)
       javaArgs[k++] = env;
 
+    if (_hasCtx)
+      javaArgs[k++] = ctx;
+
     Object obj = null;
 
     if (_hasThis) {
@@ -754,14 +812,18 @@ abstract public class JavaInvoker
       obj = qThis != null ? qThis.toJavaObject() : null;
     }
 
+    int vParamStartAt = k;
+
     String warnMessage = null;
     for (int i = 0; i < _marshalArgs.length; i++) {
+      int _i = i, _k = k;
       if (i < args.length && args[i] != null)
-        javaArgs[k] = _marshalArgs[i].marshal(env, args[i], _param[k]);
+        javaArgs[k] = VHelper.getValues(args[i]).map((a) -> _marshalArgs[_i].marshal(env, a, _param[_k]));
       else if (_defaultExprs[i] != null) {
-        javaArgs[k] = _marshalArgs[i].marshal(env,
-                                              _defaultExprs[i],
-                                              _param[k]);
+        javaArgs[k] = VHelper.getValues(_defaultExprs[i].eval(env, ctx)).map(a ->
+                _marshalArgs[_i].marshal(env,
+                        a,
+                        _param[_k]));
       } else {
         warnMessage = L.l(
           "function '{0}' has {1} required arguments, "
@@ -772,7 +834,7 @@ abstract public class JavaInvoker
 
         //return NullValue.NULL;
 
-        javaArgs[k] = _marshalArgs[i].marshal(env, NullValue.NULL, _param[k]);
+        javaArgs[k] = V.one(_marshalArgs[i].marshal(env, NullValue.NULL, _param[k]));
       }
 
       /*
@@ -787,7 +849,7 @@ abstract public class JavaInvoker
       env.warning(warnMessage);
 
     if (_hasRestArgs) {
-      V<? extends ValueOrVar> []rest;
+      V<? extends Value>[] rest;
 
       int restLen = args.length - _marshalArgs.length;
 
@@ -817,10 +879,40 @@ abstract public class JavaInvoker
         _marshalArgs.length));
     }
 
-    Object result = invoke(obj, javaArgs);
-
-    return result;
+    if (_vvariational)
+      return (V<? extends Object>) invoke(obj, javaArgs);
+    else if (_vsideeffectFree)
+      return invokeBruteForce(obj, vParamStartAt, javaArgs);
+    else {
+      //calling only a single time, hoping that none of the parameters are variational
+      for (int i = vParamStartAt; i < javaArgs.length; i++)
+        javaArgs[i] = ((V<? extends Value>) javaArgs[i]).getOne();
+      return V.one(invoke(obj, javaArgs));
+    }
   }
+
+  private V<? extends Object> invokeBruteForce(Object obj, int vParamStartAt, Object[] args) {
+    //turn array of variational parameter into choice of plain arrays (skip the first vParamStartAt entries)
+
+    V<? extends Object[]> plainArgs = bruteForceArgs(args, vParamStartAt);
+
+    return plainArgs.map(a -> invoke(obj, a));
+  }
+
+  private V<? extends Object[]> bruteForceArgs(Object[] input, int idx) {
+    if (idx >= input.length)
+      return V.one(input);
+
+    return bruteForceArgs(input, idx + 1).<Object[]>flatMap(vparams -> {
+      V<?> vparam = (V<?>) ((Object[]) vparams)[idx];
+      return vparam.<Object[]>map(param -> {
+        Object[] result = ((Object[]) vparams).clone();
+        result[idx] = param;
+        return result;
+      });
+    });
+  }
+
 
   abstract public Object invoke(Object obj, Object []args);
 

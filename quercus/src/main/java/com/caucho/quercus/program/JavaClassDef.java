@@ -485,7 +485,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     if (fieldPair != null) {
       try {
         Object result = fieldPair._field.get(qThis.toJavaObject());
-        return fieldPair._marshal.unmarshal(env, VHelper.noCtx(), result).getOne();
+        return fieldPair._marshal.unmarshal(env, VHelper.noCtx(), result);
       } catch (Exception e) {
         log.log(Level.FINE,  e.getMessage(), e);
 
