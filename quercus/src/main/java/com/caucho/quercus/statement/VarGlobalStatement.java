@@ -61,7 +61,7 @@ public class VarGlobalStatement extends Statement {
   {
     V<? extends StringValue> name = _varExpr.evalStringValue(env, ctx);
     
-    name.flatMap((a)->env.getGlobalVar(ctx, a).map((b)->env.setRef(a, b)));
+    name.vflatMap(ctx, (c, a)->env.setRef(ctx, a, env.getGlobalVar(c, a)));
 
     return V.one(null);
   }

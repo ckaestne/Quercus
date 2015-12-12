@@ -86,6 +86,10 @@ public class ArgGetFieldValue extends ArgValue {
     return _obj.getField(_env, _name).getOne();
   }
 
+  private V<? extends Value> getValues()
+  {
+    return _obj.getField(_env, _name);
+  }
   /**
    * Converts to a read-only function argument.
    */
@@ -168,7 +172,7 @@ public class ArgGetFieldValue extends ArgValue {
    */
   public Var toVar()
   {
-    return new Var(V.one(toValue()));
+    return new Var(getValues());
   }
 
   /**

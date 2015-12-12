@@ -57,7 +57,7 @@ public class GlobalStatement extends Statement {
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     try {
-      env.setRef(_var.getName(), env.getGlobalVar(ctx, _var.getName()).getOne());
+      env.setRef(ctx, _var.getName(), env.getGlobalVar(ctx, _var.getName()));
     }
     catch (RuntimeException e) {
       rethrow(e, RuntimeException.class);

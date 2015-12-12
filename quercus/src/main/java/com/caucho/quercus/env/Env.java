@@ -7173,24 +7173,22 @@ public class Env
 //      return value;
 //  }
 
-  /**
-   * Sets a reference
-   */
-  public static Var setRef(ValueOrVar oldValue, ValueOrVar value)
-  {
-    // php/3243
-    if (value instanceof Var)
-      return value._var();
-    /*
-    else if (oldValue instanceof Var) {
-      oldValue.set(value);
 
-      return oldValue;
-    }
-    */
-    else
-      return new Var(V.one(value._value()));
-  }
+//  public static Var setRef(ValueOrVar oldValue, ValueOrVar value)
+//  {
+//    // php/3243
+//    if (value instanceof Var)
+//      return value._var();
+//    /*
+//    else if (oldValue instanceof Var) {
+//      oldValue.set(value);
+//
+//      return oldValue;
+//    }
+//    */
+//    else
+//      return new Var(V.one(value._value()));
+//  }
 
 //  /**
 //   * Sets a reference
