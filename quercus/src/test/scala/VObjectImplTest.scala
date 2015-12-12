@@ -30,6 +30,7 @@ class VObjectImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         eval("class F{ function x() { echo 'x'; } } $f=new F(); $f->x();") to "x"
         eval("$obj = (object) array('foo' => '1', 'property' => '2'); echo $obj->foo; echo $obj->property;") to "12"
         eval("class F{ public static $x = 1; } F::$x=2; echo F::$x;") to "2"
+        eval("class F{ public $x = 1; } function p($a) { echo $a; } $f=new F(); p($f->x);") to "1"
     }
 
     it should "support the wikipedia example" in {

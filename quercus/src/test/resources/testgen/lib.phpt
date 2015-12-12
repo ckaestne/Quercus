@@ -9,13 +9,16 @@ if (@A)
 echo isset($b);
 
 
-
-
 ==== define
+define("CONSTANT", "x");
+echo CONSTANT;
+
+
+==== vdefine
 //define("CONSTANT", "x".(@A+1));
 //echo CONSTANT;
 
-==== vdefine
+==== vvdefine
 //if (@B) {
 //  define("X", 2);
 //  echo X;

@@ -481,7 +481,7 @@ public class RegexpModule
   public static Value preg_match(Env env,
                                  Regexp regexp,
                                  StringValue subject,
-                                 @Optional @Reference Value matchRef,
+                                 @Optional @Reference Var matchRef,
                                  @Optional int flags,
                                  @Optional int offset)
   {
@@ -497,7 +497,7 @@ public class RegexpModule
 
     ArrayValue regs;
 
-    if (matchRef.isDefault()) {
+    if (matchRef.toValue().isDefault()) {
       regs = null;
     }
     else {
@@ -506,7 +506,7 @@ public class RegexpModule
 
     if (regexpState == null || regexpState.exec(env, subject, offset) < 0) {
       if (regs != null) {
-        matchRef.set(regs);
+        matchRef.set_(regs);
       }
 
       env.freeRegexpState(regexpState);
@@ -574,7 +574,7 @@ public class RegexpModule
         }
       }
 
-      matchRef.set(regs);
+      matchRef.set_(regs);
     }
 
     env.freeRegexpState(regexpState);
@@ -885,7 +885,7 @@ public class RegexpModule
                                    Value replacement,
                                    Value subject,
                                    @Optional("-1") long limit,
-                                   @Optional @Reference Value count)
+                                   @Optional @Reference Var count)
   {
     for (Regexp regexp : regexpList) {
       if (regexp.getException() != null) {
@@ -896,7 +896,7 @@ public class RegexpModule
     }
 
     if (count != null) {
-      count.set(LongValue.ZERO);
+      count.set_(LongValue.ZERO);
     }
 
     if (subject instanceof ArrayValue) {
@@ -911,7 +911,7 @@ public class RegexpModule
                                     replacement,
                                     value.toStringValue(),
                                     limit,
-                                    count));
+                                    count.makeValue()));
       }
 
       return result;
@@ -922,7 +922,7 @@ public class RegexpModule
                          regexpList,
                          replacement,
                          subject.toStringValue(),
-                         limit, count);
+                         limit, count.makeValue());
     }
     else {
       return env.getEmptyString();

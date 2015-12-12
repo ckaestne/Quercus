@@ -3705,14 +3705,7 @@ public class Env
                            Value value,
                            boolean isCaseInsensitive)
   {
-    int id;
-
-    if (isCaseInsensitive)
-      id = _quercus.addLowerConstantId(createString(name));
-    else
-      id = _quercus.getConstantId(name);
-
-    return addConstant(id, value, isCaseInsensitive);
+    return addConstant(createString(name), value, isCaseInsensitive);
   }
 
   /**

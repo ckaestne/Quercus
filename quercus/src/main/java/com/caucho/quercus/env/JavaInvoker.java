@@ -46,6 +46,7 @@ import edu.cmu.cs.varex.VHelper;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
 /**
@@ -885,10 +886,30 @@ abstract public class JavaInvoker
       return invokeBruteForce(obj, vParamStartAt, javaArgs);
     else {
       //calling only a single time, hoping that none of the parameters are variational
-      for (int i = vParamStartAt; i < javaArgs.length; i++)
-        javaArgs[i] = ((V<? extends Value>) javaArgs[i]).getOne();
+      try {
+        for (int i = vParamStartAt; i < javaArgs.length; i++) {
+          if (javaArgs[i] instanceof V)
+            javaArgs[i] = ((V<? extends Value>) javaArgs[i]).getOne();
+          else if (javaArgs[i] instanceof V[])
+            javaArgs[i] = varrayToArray(_param[i], (V[]) javaArgs[i]);
+          else throw new QuercusException(L.l(
+                    "Unexpected parameter {1} in \"{0}\"",
+                    _method, i));
+        }
+      } catch (AssertionError e) {
+        throw new QuercusException(L.l(
+                "Call to unlifted library function \"{0}\" with variational parameter. {1}",
+                _method, e.getMessage()));
+      }
       return V.one(invoke(obj, javaArgs));
     }
+  }
+
+  private static <T> T[] varrayToArray(Class<T> c, V<? extends T>[] a) {
+    T[] result = (T[]) Array.newInstance(c.getComponentType(), a.length);
+    for (int i = 0; i < a.length; i++)
+      result[i] = a[i].getOne();
+    return result;
   }
 
   private V<? extends Object> invokeBruteForce(Object obj, int vParamStartAt, Object[] args) {
