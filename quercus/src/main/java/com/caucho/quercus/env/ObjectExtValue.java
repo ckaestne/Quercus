@@ -215,6 +215,7 @@ public class ObjectExtValue extends ObjectValue
   public V<? extends Value> getThisField(Env env, StringValue name)
   {
     EnvVar entry = getThisEntry(name);
+    if (entry == null) entry = EnvVar.fromValue(null);
 
     return entry.getValue().<Value>flatMap(v -> {
       if (v != null) {
@@ -532,7 +533,9 @@ public class ObjectExtValue extends ObjectValue
   /**
    * Gets a new value.
    */
-  private EnvVar getThisEntry(StringValue name)
+  private
+  @Nullable
+  EnvVar getThisEntry(StringValue name)
   {
     EnvVar entry = _fieldMap.get(name);
     
