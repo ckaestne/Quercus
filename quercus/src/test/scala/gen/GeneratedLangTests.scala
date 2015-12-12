@@ -273,4 +273,27 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not and fB.not and fC.not, "0")
 	}
 
+	@Test def testVstringconcat() {
+		eval("""<?php 
+		       |$a="x".@A;
+		       |echo $a;""".stripMargin) to 
+			c(fA, "x1") ~
+			c(fA.not, "x")
+	}
+
+	@Test def testVstringconcat2() {
+		eval("""<?php 
+		       |$a="x";
+		       |$b="y";
+		       |$c=$a.$b;
+		       |echo $c;
+		       |$d=$c.@A;
+		       |$e=$d.(1+@B);
+		       |echo $e;""".stripMargin) to 
+			c(fA and fB, "xyxy12") ~
+			c(fA.not and fB, "xyxy2") ~
+			c(fB.not and fA, "xyxy11") ~
+			c(fA.not and fB.not, "xyxy1")
+	}
+
 }

@@ -88,31 +88,23 @@ public class BinaryAppendExpr extends Expr
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    Value value = _value.eval(env, VHelper.noCtx()).getOne();
+    V<? extends Value> value = _value.eval(env, ctx);
 
-    StringValue sb = value.toStringBuilder(env);
+    V<? extends StringValue> sb = value.map((a)->a.toString(env));
 
     for (BinaryAppendExpr ptr = _next; ptr != null; ptr = ptr._next) {
-      Value ptrValue = ptr._value.eval(env, VHelper.noCtx()).getOne();
+      V<? extends Value> ptrValue = ptr._value.eval(env, ctx);
 
-      sb = sb.appendUnicode(ptrValue);
+      sb = sb.flatMap(s->ptrValue.map(p->s.toStringBuilder(env).appendUnicode(p)));
     }
 
-    return VHelper.toV(sb);
+    return sb;
   }
 
   @Override
   public V<? extends String> evalString(Env env, FeatureExpr ctx)
   {
-    Value value = _value.eval(env, VHelper.noCtx()).getOne();
-
-    StringValue sb = value.toStringBuilder(env);
-
-    for (BinaryAppendExpr ptr = _next; ptr != null; ptr = ptr._next) {
-      sb = sb.appendUnicode(ptr._value.eval(env, VHelper.noCtx()));
-    }
-
-    return VHelper.toV(sb.toString());
+    return _eval(env, ctx).map(a->a.toString());
   }
 
   /**

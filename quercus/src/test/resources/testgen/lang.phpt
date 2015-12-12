@@ -159,3 +159,16 @@ if (@B)
 if (@C)
     echo ++$f->x;
 echo $f->x;
+
+==== vstringconcat
+$a="x".@A;
+echo $a;
+
+==== vstringconcat2
+$a="x";
+$b="y";
+$c=$a.$b;
+echo $c;
+$d=$c.@A;
+$e=$d.(1+@B);
+echo $e;
