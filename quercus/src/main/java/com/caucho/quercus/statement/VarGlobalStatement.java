@@ -58,7 +58,7 @@ public class VarGlobalStatement extends Statement {
   
   public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    V<? extends StringValue> name = _varExpr.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> name = _varExpr.evalStringValue(env, ctx);
     
     name.flatMap((a)->env.getGlobalVar(ctx, a).map((b)->env.setRef(a, b)));
 

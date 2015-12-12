@@ -67,7 +67,7 @@ public class ContinueStatement extends Statement {
     if (_target == null)
       return VHelper.toV(ContinueValue.CONTINUE);
     else
-      return _target.eval(env, VHelper.noCtx()).map((a)-> new ContinueValue(a.toInt()));
+      return _target.eval(env, ctx).map((a)-> new ContinueValue(a.toInt()));
   }
 }
 

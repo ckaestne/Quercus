@@ -68,7 +68,7 @@ public class BreakStatement extends Statement {
     if (_target == null)
       return VHelper.toV(BreakValue.BREAK);
     else
-      return _target.eval(env, VHelper.noCtx()).map((a)->new BreakValue(a.toInt()));
+      return _target.eval(env, ctx).map((a)->new BreakValue(a.toInt()));
   }
 }
 

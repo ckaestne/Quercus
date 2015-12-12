@@ -63,7 +63,7 @@ public class ReturnRefStatement extends Statement {
   {
     if (_expr != null) {
       // php/0750
-      return _expr.evalVar(env, VHelper.noCtx()).map(v->v.makeValue());
+      return _expr.evalVar(env, ctx).map(v->v.makeValue());
     }
     else {
       return VHelper.toV(new Var().makeValue());

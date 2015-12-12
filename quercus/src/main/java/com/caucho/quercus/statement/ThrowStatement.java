@@ -59,7 +59,7 @@ public class ThrowStatement extends Statement {
    */
   public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    throw _expr.eval(env, VHelper.noCtx()).map((a)->a.toException(env,
+    throw _expr.eval(env, ctx).map((a)->a.toException(env,
                                       getLocation().getFileName(),
                                       getLocation().getLineNumber())).getOne();
   }

@@ -70,7 +70,7 @@ public class ReturnStatement extends Statement {
   public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
     if (_expr != null)
-      return _expr.evalValue(env, VHelper.noCtx());
+      return _expr.evalValue(env, ctx);
     else
       return VHelper.toV(NullValue.NULL);
   }
