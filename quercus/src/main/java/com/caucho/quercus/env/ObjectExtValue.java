@@ -33,7 +33,6 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.CurrentTime;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
@@ -238,7 +237,7 @@ public class ObjectExtValue extends ObjectValue
     FeatureExpr hasValue = entry.getValue().when(v -> v == null || v == UnsetValue.UNSET || v == NullValue.NULL).not();
     return new EnvVarImpl(V.choice(hasValue,
             entry.getVar(),
-            V.one(new Var(_quercusClass.getField(env, VHelper.noCtx().and(hasValue.not()), this, name)))));
+            V.one(Var.create(_quercusClass.getField(env, VHelper.noCtx().and(hasValue.not()), this, name)))));
   }
 
   /**
@@ -419,7 +418,7 @@ public class ObjectExtValue extends ObjectValue
                                            _quercusClass,
                                            this,
                     V.one(name),
-                    value);
+                    value).map((a)->a.toValue());
           } finally {
             _isFieldInit = false;
           }
@@ -695,8 +694,8 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                            V<? extends ValueOrVar>[] args)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
@@ -707,7 +706,8 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
@@ -719,7 +719,7 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash,
                                                    V<? extends ValueOrVar>[] args)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
@@ -731,7 +731,8 @@ public class ObjectExtValue extends ObjectValue
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     AbstractFunction fun = _methodMap.get(methodName, hash);
 
@@ -880,7 +881,7 @@ public class ObjectExtValue extends ObjectValue
       sb.append('"');
       sb.append(':');
 
-      StringValue value = fun.callMethod(env, VHelper.noCtx(), qClass, this).getOne().toStringValue(env);
+      StringValue value = fun.callMethod(env, VHelper.noCtx(), qClass, this).getOne().toValue().toStringValue(env);
 
       sb.append(value.length());
       sb.append(':');
@@ -996,7 +997,7 @@ public class ObjectExtValue extends ObjectValue
     AbstractFunction toString = _quercusClass.getToString();
 
     if (toString != null)
-      return toString.callMethod(env, VHelper.noCtx(), _quercusClass, this).getOne().toStringValue();
+      return toString.callMethod(env, VHelper.noCtx(), _quercusClass, this).getOne().toValue().toStringValue();
     else
       return env.createString(_className + "[]");
   }

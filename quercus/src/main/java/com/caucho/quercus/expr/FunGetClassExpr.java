@@ -30,7 +30,7 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -64,7 +64,7 @@ public class FunGetClassExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.createString(_className));
   }

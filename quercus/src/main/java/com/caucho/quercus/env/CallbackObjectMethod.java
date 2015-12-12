@@ -64,19 +64,19 @@ public class CallbackObjectMethod extends Callback {
 
   /**
    * Evaluates the callback with no arguments.
-   *
-   * @param env the calling environment
+   *  @param env the calling environment
    * @param ctx
    */
   @Override
-  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> call(Env env, FeatureExpr ctx)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash);
   }
 
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash, args);
   }

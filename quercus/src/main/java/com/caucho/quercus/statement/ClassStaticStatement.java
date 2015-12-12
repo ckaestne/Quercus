@@ -35,7 +35,7 @@ import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -63,7 +63,8 @@ public class ClassStaticStatement
     _initValue = initValue;
   }
 
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     try {
       StringValue staticName = _staticName;

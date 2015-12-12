@@ -36,7 +36,6 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.IdentityHashMap;
@@ -77,7 +76,7 @@ public class CallbackClassMethod extends Callback {
 
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return _qClass.callMethod(env, ctx, _qThis, _methodName, _hash, args);
   }

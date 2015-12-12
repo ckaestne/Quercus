@@ -91,7 +91,7 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     String className = env.getThis().getQuercusClass().getName();
     StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();

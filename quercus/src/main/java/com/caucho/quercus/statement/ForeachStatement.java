@@ -85,12 +85,13 @@ public class ForeachStatement
     return true;
   }
 
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     Value origObj = _objExpr.eval(env, VHelper.noCtx()).getOne();
     Value obj = origObj.copy(); // php/0669
 
-    V<? extends Value> forEachResult = V.one(null);
+    V<? extends ValueOrVar> forEachResult = V.one(null);
 
     if (_key == null && ! _isRef) {
       Iterator<EnvVar> iter = obj.getValueIterator(env);
@@ -102,7 +103,7 @@ public class ForeachStatement
 
         _value.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value));
 
-        Value result = _block.execute(env, VHelper.noCtx()).getOne();
+        ValueOrVar result = _block.execute(env, VHelper.noCtx()).getOne();
 
         if (result == null) {
         }
@@ -144,7 +145,7 @@ public class ForeachStatement
         // php/0667
         _value.evalAssignRef(env, VHelper.noCtx(), VHelper.toV(value));
 
-        Value result = _block.execute(env, VHelper.noCtx()).getOne();
+        ValueOrVar result = _block.execute(env, VHelper.noCtx()).getOne();
 
         if (result == null) {
         }
@@ -186,17 +187,17 @@ public class ForeachStatement
 
         _value.evalAssignValue(env, innerCtx, value.getValue());
 
-        V<? extends Value> result = _block.execute(env, innerCtx);
+        V<? extends ValueOrVar> result = _block.execute(env, innerCtx);
 
-        forEachResult = forEachResult.<Value>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
-                result.<Value>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), fer)));
+        forEachResult = forEachResult.<ValueOrVar>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
+                result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), fer)));
       }
     }
 
     return forEachResult;
   }
 
-  private Value evalReturn(Value r) {
+  private ValueOrVar evalReturn(ValueOrVar r) {
     if (r == null) return r;
     else if (r instanceof ContinueValue) {
       ContinueValue conValue = (ContinueValue) r;

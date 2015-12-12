@@ -747,8 +747,8 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash,
+                                            V<? extends ValueOrVar>[] args)
   {
     return _classDef.callMethod(env, ctx, this,
                                 methodName, hash,
@@ -759,7 +759,8 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _classDef.callMethod(env, ctx, this, methodName, hash);
   }
@@ -768,7 +769,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                                    V<? extends ValueOrVar>[] args)
   {
@@ -779,7 +780,8 @@ abstract public class JavaAdapter extends ArrayValue
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _classDef.callMethod(env, ctx, this, methodName, hash);
   }

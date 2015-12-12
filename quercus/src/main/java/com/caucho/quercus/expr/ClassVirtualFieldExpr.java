@@ -35,7 +35,7 @@ import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class ClassVirtualFieldExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     Value qThis = env.getThis();
 

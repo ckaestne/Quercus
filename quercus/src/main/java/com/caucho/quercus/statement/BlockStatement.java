@@ -32,9 +32,10 @@ package com.caucho.quercus.statement;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -101,8 +102,9 @@ public class BlockStatement extends Statement {
     return FALL_THROUGH;
   }
 
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx) {
-    V<? extends Value> value = V.one(null);
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx) {
+    V<? extends ValueOrVar> value = V.one(null);
     for (int i = 0; i < _statements.length; i++) {
       Statement statement = _statements[i];
 

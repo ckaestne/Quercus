@@ -220,22 +220,22 @@ public class Function extends AbstractFunction {
     return values;
   }
 
-  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, Expr []args)
+  public @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Expr []args)
   {
     return callImpl(env, ctx, args, false);
   }
 
   public @Nonnull V<? extends Value> callCopy(Env env, FeatureExpr ctx, Expr []args)
   {
-    return callImpl(env, ctx, args, false);
+    return VHelper.getValues(callImpl(env, ctx, args, false));
   }
 
-  public @Nonnull V<? extends Value> callRef(Env env,FeatureExpr ctx,  Expr []args)
+  public @Nonnull V<? extends ValueOrVar> callRef(Env env,FeatureExpr ctx,  Expr []args)
   {
     return callImpl(env, ctx, args, true);
   }
 
-  private V<? extends Value> callImpl(Env env, FeatureExpr ctx, Expr[] args, boolean isRef)
+  private V<? extends ValueOrVar> callImpl(Env env, FeatureExpr ctx, Expr[] args, boolean isRef)
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>();
 
@@ -296,12 +296,12 @@ public class Function extends AbstractFunction {
       oldThis = env.getThis();
 
     try {
-      V<? extends Value> value = _statement.execute(env, ctx);
+      V<? extends ValueOrVar> value = _statement.execute(env, ctx);
 
       if (value != null)
         return value;
-//      else if (_info.isReturnsReference())      //TODO V not supported
-//        return VHelper.toV(new Var());
+      else if (_info.isReturnsReference())      //TODO V not supported
+        return VHelper.toV(new Var());
       else
         return VHelper.toV(NullValue.NULL);
       /*
@@ -318,7 +318,7 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callImpl(env, ctx, args, false, null, null);
   }
@@ -326,11 +326,11 @@ public class Function extends AbstractFunction {
   @Override
   public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
-    return callImpl(env, ctx, args, false, null, null).map((a)->a.copy());
+    return callImpl(env, ctx, args, false, null, null).map((a)->a.toValue().copy());
   }
 
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callImpl(env, ctx, args, true, null, null);
   }
@@ -338,11 +338,11 @@ public class Function extends AbstractFunction {
   @Override
   public V<? extends Value> callClosure(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args, V<? extends ValueOrVar>[] useArgs)
   {
-    return callImpl(env, ctx, args, false, getClosureUseArgs(), useArgs).map((a)->a.copy());
+    return callImpl(env, ctx, args, false, getClosureUseArgs(), useArgs).map((a)->a.toValue().copy());
   }
 
-  public V<? extends Value> callImpl(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args, boolean isRef,
-                                     Arg []useParams, V<? extends ValueOrVar>[] useArgs)
+  public V<? extends ValueOrVar> callImpl(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args, boolean isRef,
+                                          Arg []useParams, V<? extends ValueOrVar>[] useArgs)
   {
     HashMap<StringValue,EnvVar> map = new HashMap<StringValue,EnvVar>(8);
 
@@ -413,7 +413,7 @@ public class Function extends AbstractFunction {
     }
 
     try {
-      V<? extends Value> value = _statement.execute(env, ctx);
+      V<? extends ValueOrVar> value = _statement.execute(env, ctx);
 
       return value.map(v-> {
         if (v == null) {
@@ -438,10 +438,10 @@ public class Function extends AbstractFunction {
   //
 
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
-                                       QuercusClass qClass,
-                                       Value qThis,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
+                                            QuercusClass qClass,
+                                            Value qThis,
+                                            V<? extends ValueOrVar>[] args)
   {
     if (isStatic())
       qThis = qClass;
@@ -458,10 +458,10 @@ public class Function extends AbstractFunction {
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
-                                          QuercusClass qClass,
-                                          Value qThis,
-                                          V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
+                                               QuercusClass qClass,
+                                               Value qThis,
+                                               V<? extends ValueOrVar>[] args)
   {
     Value oldThis = env.setThis(qThis);
     QuercusClass oldClass = env.setCallingClass(qClass);

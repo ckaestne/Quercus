@@ -51,31 +51,31 @@ public class ArrayAccessDelegate implements ArrayDelegate
   @Override
   public Value get(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_GET, index).getOne();
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_GET, index).getOne().toValue();
   }
 
   @Override
   public Value put(Env env, ObjectValue qThis, Value index, Value value)
   {
-    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_SET, index, value).getOne();
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_SET, index, value).getOne().toValue();
   }
 
   @Override
   public Value put(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_SET, UnsetValue.UNSET, index).getOne();
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_SET, UnsetValue.UNSET, index).getOne().toValue();
   }
 
   @Override
   public boolean isset(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_EXISTS, index).getOne().toBoolean();
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_EXISTS, index).getOne().toValue().toBoolean();
   }
 
   @Override
   public boolean isEmpty(Env env, ObjectValue qThis, Value index)
   {
-    boolean isExists = qThis.callMethod(env, VHelper.noCtx(), OFFSET_EXISTS, index).getOne().toBoolean();
+    boolean isExists = qThis.callMethod(env, VHelper.noCtx(), OFFSET_EXISTS, index).getOne().toValue().toBoolean();
 
     if (! isExists) {
       return true;
@@ -89,7 +89,7 @@ public class ArrayAccessDelegate implements ArrayDelegate
   @Override
   public Value unset(Env env, ObjectValue qThis, Value index)
   {
-    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_UNSET, index).getOne();
+    return qThis.callMethod(env, VHelper.noCtx(), OFFSET_UNSET, index).getOne().toValue();
   }
 
   @Override

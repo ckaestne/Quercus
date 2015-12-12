@@ -62,7 +62,8 @@ public class TryStatement extends Statement {
     block.setParent(this);
   }
 
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     try {
       return _block.execute(env, VHelper.noCtx());

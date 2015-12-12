@@ -31,7 +31,7 @@ package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import javax.annotation.Nonnull;
@@ -50,7 +50,8 @@ public class NullStatement extends Statement {
   /**
    * The null statement does nothing.
    */
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     return V.one(null);
   }

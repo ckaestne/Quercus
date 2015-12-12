@@ -98,7 +98,7 @@ public class CallVarExpr extends Expr {
   }
   
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, ctx, false, false);
   }
@@ -127,7 +127,7 @@ public class CallVarExpr extends Expr {
    */
   public V<? extends Value> evalImpl(Env env, FeatureExpr ctx, boolean isRef, boolean isCopy)
   {
-    V<? extends Value> value = _name.eval(env, VHelper.noCtx());
+    V<? extends Value> value = VHelper._getValues(_name.eval(env, VHelper.noCtx()));
     
     V<? extends ValueOrVar>[] args = evalArgs(env, _args, ctx);
 
@@ -137,9 +137,9 @@ public class CallVarExpr extends Expr {
       env.checkTimeout();
       
       if (isRef)
-        return value.vflatMap(ctx, (c,a)->a.callRef(env, c, args));
+        return value.vflatMap(ctx, (c,a)->a.callRef(env, c, args).map((b)->b.toValue())); //TODO V
       else if (isCopy)
-        return value.vflatMap(ctx, (c,a)->a.call(env, c, args).map((b)->b.copyReturn()));
+        return value.vflatMap(ctx, (c,a)->a.call(env, c, args).map((b)->b.toValue().copyReturn()));
       else
         return value.vflatMap(ctx, (c,a)->a.call(env, c, args).map((b)->b.toValue()));
     } finally {

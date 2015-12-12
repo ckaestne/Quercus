@@ -30,7 +30,6 @@
 package com.caucho.quercus.program;
 
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
@@ -64,7 +63,7 @@ public class UndefinedFunction extends AbstractFunction {
   /**
    * Evaluates the function.
    */
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     if (_globalId > 0) {
       AbstractFunction fun = env._fun[_globalId];

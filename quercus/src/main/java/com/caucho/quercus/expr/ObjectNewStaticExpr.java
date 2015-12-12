@@ -78,7 +78,7 @@ public class ObjectNewStaticExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     V<? extends ValueOrVar> []args = new V[_args.length];
 

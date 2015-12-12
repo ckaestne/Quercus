@@ -4293,7 +4293,7 @@ public class Env
    * @param name the function name
    * @return the function value
    */
-  public final @Nonnull V<? extends Value> call(StringValue name, FeatureExpr ctx)
+  public final @Nonnull V<? extends ValueOrVar> call(StringValue name, FeatureExpr ctx)
   {
     return this.call(ctx, name, new V[]{});
 
@@ -4310,7 +4310,7 @@ public class Env
    * @param a0 the first argument
    * @return the function value
    */
-  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0)
+  public final @Nonnull V<? extends ValueOrVar> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0)
   {
     return this.call(ctx, name, new V[]{a0});
   }
@@ -4323,7 +4323,7 @@ public class Env
    * @param a1 the second argument
    * @return the function value
    */
-  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1)
+  public final @Nonnull V<? extends ValueOrVar> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1)
   {
     return this.call(ctx, name, new V[]{a0,a1});
   }
@@ -4337,7 +4337,7 @@ public class Env
    * @param a2 the third argument
    * @return the function value
    */
-  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
+  public final @Nonnull V<? extends ValueOrVar> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
   {
     return this.call(ctx, name, new V[]{a0,a1,a2});
   }
@@ -4352,7 +4352,7 @@ public class Env
    * @param a3 the fourth argument
    * @return the function value
    */
-  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
+  public final @Nonnull V<? extends ValueOrVar> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
   {
     return this.call(ctx, name, new V[]{a0,a1,a2,a3});
   }
@@ -4368,7 +4368,7 @@ public class Env
    * @param a4 the fifth argument
    * @return the function value
    */
-  public final @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1,
+  public final @Nonnull V<? extends ValueOrVar> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> a0, V<? extends ValueOrVar> a1,
                     V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
   {
     return this.call(ctx, name, new V[]{a0,a1,a2,a3,a4});
@@ -4381,7 +4381,8 @@ public class Env
    * @param args the arguments
    * @return the function value
    */
-  public @Nonnull V<? extends Value> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> []args)
+  public @Nonnull
+  V<? extends ValueOrVar> call(FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> []args)
   {
     AbstractFunction fun = findFunction(name).getOne();
 

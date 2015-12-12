@@ -32,7 +32,7 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.BooleanValue;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
@@ -68,7 +68,7 @@ public class BinaryOrExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->
             a||b?      BooleanValue.TRUE:BooleanValue.FALSE);

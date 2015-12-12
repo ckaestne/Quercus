@@ -35,7 +35,6 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
 /**
  * Represents the introspected static function information.
@@ -128,11 +127,11 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   }
 
   @Override
-  abstract public V<? extends Value> callMethod(Env env,
-                                                FeatureExpr ctx,
-                                                QuercusClass qClass,
-                                                Value qThis,
-                                                V<? extends ValueOrVar>[] args);
+  abstract public V<? extends ValueOrVar> callMethod(Env env,
+                                                     FeatureExpr ctx,
+                                                     QuercusClass qClass,
+                                                     Value qThis,
+                                                     V<? extends ValueOrVar>[] args);
 
   /**
    * Evaluates the function, returning a copy
@@ -140,11 +139,11 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   @Override
   public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
-    return call(env, VHelper.noCtx(), args);
+    return call(env, VHelper.noCtx(), args).map((a)->a.toValue());
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callMethod(env, ctx, getQuercusClass(), (Value) null, args);
   }

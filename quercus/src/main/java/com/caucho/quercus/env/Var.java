@@ -49,6 +49,11 @@ public class Var
     _value = V.one(NullValue.NULL);
   }
 
+  public static Var create(V<? extends ValueOrVar> value)
+  {
+    return new Var(value.flatMap(v->v._getValues()));
+  }
+
   public Var(V<? extends Value> value)
   {
     _value = value;

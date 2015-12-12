@@ -473,7 +473,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
 
     if (get != null) {
       try {
-        return get.callMethod(env, VHelper.noCtx(), getQuercusClass(), qThis).getOne();
+        return get.callMethod(env, VHelper.noCtx(), getQuercusClass(), qThis).getOne().toValue();
       } catch (Exception e) {
         log.log(Level.FINE, e.getMessage(), e);
 
@@ -496,12 +496,12 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     AbstractFunction phpGet = qThis.getQuercusClass().getFieldGet();
 
     if (phpGet != null) {
-      return phpGet.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, V.one(nameV)).getOne();
+      return phpGet.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, V.one(nameV)).getOne().toValue();
     }
 
     if (__fieldGet != null) {
       try {
-        return __fieldGet.callMethod(env,VHelper.noCtx(),getQuercusClass(), qThis, V.one(nameV)).getOne();
+        return __fieldGet.callMethod(env,VHelper.noCtx(),getQuercusClass(), qThis, V.one(nameV)).getOne().toValue();
       } catch (Exception e) {
         log.log(Level.FINE,  e.getMessage(), e);
 
@@ -522,7 +522,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     AbstractJavaMethod setter = _setMap.get(name);
     if (setter != null) {
       try {
-        return setter.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, V.one(value)).getOne();
+        return setter.callMethod(env,VHelper.noCtx(), getQuercusClass(), qThis, V.one(value)).getOne().toValue();
       } catch (Exception e) {
         log.log(Level.FINE, e.getMessage(), e);
 
@@ -553,7 +553,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
         qThis.setFieldInit(true);
 
         try {
-          return phpSet.callMethod(env, VHelper.noCtx(),getQuercusClass(), qThis, V.one(nameV), V.one(value)).getOne();
+          return phpSet.callMethod(env, VHelper.noCtx(),getQuercusClass(), qThis, V.one(nameV), V.one(value)).getOne().toValue();
 
         } finally {
           qThis.setFieldInit(false);
@@ -568,7 +568,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
                                      getQuercusClass(),
                                      qThis,
                 V.one(nameV),
-                V.one(value)).getOne();
+                V.one(value)).getOne().toValue();
       } catch (Exception e) {
         log.log(Level.FINE, e.getMessage(), e);
 
@@ -591,13 +591,14 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
    * Eval new
    */
   @Override
-  public @Nonnull V<? extends Value> callNew(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args)
+  public @Nonnull
+  V<? extends ValueOrVar> callNew(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args)
   {
     if (_cons != null) {
       if (__construct != null) {
-        V<? extends Value> value = _cons.call(env, ctx, Value.NULL_ARGS);
+        V<? extends ValueOrVar> value = _cons.call(env, ctx, Value.NULL_ARGS);
 
-        __construct.callMethod(env, ctx, __construct.getQuercusClass(), value.getOne(), args);
+        __construct.callMethod(env, ctx, __construct.getQuercusClass(), value.getOne().toValue(), args);
 
         return value;
       }
@@ -648,9 +649,10 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, Value qThis,
-                                       StringValue methodName, int hash,
-                                       V<? extends ValueOrVar> []args)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, Value qThis,
+                                     StringValue methodName, int hash,
+                                     V<? extends ValueOrVar> []args)
   {
     AbstractFunction fun = _functionMap.get(methodName, hash);
 
@@ -660,8 +662,9 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
-                          StringValue methodName, int hash)
+  public final @Nonnull
+  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, Value qThis,
+                                     StringValue methodName, int hash)
   {
     return this.callMethod(env, ctx, qThis, methodName, hash, new V[]{});
   }
@@ -669,7 +672,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1)
   {
@@ -679,7 +682,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2)
   {
@@ -689,7 +692,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3)
   {
@@ -699,7 +702,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4)
   {
@@ -709,7 +712,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   /**
    * Eval a method
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,  Value qThis,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,  Value qThis,
                           StringValue methodName, int hash,
                           V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5)
   {
@@ -1424,7 +1427,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     }
 
     QuercusClass cls = getQuercusClass();
-    Value str = __toString.callMethod(env, VHelper.noCtx(),cls, value, Expr.NULL_ARGS).getOne();
+    Value str = __toString.callMethod(env, VHelper.noCtx(),cls, value, Expr.NULL_ARGS).getOne().toValue();
 
     return str.toStringValue(env);
   }

@@ -495,13 +495,13 @@ abstract public class AbstractFunction extends Callback {
    * Evaluates the function.
    */
   @Override
-  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args);
+  abstract public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args);
 
   /**
    * Evaluates the function, returning a reference.
    */
   @Override
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return call(env, ctx, args);
   }
@@ -512,7 +512,7 @@ abstract public class AbstractFunction extends Callback {
   @Override
   public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
-    return call(env, ctx, args).map((a)->a.copyReturn());
+    return call(env, ctx, args).map((a)->a.toValue().copyReturn());
   }
 
   /**
@@ -527,7 +527,8 @@ abstract public class AbstractFunction extends Callback {
    * Evaluates the function.
    */
   @Override
-  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> call(Env env, FeatureExpr ctx)
   {
     return call(env, ctx, NULL_ARG_VALUES);
   }
@@ -541,10 +542,10 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the method call.
    */
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
-                                       QuercusClass qClass,
-                                       Value qThis,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
+                                            QuercusClass qClass,
+                                            Value qThis,
+                                            V<? extends ValueOrVar>[] args)
   {
     throw new IllegalStateException(getClass().getName());
 
@@ -564,10 +565,11 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the new() method call.
    */
-  public @Nonnull V<? extends Value> callNew(Env env,
-                                    FeatureExpr ctx, QuercusClass qClass,
-                                    Value qThis,
-                                             V<? extends ValueOrVar>[] args)
+  public @Nonnull
+  V<? extends ValueOrVar> callNew(Env env,
+                                  FeatureExpr ctx, QuercusClass qClass,
+                                  Value qThis,
+                                  V<? extends ValueOrVar>[] args)
   {
     return callMethod(env, ctx, qClass, qThis, args);
   }
@@ -575,10 +577,10 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the method call, returning a reference.
    */
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
-                                          QuercusClass qClass,
-                                          Value qThis,
-                                          V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
+                                               QuercusClass qClass,
+                                               Value qThis,
+                                               V<? extends ValueOrVar>[] args)
   {
     throw new IllegalStateException(getClass().getName());
 
@@ -598,9 +600,10 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
-                          QuercusClass qClass,
-                          Value qThis)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
+                                     QuercusClass qClass,
+                                     Value qThis)
   {
     return callMethod(env, ctx, qClass, qThis, NULL_ARG_VALUES);
   }
@@ -608,36 +611,37 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
-                             QuercusClass qClass,
-                             Value qThis)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
+                                        QuercusClass qClass,
+                                        Value qThis)
   {
     return callMethodRef(env, ctx, qClass, qThis, NULL_ARG_VALUES);
   }
 
   @Deprecated
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,
                                                       Value a1) {
     return this.callMethod(env,ctx,qClass,qThis,V.one(a1));
   }
   @Deprecated
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,
                                                       Value a1, Value a2) {
     return this.callMethod(env,ctx,qClass,qThis,V.one(a1), V.one(a2));
   }
   @Deprecated
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,
                                                       Value a1, Value a2, Value a3) {
     return this.callMethod(env,ctx,qClass,qThis,V.one(a1), V.one(a2), V.one(a3));
   }
   @Deprecated
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,
                                                       Value a1, Value a2, Value a3, Value a4) {
@@ -646,7 +650,7 @@ abstract public class AbstractFunction extends Callback {
     /**
      * Evaluates the function as a method call.
      */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                                                       V<? extends ValueOrVar> a1)
@@ -658,7 +662,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                                                    V<? extends ValueOrVar> a1)
@@ -670,7 +674,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                                                 V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2)
@@ -682,7 +686,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                                                    V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2)
@@ -694,7 +698,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                                                       V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
@@ -706,7 +710,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                                                          V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3)
@@ -718,7 +722,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                                                       V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
@@ -730,7 +734,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                                                          V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4)
@@ -742,7 +746,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                                                 V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4, V<? extends ValueOrVar>a5)
@@ -754,7 +758,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function as a method call.
    */
-  public final @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
                              QuercusClass qClass,
                              Value qThis,
                                                    V<? extends ValueOrVar> a1, V<? extends ValueOrVar>a2, V<? extends ValueOrVar>a3, V<? extends ValueOrVar>a4, V<? extends ValueOrVar>a5)
@@ -766,7 +770,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function.
    */
-  public  @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx,
+  public  @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                           QuercusClass qClass,
                           Value qThis,
                           Expr []exprs)
@@ -788,7 +792,7 @@ abstract public class AbstractFunction extends Callback {
   /**
    * Evaluates the function.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
                                           QuercusClass qClass,
                                           Value qThis,
                                           Expr []exprs)

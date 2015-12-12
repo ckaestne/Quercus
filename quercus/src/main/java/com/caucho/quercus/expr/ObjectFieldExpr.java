@@ -92,7 +92,8 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull
+  protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
     return obj.flatMap((a)->a.getField(env, _name));

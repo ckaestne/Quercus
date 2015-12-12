@@ -31,7 +31,7 @@ package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.program.InterpretedClassDef;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -54,7 +54,8 @@ public class ClassDefStatement extends Statement {
   }
 
   @Override
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     env.addClass(_cl.getName(), _cl);
 

@@ -31,7 +31,6 @@ package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
 
@@ -145,12 +144,12 @@ abstract public class Closure extends Callback
   //
 
   @Override
-  public V<? extends Value> callMethod(Env env,
-                                       FeatureExpr ctx, StringValue methodName, int hash,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env,
+                                            FeatureExpr ctx, StringValue methodName, int hash,
+                                            V<? extends ValueOrVar>[] args)
   {
     if (methodName.equalsString("__invoke")) {
-      return call(env, VHelper.noCtx(), args);
+      return call(env, ctx, args);
     }
     else {
       return super.callMethod(env, ctx, methodName, hash, args);
@@ -163,7 +162,7 @@ abstract public class Closure extends Callback
    * @param ctx
    * @param args
    */
-  abstract public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args);
+  abstract public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args);
 
   @Override
   public String toString()

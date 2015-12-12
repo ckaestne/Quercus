@@ -91,7 +91,7 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
 
   public Value invoke(Env env, ObjectValue object, V<? extends ValueOrVar>[]args)
   {
-    return getFunction().callMethod(env, VHelper.noCtx(), object.getQuercusClass(), object, args).getOne();
+    return getFunction().callMethod(env, VHelper.noCtx(), object.getQuercusClass(), object, args).getOne().toValue();
   }
 
   public Value invokeArgs(Env env, ObjectValue object, ArrayValue args)
@@ -103,7 +103,7 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
 
     try {
       return fun.callMethod(env, VHelper.noCtx(), object.getQuercusClass(), object,
-                           VHelper.toVArray(args.getValueArray(env))).getOne();
+                           VHelper.toVArray(args.getValueArray(env))).getOne().toValue();
     }
     finally {
       env.popCall();

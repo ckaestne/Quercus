@@ -84,7 +84,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     String className = _className.evalString(env, VHelper.noCtx()).getOne();
 

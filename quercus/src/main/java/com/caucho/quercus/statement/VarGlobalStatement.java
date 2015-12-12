@@ -32,12 +32,12 @@ package com.caucho.quercus.statement;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarVarExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -56,7 +56,8 @@ public class VarGlobalStatement extends Statement {
     _varExpr = var.getExpr();
   }
   
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     V<? extends StringValue> name = _varExpr.evalStringValue(env, ctx);
     

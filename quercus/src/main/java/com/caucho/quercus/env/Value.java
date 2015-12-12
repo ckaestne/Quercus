@@ -1320,7 +1320,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates the function.
    */
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
     Callable call = toCallable(env, false);
 
     if (call != null)
@@ -1333,7 +1333,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates the function, returning a reference.
    */
-  public V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
+  public V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
     AbstractFunction fun = env.getFunction(this, ctx).getOne();
 
     if (fun != null)
@@ -1360,83 +1360,87 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates the function.
    */
-  public final @Nonnull V<? extends Value> callRef(Env env, FeatureExpr ctx) {
-    return callRef(env, VHelper.noCtx(), Callable.NULL_ARG_VALUES);
+  public final @Nonnull
+  V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx) {
+    return callRef(env, ctx, Callable.NULL_ARG_VALUES);
   }
 
 
 
   @Deprecated
-  public final V<? extends Value> call(Env env, FeatureExpr ctx, Value... args) {
-    return call(env, VHelper.noCtx(), VHelper.toVArray(args));
+  public final V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value... args) {
+    return call(env, ctx, VHelper.toVArray(args));
   }
   /**
    * Evaluates the function with an argument .
    */
-  public final V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1) {
-    return call(env, VHelper.noCtx(), new V[]{a1});
+  public final V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1) {
+    return call(env, ctx, new V[]{a1});
   }
 
   /**
    * Evaluates the function with an argument .
    */
-  public final @Nonnull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1) {
+  public final @Nonnull
+  V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1) {
     return callRef(env, ctx, new V[]{a1});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2) {
+  public final @Nonnull
+  V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2) {
     return call(env, ctx, new V[]{a1, a2});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2) {
+  public final @Nonnull
+  V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2) {
     return callRef(env, ctx, new V[]{a1, a2});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3) {
+  public final @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3) {
     return call(env, ctx, new V[]{a1, a2, a3});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3) {
+  public final @Nonnull V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3) {
     return callRef(env, ctx, new V[]{a1, a2, a3});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4) {
+  public final @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4) {
     return call(env, ctx, new V[]{a1, a2, a3, a4});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4) {
+  public final @Nonnull V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4) {
     return callRef(env, ctx, new V[]{a1, a2, a3, a4});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5) {
+  public final @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5) {
     return call(env, ctx, new V[]{a1, a2, a3, a4, a5});
   }
 
   /**
    * Evaluates the function with arguments
    */
-  public final @Nonnull V<? extends Value> callRef(Env env, FeatureExpr ctx,
+  public final @Nonnull V<? extends ValueOrVar> callRef(Env env, FeatureExpr ctx,
                                                    V<? extends ValueOrVar> a1, V<? extends ValueOrVar> a2, V<? extends ValueOrVar> a3, V<? extends ValueOrVar> a4, V<? extends ValueOrVar> a5) {
     return callRef(env, ctx, new V[]{a1, a2, a3, a4, a5});
   }
@@ -1448,9 +1452,9 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method.
    */
-  public V<? extends Value> callMethod(Env env,
-                                       FeatureExpr ctx, StringValue methodName, int hash,
-                                       V<? extends ValueOrVar>[] args) {
+  public V<? extends ValueOrVar> callMethod(Env env,
+                                            FeatureExpr ctx, StringValue methodName, int hash,
+                                            V<? extends ValueOrVar>[] args) {
     if (isNull()) {
       return VHelper.toV(env.error(L.l("Method call '{0}' is not allowed for a null value.",
               methodName)));
@@ -1463,7 +1467,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
 
 
   @Deprecated
-  public final V<? extends Value> callMethod(Env env,
+  public final V<? extends ValueOrVar> callMethod(Env env,
                                              FeatureExpr ctx, StringValue methodName,
                                              Value... args)
 
@@ -1471,7 +1475,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method.
    */
-  public final V<? extends Value> callMethod(Env env,
+  public final V<? extends ValueOrVar> callMethod(Env env,
                                    FeatureExpr ctx, StringValue methodName,
                                     V<? extends ValueOrVar>[] args)
   {
@@ -1484,7 +1488,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                  V<? extends ValueOrVar>[] args)
   {
@@ -1494,7 +1498,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method.
    */
-  public final V<? extends Value> callMethodRef(Env env,
+  public final V<? extends ValueOrVar> callMethodRef(Env env,
                                       FeatureExpr ctx, StringValue methodName,
                                        V<? extends ValueOrVar>[] args)
   {
@@ -1506,7 +1510,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 0 args.
    */
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return callMethod(env, ctx, methodName, hash, NULL_ARG_VALUES);
   }
@@ -1514,7 +1519,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 0 args.
    */
-  public final V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName)
+  public final V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
@@ -1524,7 +1529,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 0 args.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return callMethodRef(env, ctx, methodName, hash, NULL_ARG_VALUES);
   }
@@ -1532,7 +1538,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 0 args.
    */
-  public final V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName)
+  public final V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName)
   {
     int hash = methodName.hashCodeCaseInsensitive();
 
@@ -1542,7 +1548,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 1 arg.
    */
-  public final @Nonnull V<? extends Value> callMethod(Env env,
+  public final @Nonnull V<? extends ValueOrVar> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                                                 V<? extends ValueOrVar> a1)
   {
@@ -1552,7 +1558,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 1 arg.
    */
-  public final V<? extends Value> callMethod(Env env,
+  public final V<? extends ValueOrVar> callMethod(Env env,
                                    FeatureExpr ctx, StringValue methodName,
                                              V<? extends ValueOrVar> a1)
   {
@@ -1564,7 +1570,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 1 arg.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                  V<? extends ValueOrVar> a1)
   {
@@ -1574,7 +1580,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 1 arg.
    */
-  public final V<? extends Value> callMethodRef(Env env,
+  public final V<? extends ValueOrVar> callMethodRef(Env env,
                                       FeatureExpr ctx, StringValue methodName,
                                        V<? extends ValueOrVar> a1)
   {
@@ -1586,7 +1592,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 2 args.
    */
-  public @Nonnull V<? extends Value> callMethod(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                               V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2)
   {
@@ -1599,7 +1605,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 2 args.
    */
-  public final V<? extends Value> callMethod(Env env,
+  public final V<? extends ValueOrVar> callMethod(Env env,
                                    FeatureExpr ctx, StringValue methodName,
                                     V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2)
   {
@@ -1612,7 +1618,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 2 args.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                  V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2)
   {
@@ -1622,7 +1628,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 2 args.
    */
-  public final V<? extends Value> callMethodRef(Env env,
+  public final V<? extends ValueOrVar> callMethodRef(Env env,
                                       FeatureExpr ctx, StringValue methodName,
                                        V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2)
   {
@@ -1635,7 +1641,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 3 args.
    */
-  public @Nonnull V<? extends Value> callMethod(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                               V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3)
   {
@@ -1645,7 +1651,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 3 args.
    */
-  public final V<? extends Value> callMethod(Env env,
+  public final V<? extends ValueOrVar> callMethod(Env env,
                                    FeatureExpr ctx, StringValue methodName,
                                     V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3)
   {
@@ -1658,7 +1664,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 3 args.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                  V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3)
   {
@@ -1668,7 +1674,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 3 args.
    */
-  public final V<? extends Value> callMethodRef(Env env,
+  public final V<? extends ValueOrVar> callMethodRef(Env env,
                                       FeatureExpr ctx, StringValue methodName,
                                        V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3)
   {
@@ -1681,7 +1687,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 4 args.
    */
-  public @Nonnull V<? extends Value> callMethod(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                               V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4)
   {
@@ -1692,7 +1698,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 4 args.
    */
-  public final V<? extends Value> callMethod(Env env,
+  public final V<? extends ValueOrVar> callMethod(Env env,
                                    FeatureExpr ctx, StringValue methodName,
                                     V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4)
   {
@@ -1705,7 +1711,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 4 args.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                  V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4)
   {
@@ -1716,7 +1722,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 4 args.
    */
-  public final V<? extends Value> callMethodRef(Env env,
+  public final V<? extends ValueOrVar> callMethodRef(Env env,
                                       FeatureExpr ctx, StringValue methodName,
                                        V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4)
   {
@@ -1729,7 +1735,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 5 args.
    */
-  public @Nonnull V<? extends Value> callMethod(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethod(Env env,
                              FeatureExpr ctx, StringValue methodName, int hash,
                               V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4,  V<? extends ValueOrVar> a5)
   {
@@ -1740,7 +1746,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 5 args.
    */
-  public final V<? extends Value> callMethod(Env env,
+  public final V<? extends ValueOrVar> callMethod(Env env,
                                              FeatureExpr ctx, StringValue methodName,
                                               V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4,  V<? extends ValueOrVar> a5)
   {
@@ -1753,7 +1759,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 5 args.
    */
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                           FeatureExpr ctx, StringValue methodName, int hash,
                                            V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4,  V<? extends ValueOrVar> a5)
   {
@@ -1764,7 +1770,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Evaluates a method with 5 args.
    */
-  public final V<? extends Value> callMethodRef(Env env,
+  public final V<? extends ValueOrVar> callMethodRef(Env env,
                                                 FeatureExpr ctx, StringValue methodName,
                                                  V<? extends ValueOrVar> a1,  V<? extends ValueOrVar> a2,  V<? extends ValueOrVar> a3,  V<? extends ValueOrVar> a4,  V<? extends ValueOrVar> a5)
   {

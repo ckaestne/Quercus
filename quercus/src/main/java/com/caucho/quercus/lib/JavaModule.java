@@ -67,7 +67,7 @@ public class JavaModule extends AbstractQuercusModule {
         return null;
       }
       
-      Value newObj = def.callNew(env, VHelper.noCtx(),args).getOne();
+      Value newObj = def.callNew(env, VHelper.noCtx(),args).getOne().toValue();
 
       if (newObj.isNull())
         return new JavaValue(env, null, def);

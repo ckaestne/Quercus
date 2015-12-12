@@ -178,13 +178,13 @@ public class RecursiveIteratorIterator
     @Override
     public boolean hasChildren(Env env)
     {
-      return _obj.callMethod(env, VHelper.noCtx(), HAS_CHILDREN).getOne().toBoolean();
+      return _obj.callMethod(env, VHelper.noCtx(), HAS_CHILDREN).getOne().toValue().toBoolean();
     }
 
     @Override
     public RecursiveIterator getChildren(Env env)
     {
-      Value result = _obj.callMethod(env, VHelper.noCtx(), GET_CHILDREN).getOne();
+      Value result = _obj.callMethod(env, VHelper.noCtx(), GET_CHILDREN).getOne().toValue();
 
       return create(result);
     }
@@ -192,19 +192,19 @@ public class RecursiveIteratorIterator
     @Override
     public boolean valid(Env env)
     {
-      return _obj.callMethod(env, VHelper.noCtx(), VALID).getOne().toBoolean();
+      return _obj.callMethod(env, VHelper.noCtx(), VALID).getOne().toValue().toBoolean();
     }
 
     @Override
     public Value current(Env env)
     {
-      return _obj.callMethod(env, VHelper.noCtx(), CURRENT).getOne();
+      return _obj.callMethod(env, VHelper.noCtx(), CURRENT).getOne().toValue();
     }
 
     @Override
     public Value key(Env env)
     {
-      return _obj.callMethod(env, VHelper.noCtx(), KEY).getOne();
+      return _obj.callMethod(env, VHelper.noCtx(), KEY).getOne().toValue();
     }
 
     @Override

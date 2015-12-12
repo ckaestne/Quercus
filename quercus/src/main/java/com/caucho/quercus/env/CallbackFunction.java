@@ -35,7 +35,6 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Represents a call to a function.
@@ -105,19 +104,19 @@ public class CallbackFunction extends Callback {
 
   /**
    * Evaluates the callback with no arguments.
-   *
-   * @param env the calling environment
+   *  @param env the calling environment
    * @param ctx
    */
   @Override
-  public @Nonnull V<? extends Value> call(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> call(Env env, FeatureExpr ctx)
   {
     return getFunction(env, ctx).getOne().call(env, ctx);
   }
 
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return getFunction(env, ctx).getOne().call(env, ctx, args);
   }

@@ -12,6 +12,7 @@ trait AbstractPhpGenTest extends AbstractPhpTest {
     val fB = FeatureExprFactory.createDefinedExternal("B")
     val fC = FeatureExprFactory.createDefinedExternal("C")
     val fD = FeatureExprFactory.createDefinedExternal("D")
+    val True = FeatureExprFactory.True
 
     override def eval(s: String) = {
 

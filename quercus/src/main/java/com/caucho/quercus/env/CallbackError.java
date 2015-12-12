@@ -47,7 +47,7 @@ public class CallbackError extends Callback {
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return VHelper.toV(NullValue.NULL);
   }

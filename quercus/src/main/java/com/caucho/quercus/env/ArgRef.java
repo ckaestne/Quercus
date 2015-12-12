@@ -593,9 +593,9 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public V<? extends Value> callMethod(Env env,
-                                       FeatureExpr ctx, StringValue methodName, int hash,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env,
+                                            FeatureExpr ctx, StringValue methodName, int hash,
+                                            V<? extends ValueOrVar>[] args)
   {
     return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, args);
   }
@@ -604,7 +604,8 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _var.getValue().getOne().callMethod(env, ctx, methodName, hash);
   }
@@ -613,7 +614,7 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethodRef(Env env,
+  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
                                 FeatureExpr ctx, StringValue methodName, int hash,
                                                    V<? extends ValueOrVar>[] args)
   {
@@ -624,7 +625,8 @@ public class ArgRef extends Value
    * Evaluates a method.
    */
   @Override
-  public @Nonnull V<? extends Value> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+  public @Nonnull
+  V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
   {
     return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash);
   }

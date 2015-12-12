@@ -119,7 +119,7 @@ public class ClassVirtualMethodVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     Value qThis = env.getThis();
 
@@ -141,7 +141,7 @@ public class ClassVirtualMethodVarExpr extends Expr {
     try {
       env.checkTimeout();
 
-      return cls.callMethod(env, ctx, qThis, methodName, hash, values);
+      return VHelper.getValues(cls.callMethod(env, ctx, qThis, methodName, hash, values));
     } finally {
       env.popCall();
     }

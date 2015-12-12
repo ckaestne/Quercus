@@ -89,7 +89,8 @@ public class TraitParentClassMethodExpr extends AbstractMethodExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull
+  protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cls = env.getThis().getQuercusClass();
 
@@ -119,7 +120,7 @@ public class TraitParentClassMethodExpr extends AbstractMethodExpr {
     try {
       env.checkTimeout();
 
-      return parent.callStaticMethod(env,VHelper.noCtx(), qThis, _methodName, _hash, values);
+      return parent.callStaticMethod(env,VHelper.noCtx(), qThis, _methodName, _hash, values).map((a)->a.toValue());
     } finally {
       env.popCall();
       env.setThis(oldThis);

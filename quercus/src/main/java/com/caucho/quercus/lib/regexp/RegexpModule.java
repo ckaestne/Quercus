@@ -1152,7 +1152,7 @@ public class RegexpModule
         regs.put(VHelper.noCtx(), group);
       }
 
-      Value replacement = fun.call(env, VHelper.noCtx(), regs).getOne();
+      Value replacement = fun.call(env, VHelper.noCtx(), regs).getOne().toValue();
 
       result = result.append(replacement);
 

@@ -31,7 +31,6 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
@@ -82,7 +81,8 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull
+  protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     // quercus/0d28
     V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());

@@ -81,12 +81,12 @@ public class ReflectionFunction extends ReflectionFunctionAbstract
 
   public Value invoke(Env env, V<?extends ValueOrVar>[]args)
   {
-    return getCallable().call(env, VHelper.noCtx(),args).getOne();
+    return getCallable().call(env, VHelper.noCtx(),args).getOne().toValue();
   }
 
   public Value invokeArgs(Env env, ArrayValue args)
   {
-    return getCallable().call(env, VHelper.noCtx(),args.getValueArray(env)).getOne();
+    return getCallable().call(env, VHelper.noCtx(),args.getValueArray(env)).getOne().toValue();
   }
 
   @Override

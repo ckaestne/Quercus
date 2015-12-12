@@ -66,9 +66,9 @@ public class WrappedDirectory extends Directory {
   public boolean open(Env env, StringValue path, LongValue flags)
   {
     if (env.isUnicodeSemantics())
-      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR_U, path, flags).getOne().toBoolean();
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR_U, path, flags).getOne().toValue().toBoolean();
     else
-      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR, path, flags).getOne().toBoolean();
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR, path, flags).getOne().toValue().toBoolean();
   }
 
   /**
@@ -78,9 +78,9 @@ public class WrappedDirectory extends Directory {
   public Value read(Env env)
   {
     if (env.isUnicodeSemantics())
-      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR_U).getOne();
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR_U).getOne().toValue();
     else
-      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR).getOne();
+      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR).getOne().toValue();
   }
 
   /**

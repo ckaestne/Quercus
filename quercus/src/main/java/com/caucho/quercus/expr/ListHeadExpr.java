@@ -73,7 +73,7 @@ public class ListHeadExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
   }

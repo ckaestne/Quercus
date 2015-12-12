@@ -87,7 +87,7 @@ public class ClassConstructorExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);
 
@@ -107,7 +107,7 @@ public class ClassConstructorExpr extends Expr {
     try {
       env.checkTimeout();
 
-      return cl.callMethod(env, ctx, qThis, nameV, nameV.hashCode(), values);
+      return cl.callMethod(env, ctx, qThis, nameV, nameV.hashCode(), values).map((a)->a.toValue());
     } finally {
       env.popCall();
     }

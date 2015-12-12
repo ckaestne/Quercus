@@ -100,7 +100,7 @@ public class ObjectMethodVarExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     V<?extends ValueOrVar> []values = new V[_args.length];
 
@@ -117,7 +117,7 @@ public class ObjectMethodVarExpr extends Expr {
     try {
       env.checkTimeout();
 
-      return obj.callMethod(env, VHelper.noCtx(), methodName, values);
+      return obj.callMethod(env, VHelper.noCtx(), methodName, values).map((a)->a.toValue());
     } finally {
       env.popCall();
     }

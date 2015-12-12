@@ -60,13 +60,13 @@ public class ClassesModule extends AbstractQuercusModule {
                                                     V<? extends ValueOrVar> []args)
   {
     if (obj.isObject()) {
-      return obj.callMethod(env, ctx, name, args);
+      return obj.callMethod(env, ctx, name, args).map((a)->a.toValue());
     }
     else {
       QuercusClass cls = env.getClass(obj.toString());
 
       V<? extends Value> result
-        = cls.callMethod(env, ctx, env.getThis(), name, name.hashCode(), args);
+        = cls.callMethod(env, ctx, env.getThis(), name, name.hashCode(), args).map((a)->a.toValue());
 
       return result.map((a)->a.copyReturn());
     }

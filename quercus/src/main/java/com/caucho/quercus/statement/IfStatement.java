@@ -32,10 +32,11 @@ package com.caucho.quercus.statement;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -82,19 +83,20 @@ public class IfStatement extends Statement {
   /**
    * Executes the 'if' statement, returning any value.
    */
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     FeatureExpr condition = _test.evalBoolean(env, ctx).when((b)->b);
 
-    V<? extends Value> trueResult = V.one(null);
-    V<? extends Value> falseResult = V.one(null);
+    V<? extends ValueOrVar> trueResult = V.one(null);
+    V<? extends ValueOrVar> falseResult = V.one(null);
     if (ctx.and(condition).isSatisfiable()) {
       trueResult = _trueBlock.execute(env, ctx.and(condition));
     }
     if (_falseBlock != null && ctx.andNot(condition).isSatisfiable()) {
       falseResult= _falseBlock.execute(env, ctx.andNot(condition));
     }
-    return V.<Value>choice(condition, trueResult, falseResult);
+    return V.<ValueOrVar>choice(condition, trueResult, falseResult);
   }
 }
 

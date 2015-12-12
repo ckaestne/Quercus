@@ -449,7 +449,7 @@ public class ArrayModule
         Value searchKey = ((ArrayValue) arrays[k]).contains(entryValue).getOne();
 
         if (! searchKey.isNull())
-          ValueFound = ((int) func.call(env, VHelper.noCtx(),searchKey, entryKey).getOne().toLong())
+          ValueFound = ((int) func.call(env, VHelper.noCtx(),searchKey, entryKey).getOne().toValue().toLong())
               == 0;
       }
 
@@ -513,7 +513,7 @@ public class ArrayModule
         while (keyItr.hasNext() && ! keyFound) {
           Value currentKey = keyItr.next();
 
-          keyFound = ((int) func.call(env, VHelper.noCtx(),entryKey, currentKey).getOne().toLong()) == 0;
+          keyFound = ((int) func.call(env, VHelper.noCtx(),entryKey, currentKey).getOne().toValue().toLong()) == 0;
         }
       }
 
@@ -879,7 +879,7 @@ public class ArrayModule
         Value searchValue = ((ArrayValue) arrays[k]).containsKey(entryKey).getOne();
 
         if (searchValue != null)
-          valueFound = func.call(env, VHelper.noCtx(), searchValue, entryValue).getOne().toLong() == 0;
+          valueFound = func.call(env, VHelper.noCtx(), searchValue, entryValue).getOne().toValue().toLong() == 0;
         else
           valueFound = false;
       }
@@ -948,7 +948,7 @@ public class ArrayModule
         while (keyItr.hasNext() && ! keyFound) {
           Value currentKey = keyItr.next();
 
-          keyFound = ((int) func.call(env, VHelper.noCtx(), entryKey, currentKey).getOne().toLong()) == 0;
+          keyFound = ((int) func.call(env, VHelper.noCtx(), entryKey, currentKey).getOne().toValue().toLong()) == 0;
         }
 
       }
@@ -1575,7 +1575,7 @@ public class ArrayModule
 
     for (VEntry entry : array.entrySet()) {
       try {
-        result = callable.call(env, VHelper.noCtx(), result, entry.getEnvVar().getOne()).getOne();
+        result = callable.call(env, VHelper.noCtx(), result, entry.getEnvVar().getOne()).getOne().toValue();
       }
       catch (Exception t) {
         log.log(Level.WARNING, t.toString(), t);
@@ -1981,7 +1981,7 @@ public class ArrayModule
 
             if (keyFound)
               valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne()
-                .toLong() == 0;
+                      .toValue().toLong() == 0;
 
             isFound = keyFound && valueFound;
           }
@@ -2067,12 +2067,12 @@ public class ArrayModule
         for (VEntry entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toValue().toLong() == 0;
 
             boolean keyFound = false;
 
             if (valueFound)
-              keyFound = cmpKey.call(env, VHelper.noCtx(), entryKey, entry.getKey()).getOne().toLong()
+              keyFound = cmpKey.call(env, VHelper.noCtx(), entryKey, entry.getKey()).getOne().toValue().toLong()
                   == 0;
 
             isFound = valueFound && keyFound;
@@ -2150,7 +2150,7 @@ public class ArrayModule
 
         for (VEntry entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toValue().toLong() == 0;
           }
           catch (Exception t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -2232,7 +2232,7 @@ public class ArrayModule
 
             if (keyFound)
               valueFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne())
-                      .getOne().toLong() == 0;
+                      .getOne().toValue().toLong() == 0;
 
             isFound = keyFound && valueFound;
           }
@@ -2316,12 +2316,12 @@ public class ArrayModule
         for (VEntry entry : checkArray.entrySet()) {
           try {
             boolean valueFound =
-              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
+              cmpValue.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toValue().toLong() == 0;
 
             boolean keyFound = false;
 
             if (valueFound)
-              keyFound = cmpKey.call(env, VHelper.noCtx(), entryKey, entry.getKey()).getOne().toLong()
+              keyFound = cmpKey.call(env, VHelper.noCtx(), entryKey, entry.getKey()).getOne().toValue().toLong()
                   == 0;
 
             isFound = valueFound && keyFound;
@@ -2397,7 +2397,7 @@ public class ArrayModule
 
         for (VEntry entry : checkArray.entrySet()) {
           try {
-            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toLong() == 0;
+            isFound = cmp.call(env, VHelper.noCtx(), entryValue, entry.getEnvVar().getOne()).getOne().toValue().toLong() == 0;
           }
           catch (Throwable t) {
             log.log(Level.WARNING, t.toString(), t);
@@ -3637,7 +3637,7 @@ public class ArrayModule
         Value aElement = _getter.get(aEntry);
         Value bElement = _getter.get(bEntry);
 
-        return (int) _func.call(_env,VHelper.noCtx(),aElement, bElement).getOne().toLong();
+        return (int) _func.call(_env,VHelper.noCtx(),aElement, bElement).getOne().toValue().toLong();
       }
       catch (Exception e) {
         throw new QuercusModuleException(e);

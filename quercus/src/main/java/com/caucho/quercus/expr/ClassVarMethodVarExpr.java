@@ -108,7 +108,7 @@ public class ClassVarMethodVarExpr extends Expr
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     String className = _className.evalString(env, VHelper.noCtx()).getOne();
 
@@ -122,9 +122,9 @@ public class ClassVarMethodVarExpr extends Expr
     int hash = methodName.hashCodeCaseInsensitive();
     V<? extends ValueOrVar> []args = evalArgs(env, _args, VHelper.noCtx());
 
-    return cl.callMethod(env, ctx, env.getThis(),
+    return VHelper.getValues(cl.callMethod(env, ctx, env.getThis(),
                          methodName, hash,
-                         args);
+                         args));
   }
 
   public String toString()

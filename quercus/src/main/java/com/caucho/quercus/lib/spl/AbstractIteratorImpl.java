@@ -54,7 +54,7 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
 
       _needNext = true;
 
-      return _validFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne().toBoolean();
+      return _validFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne().toValue().toBoolean();
     }
 
     public T next()
@@ -66,12 +66,12 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
 
     protected Value getCurrentKey()
     {
-      return _keyFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne();
+      return _keyFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne().toValue();
     }
 
     protected Value getCurrentValue()
     {
-      return _currentFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne();
+      return _currentFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne().toValue();
     }
 
     public void remove()

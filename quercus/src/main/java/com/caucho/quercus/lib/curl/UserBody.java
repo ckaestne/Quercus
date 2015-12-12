@@ -84,7 +84,7 @@ public class UserBody extends PostBody
 
       while (totalWritten < length) {
         StringValue str
-          = _callback.call(env, VHelper.noCtx(), _curl, _fileV, lengthV).getOne().toStringValue(env);
+          = _callback.call(env, VHelper.noCtx(), _curl, _fileV, lengthV).getOne().toValue().toStringValue(env);
 
         int count = str.length();
 

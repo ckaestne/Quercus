@@ -30,10 +30,7 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.BreakValue;
-import com.caucho.quercus.env.ContinueValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -88,8 +85,8 @@ public class SwitchStatement extends Statement {
    */
   public
   @Nonnull
-  V<? extends Value> execute(Env env, FeatureExpr ctx) {
-    V<? extends Value> result = V.one(null);
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx) {
+    V<? extends ValueOrVar> result = V.one(null);
     try {
       V<? extends Value> vtestValue = _value.eval(env, ctx);
 
@@ -101,13 +98,13 @@ public class SwitchStatement extends Statement {
 
         for (int j = 0; j < values.length; j++)
           if (ctx.isSatisfiable()) {
-            V<? extends Value> vcaseValue = values[j].eval(env, ctx);
+            V<? extends ValueOrVar> vcaseValue = values[j].eval(env, ctx);
 
-            vcaseValue = VHelper.<Value,Value,Value>vflatMapAll(ctx, vtestValue, vcaseValue, (c, testValue, caseValue) -> {
-              if (testValue.eq(caseValue)) {
-                V<? extends Value> vretValue = _blocks[caseIdx].execute(env, c);
+            vcaseValue = VHelper.<Value,ValueOrVar,ValueOrVar>vflatMapAll(ctx, vtestValue, vcaseValue, (c, testValue, caseValue) -> {
+              if (testValue.eq(caseValue.toValue())) {
+                V<? extends ValueOrVar> vretValue = _blocks[caseIdx].execute(env, c);
 
-                return vretValue.<Value>map(retValue -> {
+                return vretValue.<ValueOrVar>map(retValue -> {
                   if (retValue instanceof BreakValue) {
                     BreakValue breakValue = (BreakValue) retValue;
 
@@ -138,7 +135,7 @@ public class SwitchStatement extends Statement {
       }
 
       if (_defaultBlock != null && ctx.isSatisfiable()) {
-        V<? extends Value> retValue = _defaultBlock.execute(env, ctx).
+        V<? extends ValueOrVar> retValue = _defaultBlock.execute(env, ctx).
                 map(v -> v instanceof BreakValue ? null : v);
         result = V.choice(ctx, retValue, result);
       }

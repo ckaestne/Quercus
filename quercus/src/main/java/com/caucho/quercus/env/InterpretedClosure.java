@@ -113,7 +113,7 @@ public class InterpretedClosure extends Closure
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, @Nonnull V<? extends ValueOrVar>[] args)
   {
     Value oldThis = env.setThis(getThis());
     Closure oldClosure = env.setClosure(this);

@@ -31,7 +31,6 @@ package com.caucho.quercus.program;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.ExprFactory;
@@ -91,7 +90,7 @@ public class MethodDeclaration extends Function
   /**
    * Evaluates the function.
    */
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     throw new UnsupportedOperationException();
   }

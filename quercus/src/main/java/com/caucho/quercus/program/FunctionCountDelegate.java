@@ -62,7 +62,7 @@ public class FunctionCountDelegate implements CountDelegate {
     if (_count != null) {
       return _count.callMethod(env, VHelper.noCtx(),
                                _count.getQuercusClass(),
-                               qThis).getOne().toInt();
+                               qThis).getOne().toValue().toInt();
     }
     else
       return 1;

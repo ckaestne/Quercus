@@ -31,7 +31,7 @@ package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -59,14 +59,15 @@ public class ReturnRefStatement extends Statement {
    * Executes the statement, returning the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
     if (_expr != null) {
       // php/0750
-      return _expr.evalVar(env, ctx).map(v->v.makeValue());
+      return _expr.evalVar(env, ctx);
     }
     else {
-      return VHelper.toV(new Var().makeValue());
+      return VHelper.toV(new Var());
     }
   }
 

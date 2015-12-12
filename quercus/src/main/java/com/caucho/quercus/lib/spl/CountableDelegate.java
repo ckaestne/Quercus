@@ -45,7 +45,7 @@ public class CountableDelegate implements CountDelegate
   @Override
   public int count(Env env, ObjectValue qThis)
   {    
-    Value count = qThis.callMethod(env, VHelper.noCtx(), COUNT_METHOD).getOne();
+    Value count = qThis.callMethod(env, VHelper.noCtx(), COUNT_METHOD).getOne().toValue();
 
     return count.toInt();
   }

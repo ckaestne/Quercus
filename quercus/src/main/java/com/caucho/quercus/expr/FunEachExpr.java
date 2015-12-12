@@ -70,7 +70,7 @@ public class FunEachExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     if (! _isVar) {
       env.error(L.l("each() argument must be a variable at '{0}'", getExpr()));

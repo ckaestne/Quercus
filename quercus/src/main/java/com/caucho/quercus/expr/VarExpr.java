@@ -135,7 +135,8 @@ public class VarExpr
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull
+  protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return env.getValue(ctx, _name, false, true);
   }

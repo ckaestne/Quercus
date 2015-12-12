@@ -459,7 +459,14 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  abstract public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx);
+  final public @Nonnull
+  V<? extends Value> eval(Env env, FeatureExpr ctx) {
+    return VHelper.getValues(_eval(env, ctx));
+  }
+
+  abstract protected @Nonnull
+  V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx);
+
 
   /**
    * Evaluates the expression, always returning a variable.
@@ -498,7 +505,7 @@ abstract public class Expr {
    */
   public V<? extends ValueOrVar> evalRef(Env env, FeatureExpr ctx)
   {
-    return eval(env, ctx);
+    return _eval(env, ctx);
   }
 
   /**

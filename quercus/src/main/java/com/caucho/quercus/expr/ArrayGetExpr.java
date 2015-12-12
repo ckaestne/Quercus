@@ -84,7 +84,8 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  protected @Nonnull
+  V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.eval(env, ctx);
     V<? extends Value> index = _index.eval(env, ctx);

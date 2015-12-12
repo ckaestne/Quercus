@@ -80,7 +80,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.error("Cannot use [] as a read-value.", getLocation()));
   }

@@ -71,7 +71,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, path).getOne();
+    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, path).getOne().toValue();
 
     return result.toBoolean();
   }
@@ -86,7 +86,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, from, to).getOne();
+    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, from, to).getOne().toValue();
 
     return result.toBoolean();
   }
@@ -104,7 +104,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, mode, options).getOne();
+    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, mode, options).getOne().toValue();
 
     return result.toBoolean();
   }
@@ -119,7 +119,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, options).getOne();
+    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, options).getOne().toValue();
 
     return result.toBoolean();
   }
@@ -134,7 +134,7 @@ public class ProtocolWrapper {
       return BooleanValue.FALSE;
     }
 
-    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, flags).getOne();
+    Value result = function.callMethod(env,VHelper.noCtx(), _qClass, obj, path, flags).getOne().toValue();
 
     return result;
   }
@@ -149,7 +149,7 @@ public class ProtocolWrapper {
       return false;
     }
 
-    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, path, options, arg).getOne();
+    Value result = function.callMethod(env, VHelper.noCtx(),_qClass, obj, path, options, arg).getOne().toValue();
 
     return result.toBoolean();
   }

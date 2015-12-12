@@ -79,7 +79,7 @@ public class ThisMethodExpr extends ObjectMethodExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     if (! _isInit) {
       init();
@@ -116,7 +116,7 @@ public class ThisMethodExpr extends ObjectMethodExpr {
     try {
       env.checkTimeout();
 
-      return fun.callMethod(env, VHelper.noCtx(), qThis.getQuercusClass(), qThis, args).getOne();
+      return fun.callMethod(env, VHelper.noCtx(), qThis.getQuercusClass(), qThis, args).getOne().toValue();
     }
     finally {
       env.popCall();
@@ -134,7 +134,7 @@ public class ThisMethodExpr extends ObjectMethodExpr {
     try {
       env.checkTimeout();
 
-      return qThis.callMethod(env, VHelper.noCtx(), methodName, hashCode, args).getOne();
+      return qThis.callMethod(env, VHelper.noCtx(), methodName, hashCode, args).getOne().toValue();
     }
     finally {
       env.popCall();

@@ -62,7 +62,7 @@ public class FunctionModule extends AbstractQuercusModule {
                                                   @Nonnull V<? extends Value> []args)
   {
     return function.call(env,
-            VHelper.noCtx(), args).map((a)->a.copyReturn());
+            VHelper.noCtx(), args).map((a)->a.toValue().copyReturn());
   }
 
   /**
@@ -109,7 +109,7 @@ public class FunctionModule extends AbstractQuercusModule {
     env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, VHelper.toVArray(args));
 
     try {
-      return function.call(env, VHelper.noCtx(), args).map((a)->a.copyReturn());
+      return function.call(env, VHelper.noCtx(), args).map((a)->a.toValue().copyReturn());
     }
     finally {
       env.popCall();

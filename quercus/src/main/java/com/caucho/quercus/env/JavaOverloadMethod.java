@@ -171,8 +171,8 @@ public class JavaOverloadMethod extends AbstractJavaMethod {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, QuercusClass qClass, Value qThis,
+                                            V<? extends ValueOrVar>[] args)
   {
     if (args.length < _methodTable.length) {
       AbstractJavaMethod []methods = _methodTable[args.length];

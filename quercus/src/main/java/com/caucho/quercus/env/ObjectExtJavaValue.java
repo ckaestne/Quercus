@@ -141,7 +141,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
    */
   private Object createJavaObject(Env env)
   {
-    Value javaWrapper = _javaClassDef.callNew(env, VHelper.noCtx(), Value.VNULL_ARGS).getOne();
+    Value javaWrapper = _javaClassDef.callNew(env, VHelper.noCtx(), Value.VNULL_ARGS).getOne().toValue();
     return javaWrapper.toJavaObject();
   }
 
@@ -183,7 +183,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
     AbstractFunction toString = _quercusClass.getToString();
 
     if (toString != null) {
-      return toString.callMethod(env, VHelper.noCtx(), _quercusClass, this).getOne().toStringValue();
+      return toString.callMethod(env, VHelper.noCtx(), _quercusClass, this).getOne().toValue().toStringValue();
     }
     else if (_javaClassDef.getToString() != null) {
       JavaValue value = new JavaValue(env, _object, _javaClassDef);

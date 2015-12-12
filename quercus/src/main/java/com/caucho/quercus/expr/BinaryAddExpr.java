@@ -31,7 +31,7 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
@@ -51,7 +51,8 @@ public class BinaryAddExpr extends AbstractBinaryExpr {
     super(left, right);
   }
 
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull
+  protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.mapAll(_left.eval(env, VHelper.noCtx()) , _right.eval(env, VHelper.noCtx()),(l,r)-> l.add(r));
   }

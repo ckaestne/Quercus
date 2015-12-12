@@ -85,7 +85,7 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
 

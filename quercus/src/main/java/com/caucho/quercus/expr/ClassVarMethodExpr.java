@@ -30,10 +30,7 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
@@ -110,9 +107,9 @@ public class ClassVarMethodExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    QuercusClass cl = _className.evalQuercusClass(env, VHelper.noCtx()).getOne();
+    QuercusClass cl = _className.evalQuercusClass(env, ctx).getOne();
 
     if (cl == null) {
       env.error(L.l("no matching class {0}", _className), getLocation());
@@ -122,9 +119,9 @@ public class ClassVarMethodExpr extends Expr {
 
     int hash = nameV.hashCodeCaseInsensitive();
 
-    return cl.callMethod(env, ctx, env.getThis(),
+    return VHelper.getValues(cl.callMethod(env, ctx, env.getThis(),
                          nameV, hash,
-                         evalArgs(env, _args, VHelper.noCtx()));
+                         evalArgs(env, _args, ctx)));
   }
 
   public String toString()

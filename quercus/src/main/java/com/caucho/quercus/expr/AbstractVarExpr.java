@@ -128,7 +128,8 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  abstract public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx);
+  @Nonnull
+  abstract protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx);
 
   /**
    * Evaluates the expression as a reference (by RefExpr).
@@ -180,7 +181,7 @@ abstract public class AbstractVarExpr extends Expr {
   @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env, ctx).map((a)->a.copy());
+    return evalValue(env, ctx).map((a)->a.copy());
   }
 
   /**

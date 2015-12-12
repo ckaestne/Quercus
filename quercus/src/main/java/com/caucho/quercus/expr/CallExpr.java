@@ -140,7 +140,7 @@ public class CallExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return evalImpl(env, ctx, false, false);
   }
@@ -200,7 +200,7 @@ public class CallExpr extends Expr {
     if (_funId==null)
       _funId=lookupFunId(env);
 
-    return _funId.vflatMap(_ctx, (ctx,funId)-> {
+    return _funId.<Value>vflatMap(_ctx, (ctx,funId)-> {
 
       if (funId <= 0) {
         env.error(ctx, L.l("'{0}' is an unknown function.", _name), getLocation());
@@ -236,9 +236,9 @@ public class CallExpr extends Expr {
           */
 
         if (isRef)
-          return fun.callRef(env, ctx, args);
+          return fun.callRef(env, ctx, args).map((a)->a.toValue()); //TODO V
         else if (isCopy)
-          return fun.call(env, ctx, args).map((a) -> a.copyReturn());
+          return fun.call(env, ctx, args).map((a) -> a.toValue().copyReturn());
         else {
           return fun.call(env, ctx, args).map((a) -> a.toValue());
         }

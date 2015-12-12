@@ -150,6 +150,24 @@ class GeneratedMiscTests extends AbstractPhpGenTest {
 			c(fA.not and fB.not, "x")
 	}
 
+	@Test def testReturnRef() {
+		eval("""<?php 
+		       |class foo {
+		       |    public $value = 42;
+		       |
+		       |    public function &getValue() {
+		       |        return $this->value;
+		       |    }
+		       |}
+		       |
+		       |$obj = new foo;
+		       |$myValue = &$obj->getValue(); // $myValue is a reference to $obj->value, which is 42.
+		       |echo $myValue;
+		       |$obj->value = 2;
+		       |echo $myValue;                // prints the new value of $obj->value, i.e. 2.""".stripMargin) to 
+			c(True, "422")
+	}
+
 	@Test def testSwitch() {
 		eval("""<?php 
 		       |$a=0+@A; 

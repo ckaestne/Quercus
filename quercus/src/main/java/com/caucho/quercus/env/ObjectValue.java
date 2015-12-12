@@ -794,7 +794,7 @@ abstract public class ObjectValue extends Callback {
    * Call for callable.
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     AbstractFunction fun = _quercusClass.getInvoke();
 
@@ -883,9 +883,9 @@ abstract public class ObjectValue extends Callback {
         throw new IllegalStateException(L.l("must implement jsonSerialize()"));
       }
 
-      V<? extends Value> value = fun.callMethod(env, VHelper.noCtx(), getQuercusClass(), this);
+      V<? extends ValueOrVar> value = fun.callMethod(env, VHelper.noCtx(), getQuercusClass(), this);
 
-      value.foreach((a)->a.jsonEncode(env, context, sb));
+      value.foreach((a)->a.toValue().jsonEncode(env, context, sb));
 
       return;
     }

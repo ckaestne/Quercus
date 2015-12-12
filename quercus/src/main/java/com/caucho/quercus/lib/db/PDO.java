@@ -517,7 +517,7 @@ public class PDO implements EnvCleanup {
       if (_statementClassName != null) {
         QuercusClass cls = env.getClass(_statementClassName);
 
-        Value phpObject = cls.callNew(env, VHelper.noCtx(),  pdoStatement, VHelper.toVArray(_statementClassArgs)).getOne();
+        Value phpObject = cls.callNew(env, VHelper.noCtx(),  pdoStatement, VHelper.toVArray(_statementClassArgs)).getOne().toValue();
 
         return phpObject;
       }
@@ -563,7 +563,7 @@ public class PDO implements EnvCleanup {
       if (_statementClassName != null) {
         QuercusClass cls = env.getClass(_statementClassName);
 
-        return cls.callNew(env, VHelper.noCtx(), pdoStatement, VHelper.toVArray(_statementClassArgs)).getOne();
+        return cls.callNew(env, VHelper.noCtx(), pdoStatement, VHelper.toVArray(_statementClassArgs)).getOne().toValue();
       }
       else {
         return env.wrapJava(pdoStatement);

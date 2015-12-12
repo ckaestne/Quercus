@@ -75,7 +75,7 @@ public class SessionCallback extends Value {
   public StringValue read(Env env, String id)
   {
     try {
-      Value value = _read.call(env,VHelper.noCtx(), env.createString(id)).getOne();
+      Value value = _read.call(env,VHelper.noCtx(), env.createString(id)).getOne().toValue();
 
       if (value instanceof StringValue)
         return (StringValue) value;

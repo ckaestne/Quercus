@@ -95,6 +95,6 @@ public class IteratorAggregateDelegate
 
   private Value getTarget(Env env, ObjectValue qThis)
   {
-    return qThis.callMethod(env, VHelper.noCtx(), GET_ITERATOR).getOne();
+    return qThis.callMethod(env, VHelper.noCtx(), GET_ITERATOR).getOne().toValue();
   }
 }

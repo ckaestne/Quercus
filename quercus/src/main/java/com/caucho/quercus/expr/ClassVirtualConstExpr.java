@@ -32,7 +32,7 @@ package com.caucho.quercus.expr;
 import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -90,7 +90,7 @@ public class ClassVirtualConstExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getCallingClass().getConstant(env, _name));
   }

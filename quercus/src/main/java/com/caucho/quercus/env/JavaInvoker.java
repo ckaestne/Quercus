@@ -671,26 +671,26 @@ abstract public class JavaInvoker
   }
 
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     return callMethod(env, ctx, (QuercusClass) null, (Value) null, args);
   }
 
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
-                                          QuercusClass qClass,
-                                          Value qThis,
-                                          V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
+                                               QuercusClass qClass,
+                                               Value qThis,
+                                               V<? extends ValueOrVar>[] args)
   {
     // php/3cl3
     return callMethod(env, ctx, qClass, qThis, args);
   }
 
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
-                                       QuercusClass qClass,
-                                       Value qThis,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
+                                            QuercusClass qClass,
+                                            Value qThis,
+                                            V<? extends ValueOrVar>[] args)
   {
     Object result = callJavaMethod(env, qClass, qThis, args);
 
@@ -713,10 +713,11 @@ abstract public class JavaInvoker
   }
 
   @Override
-  public @Nonnull V<? extends Value> callNew(Env env,
-                                    FeatureExpr ctx, QuercusClass qClass,
-                                    Value qThis,
-                                             V<? extends ValueOrVar>[] args)
+  public @Nonnull
+  V<? extends ValueOrVar> callNew(Env env,
+                                  FeatureExpr ctx, QuercusClass qClass,
+                                  Value qThis,
+                                  V<? extends ValueOrVar>[] args)
   {
     Object result = callJavaMethod(env, qClass, qThis, args);
 

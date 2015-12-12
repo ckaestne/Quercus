@@ -78,7 +78,7 @@ public class FunctionArrayDelegate implements ArrayDelegate {
       return _arrayGet.callMethod(env, VHelper.noCtx(),
                                   _arrayGet.getQuercusClass(),
                                   qThis,
-                                  key ).getOne();
+                                  key ).getOne().toValue();
     }
     else
       return UnsetValue.UNSET;
@@ -93,7 +93,7 @@ public class FunctionArrayDelegate implements ArrayDelegate {
     if (_arrayPut != null)
       return _arrayPut.callMethod(env,   VHelper.noCtx(),
                                   _arrayPut.getQuercusClass(),
-                                  qThis, key, value).getOne();
+                                  qThis, key, value).getOne().toValue();
     else
       return UnsetValue.UNSET;
   }
@@ -107,7 +107,7 @@ public class FunctionArrayDelegate implements ArrayDelegate {
     if (_arrayPut != null)
       return _arrayPut.callMethod(env,   VHelper.noCtx(),
                                   _arrayPut.getQuercusClass(),
-                                  qThis, value).getOne();
+                                  qThis, value).getOne().toValue();
     else
       return UnsetValue.UNSET;
   }
@@ -145,7 +145,7 @@ public class FunctionArrayDelegate implements ArrayDelegate {
     if (_arrayCount!= null) {
       return _arrayCount .callMethod(env,  VHelper.noCtx(),
                                      _arrayGet.getQuercusClass(),
-                                     qThis).getOne().toLong();
+                                     qThis).getOne().toValue().toLong();
     }
     else
       return 1;

@@ -52,7 +52,7 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     throw new UnimplementedVException();
 //    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
@@ -64,10 +64,10 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> callMethod(Env env, FeatureExpr ctx,
-                                       QuercusClass qClass,
-                                       Value qThis,
-                                       V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
+                                            QuercusClass qClass,
+                                            Value qThis,
+                                            V<? extends ValueOrVar>[] args)
   {
     throw new UnimplementedVException();
 //    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
@@ -80,10 +80,10 @@ public class FunSpecialCall extends AbstractFunction {
    * Evaluates the function.
    */
   @Override
-  public V<? extends Value> callMethodRef(Env env, FeatureExpr ctx,
-                                          QuercusClass qClass,
-                                          Value qThis,
-                                          V<? extends ValueOrVar>[] args)
+  public V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx,
+                                               QuercusClass qClass,
+                                               Value qThis,
+                                               V<? extends ValueOrVar>[] args)
   {
     throw new UnimplementedVException();
 //    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);

@@ -340,7 +340,7 @@ public class CurlHttpRequest
       sb.append(httpStatus);
       sb.append("\r\n");
 
-      Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), env.wrapJava(_curl), sb).getOne();
+      Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), env.wrapJava(_curl), sb).getOne().toValue();
 
       if (len.toInt() != sb.length()) {
         _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);
@@ -364,7 +364,7 @@ public class CurlHttpRequest
         sb.append(_conn.getHeaderField(i));
         sb.append("\r\n");
 
-        Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), _curl, sb).getOne();
+        Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), _curl, sb).getOne().toValue();
 
         if (len.toInt() != sb.length()) {
           _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);
@@ -384,7 +384,7 @@ public class CurlHttpRequest
 
       Value len = _curl.getHeaderCallback().call(env,VHelper.noCtx(),
               env.wrapJava(_curl),
-                                                 sb).getOne();
+                                                 sb).getOne().toValue();
 
       if (len.toInt() != sb.length()) {
         _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);
@@ -440,7 +440,7 @@ public class CurlHttpRequest
     }
 
     if (_curl.getWriteCallback() != null) {
-      Value len = _curl.getWriteCallback().call(env, VHelper.noCtx(), env.wrapJava(_curl), bb).getOne();
+      Value len = _curl.getWriteCallback().call(env, VHelper.noCtx(), env.wrapJava(_curl), bb).getOne().toValue();
 
       if (len.toInt() != bb.length()) {
         _curl.setErrorCode(CurlModule.CURLE_WRITE_ERROR);

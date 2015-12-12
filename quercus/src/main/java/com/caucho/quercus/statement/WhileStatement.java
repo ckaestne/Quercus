@@ -30,14 +30,11 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.BreakValue;
-import com.caucho.quercus.env.ContinueValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -68,9 +65,10 @@ public class WhileStatement extends Statement {
     return true;
   }
 
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = V.one(null);
+    V<? extends ValueOrVar> value = V.one(null);
     try {
       env.setLocation(getLocation());
 
@@ -79,7 +77,7 @@ public class WhileStatement extends Statement {
       while (ctx.isSatisfiable()) {
         env.checkTimeout();
 
-        V<? extends Value> vresult = _block.execute(env, ctx);
+        V<? extends ValueOrVar> vresult = _block.execute(env, ctx);
         vresult = vresult.vmap(ctx, (c,v)->{
           if (v instanceof BreakValue) {
             BreakValue breakValue = (BreakValue) v;

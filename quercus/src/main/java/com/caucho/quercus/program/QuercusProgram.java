@@ -43,6 +43,8 @@ import com.caucho.vfs.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 import java.util.*;
@@ -414,7 +416,7 @@ public class QuercusProgram {
    */
   public @Nonnull V<? extends Value> execute(Env env)
   {
-    return _statement.execute(env, FeatureExprFactory.True());
+    return VHelper.getValues(_statement.execute(env, FeatureExprFactory.True()));
   }
 
   /**

@@ -125,7 +125,7 @@ public class ClassMethodVarExpr extends AbstractMethodExpr
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);
 
@@ -141,7 +141,7 @@ public class ClassMethodVarExpr extends AbstractMethodExpr
     V<? extends ValueOrVar>[] args = evalArgs(env, _args, VHelper.noCtx());
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return cl.callStaticMethod(env, ctx, qThis, methodName, hash, args);
+    return cl.callStaticMethod(env, ctx, qThis, methodName, hash, args).map((a)->a.toValue());
   }
 
   public String toString()

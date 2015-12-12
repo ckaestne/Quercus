@@ -74,7 +74,7 @@ abstract public class AbstractMethodExpr extends Expr {
   @Override
   public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return eval(env, VHelper.noCtx()).map((a)->a.copy());
+    return eval(env, ctx).map((a)->a.copy());
   }
 
   /**
@@ -85,7 +85,7 @@ abstract public class AbstractMethodExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  protected V<? extends Value> eval(Env env, FeatureExpr ctx, Value qThis,
+  protected V<? extends ValueOrVar> eval(Env env, FeatureExpr ctx, Value qThis,
                                     StringValue methodName, int hashCode,
                                     Expr[] argExprs)
   {
@@ -96,7 +96,7 @@ abstract public class AbstractMethodExpr extends Expr {
     try {
       env.checkTimeout();
 
-      return qThis.callMethod(env, VHelper.noCtx(), methodName, hashCode, args);
+      return qThis.callMethod(env, ctx, methodName, hashCode, args);
     } finally {
       env.popCall();
     }

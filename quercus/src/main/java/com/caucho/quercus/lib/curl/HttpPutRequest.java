@@ -90,7 +90,7 @@ public class HttpPutRequest
 
         while (totalWritten < length) {
           StringValue str
-            = callback.call(env, VHelper.noCtx(),  fileV, lengthV).getOne().toStringValue(env);
+            = callback.call(env, VHelper.noCtx(),  fileV, lengthV).getOne().toValue().toStringValue(env);
 
           int count = str.length();
 

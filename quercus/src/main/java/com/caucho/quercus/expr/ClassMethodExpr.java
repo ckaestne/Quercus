@@ -90,7 +90,7 @@ public class ClassMethodExpr extends AbstractMethodExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
+  @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);
 
@@ -122,7 +122,7 @@ public class ClassMethodExpr extends AbstractMethodExpr {
     try {
       env.checkTimeout();
 
-      return cl.callStaticMethod(env, ctx, qThis, _methodName, _hash, values);
+      return cl.callStaticMethod(env, ctx, qThis, _methodName, _hash, values).map((a)->a.toValue());
     } finally {
       env.popCall();
       env.setThis(oldThis);

@@ -278,7 +278,7 @@ public class OutputBuffer {
       return false;
 
     Value result =
-      _callback.call(_env, VHelper.noCtx(), getContents(), LongValue.create(_state)).getOne();
+      _callback.call(_env, VHelper.noCtx(), getContents(), LongValue.create(_state)).getOne().toValue();
 
     // special code to do nothing to the buffer
     if (result.toValue() != BooleanValue.FALSE) {
