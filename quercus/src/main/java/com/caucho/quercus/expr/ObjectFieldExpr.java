@@ -128,7 +128,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   {
     V<? extends ValueOrVar> value = _objExpr.evalArg(env, ctx, false);
 
-    return value.flatMap((a)->a.toValue().getFieldArg(env, _name, isTop).map((b)->b.makeValue()));
+    return VHelper.getValues(value).flatMap((a)->a.getFieldArg(env, _name, isTop));
   }
 
   @Override

@@ -353,4 +353,49 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not, "33")
 	}
 
+	@Test def testVarggetfieldvalue() {
+		eval("""<?php 
+		       |class F{
+		       |    public $x = 0;
+		       |}
+		       |$f=new F();
+		       |if (@A)
+		       |    $f->x=2;
+		       |function foo(&$var) {  $var++; }
+		       |function bar($var) {  $var++; }
+		       |$fun = "foo";
+		       |$fun($f->x);
+		       |echo $f->x;
+		       |$fun = "bar";
+		       |$fun($f->x);
+		       |echo $f->x;""".stripMargin) to 
+			c(fA, "33") ~
+			c(fA.not, "11")
+	}
+
+	@Test def testVarggetfieldvalue_this() {
+		eval("""<?php 
+		       |function foo(&$var) {  $var++; }
+		       |function bar($var) {  $var++; }
+		       |
+		       |class F{
+		       |    public $x = 0;
+		       |    function foo() {
+		       |        $fun = "foo";
+		       |        $fun($this->x);
+		       |        echo $this->x;
+		       |        $fun = "bar";
+		       |        $fun($this->x);
+		       |        echo $this->x;
+		       |    }
+		       |}
+		       |$f=new F();
+		       |if (@A)
+		       |    $f->x=2;
+		       |$f->foo();
+		       |echo $f->x;""".stripMargin) to 
+			c(fA, "333") ~
+			c(fA.not, "111")
+	}
+
 }

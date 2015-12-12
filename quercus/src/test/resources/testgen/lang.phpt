@@ -217,3 +217,40 @@ $fun = "bar";
 $fun($a[1]);
 echo $a[1];
 
+==== varggetfieldvalue
+class F{
+    public $x = 0;
+}
+$f=new F();
+if (@A)
+    $f->x=2;
+function foo(&$var) {  $var++; }
+function bar($var) {  $var++; }
+$fun = "foo";
+$fun($f->x);
+echo $f->x;
+$fun = "bar";
+$fun($f->x);
+echo $f->x;
+
+
+==== varggetfieldvalue_this
+function foo(&$var) {  $var++; }
+function bar($var) {  $var++; }
+
+class F{
+    public $x = 0;
+    function foo() {
+        $fun = "foo";
+        $fun($this->x);
+        echo $this->x;
+        $fun = "bar";
+        $fun($this->x);
+        echo $this->x;
+    }
+}
+$f=new F();
+if (@A)
+    $f->x=2;
+$f->foo();
+echo $f->x;
