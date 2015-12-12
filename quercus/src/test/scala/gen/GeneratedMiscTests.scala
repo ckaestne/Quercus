@@ -114,23 +114,30 @@ class GeneratedMiscTests extends AbstractPhpGenTest {
 			c(fA.not and fB.not, "x")
 	}
 
-	@Ignore
 	@Test def testSwitch() {
 		eval("""<?php 
-		       |$a=@A; 
+		       |$a=0+@A; 
+		       |if (@B) $a++;
 		       |switch($a) {
 		       |	case 0:
 		       |		echo "x";	
 		       |		break;
+		       |	case 0:
+		       |		echo "a";	
+		       |		break;
 		       |	case 1:
 		       |		echo "y";
+		       |	case 1:
+		       |		echo "b";
 		       |		break;
 		       |	default:
 		       |		echo "z";
 		       |		break;
 		       |}""".stripMargin) to 
-			c(fA, "y") ~
-			c(fA.not, "x")
+			c(fA and fB, "z") ~
+			c(fA.not and fB, "yb") ~
+			c(fB.not and fA, "yb") ~
+			c(fA.not and fB.not, "x")
 	}
 
 	@Test def testWhile1() {

@@ -75,8 +75,8 @@ public class DoStatement extends Statement {
       do {
         env.checkTimeout();
 
-        value = _block.execute(env, ctx);
-        value = value.vmap(ctx, (c,v)->{
+        V<? extends Value> vresult = _block.execute(env, ctx);
+        vresult = vresult.vmap(ctx, (c,v)->{
           if (v instanceof BreakValue) {
             BreakValue breakValue = (BreakValue) v;
 
@@ -100,6 +100,7 @@ public class DoStatement extends Statement {
           return v;
         });
 
+        value = V.choice(ctx, vresult, value);
         ctx = ctx.and(value.when(x -> x == null));
         V<? extends Boolean> conditionValue = _test.evalBoolean(env, ctx);
         ctx = ctx.and(conditionValue.when(k -> k));

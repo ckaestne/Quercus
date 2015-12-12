@@ -38,8 +38,8 @@ import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -86,63 +86,69 @@ public class SwitchStatement extends Statement {
   /**
    * Executes the 'switch' statement, returning any value.
    */
-  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
-  {
+  public
+  @Nonnull
+  V<? extends Value> execute(Env env, FeatureExpr ctx) {
+    V<? extends Value> result = V.one(null);
     try {
-      Value testValue = _value.eval(env, VHelper.noCtx()).getOne();
+      V<? extends Value> vtestValue = _value.eval(env, ctx);
 
       int len = _cases.length;
 
       for (int i = 0; i < len; i++) {
-        Expr []values = _cases[i];
+        final int caseIdx = i;
+        Expr[] values = _cases[i];
 
-        for (int j = 0; j < values.length; j++) {
-          Value caseValue = values[j].eval(env, VHelper.noCtx()).getOne();
+        for (int j = 0; j < values.length; j++)
+          if (ctx.isSatisfiable()) {
+            V<? extends Value> vcaseValue = values[j].eval(env, ctx);
 
-          if (testValue.eq(caseValue)) {
-            Value retValue = _blocks[i].execute(env, VHelper.noCtx()).getOne();
+            vcaseValue = VHelper.<Value,Value,Value>vflatMapAll(ctx, vtestValue, vcaseValue, (c, testValue, caseValue) -> {
+              if (testValue.eq(caseValue)) {
+                V<? extends Value> vretValue = _blocks[caseIdx].execute(env, c);
 
-            if (retValue instanceof BreakValue) {
-              BreakValue breakValue = (BreakValue) retValue;
-              
-              int target = breakValue.getTarget();
-              
-              if (target > 1)
-                return VHelper.toV(new BreakValue(target - 1));
-              else
-                return V.one(null);
-            }
-            else if (retValue instanceof ContinueValue) {
-              ContinueValue conValue = (ContinueValue) retValue;
-              
-              int target = conValue.getTarget();
-              
-              if (target > 1)
-                return VHelper.toV(new ContinueValue(target - 1));
-              else
-                return V.one(null);
-            }
-            else
-              return VHelper.toV(retValue);
+                return vretValue.<Value>map(retValue -> {
+                  if (retValue instanceof BreakValue) {
+                    BreakValue breakValue = (BreakValue) retValue;
+
+                    int target = breakValue.getTarget();
+
+                    if (target > 1)
+                      return new BreakValue(target - 1);
+                    else
+                      return new BreakValue(0);
+                  } else if (retValue instanceof ContinueValue) {
+                    ContinueValue conValue = (ContinueValue) retValue;
+
+                    int target = conValue.getTarget();
+
+                    if (target > 1)
+                      return new ContinueValue(target - 1);
+                    else
+                      return null;
+                  } else
+                    return retValue;
+                });
+              }
+              return V.one(null);
+            });
+            result = V.choice(ctx, vcaseValue, result);
+            ctx = ctx.and(result.when(k -> k == null));
           }
-        }
       }
 
-      if (_defaultBlock != null) {
-        Value retValue = _defaultBlock.execute(env, VHelper.noCtx()).getOne();
-
-        if (retValue instanceof BreakValue)
-          return V.one(null);
-        else
-          return VHelper.toV(retValue);
+      if (_defaultBlock != null && ctx.isSatisfiable()) {
+        V<? extends Value> retValue = _defaultBlock.execute(env, ctx).
+                map(v -> v instanceof BreakValue ? null : v);
+        result = V.choice(ctx, retValue, result);
       }
 
-    }
-    catch (RuntimeException e) {
+    } catch (RuntimeException e) {
       rethrow(e, RuntimeException.class);
     }
 
-    return V.one(null);
+    return result.map(x->
+            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()==0)?null:x);
   }
 
   /**

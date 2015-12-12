@@ -3,6 +3,7 @@ package edu.cmu.cs.varex;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.*;
 
@@ -106,7 +107,7 @@ class VImpl<T> implements V<T> {
 
 
     @Override
-    public <U> V<? extends U> vflatMap(FeatureExpr ctx, BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
+    public <U> V<? extends U> vflatMap(FeatureExpr ctx, @Nonnull BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
         Map<U, FeatureExpr> result = new HashMap<>(values.size());
         for (HashMap.Entry<T, FeatureExpr> e : values.entrySet()) {
             V<? extends U> u = fun.apply(ctx.and(e.getValue()), e.getKey());
@@ -115,7 +116,7 @@ class VImpl<T> implements V<T> {
         return createV(result);
     }
 
-    private static <U> void addVToMap(Map<U, FeatureExpr> result, FeatureExpr ctx, V<? extends U> u) {
+    private static <U> void addVToMap(Map<U, FeatureExpr> result, FeatureExpr ctx, @Nonnull V<? extends U> u) {
         assert (u instanceof One) || (u instanceof VImpl) : "unexpected V value: " + u;
         if (u instanceof One)
             put(result, ((One<U>) u).value, ctx);

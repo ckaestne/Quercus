@@ -16,13 +16,19 @@ echo @A;
 $a=@A; 
 if($a==0) {	echo "x";} else {	echo "y";}
 ==== switch
-$a=@A; 
+$a=0+@A; 
+if (@B) $a++;
 switch($a) {
 	case 0:
 		echo "x";	
 		break;
+	case 0:
+		echo "a";	
+		break;
 	case 1:
 		echo "y";
+	case 1:
+		echo "b";
 		break;
 	default:
 		echo "z";

@@ -79,8 +79,8 @@ public class WhileStatement extends Statement {
       while (ctx.isSatisfiable()) {
         env.checkTimeout();
 
-        value = V.choice(ctx, _block.execute(env, ctx), value);
-        value = value.vmap(ctx, (c,v)->{
+        V<? extends Value> vresult = _block.execute(env, ctx);
+        vresult = vresult.vmap(ctx, (c,v)->{
           if (v instanceof BreakValue) {
             BreakValue breakValue = (BreakValue) v;
 
@@ -104,6 +104,7 @@ public class WhileStatement extends Statement {
           return v;
         });
 
+        value = V.choice(ctx, vresult, value);
 
         ctx = ctx.and(value.when(x -> x == null));
 
