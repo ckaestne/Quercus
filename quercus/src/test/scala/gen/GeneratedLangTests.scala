@@ -296,4 +296,30 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not and fB.not, "xyxy1")
 	}
 
+	@Test def testArgvalue() {
+		eval("""<?php 
+		       |function foo(&$var) {  $var++; }
+		       |function bar($var) {  $var++; }
+		       |$a=5;
+		       |foo($a);
+		       |echo $a;
+		       |bar($a);
+		       |echo $a;""".stripMargin) to 
+			c(True, "66")
+	}
+
+	@Test def testArgvalue_dyn() {
+		eval("""<?php 
+		       |function foo(&$var) {  $var++; }
+		       |function bar($var) {  $var++; }
+		       |$fun = "foo";
+		       |$a=5;
+		       |$fun($a);
+		       |echo $a;
+		       |$fun = "bar";
+		       |$fun($a);
+		       |echo $a;""".stripMargin) to 
+			c(True, "66")
+	}
+
 }

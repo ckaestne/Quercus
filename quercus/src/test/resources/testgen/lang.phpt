@@ -172,3 +172,23 @@ echo $c;
 $d=$c.@A;
 $e=$d.(1+@B);
 echo $e;
+
+==== argvalue
+function foo(&$var) {  $var++; }
+function bar($var) {  $var++; }
+$a=5;
+foo($a);
+echo $a;
+bar($a);
+echo $a;
+
+==== argvalue_dyn
+function foo(&$var) {  $var++; }
+function bar($var) {  $var++; }
+$fun = "foo";
+$a=5;
+$fun($a);
+echo $a;
+$fun = "bar";
+$fun($a);
+echo $a;
