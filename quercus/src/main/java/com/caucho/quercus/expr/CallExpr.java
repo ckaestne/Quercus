@@ -156,7 +156,7 @@ public class CallExpr extends Expr {
   @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return evalImpl(env, ctx, false, true);
+    return VHelper.getValues(evalImpl(env, ctx, false, true));
   }
 
   /**
@@ -190,7 +190,7 @@ public class CallExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
-  private V<? extends Value> evalImpl(Env env, FeatureExpr _ctx, boolean isRef, boolean isCopy)
+  private V<? extends ValueOrVar> evalImpl(Env env, FeatureExpr _ctx, boolean isRef, boolean isCopy)
   {
 //    try {
 //      w.write(_name+" - "+this.getLocation().toString()+"\n");
@@ -200,7 +200,7 @@ public class CallExpr extends Expr {
     if (_funId==null)
       _funId=lookupFunId(env);
 
-    return _funId.<Value>vflatMap(_ctx, (ctx,funId)-> {
+    return _funId.<ValueOrVar>vflatMap(_ctx, (ctx,funId)-> {
 
       if (funId <= 0) {
         env.error(ctx, L.l("'{0}' is an unknown function.", _name), getLocation());
@@ -236,11 +236,11 @@ public class CallExpr extends Expr {
           */
 
         if (isRef)
-          return fun.callRef(env, ctx, args).map((a)->a.toValue()); //TODO V
+          return fun.callRef(env, ctx, args);
         else if (isCopy)
-          return fun.call(env, ctx, args).map((a) -> a.toValue().copyReturn());
+          return VHelper.getValues(fun.call(env, ctx, args)).map((a) -> a.copyReturn());
         else {
-          return fun.call(env, ctx, args).map((a) -> a.toValue());
+          return fun.call(env, ctx, args);
         }
         //} catch (Exception e) {
         //  throw QuercusException.create(e, env.getStackTrace());
