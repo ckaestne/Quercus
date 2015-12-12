@@ -169,7 +169,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
     final V<? extends Value> value = obj.flatMap((a)->a.getFieldVar(env, _name))
       .vflatMap(ctx,(c,a)->a.postincr(c, incr));
-    obj.map((a)->a.putField(env, VHelper.noCtx(), _name, value.getOne()));
+//    obj.map((a)->a.putField(env, VHelper.noCtx(), _name, value.getOne()));
 
     return value;
   }
@@ -182,10 +182,10 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   {
     // php/09kq
 
-    V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
+    V<? extends Value> obj = _objExpr.evalObject(env, ctx);
     V<? extends Value> value = obj.flatMap((a)->a.getFieldVar(env, _name))
-            .flatMap((a)->a.preincr(ctx, incr));
-    obj.map((a)->a.putField(env, VHelper.noCtx(), _name, value.getOne()));
+            .vflatMap(ctx, (c,a)->a.preincr(c, incr));
+//    obj.map((a)->a.putField(env, VHelper.noCtx(), _name, value.getOne()));
 
     return value;
   }

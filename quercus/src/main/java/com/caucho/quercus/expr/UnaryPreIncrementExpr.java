@@ -61,7 +61,7 @@ public class UnaryPreIncrementExpr extends AbstractUnaryExpr {
 
   public @Nonnull V<? extends Value> eval(Env env, FeatureExpr ctx)
   {
-    return _expr.evalPreIncrement(env, VHelper.noCtx(), _incr);
+    return _expr.evalPreIncrement(env, ctx, _incr);
   }
 
   /**
