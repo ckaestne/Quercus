@@ -73,48 +73,60 @@ public class ForStatement extends Statement {
 
   public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
+    V<? extends Value> value = V.one(null);
     try {
       if (_init != null)
-        _init.eval(env, VHelper.noCtx());
+        _init.eval(env, ctx);
 
-      while (_test == null || _test.evalBoolean(env, VHelper.noCtx()).getOne()) {
+      V<? extends Boolean> condition = _test.evalBoolean(env, ctx);
+      ctx = ctx.and(condition.when(k->k.booleanValue()));
+      while (_test == null || ctx.isSatisfiable()) {
         env.checkTimeout();
 
-        Value value = _block.execute(env, VHelper.noCtx()).getOne();
+        V<? extends Value> vresult = _block.execute(env, ctx);
 
-        if (value == null) {
-        }
-        else if (value instanceof ContinueValue) {
-          ContinueValue conValue = (ContinueValue) value;
-          
-          int target = conValue.getTarget();
-          
-          if (target > 1) {
-            return VHelper.toV(new ContinueValue(target - 1));
+        vresult = vresult.vmap(ctx, (c,v)->{
+          if (v instanceof BreakValue) {
+            BreakValue breakValue = (BreakValue) v;
+
+            int target = breakValue.getTarget();
+
+            if (target > 1)
+              return new BreakValue(target - 1);
+            else
+              return new BreakValue(target);
           }
-        }
-        else if (value instanceof BreakValue) {
-          BreakValue breakValue = (BreakValue) value;
-          
-          int target = breakValue.getTarget();
-          
-          if (target > 1)
-            return VHelper.toV(new BreakValue(target - 1));
-          else
-            break;
-        }
-        else
-          return VHelper.toV(value);
+          else if (v instanceof ContinueValue) {
+            ContinueValue conValue = (ContinueValue) v;
+
+            int target = conValue.getTarget();
+
+            if (target > 1) {
+              return new ContinueValue(target - 1);
+            } else
+              return null;
+          }
+          return v;
+        });
+
+
+        value = V.choice(ctx, vresult, value);
+
+        ctx = ctx.and(value.when(x -> x == null));
 
         if (_incr != null)
-          _incr.eval(env, VHelper.noCtx());
+          _incr.eval(env, ctx);
+
+        condition = _test.evalBoolean(env, ctx);
+        ctx = ctx.and(condition.when(k->k.booleanValue()));
       }
     }
     catch (RuntimeException t) {
       rethrow(t, RuntimeException.class);
     }
 
-    return V.one(null);
+    return value.map(x->
+            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()==0)?null:x);
   }
 }
 

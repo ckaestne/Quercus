@@ -61,6 +61,42 @@ class GeneratedMiscTests extends AbstractPhpGenTest {
 			c(fA.not, "x0x1x2x3x4y5z6x7y8z9x10y11z12x13y14z15")
 	}
 
+	@Test def testFor1() {
+		eval("""<?php 
+		       |$a=2+@A;
+		       |if (@B) $a++;
+		       |for ($i=$a;$i>0;$i--)
+		       |  echo $i;""".stripMargin) to 
+			c(fA and fB, "4321") ~
+			c(fA.not and fB, "321") ~
+			c(fB.not and fA, "321") ~
+			c(fA.not and fB.not, "21")
+	}
+
+	@Test def testFor2() {
+		eval("""<?php 
+		       |$a=2+@A;
+		       |$inc=1+@B;
+		       |for ($i=$a;$i<10;$i=$i+$inc)
+		       |  echo $i;""".stripMargin) to 
+			c(fA and fB, "3579") ~
+			c(fA.not and fB, "2468") ~
+			c(fB.not and fA, "3456789") ~
+			c(fA.not and fB.not, "23456789")
+	}
+
+	@Test def testFor3() {
+		eval("""<?php 
+		       |$a=0+@A;
+		       |$up=5+@B;
+		       |for ($i=$a;$i<$up;$i++)
+		       |  echo $i;""".stripMargin) to 
+			c(fA and fB, "12345") ~
+			c(fA.not and fB, "012345") ~
+			c(fB.not and fA, "1234") ~
+			c(fA.not and fB.not, "01234")
+	}
+
 	@Test def testIf() {
 		eval("""<?php 
 		       |$a=@A; 

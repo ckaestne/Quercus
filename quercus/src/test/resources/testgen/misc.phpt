@@ -111,3 +111,18 @@ do {
   echo "y".$i++;
   echo "z".$i++;
 } while ($i<15);
+==== for1
+$a=2+@A;
+if (@B) $a++;
+for ($i=$a;$i>0;$i--)
+  echo $i;
+==== for2
+$a=2+@A;
+$inc=1+@B;
+for ($i=$a;$i<10;$i=$i+$inc)
+  echo $i;
+==== for3
+$a=0+@A;
+$up=5+@B;
+for ($i=$a;$i<$up;$i++)
+  echo $i;
