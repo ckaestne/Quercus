@@ -165,7 +165,8 @@ public class VarVarExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
 

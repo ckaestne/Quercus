@@ -97,9 +97,9 @@ public class ArrayTailExpr extends AbstractVarExpr {
   public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
     if (isTop) {
-      V<? extends Value> obj = _expr.evalArray(env, ctx);
+      V<? extends ValueOrVar> obj = _expr.evalArray(env, ctx);
 
-      return obj.flatMap((a)->a.putVar(ctx).map((b)->b.makeValue()));
+      return VHelper.getValues(obj).flatMap((a)->a.putVar(ctx).map((b)->b.makeValue()));
     }
     else {
       // php/0d4e need to do a toValue()
@@ -133,11 +133,12 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> obj = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends ValueOrVar> obj = _expr.evalArray(env, VHelper.noCtx());
 
-    return obj.map((a)->a.putArray(env));
+    return VHelper.getValues(obj).map((a)->a.putArray(env));
   }
 
   /**
@@ -150,11 +151,11 @@ public class ArrayTailExpr extends AbstractVarExpr {
    */
   public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends ValueOrVar> array = _expr.evalArray(env, VHelper.noCtx());
 
     Value value = env.createObject();
 
-    array.map((a)->a.put(VHelper.noCtx(), V.one(value)));
+    VHelper.getValues(array).map((a)->a.put(VHelper.noCtx(), V.one(value)));
 
     return VHelper.toV(value);
   }
@@ -199,9 +200,9 @@ public class ArrayTailExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    V<? extends Value> array = _expr.evalArray(env, ctx);
+    V<? extends ValueOrVar> array = _expr.evalArray(env, ctx);
 
-    array.map((a)->a.put(VHelper.noCtx(), value.map((b)->b.toValue())));
+    VHelper.getValues(array).map((a)->a.put(VHelper.noCtx(), value.map((b)->b.toValue())));
 
     return value;
   }

@@ -574,7 +574,8 @@ abstract public class Expr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
     return eval(env, ctx);
   }
@@ -646,16 +647,16 @@ abstract public class Expr {
     //
     //return var.put(index, value);
 
-    V<? extends Value> array = evalArray(env, ctx);
+    V<? extends ValueOrVar> array = evalArray(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
     final V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
-    V<? extends ValueOrVar> result = VHelper.vflatMapAll(ctx, array, index, (c, _array, _index) -> _array.put(c, _index, value));
+    V<? extends ValueOrVar> result = VHelper.vflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
 
     //return array.get(index); // php/03mm php/03mn
 
-    return result.map(k->k.toValue());
+    return VHelper.getValues(result);
   }
 
   /**
@@ -670,12 +671,12 @@ abstract public class Expr {
     //
     //return var.put(index, value);
 
-    V<? extends Value> array = evalArray(env, ctx);
+    V<? extends ValueOrVar> array = evalArray(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
     V<? extends ValueOrVar> value = valueExpr.evalRef(env, ctx);
 
-    V<? extends ValueOrVar> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
+    V<? extends ValueOrVar> result = VHelper.<Value,Value,ValueOrVar>vflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -694,10 +695,10 @@ abstract public class Expr {
     //
     //return var.put(index, value);
 
-    V<? extends Value> array = evalArray(env, ctx);
+    V<? extends ValueOrVar> array = evalArray(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    V<? extends ValueOrVar> result = VHelper.mapAll(array, index, value, (_array, _index, _value) -> _array.put(_index, _value));
+    V<? extends ValueOrVar> result = VHelper.<Value,Value,ValueOrVar>vflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -710,8 +711,8 @@ abstract public class Expr {
    */
   public @Nonnull V<? extends Value> evalArrayAssignTail(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
-    V<? extends Value> array = evalArray(env, ctx);
-    array.vmap(ctx, (c,a)->a.put(c, value));
+    V<? extends ValueOrVar> array = evalArray(env, ctx);
+    VHelper.getValues(array).vmap(ctx, (c,a)->a.put(c, value));
 
     return value;
   }

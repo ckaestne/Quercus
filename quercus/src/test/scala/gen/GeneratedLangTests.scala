@@ -422,4 +422,42 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not, "11112")
 	}
 
+	@Test def testGlobalvar2() {
+		eval("""<?php 
+		       |$GLOBALS['x'] = 1;
+		       |function foo() {
+		       |  global $x;
+		       |  echo $x;
+		       |  if (@A)
+		       |    $x++;
+		       |}
+		       |function bar() {
+		       |  global $x;
+		       |  echo $x;
+		       |  $x++;
+		       |}
+		       |foo();
+		       |bar();""".stripMargin) to 
+			c(fA, "12") ~
+			c(fA.not, "11")
+	}
+
+	@Test def testGlobalvar3() {
+		eval("""<?php 
+		       |$GLOBALS['x'] = 1;
+		       |function foo() {
+		       |  echo $GLOBALS['x'];
+		       |  if (@A)
+		       |    $GLOBALS['x']++;
+		       |}
+		       |function bar() {
+		       |  echo $GLOBALS['x'];
+		       |  $GLOBALS['x']++;
+		       |}
+		       |foo();
+		       |bar();""".stripMargin) to 
+			c(fA, "12") ~
+			c(fA.not, "11")
+	}
+
 }

@@ -47,6 +47,12 @@ public class VHelper {
             b.vmap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
   }
 
+  public static <A, B, C, R> V<? extends R> vmapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, V<? extends C> c, Function5<FeatureExpr, A, B, C, R> fun) {
+    return a.<R>vflatMap(ctx, (cctx, aa) ->
+            b.<R>vflatMap(cctx, (ccctx, bb) ->
+                    c.<R>vmap(ccctx, (cccctx, cc) -> fun.apply(cccctx, aa, bb, cc))));
+  }
+
   public static <A, B, R> V<? extends R> vflatMapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function4<FeatureExpr, A, B, V<? extends R>> fun) {
     return a.vflatMap(ctx, (c, aa) ->
             b.vflatMap(c, (cc, bb) -> fun.apply(cc, aa, bb)));

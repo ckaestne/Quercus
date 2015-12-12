@@ -200,7 +200,8 @@ public class ObjectFieldExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
 

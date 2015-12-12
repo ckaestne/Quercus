@@ -193,9 +193,10 @@ abstract public class AbstractVarExpr extends Expr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
-    return evalVar(env, ctx).map((a)->a.makeValue().toAutoArray());
+    return evalVar(env, ctx).map((a)->a.toAutoArray());
   }
 
   /**

@@ -274,3 +274,33 @@ foo();
 echo $x;
 bar();
 echo $x;
+
+==== globalvar2
+$GLOBALS['x'] = 1;
+function foo() {
+  global $x;
+  echo $x;
+  if (@A)
+    $x++;
+}
+function bar() {
+  global $x;
+  echo $x;
+  $x++;
+}
+foo();
+bar();
+
+==== globalvar3
+$GLOBALS['x'] = 1;
+function foo() {
+  echo $GLOBALS['x'];
+  if (@A)
+    $GLOBALS['x']++;
+}
+function bar() {
+  echo $GLOBALS['x'];
+  $GLOBALS['x']++;
+}
+foo();
+bar();

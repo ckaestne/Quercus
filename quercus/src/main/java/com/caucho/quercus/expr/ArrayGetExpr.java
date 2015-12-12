@@ -119,12 +119,13 @@ public class ArrayGetExpr extends AbstractVarExpr {
    * @return the expression value.
    */
   @Override
-  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends ValueOrVar> array = _expr.evalArray(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.mapAll(array, index,(a,i)-> a.getArray(i));
+    return VHelper.mapAll(VHelper.getValues(array), index,(a,i)-> a.getArray(i));
   }
 
   /**
@@ -155,10 +156,10 @@ public class ArrayGetExpr extends AbstractVarExpr {
   @Override
   public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends ValueOrVar> array = _expr.evalArray(env, VHelper.noCtx());
     V<? extends Value> index = _index.eval(env, VHelper.noCtx());
 
-    return VHelper.flatMapAll(array, index,(a,i)-> a.getObject(env, VHelper.noCtx(), i));
+    return VHelper.vflatMapAll(ctx, VHelper.getValues(array), index,(c, a,i)-> a.getObject(env, c, i));
   }
 
   /**
@@ -193,10 +194,10 @@ public class ArrayGetExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> array = _expr.evalArray(env, VHelper.noCtx());
-    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
+    V<? extends ValueOrVar> array = _expr.evalArray(env, ctx);
+    V<? extends Value> index = _index.eval(env, ctx);
 
-    return VHelper.mapAll(array, index,(a,i)-> a.getVar(i).getVar().getOne());
+    return VHelper.flatMapAll(VHelper.getValues(array), index,(a,i)-> a.getVar(i).getVar());
   }
 
   /**

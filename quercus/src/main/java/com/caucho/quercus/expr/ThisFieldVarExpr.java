@@ -220,7 +220,8 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
-  public @Nonnull V<? extends Value> evalArray(Env env, FeatureExpr ctx)
+  public @Nonnull
+  V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
     Value obj = env.getThis();
 
