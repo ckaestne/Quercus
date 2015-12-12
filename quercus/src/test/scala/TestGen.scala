@@ -6,7 +6,7 @@ import scala.io.Source
 
 
 /**
-  * this class takes the PHP snippets in resources/testgen/.. and
+  * this class takes the PHP snippets in resources/testgen/...php and
   * generates JUnit tests for them. The expected test outputs
   * are created through brute forcing them with a plain php interpreter.
   *
@@ -26,24 +26,18 @@ object TestGen extends App {
     assert(targetDir.exists(), "target directory not found")
 
 
-    //expand the  resourceRoot/misc.phpt file into multiple test files
-    val miscFragments = Source.fromFile(new File(resourceRoot, "misc.phpt")).mkString.split("====").map(_.trim).filter(_.size > 0)
-    var frags = Set[String]()
-    for (frag <- miscFragments) {
-        val firstBreak = frag.indexOf("\n")
-        val name = frag.take(firstBreak-1)
-        val writer = new FileWriter(new File(resourceRoot, "misc/" + name + ".php"))
-        writer.write("<?php \n")
-        writer.write(frag.drop(firstBreak+1))
-        writer.close
-        assert(!frags.contains(name),s"fragment $name redefined")
-        frags += name
-    }
 
 
 
-    for (dir <- resourceRoot.listFiles(); if dir.isDirectory) {
-        val classname = "Generated" + dir.getName.capitalize + "Tests"
+
+    for (file <- resourceRoot.listFiles(); if file.getName endsWith ".phpt")
+        generateTests(file)
+
+
+    def generateTests(file: File) {
+        val name = file.getName.dropRight(5).capitalize
+
+        val classname = "Generated" + name + "Tests"
         val writer = new FileWriter(new File(targetDir, classname + ".scala"))
         writer.append(
             s"""package edu.cmu.cs.varex.gen
@@ -54,11 +48,9 @@ object TestGen extends App {
                 |class $classname extends AbstractPhpGenTest {
                 |""".stripMargin)
 
-        for (phpFile <- dir.listFiles(); if phpFile.getName endsWith ".php") {
+        for ((testname, phpContent) <- loadTests(file)) {
 
-            val testname = phpFile.getName.dropRight(4).capitalize
-            val phpLines = Source.fromFile(phpFile).getLines().toList
-            val phpContent = phpLines.mkString("\n")
+            val phpLines = phpContent.split("\n").toList
 
             writer.append(s"\n\t@Test def test$testname() {")
             writer.append("\n\t\teval(\"\"\"" + phpLines.head)
@@ -111,6 +103,13 @@ object TestGen extends App {
 
 
     }
+
+
+    def loadTests(file: File): List[(String, String)] =
+        Source.fromFile(file).mkString.split("====").map(_.trim).map(
+            frag => (frag.take(frag.indexOf("\n") - 1).capitalize, "<?php \n" + frag.drop(frag.indexOf("\n") + 1))
+        ).filter(e => e._1.nonEmpty && e._2.nonEmpty).toList
+
 
 
     def findOptions(s: String): List[Feature] = {

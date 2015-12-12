@@ -12,9 +12,15 @@ echo ".";
 echo 0;
 echo ".";
 echo @A;
+
+==== addition
+$x=@A+1;
+echo $x;
+
 ==== if
 $a=@A; 
 if($a==0) {	echo "x";} else {	echo "y";}
+
 ==== switch
 $a=0+@A; 
 if (@B) $a++;
@@ -141,3 +147,15 @@ echo $myValue;
 $obj->value = 2;
 echo $myValue;                // prints the new value of $obj->value, i.e. 2.
 
+==== class1
+class F{
+    public $x = 0;
+}
+$f=new F();
+if (@A)
+    $f->x=2;
+if (@B)
+    echo $f->x++;
+if (@C)
+    echo ++$f->x;
+echo $f->x;
