@@ -150,9 +150,9 @@ public class ArgGetValue extends ArgValue
    * Converts to a value.
    */
   @Override
-  public Value toLocalRef()
+  public V<? extends Value> toLocalRef()
   {
-    return _obj.get(_index).copy().getOne(); // php/0d14, php/04b4
+    return _obj.get(_index).getValue().map((a)->a.copy()); // php/0d14, php/04b4
   }
 
   //

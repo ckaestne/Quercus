@@ -152,6 +152,11 @@ class VTest extends AbstractPhpTest {
          c(foo and bar, "2") ~ c(foo andNot bar, "1") ~ c(foo.not and bar,"1") ~c(foo.not andNot bar,"")
     }
 
+    @Test
+    def testArgValue(): Unit = {
+        eval("function foo(&$var) {  $var++; } function bar($var) {  $var++; } $a=5; foo($a); echo $a; bar($a); echo $a;") to "66"
+
+    }
 
 
 

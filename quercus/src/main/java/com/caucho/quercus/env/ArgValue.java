@@ -29,6 +29,7 @@
 
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -42,10 +43,9 @@ import java.util.IdentityHashMap;
  */
 abstract public class ArgValue extends Value
 {
-  @Override
-  public Value toValue()
+  public V<? extends Value> toValues()
   {
-    return toLocalValue();
+    return V.one(toLocalValue());
   }
 
   @Override

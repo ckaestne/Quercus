@@ -176,10 +176,9 @@ public class ArgRef extends Value
   /**
    * Converts to a raw value.
    */
-  @Override
-  public Value toValue()
+  public V<? extends Value> toValues()
   {
-    return _var.getValue().getOne().toValue();
+    return _var.getValue();
   }
 
   /**
@@ -233,9 +232,9 @@ public class ArgRef extends Value
    * Converts to an argument value.
    */
   @Override
-  public Value toLocalRef()
+  public V<? extends Value> toLocalRef()
   {
-    return _var.getValue().getOne();
+    return _var.getValue();
   }
 
   /**

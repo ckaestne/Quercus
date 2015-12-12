@@ -607,9 +607,9 @@ abstract public class ArrayValue extends Value {
   abstract public Value copy();
 
   @Override
-  public Value toLocalRef()
+  public V<? extends Value> toLocalRef()
   {
-    return copy();
+    return V.one(copy());
   }
 
   /**

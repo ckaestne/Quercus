@@ -296,7 +296,7 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not and fB.not, "xyxy1")
 	}
 
-	@Test def testArgvalue() {
+	@Test def testArgvar() {
 		eval("""<?php 
 		       |function foo(&$var) {  $var++; }
 		       |function bar($var) {  $var++; }
@@ -308,7 +308,7 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(True, "66")
 	}
 
-	@Test def testArgvalue_dyn() {
+	@Test def testArgvar_dyn() {
 		eval("""<?php 
 		       |function foo(&$var) {  $var++; }
 		       |function bar($var) {  $var++; }
@@ -320,6 +320,37 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 		       |$fun($a);
 		       |echo $a;""".stripMargin) to 
 			c(True, "66")
+	}
+
+	@Test def testArggetvalue() {
+		eval("""<?php 
+		       |$a=array(1=>2);
+		       |function foo(&$var) {  $var++; }
+		       |function bar($var) {  $var++; }
+		       |$fun = "foo";
+		       |$fun($a[1]);
+		       |echo $a[1];
+		       |$fun = "bar";
+		       |$fun($a[1]);
+		       |echo $a[1];""".stripMargin) to 
+			c(True, "33")
+	}
+
+	@Test def testVarggetvalue() {
+		eval("""<?php 
+		       |$a=array(1=>2);
+		       |if (@A)
+		       |    $a[1] = 3;
+		       |function foo(&$var) {  $var++; }
+		       |function bar($var) {  $var++; }
+		       |$fun = "foo";
+		       |$fun($a[1]);
+		       |echo $a[1];
+		       |$fun = "bar";
+		       |$fun($a[1]);
+		       |echo $a[1];""".stripMargin) to 
+			c(fA, "44") ~
+			c(fA.not, "33")
 	}
 
 }

@@ -37,7 +37,6 @@ import javax.annotation.Nullable;
 
 import java.io.*;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.function.Predicate;
 
 /**
@@ -386,13 +385,13 @@ public class ArrayValueImpl extends ArrayValue
    * Convert to an argument value.
    */
   @Override
-  public Value toLocalRef() {
+  public V<? extends Value> toLocalRef() {
     // php/1708
 
     Value copy = new ArrayValueImpl(this);
     copy.reset(VHelper.noCtx());
 
-    return copy;
+    return V.one(copy);
   }
 
   /**

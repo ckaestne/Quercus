@@ -840,12 +840,12 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return new QuercusLanguageException(this);
   }
 
-  /**
-   * Converts to a raw value.
-   */
-  public Value toValue() {
-    return this;
-  }
+//  /**
+//   * Converts to a raw value.
+//   */
+//  final public Value toValue() {
+//    return this;
+//  }
 
   /**
    * Converts to a key.
@@ -890,8 +890,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * <p>
    * where $a may be assigned.
    */
-  public Value toLocalRef() {
-    return this;
+  public V<? extends Value> toLocalRef() {
+    return V.one(this);
   }
 
   /**
@@ -902,7 +902,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * where $a is used as a variable in the function
    */
   public Var toLocalVar() {
-    return toLocalRef().toVar();
+    return new Var(toLocalRef());
   }
 
   /**

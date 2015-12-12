@@ -173,7 +173,7 @@ $d=$c.@A;
 $e=$d.(1+@B);
 echo $e;
 
-==== argvalue
+==== argvar
 function foo(&$var) {  $var++; }
 function bar($var) {  $var++; }
 $a=5;
@@ -182,7 +182,7 @@ echo $a;
 bar($a);
 echo $a;
 
-==== argvalue_dyn
+==== argvar_dyn
 function foo(&$var) {  $var++; }
 function bar($var) {  $var++; }
 $fun = "foo";
@@ -192,3 +192,28 @@ echo $a;
 $fun = "bar";
 $fun($a);
 echo $a;
+
+==== arggetvalue
+$a=array(1=>2);
+function foo(&$var) {  $var++; }
+function bar($var) {  $var++; }
+$fun = "foo";
+$fun($a[1]);
+echo $a[1];
+$fun = "bar";
+$fun($a[1]);
+echo $a[1];
+
+==== varggetvalue
+$a=array(1=>2);
+if (@A)
+    $a[1] = 3;
+function foo(&$var) {  $var++; }
+function bar($var) {  $var++; }
+$fun = "foo";
+$fun($a[1]);
+echo $a[1];
+$fun = "bar";
+$fun($a[1]);
+echo $a[1];
+

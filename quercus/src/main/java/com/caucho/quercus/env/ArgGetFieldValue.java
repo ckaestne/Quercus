@@ -108,9 +108,9 @@ public class ArgGetFieldValue extends ArgValue {
    * Converts to a reference variable.
    */
   @Override
-  public Value toLocalRef()
+  public V<? extends Value> toLocalRef()
   {
-    return _obj.getField(_env, _name).getOne();
+    return _obj.getField(_env, _name);
   }
 
   @Override

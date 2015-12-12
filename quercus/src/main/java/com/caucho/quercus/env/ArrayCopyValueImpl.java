@@ -190,9 +190,9 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
    * Convert to an argument value.
    */
   @Override
-  public Value toLocalRef()
+  public V<? extends Value> toLocalRef()
   {
-    return copy();
+    return V.one(copy());
   }
 
   /**

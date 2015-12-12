@@ -13,7 +13,7 @@ public interface ValueOrVar {
     Var _var();
 
     @Deprecated
-    Value toValue();
+    default Value toValue() { return isVar() ? _var().getValue().getOne() : _value(); }
 
     default Var toVar() { return isVar() ? _var() : _value().toVar(); }
     default Var toLocalVarDeclAsRef() { return isVar() ? _var() : _value().toLocalVarDeclAsRef(); }
