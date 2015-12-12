@@ -8,8 +8,11 @@ import scala.io.Source
 /**
   * this class takes the PHP snippets in resources/testgen/.. and
   * generates JUnit tests for them. The expected test outputs
-  * are created through brute forcing them with a plain Quercus
-  * version.
+  * are created through brute forcing them with a plain php interpreter.
+  *
+  * Notice that this test generator will need an executable PHP interpreter
+  * (preferably actually a quercus implementation not a Zend PHP
+  * interpreter), but the generated test cases will not.
   */
 object TestGen extends App {
     val externalPHPexecutable = "\\php\\php.exe"
