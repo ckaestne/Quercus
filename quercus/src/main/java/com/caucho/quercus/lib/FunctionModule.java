@@ -30,6 +30,8 @@
 package com.caucho.quercus.lib;
 
 import com.caucho.quercus.Location;
+import com.caucho.quercus.annotation.VParamType;
+import com.caucho.quercus.annotation.VVariational;
 import com.caucho.quercus.annotation.VariableArguments;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.CallExpr;
@@ -57,12 +59,14 @@ public class FunctionModule extends AbstractQuercusModule {
   /**
    * Calls a user function
    */
-  public static V<? extends Value> call_user_func(Env env,
-                                                  Callable function,
-                                                  @Nonnull V<? extends Value> []args)
+  @VVariational
+  @VParamType(Value.class)
+  public static V<? extends Value> call_user_func(Env env, FeatureExpr ctx,
+                                                  @VParamType(Callable.class) V<? extends Callable> function,
+                                                  @VParamType(Value.class) @Nonnull V<? extends Value>[] args)
   {
-    return function.call(env,
-            VHelper.noCtx(), args).map((a)->a.toValue().copyReturn());
+    return VHelper.getValues(function.getOne().call(env, ctx, args)).
+            map((a) -> a.copyReturn());
   }
 
   /**

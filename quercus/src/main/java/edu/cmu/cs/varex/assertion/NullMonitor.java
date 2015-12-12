@@ -105,7 +105,7 @@ public class NullMonitor {
                 methodSignature.getConstructor(), argument.getName(), argument.getIndex()));
   }
 
-  @Before("set(@javax.annotation.Nonnull * *.*) || set(edu.cmu.cs.varex.V *.*)")
+  @Before("set(@javax.annotation.Nonnull * *.*) || (set(edu.cmu.cs.varex.V *.*) && !set(@javax.annotation.Nullable * *.*))")
   public void nullCheckFieldAssignment(JoinPoint joinPoint) {
     FieldSignature sig = (FieldSignature) joinPoint.getStaticPart().getSignature();
     Object value = joinPoint.getArgs()[0];
@@ -115,7 +115,7 @@ public class NullMonitor {
 //    }
   }
 
-  @AfterReturning(pointcut = "execution(@javax.annotation.Nonnull * *(..)) || execution(edu.cmu.cs.varex.V *(..))", returning = "result")
+  @AfterReturning(pointcut = "execution(@javax.annotation.Nonnull * *(..)) || execution(!@javax.annotation.Nullable edu.cmu.cs.varex.V *(..))", returning = "result")
   public void nullCheckReturn(JoinPoint joinPoint, Object result) {
     MethodSignature methodSignature = (MethodSignature) joinPoint.getStaticPart().getSignature();
     if (result == null)

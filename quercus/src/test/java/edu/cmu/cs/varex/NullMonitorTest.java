@@ -94,4 +94,15 @@ public class NullMonitorTest {
 
 
 
+  @Test(expected = NullPointerException.class)
+  public void testNullCheckVField() {
+    new NullTestClass().testVField(null);
+  }
+
+  @Test()
+  public void testNullableVField() {
+    new NullTestClass().testVFieldN(null);
+  }
+
+
 }

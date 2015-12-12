@@ -15,6 +15,10 @@ public class NullTestClass {
   @Nullable
   private Object fieldN;
 
+  public V<? extends Object> vfield;
+  @Nullable
+  public V<? extends Object> vfieldn;
+
   public void testParameter(@Nullable Object o) {
     testParameterFun(o);
   }
@@ -50,6 +54,12 @@ public class NullTestClass {
 
   public V<? extends Object> testVReturn2(@Nonnull V<? extends Object> o) { return V.one(o); }
 
+  public void testVFieldN(@Nullable V<?> o) {
+    vfieldn=o;
+  }
+  public void testVField(@Nullable V<?> o) {
+    vfield=o;
+  }
   public static class Inner {
     public Inner(@Nonnull Object o) {
     }
