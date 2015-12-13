@@ -2320,8 +2320,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
                                    Value value)
   {
     // php/03mm
-    throw new UnimplementedVException();
-//    return put(index, value);
+    return put(index, value);
   }
 
   /**
@@ -2538,7 +2537,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public EnvVar get(Value index)
   {
-    return EnvVar._gen(UnsetValue.UNSET);
+    return EnvVar.fromValue(UnsetValue.UNSET);
   }
 
   /**
@@ -2553,13 +2552,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public EnvVar getVar(Value index)
   {
-    throw new UnimplementedVException();
-//    Value value = get(index);
-//
-//    if (value.isVar())
-//      return (Var) value;
-//    else
-//      return new Var(value);
+    return get(index);
   }
 
   /**
@@ -2599,11 +2592,11 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Returns the value for a field, creating an array if the field
    * is unset.
    */
-  public Value getArray(Value index)
+  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
   {
-    Value var = getVar(index).getValue().getOne();
+    EnvVar var = getVar(index);
 
-    return var.toAutoArray();
+    return var.getVar().map((a) -> a.toAutoArray());
   }
 
   /**

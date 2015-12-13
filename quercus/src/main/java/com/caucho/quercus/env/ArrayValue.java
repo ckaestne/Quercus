@@ -825,19 +825,18 @@ abstract public class ArrayValue extends Value {
    * Returns the value as an array.
    */
   @Override
-  public Value getArray(Value index)
+  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
   {
-    Value value = get(index).getOne();
+    EnvVar value = get(index);
 
-    Value array = value.toAutoArray();
+    V<? extends Var> array = value.getVar().vmap(ctx, (c,a)->{
+      Var result = a.toAutoArray();
+      if (result!=a)
+        put(c, index, V.one(result));
+      return result;
+    });
 
-    if (value != array) {
-      value = array;
-
-      put(index, value);
-    }
-
-    return value;
+    return value.getVar();
   }
 
   /**

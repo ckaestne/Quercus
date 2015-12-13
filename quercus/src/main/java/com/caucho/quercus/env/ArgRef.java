@@ -340,9 +340,9 @@ public class ArgRef extends Value
   }
 
   @Override
-  public Value getArray(Value index)
+  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
   {
-    return _var.getValue().getOne().getArray(index);
+    return _var.getValue().getOne().getArray(VHelper.noCtx(), index);
   }
 
   @Override

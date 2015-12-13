@@ -30,6 +30,7 @@
 package com.caucho.quercus.resources;
 
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents a PHP stream context.
@@ -82,7 +83,7 @@ public class StreamContextResource extends ResourceValue {
   public void setOption(Env env, StringValue wrapper,
                         StringValue option, Value value)
   {
-    _options.getArray(wrapper).put(option, value);
+    _options.getArray(VHelper.noCtx(), wrapper).getOne().toValue().put(option, value);
   }
 
   /**

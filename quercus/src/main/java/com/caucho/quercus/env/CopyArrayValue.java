@@ -31,7 +31,6 @@ package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.Function4;
-import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
@@ -161,9 +160,9 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Returns the value as an array.
    */
-  public Value getArray(Value fieldName)
+  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value fieldName)
   {
-    return getCopyArray().getArray(fieldName);
+    return getCopyArray().getArray(VHelper.noCtx(), fieldName);
   }
 
   /**

@@ -1616,7 +1616,7 @@ public class ArrayModule
       Value value = entry.getEnvVar().getOne();
 
       if (value.isArray()) {
-        replaceRecursive(env, result.getArray(key), value);
+        replaceRecursive(env, result.getArray(VHelper.noCtx(), key).getOne().toValue(), value);
       }
       else {
         result.put(key, value);

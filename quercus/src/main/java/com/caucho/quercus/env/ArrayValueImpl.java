@@ -32,9 +32,9 @@ package com.caucho.quercus.env;
 import com.caucho.util.RandomUtil;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.io.*;
 import java.util.IdentityHashMap;
 import java.util.function.Predicate;
@@ -683,33 +683,30 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the value as an array.
    */
   @Override
-  public Value getArray(Value index) {
-    throw new UnimplementedVException();
+  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index) {
+    // php/3482, php/3483
 
-//    // php/3482, php/3483
-//
-//    if (_isDirty)
-//      copyOnWrite();
-//
-//    Entry entry = createEntry(index);
-//
-//    Value value = entry.toValue().getOne();
-//    Value array = value.toAutoArray();
-//
-//    if (value != array) {
-//      value = array;
-//
-//      entry.set(VHelper.noCtx(), array);
-//
-//      return array;
-//    }
-//    else if (array.isString()) {
-//      // php/0482
-//      return entry.toRef();
-//    }
-//    else {
-//      return array;
-//    }
+    if (_isDirty)
+      copyOnWrite();
+
+    V<? extends Entry> entry = createEntry(ctx, index);
+
+    return entry.<ValueOrVar>vflatMap(ctx, (cc, aentry) -> {
+      V<? extends Var> var = aentry.getEnvVar().getVar();
+      return var.<ValueOrVar>vmap(cc, (c, a) -> {
+        Var result = a.toAutoArray();
+        if (result != a) {
+          aentry.set(c, V.one(a));
+          return a;
+        } else if (a.getValue().getOne().isString()) {
+          // php/0482
+          return aentry.toRef();
+        } else {
+          return a;
+        }
+      });
+    });
+
   }
 
   /**

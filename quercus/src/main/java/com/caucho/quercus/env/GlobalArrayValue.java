@@ -106,9 +106,9 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Returns the value as an array.
    */
-  public Value getArray(Value index)
+  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
   {
-    Value array = getVar(index).getOne().toAutoArray();
+    V<? extends Var> array = getVar(index).getVar().map((a)->a.toAutoArray());
 
     return array;
   }
