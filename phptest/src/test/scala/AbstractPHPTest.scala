@@ -82,7 +82,7 @@ class AbstractPHPTest {
 
         val out = new VWriteStreamImpl()
         new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request)
-        val phpResult = out.getPlainOutput
+        val phpResult = out.getPlainOutput.trim
 
         testedFile.deleteOnExit()
 

@@ -30,7 +30,10 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.BreakValue;
+import com.caucho.quercus.env.ContinueValue;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -89,10 +92,7 @@ public class ForStatement extends Statement {
 
             int target = breakValue.getTarget();
 
-            if (target > 1)
-              return new BreakValue(target - 1);
-            else
-              return new BreakValue(target);
+            return new BreakValue(target - 1);
           }
           else if (v instanceof ContinueValue) {
             ContinueValue conValue = (ContinueValue) v;
@@ -124,7 +124,7 @@ public class ForStatement extends Statement {
     }
 
     return value.map(x->
-            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()==0)?null:x);
+            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()<=0)?null:x);
   }
 }
 

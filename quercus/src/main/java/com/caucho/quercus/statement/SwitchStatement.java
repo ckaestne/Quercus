@@ -110,10 +110,7 @@ public class SwitchStatement extends Statement {
 
                     int target = breakValue.getTarget();
 
-                    if (target > 1)
-                      return new BreakValue(target - 1);
-                    else
-                      return new BreakValue(0);
+                    return new BreakValue(target - 1);
                   } else if (retValue instanceof ContinueValue) {
                     ContinueValue conValue = (ContinueValue) retValue;
 
@@ -145,7 +142,7 @@ public class SwitchStatement extends Statement {
     }
 
     return result.map(x->
-            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()==0)?null:x);
+            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()<=0)?null:x);
   }
 
   /**

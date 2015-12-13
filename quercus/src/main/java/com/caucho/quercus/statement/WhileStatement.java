@@ -84,10 +84,7 @@ public class WhileStatement extends Statement {
 
             int target = breakValue.getTarget();
 
-            if (target > 1)
-              return new BreakValue(target - 1);
-            else
-              return new BreakValue(target);
+            return new BreakValue(target - 1);
           }
           else if (v instanceof ContinueValue) {
             ContinueValue conValue = (ContinueValue) v;
@@ -117,7 +114,7 @@ public class WhileStatement extends Statement {
     }
 
     return value.map(x->
-            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()==0)?null:x);
+            (x instanceof BreakValue)&&(((BreakValue)x).getTarget()<=0)?null:x);
   }
 }
 
