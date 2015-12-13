@@ -13,7 +13,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 
     val foo = FeatureExprFactory.createDefinedExternal("foo")
     val bar = FeatureExprFactory.createDefinedExternal("bar")
-    var t = FeatureExprFactory.True
+    var t = FeatureExprFactory.bdd.True
 
     val x = StringValue.create("x")
     val y = StringValue.create("y")

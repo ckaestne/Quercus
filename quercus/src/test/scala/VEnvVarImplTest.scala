@@ -9,11 +9,9 @@ import org.scalatest.{FlatSpec, Matchers}
   */
 class VEnvVarImplTest extends FlatSpec with Matchers {
 
-    FeatureExprFactory.setDefault(FeatureExprFactory.bdd)
-
-    val foo = FeatureExprFactory.createDefinedExternal("foo")
-    val bar = FeatureExprFactory.createDefinedExternal("bar")
-    var t = FeatureExprFactory.True
+    val foo = FeatureExprFactory.bdd.createDefinedExternal("foo")
+    val bar = FeatureExprFactory.bdd.createDefinedExternal("bar")
+    var t = FeatureExprFactory.bdd.True
 
     val x = StringValue.create("x")
     val y = StringValue.create("y")
