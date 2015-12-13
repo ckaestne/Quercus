@@ -210,7 +210,7 @@ public class PDOStatement
 
   public boolean bindColumn(Env env,
                             Value column,
-                            @Reference Value var,
+                            @Reference Var var,
                             @Optional("-1") int type)
   {
     try {
@@ -248,7 +248,7 @@ public class PDOStatement
 
       ResultSetMetaData metaData = getMetaData();
       BoundColumn boundColumn
-        = new BoundColumn(metaData, column, var, columnType);
+        = new BoundColumn(metaData, column, var.makeValue(), columnType);
 
       _boundColumnMap.put(column, boundColumn);
 
@@ -263,7 +263,7 @@ public class PDOStatement
 
   public boolean bindParam(Env env,
                            @ReadOnly Value parameter,
-                           @Reference Value value,
+                           @Reference Var value,
                            @Optional("PDO::PARAM_STR") int dataType,
                            @Optional("-1") int length,
                            @Optional Value driverOptions)
@@ -322,7 +322,7 @@ public class PDOStatement
     }
 
     _paramTypes.put(index, type);
-    _paramValues.put(index, value);
+    _paramValues.put(index, value.makeValue());
 
     return true;
   }
@@ -338,7 +338,7 @@ public class PDOStatement
 
     value = value.toValue();
 
-    return bindParam(env, parameter, value, dataType, -1, DefaultValue.DEFAULT);
+    return bindParam(env, parameter, Var.create(value), dataType, -1, DefaultValue.DEFAULT);
   }
 
   /**
@@ -420,11 +420,11 @@ public class PDOStatement
       int size = parameters.getSize();
 
       ColumnType[] types = new ColumnType[size];
-      Value[] values = new Value[size];
+      Var[] values = new Var[size];
 
       for (VEntry entry : parameters.entrySet()) {
         Value key = entry.getKey();
-        Value value = entry.getEnvVar().getOne();
+        Var value = entry.getEnvVar().getVar().getOne();
 
         int index;
         if (key.isNumberConvertible()) {
@@ -434,11 +434,11 @@ public class PDOStatement
           index = resolveParameter(key);
         }
 
-        ColumnType type = ColumnType.getColumnType(value);
+        ColumnType type = ColumnType.getColumnType(value.makeValue());
 
         if (type == null) {
           _error.warning(env, L.l("unknown type {0} ({1}) for parameter index {2}",
-                                  value.getType(), value.getClass(), index));
+                                  value.makeValue().getType(), value.getClass(), index));
           return false;
         }
 
@@ -452,7 +452,7 @@ public class PDOStatement
       int size = _paramTypes.size();
 
       ColumnType[]types = new ColumnType[size];
-      Value[] values = new Value[size];
+      Var[] values = new Var[size];
 
       for (Map.Entry<Integer,ColumnType> entry : _paramTypes.entrySet()) {
         Integer index = entry.getKey();
@@ -461,7 +461,7 @@ public class PDOStatement
         int i = index.intValue();
 
         types[i] = type;
-        values[i] = _paramValues.get(index);
+        values[i] = Var.create(_paramValues.get(index));
       }
 
       bindParams(env, types, values);

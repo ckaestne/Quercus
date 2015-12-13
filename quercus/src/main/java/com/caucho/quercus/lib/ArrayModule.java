@@ -1444,9 +1444,9 @@ public class ArrayModule
   /**
    * Pops off the top element
    */
-  public static Value array_pop(Env env, @Reference Value array)
+  public static Value array_pop(Env env, @Reference Var array)
   {
-    return array.pop(env, VHelper.noCtx()).getOne();
+    return array.makeValue().pop(env, VHelper.noCtx()).getOne();
   }
 
   /**
@@ -1478,14 +1478,14 @@ public class ArrayModule
    * @return the number of elements in the final array
    */
   public static int array_push(Env env,
-                               @Reference Value array,
+                               @Reference Var array,
                                Value []values)
   {
     for (Value value : values) {
-      array.put(VHelper.noCtx(), value);
+      array.makeValue().put(VHelper.noCtx(), value);
     }
 
-    return array.getSize();
+    return array.makeValue().getSize();
   }
 
   /**
@@ -1737,14 +1737,14 @@ public class ArrayModule
    * @return the left most value in the array
    */
   public static Value array_shift(Env env,
-                                  @Reference Value value)
+                                  @Reference Var value)
   {
-    if (! value.isArray()) {
+    if (! value.makeValue().isArray()) {
       env.warning(L.l("cannot shift a non-array"));
       return NullValue.NULL;
     }
 
-    ArrayValue array = value.toArrayValue(env);
+    ArrayValue array = value.makeValue().toArrayValue(env);
 
     if (array.getSize() < 1)
       return NullValue.NULL;
@@ -1817,15 +1817,15 @@ public class ArrayModule
    * @return the part of the arrayV removed from input
    */
   public static Value array_splice(Env env,
-                                   @Reference Value arrayVar,
+                                   @Reference Var arrayVar,
                                    int offset,
                                    @Optional("NULL") Value length,
                                    @Optional Value replace)
   {
-    if (! arrayVar.isset())
+    if (! arrayVar.makeValue().isset())
       return NullValue.NULL;
 
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return NullValue.NULL;
@@ -1848,7 +1848,7 @@ public class ArrayModule
         endIndex += startIndex;
     }
 
-    return spliceImpl(env, arrayVar, array, startIndex, endIndex,
+    return spliceImpl(env, arrayVar.makeValue(), array, startIndex, endIndex,
                       replace.toArray());
   }
 
@@ -2469,10 +2469,10 @@ public class ArrayModule
    * @return the left most value in the array
    */
   public static Value array_unshift(Env env,
-                                    @Reference Value value,
+                                    @Reference Var value,
                                     Value []values)
   {
-    ArrayValue array = value.toArrayValue(env);
+    ArrayValue array = value.makeValue().toArrayValue(env);
 
     if (array == null)
       return BooleanValue.FALSE;
@@ -2512,7 +2512,7 @@ public class ArrayModule
    * @return true if the walk succedded, false otherwise
    */
   public static boolean array_walk_recursive(Env env,
-                                             @Reference Value arrayVar,
+                                             @Reference Var arrayVar,
                                              Callable callback,
                                              @Optional("NULL") Value extra)
   {
@@ -2522,7 +2522,7 @@ public class ArrayModule
       return false;
     }
 
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -2544,7 +2544,7 @@ public class ArrayModule
 
         if (value.isArray()) {
           boolean result = array_walk_recursive(env,
-                                                (ArrayValue) value.toValue(),
+                                                Var.create((ArrayValue) value.toValue()),
                                                 callback,
                                                 extra);
 
@@ -2575,7 +2575,7 @@ public class ArrayModule
    * @return true if the walk succeeded, false otherwise
    */
   public static boolean array_walk(Env env,
-                                   @Reference Value arrayVar,
+                                   @Reference Var arrayVar,
                                    Callable callback,
                                    @Optional("NULL") Value userData)
   {
@@ -2585,7 +2585,7 @@ public class ArrayModule
       return false;
     }
 
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -2629,10 +2629,10 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean arsort(Env env,
-                               @Reference Value arrayVar,
+                               @Reference Var arrayVar,
                                @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -2667,10 +2667,10 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean asort(Env env,
-                              @Reference Value arrayVar,
+                              @Reference Var arrayVar,
                               @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -2754,7 +2754,7 @@ public class ArrayModule
   /**
    * Returns the next value of the array.
    */
-  public static Value each(Env env, @Reference Value value)
+  public static Value each(Env env, @Reference Var value)
   {
     throw new UnimplementedVException();
 //    if (value instanceof Var) {
@@ -2776,9 +2776,9 @@ public class ArrayModule
   /**
    * Resets the pointer to the end
    */
-  public static Value end(@Reference Value value)
+  public static Value end(@Reference Var value)
   {
-    return value.end(VHelper.noCtx()).getOne();
+    return value.makeValue().end(VHelper.noCtx()).getOne();
   }
 
   // Basically, the compiled mode uses Java variables to store PHP
@@ -2999,10 +2999,10 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean krsort(Env env,
-                               @Reference Value arrayVar,
+                               @Reference Var arrayVar,
                                @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -3037,10 +3037,10 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean ksort(Env env,
-                              @Reference Value arrayVar,
+                              @Reference Var arrayVar,
                               @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -3076,9 +3076,9 @@ public class ArrayModule
    * @return true if the sort works, false otherwise
    * @throws ClassCastException if the elements are not mutually comparable
    */
-  public static Value natcasesort(Env env, @Reference Value arrayVar)
+  public static Value natcasesort(Env env, @Reference Var arrayVar)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return NullValue.NULL;
@@ -3098,9 +3098,9 @@ public class ArrayModule
    * @return true if the sort works, false otherwise
    * @throws ClassCastException if the elements are not mutually comparable
    */
-  public static Value natsort(Env env, @Reference Value arrayVar)
+  public static Value natsort(Env env, @Reference Var arrayVar)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return NullValue.NULL;
@@ -3135,9 +3135,9 @@ public class ArrayModule
   /**
    * Returns the next value of the array.
    */
-  public static Value next(@Reference Value value)
+  public static Value next(@Reference Var value)
   {
-    return value.next(VHelper.noCtx()).getOne();
+    return value.makeValue().next(VHelper.noCtx()).getOne();
   }
 
   /**
@@ -3151,9 +3151,9 @@ public class ArrayModule
   /**
    * Returns the previous value of the array.
    */
-  public static Value prev(@Reference Value array)
+  public static Value prev(@Reference Var array)
   {
-    return array.prev(VHelper.noCtx()).getOne();
+    return array.makeValue().prev(VHelper.noCtx()).getOne();
   }
 
   /**
@@ -3224,9 +3224,9 @@ public class ArrayModule
   /**
    * Resets the pointer
    */
-  public static Value reset(@Reference Value array)
+  public static Value reset(@Reference Var array)
   {
-    return array.reset(VHelper.noCtx()).getOne();
+    return array.makeValue().reset(VHelper.noCtx()).getOne();
   }
 
   /**
@@ -3238,10 +3238,10 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean rsort(Env env,
-                              @Reference Value arrayVar,
+                              @Reference Var arrayVar,
                               @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -3270,9 +3270,9 @@ public class ArrayModule
   /**
    * Returns the current value of the array.
    */
-  public static Value shuffle(Env env, @Reference Value array)
+  public static Value shuffle(Env env, @Reference Var array)
   {
-    return array.shuffle();
+    return array.makeValue().shuffle();
   }
 
 
@@ -3295,10 +3295,10 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean sort(Env env,
-                             @Reference Value arrayVar,
+                             @Reference Var arrayVar,
                              @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -3335,11 +3335,11 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean uasort(Env env,
-                               @Reference Value arrayVar,
+                               @Reference Var arrayVar,
                                Callable func,
                                @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -3369,11 +3369,11 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean uksort(Env env,
-                               @Reference Value arrayVar,
+                               @Reference Var arrayVar,
                                Callable func,
                                @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;
@@ -3403,11 +3403,11 @@ public class ArrayModule
    * @throws ClassCastException if the elements are not mutually comparable
    */
   public static boolean usort(Env env,
-                              @Reference Value arrayVar,
+                              @Reference Var arrayVar,
                               Callable func,
                               @Optional long sortFlag)
   {
-    ArrayValue array = arrayVar.toArrayValue(env);
+    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
 
     if (array == null)
       return false;

@@ -83,7 +83,7 @@ public class ArrayIterator
     sortFlag = 0; // qa/4a46
 
     if (_value instanceof ArrayValue)
-      ArrayModule.asort(_env, (ArrayValue) _value, sortFlag);
+      ArrayModule.asort(_env, Var.create((ArrayValue) _value), sortFlag);
   }
 
   @Override
@@ -117,19 +117,19 @@ public class ArrayIterator
   public void ksort(@Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.ksort(_env, (ArrayValue) _value, sortFlag);
+      ArrayModule.ksort(_env, Var.create((ArrayValue) _value), sortFlag);
   }
 
   public void natcasesort()
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.natcasesort(_env, _value);
+      ArrayModule.natcasesort(_env, Var.create(_value));
   }
 
   public void natsort()
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.natsort(_env, _value);
+      ArrayModule.natsort(_env, Var.create(_value));
   }
 
   public void next(Env env)
@@ -211,13 +211,13 @@ public class ArrayIterator
   public void uasort(Callback func, @Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uasort(_env, (ArrayValue) _value, func, sortFlag);
+      ArrayModule.uasort(_env, Var.create((ArrayValue) _value), func, sortFlag);
   }
 
   public void uksort(Callback func, @Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uksort(_env, (ArrayValue) _value, func, sortFlag);
+      ArrayModule.uksort(_env, Var.create((ArrayValue) _value), func, sortFlag);
   }
 
   @Override

@@ -460,8 +460,8 @@ public class XmlModule extends AbstractQuercusModule {
   public int xml_parse_into_struct(Env env,
                                    @NotNull Xml parser,
                                    StringValue data,
-                                   @Reference Value valueArray,
-                                   @Optional @Reference Value indexArray)
+                                   @Reference Var valueArray,
+                                   @Optional @Reference Var indexArray)
   {
     try {
       if (parser == null)

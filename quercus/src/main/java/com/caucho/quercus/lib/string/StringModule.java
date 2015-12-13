@@ -1435,7 +1435,7 @@ public class StringModule extends AbstractQuercusModule {
    */
   @UsesSymbolTable
   public static Value parse_str(Env env, StringValue str,
-                                @Optional @Reference Value ref)
+                                @Optional @Reference Var ref)
   {
     throw new UnimplementedVException();
 //    boolean isRef = ref instanceof Var;
@@ -2314,7 +2314,7 @@ public class StringModule extends AbstractQuercusModule {
   public static Value sscanf(Env env,
                              StringValue string,
                              StringValue format,
-                             @Optional @Reference Value []args)
+                             @Optional @Reference Var []args)
   {
     ScanfSegment[] formatArray = sscanfParseFormat(env, format);
 
@@ -2342,7 +2342,7 @@ public class StringModule extends AbstractQuercusModule {
         var = array;
       } else {
         if (argIndex < args.length) {
-          var = args[argIndex];
+          var = args[argIndex].makeValue();
 
           if (sIndex < strlen)
             argIndex++;
@@ -2591,7 +2591,7 @@ public class StringModule extends AbstractQuercusModule {
   public static Value sscanfOld(Env env,
                                 StringValue string,
                                 StringValue format,
-                                @Optional @Reference Value []args)
+                                @Optional @Reference Var []args)
   {
     int fmtLen = format.length();
     int strlen = string.length();
@@ -2646,7 +2646,7 @@ public class StringModule extends AbstractQuercusModule {
 
           if (isAssign) {
             if (argIndex < args.length)
-              obj = args[argIndex++];
+              obj = args[argIndex++].makeValue();
             else {
               env.warning(L.l("not enough vars passed in"));
               break loop;
@@ -2756,7 +2756,7 @@ public class StringModule extends AbstractQuercusModule {
 
   private static Value sscanfReturn(Env env,
                                     ArrayValue array,
-                                    Value []args,
+                                    Var []args,
                                     int argIndex,
                                     boolean isReturnArray,
                                     boolean isWarn)
@@ -3021,7 +3021,7 @@ public class StringModule extends AbstractQuercusModule {
                                   Value search,
                                   Value replace,
                                   Value subject,
-                                  @Reference @Optional Value count)
+                                  @Reference @Optional Var count)
   {
     return strReplace(env, search, replace, subject, count, true);
   }
@@ -3108,15 +3108,14 @@ public class StringModule extends AbstractQuercusModule {
                                   Value search,
                                   Value replace,
                                   Value subject,
-                                  @Reference @Optional Value count)
+                                  @Reference @Optional Var count)
   {
     return strReplace(env, search, replace, subject, count, false);
   }
 
   /**
    * replaces substrings.
-   *
-   * @param search search string
+   *  @param search search string
    * @param replace replacement string
    * @param subject replacement
    * @param count return value
@@ -3125,7 +3124,7 @@ public class StringModule extends AbstractQuercusModule {
                                   Value search,
                                   Value replace,
                                   Value subject,
-                                  Value count,
+                                  Var count,
                                   boolean isInsensitive)
   {
     count.set(LongValue.ZERO);
@@ -3154,7 +3153,7 @@ public class StringModule extends AbstractQuercusModule {
                                         search,
                                         replace,
                                         value.toStringValue(env),
-                                        count,
+                                        count.makeValue(),
                                         isInsensitive);
 
           resultArray.append(key, result);
@@ -3174,7 +3173,7 @@ public class StringModule extends AbstractQuercusModule {
                             search,
                             replace,
                             subjectString,
-                            count,
+                            count.makeValue(),
                             isInsensitive);
     }
   }

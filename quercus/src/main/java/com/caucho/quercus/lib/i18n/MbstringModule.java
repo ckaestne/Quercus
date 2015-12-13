@@ -193,7 +193,7 @@ public class MbstringModule
   public static StringValue mb_convert_variables(Env env,
                                                   String toEncoding,
                                                   String fromEncodings,
-                                                  @Reference Value vars)
+                                                  @Reference Var vars)
   {
     // XXX: fallback encoding
     int tail = fromEncodings.indexOf(',', 1);
@@ -208,8 +208,8 @@ public class MbstringModule
     else
       srcEncoding = getEncoding(env, fromEncodings.substring(0, tail).trim());
 
-    Value decoded = decodeAll(env, vars, srcEncoding);
-    vars.set(encodeAll(env, decoded, toEncoding));
+    Value decoded = decodeAll(env, vars.makeValue(), srcEncoding);
+    vars.set_(encodeAll(env, decoded, toEncoding));
 
     return env.createString(srcEncoding);
   }
@@ -872,7 +872,7 @@ public class MbstringModule
    */
   public static BooleanValue mb_parse_str(Env env,
                                           StringValue strValue,
-                                          @Optional @Reference Value result)
+                                          @Optional @Reference Var result)
   {
     String encoding = getEncoding(env);
     StringModule.parse_str(env, strValue, result);
@@ -882,7 +882,7 @@ public class MbstringModule
       return BooleanValue.TRUE;
     }
     else {
-      Value array = encodeAll(env, result, encoding);
+      Value array = encodeAll(env, result.makeValue(), encoding);
       result.set(array);
 
       return BooleanValue.TRUE;

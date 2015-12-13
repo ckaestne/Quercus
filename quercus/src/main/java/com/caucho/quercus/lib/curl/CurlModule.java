@@ -572,7 +572,7 @@ public class CurlModule
    */
   public static int curl_multi_exec(Env env,
                                     CurlMultiResource multi,
-                                    @Reference Value stillRunning)
+                                    @Reference Var stillRunning)
   {
     return multi.execute(env, stillRunning);
   }
@@ -601,7 +601,7 @@ public class CurlModule
    */
   public static Value curl_multi_info_read(Env env,
                                            CurlMultiResource multi,
-                                           @Optional @Reference Value msgsInQueue)
+                                           @Optional @Reference Var msgsInQueue)
   {
     return multi.readInfo(env, msgsInQueue);
   }

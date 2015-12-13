@@ -72,13 +72,13 @@ public class FunctionModule extends AbstractQuercusModule {
   /**
    * Calls a user function
    */
-  public static V<? extends Value> call_user_func_array(Env env,
+  public static Value call_user_func_array(Env env,
                                            Callable function,
                                            Value arg)
   {
     if (function == null) {
       env.warning("call_user_func_array: first argument is not a valid function");
-      return VHelper.toV(NullValue.NULL);
+      return NullValue.NULL;
     }
 
     ArrayValue argArray;
@@ -113,7 +113,7 @@ public class FunctionModule extends AbstractQuercusModule {
     env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, VHelper.toVArray(args));
 
     try {
-      return function.call(env, VHelper.noCtx(), args).map((a)->a.toValue().copyReturn());
+      return function.call(env, VHelper.noCtx(), args).map((a)->a.toValue().copyReturn()).getOne();
     }
     finally {
       env.popCall();

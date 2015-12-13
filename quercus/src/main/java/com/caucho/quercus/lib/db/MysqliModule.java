@@ -181,7 +181,7 @@ public class MysqliModule extends AbstractQuercusModule {
   public static boolean mysqli_bind_param(Env env,
                                           @NotNull MysqliStatement stmt,
                                           StringValue types,
-                                          @Reference Value[] params)
+                                          @Reference Var[] params)
   {
     return mysqli_stmt_bind_param(env, stmt, types, params);
   }
@@ -1155,7 +1155,7 @@ public class MysqliModule extends AbstractQuercusModule {
   public static boolean mysqli_stmt_bind_param(Env env,
                                                @NotNull MysqliStatement stmt,
                                                StringValue types,
-                                               @Reference Value[] params)
+                                               @Reference Var[] params)
   {
     if (stmt == null) {
       return false;
@@ -1169,7 +1169,7 @@ public class MysqliModule extends AbstractQuercusModule {
    */
   public static boolean mysqli_stmt_bind_result(Env env,
                                                 @NotNull MysqliStatement stmt,
-                                                @Reference Value[] outParams)
+                                                @Reference Var[] outParams)
   {
     if (stmt == null) {
       return false;
@@ -1283,7 +1283,7 @@ public class MysqliModule extends AbstractQuercusModule {
 
   public static boolean mysqli_bind_result(Env env,
                                            @NotNull MysqliStatement stmt,
-                                           @Reference Value[] outParams)
+                                           @Reference Var[] outParams)
   {
     return mysqli_stmt_bind_result(env, stmt, outParams);
   }

@@ -204,9 +204,9 @@ public class ApcModule extends AbstractQuercusModule
    */
   public Value apc_fetch(Env env,
                          String key,
-                         @Optional @Reference Value isSuccessful)
+                         @Optional @Reference Var isSuccessful)
   {
-    isSuccessful.set(BooleanValue.FALSE);
+    isSuccessful.set_(BooleanValue.FALSE);
 
     if (_cache == null)
       return BooleanValue.FALSE;
@@ -222,7 +222,7 @@ public class ApcModule extends AbstractQuercusModule
       initObject(env, new IdentityHashMap<Value,Value>(), value);
 
     if (value != null) {
-      isSuccessful.set(BooleanValue.TRUE);
+      isSuccessful.set_(BooleanValue.TRUE);
       return value;
     }
     else

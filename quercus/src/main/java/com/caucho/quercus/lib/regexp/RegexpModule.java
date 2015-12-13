@@ -136,7 +136,7 @@ public class RegexpModule
   public static Value ereg(Env env,
                            Ereg regexp,
                            StringValue string,
-                           @Optional @Reference Value regsV)
+                           @Optional @Reference Var regsV)
   {
 
     if (regexp.getRawRegexp().length() == 0) {
@@ -144,7 +144,7 @@ public class RegexpModule
       return BooleanValue.FALSE;
     }
 
-    return eregImpl(env, regexp, string, regsV);
+    return eregImpl(env, regexp, string, regsV.makeValue());
   }
 
   /**
@@ -155,7 +155,7 @@ public class RegexpModule
   public static Value eregi(Env env,
                             Eregi regexp,
                             StringValue string,
-                            @Optional @Reference Value regsV)
+                            @Optional @Reference Var regsV)
   {
 
     if (regexp.getRawRegexp().length() == 0) {
@@ -164,7 +164,7 @@ public class RegexpModule
     }
 
     //  php/1511 : error when pattern argument is null or an empty string
-    return eregImpl(env, regexp, string, regsV);
+    return eregImpl(env, regexp, string, regsV.makeValue());
   }
 
   /**
@@ -590,7 +590,7 @@ public class RegexpModule
   public static Value preg_match_all(Env env,
                                      Regexp regexp,
                                      StringValue subject,
-                                     @Reference Value matchRef,
+                                     @Reference Var matchRef,
                                      @Optional("PREG_PATTERN_ORDER") int flags,
                                      @Optional int offset)
   {
@@ -623,8 +623,8 @@ public class RegexpModule
 
     ArrayValue matches;
 
-    if (matchRef instanceof ArrayValue)
-      matches = (ArrayValue) matchRef;
+    if (matchRef.makeValue() instanceof ArrayValue)
+      matches = (ArrayValue) matchRef.makeValue();
     else
       matches = new ArrayValueImpl();
 
@@ -996,7 +996,7 @@ public class RegexpModule
                                    Value replacement,
                                    Value subject,
                                    @Optional("-1") long limit,
-                                   @Optional @Reference Value count)
+                                   @Optional @Reference Var count)
   {
     Regexp []regexpList = createRegexpArray(pattern);
 
@@ -1017,7 +1017,7 @@ public class RegexpModule
                                replacement,
                                value.getOne().toStringValue(),
                                limit,
-                               count));
+                               count.makeValue()));
       }
 
       return result;
@@ -1028,7 +1028,7 @@ public class RegexpModule
                          regexpList,
                          replacement,
                          subject.toStringValue(),
-                         limit, count);
+                         limit, count.makeValue());
     }
     else {
       return env.getEmptyString();
@@ -1409,7 +1409,7 @@ public class RegexpModule
                                             @NotNull Callable fun,
                                             Value subject,
                                             @Optional("-1") long limit,
-                                            @Optional @Reference Value count)
+                                            @Optional @Reference Var count)
   {
     if (fun == null) {
       env.warning(
@@ -1471,7 +1471,7 @@ public class RegexpModule
                                             Callable fun,
                                             Value subject,
                                             @Optional("-1") long limit,
-                                            @Optional @Reference Value count)
+                                            @Optional @Reference Var count)
   {
     if (! regexpValue.isArray()) {
       Regexp regexp = createRegexp(regexpValue.toStringValue());
@@ -1531,7 +1531,7 @@ public class RegexpModule
                                            Callable fun,
                                            StringValue subject,
                                            @Optional("-1") long limit,
-                                           @Optional @Reference Value countV)
+                                           @Optional @Reference Var countV)
     throws IllegalRegexpException
   {
     if (limit < 0)
@@ -1546,7 +1546,7 @@ public class RegexpModule
                                      fun,
                                      subject,
                                      limit,
-                                     countV);
+                                     countV.makeValue());
     }
   }
 
@@ -1558,7 +1558,7 @@ public class RegexpModule
                                            Callable fun,
                                            StringValue subject,
                                            @Optional("-1") long limit,
-                                           @Optional @Reference Value countV)
+                                           @Optional @Reference Var countV)
   {
     if (limit < 0) {
       limit = LONG_MAX;
@@ -1574,7 +1574,7 @@ public class RegexpModule
                                           fun,
                                           subject,
                                           limit,
-                                          countV);
+                                          countV.makeValue());
       }
 
       return subject;

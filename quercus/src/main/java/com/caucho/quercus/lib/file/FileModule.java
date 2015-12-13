@@ -1907,7 +1907,7 @@ public class FileModule extends AbstractQuercusModule {
       if (value == null)
         return BooleanValue.FALSE;
 
-      return StringModule.sscanf(env, value, format, args);
+      return StringModule.sscanf(env, value, format, VHelper.valArrayToVar(args));
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }

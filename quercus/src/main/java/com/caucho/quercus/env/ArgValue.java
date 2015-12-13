@@ -49,6 +49,12 @@ abstract public class ArgValue extends Value
   }
 
   @Override
+  public Value toValue()
+  {
+    return toLocalValue();
+  }
+
+  @Override
   public ArrayValue toArrayValue(Env env)
   {
     return toLocalValue().toArrayValue(env);

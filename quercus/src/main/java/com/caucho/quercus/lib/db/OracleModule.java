@@ -683,7 +683,7 @@ public class OracleModule extends AbstractQuercusModule {
   public static boolean oci_define_by_name(Env env,
                                            @NotNull OracleStatement stmt,
                                            @NotNull String columnName,
-                                           @NotNull @Reference Value variable,
+                                           @NotNull @Reference Var variable,
                                            @Optional("0") int type)
   {
     // Example:
@@ -703,7 +703,7 @@ public class OracleModule extends AbstractQuercusModule {
     //  }
 
     try {
-      stmt.putByNameVariable(columnName, variable);
+      stmt.putByNameVariable(columnName, variable.makeValue());
 
       return true;
     }
@@ -1766,7 +1766,7 @@ public class OracleModule extends AbstractQuercusModule {
                                         @NotNull Value variable,
                                         @Optional("0") int type)
   {
-    return oci_define_by_name(env, stmt, columnName, variable, type);
+    return oci_define_by_name(env, stmt, columnName, Var.create(variable), type);
   }
 
   /**
@@ -1803,7 +1803,7 @@ public class OracleModule extends AbstractQuercusModule {
    */
   public static Value ocifetchinto(Env env,
                                  @NotNull OracleStatement stmt,
-                                 @Reference Value result,
+                                 @Reference Var result,
                                  @Optional("-1") int mode)
   {
     if (mode == -1)

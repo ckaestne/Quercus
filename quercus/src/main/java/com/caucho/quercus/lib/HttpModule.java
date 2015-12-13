@@ -191,8 +191,8 @@ public class HttpModule extends AbstractQuercusModule {
    * Return true if the headers have been sent.
    */
   public static boolean headers_sent(Env env,
-                                     @Optional @Reference Value file,
-                                     @Optional @Reference Value line)
+                                     @Optional @Reference Var file,
+                                     @Optional @Reference Var line)
   {
     QuercusHttpServletResponse res = env.getResponse();
 

@@ -29,9 +29,7 @@
 
 package com.caucho.quercus.lib;
 
-import com.caucho.quercus.annotation.Optional;
-import com.caucho.quercus.annotation.ReadOnly;
-import com.caucho.quercus.annotation.ReturnNullAsFalse;
+import com.caucho.quercus.annotation.*;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
@@ -54,19 +52,21 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * Calls an object method.
    */
-  public static V<? extends Value> call_user_method(Env env,   FeatureExpr ctx,
-                                                    StringValue name,
-                                                    Value obj,
-                                                    V<? extends ValueOrVar> []args)
+  @VVariational
+  @VParamType(Value.class)
+  public static V<? extends Value> call_user_method(Env env, FeatureExpr ctx,
+                                                    @VParamType(StringValue.class) V<? extends StringValue> name,
+                                                    @VParamType(Value.class) V<? extends Value> obj,
+                                                    @VParamType(ValueOrVar.class) V<? extends ValueOrVar>[] args)
   {
-    if (obj.isObject()) {
-      return obj.callMethod(env, ctx, name, args).map((a)->a.toValue());
+    if (obj.getOne().isObject()) {
+      return obj.getOne().callMethod(env, ctx, name.getOne(), args).map((a) -> a.toValue());
     }
     else {
       QuercusClass cls = env.getClass(obj.toString());
 
       V<? extends Value> result
-        = cls.callMethod(env, ctx, env.getThis(), name, name.hashCode(), args).map((a)->a.toValue());
+              = cls.callMethod(env, ctx, env.getThis(), name.getOne(), name.hashCode(), args).map((a) -> a.toValue());
 
       return result.map((a)->a.copyReturn());
     }
@@ -75,14 +75,16 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * Calls a object method with arguments in an array.
    */
+  @VVariational
+  @VParamType(Value.class)
   public static  V<? extends Value> call_user_method_array(Env env, FeatureExpr ctx,
-                                             StringValue methodName,
-                                             Value obj,
-                                             ArrayValue params)
+                                                           @VParamType(StringValue.class) V<? extends StringValue> methodName,
+                                                           @VParamType(Value.class) V<? extends Value> obj,
+                                                           @VParamType(ArrayValue.class) V<? extends ArrayValue> params)
   {
-    Value []args = params.valuesToArray();
+    V<? extends ValueOrVar> []args = VHelper.toVArray(params.getOne().valuesToArray());
 
-    return call_user_method(env, ctx, methodName, obj, VHelper.toVArray(args));
+    return call_user_method(env, ctx, methodName, obj, args);
   }
 
   /**
@@ -239,7 +241,7 @@ public class ClassesModule extends AbstractQuercusModule {
       }
     }
 
-    ArrayModule.ksort(env, varArray, ArrayModule.SORT_STRING);
+    ArrayModule.ksort(env, Var.create(varArray), ArrayModule.SORT_STRING);
 
     return varArray;
   }

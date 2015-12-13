@@ -352,13 +352,13 @@ public class VariableModule extends AbstractQuercusModule {
   public static boolean is_callable(Env env,
                                     @ReadOnly Value v,
                                     @Optional boolean isCheckSyntaxOnly,
-                                    @Optional @Reference Value nameRef)
+                                    @Optional @Reference Var nameRef)
   {
-    if (nameRef.isDefault()) {
+    if (nameRef.makeValue().isDefault()) {
       nameRef = null;
     }
 
-    return v.isCallable(env, isCheckSyntaxOnly, nameRef);
+    return v.isCallable(env, isCheckSyntaxOnly, nameRef.makeValue());
   }
 
   /**
@@ -590,7 +590,7 @@ public class VariableModule extends AbstractQuercusModule {
    * Converts the variable to a specified tyep.
    */
   public static boolean settype(Env env,
-                                @Reference Value var,
+                                @Reference Var var,
                                 String type)
   {
     Value value = var.toValue();

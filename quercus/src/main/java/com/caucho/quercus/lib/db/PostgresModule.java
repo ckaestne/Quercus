@@ -3425,7 +3425,7 @@ public class PostgresModule extends AbstractQuercusModule {
       }
 
       Value []value = params.valuesToArray();
-      pstmt.bindParams(env, types, value);
+      pstmt.bindParams(env, types, VHelper.valArrayToVar(value));
 
       if (! pstmt.execute(env)) {
         return null;

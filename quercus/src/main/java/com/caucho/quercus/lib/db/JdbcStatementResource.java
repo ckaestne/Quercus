@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.db;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.Var;
 import com.caucho.util.L10N;
 import com.caucho.util.Log;
 
@@ -92,7 +93,7 @@ public class JdbcStatementResource
    * XXX: MySQL returns the table metadata on preparation of a statement,
    * but java.sql doesn't support this feature.
    */
-  public boolean bindResults(Env env, Value[] outParams)
+  public boolean bindResults(Env env, Var[] outParams)
   {
     int size = outParams.length;
     int numColumns = getColumnCount(env);
@@ -102,7 +103,7 @@ public class JdbcStatementResource
     }
 
     for (int i = 0; i < size; i++) {
-      Value val = outParams[i];
+      Var val = outParams[i];
 
       //TODO V
 //      if (! (val instanceof Var)) {

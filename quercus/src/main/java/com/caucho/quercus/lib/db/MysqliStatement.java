@@ -99,7 +99,7 @@ public class MysqliStatement extends JdbcPreparedStatementResource {
    */
   public boolean bind_param(Env env,
                             StringValue typeStr,
-                            @Reference Value[] params)
+                            @Reference Var[] params)
   {
     int len = typeStr.length();
 
@@ -137,7 +137,7 @@ public class MysqliStatement extends JdbcPreparedStatementResource {
    * @return true on success or false on failure
    */
   public boolean bind_result(Env env,
-                             @Reference Value[] outParams)
+                             @Reference Var[] outParams)
   {
     return bindResults(env, outParams);
   }

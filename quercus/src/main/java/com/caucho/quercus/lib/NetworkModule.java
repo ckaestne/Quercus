@@ -128,8 +128,8 @@ public class NetworkModule extends AbstractQuercusModule {
   public static SocketInputOutput fsockopen(Env env,
                                             String host,
                                             @Optional int port,
-                                            @Optional @Reference Value errno,
-                                            @Optional @Reference Value errstr,
+                                            @Optional @Reference Var errno,
+                                            @Optional @Reference Var errstr,
                                             @Optional double timeout)
   {
     try {
@@ -191,8 +191,8 @@ public class NetworkModule extends AbstractQuercusModule {
   public static SocketInputOutput pfsockopen(Env env,
                                              String host,
                                              @Optional int port,
-                                             @Optional @Reference Value errno,
-                                             @Optional @Reference Value errstr,
+                                             @Optional @Reference Var errno,
+                                             @Optional @Reference Var errstr,
                                              @Optional double timeout)
   {
     return fsockopen(env, host, port, errno, errstr, timeout);
@@ -487,8 +487,8 @@ public class NetworkModule extends AbstractQuercusModule {
 
   public static boolean getmxrr(Env env,
                                 @NotNull String hostname,
-                                @Reference Value mxhosts,
-                                @Optional @Reference Value weight)
+                                @Reference Var mxhosts,
+                                @Optional @Reference Var weight)
   {
     return dns_get(env, hostname, "MX", mxhosts, weight);
   }
@@ -496,8 +496,8 @@ public class NetworkModule extends AbstractQuercusModule {
   private static boolean dns_get(Env env,
                                  String hostname,
                                  String type,
-                                 Value hostsRef,
-                                 Value weightRef)
+                                 Var hostsRef,
+                                 Var weightRef)
   {
     try {
       // php/1m08
@@ -590,8 +590,8 @@ public class NetworkModule extends AbstractQuercusModule {
    */
   public static boolean dns_get_mx(Env env,
                                    @NotNull String hostname,
-                                   @Reference Value mxhosts,
-                                   @Optional @Reference Value weight)
+                                   @Reference Var mxhosts,
+                                   @Optional @Reference Var weight)
   {
     return dns_get(env, hostname, "MX", mxhosts, weight);
 
@@ -623,14 +623,14 @@ public class NetworkModule extends AbstractQuercusModule {
   public ArrayValue dns_get_record(Env env,
                                    @NotNull String hostname,
                                    @Optional("-1") int type,
-                                   @Optional @Reference Value authnsRef,
-                                   @Optional @Reference Value addtlRef)
+                                   @Optional @Reference Var authnsRef,
+                                   @Optional @Reference Var addtlRef)
   {
     ArrayValue result =  new ArrayValueImpl();
 
     ArrayValueImpl authns = null;
 
-    if (authnsRef != null && !authnsRef.isNull()) {
+    if (authnsRef != null && !authnsRef.makeValue().isNull()) {
       authns = new ArrayValueImpl();
       authnsRef.set(authns);
       env.stub("authns unimplemented");
@@ -638,7 +638,7 @@ public class NetworkModule extends AbstractQuercusModule {
 
     ArrayValueImpl addtl = null;
 
-    if (addtlRef != null && !addtlRef.isNull()) {
+    if (addtlRef != null && !addtlRef.makeValue().isNull()) {
       addtl = new ArrayValueImpl();
       addtlRef.set(addtl);
       env.stub("addtl unimplemented");

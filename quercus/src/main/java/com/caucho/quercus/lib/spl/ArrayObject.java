@@ -89,7 +89,7 @@ public class ArrayObject
     sortFlag = 0; // qa/4a46
 
     if (_value instanceof ArrayValue)
-      ArrayModule.asort(_env, (ArrayValue) _value, sortFlag);
+      ArrayModule.asort(_env, Var.create((ArrayValue) _value), sortFlag);
   }
 
   @Override
@@ -132,19 +132,19 @@ public class ArrayObject
   public void ksort(@Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.ksort(_env, (ArrayValue) _value, sortFlag);
+      ArrayModule.ksort(_env, Var.create((ArrayValue) _value), sortFlag);
   }
 
   public void natcasesort()
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.natcasesort(_env, _value);
+      ArrayModule.natcasesort(_env, Var.create(_value));
   }
 
   public void natsort()
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.natsort(_env, _value);
+      ArrayModule.natsort(_env, Var.create(_value));
   }
 
   @Override
@@ -184,13 +184,13 @@ public class ArrayObject
   public void uasort(Callable func)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uasort(_env, (ArrayValue) _value, func,  0);
+      ArrayModule.uasort(_env, Var.create((ArrayValue) _value), func,  0);
   }
 
   public void uksort(Callable func, @Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uksort(_env, (ArrayValue) _value, func, sortFlag);
+      ArrayModule.uksort(_env, Var.create((ArrayValue) _value), func, sortFlag);
   }
 
   public Value __getField(StringValue key)

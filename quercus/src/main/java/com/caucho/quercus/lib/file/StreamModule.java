@@ -481,8 +481,8 @@ public class StreamModule extends AbstractQuercusModule {
   @ReturnNullAsFalse
   public static SocketInputOutput stream_socket_client(Env env,
                                   @NotNull String remoteSocket,
-                                  @Optional @Reference Value errorInt,
-                                  @Optional @Reference Value errorStr,
+                                  @Optional @Reference Var errorInt,
+                                  @Optional @Reference Var errorStr,
                                   @Optional("120.0") double timeout,
                                   @Optional("STREAM_CLIENT_CONNECT") int flags,
                                   @Optional StreamContextResource context)

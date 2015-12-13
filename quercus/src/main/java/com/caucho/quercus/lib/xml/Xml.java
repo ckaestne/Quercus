@@ -438,8 +438,8 @@ public class Xml {
    */
   public int xml_parse_into_struct(Env env,
                                    StringValue data,
-                                   @Reference Value valsV,
-                                   @Optional @Reference Value indexV)
+                                   @Reference Var valsV,
+                                   @Optional @Reference Var indexV)
     throws Exception
   {
     ArrayValueImpl valueArray = new ArrayValueImpl();

@@ -61,7 +61,7 @@ public class CurlMultiResource extends ResourceValue
     _msgQueue.remove(curl);
   }
 
-  public int execute(Env env, Value stillRunning)
+  public int execute(Env env, Var stillRunning)
   {
     if (_runningCount == 0) {
       stillRunning.set(LongValue.ZERO);
@@ -90,7 +90,7 @@ public class CurlMultiResource extends ResourceValue
     }
   }
 
-  public Value readInfo(Env env, Value msgsInQueue)
+  public Value readInfo(Env env, Var msgsInQueue)
   {
     if (_msgQueue.size() == 0) {
       return BooleanValue.FALSE;

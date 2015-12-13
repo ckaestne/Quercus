@@ -197,6 +197,7 @@ public class CallExpr extends Expr {
 //      w.flush();
 //    } catch (IOException e) {
 //    }
+    System.out.println(this.toString());
     if (_funId==null)
       _funId=lookupFunId(env);
 

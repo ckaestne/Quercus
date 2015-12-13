@@ -49,6 +49,10 @@ public class Var
     _value = V.one(NullValue.NULL);
   }
 
+  @Deprecated
+  public static Var create(ValueOrVar value) {
+    return create(V.one(value));
+  }
   public static Var create(V<? extends ValueOrVar> value)
   {
     return new Var(value.flatMap(v->v._getValues()));
@@ -70,6 +74,8 @@ public class Var
       return set(ctx, value.flatMap((v)-> v.isVar() ? v._var().getValue() : V.one(v._value())));
   }
 
+  @Deprecated//("workaround for V migration, avoid")
+  public Var set(Value value) { return set_(value);}
   @Deprecated//("workaround for V migration, avoid")
   public Var set_(Value value) {
     return set(VHelper.noCtx(), V.one(value));

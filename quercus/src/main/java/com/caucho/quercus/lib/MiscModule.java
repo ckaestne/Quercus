@@ -46,7 +46,6 @@ import com.caucho.vfs.Path;
 import com.caucho.vfs.WriteStream;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,7 +177,7 @@ public class MiscModule extends AbstractQuercusModule {
    * Comples and evaluates an expression.
    */
   @UsesSymbolTable
-  public @Nonnull V<? extends Value> eval(Env env, StringValue code)
+  public Value eval(Env env, StringValue code)
   {
     try {
       if (log.isLoggable(Level.FINER))
@@ -190,10 +189,9 @@ public class MiscModule extends AbstractQuercusModule {
 
       V<? extends Value> value = program.execute(env);
 
-      if (value == null)
-        value = VHelper.toV(NullValue.NULL);
+      value = value.map(v -> v == null ? NullValue.NULL : v);
 
-      return value;
+      return value.getOne();
     } catch (IOException e) {
       throw new QuercusException(e);
     }
@@ -204,7 +202,7 @@ public class MiscModule extends AbstractQuercusModule {
    */
   public static String exec(Env env, String command,
                             @Optional Value output,
-                            @Optional @Reference Value result)
+                            @Optional @Reference Var result)
   {
     try {
       String []args = new String[3];
@@ -662,7 +660,7 @@ public class MiscModule extends AbstractQuercusModule {
    * Execute a system command.
    */
   public static void passthru(Env env, String command,
-                               @Optional @Reference Value result)
+                              @Optional @Reference Var result)
   {
 
     try {
@@ -719,7 +717,7 @@ public class MiscModule extends AbstractQuercusModule {
   public static ProcOpenResource proc_open(Env env,
                                            String command,
                                            ArrayValue descriptorArray,
-                                           @Reference Value pipes,
+                                           @Reference Var pipes,
                                            @Optional Path pwd,
                                            @Optional ArrayValue envArray,
                                            @Optional ArrayValue options)
@@ -762,7 +760,7 @@ public class MiscModule extends AbstractQuercusModule {
       ProcOpenInput out = null;
       ProcOpenInput es = null;
 
-      ArrayValue array = pipes.toAutoArray().toArrayValue(env);
+      ArrayValue array = pipes.toAutoArray().makeValue().toArrayValue(env);
       pipes.set(array);
       array.clear();
 
@@ -975,7 +973,7 @@ public class MiscModule extends AbstractQuercusModule {
    * Execute a system command.
    */
   public static String system(Env env, String command,
-                              @Optional @Reference Value result)
+                              @Optional @Reference Var result)
   {
     return exec(env, command, null, result);
   }

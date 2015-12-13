@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.db;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.UnsetValue;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.Var;
 import com.caucho.quercus.lib.file.FileReadValue;
 import com.caucho.util.L10N;
 import com.caucho.vfs.ReadStream;
@@ -56,7 +57,7 @@ public class JdbcPreparedStatementResource
   private PreparedStatement _preparedStmt;
 
   private ColumnType[] _types;
-  private Value[] _params;
+  private Var[] _params;
 
   /**
    * Constructor for JdbcStatementResource
@@ -77,7 +78,7 @@ public class JdbcPreparedStatementResource
    */
   protected boolean bindParams(Env env,
                                ColumnType[] types,
-                               Value[] params)
+                               Var[] params)
   {
     _types = types;
     _params = params;
@@ -166,7 +167,7 @@ public class JdbcPreparedStatementResource
 
     for (int i = 0; i < size; i++) {
       ColumnType type = _types[i];
-      Value value = _params[i];
+      Value value = _params[i].makeValue();
 
       if (type == ColumnType.BOOLEAN) {
         if (value.isDouble()) {
@@ -381,7 +382,7 @@ public class JdbcPreparedStatementResource
       return UnsetValue.UNSET;
     }
 
-    return _params[i];
+    return _params[i].makeValue();
   }
 
   /**

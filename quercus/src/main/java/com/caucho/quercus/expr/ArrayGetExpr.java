@@ -175,10 +175,10 @@ public class ArrayGetExpr extends AbstractVarExpr {
   {
     // php/0d2t
     // php/0d1c
-    V<? extends ValueOrVar> array = _expr.evalArg(env, VHelper.noCtx(), false);
-    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
+    V<? extends ValueOrVar> array = _expr.evalArg(env, ctx, false);
+    V<? extends Value> index = _index.eval(env, ctx);
 
-    V<? extends Value> result = VHelper.flatMapAll(array, index,(a,i)-> a.toValue().getArg(i, isTop).getValue());
+    V<? extends Value> result = VHelper.flatMapAll(VHelper.getValues(array), index,(a,i)-> a.getArg(i, isTop).getValue());
 
     return result;
   }

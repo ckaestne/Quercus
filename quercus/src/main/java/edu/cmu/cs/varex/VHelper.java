@@ -2,6 +2,7 @@ package edu.cmu.cs.varex;
 
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
+import com.caucho.quercus.env.Var;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 
@@ -129,4 +130,8 @@ public class VHelper {
     return getValues(v);
   }
 
+  @Deprecated//don't use permanently
+  public static Var[] valArrayToVar(Value[] args) {
+    return VHelper.mapArray(Var.class, args, a->Var.create(a));
+  }
 }

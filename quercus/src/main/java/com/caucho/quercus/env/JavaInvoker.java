@@ -271,10 +271,9 @@ abstract public class JavaInvoker
                                                               opt.value());
               }
             } else if (Reference.class.isAssignableFrom(ann.annotationType())) {
-              if (! Value.class.equals(argType)
-                  && ! Var.class.equals(argType)) {
+              if (! Var.class.equals(argType) && ! Var[].class.equals(argType)) {
                 throw new QuercusException(
-                  L.l("reference must be Value or Var for {0}", _name));
+                  L.l("reference must be Var for {0} in {1}", _name, _method));
               }
 
               isReference = true;
@@ -356,8 +355,8 @@ abstract public class JavaInvoker
                   _name));
         if (!_vvariational && V.class.isAssignableFrom(_retType))
           throw new QuercusException(L.l(
-                  "Unexpected variational return type for {0}",
-                  _name));
+                  "Unexpected variational return type for {0} in {1}",
+                  _name,_method));
         if (_vvariational) {
           if (vretType==null)
             throw new QuercusException(L.l(
