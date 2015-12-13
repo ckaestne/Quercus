@@ -1957,7 +1957,7 @@ abstract public class ArrayValue extends Value {
 
       printDepth(out, 2 * depth);
 
-      getRawValue().getValue().foreach((a) -> {
+      getRawValue().getVar().foreach((a) -> {
         try {
           a.varDump(env, out, depth, valueSet);
         } catch (IOException e) {

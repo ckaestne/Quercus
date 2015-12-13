@@ -40,6 +40,7 @@ public interface VWriteStream {
     void print(FeatureExpr ctx, Object v) throws IOException;
 
     void print(FeatureExpr ctx, long v) throws IOException;
+    void print(FeatureExpr ctx, char v) throws IOException;
 
 
     void print(FeatureExpr ctx, char[] buffer, int offset, int length) throws IOException;

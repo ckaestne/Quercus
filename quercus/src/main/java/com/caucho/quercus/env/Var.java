@@ -32,8 +32,11 @@ package com.caucho.quercus.env;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VWriteStream;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.IdentityHashMap;
 
 /**
  * Represents a PHP variable value.
@@ -2380,15 +2383,29 @@ public class Var
 //  }
 //
 //
-//  public void varDumpImpl(Env env,
-//                          VWriteStream out,
-//                          int depth,
-//                          IdentityHashMap<Value, String> valueSet)
-//    throws IOException
-//  {
-//    out.print(VHelper.noCtx(), "&");
-//    _value.varDump(env, out, depth, valueSet);
-//  }
+
+  public final void varDump(Env env,
+                            VWriteStream out,
+                            int depth,
+                            IdentityHashMap<Value, String> valueSet)
+          throws IOException {
+    varDumpImpl(env, out, depth, valueSet);
+  }
+
+  public void varDumpImpl(Env env,
+                          VWriteStream out,
+                          int depth,
+                          IdentityHashMap<Value, String> valueSet)
+          throws IOException {
+    out.print(VHelper.noCtx(), "&");
+    _value.foreach(v -> {
+      try {
+        v.varDump(env, out, depth, valueSet);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
+  }
 //
 //  protected void printRImpl(Env env,
 //                            VWriteStream out,

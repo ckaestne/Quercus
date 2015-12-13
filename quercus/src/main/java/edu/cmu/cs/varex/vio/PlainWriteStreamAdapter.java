@@ -89,6 +89,12 @@ public class PlainWriteStreamAdapter implements VWriteStream {
     }
 
     @Override
+    public void print(FeatureExpr ctx, char v) throws IOException {
+        updateCtx(ctx);
+        stream.print(v);
+    }
+
+    @Override
     public void print(FeatureExpr ctx, char[] buffer, int offset, int length) throws IOException {
         updateCtx(ctx);
         stream.print(buffer, offset, length);

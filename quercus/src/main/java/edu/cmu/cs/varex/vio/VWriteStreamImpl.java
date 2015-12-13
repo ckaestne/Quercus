@@ -128,6 +128,11 @@ public class VWriteStreamImpl
     }
 
     @Override
+    public void print(FeatureExpr ctx, char v) throws IOException {
+        print(ctx, Character.toString(v));
+    }
+
+    @Override
     public void print(FeatureExpr ctx, char[] buffer, int offset, int length) throws IOException {
         updateCtx(ctx);
         _buffer.append(buffer, offset, length);
