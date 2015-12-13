@@ -780,7 +780,7 @@ abstract public class ArrayValue extends Value {
    * Add element to the end of an array
    */
   @Override
-  abstract public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value);
+  abstract public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value);
 
 
   /**
@@ -1133,7 +1133,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Convert to an array.
    */
-  public static V<? extends Value> toArray(Value value)
+  public static V<? extends ValueOrVar> toArray(Value value)
   {
     value = value.toValue();
 

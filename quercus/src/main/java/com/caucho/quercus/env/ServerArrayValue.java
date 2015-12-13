@@ -225,7 +225,7 @@ public class ServerArrayValue extends ArrayValueImpl
   /**
    * Adds a new value.
    */
-  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     if (! _isFilled)
       fillMap();

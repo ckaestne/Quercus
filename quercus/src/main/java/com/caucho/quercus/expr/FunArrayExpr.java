@@ -116,17 +116,18 @@ public class FunArrayExpr extends Expr {
     for (int i = 0; i < _values.length; i++) {
       Expr keyExpr = _keys[i];
 
-      Value value = _values[i].evalArg(env, VHelper.noCtx(), true).getOne().toValue();
-      // php/0471
-      value = value.toRefValue();
+      V<? extends Value> value =
+              VHelper.getValues(_values[i].evalArg(env, ctx, true)).
+                      map((a)->a.toRefValue());
 
       if (keyExpr != null) {
-        Value key = keyExpr.evalArg(env, VHelper.noCtx(), true).getOne().toValue().toLocalValue();
+        V<? extends Value> key = VHelper.getValues(keyExpr.evalArg(env, ctx, true));
 
-        array.put(key, value);
+        key.vforeach(ctx, (c,k)->
+          array.put(c, k.toLocalValue(), value));
       }
       else
-        array.put(VHelper.noCtx(), value);
+        array.put(ctx, value);
     }
 
     return VHelper.toV(array);

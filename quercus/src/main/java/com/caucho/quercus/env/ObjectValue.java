@@ -450,7 +450,7 @@ abstract public class ObjectValue extends Callback {
    * Appends a new array value
    */
   @Override
-  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     Env env = Env.getInstance();
 
@@ -459,7 +459,7 @@ abstract public class ObjectValue extends Callback {
     // php/0d94
 
     if (delegate != null)
-      return V.one(delegate.put(env, this, value.getOne()));
+      return V.one(delegate.put(env, this, value.getOne().toValue()));
     else {
       // php/0d97
 

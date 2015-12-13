@@ -128,7 +128,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Add
    */
-  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     return getCopyArray().put(VHelper.noCtx(), value);
   }

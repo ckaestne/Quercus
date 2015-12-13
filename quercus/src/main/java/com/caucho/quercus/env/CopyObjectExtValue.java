@@ -200,7 +200,7 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Appends a new array value
    */
   @Override
-  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     _root.setModified();
 

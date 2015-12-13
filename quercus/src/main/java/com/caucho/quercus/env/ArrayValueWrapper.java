@@ -126,7 +126,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Add
    */
   @Override
-  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     return _array.put(VHelper.noCtx(), value);
   }

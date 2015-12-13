@@ -43,6 +43,7 @@ import java.util.Iterator;
 /**
  * Represents a reference to a PHP variable in a function call.
  */
+//TODO V shouldn't this be a Var not a Value?
 public class ArgRef extends Value
   implements Serializable
 {
@@ -573,7 +574,7 @@ public class ArgRef extends Value
    * Returns the array ref.
    */
   @Override
-  public V<? extends Value> put(FeatureExpr ctx, V<? extends Value> value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     return _var.getValue().getOne().put(VHelper.noCtx(), value);
   }

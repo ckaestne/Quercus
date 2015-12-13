@@ -936,19 +936,19 @@ public class Var
 //   * Converts to a reference variable
 //   */
 //
-//  public Var toLocalVarDeclAsRef()
-//  {
-//    return this;
-//  }
+  public Var toLocalVarDeclAsRef()
+  {
+    return this;
+  }
 //
 //  /**
 //   * Converts to a reference variable
 //   */
 //
-//  public Value toArgRef()
-//  {
-//    return new ArgRef(this);
-//  }
+  public Value toArgRef()
+  {
+    return new ArgRef(this);
+  }
 //
 //  /**
 //   * Converts to a key.

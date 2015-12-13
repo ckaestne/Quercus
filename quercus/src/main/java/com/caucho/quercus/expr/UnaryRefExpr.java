@@ -101,9 +101,9 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
   @Override
   public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
+    V<? extends Var> value = getExpr().evalVar(env, ctx);
     
-    return value.map((a)->a.makeValue().toArgRef());
+    return value.map((a)->a.toArgRef());
   }
 
   /**
