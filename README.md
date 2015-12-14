@@ -1,12 +1,28 @@
-# READ ME
+# Varex
 
-This directory contains a modified version of [Quercus][].
-It includes changes for the final release version of the [Java Caching API][]
-and `@PostConstruct` fixes required to deploy it to [GlassFish Server][] 4.
+This is a reimplementation of the variational PHP interpreter Varex,
+based on the PHP interpreter Quercus. It allows to create variational
+values in PHP code by calling `create_conditional` and then compute
+with them.
 
-In addition, it can be built as Apache [Maven][] artifacts.
+A description of the idea ad the potential can be found in the ICSE'14
+paper ["Exploring Variability-Aware Execution for Testing Plugin-Based Web Applications"](https://www.cs.cmu.edu/~ckaestne/pdf/icse14_varex.pdf).
+
+
+The transition from a traditional to a variational interpreter is only 
+partial. Not all language features and libraries are supported, but
+supports gets better with newer versions. 
+
+The project uses the `sbt` build system, build with
+`sbt "project quercus" compile`. It is written in Java, but many
+tests are written in Scala. For development, we recommend IntelliJ 
+IDEA, which can directly import sbt projects. When using
+Eclipse, you might want to consider using the
+[sbt-eclipse](https://github.com/typesafehub/sbteclipse/) plugin.
+
+The issue tracker is used for selecting and assigning implementation
+tasks. The wiki contains additional technical information about
+the project.
+
 
 [Quercus]: <http://quercus.caucho.com/>
-[Java Caching API]: <https://jcp.org/en/jsr/detail?id=107>
-[GlassFish Server]: <https://glassfish.java.net/>
-[Maven]: <http://maven.apache.org/>
