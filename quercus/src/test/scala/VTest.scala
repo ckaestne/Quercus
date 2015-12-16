@@ -8,8 +8,8 @@ import org.junit.{Ignore, Test}
   */
 class VTest extends AbstractPhpTest {
 
-    val foo = FeatureExprFactory.bdd.createDefinedExternal("foo")
-    val bar = FeatureExprFactory.bdd.createDefinedExternal("bar")
+    val foo = FeatureExprFactory.createDefinedExternal("foo")
+    val bar = FeatureExprFactory.createDefinedExternal("bar")
 
     val fooresult1 = c(foo, "2") ~ c(foo.not(), "1")
     val fooresult = c(foo, "1")

@@ -10,9 +10,9 @@ import org.scalatest.{FlatSpec, Matchers}
   */
 class VJavaInvokeTest extends FlatSpec with Matchers with AbstractPhpTest {
 
-    val foo = FeatureExprFactory.bdd.createDefinedExternal("foo")
-    val bar = FeatureExprFactory.bdd.createDefinedExternal("bar")
-    var t = FeatureExprFactory.bdd.True
+    val foo = FeatureExprFactory.createDefinedExternal("foo")
+    val bar = FeatureExprFactory.createDefinedExternal("bar")
+    var t = FeatureExprFactory.True
 
     val x = StringValue.create("x")
     val y = StringValue.create("y")
