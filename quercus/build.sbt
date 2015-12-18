@@ -45,7 +45,7 @@ jacoco.reportFormats in jacoco.Config := Seq(
 //        "-Xbootclasspath/p:checker/dist/jdk8.jar")
 
 
-parallelExecution in Test := false
+//parallelExecution in Test := false
 
 /**
   * AOP used for runtime checking of @Notnull annotations

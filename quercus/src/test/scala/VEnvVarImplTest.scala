@@ -1,7 +1,7 @@
 package edu.cmu.cs.varex
 
 import com.caucho.quercus.env.{EnvVarImpl, NullValue, StringValue, Var}
-import de.fosd.typechef.featureexpr.FeatureExprFactory
+import de.fosd.typechef.featureexpr.{FeatureExpr, FeatureExprFactory}
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -123,6 +123,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
         e.getValue should equal (V.choice(foo or bar, x, y))
     }
 
+
     it should "correctly handle setRef conditionally" in {
         val v1 = new Var(V.one(x))
         val v2 = new Var(V.one(y))
@@ -139,16 +140,16 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
         e2.getValue should equal (V.choice(foo andNot bar, x, y))
 
         e2.setRef(foo, V.choice(bar, x, v1))
-        e2.getVar should equal (V.choice(foo andNot bar, v1, v2))
+        assertEquiv(e2.getVar, V.choice(foo andNot bar, v1, v2))
         v1.getValue should equal (V.one(x))
-        v2.getValue should equal (V.choice(foo and bar, x, y))
-        e2.getValue should equal (V.choice(foo.not, y, x))
+        assertEquiv(v2.getValue, V.choice(foo and bar, x, y))
+        assertEquiv(e2.getValue, V.choice(foo.not, y, x))
 
         v1.set(t, V.one(y))
         v2.set(t, V.one(x))
 
         e1.getValue should equal (V.one(y))
-        e2.getValue should equal (V.choice(foo andNot bar, y, x))
+        assertEquiv(e2.getValue, V.choice(foo andNot bar, y, x))
     }
 
 
@@ -213,5 +214,16 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     //
     //
     //    }
+
+
+    def assertEquiv(actual: V[_ <: Any], expected: V[_ <: Any]) = {
+        VHelper.vmapAll(FeatureExprFactory.True, actual, expected, new Function4[FeatureExpr, Any, Any, Boolean] {
+            override def apply(ctx: FeatureExpr, a: Any, b: Any): Boolean = {
+                assert(ctx.isContradiction || a == b, s"$b expected but $a found under condition $ctx")
+                true
+            }
+        });
+    }
+
 
 }

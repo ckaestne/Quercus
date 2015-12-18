@@ -1,7 +1,7 @@
 package edu.cmu.cs.varex
 
 import com.caucho.quercus.env._
-import de.fosd.typechef.featureexpr.FeatureExprFactory
+import de.fosd.typechef.featureexpr.{FeatureExpr, FeatureExprFactory}
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -9,7 +9,7 @@ import org.scalatest.{FlatSpec, Matchers}
   */
 class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 
-    FeatureExprFactory.setDefault(FeatureExprFactory.bdd)
+    //    FeatureExprFactory.setDefault(FeatureExprFactory.bdd)
 
     val foo = FeatureExprFactory.createDefinedExternal("foo")
     val bar = FeatureExprFactory.createDefinedExternal("bar")
@@ -119,9 +119,9 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.get(2).getValue should equal(V.choice(foo and bar, y, UnsetValue.UNSET))
 
         a.put(t, V.one(z))
-        a.get(1).getValue should equal(V.choice(foo, V.one(x), V.choice(bar, y, z)))
-        a.get(2).getValue should equal(V.choice(foo.not andNot bar, V.one(UnsetValue.UNSET), V.choice(foo and bar, y, z)))
-        a.get(3).getValue should equal(V.choice(foo and bar, z, UnsetValue.UNSET))
+        assertEquiv(a.get(1).getValue, V.choice(foo, V.one(x), V.choice(bar, y, z)))
+        assertEquiv(a.get(2).getValue, V.choice(foo.not andNot bar, V.one(UnsetValue.UNSET), V.choice(foo and bar, y, z)))
+        assertEquiv(a.get(3).getValue, V.choice(foo and bar, z, UnsetValue.UNSET))
 
 
         a.append(t, LongValue.create(5), V.one(z))
@@ -156,7 +156,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.append(foo, x, V.one(y))
         a.append(t, y, V.one(x))
         a.append(bar, x, V.one(z))
-        a.remove(t, x) should equal(V.choice(bar, V.one(z), V.choice(foo, y, UnsetValue.UNSET)))
+        assertEquiv(a.remove(t, x), V.choice(bar, V.one(z), V.choice(foo, y, UnsetValue.UNSET)))
 
         a.clear()
         a.append(foo, x, V.one(y))
@@ -209,10 +209,20 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.put(bar, V.one(y))
         a.put(t, V.one(z))
         a.put(foo, V.one(x))
-        a.current() should equal(V.choice(foo, V.one(x), V.choice(bar, y, z)))
-        a.next(foo) should equal(V.choice(bar, y, z))
-        a.end(t) should equal(V.choice(foo, x, z))
+        assertEquiv(a.current(), V.choice(foo, V.one(x), V.choice(bar, y, z)))
+        assertEquiv(a.next(foo), V.choice(bar, y, z))
+        assertEquiv(a.end(t), V.choice(foo, x, z))
 
+    }
+
+
+    def assertEquiv(actual: V[_ <: Any], expected: V[_ <: Any]) = {
+        VHelper.vmapAll(FeatureExprFactory.True, actual, expected, new Function4[FeatureExpr, Any, Any, Boolean] {
+            override def apply(ctx: FeatureExpr, a: Any, b: Any): Boolean = {
+                assert(ctx.isContradiction || a == b, s"$b expected but $a found under condition $ctx")
+                true
+            }
+        });
     }
 
 }
