@@ -482,6 +482,7 @@ public class ObjectExtValue extends ObjectValue
   /**
    * Removes the field array ref.
    */
+  @Override
   public void unsetThisArray(Env env, FeatureExpr ctx, StringValue name, Value index)
   {
     unsetArray(env, ctx, name, index);
@@ -952,6 +953,7 @@ public class ObjectExtValue extends ObjectValue
   /**
    * Converts to a java String object.
    */
+  @Override
   public String toJavaString()
   {
     return toString(Env.getInstance()).toString();
@@ -1027,6 +1029,7 @@ public class ObjectExtValue extends ObjectValue
   //
 
   //XXX: push up to super, and use varDumpObject
+  @Override
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
@@ -1230,16 +1233,19 @@ public class ObjectExtValue extends ObjectValue
       _iter = iter;
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iter.hasNext();
     }
 
+    @Override
     public VEntry next()
     {
       return new EntryWrapper(_iter.next());
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -1287,16 +1293,19 @@ public class ObjectExtValue extends ObjectValue
       _iter = iter;
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iter.hasNext();
     }
 
+    @Override
     public Value next()
     {
       return _iter.next();
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -1331,6 +1340,7 @@ public class ObjectExtValue extends ObjectValue
 //      _value = entry._value.copy(env, map);
     }
 
+    @Override
     public EnvVar getEnvVar()
     {
       return _value;
@@ -1342,6 +1352,7 @@ public class ObjectExtValue extends ObjectValue
       return _value;
     }
 
+    @Override
     public StringValue getKey()
     {
       return _key;
@@ -1394,6 +1405,7 @@ public class ObjectExtValue extends ObjectValue
 //      return _value.toValue();
 //    }
 //
+    @Override
     public EnvVar setEnvVar(EnvVar value)
     {
       EnvVar oldValue = _value;//TODO V was: toValue();
@@ -1455,6 +1467,7 @@ public class ObjectExtValue extends ObjectValue
       return new Entry(_key, EnvVar._gen(copy));
     }
 
+    @Override
     public int compareTo(VEntry other)
     {
       if (other == null)

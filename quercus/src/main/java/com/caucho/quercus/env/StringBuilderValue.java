@@ -33,6 +33,7 @@ import com.caucho.quercus.QuercusModuleException;
 import com.caucho.util.CharBuffer;
 import com.caucho.vfs.TempCharBuffer;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -370,10 +371,7 @@ public class StringBuilderValue
   {
     if (_length == 0)
       return false;
-    else if (_length == 1 && _buffer[0] == '0')
-      return false;
-    else
-      return true;
+    else return !(_length == 1 && _buffer[0] == '0');
   }
 
   /**
@@ -660,6 +658,7 @@ public class StringBuilderValue
    * Each character becomes one byte, characters with values above 255 are
    * not correctly preserved.
    */
+  @Override
   public final byte[] toBytes()
   {
     byte[] bytes = new byte[_length];
@@ -676,6 +675,7 @@ public class StringBuilderValue
   /**
    * Returns the character at an index
    */
+  @Override
   public final EnvVar get(Value key)
   {
     return EnvVar._gen(charValueAt(key.toLong()));
@@ -692,9 +692,16 @@ public class StringBuilderValue
     return value;
   }
 
-  /**
-   * Sets the array ref.
-   */
+  @Override
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    setCharValueAt(index.toLong(), value.getOne().toValue());
+
+    return value;
+  }
+
+    /**
+     * Sets the array ref.
+     */
   @Override
   public Value append(Value index, ValueOrVar value)
   {
@@ -820,6 +827,7 @@ public class StringBuilderValue
   /**
    * Returns the first index of the match string, starting from the head.
    */
+  @Override
   public int indexOf(char match)
   {
     final int length = _length;
@@ -958,6 +966,7 @@ public class StringBuilderValue
   /**
    * Returns true if the region matches
    */
+  @Override
   public boolean regionMatches(int offset,
                                char []mBuffer,
                                int mOffset,
@@ -983,10 +992,11 @@ public class StringBuilderValue
   /**
    * Returns true if the region matches
    */
+  @Override
   public boolean regionMatchesIgnoreCase(int offset,
-                                                     char []mBuffer,
-                                                     int mOffset,
-                                                     int mLength)
+                                         char []mBuffer,
+                                         int mOffset,
+                                         int mLength)
   {
     int length = _length;
 
@@ -1042,6 +1052,7 @@ public class StringBuilderValue
   /**
    * Converts to a string builder
    */
+  @Override
   public StringValue copyStringBuilder()
   {
     return new StringBuilderValue(this);
@@ -1093,6 +1104,7 @@ public class StringBuilderValue
   /**
    * Converts to a string builder
    */
+  @Override
   public StringValue toStringBuilder(Env env, StringValue value)
   {
     if (_length + value.length() >= LARGE_BUILDER_THRESHOLD) {
@@ -1410,6 +1422,7 @@ public class StringBuilderValue
   /**
    * Append a buffer to the value.
    */
+  @Override
   public final StringValue append(byte []buf, int offset, int length)
   {
     int end = _length + length;
@@ -1433,6 +1446,7 @@ public class StringBuilderValue
   /**
    * Append a double to the value.
    */
+  @Override
   public final StringValue append(byte []buf)
   {
     return append(buf, 0, buf.length);
@@ -1605,6 +1619,7 @@ public class StringBuilderValue
   /**
    * Sets the length.
    */
+  @Override
   public final void setLength(int offset)
   {
     _length = offset;
@@ -1621,6 +1636,7 @@ public class StringBuilderValue
   /**
    * Return true if the array value is set
    */
+  @Override
   public boolean isset(Value indexV)
   {
     int index = indexV.toInt();
@@ -1637,6 +1653,7 @@ public class StringBuilderValue
    * @param env
    * @param ctx
    */
+  @Override
   public void print(Env env, FeatureExpr ctx)
   {
     env.write(ctx, _buffer, 0, _length);
@@ -1647,6 +1664,7 @@ public class StringBuilderValue
    * @param env
    * @param out
    */
+  @Override
   public void print(Env env, VWriteStream out)
   {
       out.write(VHelper.noCtx(), _buffer, 0, _length);
@@ -1655,6 +1673,7 @@ public class StringBuilderValue
   /**
    * Serializes the value.
    */
+  @Override
   public void serialize(Env env, StringBuilder sb)
   {
     sb.append("s:");
@@ -1730,6 +1749,7 @@ public class StringBuilderValue
     return crc.getValue() & 0xffffffff;
   }
 
+  @Override
   public void ensureAppendCapacity(int newCapacity)
   {
     ensureCapacity(_length + newCapacity);
@@ -2003,6 +2023,7 @@ public class StringBuilderValue
   /**
    * Test for equality
    */
+  @Override
   public boolean equalsIgnoreCase(Object o)
   {
     if (this == o) {
@@ -2078,6 +2099,7 @@ public class StringBuilderValue
    *
    * @param out the writer to the Java source code.
    */
+  @Override
   public void generate(PrintWriter out)
     throws IOException
   {
