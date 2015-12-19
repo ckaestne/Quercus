@@ -8,7 +8,7 @@ addons:
 scala: 2.11.7
 jdk: oraclejdk8
 sudo: false
-script: sbt "project quercus" test
+script: sbt test
 services:
   - mysql
 before_script: 

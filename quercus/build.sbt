@@ -1,11 +1,6 @@
 import com.typesafe.sbt.SbtAspectj.{ Aspectj, aspectjSettings, compiledClasses }
 import com.typesafe.sbt.SbtAspectj.AspectjKeys.{ inputs, weave }
 
-scalaVersion := "2.11.7"
-
-testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
-
-libraryDependencies += "junit" % "junit" % "4.12" % "test"
 
 libraryDependencies += "javax.jms" % "jms-api" % "1.1-rev-1"
 
@@ -19,8 +14,6 @@ libraryDependencies += "de.fosd.typechef" % "conditionallib_2.11" % "0.4.1" % "t
 
 libraryDependencies += "net.liftweb" %% "lift-testkit" % "2.6.2" % "test"
 
-libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
-
 libraryDependencies += "org.bitbucket.cowwoc.diff-match-patch" % "diff-match-patch" % "1.0" % "test"
 
 libraryDependencies += "org.scala-lang.modules" % "scala-java8-compat_2.11" % "0.7.0" % "test"
@@ -29,12 +22,7 @@ libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
 
 libraryDependencies += "com.google.code.findbugs" % "jsr305" % "3.0.1"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
-
 jacoco.settings
-
-jacoco.reportFormats in jacoco.Config := Seq(
-  de.johoop.jacoco4sbt.XMLReport(encoding = "utf-8"))
 
 //libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
 //
@@ -44,10 +32,6 @@ jacoco.reportFormats in jacoco.Config := Seq(
 //    "org.checkerframework.checker.nullness.NullnessChecker", "-AprintErrorStack",
 //        "-Xbootclasspath/p:checker/dist/jdk8.jar")
 
-
-parallelExecution in Test := false
-
-parallelExecution in jacoco.Config := false
 
 /**
   * AOP used for runtime checking of @Notnull annotations
