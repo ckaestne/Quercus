@@ -173,6 +173,7 @@ class PHPTest_lang extends AbstractPHPTest {
   @Ignore("FAILING: This test is failing with Quercus baseline")@Test def broken500_func_get_arg_004() { testFile("phptest/src/test/resources/lang/func_get_arg.004.phpt") }
   @Test def test501_func_get_arg_005() { testFile("phptest/src/test/resources/lang/func_get_arg.005.phpt") }
   @Test def test502_func_get_args_001() { testFile("phptest/src/test/resources/lang/func_get_args.001.phpt") }
+  @Ignore("V: not intending to support this; would require tracking which values have been changed to vars due to assignments")
   @Test def test503_func_get_args_002() { testFile("phptest/src/test/resources/lang/func_get_args.002.phpt") }
   @Ignore("FAILING: This test is failing with Quercus baseline")@Test def test504_func_get_args_003() { testFile("phptest/src/test/resources/lang/func_get_args.003.phpt") }
   @Ignore("FAILING: This test is failing with Quercus baseline")@Test def test505_func_get_args_004() { testFile("phptest/src/test/resources/lang/func_get_args.004.phpt") }
