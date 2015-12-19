@@ -217,6 +217,24 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         assertEquiv(a.end(t), V.choice(foo, x, z))
 
     }
+    it should "support conditional pop operation" in {
+        val a = new ArrayValueImpl()
+        a.put(t, V.one(x))
+        a.pop(null, t) should be (V.one(x))
+        a.isEmpty should be (true)
+        a.pop(null, t) should be (V.one(NullValue.NULL))
+
+        a.put(t, V.one(x))
+        a.put(bar, V.one(y))
+
+        a.pop(null, t) should be (V.choice(bar,  y, x))
+        a.pop(null, t) should be (V.choice(bar,  x, NullValue.NULL))
+        a.pop(null, t) should be (V.one(NullValue.NULL))
+
+        a.put(t, V.one(x))
+        a.pop(null, foo) should be (V.choice(foo,  x, NullValue.NULL))
+        a.pop(null, t) should be (V.choice(foo,  NullValue.NULL, x))
+    }
 
 
     def assertEquiv(actual: V[_ <: Any], expected: V[_ <: Any]) = {

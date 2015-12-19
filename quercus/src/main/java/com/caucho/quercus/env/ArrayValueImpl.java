@@ -1180,14 +1180,70 @@ public class ArrayValueImpl extends ArrayValue
    */
   @Override
   public V<? extends Value> pop(Env env, FeatureExpr ctx) {
-    throw new UnimplementedVException();
-//    if (_isDirty)
-//      copyOnWrite();
-//
-//    if (_tail != null)
-//      return remove(ctx, _tail.getKey());
-//    else
-//      return V.one(NullValue.NULL);
+    if (_isDirty)
+      copyOnWrite();
+
+    V<? extends Value> result = _pop(ctx, _tail);
+
+    _nextAvailableIndex = null;
+    reset(ctx);
+    checkInvariants();
+
+    return result;
+  }
+
+  private V<? extends Value> _pop(FeatureExpr ctx, Entry entry) {
+    V<? extends Value> result = V.one(NullValue.NULL);
+
+    if (entry != null) {
+      FeatureExpr c = entry.getCondition();
+      Entry prev = entry._prev;
+      //tail condition broader than context
+      if (c.and(ctx).isSatisfiable()) {
+        FeatureExpr remainingEntryCondition = c.andNot(ctx);
+        result = V.choice(c.and(ctx), entry.getValue_(), result);
+        if (remainingEntryCondition.isSatisfiable()) {
+          replaceEntry(entry, new Entry(remainingEntryCondition, entry.getKey(), entry.getEnvVar()));
+        }
+        else
+          removeEntry(entry);
+      }
+      FeatureExpr remainingPopCondition = ctx.andNot(c);
+      if (remainingPopCondition.isSatisfiable())
+        result = V.choice(remainingPopCondition, _pop(remainingPopCondition, prev), result);
+    }
+    return result;
+  }
+
+  private void removeEntry(Entry oldEntry) {
+    if (oldEntry.getPrev()!=null)
+      oldEntry.getPrev().setNext(oldEntry.getNext());
+    if (oldEntry.getNext()!=null)
+      oldEntry.getNext().setPrev(oldEntry.getPrev());
+    if (_head==oldEntry)
+      _head=oldEntry.getNext();
+    if (_tail==oldEntry)
+      _tail=oldEntry.getPrev();
+
+    _lookupMap.put(oldEntry.getKey(), V.choice(oldEntry.getCondition(), V.one(null), _lookupMap.get(oldEntry.getKey())));
+    incSize(oldEntry.getCondition(), -1);
+  }
+
+  private void replaceEntry(Entry oldEntry, Entry newEntry) {
+    assert oldEntry.getCondition().implies(newEntry.getCondition()).isTautology() : "function only intended to reduce the scope of an entry";
+    if (oldEntry.getPrev()!=null)
+      oldEntry.getPrev().setNext(newEntry);
+    if (oldEntry.getNext()!=null)
+      oldEntry.getNext().setPrev(newEntry);
+    newEntry.setPrev(oldEntry.getPrev());
+    newEntry.setNext(oldEntry.getNext());
+    if (_head==oldEntry)
+      _head=newEntry;
+    if (_tail==oldEntry)
+      _tail=newEntry;
+
+    _lookupMap.put(oldEntry.getKey(), V.choice(oldEntry.getCondition(), V.choice(newEntry.getCondition(), V.one(newEntry), V.one(null)), _lookupMap.get(oldEntry.getKey())));
+    incSize(oldEntry.getCondition().andNot(newEntry.getCondition()), -1);
   }
 
   @Override
