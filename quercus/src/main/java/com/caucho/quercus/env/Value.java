@@ -3052,7 +3052,6 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
                            VWriteStream out,
                            int depth,
                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
   {
     if (valueSet.get(this) != null) {
       out.print(VHelper.noCtx(), "*recursion*");
@@ -3072,9 +3071,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     out.print(VHelper.noCtx(), toString());
   }
 

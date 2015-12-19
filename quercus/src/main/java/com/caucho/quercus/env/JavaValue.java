@@ -183,9 +183,7 @@ public class JavaValue extends ObjectValue
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     if (_classDef.printRImpl(env, _object, out, depth, valueSet)) {
       return;
     }
@@ -534,7 +532,6 @@ public class JavaValue extends ObjectValue
   }
 
   private static void printRDepth(VWriteStream out, int depth)
-    throws IOException
   {
     for (int i = 0; i < 8 * depth; i++)
       out.print(VHelper.noCtx(), ' ');

@@ -825,9 +825,7 @@ abstract public class JavaAdapter extends ArrayValue
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     out.println(VHelper.noCtx(), "Array");
     printDepth(out, 8 * depth);
     out.println(VHelper.noCtx(), "(");

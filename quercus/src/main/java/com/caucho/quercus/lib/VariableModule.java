@@ -539,7 +539,6 @@ public class VariableModule extends AbstractQuercusModule {
                               @ReadOnly Value v,
                               @Optional boolean isReturn)
   {
-    try {
       VWriteStream out;
 
       if (isReturn) {
@@ -559,10 +558,6 @@ public class VariableModule extends AbstractQuercusModule {
 
         return BooleanValue.TRUE;
       }
-    }
-    catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   private static void printDepth(VWriteStream out, int depth)

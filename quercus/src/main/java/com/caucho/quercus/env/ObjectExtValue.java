@@ -1056,9 +1056,8 @@ public class ObjectExtValue extends ObjectValue
     }
 
     for (VEntry mapEntry : entrySet()) {
-      ObjectExtValue.Entry entry = (ObjectExtValue.Entry) mapEntry;
 
-      entry.varDumpImpl(env, out, depth + 1, valueSet);
+      entryVarDumpImpl(env, mapEntry, out, depth + 1, valueSet);
     }
 
     printDepth(out, 2 * depth);
@@ -1070,9 +1069,7 @@ public class ObjectExtValue extends ObjectValue
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     out.print(VHelper.noCtx(), getName());
     out.print(VHelper.noCtx(), ' ');
     out.println(VHelper.noCtx(), "Object");
@@ -1080,9 +1077,8 @@ public class ObjectExtValue extends ObjectValue
     out.println(VHelper.noCtx(), "(");
 
     for (VEntry mapEntry : entrySet()) {
-      ObjectExtValue.Entry entry = (ObjectExtValue.Entry) mapEntry;
 
-      entry.printRImpl(env, out, depth + 1, valueSet);
+      entryPrintRImpl(env, mapEntry, out, depth + 1, valueSet);
     }
 
     printDepth(out, 4 * depth);
@@ -1313,191 +1309,192 @@ public class ObjectExtValue extends ObjectValue
     }
   }
 
-  public final static class Entry
-    implements VEntry,
-               Comparable<VEntry>
-  {
-    private final StringValue _key;
-
-    private EnvVar _value;
-
-    public Entry(StringValue key)
-    {
-      _key = key;
-      _value = EnvVar._gen(UnsetValue.UNSET);
-    }
-
-    public Entry(StringValue key, EnvVar value)
-    {
-      _key = key;
-      _value = value;
-    }
-
-    public Entry(Env env, IdentityHashMap<Value,EnvVar> map, Entry entry)
-    {
-      _key = entry._key;
-
-      throw new UnimplementedVException();
-//      _value = entry._value.copy(env, map);
-    }
-
-    @Override
-    public EnvVar getEnvVar()
-    {
-      return _value;
-    }
-
-
-    public EnvVar getRawValue()
-    {
-      return _value;
-    }
-
-    @Override
-    public StringValue getKey()
-    {
-      return _key;
-    }
-
-    @Override
-    public FeatureExpr getCondition() {
-      return VHelper.noCtx();
-    }
-
-    public boolean isPublic()
-    {
-      return ! isPrivate() && ! isProtected();
-    }
-
-    public boolean isProtected()
-    {
-      return ClassField.isProtected(_key);
-    }
-
-    public boolean isPrivate()
-    {
-      return ClassField.isPrivate(_key);
-    }
-
-    public V<? extends Value> toValue()
-    {
-      // The value may be a var
-      // XXX: need test
-      return _value.getValue();
-    }
-
-//    /**
-//     * Argument used/declared as a ref.
-//     */
-//    public Var toRefVar()
-//    {
-//      Var var = _value.toLocalVarDeclAsRef();
+//  public final static class Entry
+//    implements VEntry,
+//               Comparable<VEntry>
+//  {
+//    private final StringValue _key;
 //
-//      _value = var;
+//    private EnvVar _value;
 //
-//      return var;
-//    }
-
-//    /**
-//     * Converts to an argument value.
-//     */
-//    public Value toArgValue()
+//    public Entry(StringValue key)
 //    {
-//      return _value.toValue();
+//      _key = key;
+//      _value = EnvVar._gen(UnsetValue.UNSET);
 //    }
 //
-    @Override
-    public EnvVar setEnvVar(EnvVar value)
-    {
-      EnvVar oldValue = _value;//TODO V was: toValue();
-
-      _value = value;
-
-      return oldValue;
-    }
-
-//    /**
-//     * Converts to a variable reference (for function arguments)
-//     */
-//    public Value toRef()
+//    public Entry(StringValue key, EnvVar value)
 //    {
-//      Value value = _value;
+//      _key = key;
+//      _value = value;
+//    }
 //
-//      if (value instanceof Var)
-//        return new ArgRef((Var) value);
-//      else {
-//        Var var = new VarImpl(_value);
+//    public Entry(Env env, IdentityHashMap<Value,EnvVar> map, Entry entry)
+//    {
+//      _key = entry._key;
 //
-//        _value = var;
+//      throw new UnimplementedVException();
+////      _value = entry._value.copy(env, map);
+//    }
 //
-//        return new ArgRef(var);
+//    @Override
+//    public EnvVar getEnvVar()
+//    {
+//      return _value;
+//    }
+//
+//
+//    public EnvVar getRawValue()
+//    {
+//      return _value;
+//    }
+//
+//    @Override
+//    public StringValue getKey()
+//    {
+//      return _key;
+//    }
+//
+//    @Override
+//    public FeatureExpr getCondition() {
+//      return VHelper.noCtx();
+//    }
+//
+//    public boolean isPublic()
+//    {
+//      return ! isPrivate() && ! isProtected();
+//    }
+//
+//    public boolean isProtected()
+//    {
+//      return ClassField.isProtected(_key);
+//    }
+//
+//    public boolean isPrivate()
+//    {
+//      return ClassField.isPrivate(_key);
+//    }
+//
+//    public V<? extends Value> toValue()
+//    {
+//      // The value may be a var
+//      // XXX: need test
+//      return _value.getValue();
+//    }
+//
+////    /**
+////     * Argument used/declared as a ref.
+////     */
+////    public Var toRefVar()
+////    {
+////      Var var = _value.toLocalVarDeclAsRef();
+////
+////      _value = var;
+////
+////      return var;
+////    }
+//
+////    /**
+////     * Converts to an argument value.
+////     */
+////    public Value toArgValue()
+////    {
+////      return _value.toValue();
+////    }
+////
+//    @Override
+//    public EnvVar setEnvVar(EnvVar value)
+//    {
+//      EnvVar oldValue = _value;//TODO V was: toValue();
+//
+//      _value = value;
+//
+//      return oldValue;
+//    }
+//
+////    /**
+////     * Converts to a variable reference (for function arguments)
+////     */
+////    public Value toRef()
+////    {
+////      Value value = _value;
+////
+////      if (value instanceof Var)
+////        return new ArgRef((Var) value);
+////      else {
+////        Var var = new VarImpl(_value);
+////
+////        _value = var;
+////
+////        return new ArgRef(var);
+////      }
+////    }
+//
+////    /**
+////     * Converts to a variable reference (for function  arguments)
+////     */
+////    public Value toArgRef()
+////    {
+////      Value value = _value;
+////
+////      if (value instanceof Var)
+////        return new ArgRef((Var) value);
+////      else {
+////        Var var = new VarImpl(_value);
+////
+////        _value = var;
+////
+////        return new ArgRef(var);
+////      }
+////    }
+//
+//    public V<? extends Var> toArg()
+//    {
+//      return _value.getVar();
+//    }
+//
+//    Entry copyTree(Env env, CopyRoot root)
+//    {
+//      Value copy = root.getCopy(_value.getOne());
+//
+//      if (copy == null) {
+//        copy = _value.getOne().copyTree(env, root);
 //      }
+//
+//      return new Entry(_key, EnvVar._gen(copy));
 //    }
-
-//    /**
-//     * Converts to a variable reference (for function  arguments)
-//     */
-//    public Value toArgRef()
+//
+//    @Override
+//    public int compareTo(VEntry other)
 //    {
-//      Value value = _value;
+//      if (other == null)
+//        return 1;
 //
-//      if (value instanceof Var)
-//        return new ArgRef((Var) value);
-//      else {
-//        Var var = new VarImpl(_value);
+//      Value thisKey = getKey();
+//      Value otherKey = other.getKey();
 //
-//        _value = var;
+//      if (thisKey == null)
+//        return otherKey == null ? 0 : -1;
 //
-//        return new ArgRef(var);
-//      }
+//      if (otherKey == null)
+//        return 1;
+//
+//      return thisKey.cmp(otherKey);
 //    }
-
-    public V<? extends Var> toArg()
+//
+    public void entryVarDumpImpl(Env env,
+                                 VEntry entry, VWriteStream out,
+                                 int depth,
+                                 IdentityHashMap<Value, String> valueSet)
     {
-      return _value.getVar();
-    }
-
-    Entry copyTree(Env env, CopyRoot root)
-    {
-      Value copy = root.getCopy(_value.getOne());
-
-      if (copy == null) {
-        copy = _value.getOne().copyTree(env, root);
-      }
-
-      return new Entry(_key, EnvVar._gen(copy));
-    }
-
-    @Override
-    public int compareTo(VEntry other)
-    {
-      if (other == null)
-        return 1;
-
-      Value thisKey = getKey();
-      Value otherKey = other.getKey();
-
-      if (thisKey == null)
-        return otherKey == null ? 0 : -1;
-
-      if (otherKey == null)
-        return 1;
-
-      return thisKey.cmp(otherKey);
-    }
-
-    public void varDumpImpl(Env env,
-                            VWriteStream out,
-                            int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    {
-      StringValue name = ClassField.getOrdinaryName(getKey());
+      StringValue key = entry.getKey().toStringValue();
+      StringValue name = ClassField.getOrdinaryName(key);
       String suffix = "";
 
-      if (isProtected()) {
+      if (isProtected(key)) {
         suffix = ":protected";
       }
-      else if (isPrivate()) {
+      else if (isPrivate(key)) {
         suffix = ":private";
       }
 
@@ -1506,47 +1503,47 @@ public class ObjectExtValue extends ObjectValue
 
       printDepth(out, 2 * depth);
 
-      _value.getValue().getOne().varDump(env, out, depth, valueSet);
+      entry.getEnvVar().getValue().getOne().varDump(env, out, depth, valueSet);
 
       out.println(VHelper.noCtx());
     }
-
-    protected void printRImpl(Env env,
-                              VWriteStream out,
-                              int depth,
-                              IdentityHashMap<Value, String> valueSet)
-      throws IOException
+//
+    protected void entryPrintRImpl(Env env,
+                                   VEntry entry, VWriteStream out,
+                                   int depth,
+                                   IdentityHashMap<Value, String> valueSet)
     {
-      StringValue name = ClassField.getOrdinaryName(getKey());
+      StringValue key = entry.getKey().toStringValue();
+      StringValue name = ClassField.getOrdinaryName(key);
       String suffix = "";
 
-      if (isProtected()) {
+      if (isProtected(key)) {
         suffix = ":protected";
       }
-      else if (isPrivate()) {
+      else if (isPrivate(key)) {
         suffix = ":private";
       }
 
       printDepth(out, 4 * depth);
       out.print(VHelper.noCtx(), "[" + name + suffix + "] => ");
 
-      _value.getOne().printR(env, out, depth + 1, valueSet);
+      entry.getEnvVar().getOne().printR(env, out, depth + 1, valueSet);
 
       out.println(VHelper.noCtx());
     }
-
-    private void printDepth(VWriteStream out, int depth)
-    {
-      for (int i = 0; i < depth; i++)
-        out.print(VHelper.noCtx(), ' ');
-    }
-
-    @Override
-    public String toString()
-    {
-      return "ObjectExtValue.Entry[" + getKey() + "]";
-    }
-  }
+//
+//    private void printDepth(VWriteStream out, int depth)
+//    {
+//      for (int i = 0; i < depth; i++)
+//        out.print(VHelper.noCtx(), ' ');
+//    }
+//
+//    @Override
+//    public String toString()
+//    {
+//      return "ObjectExtValue.Entry[" + getKey() + "]";
+//    }
+//  }
 
 
   static private

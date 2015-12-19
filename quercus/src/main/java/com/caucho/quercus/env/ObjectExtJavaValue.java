@@ -38,7 +38,6 @@ import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -163,9 +162,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     if (_object == null) {
       _object = createJavaObject(Env.getInstance());
     }

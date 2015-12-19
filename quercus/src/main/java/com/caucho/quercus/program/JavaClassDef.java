@@ -1460,9 +1460,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
                             Object obj,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
 
     try {
       if (_printRImpl == null) {

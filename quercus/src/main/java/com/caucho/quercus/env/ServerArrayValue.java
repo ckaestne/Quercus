@@ -36,7 +36,6 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VWriteStream;
 
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -344,9 +343,7 @@ public class ServerArrayValue extends ArrayValueImpl
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     if (! _isFilled)
       fillMap();
 

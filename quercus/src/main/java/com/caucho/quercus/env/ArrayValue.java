@@ -34,7 +34,6 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
-import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -1671,9 +1670,7 @@ abstract public class ArrayValue extends Value {
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     out.println(VHelper.noCtx(), "Array");
     printDepth(out, 4 * depth);
     out.println(VHelper.noCtx(), "(");
@@ -1964,20 +1961,14 @@ abstract public class ArrayValue extends Value {
     protected void printRImpl(Env env,
                               VWriteStream out,
                               int depth,
-                              IdentityHashMap<Value, String> valueSet)
-      throws IOException
-    {
+                              IdentityHashMap<Value, String> valueSet) {
       printDepth(out, 4 * (depth + 1));
       out.print(VHelper.noCtx(), "[");
       out.print(VHelper.noCtx(), _key);
       out.print(VHelper.noCtx(), "] => ");
       if (getRawValue() != null) {
         getRawValue().getValue().foreach((a) -> {
-          try {
             a.printR(env, out, depth + 2, valueSet);
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
         });
       }
 

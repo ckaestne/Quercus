@@ -32,7 +32,6 @@ package com.caucho.quercus.env;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
-import java.io.IOException;
 import java.util.IdentityHashMap;
 
 /**
@@ -113,9 +112,7 @@ public class ResourceValue extends Value
   protected void printRImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                            IdentityHashMap<Value, String> valueSet) {
     out.print(VHelper.noCtx(), "resource(" + toString(env) + ")");
   }
 }
