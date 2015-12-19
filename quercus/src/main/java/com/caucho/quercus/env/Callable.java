@@ -102,23 +102,23 @@ public interface Callable {
     return call(env, ctx, new V[] {a1});
   }
 
-  @Deprecated@VDeprecated
+  @Deprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1, Value a2){
     return this.call(env, ctx, V.one(a1), V.one(a2));
   }
-  @Deprecated@VDeprecated
+  @Deprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1){
     return this.call(env, ctx, V.one(a1));
   }
-  @Deprecated@VDeprecated
+  @Deprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value[] args){
     return this.call(env, ctx, VHelper.toVArray(args));
   }
-  @Deprecated@VDeprecated
+  @Deprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3){
     return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3));
   }
-  @Deprecated@VDeprecated
+  @Deprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5){
     return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3), V.one(a4), V.one(a5));
   }

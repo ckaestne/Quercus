@@ -853,7 +853,7 @@ public abstract class Var
   }
 
   @Deprecated@VDeprecated // call only when necessary to make refactoring work; likely broke things
-  public Value makeValue() {
+  public final Value makeValue() {
     return toValue();
   }
 //

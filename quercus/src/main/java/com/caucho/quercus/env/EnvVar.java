@@ -62,7 +62,7 @@ abstract public class EnvVar
   abstract public V<? extends Value> getValue();
 
   @Deprecated@VDeprecated
-  public Value getOne() { return getValue().getOne(); }
+  public final Value getOne() { return getValue().getOne(); }
 
   /**
    * Sets the current value.

@@ -6416,7 +6416,7 @@ public class Env
    * A fatal runtime error.
    */
   @Deprecated@VDeprecated//use V method instead
-  public Value error(String msg, Location location)
+  public final Value error(String msg, Location location)
   {
     return error(VHelper.noCtx(), msg, location);
   }
@@ -6794,7 +6794,7 @@ public class Env
 
 
   @Deprecated@VDeprecated
-  public Value error(int code, String msg, Location location) {
+  public final Value error(int code, String msg, Location location) {
     return error(VHelper.noCtx(),code,msg,location);
   }
 

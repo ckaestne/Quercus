@@ -13,7 +13,7 @@ public interface ValueOrVar {
     /** throws an exception if object is not a Var */
     Var _var();
 
-    @Deprecated@VDeprecated
+    @Deprecated
     default Value toValue() { return isVar() ? _var().getValue().getOne() : _value(); }
 
     default Var toVar() { return isVar() ? _var() : _value().toVar(); }

@@ -873,7 +873,7 @@ public class ArrayValueImpl extends ArrayValue
    * @return the key if it is found in the array, NULL otherwise
    */
   @Override@Deprecated@VDeprecated
-  public V<? extends Value> contains(Value value) {
+  public final V<? extends Value> contains(Value value) {
     return this.contains(V.one(value));
   }
 
@@ -894,7 +894,7 @@ public class ArrayValueImpl extends ArrayValue
    */
   @Deprecated@VDeprecated
   @Override
-  public V<? extends Value> containsStrict(Value value) {
+  public final V<? extends Value> containsStrict(Value value) {
     return this.containsStrict(V.one(value));
   }
 
