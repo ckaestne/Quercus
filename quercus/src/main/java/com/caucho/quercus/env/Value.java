@@ -2673,10 +2673,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   @Deprecated@VDeprecated("use V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) instead")
   final public EnvVar put(Value index, EnvVar value)
   {
-    Env.getCurrent().warning(L.l("{0} cannot be used as an array",
-                                 toDebugString()));
-
-    return value;
+    return EnvVar.fromValuesOrVar(put(VHelper.noCtx(), index, value.getValue()));
   }
 
   /**

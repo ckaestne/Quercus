@@ -31,6 +31,7 @@ package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.annotation.VDeprecated;
 
 /**
@@ -105,6 +106,11 @@ abstract public class EnvVar
   }
   public static EnvVar fromValues(V<? extends Value> v) {
     return new EnvVarImpl(V.one(new VarImpl(v)));
+  }
+  public static EnvVar fromValuesOrVar(V<? extends ValueOrVar> v) {
+    EnvVar result = EnvVar.fromValue(NullValue.NULL);
+    result.setRef(VHelper.noCtx(), v);
+    return result;
   }
 
   public abstract EnvVar copy();
