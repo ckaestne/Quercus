@@ -31,6 +31,7 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -445,9 +446,10 @@ public class NullValue extends Value
    * string update ($a[0] = 'A').  Creates an array automatically if
    * necessary.
    */
-  public Value append(Value index, ValueOrVar value)
+  @Override
+  public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
-    return new ArrayValueImpl().append(index, value);
+    return new ArrayValueImpl().append(ctx, index, value);
   }
 
   /**

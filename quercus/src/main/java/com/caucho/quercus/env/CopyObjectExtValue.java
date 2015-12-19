@@ -189,11 +189,11 @@ public class CopyObjectExtValue extends ObjectExtValue
    * Sets the array value with the given key.
    */
   @Override
-  public Value put(Value key, Value value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value)
   {
     _root.setModified();
 
-    return super.put(key, value);
+    return super.put(ctx, key, value);
   }
 
   /**

@@ -32,6 +32,8 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.vfs.WriteStream;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -609,9 +611,10 @@ public class UnicodeBuilderValue
    * Sets the array ref.
    */
   @Override
-  public Value put(Value index, Value value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
-    setCharValueAt(index.toLong(), value);
+    VHelper.assertTrue(ctx);
+    setCharValueAt(index.toLong(), value.getOne().toValue());
 
     return value;
   }
@@ -620,12 +623,12 @@ public class UnicodeBuilderValue
    * Sets the array ref.
    */
   @Override
-  public Value append(Value index, ValueOrVar value)
+  public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
     if (_length > 0)
-      return setCharValueAt(index.toLong(), value.toValue());
+      return setCharValueAt(index.toLong(), value.getOne().toValue());
     else
-      return new ArrayValueImpl().append(index, value);
+      return new ArrayValueImpl().append(ctx, index, value);
   }
 
   /**

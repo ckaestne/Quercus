@@ -57,6 +57,7 @@ import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHashMap;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import javax.annotation.Nonnull;
 import javax.script.Bindings;
@@ -6414,7 +6415,7 @@ public class Env
   /**
    * A fatal runtime error.
    */
-  @Deprecated//use V method instead
+  @Deprecated@VDeprecated//use V method instead
   public Value error(String msg, Location location)
   {
     return error(VHelper.noCtx(), msg, location);
@@ -6792,7 +6793,7 @@ public class Env
   }
 
 
-  @Deprecated
+  @Deprecated@VDeprecated
   public Value error(int code, String msg, Location location) {
     return error(VHelper.noCtx(),code,msg,location);
   }

@@ -33,6 +33,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -60,14 +61,14 @@ public abstract class Var
    * Sets the value.
    */
 
-  @Deprecated//("workaround for V migration, avoid")
+  @Deprecated@VDeprecated//("workaround for V migration, avoid")
   final public Var set_(FeatureExpr ctx, V<? extends ValueOrVar> value) {
       return set(ctx, value.flatMap((v)-> v.isVar() ? v._var().getValue() : V.one(v._value())));
   }
 
-  @Deprecated//("workaround for V migration, avoid")
+  @Deprecated@VDeprecated//("workaround for V migration, avoid")
   final public Var set(Value value) { return set_(value);}
-  @Deprecated//("workaround for V migration, avoid")
+  @Deprecated@VDeprecated//("workaround for V migration, avoid")
   final public Var set_(Value value) {
     return set(VHelper.noCtx(), V.one(value));
   }
@@ -851,7 +852,7 @@ public abstract class Var
     return getValue().getOne();
   }
 
-  @Deprecated // call only when necessary to make refactoring work; likely broke things
+  @Deprecated@VDeprecated // call only when necessary to make refactoring work; likely broke things
   public Value makeValue() {
     return toValue();
   }

@@ -1,6 +1,7 @@
 package com.caucho.quercus.env;
 
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 /**
  * Created by ckaestne on 11/28/2015.
@@ -12,7 +13,7 @@ public interface ValueOrVar {
     /** throws an exception if object is not a Var */
     Var _var();
 
-    @Deprecated
+    @Deprecated@VDeprecated
     default Value toValue() { return isVar() ? _var().getValue().getOne() : _value(); }
 
     default Var toVar() { return isVar() ? _var() : _value().toVar(); }

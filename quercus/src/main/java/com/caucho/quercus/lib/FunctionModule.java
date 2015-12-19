@@ -30,8 +30,8 @@
 package com.caucho.quercus.lib;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.annotation.VParamType;
-import com.caucho.quercus.annotation.VVariational;
+import edu.cmu.cs.varex.annotation.VParamType;
+import edu.cmu.cs.varex.annotation.VVariational;
 import com.caucho.quercus.annotation.VariableArguments;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.CallExpr;

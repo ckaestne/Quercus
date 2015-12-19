@@ -214,17 +214,19 @@ public class ServerArrayValue extends ArrayValueImpl
   /**
    * Adds a new value.
    */
-  public ArrayValue append(Value key, ValueOrVar value)
+  @Override
+  public ArrayValue append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
     if (! _isFilled)
       fillMap();
 
-    return super.append(key, value);
+    return super.append(ctx, index, value);
   }
 
   /**
    * Adds a new value.
    */
+  @Override
   public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     if (! _isFilled)

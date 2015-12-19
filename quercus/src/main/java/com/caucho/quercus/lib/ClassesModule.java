@@ -39,6 +39,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.annotation.VParamType;
+import edu.cmu.cs.varex.annotation.VVariational;
 
 import java.util.HashSet;
 import java.util.Iterator;

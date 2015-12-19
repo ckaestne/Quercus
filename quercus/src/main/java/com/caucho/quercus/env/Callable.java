@@ -33,6 +33,8 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.annotation.VDeprecated;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -100,23 +102,23 @@ public interface Callable {
     return call(env, ctx, new V[] {a1});
   }
 
-  @Deprecated
+  @Deprecated@VDeprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1, Value a2){
     return this.call(env, ctx, V.one(a1), V.one(a2));
   }
-  @Deprecated
+  @Deprecated@VDeprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1){
     return this.call(env, ctx, V.one(a1));
   }
-  @Deprecated
+  @Deprecated@VDeprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value[] args){
     return this.call(env, ctx, VHelper.toVArray(args));
   }
-  @Deprecated
+  @Deprecated@VDeprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3){
     return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3));
   }
-  @Deprecated
+  @Deprecated@VDeprecated
   default @Nonnull V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value a1, Value a2, Value a3, Value a4, Value a5){
     return this.call(env, ctx, V.one(a1), V.one(a2), V.one(a3), V.one(a4), V.one(a5));
   }

@@ -41,6 +41,7 @@ import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -1367,7 +1368,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
 
 
 
-  @Deprecated
+  @Deprecated@VDeprecated
   public final V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, Value... args) {
     return call(env, ctx, VHelper.toVArray(args));
   }
@@ -1466,7 +1467,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   }
 
 
-  @Deprecated
+  @Deprecated@VDeprecated
   public final V<? extends ValueOrVar> callMethod(Env env,
                                              FeatureExpr ctx, StringValue methodName,
                                              Value... args)
@@ -2241,8 +2242,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     }
   }
 
-  @Deprecated    //for V transformation only
-  public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, ValueOrVar object) {
+  @Deprecated@VDeprecated    //for V transformation only
+  final public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, ValueOrVar object) {
     return putField(env, ctx, name, V.one(object));
   }
   /**
@@ -2431,8 +2432,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     putThisField(env, VHelper.noCtx(), name, V.one(value));
   }
 
-  @Deprecated//V transformation
-  public V<? extends Value> putThisField(Env env, FeatureExpr ctx, StringValue name, ValueOrVar value) {
+  @Deprecated@VDeprecated//V transformation
+  final public V<? extends Value> putThisField(Env env, FeatureExpr ctx, StringValue name, ValueOrVar value) {
     return putThisField(env, ctx, name, V.one(value));
   }
 
@@ -2520,8 +2521,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   //
 
 
-  @Deprecated // V transformation
-  public Value putField(Env env, String name, Value value)
+  @Deprecated@VDeprecated // V transformation
+  final public Value putField(Env env, String name, Value value)
   {
     return putThisField(env, VHelper.noCtx(), env.createString(name), V.one(value)).getOne();
   }
@@ -2641,14 +2642,14 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return value;
   }
 
-  @Deprecated//for V transformation only
-  public Value put(Value index, Value value) {
+  @Deprecated@VDeprecated("V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)")//for V transformation only
+  final public Value put(Value index, Value value) {
     put(index,EnvVar._gen(value));
     return value;
   }
 
-  @Deprecated//for V transformation only
-  public ValueOrVar put(Value index, ValueOrVar value) {
+  @Deprecated@VDeprecated("V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)")//for V transformation only
+  final public ValueOrVar put(Value index, ValueOrVar value) {
     if (value.isVar())
       put(index,new EnvVarImpl(V.one(value._var())));
     else
@@ -2665,8 +2666,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Sets the array ref and returns the value
    */
-  @Deprecated
-  public EnvVar put(Value index, EnvVar value)
+  @Deprecated@VDeprecated("use V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) instead")
+  final public EnvVar put(Value index, EnvVar value)
   {
     Env.getCurrent().warning(L.l("{0} cannot be used as an array",
                                  toDebugString()));
@@ -2677,7 +2678,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Sets the array ref.
    */
-  @Deprecated
+  @Deprecated@VDeprecated
   public final Value put(Value index, EnvVar value,
                          Value innerIndex, Value innerValue)
   {
@@ -2703,8 +2704,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return value;
   }
 
-  @Deprecated //for transition to V implementation only
-  public V<? extends ValueOrVar> put(FeatureExpr ctx, ValueOrVar value) {
+  @Deprecated@VDeprecated //for transition to V implementation only
+  final public V<? extends ValueOrVar> put(FeatureExpr ctx, ValueOrVar value) {
     return this.put(ctx, V.one(value));
   }
 
@@ -2714,8 +2715,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * string update ($a[0] = 'A').  Creates an array automatically if
    * necessary.
    */
-  @Deprecated //for transition to V implementation only
-  public Value append(Value index, ValueOrVar value)
+  @Deprecated@VDeprecated("Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)") //for transition to V implementation only
+  final public Value append(Value index, ValueOrVar value)
   {
     Value array = toAutoArray();
 
@@ -2746,8 +2747,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Appends a new array.
    */
-  @Deprecated //for transition to V implementation only
-  public Value putArray(Env env)
+  @Deprecated@VDeprecated //for transition to V implementation only
+  final public Value putArray(Env env)
   {
     Value value = new ArrayValueImpl();
 
@@ -2864,8 +2865,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * nonvariational print method
      */
-  @Deprecated
-  public void print(Env env, WriteStream out)
+  @Deprecated@VDeprecated
+  final public void print(Env env, WriteStream out)
   {
     try {
       out.print(toString(env));
@@ -3102,8 +3103,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return this;
   }
 
-  @Deprecated //introduced for V transformation as warning
-  public Var makeVar() {
+  @Deprecated@VDeprecated //introduced for V transformation as warning
+  final public Var makeVar() {
     return toVar();
   }
 }

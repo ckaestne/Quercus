@@ -29,11 +29,11 @@
 
 package com.caucho.quercus.lib;
 
-import com.caucho.quercus.annotation.VParamType;
+import edu.cmu.cs.varex.annotation.VParamType;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
-import com.caucho.quercus.annotation.VSideeffectFree;
-import com.caucho.quercus.annotation.VVariational;
+import edu.cmu.cs.varex.annotation.VSideeffectFree;
+import edu.cmu.cs.varex.annotation.VVariational;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;

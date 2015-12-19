@@ -34,6 +34,7 @@ import com.caucho.quercus.marshal.Marshal;
 import com.caucho.quercus.marshal.MarshalFactory;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;

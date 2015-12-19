@@ -120,9 +120,9 @@ public class CopyArrayValue extends ArrayValue {
    * Adds a new value.
    */
   @Override
-  public Value put(Value key, Value value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value)
   {
-    return getCopyArray().put(key, value);
+    return getCopyArray().put(ctx, key, value);
   }
 
   /**

@@ -108,18 +108,18 @@ public class ArrayValueWrapper extends ArrayValue {
    * Adds a new value.
    */
   @Override
-  public Value put(Value key, Value value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value)
   {
-    return _array.put(key, value);
+    return _array.put(ctx, key, value);
   }
   
   /**
    * Adds a new value.
    */
   @Override
-  public Value append(Value key, ValueOrVar value)
+  public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
-    return _array.append(key, value);
+    return _array.append(ctx, index, value);
   }
 
   /**

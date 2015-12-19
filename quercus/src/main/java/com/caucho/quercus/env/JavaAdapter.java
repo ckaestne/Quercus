@@ -286,9 +286,9 @@ abstract public class JavaAdapter extends ArrayValue
    * Adds a new value.
    */
   @Override
-  public final Value put(Value key, Value value)
+  public final V<? extends ValueOrVar> put(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value)
   {
-    return putImpl(key, value);
+    return V.one(putImpl(key, value.getOne().toValue()));
   }
 
   /**

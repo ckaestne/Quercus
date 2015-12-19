@@ -66,23 +66,25 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
   /**
    * Adds a new value.
    */
-  public Value put(Value key, Value value)
+  @Override
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value)
   {
     if (_root != null)
       _root.setModified();
 
-    return super.put(key, value);
+    return super.put(ctx, key, value);
   }
 
   /**
    * Adds a new value.
    */
-  public ArrayValue append(Value key, ValueOrVar value)
+  @Override
+  public ArrayValue append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
     if (_root != null)
       _root.setModified();
 
-    return super.append(key, value);
+    return super.append(ctx, index, value);
   }
 
   /**

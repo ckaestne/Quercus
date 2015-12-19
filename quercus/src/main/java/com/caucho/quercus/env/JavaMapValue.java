@@ -30,6 +30,8 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.program.JavaClassDef;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -57,9 +59,9 @@ public class JavaMapValue extends JavaValue {
   }
 
   @Override
-  public Value put(Value index, Value value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
-    return _env.wrapJava(_map.put(index.toJavaObject(), value.toJavaObject()));
+    return V.one(_env.wrapJava(_map.put(index.toJavaObject(), value.getOne().toValue().toJavaObject())));
   }
 }
 

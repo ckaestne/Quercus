@@ -40,6 +40,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.annotation.VDeprecated;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -619,28 +621,28 @@ abstract public class AbstractFunction extends Callback {
     return callMethodRef(env, ctx, qClass, qThis, NULL_ARG_VALUES);
   }
 
-  @Deprecated
+  @Deprecated@VDeprecated
   public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,
                                                       Value a1) {
     return this.callMethod(env,ctx,qClass,qThis,V.one(a1));
   }
-  @Deprecated
+  @Deprecated@VDeprecated
   public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,
                                                       Value a1, Value a2) {
     return this.callMethod(env,ctx,qClass,qThis,V.one(a1), V.one(a2));
   }
-  @Deprecated
+  @Deprecated@VDeprecated
   public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,
                                                       Value a1, Value a2, Value a3) {
     return this.callMethod(env,ctx,qClass,qThis,V.one(a1), V.one(a2), V.one(a3));
   }
-  @Deprecated
+  @Deprecated@VDeprecated
   public final @Nonnull V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx,
                                                       QuercusClass qClass,
                                                       Value qThis,

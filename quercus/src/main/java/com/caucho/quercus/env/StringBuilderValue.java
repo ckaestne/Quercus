@@ -685,16 +685,9 @@ public class StringBuilderValue
    * Sets the array ref.
    */
   @Override
-  public Value put(Value index, Value value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
-    setCharValueAt(index.toLong(), value);
-
-    return value;
-  }
-
-  @Override
-  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
-    assert ctx.isTautology() : "unimplemented variational operation";
+    VHelper.assertTrue(ctx);
     setCharValueAt(index.toLong(), value.getOne().toValue());
 
     return value;
@@ -703,15 +696,6 @@ public class StringBuilderValue
     /**
      * Sets the array ref.
      */
-  @Override
-  public Value append(Value index, ValueOrVar value)
-  {
-    if (_length > 0)
-      return setCharValueAt(index.toLong(), value.toValue());
-    else
-      return new ArrayValueImpl().append(index, value);
-  }
-
   @Override
   public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
     if (_length > 0)

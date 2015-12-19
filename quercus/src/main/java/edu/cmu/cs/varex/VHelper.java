@@ -138,4 +138,8 @@ public class VHelper {
   public static <T> boolean vequal(V<? extends T> a, V<? extends T> b) {
     return vmapAll(True(), a, b, (c, aa, bb) -> c.isContradiction() || aa.equals(bb)).when(x->x).isTautology();
   }
+
+  public static void assertTrue(FeatureExpr ctx) {
+    assert ctx.isTautology() : "incomplete V transformation, cannot be called in context "+ctx;
+  }
 }

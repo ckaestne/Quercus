@@ -38,6 +38,7 @@ import com.caucho.util.ByteAppendable;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -951,10 +952,10 @@ abstract public class StringValue
    * necessary.
    */
   @Override
-  public Value append(Value index, ValueOrVar value)
+  public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
     if (length() == 0)
-      return new ArrayValueImpl().append(index, value);
+      return new ArrayValueImpl().append(ctx, index, value);
     else
       return this;
   }

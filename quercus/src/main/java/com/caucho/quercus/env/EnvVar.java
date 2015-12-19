@@ -31,6 +31,7 @@ package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 /**
  * Encapsulates an environment entry for a variable.  The EnvVar is a
@@ -60,7 +61,7 @@ abstract public class EnvVar
    */
   abstract public V<? extends Value> getValue();
 
-  @Deprecated
+  @Deprecated@VDeprecated
   public Value getOne() { return getValue().getOne(); }
 
   /**
@@ -95,7 +96,7 @@ abstract public class EnvVar
     return getVar();
   }
 
-  @Deprecated//replace new EnvVarImpl() if intended
+  @Deprecated@VDeprecated//replace new EnvVarImpl() if intended
   public static EnvVar _gen(Value v) {
     return new EnvVarImpl(V.one(new VarImpl(V.one(v))));
   }

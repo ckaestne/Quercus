@@ -427,7 +427,7 @@ abstract public class ObjectValue extends Callback {
    * Sets the array value with the given key.
    */
   @Override
-  public Value put(Value key, Value value)
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value)
   {
     Env env = Env.getInstance();
 
@@ -436,12 +436,12 @@ abstract public class ObjectValue extends Callback {
     // php/0d94
 
     if (delegate != null) {
-      return delegate.put(env, this, key, value);
+      return V.one(delegate.put(env, this, key, value.getOne().toValue()));
     }
     else {
       // php/0d94
 
-      return env.error(L.l("Can't use object '{0}' as array", getName()));
+      return V.one(env.error(L.l("Can't use object '{0}' as array", getName())));
       // return super.put(key, value);
     }
   }
@@ -473,9 +473,10 @@ abstract public class ObjectValue extends Callback {
    * string update ($a[0] = 'A').  Creates an array automatically if
    * necessary.
    */
-  public Value append(Value index, ValueOrVar value)
+  @Override
+  public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)
   {
-    put(index, value);
+    put(ctx, index, value);
 
     return this;
   }

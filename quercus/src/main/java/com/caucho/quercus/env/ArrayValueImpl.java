@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import com.caucho.util.RandomUtil;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -443,11 +444,6 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Adds a new value.
    */
-  @Deprecated@Override
-  public ArrayValue append(Value key, ValueOrVar value) {
-    return this.append(VHelper.noCtx(), V.one(key), V.one(value));
-  }
-
   @Override
   public ArrayValue append(FeatureExpr ctx, Value key, V<? extends ValueOrVar> value) {
     return this.append(ctx, V.one(key), value);
@@ -720,9 +716,9 @@ public class ArrayValueImpl extends ArrayValue
   }
 
 
-  @Deprecated@Override
-  public EnvVar put(Value index, EnvVar value) {
-    return EnvVar.fromValues(this.put(VHelper.noCtx(), index, value.getVar()).map((a)->a.toValue()));
+  @Override
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    return super.put(ctx, index, value).map((a)->a.toValue());
   }
 
   /**
@@ -862,7 +858,7 @@ public class ArrayValueImpl extends ArrayValue
    * @param value to search for in the array
    * @return the key if it is found in the array, NULL otherwise
    */
-  @Override@Deprecated
+  @Override@Deprecated@VDeprecated
   public V<? extends Value> contains(Value value) {
     return this.contains(V.one(value));
   }
@@ -882,7 +878,7 @@ public class ArrayValueImpl extends ArrayValue
    * @param value to search for in the array
    * @return the key if it is found in the array, NULL otherwise
    */
-  @Deprecated
+  @Deprecated@VDeprecated
   @Override
   public V<? extends Value> containsStrict(Value value) {
     return this.containsStrict(V.one(value));
