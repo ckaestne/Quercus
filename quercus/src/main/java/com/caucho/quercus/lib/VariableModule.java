@@ -735,7 +735,7 @@ public class VariableModule extends AbstractQuercusModule {
       }
 
       return NullValue.NULL;
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new QuercusModuleException(e);
     }
   }
@@ -771,7 +771,7 @@ public class VariableModule extends AbstractQuercusModule {
       out.flush();
 
       return NullValue.NULL;
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new QuercusModuleException(e);
     }
   }

@@ -73,7 +73,7 @@ abstract public class Callback extends Value implements Callable {
 //      result = call(env, ctx, a1._value());
 //    }
 //    else {
-//      Var aVar = new Var(V.one(a1._value()));
+//      Var aVar = new VarImpl(V.one(a1._value()));
 //
 //      result = call(env, ctx, aVar.toValue()); //TODO check V
 //
@@ -114,7 +114,7 @@ abstract public class Callback extends Value implements Callable {
 //      result = call(env, ctx, a1, a2);
 //    }
 //    else {
-//      Value aVar = new Var(V.one(a1)).toValue();
+//      Value aVar = new VarImpl(V.one(a1)).toValue();
 //
 //      result = call(env, ctx, aVar, a2);
 //
@@ -155,7 +155,7 @@ throw new UnimplementedVException();
 //      result = call(env, ctx, a1, a2, a3);
 //    }
 //    else {
-//      V<? extends Var> aVar = a1.map(a-> new Var(V.one(a)).toValue());
+//      V<? extends Var> aVar = a1.map(a-> new VarImpl(V.one(a)).toValue());
 //
 //      result = call(env, ctx, aVar, a2, a3);
 //

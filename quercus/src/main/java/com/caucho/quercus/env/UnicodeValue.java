@@ -33,7 +33,6 @@ import com.caucho.quercus.marshal.Marshal;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
-import java.io.IOException;
 import java.util.IdentityHashMap;
 
 /**
@@ -72,9 +71,7 @@ abstract public class UnicodeValue extends StringValue {
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     int length = length();
 
     if (length < 0)

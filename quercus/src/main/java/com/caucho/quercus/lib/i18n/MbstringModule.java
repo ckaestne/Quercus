@@ -514,7 +514,7 @@ public class MbstringModule
     }
 
     Value val;
-    Var regVar = new Var();
+    Var regVar = new VarImpl();
 
     val = RegexpModule.eregImpl(env, ereg, string, regVar.makeValue());
 

@@ -300,7 +300,7 @@ public class ObjectExtValue extends ObjectValue
     EnvVar value = getFieldExt(env, name);
 
     FeatureExpr whenUnset = value.getValue().when(k -> k == UnsetValue.UNSET);
-    return V.choice(whenUnset, V.one(new ArgGetFieldValue(env, this, name).toVar()), value.getVar());
+    return V.choice(whenUnset, V.one(new ArgGetFieldValue(env, this, name)), value.getVar());
   }
 
   /**
@@ -1030,9 +1030,7 @@ public class ObjectExtValue extends ObjectValue
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     int size = getSize();
 
     if (isIncompleteObject())
@@ -1415,7 +1413,7 @@ public class ObjectExtValue extends ObjectValue
 //      if (value instanceof Var)
 //        return new ArgRef((Var) value);
 //      else {
-//        Var var = new Var(_value);
+//        Var var = new VarImpl(_value);
 //
 //        _value = var;
 //
@@ -1433,7 +1431,7 @@ public class ObjectExtValue extends ObjectValue
 //      if (value instanceof Var)
 //        return new ArgRef((Var) value);
 //      else {
-//        Var var = new Var(_value);
+//        Var var = new VarImpl(_value);
 //
 //        _value = var;
 //
@@ -1478,7 +1476,6 @@ public class ObjectExtValue extends ObjectValue
                             VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
-      throws IOException
     {
       StringValue name = ClassField.getOrdinaryName(getKey());
       String suffix = "";
@@ -1525,7 +1522,6 @@ public class ObjectExtValue extends ObjectValue
     }
 
     private void printDepth(VWriteStream out, int depth)
-      throws java.io.IOException
     {
       for (int i = 0; i < depth; i++)
         out.print(VHelper.noCtx(), ' ');

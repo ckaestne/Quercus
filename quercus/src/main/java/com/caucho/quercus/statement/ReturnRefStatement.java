@@ -33,6 +33,7 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.VarImpl;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
@@ -67,7 +68,7 @@ public class ReturnRefStatement extends Statement {
       return _expr.evalVar(env, ctx);
     }
     else {
-      return VHelper.toV(new Var());
+      return VHelper.toV(new VarImpl());
     }
   }
 

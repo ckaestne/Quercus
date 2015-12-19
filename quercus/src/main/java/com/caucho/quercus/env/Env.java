@@ -1304,11 +1304,7 @@ public class Env
    */
   public final void flush()
   {
-    try {
       getOut().flush();
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1316,11 +1312,7 @@ public class Env
    */
   public final void print(FeatureExpr ctx, String v)
   {
-    try {
       getOut().print(ctx, v);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1328,11 +1320,7 @@ public class Env
    */
   public final void print(FeatureExpr ctx, char[] buffer, int offset, int length)
   {
-    try {
       getOut().print(ctx, buffer, offset, length);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1340,11 +1328,7 @@ public class Env
    */
   public final void print(FeatureExpr ctx, char v)
   {
-    try {
       getOut().print(ctx, v);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1352,11 +1336,7 @@ public class Env
    */
   public final void print(FeatureExpr ctx, long v)
   {
-    try {
       getOut().print(ctx, v);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1364,16 +1344,12 @@ public class Env
    */
   public final void print(FeatureExpr ctx, double v)
   {
-    try {
       long longV = (long) v;
 
       if (v == longV)
         getOut().print(ctx, longV);
       else
         getOut().print(ctx, v);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1381,11 +1357,7 @@ public class Env
    */
   public final void print(FeatureExpr ctx, Object v)
   {
-    try {
       getOut().print(ctx, v);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1401,11 +1373,7 @@ public class Env
    */
   public final void println(FeatureExpr ctx)
   {
-    try {
       getOut().println(ctx);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1413,11 +1381,7 @@ public class Env
    */
   public final void println(FeatureExpr ctx, String v)
   {
-    try {
       getOut().println(ctx, v);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1425,12 +1389,8 @@ public class Env
    */
   public final void println(FeatureExpr ctx, Value v)
   {
-    try {
       v.print(this, ctx);
       getOut().println(ctx);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1438,11 +1398,7 @@ public class Env
    */
   public final void println(FeatureExpr ctx, Object v)
   {
-    try {
       getOut().println(ctx, v);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1450,11 +1406,7 @@ public class Env
    */
   public final void write(FeatureExpr ctx, byte[] buffer, int offset, int length)
   {
-    try {
       getOut().write(ctx, buffer, offset, length);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -2204,7 +2156,7 @@ public class Env
         return null;
       }
 
-      envVar = new EnvVarImpl(V.one(new Var()));
+      envVar = new EnvVarImpl(V.one(new VarImpl()));
     }
 
     _map.put(name, envVar);
@@ -2246,7 +2198,7 @@ public class Env
       V<? extends Value> value = _scriptGlobalMap.get(name);
 
       if (value != null) {
-        envVar = new EnvVarImpl(V.one(new Var()));
+        envVar = new EnvVarImpl(V.one(new VarImpl()));
         envVar.setRef(VHelper.noCtx(), value);
       }
     }
@@ -2263,7 +2215,7 @@ public class Env
         return null;
       }
 
-      Var var = new Var();
+      Var var = new VarImpl();
       // var.setGlobal();
 
       envVar = new EnvVarImpl(V.one(var));
@@ -2337,7 +2289,7 @@ public class Env
     EnvVar var = _staticMap.get(name);
 
     if (var == null) {
-      var = new EnvVarImpl(V.one(new Var()));
+      var = new EnvVarImpl(V.one(new VarImpl()));
       _staticMap.put(name, var);
     }
     return var;
@@ -2350,7 +2302,7 @@ public class Env
    */
   public final V<? extends Value> getStaticValue(StringValue name)
   {
-    EnvVar var = _staticMap.getOrDefault(name, new EnvVarImpl(V.one(new Var())));
+    EnvVar var = _staticMap.getOrDefault(name, new EnvVarImpl(V.one(new VarImpl())));
 
     return var.getValue().map(v -> v == null ? NullValue.NULL : v);
   }
@@ -2403,7 +2355,7 @@ public class Env
     EnvVar envVar = _map.get(name);
 
     if (envVar != null)
-      envVar.setVar(ctx, V.one(new Var()));
+      envVar.setVar(ctx, V.one(new VarImpl()));
 
     return V.one(null);
   }
@@ -2428,7 +2380,7 @@ public class Env
         var.setGlobal();
     }
     else
-      var = new Var(value.toValue());
+      var = new VarImpl(value.toValue());
 
     _map.put(name, var);
 
@@ -2447,7 +2399,7 @@ public class Env
     EnvVar envVar = _map.get(name);
 
     if (envVar != null)
-      envVar.setVar(ctx, V.one(new Var()));
+      envVar.setVar(ctx, V.one(new VarImpl()));
 
     return V.one(null);
   }
@@ -2463,7 +2415,7 @@ public class Env
     EnvVar envVar = _globalMap.get(name);
 
     if (envVar != null)
-      envVar.setVar(ctx, V.one(new Var()));
+      envVar.setVar(ctx, V.one(new VarImpl()));
 
     return V.one(null);
   }
@@ -2476,7 +2428,7 @@ public class Env
 //  public static final Value getLocalVar(Value var)
 //  {
 //    if (var == null)
-//      var = new Var();
+//      var = new VarImpl();
 //
 //    return var;
 //  }
@@ -2543,7 +2495,7 @@ public class Env
 
     switch (specialVarId) {
       case _ENV: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2559,7 +2511,7 @@ public class Env
           return null;
         }
 
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         ArrayValue array = createArgv();
@@ -2579,7 +2531,7 @@ public class Env
 
         int size = array.getValue().getOne().getSize();
 
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         LongValue value = LongValue.create(size);
@@ -2598,7 +2550,7 @@ public class Env
       }
 
       case _POST: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2625,7 +2577,7 @@ public class Env
       }
 
       case _FILES: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2660,7 +2612,7 @@ public class Env
             return e;
         }
 
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2680,7 +2632,7 @@ public class Env
       }
 
       case _REQUEST: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         ArrayValue array = new ArrayValueImpl();
@@ -2723,7 +2675,7 @@ public class Env
         if (_inputData == null)
           return null;
 
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2741,7 +2693,7 @@ public class Env
       }
 
       case _SERVER: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2770,7 +2722,7 @@ public class Env
       }
 
       case _GLOBAL: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2787,7 +2739,7 @@ public class Env
           return getGlobalEnvVar(isUnicodeSemantics() ? S_COOKIE_U : S_COOKIE);
 
       case _COOKIE: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2814,7 +2766,7 @@ public class Env
       }
 
       case PHP_SELF: {
-        Var var = new Var();
+        Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
 
         _globalMap.put(name, envVar);
@@ -2957,7 +2909,7 @@ public class Env
     }
 
     if (value != null) {
-      envVar = new EnvVarImpl(V.one(new Var()));
+      envVar = new EnvVarImpl(V.one(new VarImpl()));
 
       _globalMap.put(name, envVar);
 
@@ -3117,7 +3069,7 @@ public class Env
     if (value instanceof Var)
       return (Var) value;
     else
-      return new Var(value);
+      return new VarImpl(value);
   }
   */
 
@@ -6206,7 +6158,7 @@ public class Env
 
     try {
       getOut().print(VHelper.noCtx(), msg.toString());
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.log(Level.WARNING, e.toString(), e);
     }
 
@@ -6229,7 +6181,7 @@ public class Env
   {
     try {
       getOut().print(VHelper.noCtx(), msg);
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.log(Level.WARNING, e.toString(), e);
     }
 
@@ -6949,7 +6901,7 @@ public class Env
         if (getIniBoolean("log_errors"))
           log.info(fullMsg);
       }
-      catch (IOException e) {
+      catch (Exception e) {
         log.log(Level.FINE, e.toString(), e);
       }
     }
@@ -7156,9 +7108,9 @@ public class Env
     if (value.isVar())
       return value._var();
     else if (value == null)
-      return new Var();
+      return new VarImpl();
     else
-      return new Var(V.one(value._value()));
+      return new VarImpl(V.one(value._value()));
   }
 
 //  /**
@@ -7169,7 +7121,7 @@ public class Env
 //    if (value instanceof Var)
 //      return value;
 //    else if (oldValue instanceof Var)
-//      return new Var(value);
+//      return new VarImpl(value);
 //    else
 //      return value;
 //  }
@@ -7188,7 +7140,7 @@ public class Env
 //    }
 //    */
 //    else
-//      return new Var(V.one(value._value()));
+//      return new VarImpl(V.one(value._value()));
 //  }
 
 //  /**

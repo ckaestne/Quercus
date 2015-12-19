@@ -2810,7 +2810,7 @@ abstract public class StringValue
                                    VWriteStream out,
                                    int depth,
                                    IdentityHashMap<Value, String> valueSet)
-    throws IOException;
+          ;
 
   class StringValueInputStream extends java.io.InputStream {
     private final int _length;

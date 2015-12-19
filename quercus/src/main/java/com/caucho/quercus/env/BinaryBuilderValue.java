@@ -615,9 +615,7 @@ public class BinaryBuilderValue
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     int length = length();
 
     if (length < 0)

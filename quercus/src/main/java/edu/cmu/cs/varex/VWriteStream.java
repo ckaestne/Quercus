@@ -21,11 +21,11 @@ public interface VWriteStream {
     }
 
     void setEncoding(String encoding) throws UnsupportedEncodingException;
-    void flush() throws IOException;
+    void flush();
     void setNewlineString(String s);
-    void close() throws IOException;
+    void close();
     void setImplicitFlush(boolean flag);
-    void flushBuffer() throws IOException;
+    void flushBuffer();
 
     void free();
 
@@ -35,22 +35,22 @@ public interface VWriteStream {
     PrintWriter getPrintWriter();
 
 
-    void print(FeatureExpr ctx, String v) throws IOException;
+    void print(FeatureExpr ctx, String v);
 
-    void print(FeatureExpr ctx, Object v) throws IOException;
+    void print(FeatureExpr ctx, Object v);
 
-    void print(FeatureExpr ctx, long v) throws IOException;
-    void print(FeatureExpr ctx, char v) throws IOException;
+    void print(FeatureExpr ctx, long v);
+    void print(FeatureExpr ctx, char v);
 
 
-    void print(FeatureExpr ctx, char[] buffer, int offset, int length) throws IOException;
+    void print(FeatureExpr ctx, char[] buffer, int offset, int length);
 
-    void println(FeatureExpr ctx) throws IOException;
-    void println(FeatureExpr ctx, String s) throws IOException;
-    void println(FeatureExpr ctx, Object v) throws IOException;
+    void println(FeatureExpr ctx);
+    void println(FeatureExpr ctx, String s);
+    void println(FeatureExpr ctx, Object v);
 
-    void write(FeatureExpr ctx, int b) throws IOException;
-    void write(FeatureExpr ctx, byte[] buffer, int offset, int length) throws IOException;
-    long writeStream(FeatureExpr ctx, InputStream inputStream) throws IOException;
+    void write(FeatureExpr ctx, int b);
+    void write(FeatureExpr ctx, byte[] buffer, int offset, int length);
+    long writeStream(FeatureExpr ctx, InputStream inputStream);
 
 }

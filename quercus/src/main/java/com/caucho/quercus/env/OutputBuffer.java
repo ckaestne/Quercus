@@ -139,7 +139,7 @@ public class OutputBuffer {
       }
 
       return bb;
-    } catch (IOException e) {
+    } catch (Exception e) {
       _env.error(e.toString(), e);
 
       return BooleanValue.FALSE;
@@ -155,7 +155,7 @@ public class OutputBuffer {
       _out.flush();
 
       return (long)_tempStream.getLength();
-    } catch (IOException e) {
+    } catch (Exception e) {
       _env.error(e.toString(), e);
 
       return -1L;
@@ -215,7 +215,7 @@ public class OutputBuffer {
       _state &= ~(OutputModule.PHP_OUTPUT_HANDLER_START);
       _state &= ~(OutputModule.PHP_OUTPUT_HANDLER_CONT);
       
-    } catch (IOException e) {
+    } catch (Exception e) {
       _env.error(e.toString(), e);
     }
   }
@@ -261,7 +261,7 @@ public class OutputBuffer {
     try {
       if (out != null)
         out.close();
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.log(Level.FINER, e.toString(), e);
     }
 
@@ -306,7 +306,7 @@ public class OutputBuffer {
       _tempStream.writeToStream(out);
 
       _tempStream.clearWrite();
-    } catch (IOException e) {
+    } catch (Exception e) {
       _env.error(e.toString(), e);
     }
   }

@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 
 import java.io.Serializable;
@@ -50,118 +52,128 @@ public class ArgGetValue extends ArgValue
     _index = index;
   }
 
-  public Value toRefValue()
-  {
-    // php/0425
-    return toLocalValue();
-  }
-
-  /**
-   * Returns the arg object for a field reference, e.g.
-   * foo($a[0][1])
-   */
-  @Override
-  public EnvVar getArg(Value index, boolean isTop)
-  {
-    return EnvVar._gen(new ArgGetValue(this, index)); // php/3d1p
-  }
-
-  /**
-   * Returns the arg object for a field reference, e.g.
-   * foo($a[0]->x)
-   */
-  @Override
-  public V<? extends Var> getFieldArg(Env env, StringValue index, boolean isTop)
-  {
-    return V.one(new ArgGetFieldValue(env, this, index).toVar()); // php/3d2p
-  }
-
-  /**
-   * Converts to a reference variable.
-   */
-  @Override
-  public Var toLocalVarDeclAsRef()
-  {
-    // php/3d55, php/3d49, php/3921
-
-    return _obj.toAutoArray().getVar(_index).getVar().getOne()/*.toLocalVarDeclAsRef()*/;
-  }
 
   @Override
-  public Value toAutoArray()
-  {
-    Value parent = _obj.toAutoArray();
-    Value value = parent.get(_index).getOne();
-
-    Value array = value.toAutoArray();
-
-    if (array != value) {
-      parent.put(_index, array);
-
-      value = array;
-    }
-
-    return value;
+  public V<? extends Value> getValue() {
+    return _obj.get(_index).getValue();
   }
 
+
+
+
+//  public Value toRefValue()
+//  {
+//    // php/0425
+//    return toLocalValue();
+//  }
+//
+//  /**
+//   * Returns the arg object for a field reference, e.g.
+//   * foo($a[0][1])
+//   */
+//  @Override
+//  public EnvVar getArg(Value index, boolean isTop)
+//  {
+//    return EnvVar._gen(new ArgGetValue(this, index)); // php/3d1p
+//  }
+//
+//  /**
+//   * Returns the arg object for a field reference, e.g.
+//   * foo($a[0]->x)
+//   */
+//  @Override
+//  public V<? extends Var> getFieldArg(Env env, StringValue index, boolean isTop)
+//  {
+//    return V.one(new ArgGetFieldValue(env, this, index).toVar()); // php/3d2p
+//  }
+//
+//  /**
+//   * Converts to a reference variable.
+//   */
+//  @Override
+//  public Var toLocalVarDeclAsRef()
+//  {
+//    // php/3d55, php/3d49, php/3921
+//
+//    return _obj.toAutoArray().getVar(_index).getVar().getOne()/*.toLocalVarDeclAsRef()*/;
+//  }
+//
   @Override
-  public Value toAutoObject(Env env)
+  public Var toAutoArray()
   {
-    Value array = _obj.toAutoArray();
-    Value value = array.get(_index).getOne();
-
-    if (value.isNull()) {
-      value = env.createObject();
-
-      array.put(_index, value);
-    }
-    else {
-      Value obj = value.toAutoObject(env);
-
-      if (obj != value) {
-        array.put(_index, obj);
-      }
-
-      value = obj;
-    }
-
-    return value;
+    throw new UnimplementedVException();
+//    Value parent = _obj.toAutoArray();
+//    Value value = parent.get(_index).getOne();
+//
+//    Value array = value.toAutoArray();
+//
+//    if (array != value) {
+//      parent.put(_index, array);
+//
+//      value = array;
+//    }
+//
+//    return value;
   }
-
-  /**
-   * Converts to a read-only value.
-   */
-  @Override
-  public Value toLocalValueReadOnly()
-  {
-    return _obj.get(_index).getOne();
-  }
-
-  /**
-   * Converts to a value.
-   */
-  @Override
-  public Value toLocalValue()
-  {
-    return _obj.get(_index).copy().getOne();
-  }
-
-  /**
-   * Converts to a value.
-   */
-  @Override
-  public V<? extends Value> toLocalRef()
-  {
-    return _obj.get(_index).getValue().map((a)->a.copy()); // php/0d14, php/04b4
-  }
-
-  //
-  // Java Serialization
-  //
-
-  public Object writeReplace()
-  {
-    return toValue();
-  }
+//
+//  @Override
+//  public Value toAutoObject(Env env)
+//  {
+//    Value array = _obj.toAutoArray();
+//    Value value = array.get(_index).getOne();
+//
+//    if (value.isNull()) {
+//      value = env.createObject();
+//
+//      array.put(_index, value);
+//    }
+//    else {
+//      Value obj = value.toAutoObject(env);
+//
+//      if (obj != value) {
+//        array.put(_index, obj);
+//      }
+//
+//      value = obj;
+//    }
+//
+//    return value;
+//  }
+//
+//  /**
+//   * Converts to a read-only value.
+//   */
+//  @Override
+//  public Value toLocalValueReadOnly()
+//  {
+//    return _obj.get(_index).getOne();
+//  }
+//
+//  /**
+//   * Converts to a value.
+//   */
+//  @Override
+//  public Value toLocalValue()
+//  {
+//    return _obj.get(_index).copy().getOne();
+//  }
+//
+//  /**
+//   * Converts to a value.
+//   */
+//  @Override
+//  public V<? extends Value> toLocalRef()
+//  {
+//    return _obj.get(_index).getValue().map((a)->a.copy()); // php/0d14, php/04b4
+//  }
+//
+//  //
+//  // Java Serialization
+//  //
+//
+//  public Object writeReplace()
+//  {
+//    return toValue();
+//  }
 }
 

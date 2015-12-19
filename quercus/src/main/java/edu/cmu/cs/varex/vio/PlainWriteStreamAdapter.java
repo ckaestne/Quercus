@@ -30,8 +30,12 @@ public class PlainWriteStreamAdapter implements VWriteStream {
     }
 
     @Override
-    public void flush() throws IOException {
-        stream.flush();
+    public void flush()  {
+        try {
+            stream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -40,8 +44,12 @@ public class PlainWriteStreamAdapter implements VWriteStream {
     }
 
     @Override
-    public void close() throws IOException {
-        stream.close();
+    public void close()  {
+        try {
+            stream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -50,8 +58,13 @@ public class PlainWriteStreamAdapter implements VWriteStream {
     }
 
     @Override
-    public void flushBuffer() throws IOException {
-        stream.flushBuffer();
+    public void flushBuffer()  {
+        try {
+            stream.flushBuffer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
+        }
     }
 
     @Override
@@ -70,79 +83,127 @@ public class PlainWriteStreamAdapter implements VWriteStream {
     }
 
     @Override
-    public void print(FeatureExpr ctx, String v) throws IOException {
+    public void print(FeatureExpr ctx, String v)  {
         updateCtx(ctx);
-        stream.print(v);
+        try {
+            stream.print(v);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     @Override
-    public void print(FeatureExpr ctx, Object v) throws IOException {
+    public void print(FeatureExpr ctx, Object v)  {
         updateCtx(ctx);
-        stream.print(v);
+        try {
+            stream.print(v);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void print(FeatureExpr ctx, long v) throws IOException {
+    public void print(FeatureExpr ctx, long v)  {
         updateCtx(ctx);
-        stream.print(v);
+        try {
+            stream.print(v);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void print(FeatureExpr ctx, char v) throws IOException {
+    public void print(FeatureExpr ctx, char v)  {
         updateCtx(ctx);
-        stream.print(v);
+        try {
+            stream.print(v);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void print(FeatureExpr ctx, char[] buffer, int offset, int length) throws IOException {
+    public void print(FeatureExpr ctx, char[] buffer, int offset, int length)  {
         updateCtx(ctx);
-        stream.print(buffer, offset, length);
+        try {
+            stream.print(buffer, offset, length);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void println(FeatureExpr ctx) throws IOException {
+    public void println(FeatureExpr ctx)  {
         updateCtx(ctx);
-        stream.println();
+        try {
+            stream.println();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void println(FeatureExpr ctx, String s) throws IOException {
+    public void println(FeatureExpr ctx, String s)  {
         updateCtx(ctx);
-        stream.println(s);
+        try {
+            stream.println(s);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void println(FeatureExpr ctx, Object v) throws IOException {
+    public void println(FeatureExpr ctx, Object v)  {
         updateCtx(ctx);
-        stream.println(v);
+        try {
+            stream.println(v);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void write(FeatureExpr ctx, int b) throws IOException {
+    public void write(FeatureExpr ctx, int b)  {
         updateCtx(ctx);
-        stream.write(b);
+        try {
+            stream.write(b);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void write(FeatureExpr ctx, byte[] buffer, int offset, int length) throws IOException {
+    public void write(FeatureExpr ctx, byte[] buffer, int offset, int length)  {
         updateCtx(ctx);
-        stream.write(buffer, offset, length);
+        try {
+            stream.write(buffer, offset, length);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public long writeStream(FeatureExpr ctx, InputStream inputStream) throws IOException {
+    public long writeStream(FeatureExpr ctx, InputStream inputStream)  {
         updateCtx(ctx);
-        return stream.writeStream(inputStream);
+        try {
+            return stream.writeStream(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void updateCtx(FeatureExpr ctx) throws IOException {
+    private void updateCtx(FeatureExpr ctx)  {
 
         if (ctx == lastCtx) return;
         if (lastCtx == null && ctx.isTautology()) {
             lastCtx = ctx;
             return;
         }
-        stream.println("\n#condition " + ctx.toTextExpr() + "\n");
+        try {
+            stream.println("\n#condition " + ctx.toTextExpr() + "\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

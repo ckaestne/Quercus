@@ -185,7 +185,7 @@ public class ZlibModule extends AbstractQuercusModule {
 
     try {
       return LongValue.create(env.getOut().writeStream(VHelper.noCtx(), is.getInputStream()));
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new QuercusModuleException(e);
     } finally {
       is.close();

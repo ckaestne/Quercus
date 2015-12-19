@@ -99,11 +99,8 @@ public class OutputModule extends AbstractQuercusModule
    */
   public Value flush(Env env)
   {
-    try {
       // XXX: conflicts with dragonflycms install
       env.getOriginalOut().flush();
-    } catch (IOException e) {
-    }
 
     return NullValue.NULL;
   }

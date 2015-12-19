@@ -131,7 +131,7 @@ abstract public class Closure extends Callback
     }
 
     if (var == null) {
-      var = new Var();
+      var = new VarImpl();
 
       varMap.put(name, var);
     }

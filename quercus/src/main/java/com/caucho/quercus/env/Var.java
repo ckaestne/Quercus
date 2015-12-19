@@ -42,15 +42,9 @@ import java.util.IdentityHashMap;
  * Represents a PHP variable value.
  */
 @SuppressWarnings("serial")
-public class Var 
+public abstract class Var
   implements Serializable, ValueOrVar
 {
-  private V<? extends Value> _value;
-
-  public Var()
-  {
-    _value = V.one(NullValue.NULL);
-  }
 
   @Deprecated
   public static Var create(ValueOrVar value) {
@@ -58,62 +52,49 @@ public class Var
   }
   public static Var create(V<? extends ValueOrVar> value)
   {
-    return new Var(value.flatMap(v->v._getValues()));
+    return new VarImpl(value.flatMap(v->v._getValues()));
   }
 
-  public Var(V<? extends Value> value)
-  {
-    _value = value;
-
-//    checkVar(value);
-  }
 
   /**
    * Sets the value.
    */
 
   @Deprecated//("workaround for V migration, avoid")
-  public Var set_(FeatureExpr ctx, V<? extends ValueOrVar> value) {
+  final public Var set_(FeatureExpr ctx, V<? extends ValueOrVar> value) {
       return set(ctx, value.flatMap((v)-> v.isVar() ? v._var().getValue() : V.one(v._value())));
   }
 
   @Deprecated//("workaround for V migration, avoid")
-  public Var set(Value value) { return set_(value);}
+  final public Var set(Value value) { return set_(value);}
   @Deprecated//("workaround for V migration, avoid")
-  public Var set_(Value value) {
+  final public Var set_(Value value) {
     return set(VHelper.noCtx(), V.one(value));
   }
 
-  public Var set(FeatureExpr ctx, V<? extends Value> value)
-  {
-    this._value = V.choice(ctx, value, _value);
-
-    return this;
-  }
+  abstract public Var set(FeatureExpr ctx, V<? extends Value> value);
 
 //  private void checkVar(Value value)
 //  {
 //    //assert(! (value instanceof Var));
 //  }
 
-  public boolean isVar()
+  final public boolean isVar()
   {
     return true;
   }
 
   @Override
-  public Value _value() {
+  final public Value _value() {
     throw new UnsupportedOperationException("called _value on a Var");
   }
 
   @Override
-  public Var _var() {
+  final public Var _var() {
     return this;
   }
 
-  public V<? extends Value> getValue() {
-    return _value;
-  }
+  abstract public V<? extends Value> getValue();
 
 //  /**
 //   * Sets the value, possibly replacing if a var and returning the resulting var
@@ -657,14 +638,14 @@ public class Var
    * Converts to an array
    */
 
-  public Var toAutoArray()
-  {
-    _value = _value.map((a)->a.toAutoArray());
-
-    // php/03mg
-
-    return this;
-  }
+  abstract public Var toAutoArray();
+//  {
+//    _value = _value.map((a)->a.toAutoArray());
+//
+//    // php/03mg
+//
+//    return this;
+//  }
 //
 //  /**
 //   * Converts to an object.
@@ -863,9 +844,10 @@ public class Var
 //   */
 //
 //
+  @Override
   public final Value toValue()
   {
-    return _value.getOne();
+    return getValue().getOne();
   }
 
   @Deprecated // call only when necessary to make refactoring work; likely broke things
@@ -922,7 +904,7 @@ public class Var
 //  public Var toVar()
 //  {
 //    // php/3d04
-//    // return new Var(_value.toArgValue());
+//    // return new VarImpl(_value.toArgValue());
 //    return this;
 //  }
 //
@@ -932,7 +914,7 @@ public class Var
 //
 //  public Var toLocalVar()
 //  {
-//    return new Var(_value.toLocalValue());
+//    return new VarImpl(_value.toLocalValue());
 //  }
 //
 //  /**
@@ -1133,29 +1115,13 @@ public class Var
 //   * Pre-increment the following value.
 //   */
 //
-  public V<? extends Value> preincr(FeatureExpr ctx, int incr)
-  {
-    _value = _value.vflatMap(ctx, (c,x)->V.choice(c,x.increment(incr),x));
-
-//    checkVar(_value);
-
-    return _value;
-  }
+  abstract public V<? extends Value> preincr(FeatureExpr ctx, int incr);
 //
   /**
    * Post-increment the following value.
    */
 
-  public V<? extends Value> postincr(FeatureExpr ctx, int incr)
-  {
-    V<? extends Value> value = _value;
-
-    _value = value.vflatMap(ctx, (c,x)->V.choice(c,x.increment(incr),x));
-
-//    checkVar(_value);
-
-    return value;
-  }
+  abstract public V<? extends Value> postincr(FeatureExpr ctx, int incr);
 //
 //  /**
 //   * Pre-increment the following value.
@@ -2392,20 +2358,11 @@ public class Var
     varDumpImpl(env, out, depth, valueSet);
   }
 
-  public void varDumpImpl(Env env,
+  abstract protected void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
-          throws IOException {
-    out.print(VHelper.noCtx(), "&");
-    _value.foreach(v -> {
-      try {
-        v.varDump(env, out, depth, valueSet);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    });
-  }
+          ;
 //
 //  protected void printRImpl(Env env,
 //                            VWriteStream out,

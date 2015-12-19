@@ -17,6 +17,6 @@ public interface ValueOrVar {
 
     default Var toVar() { return isVar() ? _var() : _value().toVar(); }
     default Var toLocalVarDeclAsRef() { return isVar() ? _var() : _value().toLocalVarDeclAsRef(); }
-    default Var toLocalVar() { return isVar() ? new Var(_var().getValue().map(a->a.toLocalValue())) : _value().toLocalVar(); }
+    default Var toLocalVar() { return isVar() ? new VarImpl(_var().getValue().map(a->a.toLocalValue())) : _value().toLocalVar(); }
     default V<? extends Value> _getValues() { return isVar() ? _var().getValue() : V.one(_value().toValue()); }
 }

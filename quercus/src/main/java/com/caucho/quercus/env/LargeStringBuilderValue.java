@@ -745,7 +745,6 @@ public class LargeStringBuilderValue
    */
   public void print(Env env, VWriteStream out)
   {
-    try {
       for (int i = 0; i < _length; i += SIZE) {
         int chunk = i / SIZE;
         int sublen = _length - i;
@@ -755,9 +754,6 @@ public class LargeStringBuilderValue
 
         out.write(VHelper.noCtx(), _bufferList[chunk], 0, sublen);
       }
-    } catch (IOException e) {
-      throw new QuercusRuntimeException(e);
-    }
   }
 
   /**
@@ -853,9 +849,7 @@ public class LargeStringBuilderValue
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     int length = length();
 
     if (length < 0)

@@ -74,7 +74,7 @@ public class LazyStaticMap extends AbstractMap<StringValue,EnvVar> {
 //      int id = _intMap.get(key);
 //
 //      if (id >= 0 && _values[id] != null) {
-//        var = new Var();
+//        var = new VarImpl();
 //        // var.setGlobal();
 //
 //        _extMap.put(key, var);

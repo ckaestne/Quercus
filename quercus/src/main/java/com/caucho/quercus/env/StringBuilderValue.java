@@ -1649,11 +1649,7 @@ public class StringBuilderValue
    */
   public void print(Env env, VWriteStream out)
   {
-    try {
       out.write(VHelper.noCtx(), _buffer, 0, _length);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**
@@ -1700,9 +1696,7 @@ public class StringBuilderValue
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     int length = length();
 
     if (length < 0)

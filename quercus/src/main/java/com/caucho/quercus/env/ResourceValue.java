@@ -101,12 +101,10 @@ public class ResourceValue extends Value
   }
 
   @Override
-  protected void varDumpImpl(Env env,
-                             VWriteStream out,
-                             int depth,
-                             IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+  public void varDumpImpl(Env env,
+                          VWriteStream out,
+                          int depth,
+                          IdentityHashMap<Value, String> valueSet) {
     out.print(VHelper.noCtx(), "resource(" + toString(env) + ")");
   }
 

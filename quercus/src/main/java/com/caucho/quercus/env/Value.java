@@ -902,7 +902,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * where $a is used as a variable in the function
    */
   public Var toLocalVar() {
-    return new Var(toLocalRef());
+    return new VarImpl(toLocalRef());
   }
 
   /**
@@ -913,7 +913,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * where $a is used as a variable in the function
    */
   public Var toLocalVarDeclAsRef() {
-    return new Var(V.one(this));
+    return new VarImpl(V.one(this));
   }
 
   /**
@@ -938,7 +938,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Converts to a Var.
    */
   public Var toVar() {
-    return new Var(V.one(this));
+    return new VarImpl(V.one(this));
   }
 
   /**
@@ -2740,7 +2740,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public V<? extends Var> putVar(FeatureExpr ctx)
   {
-    return V.one(new Var());
+    return V.one(new VarImpl());
   }
 
   /**
@@ -2858,11 +2858,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public void print(Env env, VWriteStream out)
   {
-    try {
       out.print(VHelper.noCtx(), toString(env));
-    } catch (IOException e) {
-      throw new QuercusRuntimeException(e);
-    }
   }
 
   /**
@@ -3027,7 +3023,6 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
                             VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
-    throws IOException
   {
     if (valueSet.get(this) != null) {
       out.print(VHelper.noCtx(), "*recursion*");
@@ -3044,12 +3039,10 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     }
   }
 
-  protected void varDumpImpl(Env env,
-                             VWriteStream out,
-                             int depth,
-                             IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+  public void varDumpImpl(Env env,
+                          VWriteStream out,
+                          int depth,
+                          IdentityHashMap<Value, String> valueSet) {
     out.print(VHelper.noCtx(), "resource(" + toString() + ")");
   }
 
@@ -3083,9 +3076,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     out.print(VHelper.noCtx(), toString());
   }
 
-  protected void printDepth(VWriteStream out, int depth)
-    throws IOException
-  {
+  protected void printDepth(VWriteStream out, int depth) {
     for (int i = 0; i < depth; i++)
       out.print(VHelper.noCtx(), ' ');
   }

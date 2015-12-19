@@ -33,7 +33,7 @@ package com.caucho.quercus.env;
  * Represents a PHP variable value.
  */
 @SuppressWarnings("serial")
-public class SessionVar extends Var
+public class SessionVar extends VarImpl
 {
 //  /**
 //   * Sets the value.

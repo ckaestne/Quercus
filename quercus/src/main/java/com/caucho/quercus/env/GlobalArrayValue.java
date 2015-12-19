@@ -80,7 +80,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
    */
   public EnvVar get(Value key)
   {
-    return new EnvVarImpl(V.one(new Var(_env.getGlobalValue(VHelper.noCtx(), key.toStringValue()))));
+    return new EnvVarImpl(V.one(new VarImpl(_env.getGlobalValue(VHelper.noCtx(), key.toStringValue()))));
   }
   
   /**

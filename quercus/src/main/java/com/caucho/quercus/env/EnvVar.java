@@ -97,13 +97,13 @@ abstract public class EnvVar
 
   @Deprecated//replace new EnvVarImpl() if intended
   public static EnvVar _gen(Value v) {
-    return new EnvVarImpl(V.one(new Var(V.one(v))));
+    return new EnvVarImpl(V.one(new VarImpl(V.one(v))));
   }
   public static EnvVar  fromValue(Value v) {
-    return new EnvVarImpl(V.one(new Var(V.one(v))));
+    return new EnvVarImpl(V.one(new VarImpl(V.one(v))));
   }
   public static EnvVar fromValues(V<? extends Value> v) {
-    return new EnvVarImpl(V.one(new Var(v)));
+    return new EnvVarImpl(V.one(new VarImpl(v)));
   }
 
   public abstract EnvVar copy();

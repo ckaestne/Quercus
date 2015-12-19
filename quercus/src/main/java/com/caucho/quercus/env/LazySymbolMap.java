@@ -73,7 +73,7 @@ public class LazySymbolMap extends AbstractMap<StringValue,EnvVar> {
       int id = _intMap.get(key);
 
       if (id >= 0 && _values[id] != null) {
-        Var var = new Var();
+        Var var = new VarImpl();
         // var.setGlobal();
         
         envVar = new EnvVarImpl(V.one(var));

@@ -647,15 +647,15 @@ public class ArrayValueImpl extends ArrayValue
         // php/3d42
         return value.getValue().map(v -> {
           if (!isTop && v.isset())
-            return new Var(V.one(v));
+            return new VarImpl(V.one(v));
           else {
             // XXX: should probably have Entry extend ArgGetValue and return the Entry itself
-            return new Var(V.one(new ArgGetValue(this, index))); // php/0d14, php/04b4
+            return new ArgGetValue(this, index); // php/0d14, php/04b4
           }
         });
       } else {
         // php/3d49
-        return V.one(new Var(V.one(new ArgGetValue(this, index))));
+        return V.one(new ArgGetValue(this, index));
       }
     }));
 
@@ -768,7 +768,7 @@ public class ArrayValueImpl extends ArrayValue
 
     V<? extends Value> tail = createTailKey(ctx);
 
-    return tail.map(t->new Var(V.one(new ArgGetValue(this, t))));
+    return tail.map(t->new ArgGetValue(this, t));
   }
 
   /**
@@ -832,7 +832,7 @@ public class ArrayValueImpl extends ArrayValue
     checkEntryInvariant(entries);
     checkInvariants();
 
-    V<? extends Var> v=entries.flatMap(e-> (e==null) ? V.one(new Var(V.one(UnsetValue.UNSET))) : e.getEnvVar().getVar()) ;
+    V<? extends Var> v=entries.flatMap(e-> (e==null) ? V.one(new VarImpl(V.one(UnsetValue.UNSET))) : e.getEnvVar().getVar()) ;
     return new EnvVarImpl(v);
   }
 

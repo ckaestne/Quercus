@@ -148,9 +148,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     if (_object == null) {
       _object = createJavaObject(Env.getInstance());
     }

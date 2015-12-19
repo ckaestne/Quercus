@@ -544,7 +544,7 @@ abstract public class ArrayValue extends Value {
 //      result = callback.call(env, ctx, value, a2);
 //    }
 //    else {
-//      Value aVar = new Var(value);
+//      Value aVar = new VarImpl(value);
 //
 //      result = callback.call(env, ctx, aVar, a2);
 //
@@ -569,7 +569,7 @@ abstract public class ArrayValue extends Value {
 //      result = callback.call(env, ctx, value, a2, a3);
 //    }
 //    else {
-//      Value aVar = new Var(value);
+//      Value aVar = new VarImpl(value);
 //
 //      result = callback.call(env,ctx,  aVar, a2, a3);
 //
@@ -1641,9 +1641,7 @@ abstract public class ArrayValue extends Value {
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
 
     for (VEntry mapEntry : entrySet()) {
@@ -1661,9 +1659,7 @@ abstract public class ArrayValue extends Value {
                               VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet,
-                              VEntry mapEntry)
-    throws IOException
-  {
+                              VEntry mapEntry) {
     Entry entry = (Entry) mapEntry;
 
     entry.varDumpImpl(env, out, depth, valueSet);
@@ -1834,7 +1830,7 @@ abstract public class ArrayValue extends Value {
 //      if (_var != null)
 //        return _var;
 //      else {
-//        _var = new Var(_value);
+//        _var = new VarImpl(_value);
 //
 //        return _var;
 //      }
@@ -1891,7 +1887,7 @@ abstract public class ArrayValue extends Value {
     {
       /*
       if (_var == null)
-        _var = new Var(_value);
+        _var = new VarImpl(_value);
 
         return new RefVar(_var);
 
@@ -1915,7 +1911,7 @@ abstract public class ArrayValue extends Value {
 //
 //      /*
 //      if (_var == null)
-//        _var = new Var(_value);
+//        _var = new VarImpl(_value);
 //
 //      return new RefVar(_var);
 //      */
@@ -1933,7 +1929,7 @@ abstract public class ArrayValue extends Value {
 //
 //      /*
 //      if (_var == null)
-//        _var = new Var(_value);
+//        _var = new VarImpl(_value);
 //
 //      return _var;
 //      */
@@ -1942,9 +1938,7 @@ abstract public class ArrayValue extends Value {
     public void varDumpImpl(Env env,
                             VWriteStream out,
                             int depth,
-                            IdentityHashMap<Value, String> valueSet)
-      throws IOException
-    {
+                            IdentityHashMap<Value, String> valueSet) {
       printDepth(out, 2 * depth);
       out.print(VHelper.noCtx(), "[");
 
@@ -1989,9 +1983,7 @@ abstract public class ArrayValue extends Value {
       out.println(VHelper.noCtx());
     }
 
-    private void printDepth(VWriteStream out, int depth)
-      throws java.io.IOException
-    {
+    private void printDepth(VWriteStream out, int depth) {
       for (int i = depth; i > 0; i--)
         out.print(VHelper.noCtx(), ' ');
     }

@@ -626,9 +626,7 @@ public class LongValue extends NumberValue
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value,String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value,String> valueSet) {
     out.print(VHelper.noCtx(), "int(" + toLong() + ")");
   }
 

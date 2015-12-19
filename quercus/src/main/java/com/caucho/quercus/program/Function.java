@@ -301,7 +301,7 @@ public class Function extends AbstractFunction {
       if (value != null)
         return value;
       else if (_info.isReturnsReference())      //TODO V not supported
-        return VHelper.toV(new Var());
+        return VHelper.toV(new VarImpl());
       else
         return VHelper.toV(NullValue.NULL);
       /*
@@ -418,7 +418,7 @@ public class Function extends AbstractFunction {
       return value.map(v-> {
         if (v == null) {
 //        if (_isReturnsReference) //TODO V not supported
-//          return VHelper.toV(new Var());
+//          return VHelper.toV(new VarImpl());
 //        else
           return NullValue.NULL;
         } else if (_isReturnsReference)

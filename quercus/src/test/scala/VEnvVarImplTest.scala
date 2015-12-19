@@ -1,6 +1,6 @@
 package edu.cmu.cs.varex
 
-import com.caucho.quercus.env.{EnvVarImpl, NullValue, StringValue, Var}
+import com.caucho.quercus.env._
 import de.fosd.typechef.featureexpr.{FeatureExpr, FeatureExprFactory}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -25,19 +25,19 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     }
 
     "Var" should "be variational" in {
-        val v1 = new Var()
+        val v1 = new VarImpl()
 
         v1.getValue should equal(V.one(NullValue.create()))
 
-        val v2 = new Var(V.one(x))
+        val v2 = new VarImpl(V.one(x))
         v2.getValue should equal(V.one(x))
 
-        val v3 = new Var(V.choice(foo, x, y))
+        val v3 = new VarImpl(V.choice(foo, x, y))
         v3.getValue should equal(V.choice(foo, x, y))
     }
 
     it should "be conditionally updateable" in {
-        val v1 = new Var()
+        val v1 = new VarImpl()
 
         v1.set(foo, V.one(x))
         v1.getValue should equal (V.choice(foo, x, NullValue.create()))
@@ -48,8 +48,8 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     }
 
     "EnvVar" should "hold conditional Vars" in {
-        val v1 = new Var()
-        val v2 = new Var(V.one(x))
+        val v1 = new VarImpl()
+        val v2 = new VarImpl(V.one(x))
 
         val e1 = new EnvVarImpl(V.one(v1))
         e1.getValue should equal (V.one(NullValue.create()))
@@ -61,7 +61,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     }
 
     it should "be conditionally updateable on same var" in {
-        val v1 = new Var()
+        val v1 = new VarImpl()
 
         val e1 = new EnvVarImpl(V.one(v1))
         e1.set(foo, V.one(x))
@@ -75,7 +75,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     }
 
     it should "share values through vars" in {
-        val v1 = new Var()
+        val v1 = new VarImpl()
 
         val e1 = new EnvVarImpl(V.one(v1))
         val e2 = new EnvVarImpl(V.one(v1))
@@ -85,10 +85,10 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
 
     }
     it should "allow assign by reference" in {
-        val v1 = new Var()
+        val v1 = new VarImpl()
 
         val e3 = new EnvVarImpl(V.one(v1))
-        val e4 = new EnvVarImpl(V.one(new Var()))
+        val e4 = new EnvVarImpl(V.one(new VarImpl()))
         e4.setRef(t,e3.getVar)
         e3.set(foo, V.one(x))
         e3.getValue should equal (V.choice(foo.not, NullValue.create(), x))
@@ -96,8 +96,8 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     }
 
     it should "allow assign by reference conditionally" in {
-        val v1 = new Var()
-        val v2 = new Var()
+        val v1 = new VarImpl()
+        val v2 = new VarImpl()
 
         val e3 = new EnvVarImpl(V.one(v1))
         val e4 = new EnvVarImpl(V.one(v2))
@@ -111,8 +111,8 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     }
 
     it should "update alternative vars" in {
-        val v1 = new Var(V.one(x))
-        val v2 = new Var(V.one(y))
+        val v1 = new VarImpl(V.one(x))
+        val v2 = new VarImpl(V.one(y))
 
         val e = new EnvVarImpl(V.choice(foo, v1, v2))
         e.set(bar, V.one(x))
@@ -125,8 +125,8 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
 
 
     it should "correctly handle setRef conditionally" in {
-        val v1 = new Var(V.one(x))
-        val v2 = new Var(V.one(y))
+        val v1 = new VarImpl(V.one(x))
+        val v2 = new VarImpl(V.one(y))
 
         val e1 = new EnvVarImpl(V.one(v1))
         val e2 = new EnvVarImpl(V.one(v2))
@@ -157,13 +157,13 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
 
     //    @Test def testEnvVar(): Unit = {
     //
-    //        val v = new Var()
+    //        val v = new VarImpl()
     //        val x = StringValue.create("x")
     //        val y = StringValue.create("y")
     //        v.set(x)
     //        //e and f are variables
     //        val e = new EnvVarImpl(V.one(v))
-    //        val f = new EnvVarImpl(V.one(new Var()))
+    //        val f = new EnvVarImpl(V.one(new VarImpl()))
     //        f.setRef(t, e.getVar(t))
     //
     //        println(e.get(t))
@@ -185,7 +185,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     //        assert(e.get(t).when(asJavaPredicate((e: Value) => e.toString() == "y")).isTautology())
     //
     //        //assign to new var
-    //        val v2 = new Var()
+    //        val v2 = new VarImpl()
     //        v2.set(x)
     //        e.setVar(t, V.one(v2))
     //
@@ -199,7 +199,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
     //
     //    @Test def testVEnvVar(): Unit = {
     //
-    //        val v = new Var()
+    //        val v = new VarImpl()
     //        val x = StringValue.create("x")
     //        val y = StringValue.create("y")
     //        v.set(x)

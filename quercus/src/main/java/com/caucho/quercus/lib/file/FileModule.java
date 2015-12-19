@@ -1767,7 +1767,6 @@ public class FileModule extends AbstractQuercusModule {
   {
     // php/1635
 
-    try {
       if (is == null)
         return BooleanValue.FALSE;
 
@@ -1776,9 +1775,6 @@ public class FileModule extends AbstractQuercusModule {
       long writeLength = out.writeStream(VHelper.noCtx(), is.getInputStream());
 
       return LongValue.create(writeLength);
-    } catch (IOException e) {
-      throw new QuercusModuleException(e);
-    }
   }
 
   /**

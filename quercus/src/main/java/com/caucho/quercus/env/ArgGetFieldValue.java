@@ -30,7 +30,6 @@
 package com.caucho.quercus.env;
 
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 
 /**
  * Represents an field-get argument which might be a call to a reference.
@@ -47,163 +46,168 @@ public class ArgGetFieldValue extends ArgValue {
     _name = name;
   }
 
-  /**
-   * Creates an argument which may create the given field.
-   */
   @Override
-  public EnvVar getArg(Value name, boolean isTop)
-  {
-    // php/3d1q
-    return EnvVar._gen(new ArgGetValue(this, name));
-  }
-
-  /**
-   * Creates an argument which may create the given field.
-   */
-  @Override
-  public V<? extends Var> getFieldArg(Env env, StringValue name, boolean isTop)
-  {
-    // php/3d2q
-    return V.one(new ArgGetFieldValue(env, this, name).toVar());
-  }
-
-  /**
-   * Converts to a reference variable.
-   */
-  @Override
-  public Var toLocalVarDeclAsRef()
-  {
-    // php/3d2t
-    return _obj.toAutoObject(_env).getFieldVar(_env, _name).getOne()/*.toLocalVarDeclAsRef()*/;
-  }
-
-  /**
-   * Converts to a value.
-   */
-  @Override
-  public Value toValue()
-  {
-    return _obj.getField(_env, _name).getOne();
-  }
-
-  private V<? extends Value> getValues()
-  {
-    return _obj.getField(_env, _name);
-  }
-  /**
-   * Converts to a read-only function argument.
-   */
-  @Override
-  public Value toLocalValueReadOnly()
-  {
-    return toValue();
-  }
-
-  /**
-   * Converts to a function argument.
-   */
-  @Override
-  public Value toLocalValue()
-  {
-    return toValue();
-  }
-
-  /**
-   * Converts to a reference variable.
-   */
-  @Override
-  public V<? extends Value> toLocalRef()
-  {
+  public V<? extends Value> getValue() {
     return _obj.getField(_env, _name);
   }
 
-  @Override
-  public Value toAutoArray()
-  {
-    Value parent = _obj.toAutoObject(_env);
-    Value value = parent.getField(_env, _name).getOne();
-
-    Value array = value.toAutoArray();
-
-    if (array != value) {
-      parent.putField(_env, VHelper.noCtx(), _name, array);
-
-      value = array;
-    }
-
-    return value;
-  }
-
-  @Override
-  public Value toAutoObject(Env env)
-  {
-    Value parent = _obj.toAutoObject(env);
-    Value value = parent.getField(env, _name).getOne();
-
-    if (value.isNull()) {
-      value = env.createObject();
-
-      parent.putField(env, VHelper.noCtx(), _name, value);
-    }
-    else {
-      Value obj = value.toAutoObject(env);
-
-      if (obj != value) {
-        parent.putField(env, VHelper.noCtx(), _name, obj);
-      }
-
-      value = obj;
-    }
-
-    return value;
-  }
-
-  /**
-   * Converts to a reference variable.
-   */
-  @Override
-  public Value toRefValue()
-  {
-    return _obj.getFieldVar(_env, _name).getOne().getValue().getOne();
-  }
-
-  /**
-   * Converts to a variable.
-   */
-  public Var toVar()
-  {
-    return new Var(getValues());
-  }
-
-  /**
-   * Converts to a reference variable.
-   */
-  @Override
-  public EnvVar getVar(Value index)
-  {
-    return _obj.getFieldArray(_env, _name).getVar(index);
-  }
-
-  /**
-   * Converts to a reference variable.
-   */
-  @Override
-  public V<? extends Var> getFieldVar(Env env, StringValue name)
-  {
-    // php/3d2q
-    return _obj.getFieldObject(_env, _name).getFieldVar(_env, name);
-  }
-
-  @Override
-  public StringValue toStringValue()
-  {
-    return toValue().toStringValue();
-  }
-
-  @Override
-  public String toJavaString()
-  {
-    return toValue().toJavaString();
-  }
+//  /**
+//   * Creates an argument which may create the given field.
+//   */
+//  @Override
+//  public EnvVar getArg(Value name, boolean isTop)
+//  {
+//    // php/3d1q
+//    return EnvVar._gen(new ArgGetValue(this, name));
+//  }
+//
+//  /**
+//   * Creates an argument which may create the given field.
+//   */
+//  @Override
+//  public V<? extends Var> getFieldArg(Env env, StringValue name, boolean isTop)
+//  {
+//    // php/3d2q
+//    return V.one(new ArgGetFieldValue(env, this, name).toVar());
+//  }
+//
+//  /**
+//   * Converts to a reference variable.
+//   */
+//  @Override
+//  public Var toLocalVarDeclAsRef()
+//  {
+//    // php/3d2t
+//    return _obj.toAutoObject(_env).getFieldVar(_env, _name).getOne()/*.toLocalVarDeclAsRef()*/;
+//  }
+//
+//  /**
+//   * Converts to a value.
+//   */
+//  @Override
+//  public Value toValue()
+//  {
+//    return _obj.getField(_env, _name).getOne();
+//  }
+//
+//  private V<? extends Value> getValues()
+//  {
+//    return _obj.getField(_env, _name);
+//  }
+//  /**
+//   * Converts to a read-only function argument.
+//   */
+//  @Override
+//  public Value toLocalValueReadOnly()
+//  {
+//    return toValue();
+//  }
+//
+//  /**
+//   * Converts to a function argument.
+//   */
+//  @Override
+//  public Value toLocalValue()
+//  {
+//    return toValue();
+//  }
+//
+//  /**
+//   * Converts to a reference variable.
+//   */
+//  @Override
+//  public V<? extends Value> toLocalRef()
+//  {
+//    return _obj.getField(_env, _name);
+//  }
+//
+//  @Override
+//  public Value toAutoArray()
+//  {
+//    Value parent = _obj.toAutoObject(_env);
+//    Value value = parent.getField(_env, _name).getOne();
+//
+//    Value array = value.toAutoArray();
+//
+//    if (array != value) {
+//      parent.putField(_env, VHelper.noCtx(), _name, array);
+//
+//      value = array;
+//    }
+//
+//    return value;
+//  }
+//
+//  @Override
+//  public Value toAutoObject(Env env)
+//  {
+//    Value parent = _obj.toAutoObject(env);
+//    Value value = parent.getField(env, _name).getOne();
+//
+//    if (value.isNull()) {
+//      value = env.createObject();
+//
+//      parent.putField(env, VHelper.noCtx(), _name, value);
+//    }
+//    else {
+//      Value obj = value.toAutoObject(env);
+//
+//      if (obj != value) {
+//        parent.putField(env, VHelper.noCtx(), _name, obj);
+//      }
+//
+//      value = obj;
+//    }
+//
+//    return value;
+//  }
+//
+//  /**
+//   * Converts to a reference variable.
+//   */
+//  @Override
+//  public Value toRefValue()
+//  {
+//    return _obj.getFieldVar(_env, _name).getOne().getValue().getOne();
+//  }
+//
+//  /**
+//   * Converts to a variable.
+//   */
+//  public Var toVar()
+//  {
+//    return new VarImpl(getValues());
+//  }
+//
+//  /**
+//   * Converts to a reference variable.
+//   */
+//  @Override
+//  public EnvVar getVar(Value index)
+//  {
+//    return _obj.getFieldArray(_env, _name).getVar(index);
+//  }
+//
+//  /**
+//   * Converts to a reference variable.
+//   */
+//  @Override
+//  public V<? extends Var> getFieldVar(Env env, StringValue name)
+//  {
+//    // php/3d2q
+//    return _obj.getFieldObject(_env, _name).getFieldVar(_env, name);
+//  }
+//
+//  @Override
+//  public StringValue toStringValue()
+//  {
+//    return toValue().toStringValue();
+//  }
+//
+//  @Override
+//  public String toJavaString()
+//  {
+//    return toValue().toJavaString();
+//  }
 }
 

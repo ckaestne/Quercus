@@ -371,7 +371,7 @@ abstract public class JavaAdapter extends ArrayValue
 //    // just creates a new Var, but modifying the var will not modify
 //    // the field
 //
-//    Var var = new Var(V.one(new JavaAdapterVar(this, index)));
+//    Var var = new VarImpl(V.one(new JavaAdapterVar(this, index)));
 //
 //    return new EnvVarImpl(V.one(var));
   }
@@ -791,9 +791,7 @@ abstract public class JavaAdapter extends ArrayValue
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
 
     int nestedDepth = depth + 1;

@@ -841,7 +841,7 @@ abstract public class ObjectValue extends Callback {
       sortedEntries.put(entry.getKey(), entry.getEnvVar());
     }
 
-    ArrayModule.ksort(env, new Var(V.one(sortedEntries)), ArrayModule.SORT_STRING);
+    ArrayModule.ksort(env, new VarImpl(V.one(sortedEntries)), ArrayModule.SORT_STRING);
 
     iter = sortedEntries.getIterator(env);
 

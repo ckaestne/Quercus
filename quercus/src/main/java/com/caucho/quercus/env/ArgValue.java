@@ -29,11 +29,11 @@
 
 package com.caucho.quercus.env;
 
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VWriteStream;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.IdentityHashMap;
 
 /**
@@ -41,109 +41,130 @@ import java.util.IdentityHashMap;
  *
  * foo($a[0]), where is not known if foo is defined as foo($a) or foo(&amp;$a)
  */
-abstract public class ArgValue extends Value
+abstract public class ArgValue extends Var /*extends Value*/
 {
-  public V<? extends Value> toValues()
-  {
-    return V.one(toLocalValue());
+
+  @Override
+  public Var set(FeatureExpr ctx, V<? extends Value> value) {
+    throw new UnimplementedVException();
+  }
+
+
+  @Override
+  public V<? extends Value> preincr(FeatureExpr ctx, int incr) {
+    throw new UnimplementedVException();
   }
 
   @Override
-  public Value toValue()
-  {
-    return toLocalValue();
+  public V<? extends Value> postincr(FeatureExpr ctx, int incr) {
+    throw new UnimplementedVException();
   }
 
   @Override
-  public ArrayValue toArrayValue(Env env)
-  {
-    return toLocalValue().toArrayValue(env);
+  public Var toAutoArray() {
+    throw new UnimplementedVException();
   }
 
-  @Override
-  public StringValue toStringValue()
-  {
-    return toLocalValue().toStringValue();
-  }
 
-  @Override
-  public StringValue toStringValue(Env env)
-  {
-    return toLocalValue().toStringValue(env);
-  }
-
-  @Override
-  public char toChar()
-  {
-    return toLocalValue().toChar();
-  }
-
-  @Override
-  public String toJavaString()
-  {
-    return toLocalValue().toJavaString();
-  }
-
-  @Override
-  public Object toJavaObject()
-  {
-    return toLocalValue().toJavaObject();
-  }
-
-  @Override
-  public boolean toBoolean()
-  {
-    return toLocalValue().toBoolean();
-  }
-
-  @Override
-  public double toDouble()
-  {
-    return toLocalValue().toDouble();
-  }
-
-  @Override
-  public long toLong()
-  {
-    return toLocalValue().toLong();
-  }
-
-  @Override
-  public ArrayValue toArray()
-  {
-    return toLocalValue().toArray();
-  }
-
-  @Override
-  public Value toAutoObject(Env env)
-  {
-    return toLocalValue().toObject(env);
-  }
-
-  @Override
-  public InputStream toInputStream()
-  {
-    return toLocalValue().toInputStream();
-  }
-
+  //  public V<? extends Value> toValues()
+//  {
+//    return V.one(toLocalValue());
+//  }
+//
+//  @Override
+//  public Value toValue()
+//  {
+//    return toLocalValue();
+//  }
+//
+//  @Override
+//  public ArrayValue toArrayValue(Env env)
+//  {
+//    return toLocalValue().toArrayValue(env);
+//  }
+//
+//  @Override
+//  public StringValue toStringValue()
+//  {
+//    return toLocalValue().toStringValue();
+//  }
+//
+//  @Override
+//  public StringValue toStringValue(Env env)
+//  {
+//    return toLocalValue().toStringValue(env);
+//  }
+//
+//  @Override
+//  public char toChar()
+//  {
+//    return toLocalValue().toChar();
+//  }
+//
+//  @Override
+//  public String toJavaString()
+//  {
+//    return toLocalValue().toJavaString();
+//  }
+//
+//  @Override
+//  public Object toJavaObject()
+//  {
+//    return toLocalValue().toJavaObject();
+//  }
+//
+//  @Override
+//  public boolean toBoolean()
+//  {
+//    return toLocalValue().toBoolean();
+//  }
+//
+//  @Override
+//  public double toDouble()
+//  {
+//    return toLocalValue().toDouble();
+//  }
+//
+//  @Override
+//  public long toLong()
+//  {
+//    return toLocalValue().toLong();
+//  }
+//
+//  @Override
+//  public ArrayValue toArray()
+//  {
+//    return toLocalValue().toArray();
+//  }
+//
+//  @Override
+//  public Value toAutoObject(Env env)
+//  {
+//    return toLocalValue().toObject(env);
+//  }
+//
+//  @Override
+//  public InputStream toInputStream()
+//  {
+//    return toLocalValue().toInputStream();
+//  }
+//
   @Override
   protected void varDumpImpl(Env env,
                              VWriteStream out,
                              int depth,
-                             IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
-    toLocalValue().varDumpImpl(env, out, depth, valueSet);
+                             IdentityHashMap<Value, String> valueSet) {
+    getValue().foreach((a)->a.varDumpImpl(env, out, depth, valueSet));
   }
-
-  @Override
-  protected void printRImpl(Env env,
-                            VWriteStream out,
-                            int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
-    toLocalValue().printRImpl(env, out, depth, valueSet);
-  }
+//
+//  @Override
+//  protected void printRImpl(Env env,
+//                            VWriteStream out,
+//                            int depth,
+//                            IdentityHashMap<Value, String> valueSet)
+//    throws IOException
+//  {
+//    toLocalValue().printRImpl(env, out, depth, valueSet);
+//  }
 }
 

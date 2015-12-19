@@ -64,7 +64,7 @@ public class VWriteStreamImpl
     }
 
     @Override
-    public void flush() throws IOException {
+    public void flush()  {
         doFlush();
     }
 
@@ -74,7 +74,7 @@ public class VWriteStreamImpl
     }
 
     @Override
-    public void close() throws IOException {
+    public void close()  {
         doFlush();
     }
 
@@ -84,7 +84,7 @@ public class VWriteStreamImpl
     }
 
     @Override
-    public void flushBuffer() throws IOException {
+    public void flushBuffer()  {
         doFlush();
 
     }
@@ -105,14 +105,14 @@ public class VWriteStreamImpl
     }
 
     @Override
-    public void print(FeatureExpr ctx, String v) throws IOException {
+    public void print(FeatureExpr ctx, String v)  {
         updateCtx(ctx);
         _buffer.append(v);
     }
 
 
     @Override
-    public void print(FeatureExpr ctx, Object o) throws IOException {
+    public void print(FeatureExpr ctx, Object o)  {
         if (o == null)
             print(ctx, "null");
         else if (o instanceof VfsWriteObject)
@@ -123,34 +123,34 @@ public class VWriteStreamImpl
     }
 
     @Override
-    public void print(FeatureExpr ctx, long v) throws IOException {
+    public void print(FeatureExpr ctx, long v)  {
         print(ctx, String.valueOf(v));
     }
 
     @Override
-    public void print(FeatureExpr ctx, char v) throws IOException {
+    public void print(FeatureExpr ctx, char v)  {
         print(ctx, Character.toString(v));
     }
 
     @Override
-    public void print(FeatureExpr ctx, char[] buffer, int offset, int length) throws IOException {
+    public void print(FeatureExpr ctx, char[] buffer, int offset, int length)  {
         updateCtx(ctx);
         _buffer.append(buffer, offset, length);
 
     }
 
     @Override
-    public void println(FeatureExpr ctx) throws IOException {
+    public void println(FeatureExpr ctx)  {
         print(ctx, newLine);
     }
 
     @Override
-    public void println(FeatureExpr ctx, String s) throws IOException {
+    public void println(FeatureExpr ctx, String s)  {
         print(ctx, s + newLine);
     }
 
     @Override
-    public void println(FeatureExpr ctx, Object o) throws IOException {
+    public void println(FeatureExpr ctx, Object o)  {
         if (o == null)
             println(ctx, "null");
         else
@@ -159,25 +159,25 @@ public class VWriteStreamImpl
     }
 
     @Override
-    public void write(FeatureExpr ctx, int b) throws IOException {
+    public void write(FeatureExpr ctx, int b) {
         updateCtx(ctx);
         _buffer.append(b);
     }
 
     @Override
-    public void write(FeatureExpr ctx, byte[] buffer, int offset, int length) throws IOException {
+    public void write(FeatureExpr ctx, byte[] buffer, int offset, int length)  {
         updateCtx(ctx);
         _buffer.append(_charset.decode(ByteBuffer.wrap(buffer, offset, length)));
     }
 
     @Override
-    public long writeStream(FeatureExpr ctx, InputStream inputStream) throws IOException {
+    public long writeStream(FeatureExpr ctx, InputStream inputStream) {
         throw new UnimplementedException();
 //        return 0;
     }
 
 
-    private void updateCtx(FeatureExpr ctx) throws IOException {
+    private void updateCtx(FeatureExpr ctx)  {
         if (ctx == _currentCtx) return;
         doFlush();
         _currentCtx = ctx;

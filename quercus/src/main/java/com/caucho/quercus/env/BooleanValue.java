@@ -396,9 +396,7 @@ public class BooleanValue extends Value
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value,String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value,String> valueSet) {
     if (toBoolean())
       out.print(VHelper.noCtx(), "bool(true)");
     else

@@ -37,7 +37,6 @@ import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
-import java.io.IOException;
 import java.util.IdentityHashMap;
 
 /**
@@ -85,9 +84,7 @@ public class CallbackClassMethod extends Callback {
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     out.print(VHelper.noCtx(), getClass().getName());
     out.print(VHelper.noCtx(), '[');
     out.print(VHelper.noCtx(), _qClass.getName());

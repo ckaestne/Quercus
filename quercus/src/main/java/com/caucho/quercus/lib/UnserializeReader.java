@@ -415,7 +415,7 @@ public final class UnserializeReader {
       return value;
     }
     else {
-      Var var = new Var(V.one(value));
+      Var var = new VarImpl(V.one(value));
 
       _valueList.add(var.makeValue());
       return var.makeValue();

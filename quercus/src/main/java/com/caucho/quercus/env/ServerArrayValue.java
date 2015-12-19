@@ -324,9 +324,7 @@ public class ServerArrayValue extends ArrayValueImpl
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
-                          IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
+                          IdentityHashMap<Value, String> valueSet) {
     if (! _isFilled)
       fillMap();
 
