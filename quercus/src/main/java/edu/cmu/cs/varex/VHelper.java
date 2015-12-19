@@ -134,4 +134,8 @@ public class VHelper {
   public static Var[] valArrayToVar(Value[] args) {
     return VHelper.mapArray(Var.class, args, a->Var.create(a));
   }
+
+  public static <T> boolean vequal(V<? extends T> a, V<? extends T> b) {
+    return vmapAll(True(), a, b, (c, aa, bb) -> c.isContradiction() || aa.equals(bb)).when(x->x).isTautology();
+  }
 }

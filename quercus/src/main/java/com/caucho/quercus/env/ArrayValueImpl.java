@@ -994,7 +994,7 @@ public class ArrayValueImpl extends ArrayValue
   private void checkInvariants() {
     // check size
     V<? extends Integer> expectedSize = foldRight(V.one(0), VHelper.True(), (c, e, v) -> V.choice(e.getCondition(), v + 1, v));
-    assert _size.equals(expectedSize) : "stored size " + _size + " different from actual size " + expectedSize;
+    assert VHelper.vequal(_size, expectedSize) : "stored size " + _size + " different from actual size " + expectedSize;
 
 
     //check lookup table and backward references
@@ -1072,7 +1072,7 @@ public class ArrayValueImpl extends ArrayValue
     return existingEntries.vflatMap(ctx, (c,e)->{
 
       if (e==null)
-        return V.choice(c,createNewEntry(c, key), e);
+        return V.choice(c, () -> createNewEntry(c, key), () -> e);
         else return V.one(e);
     });
   }

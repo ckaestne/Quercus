@@ -65,7 +65,7 @@ trait AbstractPhpTest extends ConditionalOutputInfrastructure {
 
     private def compare(expected: List[TOpt[String]], result: List[TOpt[String]]): Unit = {
         def compareOne(ctx: FeatureExpr, e: String, f: String): Unit =
-            assert(ctx.isContradiction || e==f, s"mismatch between expected output and actual output in context $ctx: \nEXPECTED:\n$e\nFOUND:\n$f\nALL:\n"+render(result))
+            assert(ctx.isContradiction || e.trim==f.trim, s"mismatch between expected output and actual output in context $ctx: \nEXPECTED:\n$e\nFOUND:\n$f\nALL:\n"+render(result))
 
         val allExpected = ConditionalLib.explodeOptList(expected).map(_.mkString)
         val allFound = ConditionalLib.explodeOptList(result).map(_.mkString)

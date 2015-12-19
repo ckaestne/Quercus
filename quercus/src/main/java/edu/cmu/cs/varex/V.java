@@ -1,9 +1,9 @@
 package edu.cmu.cs.varex;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.function.*;
 
 /**
@@ -35,10 +35,29 @@ public interface V<T> {
         return new One(v);
     }
     static <U> V<? extends U> choice(@Nonnull FeatureExpr condition, @Nullable U a, @Nullable U b) {
-        return VImpl.choice(condition, a, b);
+        if (condition.isContradiction())
+            return one(b);
+        else if (condition.isTautology())
+            return one(a);
+        else
+            return VImpl.choice(condition, a, b);
+    }
+
+    static <U> V<? extends U> choice(@Nonnull FeatureExpr condition, Supplier<U> a, Supplier<U> b) {
+        if (condition.isContradiction())
+            return one(b.get());
+        else if (condition.isTautology())
+            return one(a.get());
+        else
+            return VImpl.choice(condition, a.get(), b.get());
     }
     static <U> V<? extends U> choice(@Nonnull FeatureExpr condition, @Nonnull V<? extends U> a, @Nonnull V<? extends U> b) {
-        return VImpl.choice(condition, a, b);
+        if (condition.isContradiction())
+            return b;
+        else if (condition.isTautology())
+            return a;
+        else
+            return VImpl.choice(condition, a, b);
     }
 
 }
