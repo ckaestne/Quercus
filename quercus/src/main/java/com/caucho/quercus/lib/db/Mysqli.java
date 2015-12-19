@@ -1163,6 +1163,7 @@ public class Mysqli extends JdbcConnectionResource
   /**
    * Rolls the current transaction back.
    */
+  @Override
   public boolean rollback()
   {
     return super.rollback();
@@ -1992,7 +1993,7 @@ public class Mysqli extends JdbcConnectionResource
     NONE,
     UPDATE,
     DESCRIBE
-  };
+  }
 
   static class MysqlMetaDataMethod {
     private Class<?> _resultSetMetaDataClass;
@@ -2005,7 +2006,7 @@ public class Mysqli extends JdbcConnectionResource
       try {
         _getColumnCharacterSetMethod
           = _resultSetMetaDataClass.getMethod("getColumnCharacterSet",
-                                              new Class[] { int.class });
+                int.class);
       } catch (Exception e) {
         log.log(Level.FINER, e.toString(), e);
       }

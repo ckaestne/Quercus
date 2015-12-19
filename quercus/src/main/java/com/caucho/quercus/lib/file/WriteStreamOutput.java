@@ -55,6 +55,7 @@ public class WriteStreamOutput extends OutputStream implements BinaryOutput {
   /**
    * Returns the input stream.
    */
+  @Override
   public OutputStream getOutputStream()
   {
     return _os;

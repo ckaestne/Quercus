@@ -83,6 +83,7 @@ public class SwitchStatement extends Statement {
   /**
    * Executes the 'switch' statement, returning any value.
    */
+  @Override
   public
   @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx) {
@@ -148,6 +149,7 @@ public class SwitchStatement extends Statement {
   /**
    * Returns true if control can go past the statement.
    */
+  @Override
   public int fallThrough()
   {
     return FALL_THROUGH;

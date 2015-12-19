@@ -34,6 +34,6 @@ import com.caucho.quercus.env.Env;
 public interface RecursiveIterator
   extends Iterator
 {
-  public boolean hasChildren(Env env);
-  public RecursiveIterator getChildren(Env env);
+  boolean hasChildren(Env env);
+  RecursiveIterator getChildren(Env env);
 }

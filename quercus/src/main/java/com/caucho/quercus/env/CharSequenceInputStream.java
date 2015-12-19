@@ -46,6 +46,7 @@ public class CharSequenceInputStream extends InputStream {
     _length = s.length();
   }
 
+  @Override
   public int read()
   {
     if (_index < _length)
@@ -54,6 +55,7 @@ public class CharSequenceInputStream extends InputStream {
       return -1;
   }
 
+  @Override
   public int read(byte []buffer, int offset, int length)
   {
     int sublen = _length - _index;

@@ -68,6 +68,7 @@ public class ApcModule extends AbstractQuercusModule
   /**
    * Returns true for the mysql extension.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "apc" };
@@ -76,6 +77,7 @@ public class ApcModule extends AbstractQuercusModule
   /**
    * Returns the default php.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;
@@ -396,6 +398,7 @@ public class ApcModule extends AbstractQuercusModule
       }
     }
 
+    @Override
     public Value getValue(Env env)
     {
       if (env.getCurrentTime() <= _expire) {

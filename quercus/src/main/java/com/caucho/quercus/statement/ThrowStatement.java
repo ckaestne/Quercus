@@ -57,6 +57,7 @@ public class ThrowStatement extends Statement {
   /**
    * Executes the statement, returning the expression value.
    */
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
@@ -68,6 +69,7 @@ public class ThrowStatement extends Statement {
   /**
    * Returns true if control can go past the statement.
    */
+  @Override
   public int fallThrough()
   {
     return RETURN;

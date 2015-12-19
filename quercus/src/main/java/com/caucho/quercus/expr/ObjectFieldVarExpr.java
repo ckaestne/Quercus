@@ -112,6 +112,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     // quercus/0d1k
@@ -128,6 +129,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
@@ -182,6 +184,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
@@ -198,6 +201,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.evalObject(env, VHelper.noCtx());
@@ -213,6 +217,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());

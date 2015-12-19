@@ -87,10 +87,8 @@ public class GenericDecoder
     out.clear();
 
     coder = _decoder.flush(out);
-    if (coder.isMalformed())
-      return false;
+    return !coder.isMalformed();
 
-    return true;
   }
 
   @Override

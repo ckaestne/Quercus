@@ -64,7 +64,7 @@ public class UserBody extends PostBody
   @Override
   public long getContentLength()
   {
-    return (long) _length;
+    return _length;
   }
 
   @Override
@@ -73,6 +73,7 @@ public class UserBody extends PostBody
     return _length < 0;
   }
 
+  @Override
   public void writeTo(Env env, OutputStream os)
     throws IOException
   {

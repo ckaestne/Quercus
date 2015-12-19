@@ -46,6 +46,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ClassImplementation {
-  public String parent() default "";
-  public String iface() default "";
+  String parent() default "";
+  String iface() default "";
 }

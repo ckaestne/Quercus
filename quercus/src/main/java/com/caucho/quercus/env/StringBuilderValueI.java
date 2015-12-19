@@ -33,5 +33,5 @@ package com.caucho.quercus.env;
  * XXX: rename
  */
 public interface StringBuilderValueI {
-  public abstract void setLength(int length);
+  void setLength(int length);
 }

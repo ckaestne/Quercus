@@ -231,8 +231,8 @@ public class CurlHttpConnection
    * Connects to the server.
    */
   public void connect(CurlResource curl)
-    throws ConnectException, ProtocolException, SocketTimeoutException,
-            IOException
+    throws
+          IOException
   {
     authenticate();
 
@@ -243,8 +243,8 @@ public class CurlHttpConnection
    * Handles the authentication for this connection.
    */
   public void authenticate()
-    throws ConnectException, ProtocolException, SocketTimeoutException,
-           IOException
+    throws
+          IOException
   {
     if (_username != null || _proxyUsername != null)
       authenticateImpl();
@@ -259,8 +259,8 @@ public class CurlHttpConnection
    * Handles the authentication for this connection.
    */
   public void authenticateImpl()
-    throws ConnectException, ProtocolException, SocketTimeoutException,
-           IOException
+    throws
+          IOException
   {
     Proxy proxy = Proxy.NO_PROXY;
 
@@ -323,7 +323,7 @@ public class CurlHttpConnection
                                         String clientField,
                                         String username,
                                         String password)
-    throws ConnectException, SocketTimeoutException, IOException
+    throws IOException
   {
     if (username == null || password == null)
       return "";

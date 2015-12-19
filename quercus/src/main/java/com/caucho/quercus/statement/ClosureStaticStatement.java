@@ -60,6 +60,7 @@ public class ClosureStaticStatement
     _initValue = initValue;
   }
 
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {

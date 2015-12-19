@@ -86,6 +86,7 @@ public class ThisExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getThis());
@@ -161,6 +162,7 @@ public class ThisExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     env.error(L.l("can't unset $this"), getLocation());
@@ -169,6 +171,7 @@ public class ThisExpr extends AbstractVarExpr {
   /**
    * Evaluates as a QuercusClass.
    */
+  @Override
   public V<? extends QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getThis().getQuercusClass());

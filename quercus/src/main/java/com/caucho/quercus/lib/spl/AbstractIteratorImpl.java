@@ -46,6 +46,7 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
       _needNext = false;
     }
 
+    @Override
     public boolean hasNext()
     {
       if (_needNext) {
@@ -57,6 +58,7 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
       return _validFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne().toValue().toBoolean();
     }
 
+    @Override
     public T next()
     {
       return getCurrent();
@@ -74,6 +76,7 @@ public abstract class AbstractIteratorImpl<T> implements Iterator<T> {
       return _currentFun.callMethod(_env, VHelper.noCtx(), _qClass, _obj).getOne().toValue();
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();

@@ -513,6 +513,7 @@ public class QuercusSessionManager
   /**
    * Timeout for reaping old sessions.
    */
+  @Override
   public void handleAlarm(Alarm alarm)
   {
     try {

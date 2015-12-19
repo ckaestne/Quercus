@@ -777,10 +777,8 @@ public final class UnserializeReader {
 
   public final boolean isValidString(int len)
   {
-    if (_index + len >= _buffer.length)
-      return false;
+    return _index + len < _buffer.length;
 
-    return true;
   }
 
   public final String readString(int len)

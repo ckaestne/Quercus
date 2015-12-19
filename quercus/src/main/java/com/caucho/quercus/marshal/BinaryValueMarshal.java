@@ -38,6 +38,7 @@ public class BinaryValueMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new BinaryValueMarshal();
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
@@ -52,11 +53,13 @@ public class BinaryValueMarshal extends Marshal
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     Value arg = value.toBinaryValue(env);
@@ -69,6 +72,7 @@ public class BinaryValueMarshal extends Marshal
     return arg;
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof BinaryBuilderValue)

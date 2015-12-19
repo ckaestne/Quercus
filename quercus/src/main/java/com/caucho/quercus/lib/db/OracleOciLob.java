@@ -93,14 +93,14 @@ public class OracleOciLob {
       classOracleCLOB = Class.forName("oracle.sql.CLOB");
       createTemporaryBLOB = classOracleBLOB.getDeclaredMethod(
           "createTemporary",
-          new Class[]{Connection.class,
+              Connection.class,
               Boolean.TYPE,
-              Integer.TYPE});
+              Integer.TYPE);
       createTemporaryCLOB = classOracleCLOB.getDeclaredMethod(
           "createTemporary",
-          new Class[]{Connection.class,
+              Connection.class,
               Boolean.TYPE,
-              Integer.TYPE});
+              Integer.TYPE);
       BLOB_DURATION_CALL = classOracleBLOB.getDeclaredField(
           "DURATION_CALL").getInt(null);
       BLOB_DURATION_SESSION = classOracleBLOB.getDeclaredField(
@@ -813,14 +813,14 @@ public class OracleOciLob {
 
       if (lobType == OracleModule.OCI_TEMP_BLOB) {
         _lob = createTemporaryBLOB.invoke(classOracleBLOB,
-                                          new Object[] {_conn,
-                                                        true,
-                                                        BLOB_DURATION_SESSION});
+                _conn,
+                true,
+                BLOB_DURATION_SESSION);
       } else {
         _lob = createTemporaryCLOB.invoke(classOracleCLOB,
-                                          new Object[] {_conn,
-                                                        true,
-                                                        CLOB_DURATION_SESSION});
+                _conn,
+                true,
+                CLOB_DURATION_SESSION);
       }
 
       return true;

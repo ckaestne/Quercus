@@ -219,6 +219,7 @@ public class MysqliStatement extends JdbcPreparedStatementResource {
    * @return true on success, false on failure or
    * null if no more rows/data exists
    */
+  @Override
   public Value fetch(Env env)
   {
     return super.fetch(env);

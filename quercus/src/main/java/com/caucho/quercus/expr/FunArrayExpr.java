@@ -78,6 +78,7 @@ public class FunArrayExpr extends Expr {
   /**
    * Returns true if the expression evaluates to an array.
    */
+  @Override
   public boolean isArray()
   {
     return true;
@@ -86,6 +87,7 @@ public class FunArrayExpr extends Expr {
   /**
    * Returns true for a constant array.
    */
+  @Override
   public boolean isConstant()
   {
     for (int i = 0; i < _keys.length; i++) {
@@ -109,6 +111,7 @@ public class FunArrayExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     ArrayValue array = new ArrayValueImpl();

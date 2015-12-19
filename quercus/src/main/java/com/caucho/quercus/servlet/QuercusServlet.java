@@ -619,6 +619,7 @@ public class QuercusServlet
   /**
    * Closes the servlet instance.
    */
+  @Override
   public void destroy()
   {
     _impl.destroy();

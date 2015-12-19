@@ -187,20 +187,18 @@ public class OracleOciCollection {
       Class<?> clArrayDescriptor = Class.forName("oracle.sql.ArrayDescriptor");
 
       Constructor<?> constructor = classOracleARRAY.getDeclaredConstructor(
-          new Class[]
-        {clArrayDescriptor, Connection.class, Object.class});
+              clArrayDescriptor, Connection.class, Object.class);
 
       Object []elements = _javaCollection.toArray();
 
-      _collection = (Array) constructor.newInstance(new Object[]
-        {_arrayDescriptor, _jdbcConn, elements});
+      _collection = (Array) constructor.newInstance(_arrayDescriptor, _jdbcConn, elements);
 
       if (_collection != null) {
         // Optimization
         Method setAutoBuffering
           = classOracleARRAY.getDeclaredMethod("setAutoBuffering",
-                                               new Class[] {Boolean.TYPE});
-        setAutoBuffering.invoke(_collection, new Object[] {true});
+                Boolean.TYPE);
+        setAutoBuffering.invoke(_collection, true);
       }
 
       return _collection;

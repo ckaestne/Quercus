@@ -127,6 +127,7 @@ public class StreamResource extends ResourceValue {
   /**
    * Closes the stream.
    */
+  @Override
   public void close()
   {
   }

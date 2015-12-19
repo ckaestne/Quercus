@@ -65,6 +65,7 @@ public class ExpectMarshal extends Marshal
       return env.expectBoolean(value);
   }
 
+  @Override
   public boolean isReadOnly()
   {
     return false;
@@ -79,16 +80,19 @@ public class ExpectMarshal extends Marshal
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return expect(env, expr.eval(env, VHelper.noCtx()).getOne());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return expect(env, value.toValue());
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return (Value) value;

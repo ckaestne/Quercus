@@ -85,13 +85,13 @@ public class JavaConstructor extends JavaInvoker {
   {
     String name;
 
-    Name nameAnn = (Name) cons.getAnnotation(Name.class);
+    Name nameAnn = cons.getAnnotation(Name.class);
 
     if (nameAnn != null)
       name = nameAnn.value();
     else {
       Class<?> cl = cons.getDeclaringClass();
-      Name clNameAnn =  (Name) cl.getAnnotation(Name.class);
+      Name clNameAnn = cl.getAnnotation(Name.class);
 
       if (clNameAnn != null)
         name = clNameAnn.value();
@@ -113,6 +113,7 @@ public class JavaConstructor extends JavaInvoker {
     return _argLength;
   }
 
+  @Override
   public Object invoke(Object obj, Object []args)
   {
     try {

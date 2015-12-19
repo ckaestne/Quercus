@@ -57,16 +57,19 @@ public class PDOException
   }
 
 
+  @Override
   public Location getLocation(Env env)
   {
     return _location;
   }
 
+  @Override
   public String getMessage()
   {
     return _message;
   }
 
+  @Override
   public String getMessage(Env env)
   {
     return getMessage();

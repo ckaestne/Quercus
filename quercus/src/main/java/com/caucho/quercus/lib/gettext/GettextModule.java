@@ -59,6 +59,7 @@ public class GettextModule
     = Logger.getLogger(GettextModule.class.getName());
   private final L10N L = new L10N(GettextModule.class);
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "gettext" };

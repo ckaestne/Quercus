@@ -171,6 +171,7 @@ public class ProfileMethod
   }
 
   static class ItemMicrosComparator implements Comparator<ProfileItem> {
+    @Override
     public int compare(ProfileItem a, ProfileItem b)
     {
       long delta = b.getMicros() - a.getMicros();

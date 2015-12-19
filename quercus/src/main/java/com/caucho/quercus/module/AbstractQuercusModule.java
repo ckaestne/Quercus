@@ -49,6 +49,7 @@ public class AbstractQuercusModule implements QuercusModule {
   private static final HashMap<StringValue,Value> NULL_MAP
     = new HashMap<StringValue,Value>();
 
+  @Override
   public Map<StringValue,Value> getConstMap()
   {
     return NULL_MAP;
@@ -57,6 +58,7 @@ public class AbstractQuercusModule implements QuercusModule {
   /**
    * Returns the default quercus.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return IniDefinitions.EMPTY;
@@ -65,6 +67,7 @@ public class AbstractQuercusModule implements QuercusModule {
   /**
    * Returns the extensions loaded by the module.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[0];

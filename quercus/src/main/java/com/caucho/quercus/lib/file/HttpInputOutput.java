@@ -191,6 +191,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Appends to a string builder.
    */
+  @Override
   public StringValue appendTo(StringValue builder)
     throws IOException
   {
@@ -203,6 +204,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Returns the read stream.
    */
+  @Override
   public InputStream getInputStream()
   {
     return _is;
@@ -218,6 +220,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Opens a copy.
    */
+  @Override
   public BinaryInput openCopy()
     throws IOException
   {
@@ -227,6 +230,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Reads a character from a file, returning -1 on EOF.
    */
+  @Override
   public int read()
     throws IOException
   {
@@ -239,6 +243,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Reads a buffer from a file, returning -1 on EOF.
    */
+  @Override
   public int read(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -263,6 +268,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Reads a Binary string.
    */
+  @Override
   public StringValue read(int length)
     throws IOException
   {
@@ -307,6 +313,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Reads the optional linefeed character from a \r\n
    */
+  @Override
   public boolean readOptionalLinefeed()
     throws IOException
   {
@@ -324,6 +331,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Returns true on the EOF.
    */
+  @Override
   public boolean isEOF()
   {
     try {
@@ -380,6 +388,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Closes the file for reading.
    */
+  @Override
   public void closeRead()
   {
     close();
@@ -388,6 +397,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   /**
    * Closes the file.
    */
+  @Override
   public void close()
   {
     _env.removeCleanup(this);

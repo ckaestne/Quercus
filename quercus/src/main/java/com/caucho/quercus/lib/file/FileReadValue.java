@@ -68,6 +68,7 @@ public class FileReadValue extends FileValue {
   /**
    * Reads a character from a file, returning -1 on EOF.
    */
+  @Override
   public int read()
     throws IOException
   {
@@ -88,6 +89,7 @@ public class FileReadValue extends FileValue {
   /**
    * Reads a buffer from a file, returning -1 on EOF.
    */
+  @Override
   public int read(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -108,6 +110,7 @@ public class FileReadValue extends FileValue {
   /**
    * Reads the optional linefeed character from a \r\n
    */
+  @Override
   public boolean readOptionalLinefeed()
     throws IOException
   {
@@ -154,6 +157,7 @@ public class FileReadValue extends FileValue {
   /**
    * Returns true on the EOF.
    */
+  @Override
   public boolean isEOF()
   {
     if (_is == null)
@@ -173,6 +177,7 @@ public class FileReadValue extends FileValue {
   /**
    * Returns the current location in the file.
    */
+  @Override
   public long getPosition()
   {
     if (_is == null)
@@ -184,6 +189,7 @@ public class FileReadValue extends FileValue {
   /**
    * Closes the file.
    */
+  @Override
   public void close()
   {
     ReadStream is = _is;

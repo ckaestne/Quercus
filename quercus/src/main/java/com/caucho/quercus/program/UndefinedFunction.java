@@ -55,6 +55,7 @@ public class UndefinedFunction extends AbstractFunction {
     _globalId = globalId;
   }
 
+  @Override
   public String getName()
   {
     return _name;
@@ -63,6 +64,7 @@ public class UndefinedFunction extends AbstractFunction {
   /**
    * Evaluates the function.
    */
+  @Override
   public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     if (_globalId > 0) {

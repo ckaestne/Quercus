@@ -67,6 +67,7 @@ public class UnicodeModule extends AbstractQuercusModule {
   /**
    * Returns the extensions implemented by the module.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "iconv" };
@@ -75,6 +76,7 @@ public class UnicodeModule extends AbstractQuercusModule {
   /**
    * Returns the default quercus.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;
@@ -249,7 +251,7 @@ public class UnicodeModule extends AbstractQuercusModule {
         tail = newOffset + length;
 
       if (newOffset < 0 || tail < newOffset)
-        return str.EMPTY;
+        return StringValue.EMPTY;
 
       unicodeStr = unicodeStr.subSequence(newOffset, tail);
 

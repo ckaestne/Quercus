@@ -31,7 +31,7 @@ package com.caucho.quercus.servlet.api;
 
 public interface QuercusServletContext
 {
-  public String getMimeType(String name);
+  String getMimeType(String name);
 
-  public <T> T toServletContext(Class<T> cls);
+  <T> T toServletContext(Class<T> cls);
 }

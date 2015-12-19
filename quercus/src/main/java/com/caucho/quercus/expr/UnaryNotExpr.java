@@ -54,6 +54,7 @@ public class UnaryNotExpr extends AbstractUnaryExpr {
   /**
    * Return true as a boolean.
    */
+  @Override
   public boolean isBoolean()
   {
     return true;
@@ -62,6 +63,7 @@ public class UnaryNotExpr extends AbstractUnaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return _expr.evalBoolean(env, ctx).map((a)->a ? BooleanValue.FALSE : BooleanValue.TRUE);
@@ -70,6 +72,7 @@ public class UnaryNotExpr extends AbstractUnaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
+  @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     return  _expr.evalBoolean(env, ctx).map((a)->!a);

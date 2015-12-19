@@ -44,27 +44,30 @@ public class BinaryInputMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new BinaryInputMarshal();
   
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     if (value == null)
       return null;
     else if (value instanceof BinaryInput)
-      return (BinaryInput) value;
+      return value;
 
     Object javaObj = value.toJavaObject();
 
     if (javaObj instanceof BinaryInput)
-      return (BinaryInput) javaObj;
+      return javaObj;
     else if (javaObj instanceof InputStream)
       return new ReadStreamInput(env, (InputStream) javaObj);
     else
@@ -88,6 +91,7 @@ public class BinaryInputMarshal extends Marshal
       return new ReadStreamInput(env, value.toInputStream());
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return (Value) value;

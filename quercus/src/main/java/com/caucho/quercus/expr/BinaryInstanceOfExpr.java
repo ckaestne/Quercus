@@ -62,6 +62,7 @@ public class BinaryInstanceOfExpr extends AbstractUnaryExpr {
   /**
    * Returns true for a boolean.
    */
+  @Override
   public boolean isBoolean()
   {
     return true;
@@ -80,6 +81,7 @@ public class BinaryInstanceOfExpr extends AbstractUnaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
+  @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _expr.eval(env, VHelper.noCtx());

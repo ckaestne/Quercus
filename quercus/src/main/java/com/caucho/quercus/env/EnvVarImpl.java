@@ -60,6 +60,7 @@ public final class EnvVarImpl extends EnvVar
   /**
    * Sets the current value.
    */
+  @Override
   public V<? extends Value> set(FeatureExpr ctx, V<? extends Value> value)
   {
     V<? extends Value> oldVar = getValue();
@@ -79,6 +80,7 @@ public final class EnvVarImpl extends EnvVar
   /**
    * Sets the var.
    */
+  @Override
   public V<? extends Var> setVar(FeatureExpr ctx, V<? extends Var> var)
   {
     V<? extends Var> oldVar = _var;

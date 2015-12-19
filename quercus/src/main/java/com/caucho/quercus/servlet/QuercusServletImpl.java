@@ -368,6 +368,7 @@ public class QuercusServletImpl extends HttpServlet
   /**
    * Destroys the quercus instance.
    */
+  @Override
   public void destroy()
   {
     _quercus.close();

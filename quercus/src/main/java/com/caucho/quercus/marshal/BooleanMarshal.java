@@ -44,26 +44,31 @@ import edu.cmu.cs.varex.VHelper;
 public class BooleanMarshal extends Marshal {
   public static final BooleanMarshal MARSHAL = new BooleanMarshal();
 
+  @Override
   public boolean isBoolean()
   {
     return true;
   }
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return expr.evalBoolean(env, VHelper.noCtx()).getOne() ? Boolean.TRUE : Boolean.FALSE;
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return value.toBoolean() ? Boolean.TRUE : Boolean.FALSE;
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)

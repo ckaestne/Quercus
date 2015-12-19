@@ -185,7 +185,7 @@ public class ClassesModule extends AbstractQuercusModule {
     QuercusClass cl;
 
     if (cls.isObject())
-      cl = ((ObjectValue) cls).getQuercusClass();
+      cl = cls.getQuercusClass();
     else
       cl = env.findClass(cls.toString());
 
@@ -223,7 +223,7 @@ public class ClassesModule extends AbstractQuercusModule {
     QuercusClass cl;
 
     if (obj instanceof ObjectValue)
-      cl = ((ObjectValue) obj).getQuercusClass();
+      cl = obj.getQuercusClass();
     else
       cl = env.findClass(obj.toString());
 

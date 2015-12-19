@@ -47,6 +47,7 @@ abstract public class BinaryValue extends StringValue
   /**
    * Cost to convert to a binary value
    */
+  @Override
   public int toBinaryValueMarshalCost()
   {
     return Marshal.COST_IDENTICAL + 1;

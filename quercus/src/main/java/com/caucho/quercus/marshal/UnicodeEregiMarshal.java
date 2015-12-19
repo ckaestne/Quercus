@@ -43,17 +43,20 @@ import edu.cmu.cs.varex.VHelper;
 public class UnicodeEregiMarshal extends StringMarshal {
   public static final UnicodeEregiMarshal MARSHAL = new UnicodeEregiMarshal();
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return RegexpModule.createUnicodeEregi(env, 
                                            expr.eval(env, VHelper.noCtx()).getOne().toStringValue());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return RegexpModule.createUnicodeEregi(env, value.toStringValue());
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     throw new UnsupportedOperationException(getClass().getName());

@@ -56,6 +56,7 @@ public class ArrayIsSetExpr extends Expr {
     _index = index;
   }
 
+  @Override
   public boolean isBoolean()
   {
     return true;
@@ -69,6 +70,7 @@ public class ArrayIsSetExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
@@ -83,6 +85,7 @@ public class ArrayIsSetExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     V<? extends Value> array = _expr.eval(env, VHelper.noCtx());

@@ -36,11 +36,11 @@ import com.caucho.quercus.env.Value;
 @Delegates(ArrayAccessDelegate.class)
 public interface ArrayAccess
 {
-  public boolean offsetExists(Env env, Value offset);
+  boolean offsetExists(Env env, Value offset);
 
-  public Value offsetSet(Env env, Value offset, Value value);
+  Value offsetSet(Env env, Value offset, Value value);
 
-  public Value offsetGet(Env env, Value offset);
+  Value offsetGet(Env env, Value offset);
 
-  public Value offsetUnset(Env env, Value offset);
+  Value offsetUnset(Env env, Value offset);
 }

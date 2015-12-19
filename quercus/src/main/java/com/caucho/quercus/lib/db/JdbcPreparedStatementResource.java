@@ -428,12 +428,12 @@ public class JdbcPreparedStatementResource
             Object object = constructor.newInstance();
 
             Method method = cl.getDeclaredMethod("setType",
-                                                 new Class[] {String.class});
-            method.invoke(object, new Object[] {typeName});
+                    String.class);
+            method.invoke(object, typeName);
 
             method = cl.getDeclaredMethod("setValue",
-                                          new Class[] {String.class});
-            method.invoke(object, new Object[] {param});
+                    String.class);
+            method.invoke(object, param);
 
             _preparedStmt.setObject(i, object, type);
           }
@@ -490,9 +490,9 @@ public class JdbcPreparedStatementResource
               Class<?> cl = Class.forName("org.postgresql.util.PGmoney");
 
               Constructor<?> constructor
-                = cl.getDeclaredConstructor(new Class[] {String.class});
+                = cl.getDeclaredConstructor(String.class);
 
-              Object object = constructor.newInstance(new Object[] {money});
+              Object object = constructor.newInstance(money);
 
               _preparedStmt.setObject(i, object, Types.OTHER);
             }

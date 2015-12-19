@@ -144,7 +144,7 @@ public class QuercusEngine
       out = ws;
     }
     else
-      out =  VWriteStream.adapt(new WriteStream(StdoutStream.create()));;
+      out =  VWriteStream.adapt(new WriteStream(StdoutStream.create()));
 
     QuercusPage page = new InterpretedPage(program);
 
@@ -181,6 +181,7 @@ public class QuercusEngine
     /**
      * Returns true if this is a writable stream.
      */
+    @Override
     public boolean canWrite()
     {
       return true;
@@ -194,6 +195,7 @@ public class QuercusEngine
      * @param length the number of bytes to write.
      * @param isEnd true when the write is flushing a close.
      */
+    @Override
     public void write(byte []buffer, int offset, int length, boolean isEnd)
       throws IOException
     {

@@ -45,19 +45,22 @@ import java.math.BigInteger;
 public class BigIntegerMarshal extends Marshal {
   public static final Marshal MARSHAL = new BigIntegerMarshal();
 
+  @Override
   public Object marshal(Env env, Expr expr, Class argClass)
   {
     return expr.eval(env, VHelper.noCtx()).getOne().toBigInteger();
   }
   
+  @Override
   public Object marshal(Env env, Value value, Class argClass)
   {
     return value.toBigInteger();
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava((BigInteger) value);
+    return env.wrapJava(value);
   }
   
   @Override

@@ -99,6 +99,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Returns the write stream.
    */
+  @Override
   public OutputStream getOutputStream()
   {
     try {
@@ -113,6 +114,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Returns the read stream.
    */
+  @Override
   public InputStream getInputStream()
   {
     try {
@@ -171,6 +173,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Unread a character.
    */
+  @Override
   public void unread()
     throws IOException
   {
@@ -180,6 +183,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Reads a character from a file, returning -1 on EOF.
    */
+  @Override
   public int read()
     throws IOException
   {
@@ -197,6 +201,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Reads a buffer from a file, returning -1 on EOF.
    */
+  @Override
   public int read(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -219,6 +224,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Appends to a string builder.
    */
+  @Override
   public StringValue appendTo(StringValue builder)
     throws IOException
   {
@@ -231,6 +237,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Reads a Binary string.
    */
+  @Override
   public StringValue read(int length)
     throws IOException
   {
@@ -265,6 +272,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Reads the optional linefeed character from a \r\n
    */
+  @Override
   public boolean readOptionalLinefeed()
     throws IOException
   {
@@ -283,6 +291,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Reads a line from the buffer.
    */
+  @Override
   public StringValue readLine(long length)
     throws IOException
   {
@@ -292,6 +301,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Returns true on the EOF.
    */
+  @Override
   public boolean isEOF()
   {
     try {
@@ -304,6 +314,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(char v)
     throws IOException
   {
@@ -313,6 +324,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(String v)
     throws IOException
   {
@@ -323,6 +335,7 @@ public class FileInputOutput extends AbstractBinaryOutput
    /**
    * Writes a buffer to a file.
    */
+  @Override
   public void write(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -332,6 +345,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Writes a buffer to a file.
    */
+  @Override
   public void write(int ch)
     throws IOException
   {
@@ -341,6 +355,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Flushes the output.
    */
+  @Override
   public void flush()
     throws IOException
   {
@@ -349,6 +364,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Closes the file for writing.
    */
+  @Override
   public void closeWrite()
   {
     close();
@@ -357,6 +373,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Closes the file for reading.
    */
+  @Override
   public void closeRead()
   {
     close();
@@ -365,6 +382,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Closes the file.
    */
+  @Override
   public void close()
   {
     _env.removeCleanup(this);
@@ -375,6 +393,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Implements the EnvCleanup interface.
    */
+  @Override
   public void cleanup()
   {
     try {
@@ -395,6 +414,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Returns the current location in the file.
    */
+  @Override
   public long getPosition()
   {
     try {
@@ -409,11 +429,13 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Sets the current location in the stream
    */
+  @Override
   public boolean setPosition(long offset)
   {
     return _stream.seek(offset);
   }
 
+  @Override
   public long seek(long offset, int whence)
   {
     long position;
@@ -446,6 +468,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Opens a copy.
    */
+  @Override
   public BinaryInput openCopy()
     throws IOException
   {
@@ -455,6 +478,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Lock the shared advisory lock.
    */
+  @Override
   public boolean lock(boolean shared, boolean block)
   {
     return _stream.lock(shared, block);
@@ -463,11 +487,13 @@ public class FileInputOutput extends AbstractBinaryOutput
   /**
    * Unlock the advisory lock.
    */
+  @Override
   public boolean unlock()
   {
     return _stream.unlock();
   }
 
+  @Override
   public Value stat()
   {
     return FileModule.statImpl(_env, getPath());

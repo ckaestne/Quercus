@@ -188,10 +188,10 @@ public class IniParser {
 
     if (len != sb.length()) {
       if (sb instanceof StringBuilderValue) {
-        ((StringBuilderValue) sb).setLength(len);
+        sb.setLength(len);
       }
       else {
-        ((UnicodeBuilderValue) sb).setLength(len);
+        sb.setLength(len);
       }
     }
 
@@ -300,22 +300,19 @@ public class IniParser {
 
   private static boolean isValidIniKeyChar(int ch)
   {
-    if (ch <= 0
-        || ch == '='
-        || ch == ';'
-        || ch == '{'
-        || ch == '}'
-        || ch == '|'
-        || ch == '&'
-        || ch == '~'
-        || ch == '!'
-        || ch == '['
-        || ch == '('
-        || ch == ')'
-        || ch == '"')
-      return false;
-    else
-      return true;
+    return !(ch <= 0
+            || ch == '='
+            || ch == ';'
+            || ch == '{'
+            || ch == '}'
+            || ch == '|'
+            || ch == '&'
+            || ch == '~'
+            || ch == '!'
+            || ch == '['
+            || ch == '('
+            || ch == ')'
+            || ch == '"');
   }
 
   private static int skipWhitespaces(ReadStream is)

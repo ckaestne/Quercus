@@ -464,6 +464,7 @@ public class NullValue extends Value
   /**
    * Converts to a StringValue.
    */
+  @Override
   public StringValue toStringValue()
   {
     Env env = Env.getInstance();

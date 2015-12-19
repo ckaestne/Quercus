@@ -73,6 +73,7 @@ public class EncoderStream extends StreamImpl
     return true;
   }
 
+  @Override
   public int read(byte []buf, int offset, int length)
     throws IOException
   {

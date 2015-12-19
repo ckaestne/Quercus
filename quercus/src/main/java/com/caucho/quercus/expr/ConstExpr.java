@@ -210,6 +210,7 @@ public class ConstExpr extends Expr {
   /**
    * Returns true for literal
    */
+  @Override
   public Value evalConstant()
   {
     return new StringBuilderValue(_var);
@@ -223,6 +224,7 @@ public class ConstExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.getConstant(_var));

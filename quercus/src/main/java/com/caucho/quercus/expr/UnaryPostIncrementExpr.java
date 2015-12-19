@@ -58,6 +58,7 @@ public class UnaryPostIncrementExpr extends AbstractUnaryExpr {
     _incr = incr;
   }
 
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
  {
@@ -67,6 +68,7 @@ public class UnaryPostIncrementExpr extends AbstractUnaryExpr {
   /**
    * Return true for a double value
    */
+  @Override
   public boolean isDouble()
   {
     return _expr.isDouble();
@@ -75,6 +77,7 @@ public class UnaryPostIncrementExpr extends AbstractUnaryExpr {
   /**
    * Return true for a long value
    */
+  @Override
   public boolean isLong()
   {
     return _expr.isLong();
@@ -83,6 +86,7 @@ public class UnaryPostIncrementExpr extends AbstractUnaryExpr {
   /**
    * Return true for a number
    */
+  @Override
   public boolean isNumber()
   {
     return true;

@@ -80,6 +80,7 @@ public class ClassVarConstExpr extends Expr
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     // php/09d2

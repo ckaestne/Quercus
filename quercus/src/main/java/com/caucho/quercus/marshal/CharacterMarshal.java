@@ -40,21 +40,25 @@ public class CharacterMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new CharacterMarshal();
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return new Character(expr.evalChar(env, VHelper.noCtx()).getOne());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return new Character(value.toChar());
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)

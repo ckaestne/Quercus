@@ -80,6 +80,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Returns the write stream.
    */
+  @Override
   public OutputStream getOutputStream()
   {
     return _os;
@@ -96,6 +97,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(char v)
     throws IOException
   {
@@ -106,6 +108,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(String v)
     throws IOException
   {
@@ -116,6 +119,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Writes a character
    */
+  @Override
   public void write(int ch)
     throws IOException
   {
@@ -126,6 +130,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Writes a buffer to a file.
    */
+  @Override
   public void write(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -136,6 +141,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Flushes the output.
    */
+  @Override
   public void flush()
     throws IOException
   {
@@ -147,6 +153,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Closes the file.
    */
+  @Override
   public void closeWrite()
   {
     close();
@@ -155,6 +162,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Closes the file.
    */
+  @Override
   public void close()
   {
     _env.removeCleanup(this);
@@ -165,6 +173,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Implements the EnvCleanup interface.
    */
+  @Override
   public void cleanup()
   {
     try {
@@ -181,6 +190,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Lock the shared advisory lock.
    */
+  @Override
   public boolean lock(boolean shared, boolean block)
   {
     return _os.lock(shared, block);
@@ -189,6 +199,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Unlock the advisory lock.
    */
+  @Override
   public boolean unlock()
   {
       if(_os != null)
@@ -196,6 +207,7 @@ public class FileOutput extends AbstractBinaryOutput
       return true;
   }
 
+  @Override
   public Value stat()
   {
     return FileModule.statImpl(_env, getPath());
@@ -204,6 +216,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Returns the current location in the file.
    */
+  @Override
   public long getPosition()
   {
     if (_os == null)
@@ -215,6 +228,7 @@ public class FileOutput extends AbstractBinaryOutput
   /**
    * Sets the current location in the stream
    */
+  @Override
   public boolean setPosition(long offset)
   {
     if (_os == null)

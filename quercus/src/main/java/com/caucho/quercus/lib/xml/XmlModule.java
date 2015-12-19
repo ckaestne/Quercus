@@ -96,6 +96,7 @@ public class XmlModule extends AbstractQuercusModule {
 
   public static final String LIBXML_DOTTED_VERSION = "2.9.0";
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "xml", "libxml", "xmlreader", "xmlwriter" };
@@ -481,10 +482,7 @@ public class XmlModule extends AbstractQuercusModule {
    */
   public boolean xml_parser_free(@NotNull Xml parser)
   {
-    if (parser == null)
-      return false;
-    else
-      return true;
+    return parser != null;
   }
 
   /**

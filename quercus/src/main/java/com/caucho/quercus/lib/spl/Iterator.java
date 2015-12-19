@@ -40,25 +40,25 @@ public interface Iterator
   /**
    * Returns the current value.
    */
-  public Value current(Env env);
+  Value current(Env env);
 
   /**
    * Returns the current key.
    */
-  public Value key(Env env);
+  Value key(Env env);
 
   /**
    * Advances to the next row.
    */
-  public void next(Env env);
+  void next(Env env);
 
   /**
    * Rewinds the iterator so it is at the first row.
    */
-  public void rewind(Env env);
+  void rewind(Env env);
 
   /**
    * Returns true if the iterator currently points to a valid row.
    */
-  public boolean valid(Env env);
+  boolean valid(Env env);
 }

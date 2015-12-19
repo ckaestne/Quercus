@@ -69,6 +69,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Returns the write stream.
    */
+  @Override
   public OutputStream getOutputStream()
   {
     return _os;
@@ -77,6 +78,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(char v)
     throws IOException
   {
@@ -87,6 +89,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(String v)
     throws IOException
   {
@@ -97,6 +100,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Writes a character
    */
+  @Override
   public void write(int ch)
     throws IOException
   {
@@ -107,6 +111,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Writes a buffer to a file.
    */
+  @Override
   public void write(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -117,6 +122,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Flushes the output.
    */
+  @Override
   public void flush()
   {
     try {
@@ -130,6 +136,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Closes the file.
    */
+  @Override
   public void closeWrite()
   {
     close();
@@ -157,6 +164,7 @@ public class PopenOutput extends AbstractBinaryOutput
   /**
    * Closes the file.
    */
+  @Override
   public void close()
   {
     pclose();
@@ -166,6 +174,7 @@ public class PopenOutput extends AbstractBinaryOutput
    * Implements the EnvCleanup interface.
    */
 
+  @Override
   public void cleanup()
   {
     pclose();

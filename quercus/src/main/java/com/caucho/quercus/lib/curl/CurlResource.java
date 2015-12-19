@@ -888,6 +888,7 @@ public class CurlResource extends ResourceValue
   /**
    *
    */
+  @Override
   public void close()
   {
   }
@@ -903,6 +904,7 @@ public class CurlResource extends ResourceValue
   /**
    * Returns a copy of this resource.
    */
+  @Override
   public CurlResource clone()
   {
     CurlResource curl = new CurlResource();

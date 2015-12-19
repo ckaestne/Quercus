@@ -59,6 +59,7 @@ public class FileValue extends StreamResource {
   /**
    * Reads a character from a file, returning -1 on EOF.
    */
+  @Override
   public int read()
     throws IOException
   {
@@ -105,6 +106,7 @@ public class FileValue extends StreamResource {
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(String v)
     throws IOException
   {
@@ -113,6 +115,7 @@ public class FileValue extends StreamResource {
   /**
    * Closes the file.
    */
+  @Override
   public void close()
   {
   }

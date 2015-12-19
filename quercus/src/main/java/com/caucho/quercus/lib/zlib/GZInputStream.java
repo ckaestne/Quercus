@@ -87,6 +87,7 @@ public class GZInputStream extends InputStream
   /**
    * Returns 0 if gzip EOF has been reached, 1 otherwise
    */
+  @Override
   public int available()
     throws IOException
   {
@@ -102,6 +103,7 @@ public class GZInputStream extends InputStream
    * mark() and reset() are not supported by this class.
    * @return false always
    */
+  @Override
   public boolean markSupported()
   {
     return false;
@@ -111,6 +113,7 @@ public class GZInputStream extends InputStream
    * Returns the byte read, -1 if EOF
    * @return number of bytes read, or -1 if EOF
    */
+  @Override
   public int read() throws IOException
   {
     byte[] b = new byte[1];
@@ -126,6 +129,7 @@ public class GZInputStream extends InputStream
    *  stores the resulting uncompressed data into the byte array.
    * @return number of bytes read, or -1 upon EOF
    */
+  @Override
   public int read(byte[] b)
     throws IOException
   {
@@ -137,6 +141,7 @@ public class GZInputStream extends InputStream
    *  stores the resulting uncompressed data into the byte array.
    * @return number of bytes read, or -1 upon EOF
    */
+  @Override
   public int read(byte[] b, int off, int len)
     throws IOException
   {
@@ -196,6 +201,7 @@ public class GZInputStream extends InputStream
    * @param n number of bytes to skip
    * @return actual number of bytes skipped
    */
+  @Override
   public long skip(long n)
     throws IOException
   {

@@ -99,6 +99,7 @@ public class OptionsModule extends AbstractQuercusModule {
   /**
    * Returns the default php.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;
@@ -1000,11 +1001,11 @@ public class OptionsModule extends AbstractQuercusModule {
 
         expand.add(LongValue.create(value));
       }
-      else if (Character.isLetter((char) ch)) {
+      else if (Character.isLetter(ch)) {
         StringBuilder sb = new StringBuilder();
 
         for (; i < len && Character.isLetter(version.charAt(i)); i++) {
-          sb.append((char) ch);
+          sb.append(ch);
         }
 
         String s = sb.toString();

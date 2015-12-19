@@ -437,6 +437,7 @@ abstract public class JavaInvoker
   /**
    * Returns true if the environment has rest-style arguments.
    */
+  @Override
   public boolean getHasRestArgs()
   {
     if (! _isInit)
@@ -494,6 +495,7 @@ abstract public class JavaInvoker
   /**
    * Returns true if the result is a boolean.
    */
+  @Override
   public boolean isBoolean()
   {
     if (! _isInit)
@@ -505,6 +507,7 @@ abstract public class JavaInvoker
   /**
    * Returns true if the result is a string.
    */
+  @Override
   public boolean isString()
   {
     if (! _isInit)
@@ -516,6 +519,7 @@ abstract public class JavaInvoker
   /**
    * Returns true if the result is a long.
    */
+  @Override
   public boolean isLong()
   {
     if (! _isInit)
@@ -527,6 +531,7 @@ abstract public class JavaInvoker
   /**
    * Returns true if the result is a double.
    */
+  @Override
   public boolean isDouble()
   {
     if (! _isInit)
@@ -535,6 +540,7 @@ abstract public class JavaInvoker
     return _unmarshalReturn.isDouble();
   }
 
+  @Override
   public String getName()
   {
     return _name;
@@ -922,6 +928,7 @@ abstract public class JavaInvoker
     return plainArgs.map(a -> invoke(obj, a));
   }
 
+  @SuppressWarnings("RedundantCast")
   private V<? extends Object[]> bruteForceArgs(Object[] input, int idx) {
     if (idx >= input.length)
       return V.one(input);

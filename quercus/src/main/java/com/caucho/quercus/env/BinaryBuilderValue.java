@@ -139,6 +139,7 @@ public class BinaryBuilderValue
   /**
    * Returns true for a BinaryValue.
    */
+  @Override
   public boolean isBinary()
   {
     return true;
@@ -399,6 +400,7 @@ public class BinaryBuilderValue
   /**
    * Converts to a string builder
    */
+  @Override
   public StringValue toStringBuilder(Env env, StringValue value)
   {
     if (value.isUnicode()) {
@@ -491,7 +493,7 @@ public class BinaryBuilderValue
     value = value.toValue();
 
     if (value instanceof BinaryBuilderValue) {
-      append((BinaryBuilderValue) value);
+      append(value);
 
       return this;
     }
@@ -565,6 +567,7 @@ public class BinaryBuilderValue
   /**
    * Append to a string builder.
    */
+  @Override
   public StringValue appendTo(UnicodeBuilderValue sb)
   {
     if (length() == 0)

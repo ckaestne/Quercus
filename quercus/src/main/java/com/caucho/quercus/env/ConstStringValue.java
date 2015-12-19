@@ -277,6 +277,7 @@ public class ConstStringValue
    *
    * @param out the writer to the Java source code.
    */
+  @Override
   public void generate(PrintWriter out)
     throws IOException
   {

@@ -118,6 +118,7 @@ public class FileModule extends AbstractQuercusModule {
   /**
    * Returns the default quercus.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;
@@ -126,6 +127,7 @@ public class FileModule extends AbstractQuercusModule {
   /**
    * Returns the constants defined by this module.
    */
+  @Override
   public Map<StringValue,Value> getConstMap()
   {
     return _constMap;
@@ -3274,6 +3276,7 @@ public class FileModule extends AbstractQuercusModule {
       _path = path;
     }
 
+    @Override
     public void cleanup()
       throws IOException
     {

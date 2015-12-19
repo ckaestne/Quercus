@@ -65,7 +65,7 @@ public class DOMXPath
   {
     Node node = _document.getDelegate();
 
-    NodeList nodeList = (NodeList) query(env, expression, node);
+    NodeList nodeList = query(env, expression, node);
 
     if (nodeList.getLength() == 1) {
       return _document.wrap(nodeList.item(0));
@@ -86,7 +86,7 @@ public class DOMXPath
     else
       node = _document.getDelegate();
 
-    NodeList nodeList = (NodeList) query(env, expression, node);
+    NodeList nodeList = query(env, expression, node);
 
     return _document.wrap(nodeList);
   }
@@ -182,6 +182,7 @@ public class DOMXPath
       list.add(prefix);
     }
 
+    @Override
     public String getNamespaceURI(String prefix)
     {
       for (Map.Entry<String, LinkedHashSet<String>> entry
@@ -193,6 +194,7 @@ public class DOMXPath
       return null;
     }
 
+    @Override
     public String getPrefix(String namespaceURI)
     {
       Iterator<String> iter = getPrefixes(namespaceURI);
@@ -203,6 +205,7 @@ public class DOMXPath
         return null;
     }
 
+    @Override
     public Iterator<String> getPrefixes(String namespaceURI)
     {
       LinkedHashSet<String> prefixList = _namespaceMap.get(namespaceURI);

@@ -135,6 +135,7 @@ abstract public class ObjectValue extends Callback {
   /**
    * Returns the value's class name.
    */
+  @Override
   public String getClassName()
   {
     return _className;
@@ -644,7 +645,8 @@ abstract public class ObjectValue extends Callback {
   /**
    * Adds a new value.
    */
-  public V<?extends Value> putField(Env env,FeatureExpr ctx, String key, V<?extends ValueOrVar> value)
+  @Override
+  public V<?extends Value> putField(Env env, FeatureExpr ctx, String key, V<?extends ValueOrVar> value)
   {
     return putThisField(env, ctx, env.createString(key), value);
   }

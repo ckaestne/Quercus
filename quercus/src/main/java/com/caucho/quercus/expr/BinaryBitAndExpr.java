@@ -55,6 +55,7 @@ public class BinaryBitAndExpr extends AbstractBinaryExpr {
   /**
    * Returns true for a long.
    */
+  @Override
   public boolean isLong()
   {
     return true;
@@ -68,6 +69,7 @@ public class BinaryBitAndExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {

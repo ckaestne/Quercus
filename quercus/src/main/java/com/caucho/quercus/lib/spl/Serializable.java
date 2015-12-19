@@ -36,10 +36,10 @@ import com.caucho.quercus.env.Value;
 
 public interface Serializable
 {
-  public static final StringValue SERIALIZE = new ConstStringValue("serialize");
-  public static final StringValue UNSERIALIZE = new ConstStringValue("unserialize");
+  StringValue SERIALIZE = new ConstStringValue("serialize");
+  StringValue UNSERIALIZE = new ConstStringValue("unserialize");
 
-  public Value serialize(Env env);
+  Value serialize(Env env);
 
-  public void unserialize(Env env, StringValue serialized);
+  void unserialize(Env env, StringValue serialized);
 }

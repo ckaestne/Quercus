@@ -79,6 +79,7 @@ public class BinaryAppendExpr extends Expr
   /**
    * Returns true for a string.
    */
+  @Override
   public boolean isString()
   {
     return true;

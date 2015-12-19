@@ -60,6 +60,7 @@ public class LiteralLongExpr extends Expr {
   /**
    * Returns true for a literal expression.
    */
+  @Override
   public boolean isLiteral()
   {
     return true;
@@ -68,6 +69,7 @@ public class LiteralLongExpr extends Expr {
   /**
    * Returns true for a long value.
    */
+  @Override
   public boolean isLong()
   {
     return true;
@@ -81,6 +83,7 @@ public class LiteralLongExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(_objValue);

@@ -122,6 +122,7 @@ public class LargeStringBuilderValue
   /**
    * Returns true for a double
    */
+  @Override
   public boolean isDouble()
   {
     return false;
@@ -153,10 +154,7 @@ public class LargeStringBuilderValue
   {
     if (_length == 0)
       return false;
-    else if (_length == 1 && _bufferList[0][0] == '0')
-      return false;
-    else
-      return true;
+    else return !(_length == 1 && _bufferList[0][0] == '0');
   }
 
   /**
@@ -273,6 +271,7 @@ public class LargeStringBuilderValue
    * Each character becomes one byte, characters with values above 255 are
    * not correctly preserved.
    */
+  @Override
   public byte[] toBytes()
   {
     byte[] bytes = new byte[_length];
@@ -292,6 +291,7 @@ public class LargeStringBuilderValue
   /**
    * Returns the character at an index
    */
+  @Override
   public EnvVar get(Value key)
   {
     return EnvVar._gen(charValueAt(key.toLong()));
@@ -501,6 +501,7 @@ public class LargeStringBuilderValue
   /**
    * Append a Java buffer to the value.
    */
+  @Override
   public StringValue append(CharSequence buf, int head, int tail)
   {
     int len = tail - head;
@@ -536,6 +537,7 @@ public class LargeStringBuilderValue
   /**
    * Append a buffer to the value.
    */
+  @Override
   public final StringValue append(byte []buf, int offset, int length)
   {
     ensureCapacity(_length + length);
@@ -561,6 +563,7 @@ public class LargeStringBuilderValue
   /**
    * Append a double to the value.
    */
+  @Override
   public final StringValue append(byte []buf)
   {
     return append(buf, 0, buf.length);
@@ -590,7 +593,7 @@ public class LargeStringBuilderValue
     if (_length % SIZE == 0)
       ensureCapacity(_length + 1);
 
-    _bufferList[_length / SIZE][_length % SIZE] = (byte) v;
+    _bufferList[_length / SIZE][_length % SIZE] = v;
 
     _length += 1;
 
@@ -641,6 +644,7 @@ public class LargeStringBuilderValue
    * Append from an input stream, using InputStream.read semantics,
    * i.e. just call is.read once even if more data is available.
    */
+  @Override
   public int appendRead(InputStream is, long length)
   {
     try {
@@ -674,6 +678,7 @@ public class LargeStringBuilderValue
    * Append from an input stream, reading from the input stream until
    * end of file or the length is reached.
    */
+  @Override
   public int appendReadAll(InputStream is, long length)
   {
     int readLength = 0;
@@ -694,6 +699,7 @@ public class LargeStringBuilderValue
   /**
    * Append to a string builder.
    */
+  @Override
   public StringValue appendTo(UnicodeBuilderValue sb)
   {
     if (length() == 0)
@@ -725,6 +731,7 @@ public class LargeStringBuilderValue
    * @param env
    * @param ctx
    */
+  @Override
   public void print(Env env, FeatureExpr ctx)
   {
     for (int i = 0; i < _length; i += SIZE) {
@@ -743,6 +750,7 @@ public class LargeStringBuilderValue
    * @param env
    * @param out
    */
+  @Override
   public void print(Env env, VWriteStream out)
   {
       for (int i = 0; i < _length; i += SIZE) {
@@ -759,6 +767,7 @@ public class LargeStringBuilderValue
   /**
    * Serializes the value.
    */
+  @Override
   public void serialize(Env env, StringBuilder sb)
   {
     sb.append("s:");
@@ -771,6 +780,7 @@ public class LargeStringBuilderValue
   /**
    * Returns an OutputStream.
    */
+  @Override
   public OutputStream getOutputStream()
   {
     return new BuilderOutputStream();

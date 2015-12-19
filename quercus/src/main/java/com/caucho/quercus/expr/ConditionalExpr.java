@@ -74,6 +74,7 @@ public class ConditionalExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
 
   {
@@ -90,6 +91,7 @@ public class ConditionalExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
@@ -106,6 +108,7 @@ public class ConditionalExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     if (_test.evalBoolean(env, VHelper.noCtx()).getOne())

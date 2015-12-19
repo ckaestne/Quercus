@@ -188,6 +188,7 @@ public class InterpretedClassDef extends ClassDef
   /**
    * Returns true for a final class.
    */
+  @Override
   public boolean isFinal()
   {
     return _isFinal;
@@ -482,6 +483,7 @@ public class InterpretedClassDef extends ClassDef
   /**
    * Return a const value.
    */
+  @Override
   public Expr findConstant(String name)
   {
     return _constMap.get(name);
@@ -563,6 +565,7 @@ public class InterpretedClassDef extends ClassDef
   /**
    * Returns the constructor
    */
+  @Override
   public AbstractFunction findConstructor()
   {
     return _constructor;

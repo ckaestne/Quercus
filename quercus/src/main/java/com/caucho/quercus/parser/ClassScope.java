@@ -53,6 +53,7 @@ public class ClassScope extends Scope
   /**
    * Returns true if scope is within a class.
    */
+  @Override
   public boolean isClass()
   {
     return true;
@@ -62,6 +63,7 @@ public class ClassScope extends Scope
    * Returns true for an abstract scope, e.g. an abstract class or an
    * interface.
    */
+  @Override
   public boolean isAbstract()
   {
     return _cl.isAbstract() || _cl.isInterface() || _cl.isTrait();
@@ -130,6 +132,7 @@ public class ClassScope extends Scope
   /*
    *  Adds a conditional class.
    */
+  @Override
   protected void addConditionalClass(InterpretedClassDef def)
   {
     throw new UnsupportedOperationException();

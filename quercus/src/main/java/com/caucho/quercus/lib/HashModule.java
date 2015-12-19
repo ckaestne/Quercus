@@ -76,6 +76,7 @@ public class HashModule extends AbstractQuercusModule {
   {
   }
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "hash" };
@@ -462,6 +463,7 @@ public class HashModule extends AbstractQuercusModule {
       _digest.update(value);
     }
 
+    @Override
     void update(StringValue value)
     {
       int len = value.length();
@@ -473,16 +475,19 @@ public class HashModule extends AbstractQuercusModule {
       }
     }
 
+    @Override
     void update(byte []buffer, int offset, int length)
     {
       _digest.update(buffer, offset, length);
     }
 
+    @Override
     byte []digest()
     {
       return _digest.digest();
     }
 
+    @Override
     HashContext copy()
     {
       try {
@@ -514,6 +519,7 @@ public class HashModule extends AbstractQuercusModule {
       _digest.update(value);
     }
 
+    @Override
     void update(StringValue value)
     {
       int len = value.length();
@@ -542,16 +548,19 @@ public class HashModule extends AbstractQuercusModule {
       TempBuffer.free(tBuf);
     }
 
+    @Override
     void update(byte []buffer, int offset, int length)
     {
       _digest.update(buffer, offset, length);
     }
 
+    @Override
     byte []digest()
     {
       return _digest.doFinal();
     }
 
+    @Override
     HashContext copy()
     {
       try {

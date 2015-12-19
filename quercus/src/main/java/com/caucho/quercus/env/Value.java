@@ -902,6 +902,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * <p>
    * where $a is used as a variable in the function
    */
+  @Override
   public Var toLocalVar() {
     return new VarImpl(toLocalRef());
   }
@@ -913,6 +914,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * <p>
    * where $a is used as a variable in the function
    */
+  @Override
   public Var toLocalVarDeclAsRef() {
     return new VarImpl(V.one(this));
   }
@@ -938,6 +940,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Converts to a Var.
    */
+  @Override
   public Var toVar() {
     return new VarImpl(V.one(this));
   }
@@ -2629,6 +2632,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     });
   }
 
+  @Override
   public boolean isVar()
   {
     return false;

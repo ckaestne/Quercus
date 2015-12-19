@@ -62,6 +62,7 @@ public final class CurlHostnameVerifier
     return new CurlHostnameVerifier(verifyPeer, commonName, hostname);
   }
   
+  @Override
   public boolean verify(String hostname, SSLSession session)
   {
     System.out.println("VERIFY: " + hostname);

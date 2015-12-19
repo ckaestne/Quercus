@@ -59,6 +59,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
   /**
    * Returns true for an expression that can be read (only $a[] uses this)
    */
+  @Override
   public boolean canRead()
   {
     return false;
@@ -80,6 +81,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(env.error("Cannot use [] as a read-value.", getLocation()));
@@ -117,6 +119,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     V<? extends Var> obj = _expr.evalVar(env, ctx);
@@ -133,6 +136,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
@@ -149,6 +153,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     V<? extends ValueOrVar> array = _expr.evalArray(env, VHelper.noCtx());
@@ -215,6 +220,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();

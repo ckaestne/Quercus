@@ -53,6 +53,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Converts to an object.
    */
+  @Override
   public Object toObject()
   {
     return null;
@@ -78,6 +79,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Gets a new value.
    */
+  @Override
   public EnvVar get(Value key)
   {
     return new EnvVarImpl(V.one(new VarImpl(_env.getGlobalValue(VHelper.noCtx(), key.toStringValue()))));
@@ -106,6 +108,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Returns the value as an array.
    */
+  @Override
   public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
   {
     V<? extends Var> array = getVar(index).getVar().map((a)->a.toAutoArray());
@@ -130,6 +133,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Copy for assignment.
    */
+  @Override
   public Value copy()
   {
     return this;
@@ -138,6 +142,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /*
    * Returns the size.
    */
+  @Override
   public int getSize()
   {
     return _env.getGlobalEnv().size();
@@ -146,6 +151,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Gets a new value.
    */
+  @Override
   public V<? extends Value> containsKey(Value key)
   {
     EnvVar var = _env.getGlobalEnv().get(key.toStringValue());
@@ -168,6 +174,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Returns true if the key exists in the array.
    */
+  @Override
   public boolean keyExists(Value key)
   {
     EnvVar var = _env.getGlobalEnv().get(key.toStringValue());
@@ -180,6 +187,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
    * @param env
    * @param ctx
    */
+  @Override
   public void print(Env env, FeatureExpr ctx)
   {
     env.print(ctx, "Array");
@@ -197,6 +205,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   /**
    * Returns an iterator of the entries.
    */
+  @Override
   public Set<VEntry> entrySet()
   {
     return createAndFillArray().entrySet();

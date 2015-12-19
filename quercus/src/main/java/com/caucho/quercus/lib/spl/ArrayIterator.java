@@ -83,7 +83,7 @@ public class ArrayIterator
     sortFlag = 0; // qa/4a46
 
     if (_value instanceof ArrayValue)
-      ArrayModule.asort(_env, Var.create((ArrayValue) _value), sortFlag);
+      ArrayModule.asort(_env, Var.create(_value), sortFlag);
   }
 
   @Override
@@ -117,7 +117,7 @@ public class ArrayIterator
   public void ksort(@Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.ksort(_env, Var.create((ArrayValue) _value), sortFlag);
+      ArrayModule.ksort(_env, Var.create(_value), sortFlag);
   }
 
   public void natcasesort()
@@ -132,6 +132,7 @@ public class ArrayIterator
       ArrayModule.natsort(_env, Var.create(_value));
   }
 
+  @Override
   public void next(Env env)
   {
     if (_iterator == null)
@@ -194,6 +195,7 @@ public class ArrayIterator
     _flags = flags.toInt();
   }
 
+  @Override
   public void seek(Env env, int index)
   {
     rewindJava(env);
@@ -211,13 +213,13 @@ public class ArrayIterator
   public void uasort(Callback func, @Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uasort(_env, Var.create((ArrayValue) _value), func, sortFlag);
+      ArrayModule.uasort(_env, Var.create(_value), func, sortFlag);
   }
 
   public void uksort(Callback func, @Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uksort(_env, Var.create((ArrayValue) _value), func, sortFlag);
+      ArrayModule.uksort(_env, Var.create(_value), func, sortFlag);
   }
 
   @Override

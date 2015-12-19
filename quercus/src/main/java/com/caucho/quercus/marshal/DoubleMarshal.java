@@ -40,26 +40,31 @@ public class DoubleMarshal extends Marshal
 {
   public static final DoubleMarshal MARSHAL = new DoubleMarshal();
 
+  @Override
   public boolean isDouble()
   {
     return true;
   }
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return new Double(expr.evalDouble(env, VHelper.noCtx()).getOne());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return new Double(value.toDouble());
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
@@ -85,6 +90,7 @@ public class DoubleMarshal extends Marshal
     */
   }
 
+  @Override
   public Class getExpectedClass()
   {
     return double.class;

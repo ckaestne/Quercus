@@ -36,5 +36,5 @@ import com.caucho.quercus.env.Env;
  * script is executed.
  */
 public interface ModuleStartupListener extends QuercusModule {
-  public void startup(Env env);
+  void startup(Env env);
 }

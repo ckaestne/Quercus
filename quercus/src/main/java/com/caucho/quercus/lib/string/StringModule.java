@@ -4707,6 +4707,7 @@ public class StringModule extends AbstractQuercusModule {
   static class StrtrComparator<T extends VEntry>
     implements Comparator<T>
   {
+    @Override
     public int compare(T a, T b)
     {
       int lenA = a.getKey().length();
@@ -4746,7 +4747,7 @@ public class StringModule extends AbstractQuercusModule {
     if (lenV.isDefault())
       return string.substring(start);
     else if (len == 0)
-      return string.EMPTY;
+      return StringValue.EMPTY;
     else {
       int end;
 
@@ -6224,7 +6225,7 @@ public class StringModule extends AbstractQuercusModule {
   }
 
   static class ScanfHex extends ScanfSegment {
-    private final int _maxLen;;
+    private final int _maxLen;
 
     ScanfHex(int maxLen)
     {

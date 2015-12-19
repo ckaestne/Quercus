@@ -88,6 +88,7 @@ public class BlockStatement extends Statement {
   /**
    * Returns true if the statement can fallthrough.
    */
+  @Override
   public int fallThrough()
   {
     for (int i = 0; i < getStatements().length; i++) {
@@ -102,6 +103,7 @@ public class BlockStatement extends Statement {
     return FALL_THROUGH;
   }
 
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx) {
     V<? extends ValueOrVar> value = V.one(null);

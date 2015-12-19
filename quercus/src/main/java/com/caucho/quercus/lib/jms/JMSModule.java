@@ -60,6 +60,7 @@ public class JMSModule extends AbstractQuercusModule
   /**
    * Returns the default php.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;

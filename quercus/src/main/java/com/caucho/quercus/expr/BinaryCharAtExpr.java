@@ -116,6 +116,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    * @param value
    * @return the expression value.
    */
+  @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     Value obj = _objExpr.eval(env, VHelper.noCtx()).getOne();
@@ -136,6 +137,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();

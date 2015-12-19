@@ -74,6 +74,7 @@ public class ZipEntryInputStream extends ReadStreamInput
   /**
    * Opens a copy.
    */
+  @Override
   public BinaryInput openCopy()
     throws IOException
   {

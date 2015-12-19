@@ -1453,7 +1453,7 @@ public class QuercusClass extends NullValue {
       }
 
       if (_fieldGet == null) {
-        return ((ClassField) _fieldMap.get(name)).getInitExpr().eval(env, VHelper.noCtx());
+        return _fieldMap.get(name).getInitExpr().eval(env, VHelper.noCtx());
       }
     }
 
@@ -1587,6 +1587,7 @@ public class QuercusClass extends NullValue {
   /**
    * Finds the matching function.
    */
+  @Override
   public final AbstractFunction findFunction(StringValue methodName)
   {
     return _methodMap.getRaw(methodName);

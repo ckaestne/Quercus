@@ -333,6 +333,7 @@ public class Postgres extends JdbcConnectionResource
    * This function is overriden in Postgres to clear
    * any postgres specific server error message
    */
+  @Override
   protected void clearErrors()
   {
     super.clearErrors();
@@ -343,6 +344,7 @@ public class Postgres extends JdbcConnectionResource
    * This function is overriden in Postgres to save
    * the postgres specific server error message
    */
+  @Override
   protected void saveErrors(SQLException e)
   {
     try {
@@ -351,7 +353,7 @@ public class Postgres extends JdbcConnectionResource
       // Get the postgres specific server error message
       Class<?> cl = Class.forName("org.postgresql.util.PSQLException");
       Method method = cl.getDeclaredMethod("getServerErrorMessage", null);
-      _serverErrorMessage = method.invoke(e, new Object[] {});
+      _serverErrorMessage = method.invoke(e);
     }
     catch (Exception ex) {
       log.log(Level.FINE, ex.toString(), ex);
@@ -383,6 +385,7 @@ public class Postgres extends JdbcConnectionResource
    * than UNICODE.
    */
 
+  @Override
   public String getClientEncoding()
   {
     return "UNICODE";
@@ -395,6 +398,7 @@ public class Postgres extends JdbcConnectionResource
    * Return true to indicate success in all cases.
    */
 
+  @Override
   public boolean setClientEncoding(String encoding)
   {
     return true;

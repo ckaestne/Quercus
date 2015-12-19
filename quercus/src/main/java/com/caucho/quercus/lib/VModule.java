@@ -53,6 +53,7 @@ public class VModule extends AbstractQuercusModule {
     public VModule() {
     }
 
+    @Override
     public String[] getLoadedExtensions() {
         return new String[]{"v"};
     }

@@ -40,6 +40,7 @@ public class StringValueMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new StringValueMarshal();
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
@@ -54,16 +55,19 @@ public class StringValueMarshal extends Marshal
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return expr.eval(env, VHelper.noCtx()).getOne().toStringValue(env);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return value.toStringValue(env);
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof StringValue)
@@ -97,6 +101,7 @@ public class StringValueMarshal extends Marshal
     */
   }
 
+  @Override
   public int getMarshalingCost(Expr expr)
   {
     if (expr.isString())

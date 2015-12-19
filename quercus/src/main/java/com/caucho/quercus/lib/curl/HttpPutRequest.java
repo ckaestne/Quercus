@@ -51,6 +51,7 @@ public class HttpPutRequest
   /**
    * Initializes the connection.
    */
+  @Override
   protected boolean init(Env env)
     throws ProtocolException
   {
@@ -66,6 +67,7 @@ public class HttpPutRequest
   /**
    * Transfer data to the server.
    */
+  @Override
   protected void transfer(Env env)
     throws IOException
   {

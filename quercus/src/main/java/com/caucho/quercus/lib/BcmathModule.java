@@ -57,6 +57,7 @@ public class BcmathModule extends AbstractQuercusModule {
 
   private static final IniDefinitions _iniDefinitions = new IniDefinitions();
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] {  "bcmath" };
@@ -65,6 +66,7 @@ public class BcmathModule extends AbstractQuercusModule {
   /**
    * Returns the default php.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;

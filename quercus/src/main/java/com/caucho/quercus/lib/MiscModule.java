@@ -1876,7 +1876,7 @@ public class MiscModule extends AbstractQuercusModule {
         int v = Float.floatToIntBits((float) d);
 
         for (int k = 3; k >= 0; k--) {
-          bb.appendByte((int) (v >> (8 * k) & 0xff));
+          bb.appendByte(v >> (8 * k) & 0xff);
         }
       }
 
@@ -2005,7 +2005,7 @@ public class MiscModule extends AbstractQuercusModule {
     else if ('A' <= ch && ch <= 'F')
       return (ch - 'A' + 10);
     else {
-      env.warning("pack: non hex digit: " + (char) ch);
+      env.warning("pack: non hex digit: " + ch);
 
       return 0;
     }

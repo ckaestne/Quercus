@@ -593,7 +593,7 @@ abstract public class GooglePath extends FilesystemPath {
     else if (oldInode == null
              || ! oldInode.isDirectory()
              || ! getParent().isDirectory()) {
-      GooglePath parent = (GooglePath) getParent();
+      GooglePath parent = getParent();
 
       parent.updateDir(inode);
     }

@@ -1508,6 +1508,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iteratorMethod = iterator;
     }
 
+    @Override
     public Iterator<VEntry>
       getIterator(Env env, ObjectValue qThis)
     {
@@ -1524,6 +1525,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       }
     }
 
+    @Override
     public Iterator<Value> getKeyIterator(Env env, ObjectValue qThis)
     {
       try {
@@ -1539,6 +1541,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       }
     }
 
+    @Override
     public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis)
     {
       try {
@@ -1566,6 +1569,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iterator = iterator;
     }
 
+    @Override
     public Value next()
     {
       _iterator.next();
@@ -1573,11 +1577,13 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       return LongValue.create(_index++);
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -1596,6 +1602,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iterator = iterator;
     }
 
+    @Override
     public EnvVar next()
     {
       Object next = _iterator.next();
@@ -1617,6 +1624,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       }
     }
 
+    @Override
     public boolean hasNext()
     {
       if (_iterator != null)
@@ -1625,6 +1633,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
         return false;
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -1645,6 +1654,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _iterator = iterator;
     }
 
+    @Override
     public VEntry next()
     {
       Object next = _iterator.next();
@@ -1676,6 +1686,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       }
     }
 
+    @Override
     public boolean hasNext()
     {
       if (_iterator != null)
@@ -1684,6 +1695,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
         return false;
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -1702,6 +1714,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       _value = value;
     }
 
+    @Override
     public Value getKey()
     {
       return _key;
@@ -1712,11 +1725,13 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
       return VHelper.noCtx();
     }
 
+    @Override
     public EnvVar getEnvVar()
     {
       return _value;
     }
 
+    @Override
     public EnvVar setEnvVar(EnvVar value)
     {
       throw new UnsupportedOperationException();

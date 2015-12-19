@@ -61,6 +61,7 @@ public class PDFFont extends PDFObject {
     _id = id;
   }
 
+  @Override
   public int getId()
   {
     return _id;

@@ -53,6 +53,7 @@ public class BinaryBuilderStream extends StreamImpl
   /**
    * Returns true if this is a writable stream.
    */
+  @Override
   public boolean canWrite()
   {
     return true;
@@ -66,6 +67,7 @@ public class BinaryBuilderStream extends StreamImpl
    * @param length the number of bytes to write.
    * @param isEnd true when the write is flushing a close.
    */
+  @Override
   public void write(byte []buffer, int offset, int length, boolean isEnd)
     throws IOException
   {

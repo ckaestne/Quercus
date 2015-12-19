@@ -153,6 +153,7 @@ abstract public class StringValue
   /**
    * Returns the type.
    */
+  @Override
   public String getType()
   {
     return "string";
@@ -170,6 +171,7 @@ abstract public class StringValue
   /**
    * Returns true for a long
    */
+  @Override
   public boolean isLongConvertible()
   {
     return getValueType().isLongCmp();
@@ -178,6 +180,7 @@ abstract public class StringValue
   /**
    * Returns true for a double
    */
+  @Override
   public boolean isDoubleConvertible()
   {
     return getValueType().isNumberCmp();
@@ -371,6 +374,7 @@ abstract public class StringValue
   /**
    * Cost to convert to a StringValue
    */
+  @Override
   public int toStringValueMarshalCost()
   {
     return Marshal.COST_IDENTICAL;
@@ -388,6 +392,7 @@ abstract public class StringValue
   /**
    * Returns true for equality
    */
+  @Override
   public int cmp(Value rValue)
   {
     if (rValue.isString()) {
@@ -711,6 +716,7 @@ abstract public class StringValue
   /**
    * Converts to a double.
    */
+  @Override
   public double toDouble()
   {
     return toDouble(toString());
@@ -791,6 +797,7 @@ abstract public class StringValue
   /**
    * Converts to a boolean.
    */
+  @Override
   public boolean toBoolean()
   {
     int length = length();
@@ -806,6 +813,7 @@ abstract public class StringValue
   /**
    * Converts to a key.
    */
+  @Override
   public Value toKey()
   {
     int len = length();
@@ -862,6 +870,7 @@ abstract public class StringValue
   /**
    * Converts to a Java object.
    */
+  @Override
   public Object toJavaObject()
   {
     return toString();
@@ -986,6 +995,7 @@ abstract public class StringValue
   /**
    * Returns the character at an index
    */
+  @Override
   public EnvVar get(Value key)
   {
     return EnvVar._gen(charValueAt(key.toLong()));
@@ -994,6 +1004,7 @@ abstract public class StringValue
   /**
    * Returns the character at an index
    */
+  @Override
   public EnvVar getArg(Value key, boolean isTop)
   {
     // php/03ma
@@ -1097,6 +1108,7 @@ abstract public class StringValue
   /**
    * Adds to the following value.
    */
+  @Override
   public Value add(long rValue)
   {
     if (getValueType().isLongAdd())
@@ -1108,6 +1120,7 @@ abstract public class StringValue
   /**
    * Adds to the following value.
    */
+  @Override
   public Value sub(long rValue)
   {
     if (getValueType().isLongAdd())
@@ -2009,6 +2022,7 @@ abstract public class StringValue
   /**
    * Returns the length of the string.
    */
+  @Override
   public int length()
   {
     return toString().length();
@@ -2017,6 +2031,7 @@ abstract public class StringValue
   /**
    * Returns the character at a particular location
    */
+  @Override
   public char charAt(int index)
   {
     return toString().charAt(index);
@@ -2025,6 +2040,7 @@ abstract public class StringValue
   /**
    * Returns a subsequence
    */
+  @Override
   public CharSequence subSequence(int start, int end)
   {
     return new StringBuilderValue(toString().substring(start, end));
@@ -2421,6 +2437,7 @@ abstract public class StringValue
    *
    * @return InputStream
    */
+  @Override
   public InputStream toInputStream()
   {
     try {
@@ -2521,6 +2538,7 @@ abstract public class StringValue
   /**
    * Return true if the array value is set
    */
+  @Override
   public boolean isset(Value indexV)
   {
     int index = indexV.toInt();
@@ -2572,6 +2590,7 @@ abstract public class StringValue
   // ByteAppendable methods
   //
 
+  @Override
   public void write(int value)
   {
     throw new UnsupportedOperationException(getClass().getName());
@@ -2580,6 +2599,7 @@ abstract public class StringValue
   /**
    * Appends buffer to the ByteAppendable.
    */
+  @Override
   public void write(byte[] buffer, int offset, int len)
   {
     throw new UnsupportedOperationException(getClass().getName());
@@ -2825,6 +2845,7 @@ abstract public class StringValue
     /**
      * Reads the next byte.
      */
+    @Override
     public int read()
     {
       if (_index < _length)
@@ -2836,6 +2857,7 @@ abstract public class StringValue
     /**
      * Reads into a buffer.
      */
+    @Override
     public int read(byte []buffer, int offset, int length)
     {
       int sublen = _length - _index;
@@ -2885,6 +2907,7 @@ abstract public class StringValue
       _length = s.length();
     }
 
+    @Override
     public int read()
     {
       if (_index >= _length)
@@ -2893,6 +2916,7 @@ abstract public class StringValue
         return _str.charAt(_index++);
     }
 
+    @Override
     public int read(char []buf, int off, int len)
     {
       if (_index >= _length)
@@ -2908,6 +2932,7 @@ abstract public class StringValue
       return i;
     }
 
+    @Override
     public void close()
       throws IOException
     {

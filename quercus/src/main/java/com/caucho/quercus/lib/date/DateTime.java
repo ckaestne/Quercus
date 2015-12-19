@@ -288,7 +288,7 @@ public class DateTime implements DateTimeInterface, Cloneable
     int month = qDate0.getMonth() - qDate1.getMonth();
     int day = qDate0.getDayOfMonth() - qDate1.getDayOfMonth();
 
-    int hour = qDate0.getHour() - qDate1.getHour();;
+    int hour = qDate0.getHour() - qDate1.getHour();
     int minute = qDate0.getMinute() - qDate1.getMinute();
     int second = qDate0.getSecond() - qDate1.getSecond();
 

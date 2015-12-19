@@ -40,21 +40,25 @@ public class IntegerObjectMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new IntegerObjectMarshal();
   
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return new Integer((int) expr.evalLong(env, VHelper.noCtx()).getOne().longValue());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return value.toJavaInteger();
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)

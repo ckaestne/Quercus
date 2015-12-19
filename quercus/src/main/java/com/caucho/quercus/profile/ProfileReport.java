@@ -319,6 +319,7 @@ public class ProfileReport
   }
 
   static class SelfMicrosComparator implements Comparator<ProfileMethod> {
+    @Override
     public int compare(ProfileMethod a, ProfileMethod b)
     {
       long delta = b.getSelfMicros() - a.getSelfMicros();
@@ -333,6 +334,7 @@ public class ProfileReport
   }
 
   static class TotalMicrosComparator implements Comparator<ProfileMethod> {
+    @Override
     public int compare(ProfileMethod a, ProfileMethod b)
     {
       long delta = b.getTotalMicros() - a.getTotalMicros();
@@ -347,6 +349,7 @@ public class ProfileReport
   }
 
   static class ItemMicrosComparator implements Comparator<ProfileItem> {
+    @Override
     public int compare(ProfileItem a, ProfileItem b)
     {
       long delta = b.getMicros() - a.getMicros();

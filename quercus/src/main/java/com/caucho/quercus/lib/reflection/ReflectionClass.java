@@ -84,7 +84,7 @@ public class ReflectionClass
     QuercusClass cls;
 
     if (obj.isObject())
-      cls = ((ObjectValue) obj.toValue()).getQuercusClass();
+      cls = obj.toValue().getQuercusClass();
     else
       cls = env.findClass(obj.toString());
 
@@ -376,7 +376,7 @@ public class ReflectionClass
   public Value newInstanceArgs(Env env, @Optional ArrayValue args)
   {
     if (args == null) {
-      return _cls.callNew(env, new V[]{});
+      return _cls.callNew(env);
     }
     else {
       return _cls.callNew(env, VHelper.toVArray(args.getValueArray(env)));

@@ -52,6 +52,7 @@ public class PDFEmbeddedFile extends PDFObject {
   /**
    * Returns the object id.
    */
+  @Override
   public int getId()
   {
     return _id;
@@ -68,6 +69,7 @@ public class PDFEmbeddedFile extends PDFObject {
   /**
    * Writes the object to the stream
    */
+  @Override
   public void writeObject(PDFWriter out)
     throws IOException
   {

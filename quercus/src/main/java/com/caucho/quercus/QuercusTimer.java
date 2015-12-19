@@ -128,6 +128,7 @@ public class QuercusTimer
       setPriority(Thread.MAX_PRIORITY);
     }
 
+    @Override
     public void run()
     {
       int idleCount = 0;

@@ -40,7 +40,7 @@ public interface EnvCleanup {
    * are explicitly cleaned up, the Env.removeCleanup()
    * method should be invoked.
    */
-  public void cleanup()
+  void cleanup()
     throws Exception;
 }
 

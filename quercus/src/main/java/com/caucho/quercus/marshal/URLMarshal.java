@@ -42,24 +42,28 @@ public class URLMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new URLMarshal();
   
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return value.toJavaURL(env);
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava((URL) value);
+    return env.wrapJava(value);
   }
   
   @Override
@@ -73,6 +77,7 @@ public class URLMarshal extends Marshal
       return Marshal.FOUR;
   }
   
+  @Override
   public int getMarshalingCost(Expr expr)
   {
     if (expr.isString())

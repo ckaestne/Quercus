@@ -32,5 +32,5 @@ package com.caucho.quercus.lib.spl;
 public interface OuterIterator
   extends Iterator
 {
-  public Iterator getInnerIterator();
+  Iterator getInnerIterator();
 }

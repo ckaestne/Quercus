@@ -148,6 +148,7 @@ public class ConnectionEntry implements EnvCleanup
     }
   }
 
+  @Override
   public void cleanup()
     throws SQLException
   {

@@ -55,6 +55,7 @@ public class BinaryRightShiftExpr extends AbstractBinaryExpr {
   /**
    * Returns true for a long expression.
    */
+  @Override
   public boolean isLong()
   {
     return true;
@@ -68,6 +69,7 @@ public class BinaryRightShiftExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
@@ -85,6 +87,7 @@ public class BinaryRightShiftExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Long> evalLong(Env env, FeatureExpr ctx)
   {
     V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());

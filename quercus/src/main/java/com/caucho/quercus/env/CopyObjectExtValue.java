@@ -134,6 +134,7 @@ public class CopyObjectExtValue extends ObjectExtValue
     return super.putThisField(env, ctx, name, value);
   }
 
+  @Override
   protected
   @javax.annotation.Nullable
   V<? extends Value> putFieldExt(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
@@ -178,6 +179,7 @@ public class CopyObjectExtValue extends ObjectExtValue
   /**
    * Removes the field ref.
    */
+  @Override
   public void unsetThisArray(Env env, FeatureExpr ctx, StringValue name, Value index)
   {
     _root.setModified();

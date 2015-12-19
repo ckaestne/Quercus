@@ -89,7 +89,7 @@ public class ArrayObject
     sortFlag = 0; // qa/4a46
 
     if (_value instanceof ArrayValue)
-      ArrayModule.asort(_env, Var.create((ArrayValue) _value), sortFlag);
+      ArrayModule.asort(_env, Var.create(_value), sortFlag);
   }
 
   @Override
@@ -117,6 +117,7 @@ public class ArrayObject
     return _flags;
   }
 
+  @Override
   public ObjectValue getIterator()
   {
     Value[] args = new Value[] { _value, LongValue.create(_flags) };
@@ -132,7 +133,7 @@ public class ArrayObject
   public void ksort(@Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.ksort(_env, Var.create((ArrayValue) _value), sortFlag);
+      ArrayModule.ksort(_env, Var.create(_value), sortFlag);
   }
 
   public void natcasesort()
@@ -184,13 +185,13 @@ public class ArrayObject
   public void uasort(Callable func)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uasort(_env, Var.create((ArrayValue) _value), func,  0);
+      ArrayModule.uasort(_env, Var.create(_value), func,  0);
   }
 
   public void uksort(Callable func, @Optional long sortFlag)
   {
     if (_value instanceof ArrayValue)
-      ArrayModule.uksort(_env, Var.create((ArrayValue) _value), func, sortFlag);
+      ArrayModule.uksort(_env, Var.create(_value), func, sortFlag);
   }
 
   public Value __getField(StringValue key)

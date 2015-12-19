@@ -394,6 +394,7 @@ public class ArrayValueWrapper extends ArrayValue {
     return _array.getValueIterator(env);
   }
 
+  @Override
   public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
     return _array.foldRightUntil(init, ctx, op, stopCriteria);
   }

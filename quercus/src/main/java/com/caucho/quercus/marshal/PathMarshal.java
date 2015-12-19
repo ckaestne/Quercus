@@ -42,21 +42,25 @@ public class PathMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new PathMarshal();
   
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return env.lookupPwd(expr.eval(env, VHelper.noCtx()).getOne());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return env.lookupPwd(value);
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     // XXX: need test

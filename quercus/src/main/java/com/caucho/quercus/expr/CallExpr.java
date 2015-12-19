@@ -104,6 +104,7 @@ public class CallExpr extends Expr {
   /**
    * Returns the location if known.
    */
+  @Override
   public String getFunctionLocation()
   {
     return " [" + _name + "]";
@@ -254,7 +255,7 @@ public class CallExpr extends Expr {
   }
 
   private @Nonnull V<? extends Integer> lookupFunId(Env env) {
-    return VHelper.<Integer>vifTry(
+    return VHelper.vifTry(
             () -> env.findFunctionId(_name),
             () -> (_nsName != null) ? env.findFunctionId(_nsName) : V.one(0),
             (id) -> id > 0);

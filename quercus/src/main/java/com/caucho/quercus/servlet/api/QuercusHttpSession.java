@@ -31,5 +31,5 @@ package com.caucho.quercus.servlet.api;
 
 public interface QuercusHttpSession
 {
-  public String getId();
+  String getId();
 }

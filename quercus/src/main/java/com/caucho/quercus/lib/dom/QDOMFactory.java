@@ -39,31 +39,37 @@ import java.io.InputStream;
 public class QDOMFactory
   implements DOMFactory
 {
+  @Override
   public Attr createAttr(String name)
   {
     return new QAttr(name);
   }
 
+  @Override
   public Comment createComment()
   {
     return new QComment();
   }
 
+  @Override
   public Document createDocument()
   {
     return new QDocument();
   }
 
+  @Override
   public Document createDocument(DocumentType docType)
   {
     return new QDocument(docType);
   }
 
+  @Override
   public DocumentType createDocumentType(String qualifiedName)
   {
     return new QDocumentType(qualifiedName);
   }
 
+  @Override
   public DocumentType createDocumentType(String qualifiedName,
                                          String publicId,
                                          String systemId)
@@ -71,36 +77,43 @@ public class QDOMFactory
     return new QDocumentType(qualifiedName, publicId, systemId);
   }
 
+  @Override
   public Element createElement(String name)
   {
     return new QElement(name);
   }
 
+  @Override
   public Element createElement(String name, String namespace)
   {
     return new QElement(name, namespace);
   }
 
+  @Override
   public EntityReference createEntityReference(String name)
   {
     return new QEntityReference(name);
   }
 
+  @Override
   public ProcessingInstruction createProcessingInstruction(String name)
   {
     return new QProcessingInstruction(name);
   }
 
+  @Override
   public Text createText()
   {
     return new QText();
   }
 
+  @Override
   public org.w3c.dom.DOMImplementation getImplementation()
   {
     return new QDOMImplementation();
   }
 
+  @Override
   public void parseXMLDocument(Document document, InputStream is, String path)
     throws IOException, SAXException
   {
@@ -108,6 +121,7 @@ public class QDOMFactory
     xml.parseDocument((QDocument) document, is, path);
   }
 
+  @Override
   public void parseHTMLDocument(Document document, InputStream is, String path)
     throws IOException, SAXException
   {

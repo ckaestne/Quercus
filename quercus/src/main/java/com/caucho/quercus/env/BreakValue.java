@@ -65,6 +65,7 @@ public class BreakValue extends Value {
   /**
    * Converts to a boolean.
    */
+  @Override
   public boolean toBoolean()
   {
     return false;
@@ -73,6 +74,7 @@ public class BreakValue extends Value {
   /**
    * Converts to a long.
    */
+  @Override
   public long toLong()
   {
     return 0;
@@ -81,6 +83,7 @@ public class BreakValue extends Value {
   /**
    * Converts to a double.
    */
+  @Override
   public double toDouble()
   {
     return 0;
@@ -99,10 +102,12 @@ public class BreakValue extends Value {
    * @param env
    * @param ctx
    */
+  @Override
   public void print(Env env, FeatureExpr ctx)
   {
   }
 
+  @Override
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,

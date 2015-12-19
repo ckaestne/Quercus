@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Value;
 
 public class AbstractFilter implements Filter
 {
+  @Override
   public Value filter(Env env, Value value, Value flagsV)
   {
     ArrayValue options = null;

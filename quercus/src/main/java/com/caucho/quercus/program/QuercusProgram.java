@@ -491,6 +491,7 @@ public class QuercusProgram {
   }
 
   class PageDependency implements Dependency {
+    @Override
     public boolean isModified()
     {
       if (_compiledPage != null)
@@ -499,6 +500,7 @@ public class QuercusProgram {
         return _depend.isModified();
     }
 
+    @Override
     public boolean logModified(Logger log)
     {
       if (isModified()) {

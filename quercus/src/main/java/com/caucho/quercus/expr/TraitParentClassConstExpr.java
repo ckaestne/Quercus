@@ -50,7 +50,7 @@ public class TraitParentClassConstExpr extends Expr {
   public TraitParentClassConstExpr(Location location,
                                    String traitName, StringValue name)
   {
-    super(location);;
+    super(location);
 
     _traitName = traitName;
     _name = name;

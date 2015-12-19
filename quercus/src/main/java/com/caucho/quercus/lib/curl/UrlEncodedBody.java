@@ -47,6 +47,7 @@ public class UrlEncodedBody extends PostBody
     _length = _body.length();
   }
 
+  @Override
   public String getContentType()
   {
     return "application/x-www-form-urlencoded";
@@ -58,6 +59,7 @@ public class UrlEncodedBody extends PostBody
     return (long) _length;
   }
 
+  @Override
   public void writeTo(Env env, OutputStream os)
     throws IOException
   {

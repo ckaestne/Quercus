@@ -79,6 +79,7 @@ public class ConstArrayValue
   /**
    * Takes the values of this array and puts them in a java array
    */
+  @Override
   public Value[] keysToArray()
   {
     if (_keysArray == null)
@@ -91,6 +92,7 @@ public class ConstArrayValue
   /**
    * Takes the values of this array and puts them in a java array
    */
+  @Override
   public Value[] valuesToArray()
   {
     if (_valuesArray == null)

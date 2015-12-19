@@ -71,6 +71,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Reads the next byte, returning -1 on eof.
    */
+  @Override
   public int read()
     throws IOException
   {
@@ -83,6 +84,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Reads a buffer, returning -1 on eof.
    */
+  @Override
   public int read(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -95,6 +97,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Reads the optional linefeed character from a \r\n
    */
+  @Override
   public boolean readOptionalLinefeed()
     throws IOException
   {
@@ -144,6 +147,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Writes to a buffer.
    */
+  @Override
   public int write(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -159,6 +163,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * prints
    */
+  @Override
   public void print(char ch)
     throws IOException
   {
@@ -168,6 +173,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * prints
    */
+  @Override
   public void print(String s)
     throws IOException
   {
@@ -178,6 +184,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Returns true on the end of file.
    */
+  @Override
   public boolean isEOF()
   {
     return true;
@@ -186,6 +193,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Flushes the output
    */
+  @Override
   public void flush()
   {
     try {
@@ -199,6 +207,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Returns the current location in the file.
    */
+  @Override
   public long getPosition()
   {
     return 0;
@@ -207,6 +216,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Closes the stream for reading.
    */
+  @Override
   public void closeRead()
   {
     ReadStream is = _is;
@@ -219,6 +229,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Closes the stream for writing
    */
+  @Override
   public void closeWrite()
   {
     WriteStream os = _os;
@@ -234,6 +245,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Closes the stream.
    */
+  @Override
   public void close()
   {
     _env.removeCleanup(this);
@@ -244,6 +256,7 @@ public class StreamReadWrite extends StreamResource
   /**
    * Implements the EnvCleanup interface.
    */
+  @Override
   public void cleanup()
   {
     ReadStream is = _is;

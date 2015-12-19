@@ -110,6 +110,7 @@ public class ImageModule extends AbstractQuercusModule {
   public static final int IMG_FILTER_MEAN_REMOVAL = 9;
   public static final int IMG_FILTER_SMOOTH = 10;
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "gd" };

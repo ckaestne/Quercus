@@ -47,6 +47,7 @@ public class SimpleXMLModule
     = Logger.getLogger(SimpleXMLModule.class.getName());
   private static final L10N L = new L10N(SimpleXMLModule.class);
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "SimpleXML" };

@@ -56,6 +56,7 @@ public class VarGlobalStatement extends Statement {
     _varExpr = var.getExpr();
   }
   
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {

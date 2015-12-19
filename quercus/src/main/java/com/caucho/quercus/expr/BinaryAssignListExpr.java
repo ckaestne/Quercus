@@ -59,6 +59,7 @@ public class BinaryAssignListExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
@@ -77,6 +78,7 @@ public class BinaryAssignListExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     return eval(env, VHelper.noCtx()).map((a)->a.copy());

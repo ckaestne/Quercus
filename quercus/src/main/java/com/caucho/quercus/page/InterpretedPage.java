@@ -89,6 +89,7 @@ public class InterpretedPage extends QuercusPage
    *
    * @param env the calling environment
    */
+  @Override
   public @Nonnull V<? extends Value> execute(Env env)
   {
     V<? extends Value> result = _program.execute(env);
@@ -111,6 +112,7 @@ public class InterpretedPage extends QuercusPage
   /**
    * Returns the pwd according to the source page.
    */
+  @Override
   public Path getSelfPath(Env env)
   {
     return _program.getSourcePath();
@@ -146,6 +148,7 @@ public class InterpretedPage extends QuercusPage
   /**
    * Finds the class
    */
+  @Override
   public InterpretedClassDef findClass(String name)
   {
     //return _program.findClass(name);
@@ -155,6 +158,7 @@ public class InterpretedPage extends QuercusPage
   /**
    * Returns the class map.
    */
+  @Override
   public HashMap<String,ClassDef> getClassMap()
   {
     //return _program.getClassMap();

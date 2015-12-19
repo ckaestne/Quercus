@@ -267,8 +267,8 @@ public class UrlModule
         for (Value key : result.keySet()) {
           Value value = result.get(key).getOne();
 
-          if (value.isArray() && ((ArrayValue)value).getSize() == 1)
-            result.put(key, ((ArrayValue)value).get(LongValue.ZERO));
+          if (value.isArray() && value.getSize() == 1)
+            result.put(key, value.get(LongValue.ZERO));
         }
       } else {
         for (String line = reader.readLine();
@@ -833,7 +833,7 @@ public class UrlModule
 
   enum ParseUrlState {
     INIT, USER, PASS, HOST, PORT, PATH, QUERY, FRAGMENT
-  };
+  }
 
   /**
    * Gets the magic quotes value.

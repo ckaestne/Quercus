@@ -73,6 +73,7 @@ public class ListHeadExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException();
@@ -87,6 +88,7 @@ public class ListHeadExpr extends Expr {
    * @param value
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalAssignValue(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     int len = _varList.length;

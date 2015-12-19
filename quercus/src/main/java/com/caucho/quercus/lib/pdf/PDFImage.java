@@ -75,6 +75,7 @@ public class PDFImage extends PDFObject {
   /**
    * Returns the object id.
    */
+  @Override
   public int getId()
   {
     return _id;
@@ -338,6 +339,7 @@ public class PDFImage extends PDFObject {
     out.println("endstream");
   }
 
+  @Override
   public void writeObject(PDFWriter out)
     throws IOException
   {

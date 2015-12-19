@@ -74,6 +74,7 @@ public class GlobalScope extends Scope {
   /*
    * Returns true if scope is global.
    */
+  @Override
   public boolean isGlobal()
   {
     return true;
@@ -82,6 +83,7 @@ public class GlobalScope extends Scope {
   /**
    * Adds a function.
    */
+  @Override
   public void addFunction(StringValue name,
                           Function function,
                           boolean isTop)
@@ -95,6 +97,7 @@ public class GlobalScope extends Scope {
   /*
    *  Adds a function defined in a conditional block.
    */
+  @Override
   protected void addConditionalFunction(StringValue name, Function function)
   {
     _conditionalFunctionMap.put(name, function);
@@ -103,6 +106,7 @@ public class GlobalScope extends Scope {
   /**
    * Adds a class
    */
+  @Override
   public InterpretedClassDef addClass(Location location,
                                       String name,
                                       String parentName,
@@ -148,6 +152,7 @@ public class GlobalScope extends Scope {
   /**
    *  Adds a class
    */
+  @Override
   protected void addConditionalClass(InterpretedClassDef def)
   {
     _classList.add(def);

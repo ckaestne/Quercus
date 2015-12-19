@@ -103,6 +103,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
   /**
    * Sets fields not specified by the value.
    */
+  @Override
   protected
   @javax.annotation.Nullable
   V<? extends Value> putFieldExt(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
@@ -145,6 +146,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
     return javaWrapper.toJavaObject();
   }
 
+  @Override
   public void varDumpImpl(Env env,
                           VWriteStream out,
                           int depth,
@@ -210,7 +212,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
       Class<?> cls = _javaClassDef.getType();
 
       try {
-        Method method = cls.getMethod("clone", new Class[0]);
+        Method method = cls.getMethod("clone");
         method.setAccessible(true);
 
         obj = method.invoke(_object);

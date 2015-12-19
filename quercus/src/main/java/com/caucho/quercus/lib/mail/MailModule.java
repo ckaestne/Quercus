@@ -324,7 +324,7 @@ public class MailModule extends AbstractQuercusModule {
            i < len && (! Character.isWhitespace(ch = headers.charAt(i))
                        && ch != ':');
            i++) {
-        buffer.append((char) ch);
+        buffer.append(ch);
       }
 
       for (;
@@ -342,7 +342,7 @@ public class MailModule extends AbstractQuercusModule {
            i < len
            && ((ch = headers.charAt(i)) != '\r' && ch != '\n');
            i++) {
-        buffer.append((char) ch);
+        buffer.append(ch);
       }
 
       //
@@ -353,7 +353,7 @@ public class MailModule extends AbstractQuercusModule {
            i < len
            && ((ch = headers.charAt(i)) == '\r' || ch == '\n');
            i++) {
-        buffer.append((char) ch);
+        buffer.append(ch);
       }
 
       while (i < len
@@ -362,14 +362,14 @@ public class MailModule extends AbstractQuercusModule {
              i < len
              && ((ch = headers.charAt(i)) != '\r' && ch != '\n');
              i++) {
-          buffer.append((char) ch);
+          buffer.append(ch);
         }
 
         for (;
              i < len
              && ((ch = headers.charAt(i)) == '\r' || ch == '\n');
              i++) {
-          buffer.append((char) ch);
+          buffer.append(ch);
         }
       }
 

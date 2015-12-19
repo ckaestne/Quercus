@@ -44,44 +44,44 @@ public interface Callable {
   /**
    * Returns the callable name, needed as special case for ob_*
    */
-  public String getCallbackName();
+  String getCallbackName();
 
   /**
    * Checks for a valid callback.
    */
-  public boolean isValid(Env env);
+  boolean isValid(Env env);
 
   /**
    * Returns the name of the file where this is defined in.
    */
-  public String getDeclFileName(Env env);
+  String getDeclFileName(Env env);
 
   /**
    * Returns the start line in the file where this is defined in.
    */
-  public int getDeclStartLine(Env env);
+  int getDeclStartLine(Env env);
 
   /**
    * Returns the end line in the file where this is defined in.
    */
-  public int getDeclEndLine(Env env);
+  int getDeclEndLine(Env env);
 
   /**
    * Returns the comment in the file where this is defined in.
    */
-  public String getDeclComment(Env env);
+  String getDeclComment(Env env);
 
   /**
    * Returns true if this returns a reference.
    */
-  public boolean isReturnsReference(Env env);
+  boolean isReturnsReference(Env env);
 
   /**
    * Returns the formal arguments.
    */
-  public Arg[] getArgs(Env env);
+  Arg[] getArgs(Env env);
 
-  static final V<? extends ValueOrVar> []NULL_ARG_VALUES = new V[0];
+  V<? extends ValueOrVar> []NULL_ARG_VALUES = new V[0];
 
   /**
    * Evaluates the callback with no arguments.
@@ -165,8 +165,8 @@ public interface Callable {
    *
    * @param env the calling environment
    */
-  abstract public @Nonnull
-  V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar> []args);
+  @Nonnull
+  V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -178,10 +178,10 @@ public interface Callable {
    * @param key index of a1 in the array
    * @param a1 need to make a reference to this variable
    */
-  abstract public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
-                                  ArrayValue array,
-                                  Value key,
-                                  V<? extends ValueOrVar> a1);
+  @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+                                        ArrayValue array,
+                                        Value key,
+                                        V<? extends ValueOrVar> a1);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -194,11 +194,11 @@ public interface Callable {
    * @param a1 need to make a reference to this variable
    * @param a2 additional argument to pass to the callback
    */
-  abstract public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
-                                  ArrayValue array,
-                                  Value key,
-                                  V<? extends ValueOrVar> a1,
-                                  V<? extends ValueOrVar> a2);
+  @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+                                        ArrayValue array,
+                                        Value key,
+                                        V<? extends ValueOrVar> a1,
+                                        V<? extends ValueOrVar> a2);
 
   /**
    * Evaluates a callback where the first argument is from an array.
@@ -212,11 +212,11 @@ public interface Callable {
    * @param a2 additional argument to pass to the callback
    * @param a3 additional argument to pass to the callback
    */
-  abstract public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
-                                  ArrayValue array,
-                                  Value key,
-                                  V<? extends ValueOrVar> a1,
-                                  V<? extends ValueOrVar> a2,
-                                  V<? extends ValueOrVar> a3);
+  @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
+                                        ArrayValue array,
+                                        Value key,
+                                        V<? extends ValueOrVar> a1,
+                                        V<? extends ValueOrVar> a2,
+                                        V<? extends ValueOrVar> a3);
 }
 

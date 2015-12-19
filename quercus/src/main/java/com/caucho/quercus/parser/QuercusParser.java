@@ -1636,7 +1636,7 @@ public class QuercusParser {
       else
         _peekToken = token;
 
-      AbstractVarExpr valueExpr = (AbstractVarExpr) parseLeftHandSide();
+      AbstractVarExpr valueExpr = parseLeftHandSide();
 
       AbstractVarExpr keyVar = null;
       AbstractVarExpr valueVar;
@@ -1656,7 +1656,7 @@ public class QuercusParser {
         else
           _peekToken = token;
 
-        valueVar = (AbstractVarExpr) parseLeftHandSide();
+        valueVar = parseLeftHandSide();
 
         token = parseToken();
       }
@@ -2578,7 +2578,7 @@ public class QuercusParser {
   {
     int token = parseToken();
 
-    StringValue var = _namespace.EMPTY;
+    StringValue var = StringValue.EMPTY;
 
     if (token == IDENTIFIER) {
       var = _lexeme;

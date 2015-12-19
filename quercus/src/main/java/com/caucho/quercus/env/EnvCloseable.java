@@ -48,6 +48,7 @@ public class EnvCloseable implements EnvCleanup {
    * are explicitly cleaned up, the Env.removeCleanup()
    * method should be invoked.
    */
+  @Override
   public void cleanup()
     throws Exception
   {

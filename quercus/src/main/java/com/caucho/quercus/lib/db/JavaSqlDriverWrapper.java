@@ -121,6 +121,7 @@ public class JavaSqlDriverWrapper implements javax.sql.DataSource
   /**
    * new interface method in JDK 1.7 CommonDataSource
    */
+  @Override
   public Logger getParentLogger()
   {
     throw new UnsupportedOperationException();

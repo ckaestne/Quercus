@@ -86,6 +86,7 @@ public class CallbackFunction extends Callback {
   /**
    * Serializes the value.
    */
+  @Override
   public void serialize(Env env, StringBuilder sb)
   {
     CharSequence name;
@@ -121,6 +122,7 @@ public class CallbackFunction extends Callback {
     return getFunction(env, ctx).getOne().call(env, ctx, args);
   }
 
+  @Override
   public String getCallbackName()
   {
     return _funName.toString();

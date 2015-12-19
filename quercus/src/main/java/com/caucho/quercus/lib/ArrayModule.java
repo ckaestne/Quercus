@@ -139,6 +139,7 @@ public class ArrayModule
   private static final CompareNatural CNA_VALUE_NORMAL_INSENSITIVE
     = new CompareNatural(ArrayValue.GET_VALUE, SORT_NORMAL, CASE_INSENSITIVE);
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "standard" };
@@ -2544,7 +2545,7 @@ public class ArrayModule
 
         if (value.isArray()) {
           boolean result = array_walk_recursive(env,
-                                                Var.create((ArrayValue) value.toValue()),
+                                                Var.create(value.toValue()),
                                                 callback,
                                                 extra);
 
@@ -3442,6 +3443,7 @@ public class ArrayModule
       _order = order;
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -3466,6 +3468,7 @@ public class ArrayModule
       _order = order;
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -3504,6 +3507,7 @@ public class ArrayModule
       _collator = collator;
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -3527,6 +3531,7 @@ public class ArrayModule
       _order = order;
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -3559,6 +3564,7 @@ public class ArrayModule
       _isCaseSensitive = isCaseSensitive;
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -3630,6 +3636,7 @@ public class ArrayModule
       _env = env;
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -3669,6 +3676,7 @@ public class ArrayModule
      *  arrays[x][index2] for all indices "x"; the permutation will be
      *  sorted according to this comparison.
      */
+    @Override
     public int compare(LongValue index1, LongValue index2)
     {
       for (int i = 0; i < _arrays.length; i++) {

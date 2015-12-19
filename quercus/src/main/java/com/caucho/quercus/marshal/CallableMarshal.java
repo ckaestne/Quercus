@@ -48,6 +48,7 @@ public class CallableMarshal extends Marshal
     _isOptional = isOptional;
   }
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
@@ -67,6 +68,7 @@ public class CallableMarshal extends Marshal
     return callable;
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     throw new UnsupportedOperationException();

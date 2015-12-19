@@ -83,6 +83,7 @@ public class ClassConstructExpr extends AbstractMethodExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     QuercusClass cl = env.findClass(_className);

@@ -33,5 +33,5 @@ import com.caucho.quercus.env.Value;
 
 public interface JsonSerializable
 {
-  public Value jsonSerialize();
+  Value jsonSerialize();
 }

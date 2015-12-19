@@ -97,6 +97,7 @@ public class CopyRoot implements EnvCleanup
     env.addCleanup(this);
   }
 
+  @Override
   public void cleanup()
     throws Exception
   {

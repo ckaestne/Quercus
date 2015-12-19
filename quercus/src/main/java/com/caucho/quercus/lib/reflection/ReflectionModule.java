@@ -34,6 +34,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 public class ReflectionModule
   extends AbstractQuercusModule
 {
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "Reflection" };

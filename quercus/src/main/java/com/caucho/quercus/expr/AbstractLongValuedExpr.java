@@ -59,6 +59,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return evalLong(env, VHelper.noCtx()).map((a)->LongValue.create(a));
@@ -72,6 +73,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     return evalLong(env, VHelper.noCtx()).map((a)->a != 0);
@@ -85,6 +87,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Double> evalDouble(Env env, FeatureExpr ctx)
   {
     return evalLong(env, VHelper.noCtx()).map((a)->(double)a);
@@ -98,6 +101,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   abstract public V<? extends Long> evalLong(Env env, FeatureExpr ctx);
 }
 

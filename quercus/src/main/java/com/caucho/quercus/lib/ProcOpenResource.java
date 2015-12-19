@@ -152,6 +152,7 @@ public class ProcOpenResource
   /**
    * Implements the EnvCleanup interface.
    */
+  @Override
   public void cleanup()
   {
     pclose();

@@ -58,6 +58,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
   /**
    * Creates the assignment.
    */
+  @Override
   public Expr createAssign(QuercusParser parser, Expr value)
     throws IOException
   {
@@ -70,6 +71,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
   /**
    * Creates the assignment.
    */
+  @Override
   public Expr createAssignRef(QuercusParser parser,
                               Expr value
   )
@@ -89,6 +91,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
@@ -108,6 +111,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
@@ -127,6 +131,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends String> evalString(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);
@@ -146,6 +151,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     int oldErrorMask = env.setErrorMask(0);

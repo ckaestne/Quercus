@@ -83,6 +83,7 @@ public class IfStatement extends Statement {
   /**
    * Executes the 'if' statement, returning any value.
    */
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
@@ -96,7 +97,7 @@ public class IfStatement extends Statement {
     if (_falseBlock != null && ctx.andNot(condition).isSatisfiable()) {
       falseResult= _falseBlock.execute(env, ctx.andNot(condition));
     }
-    return V.<ValueOrVar>choice(condition, trueResult, falseResult);
+    return V.choice(condition, trueResult, falseResult);
   }
 }
 

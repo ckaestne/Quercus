@@ -47,6 +47,7 @@ public class ValueMarshal extends Marshal
     _isPassThru = isPassThru;
   }
 
+  @Override
   public boolean isReadOnly()
   {
     return false;
@@ -61,11 +62,13 @@ public class ValueMarshal extends Marshal
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return expr.eval(env, VHelper.noCtx());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     // php/0433
@@ -73,6 +76,7 @@ public class ValueMarshal extends Marshal
     return value.toLocalValueReadOnly(); // non-copy
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     return (Value) value;

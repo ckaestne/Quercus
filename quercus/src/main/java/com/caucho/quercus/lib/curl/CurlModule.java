@@ -284,6 +284,7 @@ public class CurlModule
   public static final int CURLVERSION_NOW                     = 3;
   public static final int CURL_VERSION_SSL                    = 4;
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "curl" };

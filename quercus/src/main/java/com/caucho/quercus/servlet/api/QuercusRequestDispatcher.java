@@ -31,7 +31,7 @@ package com.caucho.quercus.servlet.api;
 
 public interface QuercusRequestDispatcher
 {
-  public void include(QuercusHttpServletRequest request,
-                      QuercusHttpServletResponse response)
+  void include(QuercusHttpServletRequest request,
+               QuercusHttpServletResponse response)
     throws Exception;
 }

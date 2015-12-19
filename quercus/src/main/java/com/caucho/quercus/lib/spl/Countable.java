@@ -34,5 +34,5 @@ import com.caucho.quercus.env.Env;
 
 @Delegates(CountableDelegate.class)
 public interface Countable {
-  public int count(Env env);
+  int count(Env env);
 }

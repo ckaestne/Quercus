@@ -84,7 +84,7 @@ public class CurlHttpRequest
    * Opens the connection.
    */
   protected final void create(Env env)
-    throws MalformedURLException, IOException
+    throws IOException
   {
     URL url = getURL(env, _curl.getURL(), _curl.getPort());
 
@@ -148,8 +148,8 @@ public class CurlHttpRequest
    * Attempt to connect to the server.
    */
   protected void connect(Env env)
-    throws ConnectException, SocketTimeoutException,
-           UnknownHostException, IOException
+    throws
+          IOException
   {
     if (_conn != null)
       _conn.connect(_curl);
@@ -399,7 +399,7 @@ public class CurlHttpRequest
    * Returns the server response body.
    */
   private final Value getBody(Env env, StringValue bb)
-    throws SocketTimeoutException, IOException
+    throws IOException
   {
     InputStream in;
 
@@ -454,6 +454,7 @@ public class CurlHttpRequest
   /**
    * Cleanup resources associated with this connection.
    */
+  @Override
   public void cleanup()
   {
     if (_conn != null)

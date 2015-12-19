@@ -178,6 +178,7 @@ public class TokenModule extends AbstractQuercusModule {
 
   private static final IniDefinitions _iniDefinitions = new IniDefinitions();
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "tokenizer" };
@@ -186,6 +187,7 @@ public class TokenModule extends AbstractQuercusModule {
   /**
    * Returns the default php.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;
@@ -650,7 +652,7 @@ public class TokenModule extends AbstractQuercusModule {
         }
 
       case '#':
-        _lexeme.append((char) '#');
+        _lexeme.append('#');
         while ((ch = read()) >= 0 && ch != '\r' && ch != '\n') {
           _lexeme.append((char) ch);
         }
@@ -949,7 +951,7 @@ public class TokenModule extends AbstractQuercusModule {
           return _lexeme.length() > 0;
         }
         else {
-          _lexeme.append((char) '<');
+          _lexeme.append('<');
 
           unread();
         }

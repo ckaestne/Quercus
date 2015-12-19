@@ -53,6 +53,7 @@ public class LiteralStringExpr extends Expr {
   /**
    * Returns true for a literal expression.
    */
+  @Override
   public boolean isLiteral()
   {
     return true;
@@ -61,6 +62,7 @@ public class LiteralStringExpr extends Expr {
   /**
    * Returns true if the expression evaluates to a string.
    */
+  @Override
   public boolean isString()
   {
     return true;
@@ -131,6 +133,7 @@ public class LiteralStringExpr extends Expr {
    *
    * @return the expression value.
    */
+  @Override
   public Value evalConstant()
   {
     return _value;
@@ -144,6 +147,7 @@ public class LiteralStringExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(_value);

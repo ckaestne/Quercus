@@ -85,6 +85,7 @@ public class StreamModule extends AbstractQuercusModule {
    *
    * @return the new constant chain
    */
+  @Override
   public Map<StringValue,Value> getConstMap()
   {
     return _constMap;
@@ -219,7 +220,7 @@ public class StreamModule extends AbstractQuercusModule {
         int sublen = buffer.length;
 
         if (length < sublen)
-          sublen = (int) length;
+          sublen = length;
 
         sublen = in.read(buffer, 0, sublen);
         if (sublen < 0)
@@ -439,10 +440,7 @@ public class StreamModule extends AbstractQuercusModule {
   {
     env.stub("stream_set_blocking()");
 
-    if (stream == null)
-      return false;
-    else
-      return true;
+    return stream != null;
   }
 
   public static boolean stream_set_timeout(Env env,

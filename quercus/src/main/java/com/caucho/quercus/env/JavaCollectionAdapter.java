@@ -237,16 +237,19 @@ public class JavaCollectionAdapter extends JavaAdapter
       _iterator = _collection.iterator();
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public Map.Entry<Object, Object> next()
     {
       return new CollectionEntry(_index++, _iterator.next());
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -265,16 +268,19 @@ public class JavaCollectionAdapter extends JavaAdapter
       _value = value;
     }
 
+    @Override
     public Object getKey()
     {
       return _key;
     }
 
+    @Override
     public Object getValue()
     {
       return _value;
     }
 
+    @Override
     public Object setValue(Object value)
     {
       Object oldValue = _value;
@@ -317,11 +323,13 @@ public class JavaCollectionAdapter extends JavaAdapter
       _iterator = _collection.iterator();
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public VEntry next()
     {
        Value val = wrapJava(_iterator.next());
@@ -329,6 +337,7 @@ public class JavaCollectionAdapter extends JavaAdapter
        return new Entry(VHelper.noCtx(), LongValue.create(_index++), EnvVar._gen(val));
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -367,11 +376,13 @@ public class JavaCollectionAdapter extends JavaAdapter
       _iterator = _collection.iterator();
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public Value next()
     {
       _iterator.next();
@@ -379,6 +390,7 @@ public class JavaCollectionAdapter extends JavaAdapter
       return LongValue.create(_index++);
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -395,21 +407,25 @@ public class JavaCollectionAdapter extends JavaAdapter
       _iterator = _collection.iterator();
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public EnvVar next()
     {
       return EnvVar._gen(wrapJava(_iterator.next()));
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
     }
   }
+  @Override
   public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
     throw new UnimplementedVException();
 //    return VList.foldRightUntil(new OptEntryIterator(_head), init, ctx, op, stopCriteria);

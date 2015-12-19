@@ -57,9 +57,10 @@ public class LazySymbolMap extends AbstractMap<StringValue,EnvVar> {
   /**
    * Returns the matching value, or null.
    */
+  @Override
   public EnvVar get(Object key)
   {
-    return (EnvVar) get((StringValue) key);
+    return get((StringValue) key);
   }
 
   /**
@@ -99,6 +100,7 @@ public class LazySymbolMap extends AbstractMap<StringValue,EnvVar> {
     return _extMap.put(key, newVar);
   }
 
+  @Override
   public Set<Map.Entry<StringValue,EnvVar>> entrySet()
   {
     return _extMap.entrySet();

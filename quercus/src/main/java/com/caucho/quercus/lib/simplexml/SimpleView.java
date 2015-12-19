@@ -197,7 +197,7 @@ public abstract class SimpleView
         return new AttributeView((Attr) node);
 
       case Node.TEXT_NODE:
-        return new TextView((Text) node);
+        return new TextView(node);
 
       case Node.DOCUMENT_NODE:
         return new DocumentView((Document) node);

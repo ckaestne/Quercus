@@ -215,6 +215,7 @@ public class JavaMapAdapter
    *
    * @return the value if it is found in the array, NULL otherwise
    */
+  @Override
   public V<? extends Value> containsKey(Value key)
   {
     return V.one(BooleanValue.create(_map.containsKey(key.toJavaObject())));
@@ -320,11 +321,13 @@ public class JavaMapAdapter
       _iterator = _map.entrySet().iterator();
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public VEntry next()
     {
       Map.Entry entry = _iterator.next();
@@ -335,6 +338,7 @@ public class JavaMapAdapter
       return new Entry(VHelper.noCtx(), key, value);
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -371,16 +375,19 @@ public class JavaMapAdapter
       _iterator = _map.values().iterator();
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public EnvVar next()
     {
       return EnvVar._gen(wrapJava(_iterator.next()));
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -397,21 +404,25 @@ public class JavaMapAdapter
       _iterator = _map.keySet().iterator();
     }
 
+    @Override
     public boolean hasNext()
     {
       return _iterator.hasNext();
     }
 
+    @Override
     public Value next()
     {
       return wrapJava(_iterator.next());
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
     }
   }
+  @Override
   public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
     throw new UnimplementedVException();
 //    return VList.foldRightUntil(new OptEntryIterator(_head), init, ctx, op, stopCriteria);

@@ -45,6 +45,7 @@ public class JavaCollectionClassDef extends JavaClassDef {
     super(moduleContext, name, type);
   }
 
+  @Override
   public Value wrap(Env env, Object obj)
   {
     if (! _isInit)

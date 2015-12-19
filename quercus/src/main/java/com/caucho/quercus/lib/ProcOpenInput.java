@@ -91,6 +91,7 @@ public class ProcOpenInput extends ReadStreamInput
   /**
    * Opens a copy.
    */
+  @Override
   public BinaryInput openCopy()
     throws IOException
   {
@@ -116,6 +117,7 @@ public class ProcOpenInput extends ReadStreamInput
       return "ProcOpenInput[pipe]";
   }
 
+  @Override
   public void close()
   {
     _env.removeCleanup(this);
@@ -127,6 +129,7 @@ public class ProcOpenInput extends ReadStreamInput
    * Implements the EnvCleanup interface.
    */
 
+  @Override
   public void cleanup()
   {
     try {

@@ -60,6 +60,7 @@ public class ToBinaryExpr extends ToStringExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     V<? extends Value> value = _expr.eval(env, VHelper.noCtx()).map((a)->a.toValue());

@@ -40,5 +40,6 @@ abstract public class BinaryExpr implements Expr
     _right = right;
   }
 
+  @Override
   abstract public int eval(int n);
 }

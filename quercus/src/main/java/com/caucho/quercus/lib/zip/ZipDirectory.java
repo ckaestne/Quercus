@@ -94,10 +94,7 @@ public class ZipDirectory
     }
 
     // Extra data descriptors after the compressed data
-    if ((_tmpBuf[6] & 0x04) == 0x04)
-      _ddescriptor = true;
-    else 
-      _ddescriptor = false;
+    _ddescriptor = (_tmpBuf[6] & 0x04) == 0x04;
 
     int compressionMethod = (_tmpBuf[8] & 0xff) | ((_tmpBuf[9] & 0xff) << 8);
 

@@ -366,6 +366,7 @@ public class PDOStatement
   /**
    * Implements the EnvCleanup interface.
    */
+  @Override
   public void cleanup()
   {
     close();
@@ -931,6 +932,7 @@ public class PDOStatement
   /**
    * Returns an iterator of the values.
    */
+  @Override
   public Iterator<Value> iterator()
   {
     Value value = fetchAll(Env.getInstance(), 0, -1);

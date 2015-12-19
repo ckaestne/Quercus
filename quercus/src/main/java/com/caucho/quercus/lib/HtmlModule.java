@@ -376,7 +376,7 @@ public class HtmlModule extends AbstractQuercusModule {
         sb.append(entity);
       }
       else {
-        sb.append((char) ch);
+        sb.append(ch);
       }
     }
 

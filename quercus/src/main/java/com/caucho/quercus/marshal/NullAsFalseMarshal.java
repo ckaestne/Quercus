@@ -45,46 +45,55 @@ public class NullAsFalseMarshal extends Marshal
     _marshal = marshal;
   }
 
+  @Override
   public boolean isBoolean()
   {
     return _marshal.isBoolean();
   }
 
+  @Override
   public boolean isString()
   {
     return _marshal.isString();
   }
 
+  @Override
   public boolean isLong()
   {
     return _marshal.isLong();
   }
 
+  @Override
   public boolean isDouble()
   {
     return _marshal.isDouble();
   }
 
+  @Override
   public boolean isReadOnly()
   {
     return _marshal.isReadOnly();
   }
 
+  @Override
   public boolean isReference()
   {
     return _marshal.isReference();
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class argClass)
   {
     return _marshal.marshal(env, expr, argClass);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class argClass)
   {
     return _marshal.marshal(env, value, argClass);
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     // php/1427

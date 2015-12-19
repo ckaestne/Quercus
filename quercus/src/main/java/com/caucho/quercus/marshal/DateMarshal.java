@@ -43,24 +43,28 @@ public class DateMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new DateMarshal();
   
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return value.toJavaDate();
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava((Date) value);
+    return env.wrapJava(value);
   }
   
   @Override

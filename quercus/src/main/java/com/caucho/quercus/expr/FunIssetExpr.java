@@ -55,6 +55,7 @@ public class FunIssetExpr extends AbstractUnaryExpr {
   /**
    * Return true as a boolean.
    */
+  @Override
   public boolean isBoolean()
   {
     return true;
@@ -68,6 +69,7 @@ public class FunIssetExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return _expr.evalIsset(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);

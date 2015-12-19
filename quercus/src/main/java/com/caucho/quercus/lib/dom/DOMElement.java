@@ -254,6 +254,7 @@ public class DOMElement extends DOMNode<Element>
     }
   }
 
+  @Override
   public void setNodeValue(String nodeValue)
     throws DOMException
   {

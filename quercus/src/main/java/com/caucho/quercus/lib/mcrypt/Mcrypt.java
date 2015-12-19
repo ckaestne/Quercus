@@ -211,10 +211,7 @@ public class Mcrypt {
 
   private boolean isPadKey()
   {
-    if (McryptModule.MCRYPT_BLOWFISH.equals(_algorithm))
-      return false;
-    else
-      return true;
+    return !McryptModule.MCRYPT_BLOWFISH.equals(_algorithm);
   }
 
   /**
@@ -288,10 +285,7 @@ public class Mcrypt {
    */
   public boolean is_block_algorithm()
   {
-    if (_algorithm.equals(McryptModule.MCRYPT_BLOWFISH))
-      return false;
-    else
-      return true;
+    return !_algorithm.equals(McryptModule.MCRYPT_BLOWFISH);
   }
 
   /**
@@ -330,10 +324,8 @@ public class Mcrypt {
 
   private boolean isPadded()
   {
-    if (_mode.equals("CFB") || _mode.equals("OFB")) 
-      return false;
+    return !(_mode.equals("CFB") || _mode.equals("OFB"));
 
-    return true;
   }
 
   /**

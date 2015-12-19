@@ -55,6 +55,7 @@ public class BinaryDivExpr extends AbstractBinaryExpr {
   /**
    * Returns true for a double.
    */
+  @Override
   public boolean isDouble()
   {
     return true;
@@ -68,6 +69,7 @@ public class BinaryDivExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {

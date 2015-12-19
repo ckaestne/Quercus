@@ -42,6 +42,7 @@ public class SplModule extends AbstractQuercusModule
 {
   private static String DEFAULT_EXTENSIONS = ".php,.inc";
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "SPL" };
@@ -54,7 +55,7 @@ public class SplModule extends AbstractQuercusModule
     QuercusClass cls;
 
     if (obj.isObject()) {
-      cls = ((ObjectValue) obj.toObject(env)).getQuercusClass();
+      cls = obj.toObject(env).getQuercusClass();
     }
     else {
       cls = env.findClass(obj.toString(), autoload, true, true);
@@ -75,7 +76,7 @@ public class SplModule extends AbstractQuercusModule
     QuercusClass cls;
 
     if (obj.isObject()) {
-      cls = ((ObjectValue) obj.toObject(env)).getQuercusClass();
+      cls = obj.toObject(env).getQuercusClass();
     }
     else {
       cls = env.findClass(obj.toString(), autoload, true, true);

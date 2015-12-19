@@ -42,19 +42,22 @@ import java.math.BigDecimal;
 public class BigDecimalMarshal extends Marshal {
   public static final Marshal MARSHAL = new BigDecimalMarshal();
 
+  @Override
   public Object marshal(Env env, Expr expr, Class argClass)
   {
     return expr.eval(env, VHelper.noCtx()).getOne().toBigDecimal();
   }
   
+  @Override
   public Object marshal(Env env, Value value, Class argClass)
   {
     return value.toBigDecimal();
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.wrapJava((BigDecimal) value);
+    return env.wrapJava(value);
   }
   
   @Override

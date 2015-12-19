@@ -86,6 +86,7 @@ public class ClassVarNameVirtualConstExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     V<? extends StringValue> name = _name.evalStringValue(env, VHelper.noCtx());

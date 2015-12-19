@@ -80,6 +80,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Returns the input stream.
    */
+  @Override
   public InputStream getInputStream()
   {
     return _is;
@@ -88,6 +89,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Opens a copy.
    */
+  @Override
   public BinaryInput openCopy()
     throws IOException
   {
@@ -97,6 +99,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Unread the last byte.
    */
+  @Override
   abstract public void unread()
     throws IOException;
 
@@ -113,6 +116,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Reads a character from a file, returning -1 on EOF.
    */
+  @Override
   public int read()
     throws IOException
   {
@@ -140,6 +144,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Reads a buffer from a file, returning -1 on EOF.
    */
+  @Override
   public int read(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -167,6 +172,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Reads into a binary builder.
    */
+  @Override
   public StringValue read(int length)
     throws IOException
   {
@@ -184,6 +190,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Reads a line from a file, returning null on EOF.
    */
+  @Override
   public StringValue readLine(long length)
     throws IOException
   {
@@ -204,6 +211,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Reads the optional linefeed character from a \r\n
    */
+  @Override
   public boolean readOptionalLinefeed()
     throws IOException
   {
@@ -224,6 +232,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Appends to a string builder.
    */
+  @Override
   public StringValue appendTo(StringValue builder)
     throws IOException
   {
@@ -236,6 +245,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Returns true on the EOF.
    */
+  @Override
   public boolean isEOF()
   {
     return _is == null || _isEOF;
@@ -252,13 +262,16 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Returns the current location in the file.
    */
+  @Override
   abstract public long getPosition();
 
   /**
    * Sets the current location in the file.
    */
+  @Override
   abstract public boolean setPosition(long offset);
 
+  @Override
   public long seek(long offset, int whence)
   {
     long position;
@@ -283,6 +296,7 @@ abstract public class AbstractBinaryInputOutput
       return position;
   }
 
+  @Override
   public Value stat()
   {
     return BooleanValue.FALSE;
@@ -293,6 +307,7 @@ abstract public class AbstractBinaryInputOutput
    * The isEOF method will return true
    * after this method has been invoked.
    */
+  @Override
   public void closeRead()
   {
     try {
@@ -313,6 +328,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Returns self as the output stream.
    */
+  @Override
   public OutputStream getOutputStream()
   {
     return _os;
@@ -324,6 +340,7 @@ abstract public class AbstractBinaryInputOutput
     _os.write(ch);
   }
 
+  @Override
   public void write(byte []buffer, int offset, int length)
     throws IOException
   {
@@ -334,6 +351,7 @@ abstract public class AbstractBinaryInputOutput
    * Read length bytes of data from the InputStream
    * argument and write them to this output stream.
    */
+  @Override
   public int write(InputStream is, int length)
     throws IOException
   {
@@ -371,6 +389,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(char v)
     throws IOException
   {
@@ -380,6 +399,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Prints a string to a file.
    */
+  @Override
   public void print(String s)
     throws IOException
   {
@@ -392,6 +412,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Flushes the output.
    */
+  @Override
   public void flush()
     throws IOException
   {
@@ -402,6 +423,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Closes the file.
    */
+  @Override
   public void closeWrite()
   {
     try {
@@ -418,6 +440,7 @@ abstract public class AbstractBinaryInputOutput
   /**
    * Closes the file.
    */
+  @Override
   public void close()
   {
     closeRead();

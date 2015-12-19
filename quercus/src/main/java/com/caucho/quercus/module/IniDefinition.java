@@ -50,7 +50,7 @@ public class IniDefinition {
   private final Value _deflt;
   private final Type _type;
 
-  public enum Type { BOOLEAN, STRING, LONG, ARRAY };
+  public enum Type { BOOLEAN, STRING, LONG, ARRAY }
 
   public IniDefinition(String name, Type type, Value deflt, int scope)
   {

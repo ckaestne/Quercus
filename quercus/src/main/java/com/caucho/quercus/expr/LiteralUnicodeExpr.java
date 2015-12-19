@@ -52,6 +52,7 @@ public class LiteralUnicodeExpr extends Expr {
   /**
    * Returns true for a literal expression.
    */
+  @Override
   public boolean isLiteral()
   {
     return true;
@@ -62,6 +63,7 @@ public class LiteralUnicodeExpr extends Expr {
    *
    * @return the expression value.
    */
+  @Override
   public Value evalConstant()
   {
     return _value;
@@ -75,6 +77,7 @@ public class LiteralUnicodeExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(_value);

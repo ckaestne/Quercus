@@ -66,6 +66,7 @@ abstract public class AbstractVarExpr extends Expr {
   /**
    * Marks the value as assigned
    */
+  @Override
   public void assign(QuercusParser parser)
   {
     // XXX: used by list, e.g. quercus/03l8.  need further tests
@@ -247,6 +248,7 @@ abstract public class AbstractVarExpr extends Expr {
    * @param value
    * @return the expression value.
    */
+  @Override
   abstract public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value);
 }
 

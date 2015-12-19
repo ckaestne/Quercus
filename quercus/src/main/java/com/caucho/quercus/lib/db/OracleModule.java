@@ -213,6 +213,7 @@ public class OracleModule extends AbstractQuercusModule {
   /**
    * Returns true for the oracle extension.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "oci8" };
@@ -294,10 +295,10 @@ public class OracleModule extends AbstractQuercusModule {
 
       Method method
         = clArrayDescriptor.getDeclaredMethod(
-        "createDescriptor", new Class[] {String.class, Connection.class});
+        "createDescriptor", String.class, Connection.class);
 
       Object arrayDesc = method.invoke(clArrayDescriptor,
-                                       new Object[] {"NUMBER_VARRAY", conn});
+              "NUMBER_VARRAY", conn);
 
       Value []valueArray
         = varArray.valuesToArray(); // int arrayValues[] = {123, 234};
@@ -313,11 +314,9 @@ public class OracleModule extends AbstractQuercusModule {
 
       Class<?> clsArray = Class.forName("oracle.sql.ARRAY");
 
-      Constructor<?> constructor = clsArray.getDeclaredConstructor(new Class[] {
-        clArrayDescriptor, Connection.class, Object.class});
+      Constructor<?> constructor = clsArray.getDeclaredConstructor(clArrayDescriptor, Connection.class, Object.class);
 
-      Array oracleArray = (Array) constructor.newInstance(new Object[]
-        {arrayDesc, conn, objectArray});
+      Array oracleArray = (Array) constructor.newInstance(arrayDesc, conn, objectArray);
 
       // Bind array
       // ((oracle.jdbc.OraclePreparedStatement)oracleStmt).setARRAY(1, array);
@@ -1239,7 +1238,7 @@ public class OracleModule extends AbstractQuercusModule {
                                                           argTypes);
 
       Object arrayDesc = method.invoke(clArrayDescriptor,
-                                       new Object[] {typeName, jdbcConn});
+              typeName, jdbcConn);
 
       if (arrayDesc != null) {
         return new OracleOciCollection(jdbcConn, arrayDesc);
@@ -1503,7 +1502,7 @@ public class OracleModule extends AbstractQuercusModule {
 
       Value result = stmt.getResultBuffer();
 
-      return ((ArrayValueImpl)result).get(field).getOne();
+      return result.get(field).getOne();
     }
     catch (Exception e) {
       env.warning(e);

@@ -144,6 +144,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     env.error(L.l("{0}::${1}: Cannot unset class variables.", _className, _varName),

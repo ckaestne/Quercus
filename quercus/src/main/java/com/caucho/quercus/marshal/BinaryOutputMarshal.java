@@ -70,7 +70,7 @@ public class BinaryOutputMarshal extends Marshal
       return null;
     }
     else if (value instanceof BinaryOutput) {
-      return (BinaryOutput) value;
+      return value;
     }
 
     Object javaObj = value.toJavaObject();
@@ -79,7 +79,7 @@ public class BinaryOutputMarshal extends Marshal
       return null;
     }
     else if (javaObj instanceof BinaryOutput) {
-      return (BinaryOutput) javaObj;
+      return javaObj;
     }
     else if (javaObj instanceof OutputStream) {
       return new WriteStreamOutput((OutputStream) javaObj);

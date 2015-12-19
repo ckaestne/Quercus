@@ -48,27 +48,31 @@ public class ClassMarshal extends Marshal {
 
   public static final ClassMarshal MARSHAL = new ClassMarshal();
 
+  @Override
   public boolean isString()
   {
     return true;
   }
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     Object obj = value.toJavaObject();
 
     if (obj instanceof Class)
-      return (Class) obj;
+      return obj;
     else {
       Thread thread = Thread.currentThread();
       ClassLoader loader = thread.getContextClassLoader();
@@ -90,6 +94,7 @@ public class ClassMarshal extends Marshal {
     }
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)
@@ -124,6 +129,7 @@ public class ClassMarshal extends Marshal {
     */
   }
 
+  @Override
   public int getMarshalingCost(Expr expr)
   {
     if (expr.isString())

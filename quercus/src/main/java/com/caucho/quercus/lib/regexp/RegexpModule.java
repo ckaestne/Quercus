@@ -491,7 +491,7 @@ public class RegexpModule
       return BooleanValue.FALSE;
     }
 
-    StringValue empty = subject.EMPTY;
+    StringValue empty = StringValue.EMPTY;
 
     RegexpState regexpState = RegexpState.create(env, regexp, subject);
 
@@ -675,7 +675,7 @@ public class RegexpModule
 
     ArrayValue []matchList = new ArrayValue[groupCount + 1];
 
-    StringValue emptyStr = subject.EMPTY;
+    StringValue emptyStr = StringValue.EMPTY;
 
     for (int j = 0; j < groupCount; j++) {
       ArrayValue values = new ArrayValueImpl();
@@ -756,7 +756,7 @@ public class RegexpModule
       return LongValue.ZERO;
     }
 
-    StringValue empty = subject.EMPTY;
+    StringValue empty = StringValue.EMPTY;
 
     int count = 0;
 
@@ -1105,7 +1105,7 @@ public class RegexpModule
                                                      long limit,
                                                      Value countV)
   {
-    StringValue empty = subject.EMPTY;
+    StringValue empty = StringValue.EMPTY;
 
     long numberOfMatches = 0;
 

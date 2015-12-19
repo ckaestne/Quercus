@@ -56,6 +56,7 @@ public class BinaryLeqExpr extends AbstractBinaryExpr {
   /**
    * Returns true for a boolean.
    */
+  @Override
   public boolean isBoolean()
   {
     return true;
@@ -64,6 +65,7 @@ public class BinaryLeqExpr extends AbstractBinaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
@@ -73,6 +75,7 @@ public class BinaryLeqExpr extends AbstractBinaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
+  @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());

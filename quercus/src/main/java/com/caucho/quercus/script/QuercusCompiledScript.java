@@ -68,6 +68,7 @@ public class QuercusCompiledScript extends CompiledScript {
   /**
    * evaluates based on a reader.
    */
+  @Override
   public Object eval(ScriptContext cxt)
     throws ScriptException
   {
@@ -157,6 +158,7 @@ public class QuercusCompiledScript extends CompiledScript {
   /**
    * Returns the script engine.
    */
+  @Override
   public ScriptEngine getEngine()
   {
     return _engine;

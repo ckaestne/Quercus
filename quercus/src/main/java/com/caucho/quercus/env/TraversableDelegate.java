@@ -38,16 +38,16 @@ public interface TraversableDelegate {
   /**
    * Returns an iterator over the object's &lt;key,value> entries. 
    */
-  public Iterator<VEntry>
+  Iterator<VEntry>
     getIterator(Env env, ObjectValue qThis);
   
   /**
    * Returns an iterator over the object's keys
    */
-  public Iterator<Value> getKeyIterator(Env env, ObjectValue qThis);
+  Iterator<Value> getKeyIterator(Env env, ObjectValue qThis);
 
   /**
    * Returns an iterator over the object's values.
    */
-  public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis);
+  Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis);
 }

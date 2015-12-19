@@ -66,11 +66,13 @@ public class MethodDeclaration extends Function
     _qClass = qClass;
   }
 
+  @Override
   public boolean isAbstract()
   {
     return true;
   }
 
+  @Override
   public boolean isObjectMethod()
   {
     return true;
@@ -90,6 +92,7 @@ public class MethodDeclaration extends Function
   /**
    * Evaluates the function.
    */
+  @Override
   public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
     throw new UnsupportedOperationException();

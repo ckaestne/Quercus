@@ -83,6 +83,7 @@ public class CallVarExpr extends Expr {
    * Returns the reference of the value.
    * @param location
    */
+  @Override
   public Expr createRef(QuercusParser parser)
   {
     return parser.getFactory().createRef(this);
@@ -92,6 +93,7 @@ public class CallVarExpr extends Expr {
    * Returns the copy of the value.
    * @param location
    */
+  @Override
   public Expr createCopy(ExprFactory factory)
   {
     return this;

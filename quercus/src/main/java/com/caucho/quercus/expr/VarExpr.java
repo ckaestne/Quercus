@@ -157,6 +157,7 @@ public class VarExpr
   /**
    * Evaluates the expression as an isset() statement.
    */
+  @Override
   public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
     return env.getValue(VHelper.noCtx(), _name, false, false).map((a)->a.isset());
@@ -165,6 +166,7 @@ public class VarExpr
   /**
    * Evaluates the expression as an isset() statement.
    */
+  @Override
   public @Nonnull V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
   {
     return env.getValue(VHelper.noCtx(), _name, false, false);
@@ -209,6 +211,7 @@ public class VarExpr
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     V<? extends Value> value;
@@ -243,6 +246,7 @@ public class VarExpr
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     return env.getVar(ctx, _name);

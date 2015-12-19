@@ -42,16 +42,19 @@ public class DOMNodeListDelegate
   {
   }
 
+  @Override
   public Iterator<Value> getKeyIterator(Env env, ObjectValue obj)
   {
     return new DOMNodeListKeyIterator((DOMNodeList) obj.toJavaObject());
   }
   
+  @Override
   public Iterator<EnvVar> getValueIterator(Env env, ObjectValue obj)
   {
     return new DOMNodeListValueIterator(env,  (DOMNodeList) obj.toJavaObject());
   }
   
+  @Override
   public Iterator<VEntry> getIterator(Env env, ObjectValue obj)
   {
     return new DOMNodeListIterator(env, (DOMNodeList) obj.toJavaObject());
@@ -68,16 +71,19 @@ public class DOMNodeListDelegate
       _list = list;
     }
     
+    @Override
     public boolean hasNext()
     {
       return _index < _list.getLength();
     }
 
+    @Override
     public Value next()
     {
       return LongValue.create(_index++);
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -97,16 +103,19 @@ public class DOMNodeListDelegate
       _list = list;
     }
     
+    @Override
     public boolean hasNext()
     {
       return _index < _list.getLength();
     }
 
+    @Override
     public EnvVar next()
     {
       return EnvVar._gen( _env.wrapJava(_list.item(_index++)));
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -126,16 +135,19 @@ public class DOMNodeListDelegate
       _list = list;
     }
     
+    @Override
     public boolean hasNext()
     {
       return _index < _list.getLength();
     }
 
+    @Override
     public VEntry next()
     {
       return new DOMNodeListEntry(_index, EnvVar._gen(_env.wrapJava(_list.item(_index++))));
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -154,6 +166,7 @@ public class DOMNodeListDelegate
       _value = value;
     }
     
+    @Override
     public Value getKey()
     {
       return LongValue.create(_key);
@@ -164,11 +177,13 @@ public class DOMNodeListDelegate
       return VHelper.noCtx();
     }
 
+    @Override
     public EnvVar getEnvVar()
     {
       return _value;
     }
     
+    @Override
     public EnvVar setEnvVar(EnvVar value)
     {
       throw new UnsupportedOperationException();

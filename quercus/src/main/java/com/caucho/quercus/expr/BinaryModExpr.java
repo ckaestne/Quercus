@@ -55,6 +55,7 @@ public class BinaryModExpr extends AbstractBinaryExpr {
   /**
    * Return true for a long.
    */
+  @Override
   public boolean isLong()
   {
     return true;
@@ -63,6 +64,7 @@ public class BinaryModExpr extends AbstractBinaryExpr {
   /**
    * Return true for a long.
    */
+  @Override
   public boolean isNumber()
   {
     return true;
@@ -76,6 +78,7 @@ public class BinaryModExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {

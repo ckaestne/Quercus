@@ -58,6 +58,7 @@ public class BinaryInstanceOfVarExpr extends AbstractBinaryExpr {
   /**
    * Returns true for a boolean.
    */
+  @Override
   public boolean isBoolean()
   {
     return true;
@@ -66,6 +67,7 @@ public class BinaryInstanceOfVarExpr extends AbstractBinaryExpr {
   /**
    * Evaluates the equality as a boolean.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {

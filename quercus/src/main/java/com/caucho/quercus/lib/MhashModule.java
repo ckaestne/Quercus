@@ -118,6 +118,7 @@ public class MhashModule extends AbstractQuercusModule {
     addAlgorithm(MHASH_MD2, "MD2",  "MD2");
   }
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] {  "mhash" };

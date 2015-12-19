@@ -103,6 +103,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     init();
@@ -124,6 +125,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
     init();
@@ -287,6 +289,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
@@ -309,6 +312,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
     init();
@@ -330,6 +334,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     init();

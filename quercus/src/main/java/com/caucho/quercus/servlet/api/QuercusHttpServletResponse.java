@@ -34,20 +34,20 @@ import java.io.OutputStream;
 
 public interface QuercusHttpServletResponse
 {
-  public void setContentType(String type);
-  public void addHeader(String name, String value);
-  public void setHeader(String name, String value);
-  public void setStatus(int code, String status);
+  void setContentType(String type);
+  void addHeader(String name, String value);
+  void setHeader(String name, String value);
+  void setStatus(int code, String status);
 
-  public String getCharacterEncoding();
-  public void setCharacterEncoding(String encoding);
+  String getCharacterEncoding();
+  void setCharacterEncoding(String encoding);
 
-  public void addCookie(QuercusCookie cookie);
+  void addCookie(QuercusCookie cookie);
 
-  public boolean isCommitted();
+  boolean isCommitted();
 
-  public OutputStream getOutputStream()
+  OutputStream getOutputStream()
     throws IOException;
 
-  public <T> T toResponse(Class<T> cls);
+  <T> T toResponse(Class<T> cls);
 }

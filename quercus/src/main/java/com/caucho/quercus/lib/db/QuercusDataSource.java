@@ -63,6 +63,7 @@ public class QuercusDataSource implements DataSource {
     _isAllowPerConnectionUserPass = isAllowPerConnectionUserPass;
   }
 
+  @Override
   public Connection getConnection()
     throws SQLException
   {
@@ -74,6 +75,7 @@ public class QuercusDataSource implements DataSource {
     }
   }
 
+  @Override
   public Connection getConnection(String user, String pass)
     throws SQLException
   {
@@ -130,6 +132,7 @@ public class QuercusDataSource implements DataSource {
   /**
    * new interface method in JDK 1.7 CommonDataSource
    */
+  @Override
   public Logger getParentLogger()
   {
     throw new UnsupportedOperationException();

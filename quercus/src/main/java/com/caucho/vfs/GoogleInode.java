@@ -122,9 +122,9 @@ public final class GoogleInode implements Serializable {
     return getClass().getSimpleName() + "[" + _name + "," + _type + "," + _length + "]";
   }
 
-  public static enum FileType {
+  public enum FileType {
     NONE,
     FILE,
-    DIRECTORY;
+    DIRECTORY
   }
 }

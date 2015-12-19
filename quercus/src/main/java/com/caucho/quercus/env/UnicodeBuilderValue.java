@@ -210,6 +210,7 @@ public class UnicodeBuilderValue
    * @param env
    * @param charset
    */
+  @Override
   public final StringValue convertToUnicode(Env env, String charset)
   {
     return this;
@@ -235,6 +236,7 @@ public class UnicodeBuilderValue
   /**
    * Returns the type.
    */
+  @Override
   public String getType()
   {
     return "string";
@@ -319,6 +321,7 @@ public class UnicodeBuilderValue
   /**
    * Append a buffer to the value.
    */
+  @Override
   public final StringValue append(byte []buf, int offset, int length)
   {
     if (_buffer.length < _length + length)
@@ -351,6 +354,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java value to the value.
    */
+  @Override
   public StringValue append(Value v)
   {
     v.appendTo(this);
@@ -361,6 +365,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java string to the value.
    */
+  @Override
   public StringValue append(String s)
   {
     int len = s.length();
@@ -378,6 +383,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java string to the value.
    */
+  @Override
   public StringValue append(String s, int start, int end)
   {
     int len = Math.min(s.length(), end - start);
@@ -395,6 +401,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java char to the value.
    */
+  @Override
   public StringValue append(char v)
   {
     if (_buffer.length < _length + 1)
@@ -408,6 +415,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java buffer to the value.
    */
+  @Override
   public StringValue append(char []buf, int offset, int length)
   {
     if (_buffer.length < _length + length)
@@ -423,6 +431,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java double to the value.
    */
+  @Override
   public StringValue append(char []buf)
   {
     return append(buf, 0, buf.length);
@@ -431,6 +440,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java buffer to the value.
    */
+  @Override
   public StringValue append(CharSequence buf, int head, int tail)
   {
     int len = tail - head;
@@ -453,6 +463,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java buffer to the value.
    */
+  @Override
   public StringValue append(UnicodeBuilderValue sb, int head, int tail)
   {
     int len = tail - head;
@@ -523,6 +534,7 @@ public class UnicodeBuilderValue
   /**
    * Append a Java byte to the value without conversions.
    */
+  @Override
   public StringValue appendByte(int v)
   {
     if (_buffer.length < _length + 1)
@@ -584,6 +596,7 @@ public class UnicodeBuilderValue
    * Each character becomes one byte, characters with values above 255 are
    * not correctly preserved.
    */
+  @Override
   public final byte[] toBytes()
   {
     byte[] bytes = new byte[_length];
@@ -602,6 +615,7 @@ public class UnicodeBuilderValue
   /**
    * Returns the character at an index
    */
+  @Override
   public final EnvVar get(Value key)
   {
     return EnvVar._gen(charValueAt(key.toLong()));
@@ -777,6 +791,7 @@ public class UnicodeBuilderValue
   /**
    * Returns the length of the string.
    */
+  @Override
   public final int length()
   {
     return _length;
@@ -785,6 +800,7 @@ public class UnicodeBuilderValue
   /**
    * Returns the character at a particular location
    */
+  @Override
   public char charAt(int index)
   {
     return _buffer[index];
@@ -901,6 +917,7 @@ public class UnicodeBuilderValue
    * @param env
    * @param ctx
    */
+  @Override
   public void print(Env env, FeatureExpr ctx)
   {
     env.print(ctx, _buffer, 0, _length);
@@ -909,6 +926,7 @@ public class UnicodeBuilderValue
   /**
    * Serializes the value.
    */
+  @Override
   public void serialize(Env env, StringBuilder sb)
   {
     sb.append("U:");
@@ -1067,10 +1085,7 @@ public class UnicodeBuilderValue
   {
     if (_length == 0)
       return false;
-    else if (_length == 1 && _buffer[0] == '0')
-      return false;
-    else
-      return true;
+    else return !(_length == 1 && _buffer[0] == '0');
   }
 
   /**
@@ -1172,6 +1187,7 @@ public class UnicodeBuilderValue
     }
   }
 
+  @Override
   public void ensureAppendCapacity(int newCapacity)
   {
     ensureCapacity(_length + newCapacity);

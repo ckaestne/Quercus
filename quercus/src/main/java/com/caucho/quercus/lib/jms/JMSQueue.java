@@ -207,6 +207,7 @@ public class JMSQueue
     }
   }
 
+  @Override
   protected void finalize()
   {
     try {

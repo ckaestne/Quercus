@@ -49,6 +49,7 @@ public class CoreModule extends AbstractQuercusModule
   /**
    * Returns the extensions loaded by the module.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "Core" };

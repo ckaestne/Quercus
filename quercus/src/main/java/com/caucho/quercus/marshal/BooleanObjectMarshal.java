@@ -42,11 +42,13 @@ public class BooleanObjectMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new BooleanObjectMarshal();
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return expr.evalBoolean(env, VHelper.noCtx()).getOne() ? Boolean.TRUE : Boolean.FALSE;
@@ -61,6 +63,7 @@ public class BooleanObjectMarshal extends Marshal
       return value.toBoolean() ? Boolean.TRUE : Boolean.FALSE;
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value == null)

@@ -142,11 +142,8 @@ public class IpValidateFilter extends AbstractFilter implements ValidateFilter
     }
 
     int part3 = parseIp4Part(is, true);
-    if (part3 < 0 || part3 > 255) {
-      return false;
-    }
+    return !(part3 < 0 || part3 > 255);
 
-    return true;
   }
 
   private int parseIp4Part(InputStream is, boolean isLast)

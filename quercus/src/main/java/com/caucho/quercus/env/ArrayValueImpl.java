@@ -285,6 +285,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns the type.
    */
+  @Override
   public String getType() {
     return "array";
   }
@@ -292,6 +293,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Converts to a boolean.
    */
+  @Override
   public boolean toBoolean() {
     return _size.getOne() != 0;
   }
@@ -301,6 +303,7 @@ public class ArrayValueImpl extends ArrayValue
    *
    * @param env
    */
+  @Override
   public StringValue toString(Env env) {
     return env.createString("Array");
   }
@@ -308,6 +311,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Converts to an object.
    */
+  @Override
   public Object toObject() {
     return null;
   }
@@ -337,6 +341,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Copy for serialization
    */
+  @Override
   public Value copy(Env env, IdentityHashMap<Value, EnvVar> map) {
     throw new UnimplementedVException();
 //    Value oldValue = map.get(this);
@@ -365,6 +370,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Copy for saving a method's arguments.
    */
+  @Override
   public Value copySaveFunArg() {
     return new ArrayValueImpl(this);
   }
@@ -413,6 +419,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns the size.
    */
+  @Override
   public int getSize() {
     return size();
   }
@@ -420,6 +427,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Clears the array
    */
+  @Override
   public void clear() {
     if (_isDirty) {
       _isDirty = false;
@@ -437,6 +445,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns true for an array.
    */
+  @Override
   public boolean isArray() {
     return true;
   }
@@ -472,6 +481,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Add to the beginning
    */
+  @Override
   public ArrayValue unshift(Value value) {
     throw new UnimplementedVException();
 
@@ -507,6 +517,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Replace a section of the array.
    */
+  @Override
   public ArrayValue splice(int start, int end, ArrayValue replace) {
     throw new UnimplementedVException();
 
@@ -708,6 +719,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns the value as an array, using copy on write if necessary.
    */
+  @Override
   public V<? extends Value> getDirty(Value index) {
     if (_isDirty)
       copyOnWrite();
@@ -772,6 +784,7 @@ public class ArrayValueImpl extends ArrayValue
    *
    * @param ctx
    */
+  @Override
   public V<? extends Value> createTailKey(FeatureExpr ctx) {
     if (_nextAvailableIndex==null)
       updateNextAvailableIndex();
@@ -842,6 +855,7 @@ public class ArrayValueImpl extends ArrayValue
     return VList.foldRight(new OptEntryIterator(_head), init, ctx, op);
   }
 
+  @Override
   public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
     return VList.foldRightUntil(new OptEntryIterator(_head), init, ctx, op, stopCriteria);
   }
@@ -1074,7 +1088,7 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   private void incSize(FeatureExpr ctx, int increment) {
-    _size = _size.<Integer>flatMap((Integer s)->V.choice(ctx, increment+s, s));
+    _size = _size.flatMap((Integer s)->V.choice(ctx, increment+s, s));
   }
 
   /**
@@ -1167,10 +1181,12 @@ public class ArrayValueImpl extends ArrayValue
 //      return V.one(NullValue.NULL);
   }
 
+  @Override
   public final Entry getHead() {
     return _head;
   }
 
+  @Override
   protected final Entry getTail() {
     return _tail;
   }
@@ -1178,6 +1194,7 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Shuffles the array
    */
+  @Override
   public Value shuffle() {
     if (_isDirty)
       copyOnWrite();
@@ -1283,6 +1300,7 @@ public class ArrayValueImpl extends ArrayValue
    *
    * @param out the writer to the Java source code.
    */
+  @Override
   public void generate(PrintWriter out)
           throws IOException {
     out.print("new ConstArrayValue(");

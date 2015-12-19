@@ -35,19 +35,19 @@ import java.sql.ResultSetMetaData;
  * Extra ResultSet metadata for a Quercus Mysql connection.
  */
 public interface QuercusResultSetMetaData extends ResultSetMetaData {
-  public boolean isPrimaryKey(int column);
+  boolean isPrimaryKey(int column);
 
-  public boolean isUniqueKey(int column);
+  boolean isUniqueKey(int column);
 
-  public boolean isUnsigned(int column);
+  boolean isUnsigned(int column);
 
-  public boolean isZeroFill(int column);
+  boolean isZeroFill(int column);
 
-  public boolean isMultipleKey(int column);
+  boolean isMultipleKey(int column);
 
-  public boolean isBlob(int column);
+  boolean isBlob(int column);
 
-  public boolean isNotNull(int column);
+  boolean isNotNull(int column);
 
-  public int getLength(int column);
+  int getLength(int column);
 }

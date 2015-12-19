@@ -761,14 +761,14 @@ public class XMLWriter {
     return getClass().getSimpleName() + "[]";
   }
 
-  static enum WriterState {
+  enum WriterState {
     TOP,
     ELEMENT_HEADER,
     ATTRIBUTE,
     COMMENT,
     CDATA,
     ELEMENT_BODY,
-    PI;
+    PI
   }
       
 

@@ -68,6 +68,7 @@ public class JavaListAdapter
   /**
    * Adds a new value.
    */
+  @Override
   public Value putImpl(Value key, Value value)
   {
     int pos = key.toInt();
@@ -93,6 +94,7 @@ public class JavaListAdapter
   /**
    * Gets a new value.
    */
+  @Override
   public EnvVar get(Value key)
   { 
     int pos = key.toInt();
@@ -106,6 +108,7 @@ public class JavaListAdapter
   /**
    * Removes a value.
    */
+  @Override
   public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
     int pos = key.toInt();
@@ -137,6 +140,7 @@ public class JavaListAdapter
    *
    * @throws NullPointerException
    */
+  @Override
   public V<? extends Value> contains(Value value)
   {
     throw new UnimplementedVException();
@@ -151,6 +155,7 @@ public class JavaListAdapter
   /**
    * Returns the current value.
    */
+  @Override
   public V<? extends Value> current()
   {
     if (_next < _list.size())
@@ -162,6 +167,7 @@ public class JavaListAdapter
   /**
    * Returns the current key
    */
+  @Override
   public V<? extends Value> key()
   {    
     if (_next < _list.size())
@@ -173,6 +179,7 @@ public class JavaListAdapter
   /**
    * Returns true if there are more elements.
    */
+  @Override
   public V<? extends Boolean> hasCurrent()
   {
     return V.one(_next < _list.size());
@@ -182,6 +189,7 @@ public class JavaListAdapter
    * Returns the next value.
    * @param ctx
    */
+  @Override
   public V<? extends Value> next(FeatureExpr ctx)
   {
     if (_next < _list.size())
@@ -194,6 +202,7 @@ public class JavaListAdapter
    * Returns the previous value.
    * @param ctx
    */
+  @Override
   public V<? extends Value> prev(FeatureExpr ctx)
   {
     if (_next > 0)
@@ -205,6 +214,7 @@ public class JavaListAdapter
   /**
    * The each iterator
    */
+  @Override
   public Value each()
   {
     if (_next < _list.size())
@@ -229,6 +239,7 @@ public class JavaListAdapter
    * Returns the first value.
    * @param ctx
    */
+  @Override
   public V<? extends Value> reset(FeatureExpr ctx)
   {
     _next = 0;
@@ -240,6 +251,7 @@ public class JavaListAdapter
    * Returns the last value.
    * @param ctx
    */
+  @Override
   public V<? extends Value> end(FeatureExpr ctx)
   {
     _next = _list.size();

@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Expect {
-  public enum Type {
+  enum Type {
     STRING, NUMERIC, BOOLEAN
   }
 

@@ -96,6 +96,7 @@ public class JavaValue extends ObjectValue
   /**
    * Converts to a double.
    */
+  @Override
   public long toLong()
   {
     return StringValue.parseLong(toString(Env.getInstance()));
@@ -104,6 +105,7 @@ public class JavaValue extends ObjectValue
   /**
    * Converts to a double.
    */
+  @Override
   public double toDouble()
   {
     return toDouble(toString(Env.getInstance()).toString());
@@ -261,6 +263,7 @@ public class JavaValue extends ObjectValue
       return V.one(NullValue.NULL);
   }
 
+  @Override
   public Set<? extends VEntry> entrySet()
   {
     return _classDef.entrySet(_object);
@@ -368,7 +371,7 @@ public class JavaValue extends ObjectValue
       Class<?> cls = _classDef.getType();
 
       try {
-        Method method = cls.getMethod("clone", new Class[0]);
+        Method method = cls.getMethod("clone");
         method.setAccessible(true);
 
         obj = method.invoke(_object);
@@ -574,6 +577,7 @@ public class JavaValue extends ObjectValue
       _value = value;
     }
 
+    @Override
     public Value getKey()
     {
       return _key;
@@ -584,11 +588,13 @@ public class JavaValue extends ObjectValue
       return VHelper.noCtx();
     }
 
+    @Override
     public EnvVar getEnvVar()
     {
       return _value;
     }
 
+    @Override
     public EnvVar setEnvVar(EnvVar value)
     {
       return _value;

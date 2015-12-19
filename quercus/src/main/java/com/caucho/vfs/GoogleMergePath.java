@@ -81,6 +81,7 @@ public class GoogleMergePath extends MergePath
     return _googlePath;
   }
 
+  @Override
   public Path copy()
   {
     GoogleMergePath copy = new GoogleMergePath(this);

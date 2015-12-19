@@ -113,11 +113,7 @@ public class MysqliResult extends JdbcResultResource {
    */
   public boolean data_seek(Env env, int rowNumber)
   {
-    if (seek(env, rowNumber)) {
-      return true;
-    } else {
-      return false;
-    }
+    return seek(env, rowNumber);
   }
 
   /**
@@ -797,6 +793,7 @@ public class MysqliResult extends JdbcResultResource {
    * return a PHP type string.
    */
 
+  @Override
   protected String getFieldType(int fieldOffset, int jdbcType)
   {
     if (jdbcType == Types.TIMESTAMP) {

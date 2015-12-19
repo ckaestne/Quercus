@@ -157,7 +157,8 @@ public class Regexp {
       case 'D': flags |= Regcomp.END_ONLY; break;
       case 'U': flags |= Regcomp.UNGREEDY; break;
       case 'X': flags |= Regcomp.STRICT; break;
-      case 'S': /* speedup */; break;
+      case 'S': /* speedup */
+        break;
 
       case 'u': flags |= Regcomp.UTF8; break;
       case 'e': _isEval = true; break;
@@ -166,7 +167,7 @@ public class Regexp {
 
       default:
         throw new IllegalRegexpException(L.l("'{0}' is an unknown regexp flag in {1}",
-                                             (char) sflags.charAt(i), rawRegexp));
+                sflags.charAt(i), rawRegexp));
       }
     }
 

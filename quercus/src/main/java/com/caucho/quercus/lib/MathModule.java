@@ -183,7 +183,7 @@ public class MathModule extends AbstractQuercusModule {
   private static StringValue intToBase(Env env, long num, int base)
   {
     if (num == 0) {
-      return env.createString((char) '0');
+      return env.createString('0');
     }
 
     // ignore sign

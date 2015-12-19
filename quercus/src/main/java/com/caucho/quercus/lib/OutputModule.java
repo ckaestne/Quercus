@@ -57,7 +57,7 @@ public class OutputModule extends AbstractQuercusModule
   private static final IniDefinitions _iniDefinitions = new IniDefinitions();
 
   // ob_gzhandler related variables/types
-  private enum Encoding { NONE, GZIP, DEFLATE };
+  private enum Encoding { NONE, GZIP, DEFLATE }
 
   private static class GZOutputPair {
     public StringBuilderOutputStream _tempStream;
@@ -71,11 +71,13 @@ public class OutputModule extends AbstractQuercusModule
   /**
    * Returns the default php.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;
   }
 
+  @Override
   @Hide
   public void startup(Env env)
   {

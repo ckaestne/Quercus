@@ -97,6 +97,7 @@ class GoogleWriteStream extends StreamImpl {
     }
   }
 
+  @Override
   public void close()
     throws IOException
   {

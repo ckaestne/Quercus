@@ -73,6 +73,7 @@ public class DoubleValue extends NumberValue
   /**
    * Returns the type.
    */
+  @Override
   public String getType()
   {
     // php/0142
@@ -92,6 +93,7 @@ public class DoubleValue extends NumberValue
   /**
    * Returns true for a double.
    */
+  @Override
   public boolean isDoubleConvertible()
   {
     return true;
@@ -100,6 +102,7 @@ public class DoubleValue extends NumberValue
   /**
    * Returns true for integer looking doubles.
    */
+  @Override
   public boolean isLongConvertible()
   {
     return _value == (double)((long) _value);
@@ -196,6 +199,7 @@ public class DoubleValue extends NumberValue
   /**
    * Converts to a boolean.
    */
+  @Override
   public boolean toBoolean()
   {
     return _value != 0;
@@ -204,6 +208,7 @@ public class DoubleValue extends NumberValue
   /**
    * Converts to a long.
    */
+  @Override
   public long toLong()
   {
     if ((_value > (double) Long.MAX_VALUE)
@@ -217,6 +222,7 @@ public class DoubleValue extends NumberValue
   /**
    * Converts to a double.
    */
+  @Override
   public double toDouble()
   {
     return _value;
@@ -225,6 +231,7 @@ public class DoubleValue extends NumberValue
   /**
    * Converts to a double.
    */
+  @Override
   public DoubleValue toDoubleValue()
   {
     return this;
@@ -242,6 +249,7 @@ public class DoubleValue extends NumberValue
   /**
    * Converts to a key.
    */
+  @Override
   public Value toKey()
   {
     return LongValue.create((long) _value);
@@ -250,6 +258,7 @@ public class DoubleValue extends NumberValue
   /**
    * Converts to a java object.
    */
+  @Override
   public Object toJavaObject()
   {
     return new Double(_value);
@@ -258,6 +267,7 @@ public class DoubleValue extends NumberValue
   /**
    * Negates the value.
    */
+  @Override
   public Value neg()
   {
     return new DoubleValue(- _value);
@@ -266,6 +276,7 @@ public class DoubleValue extends NumberValue
   /**
    * Returns the value
    */
+  @Override
   public Value pos()
   {
     return this;
@@ -274,6 +285,7 @@ public class DoubleValue extends NumberValue
   /**
    * Multiplies to the following value.
    */
+  @Override
   public Value add(Value rValue)
   {
     return new DoubleValue(_value + rValue.toDouble());
@@ -282,6 +294,7 @@ public class DoubleValue extends NumberValue
   /**
    * Multiplies to the following value.
    */
+  @Override
   public Value add(long lValue)
   {
     return new DoubleValue(lValue + _value);
@@ -351,6 +364,7 @@ public class DoubleValue extends NumberValue
   /**
    * Increment the following value.
    */
+  @Override
   public Value increment(int incr)
   {
     return new DoubleValue(_value + incr);
@@ -359,6 +373,7 @@ public class DoubleValue extends NumberValue
   /**
    * Multiplies to the following value.
    */
+  @Override
   public Value mul(Value rValue)
   {
     return new DoubleValue(_value * rValue.toDouble());
@@ -367,6 +382,7 @@ public class DoubleValue extends NumberValue
   /**
    * Multiplies to the following value.
    */
+  @Override
   public Value mul(long lValue)
   {
     return new DoubleValue(lValue * _value);
@@ -375,6 +391,7 @@ public class DoubleValue extends NumberValue
   /**
    * Absolute value.
    */
+  @Override
   public Value abs()
   {
     if (_value >= 0)
@@ -386,6 +403,7 @@ public class DoubleValue extends NumberValue
   /**
    * Returns true for equality
    */
+  @Override
   public boolean eql(Value rValue)
   {
     rValue = rValue.toValue();
@@ -420,6 +438,7 @@ public class DoubleValue extends NumberValue
    *
    * @param env
    */
+  @Override
   public StringValue toString(Env env)
   {
     String str = toString(env.getLocaleInfo().getNumeric());
@@ -497,6 +516,7 @@ public class DoubleValue extends NumberValue
    * @param env
    * @param ctx
    */
+  @Override
   public void print(Env env, FeatureExpr ctx)
   {
     env.print(ctx, toString());
@@ -505,6 +525,7 @@ public class DoubleValue extends NumberValue
   /**
    * Serializes the value.
    */
+  @Override
   public void serialize(Env env, StringBuilder sb)
   {
     sb.append("d:");

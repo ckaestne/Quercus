@@ -81,6 +81,7 @@ public class DateModule extends AbstractQuercusModule {
   /**
    * Returns true for the date extension.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "date" };
@@ -1071,9 +1072,9 @@ public class DateModule extends AbstractQuercusModule {
   {
     long z = (long) (jd + 0.5);
     long w = (long) ((z - 1867216.25) / 36524.25);
-    long x = (long) (w / 4);
-    long a = (long) (z + 1 + w - x);
-    long b = (long) (a + 1524);
+    long x = w / 4;
+    long a = z + 1 + w - x;
+    long b = a + 1524;
     long c = (long) ((b - 122.1) / 365.25);
     long d = (long) (365.25 * c);
     long e = (long) ((b - d) / 30.6001);

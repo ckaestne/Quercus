@@ -31,15 +31,15 @@ package com.caucho.quercus.servlet.api;
 
 public interface QuercusCookie
 {
-  public String getName();
-  public String getValue();
+  String getName();
+  String getValue();
 
-  public void setVersion(int version);
-  public void setPath(String path);
-  public void setMaxAge(int maxAge);
-  public void setDomain(String domain);
-  public void setSecure(boolean isSecure);
-  public void setHttpOnly(boolean isHttpOnly);
+  void setVersion(int version);
+  void setPath(String path);
+  void setMaxAge(int maxAge);
+  void setDomain(String domain);
+  void setSecure(boolean isSecure);
+  void setHttpOnly(boolean isHttpOnly);
 
-  public <T> T toCookie(Class<T> cls);
+  <T> T toCookie(Class<T> cls);
 }

@@ -95,6 +95,7 @@ public class SessionArrayValue extends ArrayValueWrapper
   /**
    * Converts to an object.
    */
+  @Override
   public Object toObject()
   {
     return null;
@@ -103,6 +104,7 @@ public class SessionArrayValue extends ArrayValueWrapper
   /**
    * Copy for serialization
    */
+  @Override
   public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     long accessTime = _accessTime;
@@ -319,6 +321,7 @@ public class SessionArrayValue extends ArrayValueWrapper
   {
   }
   
+  @Override
   public boolean isEmpty()
   {
     return getSize() == 0;
@@ -328,6 +331,7 @@ public class SessionArrayValue extends ArrayValueWrapper
    * Callback when the session is removed from the session cache, generally
    * because the session cache is full.
    */
+  @Override
   public void removeEvent()
   {
     // XXX: logic doesn't make sense

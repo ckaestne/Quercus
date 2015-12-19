@@ -56,6 +56,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Converts to a boolean.
    */
+  @Override
   public boolean toBoolean()
   {
     if (_copyArray != null)
@@ -67,6 +68,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Copy for assignment.
    */
+  @Override
   public Value copy()
   {
     if (_copyArray != null)
@@ -78,6 +80,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Copy for serialization
    */
+  @Override
   public Value copy(Env env, IdentityHashMap<Value, EnvVar> map)
   {
     if (_copyArray != null)
@@ -89,6 +92,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Copy for saving a function arguments.
    */
+  @Override
   public Value copySaveFunArg()
   {
     if (_copyArray != null)
@@ -100,6 +104,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Returns the size.
    */
+  @Override
   public int getSize()
   {
     if (_copyArray != null)
@@ -111,6 +116,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Clears the array
    */
+  @Override
   public void clear()
   {
     getCopyArray().clear();
@@ -128,6 +134,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Add
    */
+  @Override
   public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
     return getCopyArray().put(VHelper.noCtx(), value);
@@ -136,6 +143,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Add
    */
+  @Override
   public ArrayValue unshift(Value value)
   {
     return getCopyArray().unshift(value);
@@ -144,6 +152,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Splices.
    */
+  @Override
   public ArrayValue splice(int start, int end, ArrayValue replace)
   {
     return getCopyArray().splice(start, end, replace);
@@ -152,6 +161,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Slices.
    */
+  @Override
   public ArrayValue slice(Env env, int start, int end, boolean isPreserveKeys)
   {
     return getCopyArray().slice(env, start, end, isPreserveKeys);
@@ -160,6 +170,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Returns the value as an array.
    */
+  @Override
   public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value fieldName)
   {
     return getCopyArray().getArray(VHelper.noCtx(), fieldName);
@@ -196,6 +207,7 @@ public class CopyArrayValue extends ArrayValue {
    * Sets the array ref.
    * @param ctx
    */
+  @Override
   public V<? extends Var> putVar(FeatureExpr ctx)
   {
     return getCopyArray().putVar(ctx);
@@ -204,6 +216,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Add
    */
+  @Override
   public ArrayValue append(Value key, EnvVar value)
   {
     return getCopyArray().append(key, value);
@@ -212,6 +225,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Add
    */
+  @Override
   public ArrayValue append(Value value)
   {
     return getCopyArray().append(value);
@@ -220,6 +234,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Gets a new value.
    */
+  @Override
   public EnvVar get(Value key)
   {
     if (_copyArray != null)
@@ -235,6 +250,7 @@ public class CopyArrayValue extends ArrayValue {
    *
    * @return the key if it is found in the array, NULL otherwise
    */
+  @Override
   public V<? extends Value> contains(Value value)
   {
     if (_copyArray != null)
@@ -250,6 +266,7 @@ public class CopyArrayValue extends ArrayValue {
    *
    * @return the key if it is found in the array, NULL otherwise
    */
+  @Override
   public V<? extends Value> containsStrict(Value value)
   {
     if (_copyArray != null)
@@ -265,6 +282,7 @@ public class CopyArrayValue extends ArrayValue {
    *
    * @return the value if it is found in the array, NULL otherwise
    */
+  @Override
   public V<? extends Value> containsKey(Value key)
   {
     if (_copyArray != null)
@@ -276,6 +294,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Removes a value.
    */
+  @Override
   public V<? extends Value> remove(FeatureExpr ctx, Value key)
   {
     return getCopyArray().remove(ctx, key);
@@ -284,6 +303,7 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Returns the array ref.
    */
+  @Override
   public EnvVar getVar(Value index)
   {
     return getCopyArray().getVar(index);
@@ -302,6 +322,7 @@ public class CopyArrayValue extends ArrayValue {
    * Pops the top value.
    * @param ctx
    */
+  @Override
   public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
     return getCopyArray().createTailKey(VHelper.noCtx());
@@ -310,11 +331,13 @@ public class CopyArrayValue extends ArrayValue {
   /**
    * Shuffles the array
    */
+  @Override
   public Value shuffle()
   {
     return getCopyArray().shuffle();
   }
 
+  @Override
   public Entry getHead()
   {
     if (_copyArray != null)
@@ -323,6 +346,7 @@ public class CopyArrayValue extends ArrayValue {
       return _constArray.getHead();
   }
 
+  @Override
   protected Entry getTail()
   {
     if (_copyArray != null)
@@ -384,6 +408,7 @@ public class CopyArrayValue extends ArrayValue {
       return _constArray.equals(o);
   }
 
+  @Override
   public <T> V<? extends T> foldRightUntil(V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, Entry, T, V<? extends T>> op, Predicate<T> stopCriteria) {
     if (_copyArray != null)
       return _copyArray.foldRightUntil(init, ctx, op, stopCriteria);

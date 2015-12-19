@@ -41,6 +41,7 @@ public class LongValueMarshal
 {
   public static final Marshal MARSHAL = new LongValueMarshal();
 
+  @Override
   public boolean isReadOnly()
   {
     return true;
@@ -55,16 +56,19 @@ public class LongValueMarshal
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return expr.eval(env, VHelper.noCtx()).getOne().toLongValue();
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return value.toLongValue();
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof LongValue)

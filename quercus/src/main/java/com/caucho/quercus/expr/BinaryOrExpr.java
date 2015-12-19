@@ -55,6 +55,7 @@ public class BinaryOrExpr extends AbstractBinaryExpr {
   /**
    * Returns true for a boolean.
    */
+  @Override
   public boolean isBoolean()
   {
     return true;
@@ -68,6 +69,7 @@ public class BinaryOrExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->
@@ -82,6 +84,7 @@ public class BinaryOrExpr extends AbstractBinaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
     return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->a||b);

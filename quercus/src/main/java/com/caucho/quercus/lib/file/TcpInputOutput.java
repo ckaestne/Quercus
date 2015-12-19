@@ -125,12 +125,14 @@ public class TcpInputOutput
     return factory.createSocket(s, host, port, true);
   }
 
+  @Override
   public void bind(SocketAddress address)
     throws IOException
   {
     _socket.bind(address);
   }
 
+  @Override
   public void connect(SocketAddress address)
     throws IOException
   {
@@ -139,6 +141,7 @@ public class TcpInputOutput
     init();
   }
 
+  @Override
   public void setError(int errno)
   {
     _errno = errno;
@@ -155,6 +158,7 @@ public class TcpInputOutput
     return _socket.isConnected();
   }
 
+  @Override
   public void init()
   {
     SocketStream sock = new SocketStream(_socket);
@@ -166,6 +170,7 @@ public class TcpInputOutput
     init(is, os);
   }
 
+  @Override
   public void setTimeout(long timeout)
   {
     try {
@@ -209,6 +214,7 @@ public class TcpInputOutput
   /**
    * Implements the EnvCleanup interface.
    */
+  @Override
   public void cleanup()
   {
     Socket s = _socket;

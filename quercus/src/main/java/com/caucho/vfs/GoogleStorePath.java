@@ -166,6 +166,7 @@ public class GoogleStorePath extends GooglePath
     return new GoogleWriteStream(this, os, getGoogleInode());
   }
 
+  @Override
   public StreamImpl openAppendImpl() throws IOException
   {
     long longLength = getLength();
@@ -179,7 +180,7 @@ public class GoogleStorePath extends GooglePath
       return openWriteImpl();
     }
 
-    byte[] buffer = new byte[(int) len];
+    byte[] buffer = new byte[len];
 
     ReadStream is = openRead();
     int totalRead = 0;

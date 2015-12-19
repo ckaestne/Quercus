@@ -63,16 +63,19 @@ public class SessionModule extends AbstractQuercusModule
   /**
    * Returns the default php.ini values.
    */
+  @Override
   public IniDefinitions getIniDefinitions()
   {
     return _iniDefinitions;
   }
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "session" };
   }
 
+  @Override
   @Hide
   public void startup(Env env)
   {
@@ -309,7 +312,7 @@ public class SessionModule extends AbstractQuercusModule
     }
 
     for (int i = 0; i < values.length; i++)
-      sessionRegisterImpl(env, (ArrayValue) session, values[i]);
+      sessionRegisterImpl(env, session, values[i]);
 
     return true;
   }

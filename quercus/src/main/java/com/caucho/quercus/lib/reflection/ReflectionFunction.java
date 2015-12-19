@@ -66,7 +66,7 @@ public class ReflectionFunction extends ReflectionFunctionAbstract
         env.error(L.l("function '{0}' does not exist", nameV));
       }
 
-      callable = (Callable) fun;
+      callable = fun;
     }
 
     return new ReflectionFunction(callable);

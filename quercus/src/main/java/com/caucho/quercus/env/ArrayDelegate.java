@@ -37,35 +37,35 @@ public interface ArrayDelegate {
   /**
    * Returns the value for the specified key.
    */
-  public Value get(Env env, ObjectValue qThis, Value key);
+  Value get(Env env, ObjectValue qThis, Value key);
 
   /**
    * Sets the value for the spoecified key.
    */
-  public Value put(Env env, ObjectValue qThis, Value key, Value value);
+  Value put(Env env, ObjectValue qThis, Value key, Value value);
 
   /**
    * Appends a value.
    */
-  public Value put(Env env, ObjectValue qThis, Value value);
+  Value put(Env env, ObjectValue qThis, Value value);
 
   /**
    * Returns true if the value is set
    */
-  public boolean isset(Env env, ObjectValue qThis, Value key);
+  boolean isset(Env env, ObjectValue qThis, Value key);
 
   /**
    * Returns true if the value is empty.
    */
-  public boolean isEmpty(Env env, ObjectValue qThis, Value key);
+  boolean isEmpty(Env env, ObjectValue qThis, Value key);
 
   /**
    * Removes the value at the speified key.
    */
-  public Value unset(Env env, ObjectValue qThis, Value key);
+  Value unset(Env env, ObjectValue qThis, Value key);
 
   /**
    * Returns the array count
    */
-  public long count(Env env, ObjectValue qThis);
+  long count(Env env, ObjectValue qThis);
 }

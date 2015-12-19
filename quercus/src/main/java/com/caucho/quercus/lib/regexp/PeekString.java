@@ -43,6 +43,7 @@ class PeekString extends PeekStream {
     _index = 0;
   }
 
+  @Override
   int read()
   {
     if (_index < _length) {
@@ -53,6 +54,7 @@ class PeekString extends PeekStream {
     }
   }
 
+  @Override
   int peek()
   {
     if (_index < _length)
@@ -61,6 +63,7 @@ class PeekString extends PeekStream {
       return -1;
   }
 
+  @Override
   void ungetc(int ch) {
     if (_index <= 0)
       throw new RuntimeException();
@@ -68,6 +71,7 @@ class PeekString extends PeekStream {
     _index--;
   }
 
+  @Override
   StringValue createStringBuilder()
   {
     return ((StringValue) _string).createStringBuilder();

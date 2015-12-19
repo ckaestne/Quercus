@@ -129,6 +129,7 @@ public class GenericEncoder
     return true;
   }
 
+  @Override
   public void reset()
   {
     _encoder.reset();

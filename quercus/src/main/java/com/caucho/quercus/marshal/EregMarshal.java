@@ -43,16 +43,19 @@ import edu.cmu.cs.varex.VHelper;
 public class EregMarshal extends StringMarshal {
   public static final EregMarshal MARSHAL = new EregMarshal();
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return RegexpModule.createEreg(env, expr.eval(env, VHelper.noCtx()).getOne());
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return RegexpModule.createEreg(env, value);
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     throw new UnsupportedOperationException(getClass().getName());

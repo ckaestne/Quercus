@@ -51,6 +51,7 @@ public class ZipModule extends AbstractQuercusModule {
     = Logger.getLogger(ZipModule.class.getName());
   private static final L10N L = new L10N(ZipModule.class);
 
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "zip" };

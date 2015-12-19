@@ -588,6 +588,7 @@ public class Xml {
       _indexArray = indexArray;
     }
 
+    @Override
     public void setDocumentLocator(Locator locator)
     {
       _locator = locator;
@@ -636,6 +637,7 @@ public class Xml {
       return result;
     }
 
+    @Override
     public void endDocument()
       throws SAXException
     {
@@ -644,6 +646,7 @@ public class Xml {
       }
     }
 
+    @Override
     public void startElement(String namespaceURI,
                              String lName,
                              String qName,
@@ -676,6 +679,7 @@ public class Xml {
       _isOutside = false;
     }
 
+    @Override
     public void endElement(String namespaceURI,
                            String sName,
                            String qName)
@@ -722,6 +726,7 @@ public class Xml {
       _indexArrayHashMap.put(key, indexArray);
     }
 
+    @Override
     public void characters(char[] ch,
                            int start,
                            int length)
@@ -780,6 +785,7 @@ public class Xml {
       _env = env;
     }
 
+    @Override
     public void setDocumentLocator(Locator locator)
     {
       _locator = locator;
@@ -810,6 +816,7 @@ public class Xml {
      * @param attrs
      * @throws SAXException
      */
+    @Override
     public void startElement(String namespaceURI,
                              String lName,
                              String qName,
@@ -903,6 +910,7 @@ public class Xml {
      * @param qName
      * @throws SAXException
      */
+    @Override
     public void endElement(String namespaceURI,
                            String sName,
                            String qName)
@@ -948,6 +956,7 @@ public class Xml {
      * @param length
      * @throws SAXException
      */
+    @Override
     public void characters(char[] buf,
                            int start,
                            int length)
@@ -1000,6 +1009,7 @@ public class Xml {
      * @param data
      * @throws SAXException
      */
+    @Override
     public void processingInstruction(String target,
                                       String data)
       throws SAXException
@@ -1026,6 +1036,7 @@ public class Xml {
      * @param uri
      * @throws SAXException
      */
+    @Override
     public void startPrefixMapping (String prefix,
                                     String uri)
       throws SAXException
@@ -1052,6 +1063,7 @@ public class Xml {
      * @param prefix
      * @throws SAXException
      */
+    @Override
     public void endPrefixMapping(String prefix)
       throws SAXException
     {
@@ -1068,6 +1080,7 @@ public class Xml {
       }
     }
 
+    @Override
     public void notationDecl(String name,
                              String publicId,
                              String systemId)

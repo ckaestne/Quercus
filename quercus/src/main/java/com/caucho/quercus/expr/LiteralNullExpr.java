@@ -60,6 +60,7 @@ public class LiteralNullExpr extends Expr {
    *
    * @return the expression value.
    */
+  @Override
   public Value evalConstant()
   {
     return NullValue.NULL;
@@ -68,6 +69,7 @@ public class LiteralNullExpr extends Expr {
   /**
    * Returns true for a literal expression.
    */
+  @Override
   public boolean isLiteral()
   {
     return true;
@@ -81,6 +83,7 @@ public class LiteralNullExpr extends Expr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     return VHelper.toV(NullValue.NULL);

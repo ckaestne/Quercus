@@ -121,6 +121,7 @@ public class MultipartBody extends PostBody
     return _length;
   }
 
+  @Override
   public void writeTo(Env env,
                       OutputStream os)
     throws IOException
@@ -228,11 +229,13 @@ public class MultipartBody extends PostBody
       _value = value;
     }
 
+    @Override
     long getLengthImpl()
     {
       return _value.length();
     }
 
+    @Override
     void writeData(Env env, OutputStream os)
       throws IOException
     {
@@ -251,11 +254,13 @@ public class MultipartBody extends PostBody
       _path = path;
     }
 
+    @Override
     long getLengthImpl()
     {
       return _path.getLength();
     }
 
+    @Override
     void writeData(Env env, OutputStream os)
       throws IOException
     {

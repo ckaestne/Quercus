@@ -112,6 +112,7 @@ public class PostgresModule extends AbstractQuercusModule {
   /**
    * Returns true for the postgres extension.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "postgres", "pgsql" };
@@ -853,7 +854,7 @@ public class PostgresModule extends AbstractQuercusModule {
       Class<?> cl = Class.forName("org.postgresql.util.PGbytea");
 
       Method method = cl.getDeclaredMethod("toPGString",
-                                           new Class[] {byte[].class});
+              byte[].class);
 
       String s = (String) method.invoke(cl, new Object[] { data.toBytes()});
 
@@ -1624,7 +1625,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       // getNotifications()
       Object []notifications = (Object[]) method
-          .invoke(pgconn, new Object[] {});
+          .invoke(pgconn);
 
       // org.postgresql.PGNotification
       cl = Class.forName("org.postgresql.PGNotification");
@@ -1648,9 +1649,9 @@ public class PostgresModule extends AbstractQuercusModule {
             methodGetName.invoke(notifications[i],
                 new Object[]{}));
         // getPID()
-        v = (LongValue) LongValue.create(
-            (Integer) methodGetPID.invoke(notifications[i],
-                new Object[]{}));
+        v = LongValue.create(
+            (Integer) methodGetPID.invoke(notifications[i]
+            ));
 
         arrayValue.put(k, v);
       }
@@ -1960,7 +1961,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       Method method = cl.getDeclaredMethod("close", null);
 
-      method.invoke(largeObject, new Object[] {});
+      method.invoke(largeObject);
       // largeObject.close();
 
       return true;
@@ -2007,7 +2008,7 @@ public class PostgresModule extends AbstractQuercusModule {
       // Large Objects may not be used in auto-commit mode.
       pgconn.setAutoCommit(false);
 
-      lobManager = method.invoke(pgconn, new Object[] {});
+      lobManager = method.invoke(pgconn);
       // lobManager = ((org.postgresql.PGConnection)conn).getLargeObjectAPI();
 
       // org.postgresql.largeobject.LargeObjectManager
@@ -2015,7 +2016,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       method = cl.getDeclaredMethod("create", null);
 
-      Object oidObj = method.invoke(lobManager, new Object[] {});
+      Object oidObj = method.invoke(lobManager);
 
       oid = Integer.parseInt(oidObj.toString());
 
@@ -2064,20 +2065,20 @@ public class PostgresModule extends AbstractQuercusModule {
 
       Connection pgconn = conn.getJavaConnection(env);
 
-      lobManager = method.invoke(pgconn, new Object[] {});
+      lobManager = method.invoke(pgconn);
       // lobManager = ((org.postgresql.PGConnection)conn).getLargeObjectAPI();
 
       cl = Class.forName("org.postgresql.largeobject.LargeObjectManager");
 
-      method = cl.getDeclaredMethod("open", new Class[] {Integer.TYPE});
+      method = cl.getDeclaredMethod("open", Integer.TYPE);
 
-      Object lobj = method.invoke(lobManager, new Object[] {oid});
+      Object lobj = method.invoke(lobManager, oid);
 
       cl = Class.forName("org.postgresql.largeobject.LargeObject");
 
       method = cl.getDeclaredMethod("getInputStream", null);
 
-      Object isObj = method.invoke(lobj, new Object[] {});
+      Object isObj = method.invoke(lobj);
 
       InputStream is = (InputStream)isObj;
 
@@ -2093,7 +2094,7 @@ public class PostgresModule extends AbstractQuercusModule {
       // Close the large object
       method = cl.getDeclaredMethod("close", null);
 
-      method.invoke(lobj, new Object[] {});
+      method.invoke(lobj);
 
       return true;
 
@@ -2191,12 +2192,12 @@ public class PostgresModule extends AbstractQuercusModule {
 
       Connection pgconn = conn.getJavaConnection(env);
 
-      lobManager = method.invoke(pgconn, new Object[] {});
+      lobManager = method.invoke(pgconn);
 
       cl = Class.forName("org.postgresql.largeobject.LargeObjectManager");
 
       method = cl.getDeclaredMethod("open",
-          new Class[] {Integer.TYPE, Integer.TYPE});
+              Integer.TYPE, Integer.TYPE);
 
       boolean write = mode.indexOf("w") >= 0;
       boolean read = mode.indexOf("r") >= 0;
@@ -2215,7 +2216,7 @@ public class PostgresModule extends AbstractQuercusModule {
         intMode = modeWRITE;
       }
 
-      largeObject = method.invoke(lobManager, new Object[] {oid, intMode});
+      largeObject = method.invoke(lobManager, oid, intMode);
 
       return largeObject;
 
@@ -2288,7 +2289,7 @@ public class PostgresModule extends AbstractQuercusModule {
       Method method = cl.getDeclaredMethod("getInputStream", null);
 
       InputStream is = (InputStream) method
-          .invoke(largeObject, new Object[] {});
+          .invoke(largeObject);
 
       try {
         StringValue bb = env.createBinaryBuilder();
@@ -2343,9 +2344,9 @@ public class PostgresModule extends AbstractQuercusModule {
       }
 
       Method method = cl.getDeclaredMethod(
-          "seek", new Class[]{Integer.TYPE,Integer.TYPE});
+          "seek", Integer.TYPE,Integer.TYPE);
 
-      method.invoke(largeObject, new Object[] {offset, whence});
+      method.invoke(largeObject, offset, whence);
 
       return true;
 
@@ -2366,7 +2367,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       Method method = cl.getDeclaredMethod("tell", null);
 
-      Object obj = method.invoke(largeObject, new Object[] {});
+      Object obj = method.invoke(largeObject);
 
       return Integer.parseInt(obj.toString());
 
@@ -2398,13 +2399,13 @@ public class PostgresModule extends AbstractQuercusModule {
 
       Connection pgconn = conn.getJavaConnection(env);
 
-      lobManager = method.invoke(pgconn, new Object[] {});
+      lobManager = method.invoke(pgconn);
 
       cl = Class.forName("org.postgresql.largeobject.LargeObjectManager");
 
-      method = cl.getDeclaredMethod("unlink", new Class[] {Integer.TYPE});
+      method = cl.getDeclaredMethod("unlink", Integer.TYPE);
 
-      method.invoke(lobManager, new Object[] {oid});
+      method.invoke(lobManager, oid);
 
       return true;
 
@@ -2446,11 +2447,11 @@ public class PostgresModule extends AbstractQuercusModule {
       Class<?> cl = Class.forName("org.postgresql.largeobject.LargeObject");
 
       Method method = cl.getDeclaredMethod("write",
-                                           new Class[] {byte[].class,
-                                                        Integer.TYPE,
-                                                        Integer.TYPE});
+              byte[].class,
+              Integer.TYPE,
+              Integer.TYPE);
 
-      method.invoke(largeObject, new Object[] {data.getBytes(), 0, len});
+      method.invoke(largeObject, data.getBytes(), 0, len);
 
       return LongValue.create(written);
 
@@ -2687,15 +2688,14 @@ public class PostgresModule extends AbstractQuercusModule {
 
       Class<?> cl = Class.forName("org.postgresql.core.PGStream");
 
-      Constructor constructor = cl.getDeclaredConstructor(new Class[] {
-        String.class, Integer.TYPE});
+      Constructor constructor = cl.getDeclaredConstructor(String.class, Integer.TYPE);
 
       Object object = constructor.newInstance(
-          new Object[] {conn.getHost(), conn.getPort()});
+              conn.getHost(), conn.getPort());
 
       byte []dataArray = data.getBytes();
 
-      Method method = cl.getDeclaredMethod("Send", new Class[] {byte[].class});
+      Method method = cl.getDeclaredMethod("Send", byte[].class);
 
       method.invoke(object, new Object[] {dataArray});
 
@@ -2825,8 +2825,8 @@ public class PostgresModule extends AbstractQuercusModule {
 
       // Get the postgres specific server error message
       // org.postgresql.util.ServerErrorMessage
-      Object serverError = ((Postgres) result
-          .getConnection()).getServerErrorMessage();
+      Object serverError = result
+          .getConnection().getServerErrorMessage();
 
       if (serverError != null) {
         Class cl = Class.forName("org.postgresql.util.ServerErrorMessage");
@@ -2875,7 +2875,7 @@ public class PostgresModule extends AbstractQuercusModule {
         }
 
         Method method = cl.getDeclaredMethod(methodName, null);
-        errorField = method.invoke(serverError, new Object[] {});
+        errorField = method.invoke(serverError);
       }
 
       if (errorField == null) {
@@ -3267,7 +3267,7 @@ public class PostgresModule extends AbstractQuercusModule {
       Class cl = Class.forName("org.postgresql.util.PGbytea");
 
       Method method = cl.getDeclaredMethod(
-          "toBytes", new Class[] {byte[].class});
+          "toBytes", byte[].class);
 
       return new String((byte[]) method.invoke(cl, new Object[] {dataBytes}));
 
@@ -3460,7 +3460,7 @@ public class PostgresModule extends AbstractQuercusModule {
       Method method = cl.getDeclaredMethod("getOutputStream", null);
 
       OutputStream os = (OutputStream) method.invoke(
-          largeObject, new Object[] {});
+          largeObject);
 
       int written = 0;
 

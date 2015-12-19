@@ -92,6 +92,7 @@ public class Function extends AbstractFunction {
   /**
    * Returns the name.
    */
+  @Override
   public String getName()
   {
     return _name;

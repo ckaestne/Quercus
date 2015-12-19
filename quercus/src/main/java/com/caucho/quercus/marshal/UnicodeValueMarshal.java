@@ -40,6 +40,7 @@ public class UnicodeValueMarshal extends Marshal
 {
   public static final Marshal MARSHAL = new UnicodeValueMarshal();
   
+  @Override
   public boolean isReadOnly()
   {
     return true;
@@ -54,16 +55,19 @@ public class UnicodeValueMarshal extends Marshal
     return true;
   }
 
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     return expr.eval(env, VHelper.noCtx()).getOne().toUnicodeValue(env);
   }
 
+  @Override
   public Object marshal(Env env, Value value, Class expectedClass)
   {
     return value.toUnicodeValue(env);
   }
 
+  @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
     if (value instanceof UnicodeValue)

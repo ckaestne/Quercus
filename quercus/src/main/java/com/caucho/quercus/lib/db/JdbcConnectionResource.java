@@ -588,6 +588,7 @@ public abstract class JdbcConnectionResource
    * environment is being cleaned up after a quercus
    * request has been processed.
    */
+  @Override
   public void cleanup()
   {
     if (log.isLoggable(Level.FINER)) {

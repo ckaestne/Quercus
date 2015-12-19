@@ -56,6 +56,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
   /**
    * Returns true for a reference.
    */
+  @Override
   public boolean isRef()
   {
     return true;
@@ -81,6 +82,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
@@ -114,6 +116,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
    * @param ctx
    * @return the expression value.
    */
+  @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
     V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());

@@ -181,7 +181,7 @@ public class Post
     ReadStream is;
 
     while ((is = ms.openRead()) != null) {
-      String attr = (String) ms.getAttribute("content-disposition");
+      String attr = ms.getAttribute("content-disposition");
 
       if (attr == null || ! attr.startsWith("form-data")) {
         // XXX: is this an error?
@@ -255,7 +255,7 @@ public class Post
 
         String mimeType = getAttribute(attr, "mime-type", addSlashesToValues);
         if (mimeType == null) {
-          mimeType = (String) ms.getAttribute("content-type");
+          mimeType = ms.getAttribute("content-type");
 
           // php/085f
           if (mimeType != null && mimeType.endsWith(";"))

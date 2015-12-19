@@ -40,6 +40,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Optional {
-  public static final String NOT_SET = "caucho-not-set";
-  public String value() default NOT_SET;
+  String NOT_SET = "caucho-not-set";
+  String value() default NOT_SET;
 }

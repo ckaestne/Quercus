@@ -266,6 +266,7 @@ public class PDO implements EnvCleanup {
   /**
    * Implements the EnvCleanup interface.
    */
+  @Override
   public void cleanup()
   {
     JdbcConnectionResource conn = _conn;
@@ -817,7 +818,7 @@ public class PDO implements EnvCleanup {
 
     if (argV.isArray()) {
       ArrayValue array = argV.toArrayValue(env);
-      _statementClassArgs = array.valuesToArray();;
+      _statementClassArgs = array.valuesToArray();
     }
     else {
       _statementClassArgs = Value.NULL_ARGS;

@@ -37,5 +37,5 @@ public interface SeekableIterator
   /**
    * Seeks to the given offset.
    */
-  public void seek(Env env, int index);
+  void seek(Env env, int index);
 }

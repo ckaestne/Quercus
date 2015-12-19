@@ -71,11 +71,8 @@ public class Big5Decoder
     out.clear();
 
     coder = _decoder.flush(out);
-    if (isMalformed(coder, in)) {
-      return false;
-    }
+    return !isMalformed(coder, in);
 
-    return true;
   }
 
   private boolean isMalformed(CoderResult coder, ByteBuffer in)
@@ -83,13 +80,9 @@ public class Big5Decoder
     if (coder.isMalformed() || coder.isUnmappable()) {
       int errorPosition = in.position();
 
-      if (errorPosition + 1 < in.limit()
-          && in.get(errorPosition) == '\u00a3'
-          && in.get(errorPosition + 1) == '\u00e1') {
-        return false;
-      }
-      else
-        return true;
+      return !(errorPosition + 1 < in.limit()
+              && in.get(errorPosition) == '\u00a3'
+              && in.get(errorPosition + 1) == '\u00e1');
     }
     else
       return false;

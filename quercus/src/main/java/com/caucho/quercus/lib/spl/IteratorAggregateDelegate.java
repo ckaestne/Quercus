@@ -51,6 +51,7 @@ public class IteratorAggregateDelegate
   private static final IteratorDelegate _iteratorDelegate
     = new IteratorDelegate();
 
+  @Override
   public Iterator<VEntry>
     getIterator(Env env, ObjectValue qThis)
   {
@@ -64,6 +65,7 @@ public class IteratorAggregateDelegate
                                      qThis));
   }
 
+  @Override
   public Iterator<Value> getKeyIterator(Env env, ObjectValue qThis)
   {
     Value target = getTarget(env, qThis);
@@ -76,6 +78,7 @@ public class IteratorAggregateDelegate
     }
   }
 
+  @Override
   public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis)
   {
     Value target = getTarget(env, qThis);

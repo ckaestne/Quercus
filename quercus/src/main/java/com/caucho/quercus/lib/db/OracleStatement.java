@@ -219,6 +219,7 @@ public class OracleStatement extends JdbcPreparedStatementResource {
     }
   }
 
+  @Override
   protected JdbcResultResource createResultSet(ResultSet rs)
   {
     return new OracleResult(rs, _conn);

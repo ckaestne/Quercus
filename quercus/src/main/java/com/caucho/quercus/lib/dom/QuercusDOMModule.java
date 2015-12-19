@@ -87,6 +87,7 @@ public class QuercusDOMModule
   /**
    * Returns true for the dom extension.
    */
+  @Override
   public String []getLoadedExtensions()
   {
     return new String[] { "dom" };

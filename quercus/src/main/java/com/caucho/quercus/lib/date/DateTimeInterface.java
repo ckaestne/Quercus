@@ -35,15 +35,15 @@ import com.caucho.quercus.env.StringValue;
 
 public interface DateTimeInterface
 {
-  public DateInterval diff(Env env,
-                           DateTimeInterface dateTime,
-                           @Optional boolean isAbsolute);
+  DateInterval diff(Env env,
+                    DateTimeInterface dateTime,
+                    @Optional boolean isAbsolute);
   
-  public StringValue format(Env env, StringValue format);
+  StringValue format(Env env, StringValue format);
   
-  public long getOffset();
+  long getOffset();
   
-  public long getTimestamp();
+  long getTimestamp();
   
-  public DateTimeZone getTimeZone();
+  DateTimeZone getTimeZone();
 }

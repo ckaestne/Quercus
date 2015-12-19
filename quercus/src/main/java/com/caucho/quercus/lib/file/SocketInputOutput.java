@@ -40,21 +40,21 @@ import java.net.SocketAddress;
 public interface SocketInputOutput
   extends BinaryInput, BinaryOutput, EnvCleanup
 {
-  public enum Domain { AF_INET, AF_INET6, AF_UNIX };
+  enum Domain { AF_INET, AF_INET6, AF_UNIX }
 
-  public void init()
+  void init()
     throws IOException;
 
-  public void bind(SocketAddress address)
+  void bind(SocketAddress address)
     throws IOException;
 
-  public void connect(SocketAddress address)
+  void connect(SocketAddress address)
     throws IOException;
 
-  public void setError(int error);
+  void setError(int error);
 
-  public void setTimeout(long timeout);
+  void setTimeout(long timeout);
 
-  public boolean isConnected();
+  boolean isConnected();
 }
 

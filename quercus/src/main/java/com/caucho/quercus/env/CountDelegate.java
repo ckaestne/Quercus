@@ -37,5 +37,5 @@ public interface CountDelegate
   /**
    * Returns the object's count
    */
-  public int count(Env env, ObjectValue qThis);
+  int count(Env env, ObjectValue qThis);
 }

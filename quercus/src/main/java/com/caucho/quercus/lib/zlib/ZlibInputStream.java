@@ -78,6 +78,7 @@ public class ZlibInputStream extends ReadStreamInput
   /**
    * Opens a new copy.
    */
+  @Override
   public BinaryInput openCopy()
     throws IOException
   {
@@ -87,6 +88,7 @@ public class ZlibInputStream extends ReadStreamInput
   /**
    * Sets the position.
    */
+  @Override
   public boolean setPosition(long offset)
   {
     try {

@@ -53,6 +53,7 @@ public class GlobalStatement extends Statement {
     _var = var;
   }
   
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {

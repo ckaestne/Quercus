@@ -44,7 +44,7 @@ public enum ColumnType {
 
   private final int _type;
 
-  private ColumnType(int type)
+  ColumnType(int type)
   {
     _type = type;
   }

@@ -79,7 +79,7 @@ public class ElementView extends SimpleView
       if (child.getNodeType() == Node.ELEMENT_NODE
           && (namespace == null || SimpleUtil.isSameNamespace(child, namespace))
           && (prefix == null || prefix.equals(SimpleUtil.getPrefix(childName)))) {
-        ElementView view = new ElementView((Element) child);
+        ElementView view = new ElementView(child);
 
         childList.add(view);
       }
@@ -658,7 +658,7 @@ public class ElementView extends SimpleView
 
     while (child != null) {
       if (child.getNodeType() == Node.ELEMENT_NODE) {
-        ElementView view = new ElementView((Element) child);
+        ElementView view = new ElementView(child);
 
         elementList.add(view);
       }

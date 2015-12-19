@@ -76,6 +76,7 @@ public class GoogleQuercusServlet extends QuercusServlet
    *
    * @throws ServletException if the init-param is not recognized
    */
+  @Override
   protected void setInitParam(String paramName, String paramValue)
     throws ServletException
   {

@@ -851,10 +851,7 @@ public class JdbcResultResource
     try {
       ResultSetMetaData md = getMetaData();
 
-      if (fieldOffset < 0 || md.getColumnCount() <= fieldOffset)
-        return false;
-      else
-        return true;
+      return !(fieldOffset < 0 || md.getColumnCount() <= fieldOffset);
     } catch (SQLException e) {
       log.log(Level.FINE, e.toString(), e);
       return false;
@@ -877,10 +874,7 @@ public class JdbcResultResource
 
     int index = resultString.indexOf(substring);
 
-    if (index == -1)
-      return false;
-    else
-      return true;
+    return index != -1;
   }
 
   /**
@@ -1380,10 +1374,8 @@ public class JdbcResultResource
    */
   public boolean seek(Env env, int rowNumber)
   {
-    if (setRowNumber(rowNumber))
-      return true;
+    return setRowNumber(rowNumber);
 
-    return false;
   }
 
   /**
@@ -1407,10 +1399,7 @@ public class JdbcResultResource
   {
     _fieldOffset = fieldOffset;
 
-    if (fieldOffset < 0 || fieldOffset >= getNumFields().toInt())
-      return false;
-    else
-      return true;
+    return !(fieldOffset < 0 || fieldOffset >= getNumFields().toInt());
   }
 
   /**

@@ -46,5 +46,5 @@ public @interface UsesSymbolTable {
    *
    * XXX: the default may change to false for 3.2.1
    */
-  public boolean replace() default true;
+  boolean replace() default true;
 }

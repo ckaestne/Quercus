@@ -36,49 +36,49 @@ import java.util.Map;
 
 public interface QuercusHttpServletRequest
 {
-  public String getMethod();
-  public String getHeader(String name);
-  public Enumeration getHeaderNames();
-  public String getParameter(String name);
-  public String []getParameterValues(String name);
-  public Map<String,String[]> getParameterMap();
-  public String getContentType();
-  public String getCharacterEncoding();
+  String getMethod();
+  String getHeader(String name);
+  Enumeration getHeaderNames();
+  String getParameter(String name);
+  String []getParameterValues(String name);
+  Map<String,String[]> getParameterMap();
+  String getContentType();
+  String getCharacterEncoding();
 
-  public String getRequestURI();
-  public String getQueryString();
-  public QuercusCookie []getCookies();
+  String getRequestURI();
+  String getQueryString();
+  QuercusCookie []getCookies();
 
-  public String getContextPath();
-  public String getServletPath();
-  public String getPathInfo();
-  public String getRealPath(String path);
+  String getContextPath();
+  String getServletPath();
+  String getPathInfo();
+  String getRealPath(String path);
 
-  public InputStream getInputStream()
+  InputStream getInputStream()
     throws IOException;
 
-  public QuercusHttpSession getSession(boolean isCreate);
+  QuercusHttpSession getSession(boolean isCreate);
 
-  public String getLocalAddr();
-  public String getServerName();
-  public int getServerPort();
-  public String getRemoteHost();
-  public String getRemoteAddr();
-  public int getRemotePort();
-  public String getRemoteUser();
+  String getLocalAddr();
+  String getServerName();
+  int getServerPort();
+  String getRemoteHost();
+  String getRemoteAddr();
+  int getRemotePort();
+  String getRemoteUser();
 
-  public boolean isSecure();
-  public String getProtocol();
+  boolean isSecure();
+  String getProtocol();
 
-  public Object getAttribute(String name);
-  public String getIncludeRequestUri();
-  public String getForwardRequestUri();
-  public String getIncludeContextPath();
-  public String getIncludeServletPath();
-  public String getIncludePathInfo();
-  public String getIncludeQueryString();
+  Object getAttribute(String name);
+  String getIncludeRequestUri();
+  String getForwardRequestUri();
+  String getIncludeContextPath();
+  String getIncludeServletPath();
+  String getIncludePathInfo();
+  String getIncludeQueryString();
 
-  public QuercusRequestDispatcher getRequestDispatcher(String url);
+  QuercusRequestDispatcher getRequestDispatcher(String url);
 
-  public <T> T toRequest(Class<T> cls);
+  <T> T toRequest(Class<T> cls);
 }

@@ -173,6 +173,7 @@ public class QuercusScriptEngine
   /**
    * evaluates based on a reader.
    */
+  @Override
   public Object eval(Reader script, ScriptContext cxt)
     throws ScriptException
   {
@@ -294,6 +295,7 @@ public class QuercusScriptEngine
    *
    * @return Value object, or null if script returned no value
    */
+  @Override
   public Object eval(String script, ScriptContext cxt)
     throws ScriptException
   {
@@ -303,6 +305,7 @@ public class QuercusScriptEngine
   /**
    * compiles based on a reader.
    */
+  @Override
   public CompiledScript compile(Reader reader)
     throws ScriptException
   {
@@ -325,6 +328,7 @@ public class QuercusScriptEngine
   /**
    * evaluates based on a script.
    */
+  @Override
   public CompiledScript compile(String script)
     throws ScriptException
   {
@@ -334,6 +338,7 @@ public class QuercusScriptEngine
   /**
    * Returns the engine's factory.
    */
+  @Override
   public QuercusScriptEngineFactory getFactory()
   {
     return _factory;
@@ -342,6 +347,7 @@ public class QuercusScriptEngine
   /**
    * Creates a bindings.
    */
+  @Override
   public Bindings createBindings()
   {
     return new SimpleBindings();

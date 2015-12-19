@@ -39,5 +39,5 @@ public interface IteratorAggregate
   /**
    * Returns the iterator.
    */
-  public ObjectValue getIterator();
+  ObjectValue getIterator();
 }
