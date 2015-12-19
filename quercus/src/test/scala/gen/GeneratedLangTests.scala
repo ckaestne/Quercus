@@ -353,7 +353,7 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not, "33")
 	}
 
-	@Ignore @Test def testVarggetfieldvalue() {
+	@Test def testVarggetfieldvalue() {
 		eval("""<?php 
 		       |class F{
 		       |    public $x = 0;

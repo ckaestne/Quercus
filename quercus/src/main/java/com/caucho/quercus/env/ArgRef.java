@@ -43,9 +43,8 @@ import java.util.Iterator;
 /**
  * Represents a reference to a PHP variable in a function call.
  */
-//TODO V shouldn't this be a Var not a Value?
-public class ArgRef extends Value
-  implements Serializable
+public class ArgRef /*extends Value*/
+  implements Serializable, ValueOrVar
 {
   private Var _var;
 
@@ -55,652 +54,667 @@ public class ArgRef extends Value
   }
 
   @Override
-  public V<? extends Boolean> hasCurrent()
-  {
-    return _var.getValue().getOne().hasCurrent();
-  }
-
-  /**
-   * Returns true for an implementation of a class
-   */
-  @Override
-  public boolean isA(Env env, String name)
-  {
-    return _var.getValue().getOne().isA(env, name);
-  }
-
-  /**
-   * True for a long
-   */
-  @Override
-  public boolean isLongConvertible()
-  {
-    return _var.getValue().getOne().isLongConvertible();
-  }
-
-  /**
-   * True to a double.
-   */
-  @Override
-  public boolean isDoubleConvertible()
-  {
-    return _var.getValue().getOne().isDoubleConvertible();
-  }
-
-  /**
-   * True for a number
-   */
-  @Override
-  public boolean isNumberConvertible()
-  {
-    return _var.getValue().getOne().isNumberConvertible();
-  }
-
-  /**
-   * Returns true for a long-value.
-   */
-  public boolean isLong()
-  {
-    return _var.getValue().getOne().isLong();
-  }
-
-  /**
-   * Returns true for a long-value.
-   */
-  public boolean isDouble()
-  {
-    return _var.getValue().getOne().isDouble();
+  public boolean isVar() {
+    return true;
   }
 
   @Override
-  public ArrayValue toArrayValue(Env env)
-  {
-    // php/3co1
-    return _var.getValue().getOne().toArrayValue(env);
+  public Value _value() {
+    throw new UnsupportedOperationException("called _value on a Var");
   }
 
-  /**
-   * Converts to a boolean.
-   */
   @Override
-  public boolean toBoolean()
-  {
-    return _var.getValue().getOne().toBoolean();
-  }
-
-  /**
-   * Converts to a long.
-   */
-  @Override
-  public long toLong()
-  {
-    return _var.getValue().getOne().toLong();
-  }
-
-  /**
-   * Converts to a double.
-   */
-  @Override
-  public double toDouble()
-  {
-    return _var.getValue().getOne().toDouble();
-  }
-
-  /**
-   * Converts to a string.
-   * @param env
-   */
-  @Override
-  public StringValue toString(Env env)
-  {
-    return _var.getValue().getOne().toString(env);
-  }
-
-  /**
-   * Converts to an object.
-   */
-  @Override
-  public Value toObject(Env env)
-  {
-    return _var.getValue().getOne().toObject(env);
-  }
-
-  /**
-   * Converts to an object.
-   */
-  @Override
-  public Object toJavaObject()
-  {
-    return _var.getValue().getOne().toJavaObject();
-  }
-
-  /**
-   * Converts to a raw value.
-   */
-  public V<? extends Value> toValues()
-  {
-    return _var.getValue();
-  }
-
-  /**
-   * Returns true for an object.
-   */
-  @Override
-  public boolean isObject()
-  {
-    return _var.getValue().getOne().isObject();
-  }
-
-  /**
-   * Returns true for an array.
-   */
-  @Override
-  public boolean isArray()
-  {
-    return _var.getValue().getOne().isArray();
-  }
-
-  /**
-   * Copy the value.
-   */
-  @Override
-  public Value copy()
-  {
-    // quercus/0d05
-    return this;
-  }
-
-  /**
-   * Converts to an argument value.
-   */
-  @Override
-  public Value toLocalValueReadOnly()
-  {
-    return _var.getValue().getOne();
-  }
-
-  /**
-   * Converts to an argument value.
-   */
-  @Override
-  public Value toLocalValue()
-  {
-    // php/0471, php/3d4a
-    return _var.getValue().getOne().toLocalValue();
-  }
-
-  /**
-   * Converts to an argument value.
-   */
-  @Override
-  public V<? extends Value> toLocalRef()
-  {
-    return _var.getValue();
-  }
-
-  /**
-   * Converts to an argument value.
-   */
-  @Override
-  public Var toLocalVar()
-  {
+  public Var _var() {
     return _var;
   }
 
-  /**
-   * Converts to an argument value.
-   */
-  @Override
-  public Value toRefValue()
-  {
-    return _var.getValue().getOne();
-  }
-
-  /**
-   * Converts to a variable
-   */
-  @Override
-  public Var toVar()
-  {
-    return _var;
-  }
-
-  /**
-   * Converts to a reference variable
-   */
-  @Override
-  public Var toLocalVarDeclAsRef()
-  {
-    return _var;
-  }
-
-  @Override
-  public StringValue toStringValue()
-  {
-    return _var.getValue().getOne().toStringValue();
-  }
-
-  @Override
-  public StringValue toBinaryValue(Env env)
-  {
-    return _var.getValue().getOne().toBinaryValue(env);
-  }
-
-  @Override
-  public StringValue toUnicodeValue(Env env)
-  {
-    return _var.getValue().getOne().toUnicodeValue(env);
-  }
-
-  @Override
-  public StringValue toStringBuilder()
-  {
-    return _var.getValue().getOne().toStringBuilder();
-  }
-
-  @Override
-  public StringValue toStringBuilder(Env env)
-  {
-    return _var.getValue().getOne().toStringBuilder(env);
-  }
-
-  @Override
-  public java.io.InputStream toInputStream()
-  {
-    return _var.getValue().getOne().toInputStream();
-  }
-
-  @Override
-  public Value append(Value index, ValueOrVar value)
-  {
-    return _var.getValue().getOne().append(index, value);
-  }
-
-  @Override
-  public V<? extends Value> containsKey(Value key)
-  {
-    return _var.getValue().getOne().containsKey(key);
-  }
-
-  @Override
-  public Value copyArrayItem()
-  {
-    return _var.getValue().getOne().copyArrayItem();
-  }
-
-  @Override
-  public V<? extends Value> current()
-  {
-    return _var.getValue().getOne().current();
-  }
-
-  @Override
-  public Value getArray()
-  {
-    return _var.getValue().getOne().getArray();
-  }
-
-  @Override
-  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
-  {
-    return _var.getValue().getOne().getArray(VHelper.noCtx(), index);
-  }
-
-  @Override
-  public int getCount(Env env)
-  {
-    return _var.getValue().getOne().getCount(env);
-  }
-
-  @Override
-  public Value[] getKeyArray(Env env)
-  {
-    return _var.getValue().getOne().getKeyArray(env);
-  }
-
-  @Override
-  public V<? extends Value> key()
-  {
-    return _var.getValue().getOne().key();
-  }
-
-  @Override
-  public V<? extends Value> next(FeatureExpr ctx)
-  {
-    return _var.getValue().getOne().next(ctx);
-  }
-
-  @Override
-  public ArrayValue toArray()
-  {
-    return _var.getValue().getOne().toArray();
-  }
-
-  @Override
-  public Value toAutoArray()
-  {
-    return _var.getValue().getOne().toAutoArray();
-  }
-
-  /**
-   * Negates the value.
-   */
-  @Override
-  public Value neg()
-  {
-    return _var.getValue().getOne().neg();
-  }
-
-  /**
-   * Adds to the following value.
-   */
-  @Override
-  public Value add(Value rValue)
-  {
-    return _var.getValue().getOne().add(rValue);
-  }
-
-  /**
-   * Adds to the following value.
-   */
-  @Override
-  public Value add(long rValue)
-  {
-    return _var.getValue().getOne().add(rValue);
-  }
-
-//  /**
-//   * Pre-increment the following value.
-//   */
 //  @Override
-//  public Value preincr(int incr)
+//  public V<? extends Boolean> hasCurrent()
 //  {
-//    return _var.getValue().getOne().preincr(incr);
+//    return _var.getValue().getOne().hasCurrent();
 //  }
 //
 //  /**
-//   * Post-increment the following value.
+//   * Returns true for an implementation of a class
 //   */
 //  @Override
-//  public Value postincr(int incr)
+//  public boolean isA(Env env, String name)
 //  {
-//    return _var.getValue().getOne().postincr(incr);
+//    return _var.getValue().getOne().isA(env, name);
 //  }
-
-  /**
-   * Increment the following value.
-   */
-  @Override
-  public Value increment(int incr)
-  {
-    return _var.getValue().getOne().increment(incr);
-  }
-
-  /**
-   * Subtracts to the following value.
-   */
-  @Override
-  public Value sub(Value rValue)
-  {
-    return _var.getValue().getOne().sub(rValue);
-  }
-
-  /**
-   * Subtracts to the following value.
-   */
-  @Override
-  public Value sub(long rValue)
-  {
-    return _var.getValue().getOne().sub(rValue);
-  }
-
-  /**
-   * Multiplies to the following value.
-   */
-  @Override
-  public Value mul(Value rValue)
-  {
-    return _var.getValue().getOne().mul(rValue);
-  }
-
-  /**
-   * Multiplies to the following value.
-   */
-  @Override
-  public Value mul(long lValue)
-  {
-    return _var.getValue().getOne().mul(lValue);
-  }
-
-  /**
-   * Divides the following value.
-   */
-  @Override
-  public Value div(Value rValue)
-  {
-    return _var.getValue().getOne().div(rValue);
-  }
-
-  /**
-   * Shifts left by the value.
-   */
-  @Override
-  public Value lshift(Value rValue)
-  {
-    return _var.getValue().getOne().lshift(rValue);
-  }
-
-  /**
-   * Shifts right by the value.
-   */
-  @Override
-  public Value rshift(Value rValue)
-  {
-    return _var.getValue().getOne().rshift(rValue);
-  }
-
-  /**
-   * Absolute value.
-   */
-  public Value abs()
-  {
-    return _var.getValue().getOne().abs();
-  }
-
-  /**
-   * Returns true for equality
-   */
-  @Override
-  public boolean eql(Value rValue)
-  {
-    return _var.getValue().getOne().eql(rValue);
-  }
-
-  /**
-   * Returns the array/object size
-   */
-  @Override
-  public int getSize()
-  {
-    return _var.getValue().getOne().getSize();
-  }
-
-  @Override
-  public Iterator<VEntry> getIterator(Env env)
-  {
-    return _var.getValue().getOne().getIterator(env);
-  }
-
-  @Override
-  public Iterator<Value> getKeyIterator(Env env)
-  {
-    return _var.getValue().getOne().getKeyIterator(env);
-  }
-
-  @Override
-  public Iterator<EnvVar> getValueIterator(Env env)
-  {
-    return _var.getValue().getOne().getValueIterator(env);
-  }
-
-  /**
-   * Returns the array ref.
-   */
-  @Override
-  public EnvVar get(Value index)
-  {
-    return _var.getValue().getOne().get(index);
-  }
-
-  /**
-   * Returns the array ref.
-   */
-  @Override
-  public EnvVar getVar(Value index)
-  {
-    return _var.getValue().getOne().getVar(index);
-  }
-
-  /**
-   * Returns the array ref.
-   */
-  @Override
-  public Value put(Value index, Value value)
-  {
-    return _var.getValue().getOne().put(index, value);
-  }
-
-  /**
-   * Returns the array ref.
-   */
-  @Override
-  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
-  {
-    return _var.getValue().getOne().put(VHelper.noCtx(), value);
-  }
-
-  /**
-   * Returns the character at an index
-   */
-  /* XXX: need test first
-  public Value charAt(long index)
-  {
-    return _ref.charAt(index);
-  }
-  */
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public V<? extends ValueOrVar> callMethod(Env env,
-                                            FeatureExpr ctx, StringValue methodName, int hash,
-                                            V<? extends ValueOrVar>[] args)
-  {
-    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, args);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @Nonnull
-  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
-  {
-    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
-                                FeatureExpr ctx, StringValue methodName, int hash,
-                                                   V<? extends ValueOrVar>[] args)
-  {
-    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, args);
-  }
-
-  /**
-   * Evaluates a method.
-   */
-  @Override
-  public @Nonnull
-  V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
-  {
-    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash);
-  }
-
-
-  /**
-   * Evaluates a method.
-   */
-  /*
-  @Override
-  public Value callClassMethod(Env env, AbstractFunction fun, Value []args)
-  {
-    return _var.getValue().getOne().callClassMethod(env, fun, args);
-  }
-  */
-
-  /**
-   * Serializes the value.
-   */
-  public void serialize(Env env, StringBuilder sb)
-  {
-    _var.getValue().getOne().serialize(env, sb);
-  }
-
-  /*
-   * Serializes the value.
-   *
-   * @param sb holds result of serialization
-   * @param serializeMap holds reference indexes
-   */
-  public void serialize(Env env, StringBuilder sb, SerializeMap serializeMap)
-  {
-    _var.getValue().getOne().serialize(env, sb, serializeMap);
-  }
-
-  /**
-   * Prints the value.
-   * @param env
-   * @param ctx
-   */
-  @Override
-  public void print(Env env, FeatureExpr ctx)
-  {
-    _var.getValue().getOne().print(env, VHelper.noCtx());
-  }
-
-  @Override
-  public void varDumpImpl(Env env,
-                          VWriteStream out,
-                          int depth,
-                          IdentityHashMap<Value,String> valueSet)
-    throws IOException
-  {
-    out.print(VHelper.noCtx(), "&");
-    toValue().varDumpImpl(env, out, depth, valueSet);
-  }
-
-  @Override
-  protected void printRImpl(Env env,
-                            VWriteStream out,
-                            int depth,
-                            IdentityHashMap<Value, String> valueSet)
-    throws IOException
-  {
-    toValue().printRImpl(env, out, depth, valueSet);
-  }
-
-  //
-  // Java Serialization
-  //
-
-  public Object writeReplace()
-  {
-    return _var;
-  }
+//
+//  /**
+//   * True for a long
+//   */
+//  @Override
+//  public boolean isLongConvertible()
+//  {
+//    return _var.getValue().getOne().isLongConvertible();
+//  }
+//
+//  /**
+//   * True to a double.
+//   */
+//  @Override
+//  public boolean isDoubleConvertible()
+//  {
+//    return _var.getValue().getOne().isDoubleConvertible();
+//  }
+//
+//  /**
+//   * True for a number
+//   */
+//  @Override
+//  public boolean isNumberConvertible()
+//  {
+//    return _var.getValue().getOne().isNumberConvertible();
+//  }
+//
+//  /**
+//   * Returns true for a long-value.
+//   */
+//  public boolean isLong()
+//  {
+//    return _var.getValue().getOne().isLong();
+//  }
+//
+//  /**
+//   * Returns true for a long-value.
+//   */
+//  public boolean isDouble()
+//  {
+//    return _var.getValue().getOne().isDouble();
+//  }
+//
+//  @Override
+//  public ArrayValue toArrayValue(Env env)
+//  {
+//    // php/3co1
+//    return _var.getValue().getOne().toArrayValue(env);
+//  }
+//
+//  /**
+//   * Converts to a boolean.
+//   */
+//  @Override
+//  public boolean toBoolean()
+//  {
+//    return _var.getValue().getOne().toBoolean();
+//  }
+//
+//  /**
+//   * Converts to a long.
+//   */
+//  @Override
+//  public long toLong()
+//  {
+//    return _var.getValue().getOne().toLong();
+//  }
+//
+//  /**
+//   * Converts to a double.
+//   */
+//  @Override
+//  public double toDouble()
+//  {
+//    return _var.getValue().getOne().toDouble();
+//  }
+//
+//  /**
+//   * Converts to a string.
+//   * @param env
+//   */
+//  @Override
+//  public StringValue toString(Env env)
+//  {
+//    return _var.getValue().getOne().toString(env);
+//  }
+//
+//  /**
+//   * Converts to an object.
+//   */
+//  @Override
+//  public Value toObject(Env env)
+//  {
+//    return _var.getValue().getOne().toObject(env);
+//  }
+//
+//  /**
+//   * Converts to an object.
+//   */
+//  @Override
+//  public Object toJavaObject()
+//  {
+//    return _var.getValue().getOne().toJavaObject();
+//  }
+//
+//  /**
+//   * Converts to a raw value.
+//   */
+//  public V<? extends Value> toValues()
+//  {
+//    return _var.getValue();
+//  }
+//
+//  /**
+//   * Returns true for an object.
+//   */
+//  @Override
+//  public boolean isObject()
+//  {
+//    return _var.getValue().getOne().isObject();
+//  }
+//
+//  /**
+//   * Returns true for an array.
+//   */
+//  @Override
+//  public boolean isArray()
+//  {
+//    return _var.getValue().getOne().isArray();
+//  }
+//
+//  /**
+//   * Copy the value.
+//   */
+//  @Override
+//  public Value copy()
+//  {
+//    // quercus/0d05
+//    return this;
+//  }
+//
+//  /**
+//   * Converts to an argument value.
+//   */
+//  @Override
+//  public Value toLocalValueReadOnly()
+//  {
+//    return _var.getValue().getOne();
+//  }
+//
+//  /**
+//   * Converts to an argument value.
+//   */
+//  @Override
+//  public Value toLocalValue()
+//  {
+//    // php/0471, php/3d4a
+//    return _var.getValue().getOne().toLocalValue();
+//  }
+//
+//  /**
+//   * Converts to an argument value.
+//   */
+//  @Override
+//  public V<? extends Value> toLocalRef()
+//  {
+//    return _var.getValue();
+//  }
+//
+//  /**
+//   * Converts to an argument value.
+//   */
+//  @Override
+//  public Var toLocalVar()
+//  {
+//    return _var;
+//  }
+//
+//  /**
+//   * Converts to an argument value.
+//   */
+//  @Override
+//  public Value toRefValue()
+//  {
+//    return _var.getValue().getOne();
+//  }
+//
+//  /**
+//   * Converts to a variable
+//   */
+//  @Override
+//  public Var toVar()
+//  {
+//    return _var;
+//  }
+//
+//  /**
+//   * Converts to a reference variable
+//   */
+//  @Override
+//  public Var toLocalVarDeclAsRef()
+//  {
+//    return _var;
+//  }
+//
+//  @Override
+//  public StringValue toStringValue()
+//  {
+//    return _var.getValue().getOne().toStringValue();
+//  }
+//
+//  @Override
+//  public StringValue toBinaryValue(Env env)
+//  {
+//    return _var.getValue().getOne().toBinaryValue(env);
+//  }
+//
+//  @Override
+//  public StringValue toUnicodeValue(Env env)
+//  {
+//    return _var.getValue().getOne().toUnicodeValue(env);
+//  }
+//
+//  @Override
+//  public StringValue toStringBuilder()
+//  {
+//    return _var.getValue().getOne().toStringBuilder();
+//  }
+//
+//  @Override
+//  public StringValue toStringBuilder(Env env)
+//  {
+//    return _var.getValue().getOne().toStringBuilder(env);
+//  }
+//
+//  @Override
+//  public java.io.InputStream toInputStream()
+//  {
+//    return _var.getValue().getOne().toInputStream();
+//  }
+//
+//  @Override
+//  public Value append(Value index, ValueOrVar value)
+//  {
+//    return _var.getValue().getOne().append(index, value);
+//  }
+//
+//  @Override
+//  public V<? extends Value> containsKey(Value key)
+//  {
+//    return _var.getValue().getOne().containsKey(key);
+//  }
+//
+//  @Override
+//  public Value copyArrayItem()
+//  {
+//    return _var.getValue().getOne().copyArrayItem();
+//  }
+//
+//  @Override
+//  public V<? extends Value> current()
+//  {
+//    return _var.getValue().getOne().current();
+//  }
+//
+//  @Override
+//  public Value getArray()
+//  {
+//    return _var.getValue().getOne().getArray();
+//  }
+//
+//  @Override
+//  public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
+//  {
+//    return _var.getValue().getOne().getArray(VHelper.noCtx(), index);
+//  }
+//
+//  @Override
+//  public int getCount(Env env)
+//  {
+//    return _var.getValue().getOne().getCount(env);
+//  }
+//
+//  @Override
+//  public Value[] getKeyArray(Env env)
+//  {
+//    return _var.getValue().getOne().getKeyArray(env);
+//  }
+//
+//  @Override
+//  public V<? extends Value> key()
+//  {
+//    return _var.getValue().getOne().key();
+//  }
+//
+//  @Override
+//  public V<? extends Value> next(FeatureExpr ctx)
+//  {
+//    return _var.getValue().getOne().next(ctx);
+//  }
+//
+//  @Override
+//  public ArrayValue toArray()
+//  {
+//    return _var.getValue().getOne().toArray();
+//  }
+//
+//  @Override
+//  public Value toAutoArray()
+//  {
+//    return _var.getValue().getOne().toAutoArray();
+//  }
+//
+//  /**
+//   * Negates the value.
+//   */
+//  @Override
+//  public Value neg()
+//  {
+//    return _var.getValue().getOne().neg();
+//  }
+//
+//  /**
+//   * Adds to the following value.
+//   */
+//  @Override
+//  public Value add(Value rValue)
+//  {
+//    return _var.getValue().getOne().add(rValue);
+//  }
+//
+//  /**
+//   * Adds to the following value.
+//   */
+//  @Override
+//  public Value add(long rValue)
+//  {
+//    return _var.getValue().getOne().add(rValue);
+//  }
+//
+////  /**
+////   * Pre-increment the following value.
+////   */
+////  @Override
+////  public Value preincr(int incr)
+////  {
+////    return _var.getValue().getOne().preincr(incr);
+////  }
+////
+////  /**
+////   * Post-increment the following value.
+////   */
+////  @Override
+////  public Value postincr(int incr)
+////  {
+////    return _var.getValue().getOne().postincr(incr);
+////  }
+//
+//  /**
+//   * Increment the following value.
+//   */
+//  @Override
+//  public Value increment(int incr)
+//  {
+//    return _var.getValue().getOne().increment(incr);
+//  }
+//
+//  /**
+//   * Subtracts to the following value.
+//   */
+//  @Override
+//  public Value sub(Value rValue)
+//  {
+//    return _var.getValue().getOne().sub(rValue);
+//  }
+//
+//  /**
+//   * Subtracts to the following value.
+//   */
+//  @Override
+//  public Value sub(long rValue)
+//  {
+//    return _var.getValue().getOne().sub(rValue);
+//  }
+//
+//  /**
+//   * Multiplies to the following value.
+//   */
+//  @Override
+//  public Value mul(Value rValue)
+//  {
+//    return _var.getValue().getOne().mul(rValue);
+//  }
+//
+//  /**
+//   * Multiplies to the following value.
+//   */
+//  @Override
+//  public Value mul(long lValue)
+//  {
+//    return _var.getValue().getOne().mul(lValue);
+//  }
+//
+//  /**
+//   * Divides the following value.
+//   */
+//  @Override
+//  public Value div(Value rValue)
+//  {
+//    return _var.getValue().getOne().div(rValue);
+//  }
+//
+//  /**
+//   * Shifts left by the value.
+//   */
+//  @Override
+//  public Value lshift(Value rValue)
+//  {
+//    return _var.getValue().getOne().lshift(rValue);
+//  }
+//
+//  /**
+//   * Shifts right by the value.
+//   */
+//  @Override
+//  public Value rshift(Value rValue)
+//  {
+//    return _var.getValue().getOne().rshift(rValue);
+//  }
+//
+//  /**
+//   * Absolute value.
+//   */
+//  public Value abs()
+//  {
+//    return _var.getValue().getOne().abs();
+//  }
+//
+//  /**
+//   * Returns true for equality
+//   */
+//  @Override
+//  public boolean eql(Value rValue)
+//  {
+//    return _var.getValue().getOne().eql(rValue);
+//  }
+//
+//  /**
+//   * Returns the array/object size
+//   */
+//  @Override
+//  public int getSize()
+//  {
+//    return _var.getValue().getOne().getSize();
+//  }
+//
+//  @Override
+//  public Iterator<VEntry> getIterator(Env env)
+//  {
+//    return _var.getValue().getOne().getIterator(env);
+//  }
+//
+//  @Override
+//  public Iterator<Value> getKeyIterator(Env env)
+//  {
+//    return _var.getValue().getOne().getKeyIterator(env);
+//  }
+//
+//  @Override
+//  public Iterator<EnvVar> getValueIterator(Env env)
+//  {
+//    return _var.getValue().getOne().getValueIterator(env);
+//  }
+//
+//  /**
+//   * Returns the array ref.
+//   */
+//  @Override
+//  public EnvVar get(Value index)
+//  {
+//    return _var.getValue().getOne().get(index);
+//  }
+//
+//  /**
+//   * Returns the array ref.
+//   */
+//  @Override
+//  public EnvVar getVar(Value index)
+//  {
+//    return _var.getValue().getOne().getVar(index);
+//  }
+//
+//  /**
+//   * Returns the array ref.
+//   */
+//  @Override
+//  public Value put(Value index, Value value)
+//  {
+//    return _var.getValue().getOne().put(index, value);
+//  }
+//
+//  /**
+//   * Returns the array ref.
+//   */
+//  @Override
+//  public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
+//  {
+//    return _var.getValue().getOne().put(VHelper.noCtx(), value);
+//  }
+//
+//  /**
+//   * Returns the character at an index
+//   */
+//  /* XXX: need test first
+//  public Value charAt(long index)
+//  {
+//    return _ref.charAt(index);
+//  }
+//  */
+//
+//  /**
+//   * Evaluates a method.
+//   */
+//  @Override
+//  public V<? extends ValueOrVar> callMethod(Env env,
+//                                            FeatureExpr ctx, StringValue methodName, int hash,
+//                                            V<? extends ValueOrVar>[] args)
+//  {
+//    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash, args);
+//  }
+//
+//  /**
+//   * Evaluates a method.
+//   */
+//  @Override
+//  public @Nonnull
+//  V<? extends ValueOrVar> callMethod(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+//  {
+//    return _var.getValue().getOne().callMethod(env, ctx, methodName, hash);
+//  }
+//
+//  /**
+//   * Evaluates a method.
+//   */
+//  @Override
+//  public @Nonnull V<? extends ValueOrVar> callMethodRef(Env env,
+//                                FeatureExpr ctx, StringValue methodName, int hash,
+//                                                   V<? extends ValueOrVar>[] args)
+//  {
+//    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash, args);
+//  }
+//
+//  /**
+//   * Evaluates a method.
+//   */
+//  @Override
+//  public @Nonnull
+//  V<? extends ValueOrVar> callMethodRef(Env env, FeatureExpr ctx, StringValue methodName, int hash)
+//  {
+//    return _var.getValue().getOne().callMethodRef(env, ctx, methodName, hash);
+//  }
+//
+//
+//  /**
+//   * Evaluates a method.
+//   */
+//  /*
+//  @Override
+//  public Value callClassMethod(Env env, AbstractFunction fun, Value []args)
+//  {
+//    return _var.getValue().getOne().callClassMethod(env, fun, args);
+//  }
+//  */
+//
+//  /**
+//   * Serializes the value.
+//   */
+//  public void serialize(Env env, StringBuilder sb)
+//  {
+//    _var.getValue().getOne().serialize(env, sb);
+//  }
+//
+//  /*
+//   * Serializes the value.
+//   *
+//   * @param sb holds result of serialization
+//   * @param serializeMap holds reference indexes
+//   */
+//  public void serialize(Env env, StringBuilder sb, SerializeMap serializeMap)
+//  {
+//    _var.getValue().getOne().serialize(env, sb, serializeMap);
+//  }
+//
+//  /**
+//   * Prints the value.
+//   * @param env
+//   * @param ctx
+//   */
+//  @Override
+//  public void print(Env env, FeatureExpr ctx)
+//  {
+//    _var.getValue().getOne().print(env, VHelper.noCtx());
+//  }
+//
+//  @Override
+//  public void varDumpImpl(Env env,
+//                          VWriteStream out,
+//                          int depth,
+//                          IdentityHashMap<Value,String> valueSet)
+//    throws IOException
+//  {
+//    out.print(VHelper.noCtx(), "&");
+//    toValue().varDumpImpl(env, out, depth, valueSet);
+//  }
+//
+//  @Override
+//  protected void printRImpl(Env env,
+//                            VWriteStream out,
+//                            int depth,
+//                            IdentityHashMap<Value, String> valueSet)
+//    throws IOException
+//  {
+//    toValue().printRImpl(env, out, depth, valueSet);
+//  }
+//
+//  //
+//  // Java Serialization
+//  //
+//
+//  public Object writeReplace()
+//  {
+//    return _var;
+//  }
 }
 

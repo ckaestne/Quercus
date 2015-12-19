@@ -948,7 +948,7 @@ public class Var
 //   * Converts to a reference variable
 //   */
 //
-  public Value toArgRef()
+  public ArgRef toArgRef()
   {
     return new ArgRef(this);
   }

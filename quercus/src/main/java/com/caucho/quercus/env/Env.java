@@ -3481,6 +3481,7 @@ public class Env
 
     for (int i = 0; args != null && i < args.length; i++) {
       // php/3715, 3768
+      //preV: newArgs[i] = args[i].toValue().copySaveFunArg();
       newArgs[i] = args[i].flatMap((a)->a._getValues().map((b)->b.copySaveFunArg()));
     }
 
