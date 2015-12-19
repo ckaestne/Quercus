@@ -647,12 +647,12 @@ abstract public class Expr {
     //
     //return var.put(index, value);
 
-    V<? extends ValueOrVar> array = evalArray(env, ctx);
+    V<? extends Var> array = evalArray(env, ctx).map(a->a.toVar());
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
     final V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
-    V<? extends ValueOrVar> result = VHelper.vflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
+    V<? extends ValueOrVar> result = VHelper.vflatMapAll(ctx, array, index, (c, _array, _index) -> _array.put(c, _index, value));
 
     //return array.get(index); // php/03mm php/03mn
 

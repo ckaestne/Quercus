@@ -694,6 +694,7 @@ public class StringBuilderValue
 
   @Override
   public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    assert ctx.isTautology() : "unimplemented variational operation";
     setCharValueAt(index.toLong(), value.getOne().toValue());
 
     return value;
@@ -709,6 +710,14 @@ public class StringBuilderValue
       return setCharValueAt(index.toLong(), value.toValue());
     else
       return new ArrayValueImpl().append(index, value);
+  }
+
+  @Override
+  public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    if (_length > 0)
+      return setCharValueAt(index.toLong(), value.getOne().toValue());
+    else
+      return new ArrayValueImpl().append(ctx, index, value);
   }
 
   /**

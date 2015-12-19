@@ -79,6 +79,7 @@ public abstract class Var
 //    //assert(! (value instanceof Var));
 //  }
 
+  @Override
   final public boolean isVar()
   {
     return true;
@@ -921,6 +922,7 @@ public abstract class Var
 //   * Converts to a reference variable
 //   */
 //
+  @Override
   public Var toLocalVarDeclAsRef()
   {
     return this;
@@ -1538,11 +1540,11 @@ public abstract class Var
 //    return _value.getObject(env, index);
 //  }
 //
-//  /**
-//   * Returns the array ref.
-//   */
-//
-//  public Value put(Value index, Value value)
+  /**
+   * Returns the array ref.
+   */
+
+  abstract public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value);
 //  {
 //    // php/33m{g,h}
 //    // _value = _value.toAutoArray().append(index, value);

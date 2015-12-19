@@ -65,8 +65,13 @@ abstract public class ArgValue extends Var /*extends Value*/
     throw new UnimplementedVException();
   }
 
+  @Override
+  public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
+    throw new UnimplementedVException();
+  }
 
-  //  public V<? extends Value> toValues()
+
+    //  public V<? extends Value> toValues()
 //  {
 //    return V.one(toLocalValue());
 //  }
