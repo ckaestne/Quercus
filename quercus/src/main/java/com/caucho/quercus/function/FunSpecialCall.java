@@ -69,11 +69,10 @@ public class FunSpecialCall extends AbstractFunction {
                                             Value qThis,
                                             V<? extends ValueOrVar>[] args)
   {
-    throw new UnimplementedVException();
-//    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
-//
-//    return _call.callMethod(env, ctx, qClass, qThis,
-//                            _name, arrayArgs);
+    ArrayValueImpl arrayArgs = new ArrayValueImpl(args);
+
+    return _call.callMethod(env, ctx, qClass, qThis,
+                            _name, arrayArgs);
   }
 
   /**

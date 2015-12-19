@@ -214,7 +214,16 @@ public class ArrayValueImpl extends ArrayValue
 //    }
   }
 
+  @Deprecated@VDeprecated("new (V<? extends ValueOrVar>[] values)")
   public ArrayValueImpl(Value[] values) {
+    this();
+
+    for (int i = 0; i < values.length; i++) {
+      put(VHelper.noCtx(), values[i]);
+    }
+  }
+
+  public ArrayValueImpl(V<? extends ValueOrVar>[] values) {
     this();
 
     for (int i = 0; i < values.length; i++) {

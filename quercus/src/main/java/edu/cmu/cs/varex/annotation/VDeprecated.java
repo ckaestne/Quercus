@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * deprecated functions are helper functions to call the correct
  * variational functions. they should be final
  */
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VDeprecated {
   /**
