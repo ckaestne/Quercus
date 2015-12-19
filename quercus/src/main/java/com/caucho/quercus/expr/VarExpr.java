@@ -229,10 +229,13 @@ public class VarExpr
     */
       value = env.getValue(VHelper.noCtx(), _name);
 
-      value.vforeach(ctx, (c,v)-> {
+      value = value.vmap(ctx, (c,v)-> {
                 if (v == null || v.isString() || v.isNull()) {
-                  env.setValue(c, _name, V.one(env.createObject()));
+                  ObjectValue x = env.createObject();
+                  env.setValue(c, _name, V.one(x));
+                  return x;
                 }
+                return v;
               });
     //}
 
