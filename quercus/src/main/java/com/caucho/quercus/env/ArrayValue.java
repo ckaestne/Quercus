@@ -1158,11 +1158,13 @@ abstract public class ArrayValue extends Value {
   /**
    * Pops the top value.
    */
+  @Override
   abstract public V<? extends Value> pop(Env env, FeatureExpr ctx);
 
   /**
    * Shuffles the array
    */
+  @Override
   abstract public Value shuffle();
 
   /**
@@ -1323,6 +1325,7 @@ abstract public class ArrayValue extends Value {
    *
    * @return the value if it is found in the array, NULL otherwise
    */
+  @Override
   abstract public V<? extends Value> containsKey(Value key);
 
 //  /**
@@ -1570,7 +1573,7 @@ abstract public class ArrayValue extends Value {
       Value rEntryValue = rValue.get(entryKey).getValue().getOne();
 
       if ((rEntryValue instanceof ArrayValue)
-          && ! entryValue.eq((ArrayValue) rEntryValue))
+          && ! entryValue.eq(rEntryValue))
         return false;
 
       if (! entryValue.eq(rEntryValue))
@@ -1623,15 +1626,13 @@ abstract public class ArrayValue extends Value {
         return false;
     }
 
-    if (iterA.hasNext() || iterB.hasNext())
-      return false;
-    else
-      return true;
+    return !(iterA.hasNext() || iterB.hasNext());
   }
 
   /**
    * Converts to a key.
    */
+  @Override
   public Value toKey()
   {
     return ARRAY;
@@ -1769,6 +1770,7 @@ abstract public class ArrayValue extends Value {
       return _value;
     }
 
+    @Override
     public EnvVar getEnvVar()
     {
       // return _var != null ? _var.toValue() : _value;
@@ -1776,6 +1778,7 @@ abstract public class ArrayValue extends Value {
     }
 
 //    @Override
+    @Override
     public EnvVar setEnvVar(EnvVar value) {
       EnvVar oldValue = _value;
       _value=value;
@@ -1788,6 +1791,7 @@ abstract public class ArrayValue extends Value {
       return _value.getValue();
     }
 
+    @Override
     public Value getKey()
     {
       return _key;
@@ -1951,12 +1955,8 @@ abstract public class ArrayValue extends Value {
 
       printDepth(out, 2 * depth);
 
-      getRawValue().getVar().foreach((a) -> {
-        try {
+      getRawValue().getValue().foreach((a) -> {
           a.varDump(env, out, depth, valueSet);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
       });
     }
 
@@ -1998,6 +1998,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Returns the field keys.
    */
+  @Override
   public Value []getKeyArray(Env env)
   {
     int len = getSize();
@@ -2015,6 +2016,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Returns the field values.
    */
+  @Override
   public Value []getValueArray(Env env)
   {
     int len = getSize();
@@ -2163,11 +2165,13 @@ abstract public class ArrayValue extends Value {
       _current = head;
     }
 
+    @Override
     public boolean hasNext()
     {
       return _current != null;
     }
 
+    @Override
     public Entry next()
     {
       if (_current != null) {
@@ -2180,6 +2184,7 @@ abstract public class ArrayValue extends Value {
         return null;
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -2195,11 +2200,13 @@ abstract public class ArrayValue extends Value {
       _current = head;
     }
 
+    @Override
     public boolean hasNext()
     {
       return _current != null;
     }
 
+    @Override
     public Value next()
     {
       if (_current != null) {
@@ -2212,6 +2219,7 @@ abstract public class ArrayValue extends Value {
         return null;
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -2227,11 +2235,13 @@ abstract public class ArrayValue extends Value {
       _current = head;
     }
 
+    @Override
     public boolean hasNext()
     {
       return _current != null;
     }
 
+    @Override
     public EnvVar next()
     {
       if (_current != null) {
@@ -2244,6 +2254,7 @@ abstract public class ArrayValue extends Value {
         return null;
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
@@ -2259,6 +2270,7 @@ abstract public class ArrayValue extends Value {
     {
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -2287,6 +2299,7 @@ abstract public class ArrayValue extends Value {
     {
     }
 
+    @Override
     public int compare(VEntry aEntry,
                        VEntry bEntry)
     {
@@ -2349,11 +2362,13 @@ abstract public class ArrayValue extends Value {
       _current = head;
     }
 
+    @Override
     public boolean hasNext()
     {
       return _current != null;
     }
 
+    @Override
     public Opt<Entry> next()
     {
       if (_current != null) {
@@ -2366,6 +2381,7 @@ abstract public class ArrayValue extends Value {
         return null;
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();

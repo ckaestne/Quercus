@@ -85,6 +85,7 @@ public class ForeachStatement
     return true;
   }
 
+  @Override
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
@@ -140,10 +141,10 @@ public class ForeachStatement
         if (_key != null)
           _key.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(key));
 
-        Value value = origObj.getVar(key).getOne();
+        EnvVar value = origObj.getVar(key);
 
         // php/0667
-        _value.evalAssignRef(env, VHelper.noCtx(), VHelper.toV(value));
+        _value.evalAssignRef(env, VHelper.noCtx(), value.getVar());
 
         ValueOrVar result = _block.execute(env, VHelper.noCtx()).getOne();
 
