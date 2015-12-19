@@ -1,5 +1,7 @@
 import com.typesafe.sbt.SbtAspectj.{ Aspectj, aspectjSettings, compiledClasses }
 import com.typesafe.sbt.SbtAspectj.AspectjKeys.{ inputs, weave }
+import de.johoop.jacoco4sbt.JacocoPlugin.jacoco
+import sbt.{TestFrameworks, Tests}
 
 
 scalaVersion := "2.11.7"
@@ -19,12 +21,29 @@ lazy val phptest = project.dependsOn(quercus % "test->test;compile->compile")
 
 lazy val wordpress = project.dependsOn(quercus % "test->test;compile->compile")
 
+scalaVersion in ThisBuild := "2.11.7"
 
-testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
+libraryDependencies in ThisBuild += "junit" % "junit" % "4.12" % "test"
 
-javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
+testOptions in ThisBuild += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
+
+javacOptions in ThisBuild ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
+
+jacoco.reportFormats in jacoco.Config in ThisBuild := Seq(
+    de.johoop.jacoco4sbt.XMLReport(encoding = "utf-8"))
+
+//libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
+//
+//libraryDependencies += "org.checkerframework" % "jdk8" % "1.9.8"
+//
+//javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint", "-implicit:class", "-processor",
+//    "org.checkerframework.checker.nullness.NullnessChecker", "-AprintErrorStack",
+//        "-Xbootclasspath/p:checker/dist/jdk8.jar")
 
 
+parallelExecution in Test in ThisBuild  := false
+
+parallelExecution in jacoco.Config in ThisBuild  := false
 
 
 initialize := {

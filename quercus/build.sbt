@@ -1,11 +1,6 @@
 import com.typesafe.sbt.SbtAspectj.{ Aspectj, aspectjSettings, compiledClasses }
 import com.typesafe.sbt.SbtAspectj.AspectjKeys.{ inputs, weave }
 
-scalaVersion := "2.11.7"
-
-testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-v")
-
-libraryDependencies += "junit" % "junit" % "4.12" % "test"
 
 libraryDependencies += "javax.jms" % "jms-api" % "1.1-rev-1"
 
@@ -33,9 +28,6 @@ libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
 
 jacoco.settings
 
-jacoco.reportFormats in jacoco.Config := Seq(
-  de.johoop.jacoco4sbt.XMLReport(encoding = "utf-8"))
-
 //libraryDependencies += "org.checkerframework" % "checker" % "1.9.8"
 //
 //libraryDependencies += "org.checkerframework" % "jdk8" % "1.9.8"
@@ -44,10 +36,6 @@ jacoco.reportFormats in jacoco.Config := Seq(
 //    "org.checkerframework.checker.nullness.NullnessChecker", "-AprintErrorStack",
 //        "-Xbootclasspath/p:checker/dist/jdk8.jar")
 
-
-parallelExecution in Test := false
-
-parallelExecution in jacoco.Config := false
 
 /**
   * AOP used for runtime checking of @Notnull annotations
