@@ -94,5 +94,10 @@ public final class EnvVarImpl extends EnvVar
   public EnvVar copy() {
     return EnvVar.fromValues(getValue().map(r->r.copy()));
   }
+
+  @Override
+  public String toString() {
+    return _var.toString();
+  }
 }
 

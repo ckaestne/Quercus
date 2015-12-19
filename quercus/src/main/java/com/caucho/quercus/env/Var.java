@@ -368,10 +368,10 @@ public abstract class Var
 //  //
 //
 //
-//  public String toString()
-//  {
-//    return _value.toString();
-//  }
+  public String toString()
+  {
+    return getValue().toString();
+  }
 //
 //  /**
 //   * Converts to a boolean.

@@ -573,7 +573,7 @@ public class ObjectExtValue extends ObjectValue
     EnvVar entry = _fieldMap.get(canonicalName);
 
     if (entry == null) {
-      entry = EnvVar.fromValues(V.choice(ctx, value.getValue(), V.one(UnsetValue.UNSET)));
+      entry = EnvVar.fromValue(UnsetValue.UNSET);
       _fieldMap.put(canonicalName, entry);
 
       if (ClassField.isProtected(canonicalName)) {
@@ -584,6 +584,7 @@ public class ObjectExtValue extends ObjectValue
         _protectedFieldMap.put(name, entry);
       }
     }
+    entry.setRef(ctx, value.getVar());
     return entry;
   }
 
