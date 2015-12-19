@@ -1657,37 +1657,36 @@ public class ArrayModule
                                     @ReadOnly ArrayValue inputArray,
                                     @Optional("false") boolean keyed)
   {
-    throw new UnimplementedVException();
-//    if (inputArray == null) {
-//      return NullValue.NULL;
-//    }
-//
-//    ArrayValue newArray = new ArrayValueImpl();
-//
-//    if (inputArray.getSize() == 0) {
-//      return newArray;
-//    }
-//
-//    VEntry[] entryArray = new Map.Entry[inputArray.getSize()];
-//    inputArray.entrySet().toArray(entryArray);
-//
-//    int newIndex = 0;
-//
-//    for (int index = entryArray.length - 1; index > -1; index--) {
-//      Value currentKey = entryArray[index].getKey();
-//
-//      Value currentValue = entryArray[index].getValue().getOne();
-//
-//      if (keyed || (currentKey instanceof StringValue))
-//        newArray.put(currentKey, currentValue);
-//      else {
-//        newArray.put(LongValue.create(newIndex), currentValue);
-//
-//        newIndex++;
-//      }
-//    }
-//
-//    return newArray;
+    if (inputArray == null) {
+      return NullValue.NULL;
+    }
+
+    ArrayValue newArray = new ArrayValueImpl();
+
+    if (inputArray.getSize() == 0) {
+      return newArray;
+    }
+
+    VEntry[] entryArray = new VEntry[inputArray.getSize()];
+    inputArray.entrySet().toArray(entryArray);
+
+    int newIndex = 0;
+
+    for (int index = entryArray.length - 1; index > -1; index--) {
+      Value currentKey = entryArray[index].getKey();
+
+      EnvVar currentValue = entryArray[index].getEnvVar();
+
+      if (keyed || (currentKey instanceof StringValue))
+        newArray.put(currentKey, currentValue);
+      else {
+        newArray.put(LongValue.create(newIndex), currentValue);
+
+        newIndex++;
+      }
+    }
+
+    return newArray;
   }
 
   /**

@@ -1437,28 +1437,27 @@ public class StringModule extends AbstractQuercusModule {
   public static Value parse_str(Env env, StringValue str,
                                 @Optional @Reference Var ref)
   {
-    throw new UnimplementedVException();
-//    boolean isRef = ref instanceof Var;
-//
-//    ArrayValue result = null;
-//
-//    if (isRef) {
-//      result = new ArrayValueImpl();
-//      ref.set(result);
-//    }
-//    else if (ref instanceof ArrayValue) {
-//      result = (ArrayValue) ref;
-//      isRef = true;
-//    }
-//    else
-//      result = new ArrayValueImpl();
-//
-//    return StringUtility.parseStr(env,
-//                                  str,
-//                                  result,
-//                                  isRef,
-//                                  env.getHttpInputEncoding(),
-//                                  false);
+    boolean isRef = ref instanceof Var;
+
+    ArrayValue result = null;
+
+    if (isRef) {
+      result = new ArrayValueImpl();
+      ref.set(result);
+    }
+    else if (ref.getValue().getOne() instanceof ArrayValue) {
+      result = (ArrayValue) ref.getValue().getOne();
+      isRef = true;
+    }
+    else
+      result = new ArrayValueImpl();
+
+    return StringUtility.parseStr(env,
+                                  str,
+                                  result,
+                                  isRef,
+                                  env.getHttpInputEncoding(),
+                                  false);
   }
 
   /**

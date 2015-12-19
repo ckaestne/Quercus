@@ -1111,7 +1111,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns true for a callable object.
    */
-  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Value nameRef) {
+  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Var nameRef) {
     return false;
   }
 

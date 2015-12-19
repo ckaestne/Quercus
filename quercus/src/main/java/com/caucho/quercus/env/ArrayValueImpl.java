@@ -167,21 +167,21 @@ public class ArrayValueImpl extends ArrayValue
 //    _nextAvailableIndex = source.getNextAvailableIndex();
   }
 
-//  public ArrayValueImpl(Env env,
-//                        IdentityHashMap<Value,EnvVar> map,
-//                        ArrayValue copy)
-//  {
-//    this();
-//
-//    map.put(copy, EnvVar._gen(this));
-//
-//    for (Entry ptr = copy.getHead(); ptr != null; ptr = ptr.getNext()) {
-//      // Value value = ptr._var != null ? ptr._var.toValue() : ptr._value;
-//      Value value = ptr.toValue().getOne();
-//
-//      append(ptr.getKey(), value.copy(env, map));
-//    }
-//  }
+  public ArrayValueImpl(Env env,
+                        IdentityHashMap<Value,EnvVar> map,
+                        ArrayValue copy)
+  {
+    this();
+
+    map.put(copy, EnvVar._gen(this));
+
+    for (Entry ptr = copy.getHead(); ptr != null; ptr = ptr.getNext()) {
+      // Value value = ptr._var != null ? ptr._var.toValue() : ptr._value;
+      Value value = ptr.toValue().getOne();
+
+      append(ptr.getKey(), value.copy(env, map));
+    }
+  }
 
   /**
    * Copy for unserialization.
@@ -352,13 +352,12 @@ public class ArrayValueImpl extends ArrayValue
    */
   @Override
   public Value copy(Env env, IdentityHashMap<Value, EnvVar> map) {
-    throw new UnimplementedVException();
-//    Value oldValue = map.get(this);
-//
-//    if (oldValue != null)
-//      return oldValue;
-//
-//    return new ArrayValueImpl(env, map, this);
+    EnvVar oldValue = map.get(this);
+
+    if (oldValue != null)
+      return oldValue.getOne();
+
+    return new ArrayValueImpl(env, map, this);
   }
 
   /**

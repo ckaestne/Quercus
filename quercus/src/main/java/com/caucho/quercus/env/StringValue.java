@@ -233,7 +233,7 @@ abstract public class StringValue
   }
 
   @Override
-  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Value nameRef) {
+  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Var nameRef) {
     if (nameRef != null) {
       nameRef.set(this);
     }

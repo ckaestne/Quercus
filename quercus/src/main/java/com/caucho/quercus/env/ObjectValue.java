@@ -210,7 +210,7 @@ abstract public class ObjectValue extends Callback {
    * The object is callable if it has an __invoke method
    */
   @Override
-  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Value nameRef)
+  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Var nameRef)
   {
     // php/127c, isCheckSyntaxOnly is not used
 

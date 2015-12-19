@@ -353,7 +353,7 @@ abstract public class ArrayValue extends Value {
   }
 
   @Override
-  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Value nameRef)
+  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Var nameRef)
   {
     //XXX: refactor to use toCallable()
 
@@ -1115,10 +1115,9 @@ abstract public class ArrayValue extends Value {
    */
   public ArrayValue append(EnvVar value)
   {
-    throw new UnimplementedVException();
-//    put(value);
-//
-//    return this;
+    put(VHelper.noCtx(), value.getVar());
+
+    return this;
   }
 
   /**

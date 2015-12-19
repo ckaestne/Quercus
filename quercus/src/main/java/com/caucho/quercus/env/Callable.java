@@ -33,7 +33,6 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import javax.annotation.Nonnull;
 
@@ -204,19 +203,19 @@ public interface Callable {
    * Evaluates a callback where the first argument is from an array.
    * The callback may be modifying that array element.
    * For ArrayModule.
-   *
-   * @param env
+   *  @param env
    * @param array from which a1 came from
    * @param key index of a1 in the array
    * @param a1 need to make a reference to this variable
    * @param a2 additional argument to pass to the callback
    * @param a3 additional argument to pass to the callback
    */
-  @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
-                                        ArrayValue array,
-                                        Value key,
-                                        V<? extends ValueOrVar> a1,
-                                        V<? extends ValueOrVar> a2,
-                                        V<? extends ValueOrVar> a3);
+  @Nonnull
+  V<? extends ValueOrVar> callArray(Env env, FeatureExpr ctx,
+                                    ArrayValue array,
+                                    Value key,
+                                    V<? extends ValueOrVar> a1,
+                                    V<? extends ValueOrVar> a2,
+                                    V<? extends ValueOrVar> a3);
 }
 

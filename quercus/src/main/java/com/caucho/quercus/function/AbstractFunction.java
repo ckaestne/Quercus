@@ -492,7 +492,7 @@ abstract public class AbstractFunction extends Callback {
    * The object is callable if it has an __invoke method
    */
   @Override
-  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Value nameRef)
+  public boolean isCallable(Env env, boolean isCheckSyntaxOnly, Var nameRef)
   {
     throw new UnimplementedException();
   }

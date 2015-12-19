@@ -131,41 +131,40 @@ abstract public class Callback extends Value implements Callable {
    * Evaluates a callback where the first argument is from an array.
    * The callback may be modifying that array element.
    * For ArrayModule.
-   *
-   * @param env
+   *  @param env
    * @param array from which a1 came from
    * @param key index of a1 in the array
    * @param a1 need to make a reference to this variable
    */
   @Override
-  final public @Nonnull V<? extends Value> callArray(Env env, FeatureExpr ctx,
-                               ArrayValue array,
-                               Value key,
-                                                     V<? extends ValueOrVar> a1,
-                                                     V<? extends ValueOrVar> a2,
-                                                     V<? extends ValueOrVar> a3)
+  final public @Nonnull
+  V<? extends ValueOrVar> callArray(Env env, FeatureExpr ctx,
+                                    ArrayValue array,
+                                    Value key,
+                                    V<? extends ValueOrVar> a1,
+                                    V<? extends ValueOrVar> a2,
+                                    V<? extends ValueOrVar> a3)
   {
     // php/1740
-throw new UnimplementedVException();
-//    V<? extends Value> result;
-//
-//    if (a1.getOne().isVar()) {
-//      a1 = a1.map(a-> new ArgRef(a._var()));
-//
-//      result = call(env, ctx, a1, a2, a3);
-//    }
-//    else {
-//      V<? extends Var> aVar = a1.map(a-> new VarImpl(V.one(a)).toValue());
-//
-//      result = call(env, ctx, aVar, a2, a3);
-//
-//      V<? extends Value> aNew = aVar.map(a->a.toValue());
-//
-//      if (aNew != a1)
-//        array.put(key, aNew.getOne());
-//    }
-//
-//    return result;
+    V<? extends ValueOrVar> result;
+
+    if (a1.getOne().isVar()) {
+      a1 = a1.map(a-> new ArgRef(a._var()));
+
+      result = call(env, ctx, a1, a2, a3);
+    }
+    else {
+      V<? extends Var> aVar = a1.map(a->Var.create(a));
+
+      result = call(env, ctx, aVar, a2, a3);
+
+      V<? extends Value> aNew = aVar.map(a->a.toValue());
+
+      if (aNew != a1)
+        array.put(key, aNew.getOne());
+    }
+
+    return result;
   }
 
   /**

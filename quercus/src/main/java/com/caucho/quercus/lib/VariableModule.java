@@ -358,7 +358,7 @@ public class VariableModule extends AbstractQuercusModule {
       nameRef = null;
     }
 
-    return v.isCallable(env, isCheckSyntaxOnly, nameRef.makeValue());
+    return v.isCallable(env, isCheckSyntaxOnly, nameRef);
   }
 
   /**
