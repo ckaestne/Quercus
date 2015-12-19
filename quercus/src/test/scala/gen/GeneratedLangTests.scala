@@ -481,4 +481,31 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(True, "int(1)\nint(20)")
 	}
 
+	@Test def testPassbyreference() {
+		eval("""<?php 
+		       |function f($arg1, &$arg2)
+		       |{
+		       |	echo $arg1++;
+		       |	echo $arg2++;
+		       |}
+		       |
+		       |function g (&$arg1, &$arg2)
+		       |{
+		       |	echo $arg2;
+		       |}
+		       |$a = 7;
+		       |$b = 15;
+		       |
+		       |f($a, $b);
+		       |
+		       |echo $a;
+		       |echo $b;
+		       |
+		       |$c=array(1);
+		       |g($c,$c[0]);
+		       |
+		       |echo $c[0];""".stripMargin) to 
+			c(True, "71571611")
+	}
+
 }

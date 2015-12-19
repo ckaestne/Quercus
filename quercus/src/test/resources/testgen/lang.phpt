@@ -319,3 +319,27 @@ function foo($a, $b)
 	var_dump($b);
 }
 foo(1, 2);
+
+==== passbyreference
+function f($arg1, &$arg2)
+{
+	echo $arg1++;
+	echo $arg2++;
+}
+
+function g (&$arg1, &$arg2)
+{
+	echo $arg2;
+}
+$a = 7;
+$b = 15;
+
+f($a, $b);
+
+echo $a;
+echo $b;
+
+$c=array(1);
+g($c,$c[0]);
+
+echo $c[0];
