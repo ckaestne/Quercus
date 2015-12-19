@@ -3152,7 +3152,7 @@ public class StringModule extends AbstractQuercusModule {
                                         search,
                                         replace,
                                         value.toStringValue(env),
-                                        count.makeValue(),
+                                        count,
                                         isInsensitive);
 
           resultArray.append(key, result);
@@ -3172,7 +3172,7 @@ public class StringModule extends AbstractQuercusModule {
                             search,
                             replace,
                             subjectString,
-                            count.makeValue(),
+                            count,
                             isInsensitive);
     }
   }
@@ -3189,7 +3189,7 @@ public class StringModule extends AbstractQuercusModule {
                                       Value search,
                                       Value replace,
                                       StringValue subject,
-                                      Value count,
+                                      Var count,
                                       boolean isInsensitive)
   {
     if (! search.isArray()) {
@@ -3265,10 +3265,10 @@ public class StringModule extends AbstractQuercusModule {
                                             StringValue search,
                                             StringValue replace,
                                             StringValue subject,
-                                            Value countV,
+                                            Var countV,
                                             boolean isInsensitive)
   {
-    long count = countV.toLong();
+    long count = countV.getValue().getOne().toLong();
 
     int head = 0;
     int next;
