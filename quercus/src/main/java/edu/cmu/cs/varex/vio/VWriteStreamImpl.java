@@ -9,11 +9,9 @@ import edu.cmu.cs.varex.Opt;
 import edu.cmu.cs.varex.OptImpl;
 import edu.cmu.cs.varex.VWriteStream;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +26,7 @@ public class VWriteStreamImpl
 
     private FeatureExpr _currentCtx = FeatureExprFactory.True();
     private StringBuffer _buffer = new StringBuffer();
-    private final List<Opt<String>> _output = new ArrayList<>();
+    protected final List<Opt<String>> _output = new ArrayList<>();
     private String newLine = "\n";
     Charset _charset = Charset.defaultCharset();
 
@@ -50,7 +48,7 @@ public class VWriteStreamImpl
         return out.toString();
     }
 
-    private void doFlush() {
+    protected void doFlush() {
         if (_buffer.length() > 0) {
             String c = _buffer.toString();
             _buffer = new StringBuffer();
@@ -64,6 +62,11 @@ public class VWriteStreamImpl
     }
 
     @Override
+    public Charset getEncoding() {
+        return _charset;
+    }
+
+    @Override
     public void flush()  {
         doFlush();
     }
@@ -71,6 +74,11 @@ public class VWriteStreamImpl
     @Override
     public void setNewlineString(String s) {
         newLine = s;
+    }
+
+    @Override
+    public String getNewlineString() {
+        return newLine;
     }
 
     @Override
@@ -122,15 +130,6 @@ public class VWriteStreamImpl
             print(ctx, o.toString());
     }
 
-    @Override
-    public void print(FeatureExpr ctx, long v)  {
-        print(ctx, String.valueOf(v));
-    }
-
-    @Override
-    public void print(FeatureExpr ctx, char v)  {
-        print(ctx, Character.toString(v));
-    }
 
     @Override
     public void print(FeatureExpr ctx, char[] buffer, int offset, int length)  {
@@ -139,36 +138,8 @@ public class VWriteStreamImpl
 
     }
 
-    @Override
-    public void println(FeatureExpr ctx)  {
-        print(ctx, newLine);
-    }
 
-    @Override
-    public void println(FeatureExpr ctx, String s)  {
-        print(ctx, s + newLine);
-    }
 
-    @Override
-    public void println(FeatureExpr ctx, Object o)  {
-        if (o == null)
-            println(ctx, "null");
-        else
-            println(ctx, o.toString());
-
-    }
-
-    @Override
-    public void write(FeatureExpr ctx, int b) {
-        updateCtx(ctx);
-        _buffer.append(b);
-    }
-
-    @Override
-    public void write(FeatureExpr ctx, byte[] buffer, int offset, int length)  {
-        updateCtx(ctx);
-        _buffer.append(_charset.decode(ByteBuffer.wrap(buffer, offset, length)));
-    }
 
     @Override
     public long writeStream(FeatureExpr ctx, InputStream inputStream) {
@@ -181,6 +152,12 @@ public class VWriteStreamImpl
         if (ctx == _currentCtx) return;
         doFlush();
         _currentCtx = ctx;
+    }
+
+    @Override
+    public void write(FeatureExpr ctx, int b) {
+        updateCtx(ctx);
+        _buffer.append(b);
     }
 
 }

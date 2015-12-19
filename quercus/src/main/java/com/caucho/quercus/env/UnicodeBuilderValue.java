@@ -366,8 +366,9 @@ public class UnicodeBuilderValue
    * Append a Java string to the value.
    */
   @Override
-  public StringValue append(String s)
+  public StringValue append(FeatureExpr ctx, String s)
   {
+    VHelper.assertTrue(ctx);
     int len = s.length();
 
     if (_buffer.length < _length + len)

@@ -2719,12 +2719,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   @Deprecated@VDeprecated("Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value)") //for transition to V implementation only
   final public Value append(Value index, ValueOrVar value)
   {
-    Value array = toAutoArray();
-
-    if (array.isArray())
-      return array.append(index, value);
-    else
-      return array;
+    return append(VHelper.noCtx(), index, V.one(value));
   }
 
   public Value append(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {

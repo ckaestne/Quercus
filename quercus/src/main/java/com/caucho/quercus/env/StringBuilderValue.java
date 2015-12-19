@@ -1124,8 +1124,9 @@ public class StringBuilderValue
    * Append a Java string to the value.
    */
   @Override
-  public final StringValue append(String s)
+  public final StringValue append(FeatureExpr ctx, String s)
   {
+    VHelper.assertTrue(ctx);
     int sublen = s.length();
 
     if (_buffer.length < _length + sublen)

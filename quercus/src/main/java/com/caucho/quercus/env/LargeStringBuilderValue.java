@@ -483,8 +483,9 @@ public class LargeStringBuilderValue
    * Append a Java string to the value.
    */
   @Override
-  public StringValue append(String s)
+  public StringValue append(FeatureExpr ctx, String s)
   {
+    VHelper.assertTrue(ctx);
     int len = s.length();
 
     ensureCapacity(_length + len);

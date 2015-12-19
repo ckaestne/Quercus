@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 /**
  * adapter for nonvariational writers
@@ -30,6 +31,11 @@ public class PlainWriteStreamAdapter implements VWriteStream {
     }
 
     @Override
+    public Charset getEncoding() {
+        return null;
+    }
+
+    @Override
     public void flush()  {
         try {
             stream.flush();
@@ -41,6 +47,11 @@ public class PlainWriteStreamAdapter implements VWriteStream {
     @Override
     public void setNewlineString(String s) {
         stream.setNewlineString(s);
+    }
+
+    @Override
+    public String getNewlineString() {
+        return stream.getNewlineString();
     }
 
     @Override

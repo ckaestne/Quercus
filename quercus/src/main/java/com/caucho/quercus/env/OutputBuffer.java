@@ -31,9 +31,7 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.lib.OutputModule;
 import com.caucho.vfs.TempBuffer;
-import edu.cmu.cs.varex.VHelper;
-import edu.cmu.cs.varex.VTempStream;
-import edu.cmu.cs.varex.VWriteStream;
+import edu.cmu.cs.varex.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -130,12 +128,11 @@ public class OutputBuffer {
     try {
       _out.flush();
 
-      StringValue bb = _env.createBinaryBuilder(_tempStream.getLength());
+      StringValue bb = _env.createBinaryBuilder();
 
-      for (TempBuffer ptr = _tempStream.getHead();
-           ptr != null;
-           ptr = ptr.getNext()) {
-        bb.append(ptr.getBuffer(), 0, ptr.getLength());
+      for (Opt<String> frag: _tempStream.getContent()) {
+
+        bb.append(frag.getCondition(), frag.getValue());
       }
 
       return bb;
@@ -154,7 +151,7 @@ public class OutputBuffer {
     try {
       _out.flush();
 
-      return (long)_tempStream.getLength();
+      return _tempStream.getLength().getOne();
     } catch (Exception e) {
       _env.error(e.toString(), e);
 

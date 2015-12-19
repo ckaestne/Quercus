@@ -1,6 +1,8 @@
 package edu.cmu.cs.varex;
 
-import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.vio.VTempStreamImpl;
+
+import java.util.Iterator;
 
 /**
  * Created by ckaestne on 11/28/2015.
@@ -13,10 +15,11 @@ public interface VTempStream {
     void clearWrite();
 
     static VTempStream create() {
-        return null;
+        return new VTempStreamImpl();
     }
 
-    int getLength();
+    Iterable<Opt<String>> getContent();
 
-    TempBuffer getHead();
+    V<? extends Integer> getLength();
+
 }

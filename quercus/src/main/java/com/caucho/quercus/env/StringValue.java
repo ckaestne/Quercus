@@ -42,6 +42,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -1439,7 +1440,13 @@ abstract public class StringValue
   /**
    * Append a Java string to the value.
    */
-  public StringValue append(String s)
+  @Deprecated@VDeprecated("StringValue append(FeatureExpr ctx, String s)")
+  public final StringValue append(String s)
+  {
+    return append(VHelper.noCtx(), s);
+  }
+
+  public StringValue append(FeatureExpr ctx, String s)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
