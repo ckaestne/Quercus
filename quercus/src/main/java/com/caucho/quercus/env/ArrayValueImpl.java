@@ -621,24 +621,24 @@ public class ArrayValueImpl extends ArrayValue
    */
   @Override
   public ArrayValue slice(Env env, int start, int end, boolean isPreserveKeys) {
-    throw new UnimplementedVException();
-//    ArrayValueImpl array = new ArrayValueImpl();
-//
-//    int i = 0;
-//    for (Entry ptr = _head; i < end && ptr != null; ptr = ptr.getNext()) {
-//      if (start > i++)
-//        continue;
-//
-//      Value key = ptr.getKey();
-//      Value value = ptr.getEnvVar().getOne();
-//
-//      if (isPreserveKeys || key.isString())
-//        array.put(key, value);
-//      else
-//        array.put(value);
-//    }
-//
-//    return array;
+    ArrayValueImpl array = new ArrayValueImpl();
+
+    int i = 0;
+    for (Entry ptr = _head; i < end && ptr != null; ptr = ptr.getNext()) {
+      VHelper.assertTrue(ptr.getCondition());
+      if (start > i++)
+        continue;
+
+      Value key = ptr.getKey();
+      EnvVar value = ptr.getEnvVar();
+
+      if (isPreserveKeys || key.isString())
+        array.put(ptr.getCondition(), key, value.getVar());
+      else
+        array.put(ptr.getCondition(), value.getVar());
+    }
+
+    return array;
   }
 
   /**

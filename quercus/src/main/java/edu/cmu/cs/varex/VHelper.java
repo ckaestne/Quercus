@@ -140,6 +140,7 @@ public class VHelper {
   }
 
   public static void assertTrue(FeatureExpr ctx) {
-    assert ctx.isTautology() : "incomplete V transformation, cannot be called in context "+ctx;
+    if (!ctx.isTautology())
+      throw new UnimplementedVException("incomplete V transformation, cannot be called in context " + ctx);
   }
 }
