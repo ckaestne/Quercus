@@ -9,7 +9,6 @@ scala: 2.11.7
 jdk: oraclejdk8
 sudo: false
 script: sbt "project quercus" test
-after_success: "sbt coveralls"
 services:
   - mysql
 before_script: 
