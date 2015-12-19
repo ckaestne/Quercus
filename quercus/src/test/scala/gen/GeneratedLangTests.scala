@@ -469,4 +469,16 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(True, "1x")
 	}
 
+	@Test def testVar_vs_val_parameter() {
+		eval("""<?php 
+		       |function foo($a, $b)
+		       |{
+		       |    $b = 20;
+		       |	var_dump($a);
+		       |	var_dump($b);
+		       |}
+		       |foo(1, 2);""".stripMargin) to 
+			c(True, "int(1)\nint(20)")
+	}
+
 }

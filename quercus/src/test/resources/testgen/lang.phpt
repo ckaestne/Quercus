@@ -310,3 +310,12 @@ function foo() { echo "x"; }
 echo function_exists("foo");
 echo function_exists("bar");
 foo();
+
+==== var_vs_val_parameter
+function foo($a, $b)
+{
+    $b = 20;
+	var_dump($a);
+	var_dump($b);
+}
+foo(1, 2);
