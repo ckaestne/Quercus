@@ -47,6 +47,8 @@ jacoco.reportFormats in jacoco.Config := Seq(
 
 parallelExecution in Test := false
 
+parallelExecution in jacoco.Config := false
+
 /**
   * AOP used for runtime checking of @Notnull annotations
   */
