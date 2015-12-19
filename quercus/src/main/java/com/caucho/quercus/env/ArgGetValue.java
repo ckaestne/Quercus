@@ -87,16 +87,16 @@ public class ArgGetValue extends ArgValue
 //    return V.one(new ArgGetFieldValue(env, this, index).toVar()); // php/3d2p
 //  }
 //
-//  /**
-//   * Converts to a reference variable.
-//   */
-//  @Override
-//  public Var toLocalVarDeclAsRef()
-//  {
-//    // php/3d55, php/3d49, php/3921
-//
-//    return _obj.toAutoArray().getVar(_index).getVar().getOne()/*.toLocalVarDeclAsRef()*/;
-//  }
+  /**
+   * Converts to a reference variable.
+   */
+  @Override
+  public Var toLocalVarDeclAsRef()
+  {
+    // php/3d55, php/3d49, php/3921
+
+    return _obj.toAutoArray().getVar(_index).getVar().getOne()/*.toLocalVarDeclAsRef()*/;
+  }
 //
   @Override
   public Var toAutoArray()
