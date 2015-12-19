@@ -31,6 +31,7 @@ package com.caucho.quercus.lib.spl;
 
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -44,12 +45,14 @@ public class IteratorDelegate implements TraversableDelegate
 {
   private static final L10N L = new L10N(IteratorDelegate.class);
   
+  @Override
   public Iterator<VEntry>
     getIterator(Env env, ObjectValue qThis)
   {
     return new EntryIterator(env, qThis);
   }
 
+  @Override
   public Iterator<Value> getKeyIterator(Env env, ObjectValue qThis)
   {
     // doesn't belong here
@@ -59,13 +62,14 @@ public class IteratorDelegate implements TraversableDelegate
     return new KeyIterator(env, qThis);
   }
 
+  @Override
   public Iterator<EnvVar> getValueIterator(Env env, ObjectValue qThis)
   {
-    return new ValueIterator(env, (ObjectValue) qThis);
+    return new ValueIterator(env, qThis);
   }
 
-  public static class EntryIterator<T>
-    extends AbstractIteratorImpl<Map.Entry<Value, Value>>
+  public static class EntryIterator
+    extends AbstractIteratorImpl<VEntry>
   {
     public EntryIterator(Env env, ObjectValue obj)
     {
@@ -73,13 +77,13 @@ public class IteratorDelegate implements TraversableDelegate
     }
 
     @Override
-    protected Map.Entry<Value, Value> getCurrent()
+    protected VEntry getCurrent()
     {
       // php/4ar2
       Value value = getCurrentValue();
       Value key = getCurrentKey();
 
-      return new EntryImpl(key, value);
+      return new ArrayValue.Entry(VHelper.noCtx(), key, EnvVar.fromValue(value));
     }
   }
 
@@ -95,16 +99,19 @@ public class IteratorDelegate implements TraversableDelegate
       _value = value;
     }
 
+    @Override
     public Value getKey()
     {
       return _key;
     }
 
+    @Override
     public Value getValue()
     {
       return _value;
     }
 
+    @Override
     public Value setValue(Value value)
     {
       throw new UnsupportedOperationException();
@@ -126,8 +133,8 @@ public class IteratorDelegate implements TraversableDelegate
     }
   }
 
-  public static class ValueIterator<T>
-    extends AbstractIteratorImpl<Value>
+  public static class ValueIterator
+    extends AbstractIteratorImpl<EnvVar>
   {
     public ValueIterator(Env env, ObjectValue obj)
     {
@@ -135,9 +142,9 @@ public class IteratorDelegate implements TraversableDelegate
     }
 
     @Override
-    protected Value getCurrent()
+    protected EnvVar getCurrent()
     {
-      return getCurrentValue();
+      return EnvVar.fromValue(getCurrentValue());
     }
   }
 }
