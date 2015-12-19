@@ -2,11 +2,14 @@ package edu.cmu.cs.varex
 
 import com.caucho.quercus.env._
 import de.fosd.typechef.featureexpr.{FeatureExpr, FeatureExprFactory}
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Tests for variational arrays and their internals
   */
+@RunWith(classOf[JUnitRunner])
 class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 
     //    FeatureExprFactory.setDefault(FeatureExprFactory.bdd)

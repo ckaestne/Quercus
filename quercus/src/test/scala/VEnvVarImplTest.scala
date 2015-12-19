@@ -2,11 +2,14 @@ package edu.cmu.cs.varex
 
 import com.caucho.quercus.env._
 import de.fosd.typechef.featureexpr.{FeatureExpr, FeatureExprFactory}
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Tests vor the EnvVar class (values, vars, and envvar)
   */
+@RunWith(classOf[JUnitRunner])
 class VEnvVarImplTest extends FlatSpec with Matchers {
 
     val foo = FeatureExprFactory.createDefinedExternal("foo")

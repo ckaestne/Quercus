@@ -2,12 +2,15 @@ package edu.cmu.cs.varex
 
 import com.caucho.quercus.env._
 import de.fosd.typechef.featureexpr.FeatureExprFactory
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Tests for correct interaction of the base code with modules/libraries
   * written in Java
   */
+@RunWith(classOf[JUnitRunner])
 class VJavaInvokeTest extends FlatSpec with Matchers with AbstractPhpTest {
 
     val foo = FeatureExprFactory.createDefinedExternal("foo")
