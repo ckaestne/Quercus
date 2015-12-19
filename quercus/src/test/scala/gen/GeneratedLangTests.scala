@@ -508,4 +508,22 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(True, "71571611")
 	}
 
+	@Test def testStringtemplates() {
+		eval("""<?php 
+		       |$a = 1;
+		       |$b = "f$a";
+		       |echo $b;""".stripMargin) to 
+			c(True, "f1")
+	}
+
+	@Test def testVstringtemplates() {
+		eval("""<?php 
+		       |$a = 1;
+		       |if (@A) $a=2;
+		       |$b = "f$a";
+		       |echo $b;""".stripMargin) to 
+			c(fA, "f2") ~
+			c(fA.not, "f1")
+	}
+
 }

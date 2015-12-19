@@ -343,3 +343,14 @@ $c=array(1);
 g($c,$c[0]);
 
 echo $c[0];
+
+==== stringtemplates
+$a = 1;
+$b = "f$a";
+echo $b;
+
+==== vstringtemplates
+$a = 1;
+if (@A) $a=2;
+$b = "f$a";
+echo $b;

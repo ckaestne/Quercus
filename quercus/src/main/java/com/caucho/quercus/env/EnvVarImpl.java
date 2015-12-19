@@ -97,7 +97,7 @@ public final class EnvVarImpl extends EnvVar
 
   @Override
   public String toString() {
-    return _var.toString();
+    return _var.getOne().getValue().getOne().toString();
   }
 }
 

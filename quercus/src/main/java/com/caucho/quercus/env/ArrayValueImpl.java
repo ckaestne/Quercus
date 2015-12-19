@@ -1229,7 +1229,7 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   private void replaceEntry(Entry oldEntry, Entry newEntry) {
-    assert oldEntry.getCondition().implies(newEntry.getCondition()).isTautology() : "function only intended to reduce the scope of an entry";
+    assert newEntry.getCondition().implies(oldEntry.getCondition()).isTautology() : String.format("function only intended to reduce the scope of an entry; old condition: %s, new condition: %s", oldEntry.getCondition(), newEntry.getCondition());
     if (oldEntry.getPrev()!=null)
       oldEntry.getPrev().setNext(newEntry);
     if (oldEntry.getNext()!=null)
