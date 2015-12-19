@@ -1427,7 +1427,7 @@ public class QuercusContext
           _name = _name.substring(1);
         }
 
-        return _functionNameMap.getOrDefault(name,V.one(-1));
+        return _functionNameMap.getOrDefault(_name,V.one(-1));
       }
       // IntMap is internally synchronized
       return V.one(id);
