@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
  */
 public interface VWriteStream {
     static VWriteStream create(VTempStream tempStream) {
-        return null;
+        throw new UnimplementedVException();
     }
     static VWriteStream adapt(WriteStream writeStream) {
         return new PlainWriteStreamAdapter(writeStream);
