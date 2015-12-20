@@ -46,7 +46,7 @@ public class VoidMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     throw new UnsupportedOperationException();
   }

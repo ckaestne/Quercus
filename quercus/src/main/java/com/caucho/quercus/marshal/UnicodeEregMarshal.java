@@ -50,7 +50,7 @@ public class UnicodeEregMarshal extends StringMarshal {
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     return RegexpModule.createUnicodeEreg(env, value.toStringValue());
   }

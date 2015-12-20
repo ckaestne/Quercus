@@ -68,11 +68,11 @@ public class JavaMarshal extends Marshal {
   {
     Value value = expr.eval(env, VHelper.noCtx()).getOne();
 
-    return marshal(env, value, argClass);
+    return marshalValue(env, value, argClass);
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, Value value, Class argClass)
   {
     if (! value.isset()) {
       if (_isNotNull) {

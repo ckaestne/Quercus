@@ -52,7 +52,7 @@ public class BigIntegerMarshal extends Marshal {
   }
   
   @Override
-  public Object marshal(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, Value value, Class argClass)
   {
     return value.toBigInteger();
   }

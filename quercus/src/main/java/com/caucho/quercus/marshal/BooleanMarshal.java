@@ -35,7 +35,6 @@ import com.caucho.quercus.env.NullValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
 /**
@@ -63,7 +62,7 @@ public class BooleanMarshal extends Marshal {
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     return value.toBoolean() ? Boolean.TRUE : Boolean.FALSE;
   }

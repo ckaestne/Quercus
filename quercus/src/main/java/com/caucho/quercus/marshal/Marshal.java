@@ -31,9 +31,13 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.ValueOrVar;
+import com.caucho.quercus.env.Var;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 /**
  * Code for marshaling (PHP to Java) and unmarshaling (Java to PHP) arguments.
@@ -193,9 +197,29 @@ abstract public class Marshal {
 //Do not call anymore, evaluate first and use other marshal function instead. This won't be maintained for V implementation.
   abstract public Object marshal(Env env, Expr expr, Class argClass);
 
-  public Object marshal(Env env, Value value, Class argClass)
+  @Deprecated
+  @VDeprecated
+  final public Object marshal(Env env, Value value, Class argClass) {
+    return marshalValue(env, value, argClass);
+  }
+
+  public V<? extends Object> marshal(Env env, V<? extends ValueOrVar> value, Class argClass) {
+    return value.<Object>flatMap(v -> {
+      if (isReference()) {
+        assert v.isVar();
+        return V.one(marshalRef(env, v._var(), argClass));
+      }
+      return v._getValues().map(vv -> marshalValue(env, vv, argClass));
+    });
+  }
+
+  protected Object marshalRef(Env env, Var value, Class argClass) {
+    throw new UnsupportedOperationException("can only be called on ReferenceMarshal");
+  }
+
+  protected Object marshalValue(Env env, Value value, Class argClass)
   {
-    return marshalImpl(env, value.toValue(), argClass);
+    return marshalImpl(env, value.toLocalValue(), argClass);
   }
 
   protected Object marshalImpl(Env env, Value value, Class<?> argClass)

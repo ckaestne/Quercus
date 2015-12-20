@@ -354,3 +354,17 @@ $a = 1;
 if (@A) $a=2;
 $b = "f$a";
 echo $b;
+
+==== arrayvar
+$a = array(1, 2, 5);
+$b = &$a;
+$a[] = 10;
+echo implode("-",$a);
+echo implode("-",$b);
+
+==== arrayvar2
+$a = array(1, 2, 5);
+$b = $a;
+$a[] = 10;
+echo implode("-",$a);
+echo implode("-",$b);

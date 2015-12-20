@@ -1157,7 +1157,7 @@ abstract public class ArrayValue extends Value {
   /**
    * Pops the top value.
    */
-  @Override
+//  @Override
   abstract public V<? extends Value> pop(Env env, FeatureExpr ctx);
 
   /**
@@ -2086,7 +2086,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-              ptr.getEnvVar().getValue().getOne(),
+              ptr.getEnvVar().getVar(),
                                                    elementType));
     }
 

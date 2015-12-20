@@ -88,9 +88,9 @@ public class NullAsFalseMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, Value value, Class argClass)
   {
-    return _marshal.marshal(env, value, argClass);
+    return _marshal.marshalValue(env, value, argClass);
   }
 
   @Override

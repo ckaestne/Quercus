@@ -87,7 +87,7 @@ public class ExpectMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     return expect(env, value.toValue());
   }

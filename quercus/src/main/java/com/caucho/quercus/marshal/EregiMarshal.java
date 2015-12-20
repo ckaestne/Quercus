@@ -50,7 +50,7 @@ public class EregiMarshal extends StringMarshal {
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     return RegexpModule.createEregi(env, value);
   }

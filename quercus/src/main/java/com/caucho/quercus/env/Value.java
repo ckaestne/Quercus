@@ -1301,14 +1301,14 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return BooleanValue.FALSE;
   }
 
-  /**
-   * Pops the top array element.
-   */
-  public V<? extends Value> pop(Env env, FeatureExpr ctx) {
-    env.warning("cannot pop a non-array");
-
-    return V.one(NullValue.NULL);
-  }
+//  /**
+//   * Pops the top array element.
+//   */
+//  public V<? extends Value> pop(Env env, FeatureExpr ctx) {
+//    env.warning("cannot pop a non-array");
+//
+//    return V.one(NullValue.NULL);
+//  }
 
   /**
    * Finds the method name.

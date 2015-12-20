@@ -61,7 +61,7 @@ public class StringMarshal extends Marshal {
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     return value.toJavaString();
   }

@@ -69,7 +69,7 @@ public class ValueMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     // php/0433
     // php/3c81

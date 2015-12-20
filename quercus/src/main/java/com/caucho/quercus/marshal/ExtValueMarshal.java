@@ -65,11 +65,11 @@ public class ExtValueMarshal extends Marshal
   @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
+    return marshalValue(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     if (value == null || ! value.isset())
       return null;

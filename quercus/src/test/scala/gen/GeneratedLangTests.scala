@@ -526,4 +526,24 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not, "f1")
 	}
 
+	@Test def testArrayvar() {
+		eval("""<?php 
+		       |$a = array(1, 2, 5);
+		       |$b = &$a;
+		       |$a[] = 10;
+		       |echo implode("-",$a);
+		       |echo implode("-",$b);""".stripMargin) to 
+			c(True, "1-2-5-101-2-5-10")
+	}
+
+	@Test def testArrayvar2() {
+		eval("""<?php 
+		       |$a = array(1, 2, 5);
+		       |$b = $a;
+		       |$a[] = 10;
+		       |echo implode("-",$a);
+		       |echo implode("-",$b);""".stripMargin) to 
+			c(True, "1-2-5-101-2-5")
+	}
+
 }

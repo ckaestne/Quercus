@@ -31,6 +31,7 @@ package com.caucho.quercus.marshal;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.Var;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
@@ -59,7 +60,12 @@ public class ReferenceMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class argClass)
+  protected Object marshalRef(Env env, Var var, Class argClass) {
+    return var.toLocalVarDeclAsRef();
+  }
+
+  @Override
+  public Object marshalValue(Env env, Value value, Class argClass)
   {
     return value.toLocalVarDeclAsRef();
   }

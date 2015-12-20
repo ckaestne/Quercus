@@ -827,12 +827,12 @@ abstract public class JavaInvoker
     for (int i = 0; i < _marshalArgs.length; i++) {
       int _i = i, _k = k;
       if (i < args.length && args[i] != null)
-        javaArgs[k] = VHelper.getValues(args[i]).map((a) -> _marshalArgs[_i].marshal(env, a, _param[_k]));
+        javaArgs[k] = _marshalArgs[_i].marshal(env, args[i], _param[_k]);
       else if (_defaultExprs[i] != null) {
-        javaArgs[k] = VHelper.getValues(_defaultExprs[i].eval(env, ctx)).map(a ->
+        javaArgs[k] =
                 _marshalArgs[_i].marshal(env,
-                        a,
-                        _param[_k]));
+                        _defaultExprs[i].eval(env, ctx),
+                        _param[_k]);
       } else {
         warnMessage = L.l(
           "function '{0}' has {1} required arguments, "
@@ -843,7 +843,7 @@ abstract public class JavaInvoker
 
         //return NullValue.NULL;
 
-        javaArgs[k] = V.one(_marshalArgs[i].marshal(env, NullValue.NULL, _param[k]));
+        javaArgs[k] = V.one(_marshalArgs[i].marshal(env, V.one(NullValue.NULL), _param[k]));
       }
 
       /*

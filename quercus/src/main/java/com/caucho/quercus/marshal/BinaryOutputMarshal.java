@@ -54,17 +54,17 @@ public class BinaryOutputMarshal extends Marshal
   // XXX: push this down to the Value class?
   public static BinaryOutput marshal(Env env, Value value)
   {
-    return (BinaryOutput) MARSHAL.marshal(env, value, MARSHAL.getExpectedClass());
+    return (BinaryOutput) MARSHAL.marshalValue(env, value, MARSHAL.getExpectedClass());
   }
 
   @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
-    return marshal(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
+    return marshalValue(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     if (value == null) {
       return null;

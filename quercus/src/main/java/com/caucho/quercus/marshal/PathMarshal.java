@@ -55,7 +55,7 @@ public class PathMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, Value value, Class expectedClass)
   {
     return env.lookupPwd(value);
   }

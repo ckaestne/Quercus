@@ -1447,7 +1447,9 @@ public class ArrayModule
    */
   public static Value array_pop(Env env, @Reference Var array)
   {
-    return array.makeValue().pop(env, VHelper.noCtx()).getOne();
+    Value a = array.makeValue();
+    assert a.isArray();
+    return a.toArray().pop(env, VHelper.noCtx()).getOne();
   }
 
   /**

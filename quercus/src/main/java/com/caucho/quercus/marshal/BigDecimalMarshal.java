@@ -49,7 +49,7 @@ public class BigDecimalMarshal extends Marshal {
   }
   
   @Override
-  public Object marshal(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, Value value, Class argClass)
   {
     return value.toBigDecimal();
   }

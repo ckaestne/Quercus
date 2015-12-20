@@ -55,7 +55,7 @@ public class JavaCollectionMarshal extends JavaMarshal {
   }
 
   @Override
-  public Object marshal(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, Value value, Class argClass)
   {
     if (! value.isset()) {
       if (_isNotNull) {
