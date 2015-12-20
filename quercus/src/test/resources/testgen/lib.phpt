@@ -25,3 +25,18 @@ echo CONSTANT;
 //}
 
 //echo defined("X");
+
+==== debug_backtrace
+function printStack($s) {
+  foreach ($s as $nr => $row) {
+    echo $nr.":";
+    echo $row["function"];
+    echo "\n";
+  }
+}
+function foo() { bar(); }
+function bar() {
+  $a = debug_backtrace();
+  printStack($a);
+}
+foo();
