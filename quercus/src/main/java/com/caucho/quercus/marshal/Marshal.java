@@ -205,13 +205,14 @@ abstract public class Marshal {
 
   public V<? extends Object> marshal(Env env, V<? extends ValueOrVar> value, Class argClass) {
     return value.<Object>flatMap(v -> {
-      if (isReference()) {
-        assert v.isVar();
+      if (isRefMarshal() && v.isVar()) {
         return V.one(marshalRef(env, v._var(), argClass));
       }
       return v._getValues().map(vv -> marshalValue(env, vv, argClass));
     });
   }
+
+  protected boolean isRefMarshal() { return false; }
 
   protected Object marshalRef(Env env, Var value, Class argClass) {
     throw new UnsupportedOperationException("can only be called on ReferenceMarshal");

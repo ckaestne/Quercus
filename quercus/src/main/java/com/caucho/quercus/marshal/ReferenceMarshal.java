@@ -53,6 +53,9 @@ public class ReferenceMarshal extends Marshal
   }
 
   @Override
+  protected boolean isRefMarshal() { return true; }
+
+  @Override
   public Object marshal(Env env, Expr expr, Class expectedClass)
   {
     // quercus/0d1k
