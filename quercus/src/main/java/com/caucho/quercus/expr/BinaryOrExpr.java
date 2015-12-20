@@ -72,8 +72,8 @@ public class BinaryOrExpr extends AbstractBinaryExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->
-            a||b?      BooleanValue.TRUE:BooleanValue.FALSE);
+    return _left.evalBoolean(env, ctx).vflatMap(ctx, (c, l)->
+            l ? V.one(BooleanValue.TRUE) : _right.evalBoolean(env, c).map(r->r?BooleanValue.TRUE:BooleanValue.FALSE));
   }
 
   /**
