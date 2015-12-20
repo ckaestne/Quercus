@@ -1,7 +1,7 @@
 # Varex
 
 This is a reimplementation of the variational PHP interpreter Varex,
-based on the PHP interpreter Quercus. It allows to create variational
+based on the PHP interpreter Quercus (see [VarexJ](https://github.com/meinicke/VarexJ) for a Java version and the original [Varex](https://github.com/git1997/VarExecution) implementation for a previous implementation for PHP). It allows to create variational
 values in PHP code by calling `create_conditional` and then compute
 with them.
 
