@@ -107,7 +107,7 @@ object TestGen extends App {
 
     def loadTests(file: File): List[(String, String)] =
         Source.fromFile(file).mkString.split("====").map(_.trim).map(
-            frag => (frag.take(frag.indexOf("\n") - 1).capitalize, "<?php \n" + frag.drop(frag.indexOf("\n") + 1))
+            frag => (frag.take(frag.indexOf("\n")).trim.capitalize, "<?php \n" + frag.drop(frag.indexOf("\n") + 1))
         ).filter(e => e._1.nonEmpty && e._2.nonEmpty).toList
 
 

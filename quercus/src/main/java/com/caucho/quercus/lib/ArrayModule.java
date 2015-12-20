@@ -655,16 +655,15 @@ public class ArrayModule
           VEntry entry = iter.next();
 
           Value key = entry.getKey();
-          Value value;
+          EnvVar value = entry.getEnvVar();
 
-          if (entry instanceof VEntry)
-            value = ((ArrayValue.Entry) entry).getRawValue().getOne();
-          else
-            value = entry.getEnvVar().getOne();
+//          if (entry instanceof VEntry)
+//            value = ((ArrayValue.Entry) entry).getRawValue().getOne();
+//          else
+//            value = entry.getEnvVar().getOne();
 
           // php/1740
-          boolean isMatch
-            = callback.callArray(env, VHelper.noCtx(),array, key, V.one(value)).getOne().toBoolean();
+          boolean isMatch = callback.call(env, VHelper.noCtx(), value.getVar()).getOne().toValue().toBoolean();
 
           if (isMatch)
             filteredArray.put(key, value);
@@ -2536,17 +2535,17 @@ public class ArrayModule
         VEntry entry = iter.next();
 
         Value key = entry.getKey();
-        Value value;
+        EnvVar value = entry.getEnvVar();
 
         // php/1742
-        if (entry instanceof VEntry)
-          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
-        else
-          value = entry.getEnvVar().getOne();
+//        if (entry instanceof VEntry)
+//          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
+//        else
+//          value = entry.getEnvVar().getOne();
 
-        if (value.isArray()) {
+        if (value.getValue().getOne().isArray()) {
           boolean result = array_walk_recursive(env,
-                                                Var.create(value.toValue()),
+                                                Var.create(value.getValue().getOne()),
                                                 callback,
                                                 extra);
 
@@ -2554,7 +2553,7 @@ public class ArrayModule
             return false;
         }
         else
-          callback.callArray(env, VHelper.noCtx(), array, key, V.one(value), V.one(key), V.one(extra));
+          callback.call(env, VHelper.noCtx(), value.getVar(), V.one(key), V.one(extra));
       }
 
       return true;
@@ -2599,15 +2598,15 @@ public class ArrayModule
         VEntry entry = iter.next();
 
         Value key = entry.getKey();
-        Value value;
+        EnvVar value = entry.getEnvVar();
 
         // php/1741
-        if (entry instanceof VEntry)
-          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
-        else
-          value = entry.getEnvVar().getOne();
+//        if (entry instanceof VEntry)
+//          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
+//        else
+//          value = entry.getEnvVar().getOne();
 
-        callback.callArray(env, VHelper.noCtx(),array, key, V.one(value), V.one(key), V.one(userData));
+        callback.call(env, VHelper.noCtx(),value.getVar(), V.one(key), V.one(userData));
       }
 
       return true;
