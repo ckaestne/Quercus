@@ -90,27 +90,27 @@ public class FunctionModule extends AbstractQuercusModule {
       argArray = new ArrayValueImpl().append(arg);
     }
 
-    Value []args;
+    V<? extends ValueOrVar> []args;
 
     if (argArray != null) {
-      args = new Value[argArray.getSize()];
+      args = new V[argArray.getSize()];
 
       int i = 0;
 
       for (VEntry entry : argArray.entrySet()) {
         ArrayValue.Entry arrayEntry = (ArrayValue.Entry) entry;
 
-        args[i++] = arrayEntry.getRawValue().getOne();
+        args[i++] = arrayEntry.getRawValue().getVar();
       }
     }
     else {
-      args = new Value[0];
+      args = new V[0];
     }
 
     // nam: 2012-04-30 this works for interpreted, but need to also work for compiled
     // chk: 2015-11-26 fix this, otherwise stackframes and consequently wordpress title is missing
     QuercusClass oldCallingClass = env.getCallingClass();
-    env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, VHelper.toVArray(args));
+    env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, args);
 
     try {
       return function.call(env, VHelper.noCtx(), args).map((a)->a.toValue().copyReturn()).getOne();

@@ -1268,8 +1268,8 @@ public class Env
   {
     long now = _quercus.getCurrentTime();
 
-    if (_endTime < now)
-      _isTimeout = true;
+//    if (_endTime < now)
+//      _isTimeout = true;
   }
 
   public void resetTimeout()
@@ -3122,6 +3122,8 @@ public class Env
    */
   public void pushCall(Expr call, Value obj, V<? extends ValueOrVar>[] args)
   {
+    for (int i=0; i<getCallDepth();i++) System.out.print("  ");
+    System.out.println(call.toString());
     if (_callStack == null) {
       _callStack = new Expr[256];
       _callThisStack = new Value[256];

@@ -368,3 +368,57 @@ $b = $a;
 $a[] = 10;
 echo implode("-",$a);
 echo implode("-",$b);
+
+==== arrayinit
+function __($a) { return "..".$a; }
+$defaults = array(
+		'show_option_all' => '', 'show_option_none' => __('No categories'),
+		'hierarchical' => true, 'title_li' => __( 'Categories' ),
+		'echo' => 1
+	);
+foreach ($defaults as $k => $v)
+  echo $k."->".$v."; ";
+
+==== call_user_func_array_var
+class X {
+        function foo(&$v, $a) {
+                $v = $a;
+        }
+}
+$x = new X();
+$v = "x";
+$a = array( &$v, "y");
+print_r($a);
+call_user_func_array(array($x, "foo"), $a);
+print_r($a);
+
+==== array_merge_call_user_func_array_var
+class X {
+        function foo(&$v, $a) {
+                $v = $a;
+        }
+}
+$x = new X();
+$v = "x";
+$vv = array(1, 2);
+$a = array_merge(array( &$v, "y"), $vv);
+print_r($a);
+call_user_func_array(array($x, "foo"), $a);
+print_r($a);
+
+==== call_user_func_array_var2
+class X {
+        function foo(&$v, $a) {
+                $v = $a;
+        }
+        function bar($a, &$v) {
+                $args = array(&$v, $a);
+                call_user_func_array(array($this, "foo"), $args);
+        }
+}
+$x = new X();
+$v = "x";
+$a = array( "y", &$v);
+print_r($a);
+call_user_func_array(array($x, "bar"), $a);
+print_r($a);
