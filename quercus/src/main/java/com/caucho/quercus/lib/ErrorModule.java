@@ -250,6 +250,8 @@ public class ErrorModule extends AbstractQuercusModule {
       }
       else if (className.startsWith("com.caucho.quercus")) {
       }
+      else if (className.startsWith("edu.cmu.cs.varex")) {
+      }
       else if (name.equals("invoke") || name.equals("invoke0")) {
       }
       else {

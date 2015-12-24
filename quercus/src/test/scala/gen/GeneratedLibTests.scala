@@ -48,4 +48,22 @@ class GeneratedLibTests extends AbstractPhpGenTest {
 			c(fB.not, "")
 	}
 
+	@Test def testDebug_backtrace() {
+		eval("""<?php 
+		       |function printStack($s) {
+		       |  foreach ($s as $nr => $row) {
+		       |    echo $nr.":";
+		       |    echo $row["function"];
+		       |    echo "\n";
+		       |  }
+		       |}
+		       |function foo() { bar(); }
+		       |function bar() {
+		       |  $a = debug_backtrace();
+		       |  printStack($a);
+		       |}
+		       |foo();""".stripMargin) to 
+			c(True, "0:bar\n1:foo")
+	}
+
 }

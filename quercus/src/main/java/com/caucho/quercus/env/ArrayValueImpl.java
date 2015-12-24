@@ -413,8 +413,8 @@ public class ArrayValueImpl extends ArrayValue
    * Convert to an argument declared as a reference
    */
   @Override
-  public Value toRefValue() {
-    return this;
+  public V<? extends ValueOrVar> toRefValue() {
+    return V.one(this);
   }
 
   /**

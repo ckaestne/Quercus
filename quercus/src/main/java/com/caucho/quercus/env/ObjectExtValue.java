@@ -182,8 +182,10 @@ public class ObjectExtValue extends ObjectValue
   @Override
   public int getSize()
   {
-    throw new UnimplementedVException("need variational implementation returning only not unset fields in each configuration");
-//    return _fieldMap.size();
+//    throw new UnimplementedVException("need variational implementation returning only not unset fields in each configuration");
+    for (EnvVar e: _fieldMap.values())
+      e.getOne();
+    return _fieldMap.size();
   }
 
   /**
