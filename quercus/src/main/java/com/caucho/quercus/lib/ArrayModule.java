@@ -1189,14 +1189,14 @@ public class ArrayModule
         VEntry entry = iter.next();
 
         Value key = entry.getKey();
-        Value value;
+        EnvVar value;
 
         if (entry instanceof VEntry) {
           // php/173z, php/1747
-          value = ((ArrayValue.Entry) entry).getRawValue().getOne();
+          value = ((ArrayValue.Entry) entry).getRawValue();
         }
         else {
-          value = entry.getEnvVar().getOne();
+          value = entry.getEnvVar();
         }
 
         //TODO V
@@ -1206,7 +1206,7 @@ public class ArrayModule
 
         // php/1745
         if (key.isNumberConvertible()) {
-          result.put(VHelper.noCtx(), value);
+          result.put(VHelper.noCtx(), value.getVar());
         }
         else {
           result.append(key, value);

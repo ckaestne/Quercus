@@ -612,4 +612,26 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(True, "Array\n(\n    [0] => y\n    [1] => x\n)\nArray\n(\n    [0] => y\n    [1] => y\n)")
 	}
 
+	@Test def testCall_user_func_array_var3() {
+		eval("""<?php 
+		       |class X {
+		       |        function foo(&$v, $a, $b) {
+		       |                $v = $a;
+		       |                echo $b;
+		       |        }
+		       |        function bar($a, &$v, $b) {
+		       |                $args = array_merge(array(&$v, $a), $b);
+		       |                call_user_func_array(array($this, "foo"), $args);
+		       |        }
+		       |}
+		       |$x = new X();
+		       |$v = "x";
+		       |$b = array(5);
+		       |$a = array( "y", &$v, $b);
+		       |print_r($a);
+		       |call_user_func_array(array($x, "bar"), $a);
+		       |print_r($a);""".stripMargin) to 
+			c(True, "Array\n(\n    [0] => y\n    [1] => x\n    [2] => Array\n        (\n            [0] => 5\n        )\n\n)\n5Array\n(\n    [0] => y\n    [1] => y\n    [2] => Array\n        (\n            [0] => 5\n        )\n\n)")
+	}
+
 }

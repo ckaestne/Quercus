@@ -422,3 +422,22 @@ $a = array( "y", &$v);
 print_r($a);
 call_user_func_array(array($x, "bar"), $a);
 print_r($a);
+
+==== call_user_func_array_var3
+class X {
+        function foo(&$v, $a, $b) {
+                $v = $a;
+                echo $b;
+        }
+        function bar($a, &$v, $b) {
+                $args = array_merge(array(&$v, $a), $b);
+                call_user_func_array(array($this, "foo"), $args);
+        }
+}
+$x = new X();
+$v = "x";
+$b = array(5);
+$a = array( "y", &$v, $b);
+print_r($a);
+call_user_func_array(array($x, "bar"), $a);
+print_r($a);
