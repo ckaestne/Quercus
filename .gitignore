@@ -2,3 +2,5 @@ wordpress/src/main/webapp/wordpress-4.3.1/wp-config.php
 *.*~
 target/
 run.sh
+.idea/
+test.php
