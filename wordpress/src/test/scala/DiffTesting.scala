@@ -1,9 +1,9 @@
 package edu.cmu.cs.varex
 
-import org.junit.{Ignore, Test}
+import org.junit.Test
 
 
-@Ignore
+
 class DiffTesting extends AbstractDiffTest {
 
     @Test
