@@ -1209,7 +1209,7 @@ public class ArrayModule
           result.put(VHelper.noCtx(), value.getVar());
         }
         else {
-          result.append(key, value);
+          result.append(VHelper.noCtx(), key, value.getVar());
         }
       }
     }

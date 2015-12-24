@@ -1,5 +1,5 @@
-import com.typesafe.sbt.SbtAspectj.{ Aspectj, aspectjSettings, compiledClasses }
-import com.typesafe.sbt.SbtAspectj.AspectjKeys.{ inputs, weave }
+import com.typesafe.sbt.SbtAspectj.AspectjKeys.inputs
+import com.typesafe.sbt.SbtAspectj.{Aspectj, compiledClasses}
 
 
 libraryDependencies += "javax.jms" % "jms-api" % "1.1-rev-1"
@@ -18,7 +18,7 @@ libraryDependencies += "org.bitbucket.cowwoc.diff-match-patch" % "diff-match-pat
 
 libraryDependencies += "org.scala-lang.modules" % "scala-java8-compat_2.11" % "0.7.0" % "test"
 
-libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
+//libraryDependencies += "org.checkerframework" % "checker-qual" % "1.9.8"
 
 libraryDependencies += "com.google.code.findbugs" % "jsr305" % "3.0.1"
 

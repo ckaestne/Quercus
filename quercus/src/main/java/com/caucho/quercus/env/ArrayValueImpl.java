@@ -1034,8 +1034,9 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   @Override
-  public ArrayValue append(Value key, EnvVar value) {
-    throw new UnimplementedVException();
+  @VDeprecated@Deprecated
+  public final ArrayValue append(Value key, EnvVar value) {
+    return append(VHelper.noCtx(), key, value.getVar());
   }
 
 

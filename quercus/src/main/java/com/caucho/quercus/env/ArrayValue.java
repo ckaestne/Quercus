@@ -1099,6 +1099,7 @@ abstract public class ArrayValue extends Value {
    *
    * XXX: change name to appendArg
    */
+  @Deprecated
   abstract public ArrayValue append(Value key, EnvVar value);
 
   @Deprecated//V transformation
