@@ -933,8 +933,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * <p>
    * where $a is never assigned in the function
    */
-  public Value toRefValue() {
-    return this;
+  public V<? extends ValueOrVar> toRefValue() {
+    return V.one(this);
   }
 
   /**
