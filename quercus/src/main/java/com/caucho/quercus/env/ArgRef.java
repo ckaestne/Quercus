@@ -29,16 +29,9 @@
 
 package com.caucho.quercus.env;
 
-import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
 
 /**
  * Represents a reference to a PHP variable in a function call.
@@ -261,14 +254,14 @@ public class ArgRef /*extends Value*/
 //    return _var;
 //  }
 //
-//  /**
-//   * Converts to an argument value.
-//   */
-//  @Override
-//  public Value toRefValue()
-//  {
-//    return _var.getValue().getOne();
-//  }
+  /**
+   * Converts to an argument value.
+   */
+  @Override
+  public V<? extends ValueOrVar> toRefValue()
+  {
+    return V.one(_var);
+  }
 //
 //  /**
 //   * Converts to a variable

@@ -119,9 +119,9 @@ public class FunArrayExpr extends Expr {
     for (int i = 0; i < _values.length; i++) {
       Expr keyExpr = _keys[i];
 
-      V<? extends Value> value =
-              VHelper.getValues(_values[i].evalArg(env, ctx, true)).
-                      map((a)->a.toRefValue());
+      V<? extends ValueOrVar> value =
+              _values[i].evalArg(env, ctx, true).
+                      flatMap((a)->a.toRefValue());
 
       if (keyExpr != null) {
         V<? extends Value> key = VHelper.getValues(keyExpr.evalArg(env, ctx, true));

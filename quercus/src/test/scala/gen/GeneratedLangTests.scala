@@ -546,4 +546,70 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(True, "1-2-5-101-2-5")
 	}
 
+	@Test def testArrayinit() {
+		eval("""<?php 
+		       |function __($a) { return "..".$a; }
+		       |$defaults = array(
+		       |		'show_option_all' => '', 'show_option_none' => __('No categories'),
+		       |		'hierarchical' => true, 'title_li' => __( 'Categories' ),
+		       |		'echo' => 1
+		       |	);
+		       |foreach ($defaults as $k => $v)
+		       |  echo $k."->".$v."; ";""".stripMargin) to 
+			c(True, "show_option_all->; show_option_none->..No categories; hierarchical->1; title_li->..Categories; echo->1;")
+	}
+
+	@Test def testCall_user_func_array_var() {
+		eval("""<?php 
+		       |class X {
+		       |        function foo(&$v, $a) {
+		       |                $v = $a;
+		       |        }
+		       |}
+		       |$x = new X();
+		       |$v = "x";
+		       |$a = array( &$v, "y");
+		       |print_r($a);
+		       |call_user_func_array(array($x, "foo"), $a);
+		       |print_r($a);""".stripMargin) to 
+			c(True, "Array\n(\n    [0] => x\n    [1] => y\n)\nArray\n(\n    [0] => y\n    [1] => y\n)")
+	}
+
+	@Test def testArray_merge_call_user_func_array_var() {
+		eval("""<?php 
+		       |class X {
+		       |        function foo(&$v, $a) {
+		       |                $v = $a;
+		       |        }
+		       |}
+		       |$x = new X();
+		       |$v = "x";
+		       |$vv = array(1, 2);
+		       |$a = array_merge(array( &$v, "y"), $vv);
+		       |print_r($a);
+		       |call_user_func_array(array($x, "foo"), $a);
+		       |print_r($a);""".stripMargin) to 
+			c(True, "Array\n(\n    [0] => x\n    [1] => y\n    [2] => 1\n    [3] => 2\n)\nArray\n(\n    [0] => y\n    [1] => y\n    [2] => 1\n    [3] => 2\n)")
+	}
+
+	@Test def testCall_user_func_array_var2() {
+		eval("""<?php 
+		       |class X {
+		       |        function foo(&$v, $a) {
+		       |                $v = $a;
+		       |        }
+		       |        function bar($a, &$v) {
+		       |                $args = array(&$v, $a);
+		       |                call_user_func_array(array($this, "foo"), $args);
+		       |        }
+		       |}
+		       |$x = new X();
+		       |$v = "x";
+		       |$a = array( "y", &$v);
+		       |print_r($a);
+		       |call_user_func_array(array($x, "bar"), $a);
+		       |print_r($a);""".stripMargin) to 
+			c(True, "Array\n(\n    [0] => y\n    [1] => x\n)\nArray\n(\n    [0] => y\n    [1] => y\n)")
+	}
+
 }
