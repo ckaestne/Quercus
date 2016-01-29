@@ -4,7 +4,7 @@ import org.junit.Test
 
 
 
-class DiffTesting extends AbstractDiffTest {
+class PlainDiffTesting extends AbstractDiffTest {
 
     @Test
     def testWPmain() {

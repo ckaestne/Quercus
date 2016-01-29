@@ -9,7 +9,13 @@ import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
 
 import scala.sys.process._
 
-class AbstractDiffTest {
+/**
+  * infrastructure to test Varex against the native PHP interpreter.
+  *
+  * This test infrastructure does not consider variability at all. For testing across multiple
+  * configurations, check AbstractVDiffTest
+  */
+trait AbstractDiffTest {
 
 
     val externalPHPexecutable = "\\php\\php.exe"
