@@ -897,9 +897,9 @@ abstract public class JavaInvoker
       try {
         for (int i = vParamStartAt; i < javaArgs.length; i++) {
           if (javaArgs[i] instanceof V)
-            javaArgs[i] = ((V<? extends Value>) javaArgs[i]).getOne();
+            javaArgs[i] = ((V<? extends Value>) javaArgs[i]).getOne(ctx);
           else if (javaArgs[i] instanceof V[])
-            javaArgs[i] = varrayToArray(_param[i], (V[]) javaArgs[i]);
+            javaArgs[i] = varrayToArray(ctx, _param[i], (V[]) javaArgs[i]);
           else throw new QuercusException(L.l(
                     "Unexpected parameter {1} in \"{0}\"",
                     _method, i));
@@ -913,10 +913,10 @@ abstract public class JavaInvoker
     }
   }
 
-  private static <T> T[] varrayToArray(Class<T> c, V<? extends T>[] a) {
+  private static <T> T[] varrayToArray(FeatureExpr ctx, Class<T> c, V<? extends T>[] a) {
     T[] result = (T[]) Array.newInstance(c.getComponentType(), a.length);
     for (int i = 0; i < a.length; i++)
-      result[i] = a[i].getOne();
+      result[i] = a[i].getOne(ctx);
     return result;
   }
 

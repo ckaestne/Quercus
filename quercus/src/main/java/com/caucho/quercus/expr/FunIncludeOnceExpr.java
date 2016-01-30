@@ -85,7 +85,7 @@ public class FunIncludeOnceExpr extends AbstractUnaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    StringValue name = _expr.eval(env, VHelper.noCtx()).getOne().toStringValue();
+    StringValue name = _expr.eval(env, ctx).getOne(ctx).toStringValue();
 
     // return env.include(_dir, name);
     
