@@ -551,15 +551,17 @@ function wp_get_active_and_valid_plugins() {
 		//VAREX modification: conditional loading
 
         global $argv;
+        $includePlugin = false;
 		if (in_array("_V_".$plugin,$_REQUEST)) {
 		    //variational
-		    if (create_conditional($plugin)) {
-        		$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
-        		echo "<!-- loading plugin $plugin -->";
-        	}
+		    $includePlugin = create_conditional($plugin);
 		} else if (($argv!=null && in_array("_VA_".$plugin,$argv)) ||
 		        in_array("_VA_".$plugin,$_REQUEST)) {
 		    //activated
+		    $includePlugin= true;
+		}
+
+		if ($includePlugin) {
     		$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
        		echo "<!-- loading plugin $plugin -->";
     	} else {
