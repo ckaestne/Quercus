@@ -441,3 +441,57 @@ $a = array( "y", &$v, $b);
 print_r($a);
 call_user_func_array(array($x, "bar"), $a);
 print_r($a);
+
+==== callbacks_phpdoc
+function my_callback_function() {
+    echo 'hello1world!';
+}
+class MyClass {
+    static function myCallbackMethod() {
+        echo 'Hello2World!';
+    }
+}
+call_user_func('my_callback_function');
+call_user_func(array('MyClass', 'myCallbackMethod'));
+$obj = new MyClass();
+call_user_func(array($obj, 'myCallbackMethod'));
+call_user_func('MyClass::myCallbackMethod');
+class A {
+    public static function who() {
+        echo "A\n";
+    }
+}
+class B extends A {
+    public static function who() {
+        echo "B\n";
+    }
+}
+call_user_func(array('B', 'who'));
+//TODO not supported in quercus:
+//call_user_func(array('B', 'parent::who'));
+class C {
+    public function __invoke($name) {
+        echo 'Hello3', $name, "\n";
+    }
+}
+$c = new C();
+call_user_func($c, 'PHP!');
+
+==== namespaces
+namespace my\name; // see "Defining Namespaces" section
+class MyClass {
+    function foo() { echo "A;"; }
+}
+function myfunction() {}
+const MYCONST = 1;
+$a = new MyClass;
+echo $a->foo().".";
+$c = new \my\name\MyClass; // see "Global Space" section
+echo $c->foo().".";
+$a = strlen('hi');
+echo $a.".";
+//$d = namespace\MYCONST;
+//echo $d.".";
+$d = __NAMESPACE__ . '\MYCONST';
+//echo $d.".";
+echo constant($d);

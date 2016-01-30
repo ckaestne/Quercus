@@ -5126,6 +5126,10 @@ public class Env
                                 boolean useImport,
                                 boolean useAliasMap)
   {
+    //handle namespaces in string constants
+    if (name != null && name.startsWith("\\"))
+      name = name.substring(1);
+
     if (id < 0) {
       id = _quercus.getClassId(name);
     }

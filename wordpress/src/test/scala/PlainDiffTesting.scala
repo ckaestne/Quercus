@@ -11,6 +11,14 @@ class PlainDiffTesting extends AbstractDiffTest {
         testFile("wordpress/src/main/webapp/wordpress-4.3.1/index.php")
     }
 
+
+    @Test
+    def testWPmainWithPlugins() {
+        testFile("wordpress/src/main/webapp/wordpress-4.3.1/index.php",
+            List("hello.php","twitter/twitter.php",
+                "slider-image/slider.php","spider-event-calendar/calendar.php"))
+    }
+
     @Test
     def testWPadminmain() {
         testFile("wordpress/src/main/webapp/wordpress-4.3.1/wp-admin/index.php")
