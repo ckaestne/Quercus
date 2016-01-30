@@ -108,7 +108,7 @@ class upcoming_events extends WP_Widget {
     
 global $wpdb;
 
-  $many_sp_calendar = ((isset($_GET['many_sp_calendar']) && is_numeric(esc_html($_GET['many_sp_calendar']))) ? esc_html($_GET['many_sp_calendar']) : rand(10, 10000));
+  $many_sp_calendar = ((isset($_GET['many_sp_calendar']) && is_numeric(esc_html($_GET['many_sp_calendar']))) ? esc_html($_GET['many_sp_calendar']) : 10);
   ?>
   <script>
 
