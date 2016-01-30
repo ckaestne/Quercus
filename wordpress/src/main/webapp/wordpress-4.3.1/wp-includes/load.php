@@ -546,8 +546,28 @@ function wp_get_active_and_valid_plugins() {
 			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist
 			// not already included as a network plugin
 			&& ( ! $network_plugins || ! in_array( WP_PLUGIN_DIR . '/' . $plugin, $network_plugins ) )
-			)
-		$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
+			)        {
+
+		//VAREX modification: conditional loading
+
+        global $argv;
+		if (in_array("_V_".$plugin,$_REQUEST)) {
+		    //variational
+		    if (create_conditional($plugin)) {
+        		$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
+        		echo "<!-- loading plugin $plugin -->";
+        	}
+		} else if (($argv!=null && in_array("_VA_".$plugin,$argv)) ||
+		        in_array("_VA_".$plugin,$_REQUEST)) {
+		    //activated
+    		$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
+       		echo "<!-- loading plugin $plugin -->";
+    	} else {
+        	//else not activated
+       		echo "<!-- skipping plugin $plugin -->";
+       	}
+
+		}
 	}
 	return $plugins;
 }

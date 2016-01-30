@@ -21,21 +21,21 @@ trait AbstractDiffTest {
     val externalPHPexecutable = "\\php\\php.exe"
     val phpExecutable = if (new File(externalPHPexecutable).exists()) externalPHPexecutable else "php"
 
-    def testFile(phpFile: String): Unit = {
+    def testFile(phpFile: String, plugins: List[String]=Nil): Unit = {
         val file = new File(phpFile)
         assert(file.exists(), s"file $file does not exist")
 
 
 
         val request = new MockHttpServletRequest()
+        request.parameters ++= plugins.map(o => ("_VA_" + o, "_VA_" + o))
         val out = new VWriteStreamImpl()
         new TQuercus().executeFile(file, out, request)
         var quercusResult = out.getPlainOutput
         quercusResult = quercusResult.replace("\r\n","\n").trim
         writeFile(file, ".quercus.html", quercusResult)
 
-
-        var zendResult = (phpExecutable + " " + file.getPath) !!
+        var zendResult = (phpExecutable + " " + file.getPath  + " --args " + plugins.map("_VA_" + _).mkString(" ")) !!
 
         zendResult = zendResult.replace("\r\n","\n").trim
         writeFile(file, ".zend.html", zendResult)
