@@ -137,7 +137,7 @@ public class CopyArrayValue extends ArrayValue {
   @Override
   public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    return getCopyArray().put(VHelper.noCtx(), value);
+    return getCopyArray().put(ctx, value);
   }
 
   /**
@@ -173,7 +173,7 @@ public class CopyArrayValue extends ArrayValue {
   @Override
   public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value fieldName)
   {
-    return getCopyArray().getArray(VHelper.noCtx(), fieldName);
+    return getCopyArray().getArray(ctx, fieldName);
   }
 
   /**
@@ -325,7 +325,7 @@ public class CopyArrayValue extends ArrayValue {
   @Override
   public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
-    return getCopyArray().createTailKey(VHelper.noCtx());
+    return getCopyArray().createTailKey(ctx);
   }
 
   /**

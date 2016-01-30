@@ -1992,7 +1992,7 @@ public class Env
 
   public V<? extends Value> getGlobalValue(FeatureExpr ctx, String name)
   {
-    return getGlobalValue(VHelper.noCtx(), createString(name));
+    return getGlobalValue(ctx, createString(name));
   }
 
   /**
@@ -3102,7 +3102,7 @@ public class Env
    */
   public V<? extends ValueOrVar> setGlobalValue(FeatureExpr ctx, String name, V<? extends ValueOrVar> value)
   {
-    return setGlobalValue(VHelper.noCtx(), createString(name), value);
+    return setGlobalValue(ctx, createString(name), value);
   }
 
   /**
@@ -6857,7 +6857,7 @@ public class Env
 
         Value context = NullValue.NULL;
 
-        handler.call(this, VHelper.noCtx(),V.one(LongValue.create(mask)), V.one(createString(msg)),
+        handler.call(this, ctx,V.one(LongValue.create(mask)), V.one(createString(msg)),
                 V.one(fileNameV), V.one(lineV), V.one(context));
 
         return NullValue.NULL;

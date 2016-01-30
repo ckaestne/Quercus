@@ -128,7 +128,7 @@ public class ArrayValueWrapper extends ArrayValue {
   @Override
   public V<? extends ValueOrVar> put(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    return _array.put(VHelper.noCtx(), value);
+    return _array.put(ctx, value);
   }
 
   /**
@@ -175,7 +175,7 @@ public class ArrayValueWrapper extends ArrayValue {
   @Override
   public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
-    return _array.createTailKey(VHelper.noCtx());
+    return _array.createTailKey(ctx);
   }
 
   /**

@@ -768,7 +768,7 @@ public class ArrayValueImpl extends ArrayValue
       copyOnWrite();
 
     // 0d0d
-    V<? extends Value> tailKey = createTailKey(VHelper.noCtx());
+    V<? extends Value> tailKey = createTailKey(ctx);
 
     return tailKey.flatMap(key->getVar(key).getVar());
   }
