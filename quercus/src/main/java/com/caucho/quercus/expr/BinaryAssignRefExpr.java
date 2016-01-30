@@ -78,7 +78,7 @@ public class BinaryAssignRefExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return _var.evalAssignRef(env, ctx, _value).map((a)->a.toValue());
+    return _var.evalAssignRef(env, ctx, _value).flatMap((a)->a._getValues());
   }
 
   /**
@@ -92,7 +92,7 @@ public class BinaryAssignRefExpr extends Expr {
   @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return _var.evalAssignRef(env, VHelper.noCtx(), _value).map((a)->a.toValue().copy());
+    return _var.evalAssignRef(env, VHelper.noCtx(), _value).flatMap((a)->a._getValues()).map((a)->a.copy());
   }
 
   /**

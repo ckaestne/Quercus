@@ -88,7 +88,7 @@ public class ObjectMethodExpr extends AbstractMethodExpr {
 
     int hash = methodName.hashCodeCaseInsensitive();
 
-    return eval(env, ctx, obj.getOne(), methodName, hash, _args);
+    return eval(env, ctx, obj.getOne(ctx), methodName, hash, _args);
   }
 
   public String toString()
