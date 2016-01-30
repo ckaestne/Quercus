@@ -132,6 +132,60 @@ $a=0+@A;
 $up=5+@B;
 for ($i=$a;$i<$up;$i++)
   echo $i;
+
+==== foreach1
+$a = array("a", "b");
+if (@A)
+    $a[] = "c";
+if (@B && @A)
+    $a[] = "d";
+$a[] = "e";
+foreach ($a as $b)
+  echo $b;
+
+==== foreach2key
+$a = array("a", "b");
+if (@A)
+    $a[] = "c";
+if (@B && @A)
+    $a[] = "d";
+$a[] = "e";
+foreach ($a as $k=>$b)
+  echo "$k -> $b; ";
+
+==== foreach3ref
+$a = array("a", "b");
+if (@A)
+    $a[] = "c";
+if (@B && @A)
+    $a[] = "d";
+$a[] = "e";
+foreach ($a as $k=>&$b)
+  $b = "[$b]";
+foreach ($a as $k=>$b)
+  echo "$k -> $b; ";
+
+==== foreach4vref
+$a = array("a");
+if (@A)
+    $a[] = "c";
+$a[] = "e";
+if (@B)
+    foreach ($a as $k=>&$b)
+        $b = "[$b]";
+foreach ($a as $k=>$b)
+    echo "$k -> $b; ";
+
+==== foreach5varray
+$a = array("a");
+if (@A)
+    $a = array("b", "c");
+if (@B)
+    $a[] = "e";
+foreach ($a as $k=>$b)
+    echo "$k -> $b; ";
+
+
 ==== returnRef
 class foo {
     public $value = 42;

@@ -232,6 +232,88 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not and fB.not, "01234")
 	}
 
+	@Test def testForeach1() {
+		eval("""<?php 
+		       |$a = array("a", "b");
+		       |if (@A)
+		       |    $a[] = "c";
+		       |if (@B && @A)
+		       |    $a[] = "d";
+		       |$a[] = "e";
+		       |foreach ($a as $b)
+		       |  echo $b;""".stripMargin) to 
+			c(fA and fB, "abcde") ~
+			c(fA.not and fB, "abe") ~
+			c(fB.not and fA, "abce") ~
+			c(fA.not and fB.not, "abe")
+	}
+
+	@Test def testForeach2key() {
+		eval("""<?php 
+		       |$a = array("a", "b");
+		       |if (@A)
+		       |    $a[] = "c";
+		       |if (@B && @A)
+		       |    $a[] = "d";
+		       |$a[] = "e";
+		       |foreach ($a as $k=>$b)
+		       |  echo "$k -> $b; ";""".stripMargin) to 
+			c(fA and fB, "0 -> a; 1 -> b; 2 -> c; 3 -> d; 4 -> e;") ~
+			c(fA.not and fB, "0 -> a; 1 -> b; 2 -> e;") ~
+			c(fB.not and fA, "0 -> a; 1 -> b; 2 -> c; 3 -> e;") ~
+			c(fA.not and fB.not, "0 -> a; 1 -> b; 2 -> e;")
+	}
+
+	@Test def testForeach3ref() {
+		eval("""<?php 
+		       |$a = array("a", "b");
+		       |if (@A)
+		       |    $a[] = "c";
+		       |if (@B && @A)
+		       |    $a[] = "d";
+		       |$a[] = "e";
+		       |foreach ($a as $k=>&$b)
+		       |  $b = "[$b]";
+		       |foreach ($a as $k=>$b)
+		       |  echo "$k -> $b; ";""".stripMargin) to 
+			c(fA and fB, "0 -> [a]; 1 -> [b]; 2 -> [c]; 3 -> [d]; 4 -> [d];") ~
+			c(fA.not and fB, "0 -> [a]; 1 -> [b]; 2 -> [b];") ~
+			c(fB.not and fA, "0 -> [a]; 1 -> [b]; 2 -> [c]; 3 -> [c];") ~
+			c(fA.not and fB.not, "0 -> [a]; 1 -> [b]; 2 -> [b];")
+	}
+
+	@Test def testForeach4vref() {
+		eval("""<?php 
+		       |$a = array("a");
+		       |if (@A)
+		       |    $a[] = "c";
+		       |$a[] = "e";
+		       |if (@B)
+		       |    foreach ($a as $k=>&$b)
+		       |        $b = "[$b]";
+		       |foreach ($a as $k=>$b)
+		       |    echo "$k -> $b; ";""".stripMargin) to 
+			c(fA and fB, "0 -> [a]; 1 -> [c]; 2 -> [c];") ~
+			c(fA.not and fB, "0 -> [a]; 1 -> [a];") ~
+			c(fB.not and fA, "0 -> a; 1 -> c; 2 -> e;") ~
+			c(fA.not and fB.not, "0 -> a; 1 -> e;")
+	}
+
+	@Test def testForeach5varray() {
+		eval("""<?php 
+		       |$a = array("a");
+		       |if (@A)
+		       |    $a = array("b", "c");
+		       |if (@B)
+		       |    $a[] = "e";
+		       |foreach ($a as $k=>$b)
+		       |    echo "$k -> $b; ";""".stripMargin) to 
+			c(fA and fB, "0 -> b; 1 -> c; 2 -> e;") ~
+			c(fA.not and fB, "0 -> a; 1 -> e;") ~
+			c(fB.not and fA, "0 -> b; 1 -> c;") ~
+			c(fA.not and fB.not, "0 -> a;")
+	}
+
 	@Test def testReturnRef() {
 		eval("""<?php 
 		       |class foo {

@@ -34,11 +34,14 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.AbstractVarExpr;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.Opt;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.VList;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Represents a foreach statement.
@@ -85,115 +88,92 @@ public class ForeachStatement
     return true;
   }
 
+  private class MergedIterator implements Iterator<VEntry> {
+    private final Iterator<Opt<Iterator<VEntry>>> ititerator;
+    private Opt<Iterator<VEntry>> thisIterator;
+
+    public MergedIterator(List<Opt<Iterator<VEntry>>> iterators) {
+      this.ititerator = iterators.iterator();
+      if (ititerator.hasNext())
+        thisIterator = ititerator.next();
+      else thisIterator = null;
+    }
+
+    @Override
+    public boolean hasNext() {
+      if (thisIterator == null) return false;
+      if (thisIterator.getValue().hasNext()) return true;
+      if (ititerator.hasNext())
+        thisIterator = ititerator.next();
+      else thisIterator = null;
+      return hasNext();
+    }
+
+    @Override
+    public VEntry next() {
+      assert hasNext();
+      final VEntry next = thisIterator.getValue().next();
+      final FeatureExpr iteratorCondition = thisIterator.getCondition();
+      return new VEntry() {
+        @Override
+        public EnvVar getEnvVar() {
+          return next.getEnvVar();
+        }
+
+        @Override
+        public EnvVar setEnvVar(EnvVar value) {
+          return next.setEnvVar(value);
+        }
+
+        @Override
+        public Value getKey() {
+          return next.getKey();
+        }
+
+        @Override
+        public FeatureExpr getCondition() {
+          return next.getCondition().and(iteratorCondition);
+        }
+      };
+    }
+  }
+
+  private Iterator<VEntry> getMergedIterator(Env env, V<? extends Value> obj) {
+    final List<Opt<Iterator<VEntry>>> iterators = VList.flatten(obj.map((a) -> a.getIterator(env)));
+    return new MergedIterator(iterators);
+  }
+
   @Override
-  public @Nonnull
-  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
-  {
-    Value origObj = _objExpr.eval(env, VHelper.noCtx()).getOne();
-    Value obj = origObj.copy(); // php/0669
+  public
+  @Nonnull
+  V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx) {
+    V<? extends Value> origObj = _objExpr.eval(env, ctx);
+    V<? extends Value> obj = origObj.map((a) -> a.copy()); // php/0669
+    Iterator<VEntry> iter = getMergedIterator(env, obj);
+
 
     V<? extends ValueOrVar> forEachResult = V.one(null);
 
-    if (_key == null && ! _isRef) {
-      Iterator<EnvVar> iter = obj.getValueIterator(env);
+    while (iter.hasNext() && ctx.isSatisfiable()) {
+      VEntry entry = iter.next();
+      Value key = entry.getKey();
+      EnvVar value = entry.getEnvVar();
+      FeatureExpr innerCtx = ctx.and(entry.getCondition());
 
-      while (iter.hasNext()) {
-        Value value = iter.next().getOne();
-
-        value = value.copy(); // php/0662
-
-        _value.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(value));
-
-        ValueOrVar result = _block.execute(env, VHelper.noCtx()).getOne();
-
-        if (result == null) {
-        }
-        else if (result instanceof ContinueValue) {
-          ContinueValue conValue = (ContinueValue) result;
-
-          int target = conValue.getTarget();
-
-          if (target > 1) {
-            return VHelper.toV(new ContinueValue(target - 1));
-          }
-        }
-        else if (result instanceof BreakValue) {
-          BreakValue breakValue = (BreakValue) result;
-
-          int target = breakValue.getTarget();
-
-          if (target > 1)
-            return VHelper.toV(new BreakValue(target - 1));
-          else
-            break;
-        }
-        else
-          return VHelper.toV(result);
-      }
-
-      return V.one(null);
-    } else if (_isRef) {
-      Iterator<Value> iter = obj.getKeyIterator(env);
-
-      while (iter.hasNext()) {
-        Value key = iter.next();
-
-        if (_key != null)
-          _key.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(key));
-
-        EnvVar value = origObj.getVar(key);
-
-        // php/0667
-        _value.evalAssignRef(env, VHelper.noCtx(), value.getVar());
-
-        ValueOrVar result = _block.execute(env, VHelper.noCtx()).getOne();
-
-        if (result == null) {
-        }
-        else if (result instanceof ContinueValue) {
-          ContinueValue conValue = (ContinueValue) result;
-
-          int target = conValue.getTarget();
-
-          if (target > 1) {
-            return VHelper.toV(new ContinueValue(target - 1));
-          }
-        }
-        else if (result instanceof BreakValue) {
-          BreakValue breakValue = (BreakValue) result;
-
-          int target = breakValue.getTarget();
-
-          if (target > 1)
-            return VHelper.toV(new BreakValue(target - 1));
-          else
-            break;
-        }
-        else
-          return VHelper.toV(result);
-      }
-    }
-    else {
-      Iterator<VEntry> iter = obj.getIterator(env);
-
-      while (iter.hasNext() && ctx.isSatisfiable()) {
-        VEntry entry = iter.next();
-        Value key = entry.getKey();
-        EnvVar value = entry.getEnvVar();
-        FeatureExpr innerCtx = ctx.and(entry.getCondition());
-
-        value = value.copy(); // php/066w
-
+      if (_key != null)
         _key.evalAssignValue(env, innerCtx, VHelper.toV(key));
 
-        _value.evalAssignValue(env, innerCtx, value.getValue());
+      if (!_isRef)
+        _value.evalAssignValue(env, innerCtx, value.copy().getValue());
+      else
+        _value.evalAssignRef(env, innerCtx, value.getVar());
 
-        V<? extends ValueOrVar> result = _block.execute(env, innerCtx);
+      V<? extends ValueOrVar> result = _block.execute(env, innerCtx);
 
-        forEachResult = forEachResult.<ValueOrVar>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
-                result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), fer)));
-      }
+      forEachResult = forEachResult.<ValueOrVar>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
+              result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), fer)));
     }
+
 
     return forEachResult;
   }

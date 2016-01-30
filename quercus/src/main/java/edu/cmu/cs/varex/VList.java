@@ -2,7 +2,9 @@ package edu.cmu.cs.varex;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -52,5 +54,11 @@ public class VList {
     return result;
   }
 
+
+  public static <T> List<Opt<T>> flatten(V<? extends T> v) {
+    List<Opt<T>> result = new ArrayList<Opt<T>>();
+    v.vforeach(VHelper.True(), (f, val) -> result.add(Opt.create(f, val)));
+    return result;
+  }
 
 }
