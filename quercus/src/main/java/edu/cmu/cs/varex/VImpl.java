@@ -70,10 +70,11 @@ class VImpl<T> implements V<T> {
         boolean foundResult = false;
         for (HashMap.Entry<T, FeatureExpr> e : values.entrySet())
             if (ctx.and(e.getValue()).isSatisfiable()) {
-                assert !foundResult : "getOne("+ctx+") called on Choice with multiple matching values: " + this;
+                assert !foundResult : "getOne(" + ctx + ") called on Choice with multiple matching values: " + this;
                 result = e.getKey();
                 foundResult=true;
             }
+        assert foundResult : "getOne(" + ctx + ") called but no result found: " + this;  //this should always hold if the context is satisfiable
 
         return result;
     }
