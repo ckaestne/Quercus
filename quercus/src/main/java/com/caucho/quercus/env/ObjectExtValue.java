@@ -113,19 +113,18 @@ public class ObjectExtValue extends ObjectValue
                         ObjectExtValue copy)
   {
     super(env, copy.getQuercusClass());
-    throw new UnimplementedVException();
-//
-//    _methodMap = copy._methodMap;
-//
-//    _isFieldInit = copy._isFieldInit;
-//
-//    for (Map.Entry<StringValue, V<? extends EnvVar>> entry : copy._fieldMap.entrySet()) {
-//      Entry entryCopy = new Entry(env, copyMap, entry.getValue());
-//
-//      _fieldMap.put(entry.getKey(), entryCopy);
-//    }
-//
-//    _incompleteObjectName = copy._incompleteObjectName;
+
+    _methodMap = copy._methodMap;
+
+    _isFieldInit = copy._isFieldInit;
+
+    for (Map.Entry<StringValue, EnvVar> entry : copy._fieldMap.entrySet()) {
+      EnvVar entryCopy = entry.getValue().copy();
+
+      _fieldMap.put(entry.getKey(), entryCopy);
+    }
+
+    _incompleteObjectName = copy._incompleteObjectName;
   }
 
   private void init()

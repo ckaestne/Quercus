@@ -64,15 +64,14 @@ public final class SerializeMap {
   /*
    * Retrieves the position of this value in the serialization.
    */
-  public Integer get(Value value)
+  public Integer get(ValueOrVar value)
   {
     Integer index = _varMap.get(value);
 
-    throw new UnimplementedVException();
-//    if (index == null && value instanceof Var)
-//      return _varMap.get(value.toValue());
-//
-//    return index;
+    if (index == null && value.isVar())
+      return _varMap.get(value.toValue());
+
+    return index;
   }
   
 }

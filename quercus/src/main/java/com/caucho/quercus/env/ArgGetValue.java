@@ -101,19 +101,19 @@ public class ArgGetValue extends ArgValue
   @Override
   public Var toAutoArray()
   {
-    throw new UnimplementedVException();
-//    Value parent = _obj.toAutoArray();
-//    Value value = parent.get(_index).getOne();
-//
-//    Value array = value.toAutoArray();
-//
-//    if (array != value) {
-//      parent.put(_index, array);
-//
-//      value = array;
-//    }
-//
-//    return value;
+    //TODO lift this correctly
+    Value parent = _obj.toAutoArray();
+    Value value = parent.get(_index).getOne();
+
+    Value array = value.toAutoArray();
+
+    if (array != value) {
+      parent.put(_index, array);
+
+      value = array;
+    }
+
+    return value.toVar();
   }
 //
 //  @Override

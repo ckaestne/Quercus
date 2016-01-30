@@ -1,13 +1,12 @@
 package edu.cmu.cs.varex;
 
-import com.caucho.quercus.env.Value;
-import com.caucho.quercus.env.ValueOrVar;
-import com.caucho.quercus.env.Var;
+import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Array;
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -142,5 +141,12 @@ public class VHelper {
   public static void assertTrue(FeatureExpr ctx) {
     if (!ctx.isTautology())
       throw new UnimplementedVException("incomplete V transformation, cannot be called in context " + ctx);
+  }
+
+  public static void assertNonVariational(ArrayValue array) {
+    Iterator<VEntry> it = array.getIterator();
+    while (it.hasNext()) {
+      assertTrue(it.next().getCondition());
+    }
   }
 }

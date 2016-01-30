@@ -4636,68 +4636,68 @@ public class StringModule extends AbstractQuercusModule {
                                         StringValue string,
                                         ArrayValue map)
   {
-    throw new UnimplementedVException();
-//    int size = map.getSize();
-//
-//    StringValue []fromList = new StringValue[size];
-//    StringValue []toList = new StringValue[size];
-//
-//    VEntry [] entryArray = new Map.Entry[size];
-//
-//    int i = 0;
-//    for (VEntry entry : map.entrySet()) {
-//      entryArray[i++] = entry;
-//    }
-//
-//    // sort entries in descending fashion
-//    Arrays.sort(entryArray, new StrtrComparator<VEntry>());
-//
-//    boolean []charSet = new boolean[256];
-//
-//    for (i = 0; i < size; i++) {
-//      fromList[i] = entryArray[i].getKey().toStringValue(env);
-//      toList[i] = entryArray[i].getValue().getOne().toStringValue(env);
-//
-//      charSet[fromList[i].charAt(0)] = true;
-//    }
-//
-//    StringValue result = string.createStringBuilder();
-//    int len = string.length();
-//    int head = 0;
-//
-//    top:
-//    while (head < len) {
-//      char ch = string.charAt(head);
-//
-//      if (charSet.length <= ch || charSet[ch]) {
-//        fromLoop:
-//        for (i = 0; i < fromList.length; i++) {
-//          StringValue from = fromList[i];
-//          int fromLen = from.length();
-//
-//          if (head + fromLen > len)
-//            continue;
-//
-//          if (ch != from.charAt(0))
-//            continue;
-//
-//          for (int j = 0; j < fromLen; j++) {
-//            if (string.charAt(head + j) != from.charAt(j))
-//              continue fromLoop;
-//          }
-//
-//          result = result.append(toList[i]);
-//          head = head + fromLen;
-//
-//          continue top;
-//        }
-//      }
-//
-//      result.append(ch);
-//      head++;
-//    }
-//
-//    return result;
+    VHelper.assertNonVariational(map);
+    int size = map.getSize();
+
+    StringValue []fromList = new StringValue[size];
+    StringValue []toList = new StringValue[size];
+
+    VEntry [] entryArray = new VEntry[size];
+
+    int i = 0;
+    for (VEntry entry : map.entrySet()) {
+      entryArray[i++] = entry;
+    }
+
+    // sort entries in descending fashion
+    Arrays.sort(entryArray, new StrtrComparator<VEntry>());
+
+    boolean []charSet = new boolean[256];
+
+    for (i = 0; i < size; i++) {
+      fromList[i] = entryArray[i].getKey().toStringValue(env);
+      toList[i] = entryArray[i].getEnvVar().getValue().getOne().toStringValue(env);
+
+      charSet[fromList[i].charAt(0)] = true;
+    }
+
+    StringValue result = string.createStringBuilder();
+    int len = string.length();
+    int head = 0;
+
+    top:
+    while (head < len) {
+      char ch = string.charAt(head);
+
+      if (charSet.length <= ch || charSet[ch]) {
+        fromLoop:
+        for (i = 0; i < fromList.length; i++) {
+          StringValue from = fromList[i];
+          int fromLen = from.length();
+
+          if (head + fromLen > len)
+            continue;
+
+          if (ch != from.charAt(0))
+            continue;
+
+          for (int j = 0; j < fromLen; j++) {
+            if (string.charAt(head + j) != from.charAt(j))
+              continue fromLoop;
+          }
+
+          result = result.append(toList[i]);
+          head = head + fromLen;
+
+          continue top;
+        }
+      }
+
+      result.append(ch);
+      head++;
+    }
+
+    return result;
   }
 
   /*

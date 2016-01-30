@@ -298,7 +298,7 @@ public class Env
   private Location _location;
 
   private long _startTime;
-  private long _timeLimit = 600000L;
+  private long _timeLimit = 6000000L;
   private long _endTime;
 
   private Expr [] _callStack;
@@ -3880,24 +3880,23 @@ public class Env
    * Compiled mode normally uses the _fun array directly, so this call
    * is rare.
    */
-  public V<? extends AbstractFunction> findFunction(StringValue name)
-  {
+  public V<? extends AbstractFunction> findFunction(StringValue name) {
     V<? extends Integer> vid = _quercus.findFunctionId(name);
 
-    return vid.<AbstractFunction>flatMap((id)->{
-        if (id >= 0) {
-          if (id < _fun.length && ! (_fun[id] instanceof UndefinedFunction)) {
-            return V.one(_fun[id]);
-          }
-          else {
-            return V.one(null);
-          }
+    return vid.<AbstractFunction>flatMap((id) -> {
+      if (id >= 0) {
+        if (id < _fun.length && !(_fun[id] instanceof UndefinedFunction)) {
+          return V.one(_fun[id]);
+        } else {
+          return V.one(null);
         }
+      }
 
-        if (_anonymousFunMap != null)
-            return _anonymousFunMap.get(name);
-        else
-            return V.one(null);
+      if (_anonymousFunMap != null) {
+        V<? extends AbstractFunction> r = _anonymousFunMap.get(name);
+        return r == null ? V.one(null) : r;
+      } else
+        return V.one(null);
     });
 
     /*
