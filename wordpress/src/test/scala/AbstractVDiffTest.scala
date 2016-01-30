@@ -54,7 +54,7 @@ trait AbstractVDiffTest {
         val request = new MockHttpServletRequest()
         request.parameters ++= options.map(o => ("_V_" + o, "_V_" + o))
         val out = new VWriteStreamImpl()
-        new TQuercus().executeFile(file, out, request)
+        new TQuercus().executeFile(file, out, request, VHelper.True())
         out.getConditionalOutput.toList
     }
 

@@ -30,7 +30,7 @@ trait AbstractDiffTest {
         val request = new MockHttpServletRequest()
         request.parameters ++= plugins.map(o => ("_VA_" + o, "_VA_" + o))
         val out = new VWriteStreamImpl()
-        new TQuercus().executeFile(file, out, request)
+        new TQuercus().executeFile(file, out, request, VHelper.True())
         var quercusResult = out.getPlainOutput
         quercusResult = quercusResult.replace("\r\n","\n").trim
         writeFile(file, ".quercus.html", quercusResult)

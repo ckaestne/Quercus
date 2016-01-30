@@ -81,7 +81,7 @@ class AbstractPHPTest {
             replaceAll("\n?Strict Standards:  [^\\n]*\n", "")
 
         val out = new VWriteStreamImpl()
-        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request)
+        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request, VHelper.True())
         val phpResult = out.getPlainOutput.trim
 
         testedFile.deleteOnExit()

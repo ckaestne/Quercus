@@ -2,6 +2,7 @@ import java.io.File
 import java.util.logging._
 
 import com.caucho.quercus.TQuercus
+import edu.cmu.cs.varex.VHelper
 import edu.cmu.cs.varex.vio.VWriteStreamImpl
 import net.liftweb.mocks.MockHttpServletRequest
 
@@ -37,7 +38,7 @@ object TestDB extends App {
     //
     val request = new MockHttpServletRequest()
     val out = new VWriteStreamImpl()
-    new TQuercus().executeFile(new File("wordpress/src/main/webapp/wordpress-4.3.1/index.php"), out, request)
+    new TQuercus().executeFile(new File("wordpress/src/main/webapp/wordpress-4.3.1/index.php"), out, request, VHelper.True())
     val phpResult = out.getPlainOutput.trim
     println(phpResult)
 }
