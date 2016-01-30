@@ -414,9 +414,9 @@ public class QuercusProgram {
    * @return null if there is no return value
    *
    */
-  public @Nonnull V<? extends Value> execute(Env env)
+  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    return VHelper.getValues(_statement.execute(env, FeatureExprFactory.True()));
+    return VHelper.getValues(_statement.execute(env, ctx));
   }
 
   /**

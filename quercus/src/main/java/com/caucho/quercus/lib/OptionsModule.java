@@ -132,7 +132,7 @@ public class OptionsModule extends AbstractQuercusModule {
         QuercusProgram program = quercus.parseCode(value.toStringValue(env));
 
         program = program.createExprReturn();
-        Value v = program.execute(env).getOne();
+        Value v = program.execute(env, VHelper.noCtx()).getOne();
 
         result = v != null && v.toBoolean();
       }

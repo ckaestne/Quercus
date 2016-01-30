@@ -1367,7 +1367,7 @@ public class RegexpModule
 
         try {
           if (evalString.length() > 0) { // php/152z
-            result = result.append(env.evalCode(evalString));
+            result = result.append(env.evalCode(evalString, VHelper.noCtx()));
           }
         } catch (Exception e) {
           env.warning(e);

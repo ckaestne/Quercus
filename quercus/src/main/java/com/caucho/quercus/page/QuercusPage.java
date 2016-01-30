@@ -157,11 +157,11 @@ abstract public class QuercusPage
       if (compile != null)
         return compile.executeTop(env);
 
-      return execute(env);
+      return execute(env, VHelper.True());
     } catch (QuercusLanguageException e) {
       if (env.getExceptionHandler() != null) {
         try {
-          env.getExceptionHandler().call(env, VHelper.noCtx(), V.one(e.getValue()));
+          env.getExceptionHandler().call(env, VHelper.True(), V.one(e.getValue()));
         }
         catch (QuercusLanguageException e2) {
           uncaughtExceptionError(env, e2);
@@ -204,7 +204,7 @@ abstract public class QuercusPage
    *
    * @param env the calling environment
    */
-  abstract public @Nonnull V<? extends Value> execute(Env env);
+  abstract public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx);
 
   /**
    * Initialize the program

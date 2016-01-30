@@ -34,6 +34,7 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.VfsStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -59,7 +60,7 @@ public class InternalAutoloadCallback
    *
    * @param env the calling environment
    */
-  public QuercusClass loadClass(Env env, String name)
+  public QuercusClass loadClass(Env env, String name, FeatureExpr ctx)
   {
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
     URL url = loader.getResource(_prefix + name + ".php");
@@ -81,7 +82,7 @@ public class InternalAutoloadCallback
 
           QuercusPage page = env.getQuercus().parse(rs);
 
-          page.execute(env);
+          page.execute(env, ctx);
         }
         finally {
           try {
@@ -98,7 +99,7 @@ public class InternalAutoloadCallback
     else {
       Path path = env.getPwd().lookup(urlStr);
 
-      env.executePage(path);
+      env.executePage(path, ctx);
     }
 
     return env.findClass(name, -1, false, false, false);

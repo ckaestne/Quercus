@@ -187,7 +187,7 @@ public class MiscModule extends AbstractQuercusModule {
 
       QuercusProgram program = quercus.parseCode(code);
 
-      V<? extends Value> value = program.execute(env);
+      V<? extends Value> value = program.execute(env, VHelper.noCtx());
 
       value = value.map(v -> v == null ? NullValue.NULL : v);
 

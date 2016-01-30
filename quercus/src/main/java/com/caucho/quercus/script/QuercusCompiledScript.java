@@ -38,6 +38,7 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.vfs.WriteStream;
 import com.caucho.vfs.WriterStreamImpl;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VNullWriteStream;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -118,7 +119,7 @@ public class QuercusCompiledScript extends CompiledScript {
       Object result = null;
 
       try {
-        Value value = _program.execute(env).getOne();
+        Value value = _program.execute(env, VHelper.noCtx()).getOne();
 
         if (value != null) {
           //if (value instanceof JavaValue || value instanceof JavaAdapter) {

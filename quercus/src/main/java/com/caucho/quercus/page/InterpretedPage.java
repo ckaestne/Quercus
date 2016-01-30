@@ -90,9 +90,9 @@ public class InterpretedPage extends QuercusPage
    * @param env the calling environment
    */
   @Override
-  public @Nonnull V<? extends Value> execute(Env env)
+  public @Nonnull V<? extends Value> execute(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> result = _program.execute(env);
+    V<? extends Value> result = _program.execute(env, ctx);
 
     if (result == null)
       result = VHelper.toV(LongValue.ONE);

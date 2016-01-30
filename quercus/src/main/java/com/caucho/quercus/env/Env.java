@@ -4111,7 +4111,7 @@ public class Env
    * @param code the code to evalute
    * @return the result
    */
-  public @Nonnull V<? extends Value> evalCode(StringValue code)
+  public @Nonnull V<? extends Value> evalCode(StringValue code, FeatureExpr ctx)
     throws IOException
   {
     if (log.isLoggable(Level.FINER)) {
@@ -4122,7 +4122,7 @@ public class Env
 
     QuercusProgram program = quercus.parseEvalExpr(code);
 
-    V<? extends Value> value = program.execute(this);
+    V<? extends Value> value = program.execute(this, ctx);
 
     if (value == null)
       return VHelper.toV(NullValue.NULL);
@@ -4211,15 +4211,15 @@ public class Env
   /**
    * Executes the given page
    */
-  protected V<? extends Value> executePage(QuercusPage page)
+  protected V<? extends Value> executePage(QuercusPage page, FeatureExpr ctx)
   {
     if (log.isLoggable(Level.FINEST))
       log.finest(this + " executePage " + page);
 
     if (page.getCompiledPage() != null)
-      return page.getCompiledPage().execute(this);
+      return page.getCompiledPage().execute(this, ctx);
     else
-      return page.execute(this);
+      return page.execute(this, ctx);
   }
 
   /**
@@ -4228,9 +4228,9 @@ public class Env
   protected V<? extends Value> executePageTop(QuercusPage page)
   {
     if (page.getCompiledPage() != null)
-      return page.getCompiledPage().execute(this);
+      return page.getCompiledPage().execute(this, VHelper.True());
     else
-      return page.execute(this);
+      return page.execute(this, VHelper.True());
   }
 
   /**
@@ -5249,7 +5249,7 @@ public class Env
       }
     }
 
-    return _internalAutoload.loadClass(this, name);
+    return _internalAutoload.loadClass(this, name, VHelper.noCtx());
   }
 
   /**
@@ -5829,13 +5829,13 @@ public class Env
         _includeMap.put(path, page);
       }
 
-      return executePage(page);
+      return executePage(page, ctx);
     } catch (IOException e) {
       throw new QuercusModuleException(e);
     }
   }
 
-  void executePage(Path path)
+  void executePage(Path path, FeatureExpr ctx)
   {
     if (log.isLoggable(Level.FINEST)) {
       log.finest(this + " execute " + path);
@@ -5846,7 +5846,7 @@ public class Env
 
       pageInit(VHelper.noCtx(), page);
 
-      executePage(page);
+      executePage(page, ctx);
     } catch (IOException e) {
       throw new QuercusException(e);
     }
@@ -6890,7 +6890,7 @@ public class Env
         }
 
         if (getIniBoolean("track_errors")) {
-          setGlobalValue(VHelper.noCtx(), "php_errormsg", V.one(createString(fullMsg)));
+          setGlobalValue(ctx, "php_errormsg", V.one(createString(fullMsg)));
         }
 
         if ("stderr".equals(getIniString("display_errors"))) {
@@ -6899,7 +6899,7 @@ public class Env
         }
         else if (getIniBoolean("display_errors")) {
           // initial newline to match PHP
-          getOut().println(VHelper.noCtx(), "\n" + fullMsg);
+          getOut().println(ctx, "\n" + fullMsg);
         }
 
         if (getIniBoolean("log_errors"))

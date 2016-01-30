@@ -37,6 +37,7 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.vfs.*;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -155,7 +156,7 @@ public class QuercusEngine
     try {
       env.start();
 
-      value = program.execute(env);
+      value = program.execute(env, VHelper.noCtx());
     }
     catch (QuercusExitException e) {
     }

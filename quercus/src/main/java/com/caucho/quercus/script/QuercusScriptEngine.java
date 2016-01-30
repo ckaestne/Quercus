@@ -42,6 +42,7 @@ import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.VfsStream;
 import com.caucho.vfs.WriteStream;
 import com.caucho.vfs.WriterStreamImpl;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VNullWriteStream;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -238,7 +239,7 @@ public class QuercusScriptEngine
       Object result = null;
 
       try {
-        Value value = program.execute(env).getOne();
+        Value value = program.execute(env, VHelper.noCtx()).getOne();
 
         if (value != null) {
           //if (value instanceof JavaValue || value instanceof JavaAdapter) {
