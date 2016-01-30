@@ -35,6 +35,7 @@ import com.caucho.quercus.servlet.api.QuercusHttpServletResponseImpl;
 import com.caucho.vfs.FilePath;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.StringPath;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.Opt;
 import edu.cmu.cs.varex.VWriteStream;
 import edu.cmu.cs.varex.vio.VWriteStreamImpl;
@@ -104,30 +105,30 @@ public class TQuercus
     }
 
 
-    public static List<Opt<String>> executeScript(String code)
+    public static List<Opt<String>> executeScript(String code, FeatureExpr ctx)
             throws IOException {
         HttpServletRequest request = new MockHttpServletRequest((String) null, "");
         VWriteStreamImpl ws = new VWriteStreamImpl();
         TQuercus quercus = new TQuercus(Collections.emptyMap());
 
-        quercus.executeScript(code, ws, request);
+        quercus.executeScript(code, ws, request, ctx);
 
         return ws.getConditionalOutput();
     }
 
-    public void executeScript( @Nonnull String code, @Nonnull VWriteStream os, @Nullable HttpServletRequest request)
+    public void executeScript( @Nonnull String code, @Nonnull VWriteStream os, @Nullable HttpServletRequest request, FeatureExpr ctx)
             throws IOException {
         Path path = new StringPath(code);
-        execute(path, os, request);
+        execute(path, os, request, ctx);
     }
 
-    public void executeFile(@Nonnull File file, @Nonnull VWriteStream os, @Nullable HttpServletRequest request)
+    public void executeFile(@Nonnull File file, @Nonnull VWriteStream os, @Nullable HttpServletRequest request, FeatureExpr ctx)
             throws IOException {
         Path path = new FilePath(file.getPath());
-        execute(path, os, request);
+        execute(path, os, request, ctx);
     }
 
-    public void execute(@Nonnull Path path, @Nonnull VWriteStream ws, @Nullable HttpServletRequest request)
+    public void execute(@Nonnull Path path, @Nonnull VWriteStream ws, @Nullable HttpServletRequest request, FeatureExpr ctx)
             throws IOException {
         QuercusPage page = parse(path);
 
@@ -144,7 +145,7 @@ public class TQuercus
 
 
         try {
-            env.execute();
+            env.execute(ctx);
         } catch (QuercusDieException e) {
             System.err.println(e);
             log.log(Level.FINER, e.toString(), e);

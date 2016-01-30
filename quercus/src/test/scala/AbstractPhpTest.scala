@@ -25,21 +25,22 @@ trait AbstractPhpTest extends ConditionalOutputInfrastructure {
     handler.setLevel(Level.WARNING)
 
     log.fine("test")
+    val ctx = VHelper.True()// FeatureExprFactory.createDefinedExternal("CTX")
 
     case class Eval(code: String) {
 
 
 
         def to(expected: ConditionalOutput): Unit = {
-            val result = TQuercus.executeScript(code)
-            compare(toTypeChef(expected.toOptList), toTypeChef(result.asScala.toList))
+            val result = TQuercus.executeScript(code, ctx)
+            compare(toTypeChef(expected.toOptList.map(o=>Opt.create(o.getCondition and ctx, o.getValue))), toTypeChef(result.asScala.toList))
 //            assert(expected.toString.trim == result.toString.trim, explainResult(expected.toString, result.toString))
 
         }
 
         def toError(): Unit = {
             try {
-                val result = TQuercus.executeScript(code)
+                val result = TQuercus.executeScript(code, ctx)
                 Assert.fail("expected error, but execution succeeded with result "+toTypeChef(result.asScala.toList))
             } catch {
                 case e: Exception =>

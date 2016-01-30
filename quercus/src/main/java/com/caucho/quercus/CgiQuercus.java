@@ -37,6 +37,7 @@ import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.StdoutStream;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -87,7 +88,7 @@ public class CgiQuercus
     env.start();
 
     try {
-      env.execute();
+      env.execute(VHelper.True());
     } catch (QuercusDieException e) {
     } catch (QuercusExitException e) {
     }

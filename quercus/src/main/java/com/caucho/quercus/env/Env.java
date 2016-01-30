@@ -4133,7 +4133,7 @@ public class Env
   /**
    * Evaluates the top-level code and prepend and append code.
    */
-  public void execute()
+  public void execute(FeatureExpr ctx)
     throws IOException
   {
     StringValue prepend
@@ -4150,7 +4150,7 @@ public class Env
       }
     }
 
-    executeTop();
+    executeTop(ctx);
 
     StringValue append
       = _quercus.getIniValue("auto_append_file").toStringValue(this);
@@ -4172,10 +4172,10 @@ public class Env
    *
    * @return the result
    */
-  public @Nonnull V<? extends Value> executeTop()
+  public @Nonnull V<? extends Value> executeTop(FeatureExpr ctx)
   {
     try {
-      return executePageTop(_page);
+      return executePageTop(_page, ctx);
     } catch (QuercusLanguageException e) {
       log.log(Level.FINER, e.toString(), e);
 
@@ -4225,12 +4225,12 @@ public class Env
   /**
    * Executes the given page
    */
-  protected V<? extends Value> executePageTop(QuercusPage page)
+  protected V<? extends Value> executePageTop(QuercusPage page, FeatureExpr ctx)
   {
     if (page.getCompiledPage() != null)
-      return page.getCompiledPage().execute(this, VHelper.True());
+      return page.getCompiledPage().execute(this, ctx);
     else
-      return page.execute(this, VHelper.True());
+      return page.execute(this, ctx);
   }
 
   /**

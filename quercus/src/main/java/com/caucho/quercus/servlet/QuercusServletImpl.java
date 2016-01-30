@@ -199,7 +199,7 @@ public class QuercusServletImpl extends HttpServlet
           }
         }
 
-        env.executeTop();
+        env.executeTop(VHelper.True());
 
         StringValue append
           = quercus.getIniValue("auto_append_file").toStringValue(env);
