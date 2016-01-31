@@ -36,7 +36,7 @@ import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -87,7 +87,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     // quercus/0d28
-    V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
+    V<? extends Var> value = getExpr().evalVar(env, ctx);
     
     return value.map((a)->a.makeValue().toRef());
   }
@@ -119,7 +119,7 @@ public class UnaryRefExpr extends AbstractUnaryExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<? extends Var> value = getExpr().evalVar(env, VHelper.noCtx());
+    V<? extends Var> value = getExpr().evalVar(env, ctx);
 
     // php/112d
     return value;

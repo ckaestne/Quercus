@@ -660,7 +660,7 @@ abstract public class ObjectValue extends Callback {
                         StringValue canonicalName,
                         V<? extends Value> value)
   {
-    putThisField(env, VHelper.noCtx(), canonicalName, value);
+    putThisField(env, ctx, canonicalName, value);
   }
 
   @Override
@@ -707,7 +707,7 @@ abstract public class ObjectValue extends Callback {
   @Override
   public V<? extends Var> setStaticFieldRef(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    return getQuercusClass().setStaticFieldRef(env, VHelper.noCtx(), name, value);
+    return getQuercusClass().setStaticFieldRef(env, ctx, name, value);
   }
 
   /**
@@ -802,7 +802,7 @@ abstract public class ObjectValue extends Callback {
     AbstractFunction fun = _quercusClass.getInvoke();
 
     if (fun != null)
-      return fun.callMethod(env,VHelper.noCtx(), _quercusClass, this, args);
+      return fun.callMethod(env, ctx, _quercusClass, this, args);
     else {
       return VHelper.toV(env.warning(L.l("{0} is not a valid function",
                              this)));

@@ -36,9 +36,8 @@ import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -89,7 +88,7 @@ public class ClassVarNameVirtualConstExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends StringValue> name = _name.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> name = _name.evalStringValue(env, ctx);
 
     return name.map((n)->env.getCallingClass().getConstant(env, n));
   }

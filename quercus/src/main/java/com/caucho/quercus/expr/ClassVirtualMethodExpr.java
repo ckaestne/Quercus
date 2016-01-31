@@ -35,8 +35,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -100,7 +100,7 @@ public class ClassVirtualMethodExpr extends Expr {
       return VHelper.toV(NullValue.NULL);
     }
 
-    V<? extends ValueOrVar> []values = evalArgs(env, _args, VHelper.noCtx());
+    V<? extends ValueOrVar>[] values = evalArgs(env, _args, ctx);
 
     env.pushCall(this, cls, values);
 

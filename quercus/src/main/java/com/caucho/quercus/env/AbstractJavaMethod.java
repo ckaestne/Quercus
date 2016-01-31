@@ -139,7 +139,7 @@ abstract public class AbstractJavaMethod extends AbstractFunction
   @Override
   public V<? extends Value> callCopy(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
-    return call(env, VHelper.noCtx(), args).map((a)->a.toValue());
+    return call(env, ctx, args).map((a) -> a.toValue());
   }
 
   @Override

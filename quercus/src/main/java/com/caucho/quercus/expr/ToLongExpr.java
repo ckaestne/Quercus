@@ -35,7 +35,7 @@ import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -64,7 +64,7 @@ public class ToLongExpr extends AbstractUnaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return _expr.evalLong(env, VHelper.noCtx()).map((a)->LongValue.create(a));
+    return _expr.evalLong(env, ctx).map((a) -> LongValue.create(a));
   }
 
   public String toString()

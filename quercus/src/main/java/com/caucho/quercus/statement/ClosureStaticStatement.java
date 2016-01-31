@@ -30,12 +30,15 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Closure;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.ValueOrVar;
+import com.caucho.quercus.env.Var;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -72,7 +75,7 @@ public class ClosureStaticStatement
       env.setRef(ctx, _var.getName(), V.one(var.makeValue()));
 
       if (! var.makeValue().isset() && _initValue != null) {
-        var.set(VHelper.noCtx(), _initValue.eval(env, VHelper.noCtx()));
+        var.set(ctx, _initValue.eval(env, ctx));
       }
 
     }

@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -94,10 +94,10 @@ public class ConditionalExpr extends Expr {
   @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
-      return _trueExpr.evalBoolean(env, VHelper.noCtx());
+    if (_test.evalBoolean(env, ctx).getOne())
+      return _trueExpr.evalBoolean(env, ctx);
     else
-      return _falseExpr.evalBoolean(env, VHelper.noCtx());
+      return _falseExpr.evalBoolean(env, ctx);
   }
 
   /**
@@ -111,10 +111,10 @@ public class ConditionalExpr extends Expr {
   @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    if (_test.evalBoolean(env, VHelper.noCtx()).getOne())
-      return _trueExpr.evalCopy(env, VHelper.noCtx());
+    if (_test.evalBoolean(env, ctx).getOne())
+      return _trueExpr.evalCopy(env, ctx);
     else
-      return _falseExpr.evalCopy(env, VHelper.noCtx());
+      return _falseExpr.evalCopy(env, ctx);
   }
 
   public String toString()

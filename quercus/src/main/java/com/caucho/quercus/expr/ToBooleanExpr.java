@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -63,7 +63,7 @@ public class ToBooleanExpr extends AbstractUnaryExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return _expr.evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
+    return _expr.evalBoolean(env, ctx).map((a) -> a ? BooleanValue.TRUE : BooleanValue.FALSE);
   }
 
   public String toString()

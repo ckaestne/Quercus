@@ -4181,7 +4181,7 @@ public class Env
 
       if (getExceptionHandler() != null) {
         try {
-          getExceptionHandler().call(this, VHelper.noCtx(), V.one(e.toException(this)));
+          getExceptionHandler().call(this, ctx, V.one(e.toException(this)));
         }
         catch (QuercusLanguageException e2) {
           uncaughtExceptionError(e2);
@@ -5844,7 +5844,7 @@ public class Env
     try {
       QuercusPage page = _quercus.parse(path);
 
-      pageInit(VHelper.noCtx(), page);
+      pageInit(ctx, page);
 
       executePage(page, ctx);
     } catch (IOException e) {

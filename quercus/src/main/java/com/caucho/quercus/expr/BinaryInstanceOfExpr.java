@@ -36,7 +36,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -75,7 +75,7 @@ public class BinaryInstanceOfExpr extends AbstractUnaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
+    return evalBoolean(env, ctx).map((a) -> a ? BooleanValue.TRUE : BooleanValue.FALSE);
   }
 
   /**
@@ -84,7 +84,7 @@ public class BinaryInstanceOfExpr extends AbstractUnaryExpr {
   @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> obj = _expr.eval(env, VHelper.noCtx());
+    V<? extends Value> obj = _expr.eval(env, ctx);
 
     // php/03p1
     return obj.map((a)->a.isA(env, _right));

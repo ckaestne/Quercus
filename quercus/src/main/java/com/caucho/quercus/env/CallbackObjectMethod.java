@@ -36,8 +36,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.IdentityHashMap;
 
 /**
@@ -70,14 +70,14 @@ public class CallbackObjectMethod extends Callback {
   public @Nonnull
   V<? extends ValueOrVar> call(Env env, FeatureExpr ctx)
   {
-    return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash);
+    return _obj.callMethod(env, ctx, _methodName, _hash);
   }
 
 
   @Override
   public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args)
   {
-    return _obj.callMethod(env, VHelper.noCtx(), _methodName, _hash, args);
+    return _obj.callMethod(env, ctx, _methodName, _hash, args);
   }
 
   @Override

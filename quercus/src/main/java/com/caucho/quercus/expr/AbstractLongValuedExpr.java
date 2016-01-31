@@ -35,7 +35,7 @@ import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -62,7 +62,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return evalLong(env, VHelper.noCtx()).map((a)->LongValue.create(a));
+    return evalLong(env, ctx).map((a) -> LongValue.create(a));
   }
 
   /**
@@ -76,7 +76,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
   @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    return evalLong(env, VHelper.noCtx()).map((a)->a != 0);
+    return evalLong(env, ctx).map((a) -> a != 0);
   }
 
   /**
@@ -90,7 +90,7 @@ abstract public class AbstractLongValuedExpr extends Expr {
   @Override
   public V<? extends Double> evalDouble(Env env, FeatureExpr ctx)
   {
-    return evalLong(env, VHelper.noCtx()).map((a)->(double)a);
+    return evalLong(env, ctx).map((a) -> (double) a);
   }
 
   /**

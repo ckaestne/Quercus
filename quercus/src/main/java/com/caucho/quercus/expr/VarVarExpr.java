@@ -33,7 +33,7 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -70,9 +70,9 @@ public class VarVarExpr extends AbstractVarExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    V<? extends Value> value = varName.flatMap((vn)->env.getValue(VHelper.noCtx(), vn));
+    V<? extends Value> value = varName.vflatMap(ctx, (c, vn) -> env.getValue(c, vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -94,7 +94,7 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
     // php/0d63
     env.setRef(ctx, varName.getOne(), value);
@@ -113,9 +113,9 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public void evalUnset(Env env, FeatureExpr ctx)
   {
-    StringValue varName = _var.evalStringValue(env, VHelper.noCtx()).getOne();
+    StringValue varName = _var.evalStringValue(env, ctx).getOne();
 
-    env.unsetVar(VHelper.noCtx(), varName);
+    env.unsetVar(ctx, varName);
   }
 
   /**
@@ -129,9 +129,9 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    return varName.flatMap((vn)-> env.getVar(ctx, vn));
+    return varName.vflatMap(ctx, (c, vn) -> env.getVar(c, vn));
   }
 
   /**
@@ -145,9 +145,9 @@ public class VarVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    V<? extends Var> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
+    V<? extends Var> value = varName.vflatMap(ctx, (c, vn) -> env.getVar(c, vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -169,9 +169,9 @@ public class VarVarExpr extends AbstractVarExpr {
   public @Nonnull
   V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
-    V<? extends StringValue> varName = _var.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    V<? extends Var> value = varName.flatMap((vn)-> env.getVar(ctx, vn));
+    V<? extends Var> value = varName.vflatMap(ctx, (c, vn) -> env.getVar(c, vn));
 
     return value.map((a)->a.makeValue().toAutoArray());
   }

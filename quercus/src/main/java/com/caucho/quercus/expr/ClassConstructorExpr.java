@@ -35,9 +35,8 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -100,7 +99,7 @@ public class ClassConstructorExpr extends Expr {
 
     AbstractFunction fun = cl.getFunction(nameV);
 
-    V<? extends ValueOrVar>[] values = evalArgs(env, _args, VHelper.noCtx());
+    V<? extends ValueOrVar>[] values = evalArgs(env, _args, ctx);
 
     Value qThis = env.getThis();
     env.pushCall(this, qThis, values);

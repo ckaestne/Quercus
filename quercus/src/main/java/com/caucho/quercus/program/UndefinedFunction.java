@@ -71,7 +71,7 @@ public class UndefinedFunction extends AbstractFunction {
       AbstractFunction fun = env._fun[_globalId];
       env._fun[_id] = fun;
 
-      return fun.call(env, VHelper.noCtx(), args);
+      return fun.call(env, ctx, args);
     }
 
     return VHelper.toV(env.error(L.l("'{0}' is an unknown function.", _name)));

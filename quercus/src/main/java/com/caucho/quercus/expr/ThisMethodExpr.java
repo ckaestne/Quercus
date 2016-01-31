@@ -39,8 +39,8 @@ import com.caucho.quercus.program.InterpretedClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -85,7 +85,7 @@ public class ThisMethodExpr extends ObjectMethodExpr {
       init();
     }
 
-    Value qThis = _objExpr.eval(env, VHelper.noCtx()).getOne();
+    Value qThis = _objExpr.eval(env, ctx).getOne();
 
     if (_fun != null) {
       return VHelper.toV(evalPrivate(env, _fun, qThis, _args));

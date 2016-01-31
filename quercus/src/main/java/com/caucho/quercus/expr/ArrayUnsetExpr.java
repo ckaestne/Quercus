@@ -36,6 +36,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -70,10 +71,10 @@ public class ArrayUnsetExpr extends Expr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
-    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
+    V<? extends Value> array = _expr.eval(env, ctx);
+    V<? extends Value> index = _index.eval(env, ctx);
 
-    return VHelper.flatMapAll(array, index, (a,i)-> a.remove(ctx, i));
+    return VHelper.vflatMapAll(ctx, array, index, (c, a, i) -> a.remove(c, i));
   }
 
   public String toString()

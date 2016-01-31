@@ -38,6 +38,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -74,9 +75,9 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> obj = _objExpr.eval(env, VHelper.noCtx());
+    V<? extends Value> obj = _objExpr.eval(env, ctx);
 
-    return obj.map((a)->a.charValueAt(_indexExpr.evalLong(env, VHelper.noCtx()).getOne()));
+    return obj.vmap(ctx, (c, a) -> a.charValueAt(_indexExpr.evalLong(env, c).getOne()));
   }
   
   /**
@@ -90,7 +91,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return eval(env, VHelper.noCtx()).map((a)->a.toVar());
+    return eval(env, ctx).map((a) -> a.toVar());
   }
   
   /**
@@ -104,7 +105,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return eval(env, VHelper.noCtx());
+    return eval(env, ctx);
   }
   
   /**
@@ -119,12 +120,12 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    Value obj = _objExpr.eval(env, VHelper.noCtx()).getOne();
+    Value obj = _objExpr.eval(env, ctx).getOne();
 
-    Value result = obj.setCharValueAt(_indexExpr.evalLong(env, VHelper.noCtx()).getOne(),
+    Value result = obj.setCharValueAt(_indexExpr.evalLong(env, ctx).getOne(),
                                       value.getOne().toValue());
 
-    _objExpr.evalAssignValue(env, VHelper.noCtx(), VHelper.toV(result));
+    _objExpr.evalAssignValue(env, ctx, VHelper.toV(result));
     
     return value;
   }

@@ -37,6 +37,7 @@ import com.caucho.quercus.env.Var;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -101,13 +102,13 @@ public class ArrayTailExpr extends AbstractVarExpr {
     if (isTop) {
       V<? extends ValueOrVar> obj = _expr.evalArray(env, ctx);
 
-      return VHelper.getValues(obj).flatMap((a)->a.putVar(ctx).map((b)->b.makeValue()));
+      return VHelper.getValues(obj).vflatMap(ctx, (c, a) -> a.putVar(c).map((b) -> b.makeValue()));
     }
     else {
       // php/0d4e need to do a toValue()
       V<? extends Value> obj = _expr.evalArray(env, ctx).map((a)->a.toValue());
 
-      return obj.flatMap((a)->a.getArgTail(env, ctx, isTop).map((b)->b.makeValue()));
+      return obj.vflatMap(ctx, (c, a) -> a.getArgTail(env, c, isTop).map((b) -> b.makeValue()));
     }
   }
 
@@ -140,7 +141,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
   public @Nonnull
   V<? extends ValueOrVar> evalArray(Env env, FeatureExpr ctx)
   {
-    V<? extends ValueOrVar> obj = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends ValueOrVar> obj = _expr.evalArray(env, ctx);
 
     return VHelper.getValues(obj).map((a)->a.putArray(env));
   }
@@ -156,11 +157,11 @@ public class ArrayTailExpr extends AbstractVarExpr {
   @Override
   public @Nonnull V<? extends Value> evalObject(Env env, FeatureExpr ctx)
   {
-    V<? extends ValueOrVar> array = _expr.evalArray(env, VHelper.noCtx());
+    V<? extends ValueOrVar> array = _expr.evalArray(env, ctx);
 
     Value value = env.createObject();
 
-    VHelper.getValues(array).map((a)->a.put(VHelper.noCtx(), V.one(value)));
+    VHelper.getValues(array).vmap(ctx, (c, a) -> a.put(c, V.one(value)));
 
     return VHelper.toV(value);
   }
@@ -207,7 +208,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
   {
     V<? extends ValueOrVar> array = _expr.evalArray(env, ctx);
 
-    VHelper.getValues(array).map((a)->a.put(VHelper.noCtx(), value.map((b)->b.toValue())));
+    VHelper.getValues(array).vmap(ctx, (c, a) -> a.put(c, value.map((b) -> b.toValue())));
 
     return value;
   }

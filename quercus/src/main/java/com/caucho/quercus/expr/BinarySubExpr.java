@@ -36,6 +36,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -63,8 +64,8 @@ public class BinarySubExpr extends AbstractBinaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> lValue = _left.eval(env, VHelper.noCtx());
-    V<? extends Value> rValue = _right.eval(env, VHelper.noCtx());
+    V<? extends Value> lValue = _left.eval(env, ctx);
+    V<? extends Value> rValue = _right.eval(env, ctx);
 
     return VHelper.mapAll(lValue,rValue,(l,r)-> l.sub(r));
   }

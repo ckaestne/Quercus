@@ -39,8 +39,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -129,7 +129,7 @@ public class CallVarExpr extends Expr {
    */
   public V<? extends Value> evalImpl(Env env, FeatureExpr ctx, boolean isRef, boolean isCopy)
   {
-    V<? extends Value> value = VHelper._getValues(_name.eval(env, VHelper.noCtx()));
+    V<? extends Value> value = VHelper._getValues(_name.eval(env, ctx));
     
     V<? extends ValueOrVar>[] args = evalArgs(env, _args, ctx);
 

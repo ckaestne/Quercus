@@ -34,7 +34,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -63,9 +63,9 @@ public class BinaryAssignListExpr extends Expr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = _value.eval(env, VHelper.noCtx());
+    V<? extends Value> value = _value.eval(env, ctx);
 
-    _listHead.evalAssignValue(env, VHelper.noCtx(), value);
+    _listHead.evalAssignValue(env, ctx, value);
 
     return value;
   }
@@ -81,7 +81,7 @@ public class BinaryAssignListExpr extends Expr {
   @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env, VHelper.noCtx()).map((a)->a.copy());
+    return eval(env, ctx).map((a) -> a.copy());
   }
 }
 

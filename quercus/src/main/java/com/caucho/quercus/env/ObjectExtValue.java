@@ -33,7 +33,6 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.CurrentTime;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -984,7 +983,7 @@ public class ObjectExtValue extends ObjectValue
   @Override
   public void print(Env env, FeatureExpr ctx)
   {
-    env.print(VHelper.noCtx(),toString(env));
+    env.print(ctx, toString(env));
   }
 
   /**

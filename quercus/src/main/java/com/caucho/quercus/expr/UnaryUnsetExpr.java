@@ -36,6 +36,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -66,7 +67,7 @@ public class UnaryUnsetExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    _var.evalUnset(env, VHelper.noCtx());
+    _var.evalUnset(env, ctx);
 
     return VHelper.toV(NullValue.NULL);
   }

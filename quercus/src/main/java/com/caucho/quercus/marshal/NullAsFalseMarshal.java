@@ -34,7 +34,6 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.VHelper;
 
 public class NullAsFalseMarshal extends Marshal
 {
@@ -101,7 +100,7 @@ public class NullAsFalseMarshal extends Marshal
       return BooleanValue.FALSE;
     }
 
-    Value result = _marshal.unmarshal(env, VHelper.noCtx(), value);
+    Value result = _marshal.unmarshal(env, ctx, value);
 
     if (result == null)
       return BooleanValue.FALSE;

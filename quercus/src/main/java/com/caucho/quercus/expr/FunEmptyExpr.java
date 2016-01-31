@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -61,7 +61,7 @@ public class FunEmptyExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return _value.evalEmpty(env, VHelper.noCtx()).map((a)->BooleanValue.create(a));
+    return _value.evalEmpty(env, ctx).map((a) -> BooleanValue.create(a));
   }
 }
 

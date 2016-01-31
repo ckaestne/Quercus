@@ -33,9 +33,8 @@ import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -95,13 +94,13 @@ public class ListHeadExpr extends Expr {
 
     for (int i = 0; i < len; i++) {
       if (_varList[i] != null)
-        _varList[i].evalAssignValue(env, VHelper.noCtx(), value.getOne().get(_keyList[i]).copy().getValue());
+        _varList[i].evalAssignValue(env, ctx, value.getOne().get(_keyList[i]).copy().getValue());
     }
 
     return value;
   }
 
-  public Value evalAssignEachValue(Env env, Value value)
+  public Value evalAssignEachValue(Env env, FeatureExpr ctx, Value value)
   {
     if (! value.isArray()) {
       env.warning(L.l("variable passed to each must reference an array, saw {0}", value.getType()));
@@ -111,15 +110,15 @@ public class ListHeadExpr extends Expr {
     ArrayValue array = value.toArrayValue(env);
 
     if (_varList.length > 0 && _varList[0] != null)
-      _varList[0].evalAssignValue(env, VHelper.noCtx(), array.key());
+      _varList[0].evalAssignValue(env, ctx, array.key());
 
     if (_varList.length > 1 && _varList[1] != null)
-      _varList[1].evalAssignValue(env, VHelper.noCtx(), array.current().map((a)->a.copy()));
+      _varList[1].evalAssignValue(env, ctx, array.current().map((a) -> a.copy()));
 
     return array.each();
   }
 
-  public boolean evalEachBoolean(Env env, Value value)
+  public boolean evalEachBoolean(Env env, FeatureExpr ctx, Value value)
   {
     if (! value.isArray()) {
       env.warning(L.l("variable passed to each must reference an array, saw {0}", value.getType()));
@@ -132,12 +131,12 @@ public class ListHeadExpr extends Expr {
       return false;
 
     if (_varList.length > 0 && _varList[0] != null)
-      _varList[0].evalAssignValue(env, VHelper.noCtx(), array.key());
+      _varList[0].evalAssignValue(env, ctx, array.key());
 
     if (_varList.length > 1 && _varList[1] != null)
-      _varList[1].evalAssignValue(env, VHelper.noCtx(), array.current().map((a)->a.copy()));
+      _varList[1].evalAssignValue(env, ctx, array.current().map((a) -> a.copy()));
 
-    array.next(VHelper.noCtx());
+    array.next(ctx);
 
     return true;
   }

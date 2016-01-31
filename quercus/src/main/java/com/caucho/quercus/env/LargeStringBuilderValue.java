@@ -742,7 +742,7 @@ public class LargeStringBuilderValue
       if (SIZE < sublen)
         sublen = SIZE;
 
-      env.write(VHelper.noCtx(), _bufferList[chunk], 0, sublen);
+      env.write(ctx, _bufferList[chunk], 0, sublen);
     }
   }
 

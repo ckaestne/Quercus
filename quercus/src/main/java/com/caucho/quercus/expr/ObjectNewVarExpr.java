@@ -30,13 +30,16 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.NullValue;
+import com.caucho.quercus.env.QuercusClass;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -87,7 +90,7 @@ public class ObjectNewVarExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    String name = _name.evalString(env, VHelper.noCtx()).getOne().intern();
+    String name = _name.evalString(env, ctx).getOne().intern();
     QuercusClass cl = env.findAbstractClass(name);
 
     _fullArgs = _args;
@@ -95,7 +98,7 @@ public class ObjectNewVarExpr extends Expr {
     V<? extends ValueOrVar> []args = new V[_args.length];
 
     for (int i = 0; i < args.length; i++) {
-      args[i] = _args[i].eval(env, VHelper.noCtx());
+      args[i] = _args[i].eval(env, ctx);
     }
 
     env.pushCall(this, NullValue.NULL, args);

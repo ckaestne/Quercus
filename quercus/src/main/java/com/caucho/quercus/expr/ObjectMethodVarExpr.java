@@ -37,9 +37,8 @@ import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -106,19 +105,19 @@ public class ObjectMethodVarExpr extends Expr {
     V<?extends ValueOrVar> []values = new V[_args.length];
 
     for (int i = 0; i < values.length; i++) {
-      values[i] = _args[i].evalArg(env, VHelper.noCtx(), true);
+      values[i] = _args[i].evalArg(env, ctx, true);
     }
 
-    StringValue methodName = _name.eval(env, VHelper.noCtx()).getOne().toStringValue(env);
+    StringValue methodName = _name.eval(env, ctx).getOne().toStringValue(env);
 
-    Value obj = _objExpr.eval(env, VHelper.noCtx()).getOne();
+    Value obj = _objExpr.eval(env, ctx).getOne();
 
     env.pushCall(this, obj, values);
 
     try {
       env.checkTimeout();
 
-      return obj.callMethod(env, VHelper.noCtx(), methodName, values).map((a)->a.toValue());
+      return obj.callMethod(env, ctx, methodName, values).map((a) -> a.toValue());
     } finally {
       env.popCall();
     }

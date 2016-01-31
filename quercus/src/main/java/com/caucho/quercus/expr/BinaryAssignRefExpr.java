@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -92,7 +92,7 @@ public class BinaryAssignRefExpr extends Expr {
   @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return _var.evalAssignRef(env, VHelper.noCtx(), _value).flatMap((a)->a._getValues()).map((a)->a.copy());
+    return _var.evalAssignRef(env, ctx, _value).flatMap((a) -> a._getValues()).map((a) -> a.copy());
   }
 
   /**

@@ -36,9 +36,8 @@ import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -136,9 +135,9 @@ public class ClassMethodVarExpr extends AbstractMethodExpr
     // qa/0954 - static calls pass the current $this
     Value qThis = env.getThis();
 
-    StringValue methodName = _nameExpr.evalStringValue(env, VHelper.noCtx()).getOne();
+    StringValue methodName = _nameExpr.evalStringValue(env, ctx).getOne();
 
-    V<? extends ValueOrVar>[] args = evalArgs(env, _args, VHelper.noCtx());
+    V<? extends ValueOrVar>[] args = evalArgs(env, _args, ctx);
     int hash = methodName.hashCodeCaseInsensitive();
 
     return cl.callStaticMethod(env, ctx, qThis, methodName, hash, args).map((a)->a.toValue());

@@ -36,6 +36,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -72,7 +73,7 @@ public class BinaryXorExpr extends AbstractBinaryExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->
+    return VHelper.mapAll(_left.evalBoolean(env, ctx), _right.evalBoolean(env, ctx), (a, b) ->
             a!=b?      BooleanValue.TRUE:BooleanValue.FALSE);
   }
 
@@ -87,7 +88,7 @@ public class BinaryXorExpr extends AbstractBinaryExpr {
   @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    return VHelper.mapAll(_left.evalBoolean(env, VHelper.noCtx()), _right.evalBoolean(env, VHelper.noCtx()),(a,b)->a!=b);
+    return VHelper.mapAll(_left.evalBoolean(env, ctx), _right.evalBoolean(env, ctx), (a, b) -> a != b);
   }
 
   public String toString()

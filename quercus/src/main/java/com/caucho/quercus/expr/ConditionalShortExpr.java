@@ -34,7 +34,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -63,13 +63,13 @@ public class ConditionalShortExpr extends Expr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = _test.eval(env, VHelper.noCtx());
+    V<? extends Value> value = _test.eval(env, ctx);
 
-    return value.map((v)-> {
+    return value.vmap(ctx, (c, v)-> {
       if (v.toBoolean())
         return v.copy(); // php/03cj, php/03ck
       else
-        return _falseExpr.evalCopy(env, VHelper.noCtx()).getOne(); // php/03cl
+        return _falseExpr.evalCopy(env, c).getOne(); // php/03cl
     });
   }
 

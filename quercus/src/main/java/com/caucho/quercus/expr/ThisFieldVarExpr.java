@@ -36,8 +36,8 @@ import com.caucho.quercus.program.ClassField;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -150,7 +150,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
   {
     Value obj = env.getThis();
 
-    obj.putThisField(env, VHelper.noCtx(), evalName(env), value);
+    obj.putThisField(env, ctx, evalName(env), value);
 
     return value;
   }
@@ -169,7 +169,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
   {
     Value obj = env.getThis();
 
-    obj.putThisField(env, VHelper.noCtx(), evalName(env), value.map((a)->a.toValue()));
+    obj.putThisField(env, ctx, evalName(env), value.map((a) -> a.toValue()));
 
     return value;
   }
@@ -184,10 +184,10 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
 
     StringValue name = evalName(env);
 
-    V<? extends Value> fieldVar = obj.getThisFieldArray(env, VHelper.noCtx(), name);
-    Value index = indexExpr.eval(env, VHelper.noCtx()).getOne();
+    V<? extends Value> fieldVar = obj.getThisFieldArray(env, ctx, name);
+    Value index = indexExpr.eval(env, ctx).getOne();
 
-    Value value = valueExpr.evalCopy(env, VHelper.noCtx()).getOne();
+    Value value = valueExpr.evalCopy(env, ctx).getOne();
 
     // php/03mn
     return fieldVar.map((a)->a.putThisFieldArray(env, obj, name, index, value));
@@ -203,7 +203,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
 
     StringValue name = evalName(env);
 
-    V<? extends Value> fieldVar = obj.getThisFieldArray(env, VHelper.noCtx(), name);
+    V<? extends Value> fieldVar = obj.getThisFieldArray(env, ctx, name);
     Value index = indexExpr.eval(env, ctx).getOne();
 
     Value value = valueExpr.evalRef(env, ctx).getOne().toValue();
@@ -226,7 +226,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
   {
     Value obj = env.getThis();
 
-    return obj.getThisFieldArray(env, VHelper.noCtx(), evalName(env));
+    return obj.getThisFieldArray(env, ctx, evalName(env));
   }
 
   /**
@@ -242,7 +242,7 @@ public class ThisFieldVarExpr extends AbstractVarExpr {
   {
     Value obj = env.getThis();
 
-    return obj.getThisFieldObject(env, VHelper.noCtx(), evalName(env));
+    return obj.getThisFieldObject(env, ctx, evalName(env));
   }
 
   /**

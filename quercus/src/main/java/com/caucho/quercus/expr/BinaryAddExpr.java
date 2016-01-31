@@ -35,6 +35,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -55,7 +56,7 @@ public class BinaryAddExpr extends AbstractBinaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return VHelper.mapAll(_left.eval(env, VHelper.noCtx()) , _right.eval(env, VHelper.noCtx()),(l,r)-> l.add(r));
+    return VHelper.mapAll(_left.eval(env, ctx), _right.eval(env, ctx), (l, r) -> l.add(r));
   }
 
   /**

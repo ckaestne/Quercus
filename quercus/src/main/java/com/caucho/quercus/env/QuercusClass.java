@@ -40,8 +40,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.logging.Level;
@@ -1453,7 +1453,7 @@ public class QuercusClass extends NullValue {
       }
 
       if (_fieldGet == null) {
-        return _fieldMap.get(name).getInitExpr().eval(env, VHelper.noCtx());
+        return _fieldMap.get(name).getInitExpr().eval(env, ctx);
       }
     }
 

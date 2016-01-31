@@ -36,8 +36,8 @@ import com.caucho.quercus.program.ClassField;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -205,7 +205,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    obj.putThisField(env, VHelper.noCtx(), _name, value);
+    obj.putThisField(env, ctx, _name, value);
 
     return value;
   }
@@ -230,7 +230,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    obj.putThisField(env, VHelper.noCtx(), _name, value.map((a)->a.toValue()));
+    obj.putThisField(env, ctx, _name, value.map((a) -> a.toValue()));
 
     return value;
   }
@@ -251,9 +251,9 @@ public class ThisFieldExpr extends AbstractVarExpr {
 
     // php/044i
     V<? extends Value> fieldVar = obj.getThisFieldArray(env, ctx, _name);
-    V<? extends Value> index = indexExpr.eval(env, VHelper.noCtx());
+    V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    V<? extends Value> value = valueExpr.evalCopy(env, VHelper.noCtx());
+    V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
     return VHelper.mapAll(index, value, fieldVar, (i,v, fv)-> fv.putThisFieldArray(env, obj, _name, i, v));
   }
@@ -273,10 +273,10 @@ public class ThisFieldExpr extends AbstractVarExpr {
     }
 
     // php/044i
-    V<? extends Value> fieldVar = obj.getThisFieldArray(env, VHelper.noCtx(), _name);
-    V<? extends Value> index = indexExpr.eval(env, VHelper.noCtx());
+    V<? extends Value> fieldVar = obj.getThisFieldArray(env, ctx, _name);
+    V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    V<? extends ValueOrVar> value = valueExpr.evalRef(env, VHelper.noCtx());
+    V<? extends ValueOrVar> value = valueExpr.evalRef(env, ctx);
 
     return  VHelper.mapAll(index, value, fieldVar, (i,v, fv)-> fv.putThisFieldArray(env, obj, _name, i, v.toValue()));
   }
@@ -301,7 +301,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return obj.getThisFieldArray(env, VHelper.noCtx(), _name);
+    return obj.getThisFieldArray(env, ctx, _name);
   }
 
   /**
@@ -323,7 +323,7 @@ public class ThisFieldExpr extends AbstractVarExpr {
       return VHelper.toV(env.thisError(getLocation()));
     }
 
-    return obj.getThisFieldObject(env, VHelper.noCtx(), _name);
+    return obj.getThisFieldObject(env, ctx, _name);
   }
 
   /**

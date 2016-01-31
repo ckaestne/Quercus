@@ -33,6 +33,7 @@ import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -143,7 +144,7 @@ public class LiteralExpr extends Expr {
   @Override
   public V<? extends QuercusClass> evalQuercusClass(Env env, FeatureExpr ctx)
   {
-    V<? extends String> className = evalString(env, VHelper.noCtx());
+    V<? extends String> className = evalString(env, ctx);
 
     return className.map((a)->env.getClass(a));
   }

@@ -33,9 +33,8 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -97,7 +96,7 @@ public class TraitParentClassMethodExpr extends AbstractMethodExpr {
 
     QuercusClass parent = cls.getTraitParent(env, _traitName);
 
-    V<? extends ValueOrVar>[] values = evalArgs(env, _args, VHelper.noCtx());
+    V<? extends ValueOrVar>[] values = evalArgs(env, _args, ctx);
 
     Value oldThis = env.getThis();
 
@@ -121,7 +120,7 @@ public class TraitParentClassMethodExpr extends AbstractMethodExpr {
     try {
       env.checkTimeout();
 
-      return parent.callStaticMethod(env,VHelper.noCtx(), qThis, _methodName, _hash, values).map((a)->a.toValue());
+      return parent.callStaticMethod(env, ctx, qThis, _methodName, _hash, values).map((a) -> a.toValue());
     } finally {
       env.popCall();
       env.setThis(oldThis);

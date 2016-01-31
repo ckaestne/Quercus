@@ -34,7 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -62,9 +62,9 @@ public class BinaryCommaExpr extends AbstractBinaryExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    _left.eval(env, VHelper.noCtx());
+    _left.eval(env, ctx);
 
-    return _right.eval(env, VHelper.noCtx());
+    return _right.eval(env, ctx);
   }
 
   /**
@@ -78,9 +78,9 @@ public class BinaryCommaExpr extends AbstractBinaryExpr {
   @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    _left.eval(env, VHelper.noCtx());
+    _left.eval(env, ctx);
 
-    return _right.evalBoolean(env, VHelper.noCtx());
+    return _right.evalBoolean(env, ctx);
   }
 
   public String toString()

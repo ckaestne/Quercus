@@ -37,6 +37,7 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -71,9 +72,9 @@ public class BinaryAssignListEachExpr extends Expr {
       return VHelper.toV(NullValue.NULL);
     }
 
-    V<? extends Value> value = _value.eval(env, VHelper.noCtx());
+    V<? extends Value> value = _value.eval(env, ctx);
 
-    _listHead.evalAssignEachValue(env, value.getOne());
+    _listHead.evalAssignEachValue(env, ctx, value.getOne());
 
     return value;
   }
@@ -94,9 +95,9 @@ public class BinaryAssignListEachExpr extends Expr {
       return VHelper.toV(false);
     }
 
-    V<? extends Value> value = _value.eval(env, VHelper.noCtx());
+    V<? extends Value> value = _value.eval(env, ctx);
 
-    return VHelper.toV(_listHead.evalEachBoolean(env, value.getOne()));
+    return VHelper.toV(_listHead.evalEachBoolean(env, ctx, value.getOne()));
   }
 }
 

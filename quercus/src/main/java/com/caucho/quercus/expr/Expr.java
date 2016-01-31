@@ -37,8 +37,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -724,7 +724,7 @@ abstract public class Expr {
   {
     V<? extends Var> var = evalVar(env, ctx);
 
-    return var.flatMap(a->a.postincr(ctx, incr));
+    return var.vflatMap(ctx, (c, a) -> a.postincr(c, incr));
   }
 
   /**
@@ -734,7 +734,7 @@ abstract public class Expr {
   {
     V<? extends Var> var = evalVar(env, ctx);
 
-    return var.flatMap(a->a.preincr(ctx, incr));
+    return var.vflatMap(ctx, (c, a) -> a.preincr(c, incr));
   }
 
   /**
@@ -846,7 +846,7 @@ abstract public class Expr {
     V<? extends Value> array = evalDirty(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    array.map(a->a.remove(ctx, index.getOne()));
+    array.vmap(ctx, (c, a) -> a.remove(c, index.getOne()));
   }
 
   /**
@@ -887,7 +887,7 @@ abstract public class Expr {
   public void print(Env env, FeatureExpr ctx)
     throws IOException
   {
-    eval(env, ctx).foreach((a)->a.print(env, VHelper.noCtx()));
+    eval(env, ctx).vforeach(ctx, (c, a) -> a.print(env, c));
   }
 
   @Override

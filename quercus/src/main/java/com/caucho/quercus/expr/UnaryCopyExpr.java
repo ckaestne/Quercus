@@ -34,7 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -63,7 +63,7 @@ public class UnaryCopyExpr extends AbstractUnaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return _expr.eval(env, VHelper.noCtx()).map((a)->a.copy());
+    return _expr.eval(env, ctx).map((a) -> a.copy());
   }
 
   /**
@@ -77,7 +77,7 @@ public class UnaryCopyExpr extends AbstractUnaryExpr {
   @Override
   public V<? extends ValueOrVar> evalArg(Env env, FeatureExpr ctx, boolean isTop)
   {
-    return eval(env, VHelper.noCtx());
+    return eval(env, ctx);
   }
 
   public String toString()

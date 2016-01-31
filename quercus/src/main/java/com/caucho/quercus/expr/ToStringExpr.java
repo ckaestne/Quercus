@@ -34,7 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -71,7 +71,7 @@ public class ToStringExpr extends AbstractUnaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return _expr.eval(env, VHelper.noCtx()).map((a)->a.toString(env));
+    return _expr.eval(env, ctx).map((a) -> a.toString(env));
   }
 
   public String toString()

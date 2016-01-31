@@ -35,7 +35,7 @@ import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -73,7 +73,7 @@ public class UnaryBitNotExpr extends AbstractUnaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Long> lValue = _expr.evalLong(env, VHelper.noCtx());
+    V<? extends Long> lValue = _expr.evalLong(env, ctx);
 
     return lValue.map((a)->LongValue.create(~ a.longValue()));
   }

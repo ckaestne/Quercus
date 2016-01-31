@@ -36,7 +36,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -60,7 +60,7 @@ abstract public class AbstractMethodExpr extends Expr {
   @Override
   public @Nonnull V<? extends Value> evalCopy(Env env, FeatureExpr ctx)
   {
-    return eval(env, VHelper.noCtx()).map((a)->a.copy());
+    return eval(env, ctx).map((a) -> a.copy());
   }
 
   /**
@@ -89,7 +89,7 @@ abstract public class AbstractMethodExpr extends Expr {
                                     StringValue methodName, int hashCode,
                                     Expr[] argExprs)
   {
-    V<? extends ValueOrVar>[] args = evalArgs(env, argExprs, VHelper.noCtx());
+    V<? extends ValueOrVar>[] args = evalArgs(env, argExprs, ctx);
 
     env.pushCall(this, qThis, args);
 

@@ -35,9 +35,8 @@ import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -86,11 +85,11 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    String className = _className.evalString(env, VHelper.noCtx()).getOne();
+    String className = _className.evalString(env, ctx).getOne();
 
     QuercusClass qClass = env.getClass(className);
 
-    StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
+    StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
     return qClass.getStaticFieldValue(env, varName);
   }
@@ -106,11 +105,11 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    String className = _className.evalString(env, VHelper.noCtx()).getOne();
+    String className = _className.evalString(env, ctx).getOne();
 
     QuercusClass qClass = env.getClass(className);
 
-    StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
+    StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
     return qClass.getStaticFieldVar(env, varName);
   }
@@ -127,13 +126,13 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    String className = _className.evalString(env, VHelper.noCtx()).getOne();
+    String className = _className.evalString(env, ctx).getOne();
 
     QuercusClass qClass = env.getClass(className);
 
-    StringValue varName = _varName.evalStringValue(env, VHelper.noCtx()).getOne();
+    StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
-    return qClass.setStaticFieldRef(env, VHelper.noCtx(), varName, value).map((a)->a.makeValue());
+    return qClass.setStaticFieldRef(env, ctx, varName, value).map((a) -> a.makeValue());
   }
 
   /**

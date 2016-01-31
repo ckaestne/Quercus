@@ -32,7 +32,6 @@ package com.caucho.quercus.env;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.Function4;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 
 import java.util.IdentityHashMap;
 import java.util.function.Predicate;
@@ -200,7 +199,7 @@ public class CopyArrayValue extends ArrayValue {
   @Override
   public V<? extends Value> getObject(Env env, FeatureExpr ctx, Value fieldName)
   {
-    return getCopyArray().getObject(env, VHelper.noCtx(), fieldName);
+    return getCopyArray().getObject(env, ctx, fieldName);
   }
 
   /**

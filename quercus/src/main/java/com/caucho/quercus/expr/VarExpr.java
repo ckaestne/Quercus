@@ -34,7 +34,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -160,7 +160,7 @@ public class VarExpr
   @Override
   public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
-    return env.getValue(VHelper.noCtx(), _name, false, false).map((a)->a.isset());
+    return env.getValue(ctx, _name, false, false).map((a) -> a.isset());
   }
 
   /**
@@ -169,7 +169,7 @@ public class VarExpr
   @Override
   public @Nonnull V<? extends Value> evalIssetValue(Env env, FeatureExpr ctx)
   {
-    return env.getValue(VHelper.noCtx(), _name, false, false);
+    return env.getValue(ctx, _name, false, false);
   }
 
   /**
@@ -227,7 +227,7 @@ public class VarExpr
       }
     } else {
     */
-      value = env.getValue(VHelper.noCtx(), _name);
+    value = env.getValue(ctx, _name);
 
       value = value.vmap(ctx, (c,v)-> {
                 if (v == null || v.isString() || v.isNull()) {

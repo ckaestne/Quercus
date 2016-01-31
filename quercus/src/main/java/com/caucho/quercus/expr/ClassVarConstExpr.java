@@ -30,13 +30,15 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.QuercusClass;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -84,7 +86,7 @@ public class ClassVarConstExpr extends Expr
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     // php/09d2
-    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, ctx);
 
     return cls.map((a)->a.getConstant(env, _name));
   }

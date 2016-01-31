@@ -30,14 +30,16 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.ValueOrVar;
+import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -88,7 +90,7 @@ public class ClassFieldVarExpr extends AbstractVarExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends StringValue> varName = _varName.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _varName.evalStringValue(env, ctx);
 
     return varName.flatMap((a)->env.getClass(_className).getStaticFieldValue(env, a));
   }
@@ -104,7 +106,7 @@ public class ClassFieldVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<? extends StringValue> varName = _varName.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _varName.evalStringValue(env, ctx);
 
     return varName.flatMap((a)-> env.getClass(_className).getStaticFieldVar(env, a));
   }
@@ -121,9 +123,9 @@ public class ClassFieldVarExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    V<? extends StringValue> varName = _varName.evalStringValue(env, VHelper.noCtx());
+    V<? extends StringValue> varName = _varName.evalStringValue(env, ctx);
 
-    env.getClass(_className).setStaticFieldRef(env, VHelper.noCtx(), varName.getOne(), value);
+    env.getClass(_className).setStaticFieldRef(env, ctx, varName.getOne(), value);
 
     return value;
   }
@@ -140,7 +142,7 @@ public class ClassFieldVarExpr extends AbstractVarExpr {
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     env.error(L.l("{0}::${1}: Cannot unset static variables.",
-                  _className, _varName.evalStringValue(env, VHelper.noCtx())),
+            _className, _varName.evalStringValue(env, ctx)),
               getLocation());
   }
 

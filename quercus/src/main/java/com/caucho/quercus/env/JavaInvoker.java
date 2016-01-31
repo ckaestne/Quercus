@@ -771,7 +771,7 @@ abstract public class JavaInvoker
       }
     }
 
-    V<? extends Value> value = result.map((a) -> _unmarshalReturn.unmarshal(env, ctx, a));
+    V<? extends Value> value = result.vmap(ctx, (c, a) -> _unmarshalReturn.unmarshal(env, c, a));
 
     return value;
   }

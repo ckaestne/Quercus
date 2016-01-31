@@ -36,9 +36,8 @@ import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -85,9 +84,9 @@ public class ClassVarVarConstExpr extends Expr
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, ctx);
 
-    return cls.map((a)->a.getConstant(env, _name.evalStringValue(env, VHelper.noCtx()).getOne()));
+    return cls.vmap(ctx, (c, a) -> a.getConstant(env, _name.evalStringValue(env, c).getOne()));
   }
 
   @Override

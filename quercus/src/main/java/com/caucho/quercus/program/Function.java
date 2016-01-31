@@ -40,8 +40,8 @@ import com.caucho.quercus.statement.Statement;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -391,9 +391,9 @@ public class Function extends AbstractFunction {
         if (defaultExpr == null)
           return VHelper.toV(env.error("expected default expression"));
         else if (arg.isReference())
-          map.put(arg.getName(), new EnvVarImpl(defaultExpr.evalVar(env, VHelper.noCtx())));
+          map.put(arg.getName(), new EnvVarImpl(defaultExpr.evalVar(env, ctx)));
         else {
-          map.put(arg.getName(), new EnvVarImpl(defaultExpr.eval(env, VHelper.noCtx()).map(x->x.toLocalVar())));
+          map.put(arg.getName(), new EnvVarImpl(defaultExpr.eval(env, ctx).map(x -> x.toLocalVar())));
         }
       } catch (Exception e) {
         throw new QuercusException(getName() + ":arg(" + arg.getName() + ") "

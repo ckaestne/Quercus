@@ -34,6 +34,7 @@ import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -74,7 +75,7 @@ public class ArrayIsSetExpr extends Expr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-   return evalBoolean(env, VHelper.noCtx()) .map((a)->a? BooleanValue.TRUE : BooleanValue.FALSE);
+    return evalBoolean(env, ctx).map((a) -> a ? BooleanValue.TRUE : BooleanValue.FALSE);
   }
 
   /**
@@ -88,8 +89,8 @@ public class ArrayIsSetExpr extends Expr {
   @Override
   public @Nonnull V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> array = _expr.eval(env, VHelper.noCtx());
-    V<? extends Value> index = _index.eval(env, VHelper.noCtx());
+    V<? extends Value> array = _expr.eval(env, ctx);
+    V<? extends Value> index = _index.eval(env, ctx);
 
     return VHelper.mapAll(array, index,(a,i)->
       a.get(i).getOne() != UnsetValue.UNSET);

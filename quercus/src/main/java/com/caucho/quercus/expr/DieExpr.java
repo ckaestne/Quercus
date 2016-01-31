@@ -35,6 +35,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -77,7 +78,7 @@ public class DieExpr extends Expr {
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
     if (_value != null) {
-      V<? extends String> msg = _value.evalString(env, VHelper.noCtx());
+      V<? extends String> msg = _value.evalString(env, ctx);
           return msg.map((a)->env.die(a));
     }
     else

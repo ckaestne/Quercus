@@ -1341,7 +1341,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     AbstractFunction fun = env.getFunction(this, ctx).getOne();
 
     if (fun != null)
-      return fun.callRef(env, VHelper.noCtx(), args);
+      return fun.callRef(env, ctx, args);
     else
       return VHelper.toV(env.warning(L.l("{0} is not a valid function",
               this)));
@@ -1354,7 +1354,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     AbstractFunction fun = env.getFunction(this, ctx).getOne();
 
     if (fun != null)
-      return fun.callCopy(env, VHelper.noCtx(), args);
+      return fun.callCopy(env, ctx, args);
     else
       return VHelper.toV(env.warning(L.l("{0} is not a valid function",
               this)));
@@ -2446,7 +2446,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public V<? extends Value> putThisField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    return putField(env, VHelper.noCtx(), name, value);
+    return putField(env, ctx, name, value);
   }
 
 //  /**

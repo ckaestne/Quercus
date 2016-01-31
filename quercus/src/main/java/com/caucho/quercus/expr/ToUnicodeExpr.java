@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -64,7 +64,7 @@ public class ToUnicodeExpr extends ToStringExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends Value> value = _expr.eval(env, VHelper.noCtx()).map((a)->a.toValue());
+    V<? extends Value> value = _expr.eval(env, ctx).map((a) -> a.toValue());
 
     return value.map((v)-> {
       if (v.isUnicode())

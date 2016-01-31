@@ -48,8 +48,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -603,11 +603,11 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
         return value;
       }
       else {
-        return _cons.call(env, VHelper.noCtx(), args);
+        return _cons.call(env, ctx, args);
       }
     }
     else if (__construct != null) {
-      return __construct.call(env, VHelper.noCtx(), args);
+      return __construct.call(env, ctx, args);
     }
     else {
       return VHelper.toV(NullValue.NULL);

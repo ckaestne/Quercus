@@ -36,9 +36,8 @@ import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.parser.QuercusParser;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -97,7 +96,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.eval(env, VHelper.noCtx());
+      return _expr.eval(env, ctx);
     } finally {
       env.setErrorMask(oldErrorMask);
     }
@@ -117,7 +116,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.evalBoolean(env, VHelper.noCtx());
+      return _expr.evalBoolean(env, ctx);
     } finally {
       env.setErrorMask(oldErrorMask);
     }
@@ -137,7 +136,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.evalString(env, VHelper.noCtx());
+      return _expr.evalString(env, ctx);
     } finally {
       env.setErrorMask(oldErrorMask);
     }
@@ -157,7 +156,7 @@ public class UnarySuppressErrorExpr extends AbstractUnaryExpr {
     int oldErrorMask = env.setErrorMask(0);
 
     try {
-      return _expr.evalCopy(env, VHelper.noCtx());
+      return _expr.evalCopy(env, ctx);
     } finally {
       env.setErrorMask(oldErrorMask);
     }

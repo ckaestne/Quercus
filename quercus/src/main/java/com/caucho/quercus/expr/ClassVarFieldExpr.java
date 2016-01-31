@@ -35,9 +35,8 @@ import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -87,7 +86,7 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, ctx);
 
     return cls.flatMap((a)->a.getStaticFieldValue(env, _varName));
   }
@@ -103,7 +102,7 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, ctx);
 
     return cls.flatMap((a)->a.getStaticFieldVar(env, _varName));
   }
@@ -120,9 +119,9 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, VHelper.noCtx());
+    V<? extends QuercusClass> cls = _className.evalQuercusClass(env, ctx);
 
-    return cls.flatMap((a)->a.setStaticFieldRef(env, VHelper.noCtx(), _varName, value)).map((a)->a.makeValue());
+    return cls.vflatMap(ctx, (c, a) -> a.setStaticFieldRef(env, c, _varName, value)).map((a) -> a.makeValue());
   }
 
   /**
