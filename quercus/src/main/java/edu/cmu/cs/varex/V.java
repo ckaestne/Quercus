@@ -17,7 +17,7 @@ public interface V<T> {
     @Deprecated
     T getOne();
     @Deprecated
-    T getOne(@Nonnull FeatureExpr ctx);
+    default T getOne(@Nonnull FeatureExpr ctx) { return select(ctx).getOne(); }
 
 
     <U> V<? extends U> map(@Nonnull Function<? super T, ? extends U> fun);
@@ -31,9 +31,19 @@ public interface V<T> {
 
     FeatureExpr when(@Nonnull Predicate<T> condition);
 
+    V<T> select(FeatureExpr configSpace);
+
+    FeatureExpr getConfigSpace();
+
+    @Deprecated
     static <U> V<U> one(@Nullable U v) {
-        return new One(v);
+        return one(VHelper.True(), v);
     }
+
+    static <U> V<U> one(FeatureExpr configSpace, @Nullable U v) {
+        return new One(configSpace, v);
+    }
+
     static <U> V<? extends U> choice(@Nonnull FeatureExpr condition, @Nullable U a, @Nullable U b) {
         if (condition.isContradiction())
             return one(b);

@@ -9,9 +9,11 @@ import java.util.function.*;
  * Created by ckaestne on 11/27/2015.
  */
 public class One<T> implements V<T> {
+    final FeatureExpr configSpace;
     final T value;
 
-    public One(T v) {
+    public One(FeatureExpr configSpace, T v) {
+        this.configSpace = configSpace;
         this.value = v;
     }
 
@@ -26,18 +28,13 @@ public class One<T> implements V<T> {
     }
 
     @Override
-    public T getOne(FeatureExpr ctx) {
-        return getOne();
-    }
-
-    @Override
     public <U> V<? extends U> map(Function<? super T, ? extends U> fun) {
-        return new One(fun.apply(value));
+        return new One(configSpace, fun.apply(value));
     }
 
     @Override
     public <U> V<? extends U> vmap(FeatureExpr ctx, BiFunction<FeatureExpr, ? super T, ? extends U> fun) {
-        return new One(fun.apply(ctx, value));
+        return new One(configSpace, fun.apply(ctx, value));
     }
 
     @Override
@@ -66,6 +63,22 @@ public class One<T> implements V<T> {
     }
 
     @Override
+    public V<T> select(FeatureExpr selectConfigSpace) {
+        assert selectConfigSpace.implies(configSpace).isTautology() :
+                "selecting under broader condition (" + selectConfigSpace + ") than the configuration space described by One (" + configSpace + ")";
+
+        FeatureExpr newCondition = configSpace.and(selectConfigSpace);
+        if (newCondition.isSatisfiable())
+            return new One(newCondition, value);
+        else return VEmpty.instance();
+    }
+
+    @Override
+    public FeatureExpr getConfigSpace() {
+        return configSpace;
+    }
+
+    @Override
     public int hashCode() {
         return value.hashCode();
     }
@@ -74,7 +87,7 @@ public class One<T> implements V<T> {
     public boolean equals(Object obj) {
         if (obj instanceof One) {
             if (((One) obj).value == null) return value == null;
-            return ((One)obj).value.equals(value);
+            return ((One)obj).value.equals(value) && ((One)obj).configSpace.equivalentTo(configSpace);
         }
         return super.equals(obj);
     }
