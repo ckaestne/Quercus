@@ -157,8 +157,11 @@ public class ForeachStatement
     while (iter.hasNext() && ctx.isSatisfiable()) {
       VEntry entry = iter.next();
       Value key = entry.getKey();
-      EnvVar value = entry.getEnvVar();
       FeatureExpr innerCtx = ctx.and(entry.getCondition());
+      EnvVar value;
+      if (!_isRef)
+        value = entry.getEnvVar();
+      else value = origObj.getOne(innerCtx).getVar(key);
 
       if (_key != null)
         _key.evalAssignValue(env, innerCtx, VHelper.toV(key));
