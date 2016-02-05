@@ -50,13 +50,13 @@ public class JavaArrayMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
-    return marshalValue(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
+    return marshalValue(env, ctx, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class expectedClass)
   {
     /*
     if (! value.isset()) {
@@ -71,7 +71,7 @@ public class JavaArrayMarshal extends Marshal
     */
 
     Class<?> componentType = expectedClass.getComponentType();
-    Object array = value.valuesToArray(env, componentType);
+    Object array = value.valuesToArray(env, ctx, componentType);
     /*
     if (array == null && _isNotNull) {
       env.warning(L.l(

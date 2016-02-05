@@ -111,7 +111,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
       createJavaObject(env);
     }
 
-    return V.one(_javaClassDef.putField(env, this, name, value.getOne().toValue()));
+    return V.one(_javaClassDef.putField(env, ctx, this, name, value.getOne().toValue()));
   }
 
   /**

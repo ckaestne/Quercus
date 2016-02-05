@@ -41,7 +41,7 @@ public class ByteObjectMarshal extends Marshal
   public static final Marshal MARSHAL = new ByteObjectMarshal();
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     return new Byte((byte) expr.evalLong(env, VHelper.noCtx()).getOne().longValue());
   }
@@ -53,7 +53,7 @@ public class ByteObjectMarshal extends Marshal
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class expectedClass)
   {
     return value.toJavaByte();
   }

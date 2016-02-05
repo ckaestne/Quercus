@@ -686,7 +686,7 @@ abstract public class JavaAdapter extends ArrayValue
    * <i>elementType</i>, and puts them in a java array.
    */
   @Override
-  public Object valuesToArray(Env env, Class elementType)
+  public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
     int size = getSize();
 
@@ -699,7 +699,7 @@ abstract public class JavaAdapter extends ArrayValue
 
     for (VEntry entry : entrySet()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-                                                   entry.getEnvVar().getOne(),
+              ctx, entry.getEnvVar().getOne(),
                                                    elementType));
     }
 
@@ -717,7 +717,7 @@ abstract public class JavaAdapter extends ArrayValue
                                      FeatureExpr ctx, StringValue name,
                                      V<? extends ValueOrVar> value)
   {
-    return V.one(_classDef.putField(env, this, name, value.getOne().toValue()));
+    return V.one(_classDef.putField(env, ctx, this, name, value.getOne().toValue()));
   }
 
   /**

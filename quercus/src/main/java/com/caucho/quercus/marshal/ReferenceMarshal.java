@@ -56,7 +56,7 @@ public class ReferenceMarshal extends Marshal
   protected boolean isRefMarshal() { return true; }
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     // quercus/0d1k
     return expr.evalRef(env, VHelper.noCtx());
@@ -68,7 +68,7 @@ public class ReferenceMarshal extends Marshal
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class argClass)
   {
     return value.toLocalVarDeclAsRef();
   }

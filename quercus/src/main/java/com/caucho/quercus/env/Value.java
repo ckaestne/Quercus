@@ -1125,7 +1125,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Converts to a callable
    */
-  public Callable toCallable(Env env, boolean isOptional) {
+  public Callable toCallable(Env env, FeatureExpr ctx, boolean isOptional) {
     if (!isOptional) {
       env.warning(L.l("Callable: '{0}' is not a valid callable argument",
               toString()));
@@ -1325,7 +1325,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Evaluates the function.
    */
   public V<? extends ValueOrVar> call(Env env, FeatureExpr ctx, V<? extends ValueOrVar>[] args) {
-    Callable call = toCallable(env, false);
+    Callable call = toCallable(env, ctx, false);
 
     if (call != null)
       return call.call(env, ctx, args);
@@ -2813,7 +2813,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Takes the values of this array, unmarshalls them to objects of type
    * <i>elementType</i>, and puts them in a java array.
    */
-  public Object valuesToArray(Env env, Class<?> elementType)
+  public Object valuesToArray(Env env, FeatureExpr ctx, Class<?> elementType)
   {
     env.error(L.l("Can't assign {0} with type {1} to {2}[]",
                   this,

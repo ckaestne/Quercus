@@ -253,7 +253,7 @@ public class JavaValue extends ObjectValue
   @Override
   public V<? extends Value> putField(Env env, FeatureExpr ctx, StringValue name, V<? extends ValueOrVar> value)
   {
-    Value oldValue = _classDef.putField(env, this, name, value.getOne().toValue());
+    Value oldValue = _classDef.putField(env, ctx, this, name, value.getOne().toValue());
 
     if (oldValue != null)
       return V.one(oldValue);

@@ -47,13 +47,13 @@ public class ShortObjectMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     return new Short((short) expr.evalLong(env, VHelper.noCtx()).getOne().longValue());
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class expectedClass)
   {
     return value.toJavaShort();
   }

@@ -40,13 +40,13 @@ public class VoidMarshal extends Marshal
   public static final Marshal MARSHAL = new VoidMarshal();
   
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class expectedClass)
   {
     throw new UnsupportedOperationException();
   }

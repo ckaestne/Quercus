@@ -44,13 +44,13 @@ public class EregiMarshal extends StringMarshal {
   public static final EregiMarshal MARSHAL = new EregiMarshal();
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     return RegexpModule.createEregi(env, expr.eval(env, VHelper.noCtx()).getOne());
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class expectedClass)
   {
     return RegexpModule.createEregi(env, value);
   }

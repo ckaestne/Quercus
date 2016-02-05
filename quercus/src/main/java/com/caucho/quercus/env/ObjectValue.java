@@ -235,13 +235,13 @@ abstract public class ObjectValue extends Callback {
   }
 
   @Override
-  public Callable toCallable(Env env, boolean isOptional)
+  public Callable toCallable(Env env, FeatureExpr ctx, boolean isOptional)
   {
     if (_quercusClass.getInvoke() != null) {
       return this;
     }
     else {
-      return super.toCallable(env, isOptional);
+      return super.toCallable(env, ctx, isOptional);
     }
   }
 

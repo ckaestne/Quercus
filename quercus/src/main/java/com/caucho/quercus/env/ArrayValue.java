@@ -456,16 +456,16 @@ abstract public class ArrayValue extends Value {
    * Converts to a callable object.
    */
   @Override
-  public Callable toCallable(Env env, boolean isOptional)
+  public Callable toCallable(Env env, FeatureExpr ctx, boolean isOptional)
   {
-    Value obj = get(LongValue.ZERO).getOne();
-    Value nameV = get(LongValue.ONE).getOne();
+    Value obj = get(LongValue.ZERO).getOne(ctx);
+    Value nameV = get(LongValue.ONE).getOne(ctx);
 
     if (! nameV.isString()) {
       env.warning(L.l("'{0}' ({1}) is an unknown callback name",
                       nameV, nameV.getClass().getSimpleName()));
 
-      return super.toCallable(env, false);
+      return super.toCallable(env, ctx, false);
     }
 
     String name = nameV.toString();
@@ -486,7 +486,7 @@ abstract public class ArrayValue extends Value {
           env.warning(L.l("Callback: '{0}' is not a valid callback class for {1}",
                           clsName, name));
 
-          return super.toCallable(env, false);
+          return super.toCallable(env, ctx, false);
         }
 
         return new CallbackClassMethod(cls, env.createString(name), obj);
@@ -501,7 +501,7 @@ abstract public class ArrayValue extends Value {
         env.warning(L.l("Callback: '{0}' is not a valid callback string for {1}",
                         obj.toString(), obj));
 
-        return super.toCallable(env, isOptional);
+        return super.toCallable(env, ctx, isOptional);
       }
 
       return new CallbackClassMethod(cl, env.createString(name), NullThisValue.NULL);
@@ -2074,7 +2074,7 @@ abstract public class ArrayValue extends Value {
    * <i>elementType</i>, and puts them in a java array.
    */
   @Override
-  public Object valuesToArray(Env env, Class elementType)
+  public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
     int size = getSize();
 
@@ -2087,7 +2087,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-              ptr.getEnvVar().getVar(),
+              VHelper.noCtx(), ptr.getEnvVar().getVar(),
                                                    elementType));
     }
 

@@ -827,11 +827,11 @@ abstract public class JavaInvoker
     for (int i = 0; i < _marshalArgs.length; i++) {
       int _i = i, _k = k;
       if (i < args.length && args[i] != null)
-        javaArgs[k] = _marshalArgs[_i].marshal(env, args[i], _param[_k]);
+        javaArgs[k] = _marshalArgs[_i].marshal(env, ctx, args[i], _param[_k]);
       else if (_defaultExprs[i] != null) {
         javaArgs[k] =
                 _marshalArgs[_i].marshal(env,
-                        _defaultExprs[i].eval(env, ctx),
+                        ctx, _defaultExprs[i].eval(env, ctx),
                         _param[_k]);
       } else {
         warnMessage = L.l(
@@ -843,7 +843,7 @@ abstract public class JavaInvoker
 
         //return NullValue.NULL;
 
-        javaArgs[k] = V.one(_marshalArgs[i].marshal(env, V.one(NullValue.NULL), _param[k]));
+        javaArgs[k] = V.one(_marshalArgs[i].marshal(env, ctx, V.one(NullValue.NULL), _param[k]));
       }
 
       /*

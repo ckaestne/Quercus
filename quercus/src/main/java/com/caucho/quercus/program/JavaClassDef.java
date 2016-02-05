@@ -513,7 +513,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
   }
 
   public Value putField(Env env,
-                        Value qThis,
+                        FeatureExpr ctx, Value qThis,
                         StringValue nameV,
                         Value value)
   {
@@ -535,7 +535,7 @@ public class JavaClassDef extends ClassDef implements InstanceInitializer {
     if (fieldPair != null) {
       try {
         Class<?> type = fieldPair._field.getType();
-        Object marshaledValue = fieldPair._marshal.marshal(env, value, type);
+        Object marshaledValue = fieldPair._marshal.marshal(env, ctx, value, type);
         fieldPair._field.set(qThis.toJavaObject(), marshaledValue);
 
         return value;

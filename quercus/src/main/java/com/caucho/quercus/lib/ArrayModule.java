@@ -642,7 +642,7 @@ public class ArrayModule
     ArrayValue filteredArray = new ArrayValueImpl();
 
     if (! callbackName.isDefault()) {
-      Callable callback = callbackName.toCallable(env, false);
+      Callable callback = callbackName.toCallable(env, VHelper.noCtx(), false);
 
       if (callback == null || ! callback.isValid(env)) {
         return NullValue.NULL;
@@ -1953,7 +1953,7 @@ public class ArrayModule
 
     Value callbackValue = arrays[arrays.length - 1];
 
-    Callable cmp = callbackValue.toCallable(env, false);
+    Callable cmp = callbackValue.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmp.isValid(env))
       return NullValue.NULL;
@@ -2037,14 +2037,14 @@ public class ArrayModule
 
     Value callbackValue = arrays[arrays.length - 2];
 
-    Callable cmpValue = callbackValue.toCallable(env, false);
+    Callable cmpValue = callbackValue.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmpValue.isValid(env))
       return NullValue.NULL;
 
     Value callbackKey = arrays[arrays.length - 1];
 
-    Callable cmpKey = callbackKey.toCallable(env, false);
+    Callable cmpKey = callbackKey.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmpKey.isValid(env))
       return NullValue.NULL;
@@ -2128,7 +2128,7 @@ public class ArrayModule
 
     Value callbackValue = arrays[arrays.length - 1];
 
-    Callable cmp = callbackValue.toCallable(env, false);
+    Callable cmp = callbackValue.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmp.isValid(env))
       return NullValue.NULL;
@@ -2204,7 +2204,7 @@ public class ArrayModule
 
     Value callbackValue = arrays[arrays.length - 1];
 
-    Callable cmp = callbackValue.toCallable(env, false);
+    Callable cmp = callbackValue.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmp.isValid(env))
       return NullValue.NULL;
@@ -2286,14 +2286,14 @@ public class ArrayModule
 
     Value callbackValue = arrays[arrays.length - 2];
 
-    Callable cmpValue = callbackValue.toCallable(env, false);
+    Callable cmpValue = callbackValue.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmpValue.isValid(env))
       return NullValue.NULL;
 
     Value callbackKey = arrays[arrays.length - 1];
 
-    Callable cmpKey = callbackKey.toCallable(env, false);
+    Callable cmpKey = callbackKey.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmpKey.isValid(env))
       return NullValue.NULL;
@@ -2375,7 +2375,7 @@ public class ArrayModule
 
     Value callbackValue = arrays[arrays.length - 1];
 
-    Callable cmp = callbackValue.toCallable(env, false);
+    Callable cmp = callbackValue.toCallable(env, VHelper.noCtx(), false);
 
     if (! cmp.isValid(env))
       return NullValue.NULL;

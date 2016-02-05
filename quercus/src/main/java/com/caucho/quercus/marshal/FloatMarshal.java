@@ -53,13 +53,13 @@ public class FloatMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     return new Float((float) expr.evalDouble(env, VHelper.noCtx()).getOne().doubleValue());
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class expectedClass)
   {
     return new Float((float) value.toDouble());
   }

@@ -882,7 +882,7 @@ abstract public class StringValue
    * <i>elementType</i>, and puts them in a java array.
    */
   @Override
-  public Object valuesToArray(Env env, Class elementType)
+  public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
     if (char.class.equals(elementType)) {
       return toUnicode(env).toCharArray();
@@ -929,11 +929,11 @@ abstract public class StringValue
    * Converts to a callable object
    */
   @Override
-  public Callable toCallable(Env env, boolean isOptional)
+  public Callable toCallable(Env env, FeatureExpr ctx, boolean isOptional)
   {
     // php/1h0o
     if (isEmpty()) {
-      return super.toCallable(env, isOptional);
+      return super.toCallable(env, ctx, isOptional);
     }
 
     int p = indexOf("::");
@@ -949,7 +949,7 @@ abstract public class StringValue
       if (cl == null) {
         env.warning(L.l("can't find class {0}", className));
 
-        return super.toCallable(env, false);
+        return super.toCallable(env, ctx, false);
       }
 
       return new CallbackClassMethod(cl, methodName);

@@ -195,20 +195,20 @@ abstract public class Marshal {
 
   @Deprecated
 //Do not call anymore, evaluate first and use other marshal function instead. This won't be maintained for V implementation.
-  abstract public Object marshal(Env env, Expr expr, Class argClass);
+  abstract public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class argClass);
 
   @Deprecated
   @VDeprecated
-  final public Object marshal(Env env, Value value, Class argClass) {
-    return marshalValue(env, value, argClass);
+  final public Object marshal(Env env, FeatureExpr ctx, Value value, Class argClass) {
+    return marshalValue(env, ctx, value, argClass);
   }
 
-  public V<? extends Object> marshal(Env env, V<? extends ValueOrVar> value, Class argClass) {
-    return value.<Object>flatMap(v -> {
+  public V<? extends Object> marshal(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value, Class argClass) {
+    return value.<Object>vflatMap(ctx, (c, v) -> {
       if (isRefMarshal() && v.isVar()) {
-        return V.one(marshalRef(env, v._var(), argClass));
+        return V.one(c, marshalRef(env, v._var(), argClass));
       }
-      return v._getValues().map(vv -> marshalValue(env, vv, argClass));
+      return v._getValues().select(c).vmap(c, (cc,vv) -> marshalValue(env, cc, vv, argClass));
     });
   }
 
@@ -218,12 +218,12 @@ abstract public class Marshal {
     throw new UnsupportedOperationException("can only be called on ReferenceMarshal");
   }
 
-  protected Object marshalValue(Env env, Value value, Class argClass)
+  protected Object marshalValue(Env env, FeatureExpr ctx, Value value, Class argClass)
   {
-    return marshalImpl(env, value.toLocalValue(), argClass);
+    return marshalImpl(env, ctx, value.toLocalValue(), argClass);
   }
 
-  protected Object marshalImpl(Env env, Value value, Class<?> argClass)
+  protected Object marshalImpl(Env env, FeatureExpr ctx, Value value, Class<?> argClass)
   {
     return value;
   }

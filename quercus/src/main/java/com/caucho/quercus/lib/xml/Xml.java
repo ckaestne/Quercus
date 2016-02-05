@@ -163,11 +163,11 @@ public class Xml {
   {
     if (_obj == null) {
       if (! startElementHandler.isEmpty()) {
-        _startElementHandler = startElementHandler.toCallable(env, false);
+        _startElementHandler = startElementHandler.toCallable(env, VHelper.noCtx(), false);
       }
 
       if (! endElementHandler.isEmpty()) {
-        _endElementHandler = endElementHandler.toCallable(env, false);
+        _endElementHandler = endElementHandler.toCallable(env, VHelper.noCtx(), false);
       }
     }
     else {
@@ -198,12 +198,12 @@ public class Xml {
   public boolean xml_set_character_data_handler(Env env, Value handler)
   {
     if (_obj == null) {
-      _characterDataHandler = handler.toCallable(env, false);
+      _characterDataHandler = handler.toCallable(env, VHelper.noCtx(), false);
     } else {
       Value value = new ArrayValueImpl();
       value.put(VHelper.noCtx(), _obj);
       value.put(VHelper.noCtx(), handler);
-      _characterDataHandler = value.toCallable(env, false);
+      _characterDataHandler = value.toCallable(env, VHelper.noCtx(), false);
     }
 
     return true;
@@ -227,13 +227,13 @@ public class Xml {
   public boolean xml_set_default_handler(Env env, Value handler)
   {
     if (_obj == null) {
-      _defaultHandler = handler.toCallable(env, false);
+      _defaultHandler = handler.toCallable(env, VHelper.noCtx(), false);
     }
     else {
       Value value = new ArrayValueImpl();
       value.put(VHelper.noCtx(), _obj);
       value.put(VHelper.noCtx(), handler);
-      _defaultHandler = value.toCallable(env, false);
+      _defaultHandler = value.toCallable(env, VHelper.noCtx(), false);
     }
     return true;
   }
@@ -250,12 +250,12 @@ public class Xml {
   {
     if (_obj == null) {
       _processingInstructionHandler
-        = processingInstructionHandler.toCallable(env, false);
+        = processingInstructionHandler.toCallable(env, VHelper.noCtx(), false);
     } else {
       Value value = new ArrayValueImpl();
       value.put(VHelper.noCtx(), _obj);
       value.put(VHelper.noCtx(), processingInstructionHandler);
-      _processingInstructionHandler = value.toCallable(env, false);
+      _processingInstructionHandler = value.toCallable(env, VHelper.noCtx(), false);
     }
     return true;
   }
@@ -271,12 +271,12 @@ public class Xml {
       Value startNamespaceDeclHandler)
   {
     if (_obj == null) {
-      _startNamespaceDeclHandler = startNamespaceDeclHandler.toCallable(env, false);
+      _startNamespaceDeclHandler = startNamespaceDeclHandler.toCallable(env, VHelper.noCtx(), false);
     } else {
       Value value = new ArrayValueImpl();
       value.put(VHelper.noCtx(), _obj);
       value.put(VHelper.noCtx(), startNamespaceDeclHandler);
-      _startNamespaceDeclHandler = value.toCallable(env, false);
+      _startNamespaceDeclHandler = value.toCallable(env, VHelper.noCtx(), false);
     }
     return true;
   }
@@ -290,12 +290,12 @@ public class Xml {
   public boolean xml_set_unparsed_entity_decl_handler(Env env, Value handler)
   {
     if (_obj == null) {
-      _unparsedEntityDeclHandler = handler.toCallable(env, false);
+      _unparsedEntityDeclHandler = handler.toCallable(env, VHelper.noCtx(), false);
     } else {
       Value value = new ArrayValueImpl();
       value.put(VHelper.noCtx(), _obj);
       value.put(VHelper.noCtx(), handler);
-      _unparsedEntityDeclHandler = value.toCallable(env, false);
+      _unparsedEntityDeclHandler = value.toCallable(env, VHelper.noCtx(), false);
     }
     return true;
   }
@@ -311,12 +311,12 @@ public class Xml {
       Value endNamespaceDeclHandler)
   {
     if (_obj == null) {
-      _endNamespaceDeclHandler = endNamespaceDeclHandler.toCallable(env, false);
+      _endNamespaceDeclHandler = endNamespaceDeclHandler.toCallable(env, VHelper.noCtx(), false);
     } else {
       Value value = new ArrayValueImpl();
       value.put(VHelper.noCtx(), _obj);
       value.put(VHelper.noCtx(), endNamespaceDeclHandler);
-      _endNamespaceDeclHandler = value.toCallable(env, false);
+      _endNamespaceDeclHandler = value.toCallable(env, VHelper.noCtx(), false);
     }
     return true;
   }
@@ -330,12 +330,12 @@ public class Xml {
   public boolean xml_set_notation_decl_handler(Env env, Value handler)
   {
     if (_obj == null) {
-      _notationDeclHandler = handler.toCallable(env, false);
+      _notationDeclHandler = handler.toCallable(env, VHelper.noCtx(), false);
     } else {
       Value value = new ArrayValueImpl();
       value.put(VHelper.noCtx(), _obj);
       value.put(VHelper.noCtx(), handler);
-      _notationDeclHandler = value.toCallable(env, false);
+      _notationDeclHandler = value.toCallable(env, VHelper.noCtx(), false);
     }
     return true;
   }

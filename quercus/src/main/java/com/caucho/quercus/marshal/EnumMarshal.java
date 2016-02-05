@@ -48,7 +48,7 @@ public class EnumMarshal extends Marshal {
   }
 
   @Override
-  public Object marshal(Env env, Expr expr, Class argClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class argClass)
   {
     String name = expr.evalString(env, VHelper.noCtx()).toString();
 
@@ -67,7 +67,7 @@ public class EnumMarshal extends Marshal {
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class argClass)
   {
     return value.toJavaEnum(env, argClass);
   }

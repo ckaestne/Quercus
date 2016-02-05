@@ -409,7 +409,7 @@ public class NullValue extends Value
    * <i>elementType</i>, and puts them in a java array.
    */
   @Override
-  public Object valuesToArray(Env env, Class elementType)
+  public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
     return null;
   }

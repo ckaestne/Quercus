@@ -43,13 +43,13 @@ public class BigDecimalMarshal extends Marshal {
   public static final Marshal MARSHAL = new BigDecimalMarshal();
 
   @Override
-  public Object marshal(Env env, Expr expr, Class argClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class argClass)
   {
     return expr.eval(env, VHelper.noCtx()).getOne().toBigDecimal();
   }
   
   @Override
-  public Object marshalValue(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class argClass)
   {
     return value.toBigDecimal();
   }

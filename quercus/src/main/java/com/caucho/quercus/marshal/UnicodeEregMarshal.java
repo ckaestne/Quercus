@@ -44,13 +44,13 @@ public class UnicodeEregMarshal extends StringMarshal {
   public static final UnicodeEregMarshal MARSHAL = new UnicodeEregMarshal();
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     return RegexpModule.createUnicodeEreg(env, expr.eval(env, VHelper.noCtx()).getOne().toStringValue());
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class expectedClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class expectedClass)
   {
     return RegexpModule.createUnicodeEreg(env, value.toStringValue());
   }

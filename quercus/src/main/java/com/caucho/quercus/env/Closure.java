@@ -74,7 +74,7 @@ abstract public class Closure extends Callback
   }
 
   @Override
-  public Callable toCallable(Env env, boolean isOptional)
+  public Callable toCallable(Env env, FeatureExpr ctx, boolean isOptional)
   {
     return this;
   }

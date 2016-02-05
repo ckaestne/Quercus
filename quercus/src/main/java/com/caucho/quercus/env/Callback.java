@@ -31,7 +31,6 @@ package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import javax.annotation.Nonnull;
 
 /**
  * Represents a call to a function.
@@ -40,7 +39,7 @@ import javax.annotation.Nonnull;
 abstract public class Callback extends Value implements Callable {
 
   @Override
-  public Callable toCallable(Env env, boolean isOptional)
+  public Callable toCallable(Env env, FeatureExpr ctx, boolean isOptional)
   {
     return this;
   }

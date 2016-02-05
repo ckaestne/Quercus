@@ -34,6 +34,7 @@ import com.caucho.quercus.env.JavaMapAdapter;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.program.JavaClassDef;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 
 /**
  * Code for marshalling arguments.
@@ -54,7 +55,7 @@ public class JavaMapMarshal extends JavaMarshal {
   }
 
   @Override
-  public Object marshalValue(Env env, Value value, Class argClass)
+  public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class argClass)
   {
     if (! value.isset()) {
       if (_isNotNull) {

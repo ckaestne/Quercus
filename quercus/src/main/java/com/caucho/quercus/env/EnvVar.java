@@ -64,6 +64,8 @@ abstract public class EnvVar
 
   @Deprecated@VDeprecated
   public final Value getOne() { return getValue().getOne(); }
+  @Deprecated@VDeprecated
+  public final Value getOne(FeatureExpr ctx) { return getValue().getOne(ctx); }
 
   /**
    * Sets the current value.

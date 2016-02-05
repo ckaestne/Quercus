@@ -55,15 +55,15 @@ public class CallableMarshal extends Marshal
   }
 
   @Override
-  public Object marshal(Env env, Expr expr, Class expectedClass)
+  public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
-    return marshalValue(env, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
+    return marshalValue(env, ctx, expr.eval(env, VHelper.noCtx()).getOne(), expectedClass);
   }
 
   @Override
-  protected Object marshalImpl(Env env, Value value, Class<?> expectedClass)
+  protected Object marshalImpl(Env env, FeatureExpr ctx, Value value, Class<?> expectedClass)
   {
-    Callable callable = value.toCallable(env, _isOptional);
+    Callable callable = value.toCallable(env, ctx, _isOptional);
 
     return callable;
   }
