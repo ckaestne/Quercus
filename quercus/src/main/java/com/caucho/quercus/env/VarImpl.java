@@ -33,7 +33,6 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import java.util.IdentityHashMap;
 
@@ -895,8 +894,8 @@ public class VarImpl extends Var {
 //   */
 //
   @Override
-  public Var toLocalVarDeclAsRef() {
-    return this;
+  public V<? extends Var> toLocalVarDeclAsRef() {
+    return V.one(this);
   }
 
   //

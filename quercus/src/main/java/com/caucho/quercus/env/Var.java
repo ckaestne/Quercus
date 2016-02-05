@@ -924,9 +924,9 @@ public abstract class Var
 //   */
 //
   @Override
-  public Var toLocalVarDeclAsRef()
+  public V<? extends Var> toLocalVarDeclAsRef()
   {
-    return this;
+    return V.one(this);
   }
 //
 //  /**

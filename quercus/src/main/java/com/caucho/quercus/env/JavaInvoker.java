@@ -869,10 +869,10 @@ abstract public class JavaInvoker
 
         for (int i = _marshalArgs.length; i < args.length; i++) {
           if (_isRestReference) {
-            rest[i - _marshalArgs.length] = args[i].map(a->a.toLocalVarDeclAsRef().makeValue());
+            rest[i - _marshalArgs.length] = args[i].flatMap(a->a.toLocalVarDeclAsRef()).map(a->a.makeValue());
           }
           else
-            rest[i - _marshalArgs.length] = args[i].map(a->a.toValue());
+            rest[i - _marshalArgs.length] = args[i].flatMap(a->a._getValues());
         }
       }
 

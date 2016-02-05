@@ -29,8 +29,6 @@
 
 package com.caucho.quercus.env;
 
-import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 
 import java.io.Serializable;
@@ -91,11 +89,11 @@ public class ArgGetValue extends ArgValue
    * Converts to a reference variable.
    */
   @Override
-  public Var toLocalVarDeclAsRef()
+  public V<? extends Var> toLocalVarDeclAsRef()
   {
     // php/3d55, php/3d49, php/3921
 
-    return _obj.toAutoArray().getVar(_index).getVar().getOne()/*.toLocalVarDeclAsRef()*/;
+    return _obj.toAutoArray().getVar(_index).getVar()/*.toLocalVarDeclAsRef()*/;
   }
 //
   @Override

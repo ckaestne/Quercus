@@ -255,7 +255,7 @@ public class Function extends AbstractFunction {
       else if (arg.isReference()) {
         values[i] = args[i].evalVar(env, ctx);
 
-        map.put(arg.getName(), new EnvVarImpl(values[i].map((a)->a.toLocalVarDeclAsRef())));
+        map.put(arg.getName(), new EnvVarImpl(values[i].flatMap((a)->a.toLocalVarDeclAsRef())));
       }
       else {
         // php/0d04
@@ -363,7 +363,7 @@ public class Function extends AbstractFunction {
       if (arg == null) {
       }
       else if (arg.isReference()) {
-        map.put(arg.getName(), new EnvVarImpl(args[i].map((a)->a.toLocalVarDeclAsRef())));
+        map.put(arg.getName(), new EnvVarImpl(args[i].flatMap((a)->a.toLocalVarDeclAsRef())));
       }
       else {
         // XXX: php/1708, toVar() may be doing another copy()

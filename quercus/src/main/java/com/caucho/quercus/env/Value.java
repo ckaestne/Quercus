@@ -915,8 +915,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * where $a is used as a variable in the function
    */
   @Override
-  public Var toLocalVarDeclAsRef() {
-    return new VarImpl(V.one(this));
+  public V<? extends Var> toLocalVarDeclAsRef() {
+    return V.one(new VarImpl(V.one(this)));
   }
 
   /**
