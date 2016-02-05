@@ -104,7 +104,7 @@ public class CopyArrayValue extends ArrayValue {
    * Returns the size.
    */
   @Override
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
     if (_copyArray != null)
       return _copyArray.getSize();

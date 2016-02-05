@@ -552,9 +552,9 @@ public class StringBuilderValue
    * Returns true if the value is empty.
    */
   @Override
-  public final boolean isEmpty()
+  public final V<? extends Boolean> isEmpty()
   {
-    return _length == 0 || _length == 1 && _buffer[0] == '0';
+    return V.one(_length == 0 || _length == 1 && _buffer[0] == '0');
   }
 
   /**

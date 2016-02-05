@@ -387,14 +387,14 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns true if the value is empty
    */
-  public boolean isEmpty() {
-    return false;
+  public V<? extends Boolean> isEmpty() {
+    return V.one(false);
   }
 
   /**
    * Returns true if the value is empty
    */
-  public boolean isEmpty(Env env, Value index) {
+  public V<? extends Boolean> isEmpty(Env env, Value index) {
     return isEmpty();
   }
 
@@ -2076,23 +2076,23 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns the array size.
    */
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
-    return 1;
+    return V.one(1);
   }
 
   /**
    * Returns the count, as returned by the global php count() function
    */
-  public int getCount(Env env)
+  public V<? extends Integer> getCount(Env env)
   {
-    return 1;
+    return getSize();
   }
 
   /**
    * Returns the count, as returned by the global php count() function
    */
-  public int getCountRecursive(Env env)
+  public V<? extends Integer> getCountRecursive(Env env)
   {
     return getCount(env);
   }

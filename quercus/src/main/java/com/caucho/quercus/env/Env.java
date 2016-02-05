@@ -2530,7 +2530,7 @@ public class Env
 
         Var array = getGlobalEnvVar(isUnicodeSemantics() ? S_ARGV_U : S_ARGV).getVar().getOne();
 
-        int size = array.getValue().getOne().getSize();
+        int size = array.getValue().getOne().getSize().getOne();
 
         Var var = new VarImpl();
         EnvVar envVar = new EnvVarImpl(V.one(var));
@@ -2561,7 +2561,7 @@ public class Env
         envVar.set(VHelper.noCtx(), V.one(post));
 
         if (_variablesOrder.indexOf('P') >= 0
-            && _inputPost.getSize() > 0) {
+            && _inputPost.getSize().getOne() > 0) {
           for (VEntry entry : _inputPost.entrySet()) {
             post.put(entry.getKey(), entry.getEnvVar());
           }
@@ -2653,7 +2653,7 @@ public class Env
               array.putAll(getInputGetArray());
               break;
             case 'P':
-              if (_inputPost.getSize() > 0)
+              if (_inputPost.getSize().getOne() > 0)
                 fillPost(array, _inputPost);
               break;
             case 'C':
@@ -2708,7 +2708,7 @@ public class Env
             ArrayValue argv = createArgv();
 
             serverEnv.put(createString("argc"),
-                          LongValue.create(argv.getSize()));
+                          LongValue.create(argv.getSize().getOne()));
 
             serverEnv.put(createString("argv"), argv);
           }
@@ -7576,7 +7576,7 @@ public class Env
         String value;
 
         // php/1k6e
-        if (session.getSize() > 0)
+        if (session.getSize().getOne() > 0)
           value = VariableModule.serialize(this, session.getArray());
         else
           value = "";

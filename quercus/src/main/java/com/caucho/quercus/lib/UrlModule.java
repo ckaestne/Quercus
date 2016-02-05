@@ -267,7 +267,7 @@ public class UrlModule
         for (Value key : result.keySet()) {
           Value value = result.get(key).getOne();
 
-          if (value.isArray() && value.getSize() == 1)
+          if (value.isArray() && value.getSize().getOne() == 1)
             result.put(key, value.get(LongValue.ZERO));
         }
       } else {

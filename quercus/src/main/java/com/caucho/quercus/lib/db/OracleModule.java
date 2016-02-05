@@ -1812,7 +1812,7 @@ public class OracleModule extends AbstractQuercusModule {
 
     if (array.isArray()) {
       result.set(array);
-      return LongValue.create(array.getSize());
+      return LongValue.create(array.getSize().getOne());
     }
     else {
       return BooleanValue.FALSE;

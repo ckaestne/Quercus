@@ -89,7 +89,7 @@ public class PDOStatement
     _pdo = pdo;
     _error = error;
 
-    if (options != null && options.getSize() > 0) {
+    if (options != null && options.getSize().getOne() > 0) {
       env.notice(L.l("PDOStatement options unsupported"));
     }
 
@@ -418,7 +418,7 @@ public class PDOStatement
     closeCursor(env);
 
     if (parameters != null) {
-      int size = parameters.getSize();
+      int size = parameters.getSize().getOne();
 
       ColumnType[] types = new ColumnType[size];
       Var[] values = new Var[size];
@@ -631,7 +631,7 @@ public class PDOStatement
         // doesn't handle references
         ArrayValue argsArray = (ArrayValue) _fetchModeArgs[1];
 
-        ctorArgs = new Value[argsArray.getSize()];
+        ctorArgs = new Value[argsArray.getSize().getOne()];
 
         int i = 0;
 

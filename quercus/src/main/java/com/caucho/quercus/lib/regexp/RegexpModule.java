@@ -263,7 +263,7 @@ public class RegexpModule
     if (pattern.isArray()) {
       ArrayValue array = pattern.toArray();
 
-      Regexp []regexpArray = new Regexp[array.getSize()];
+      Regexp []regexpArray = new Regexp[array.getSize().getOne()];
 
       int i = 0;
       for (EnvVar value : array.values()) {
@@ -538,7 +538,7 @@ public class RegexpModule
         if (isOffsetCapture) {
           // php/151u
           // add unmatched groups first
-          for (int j = regs.getSize(); j < i; j++) {
+          for (int j = regs.getSize().getOne(); j < i; j++) {
             ArrayValue part = new ArrayValueImpl();
 
             part.append(empty);
@@ -561,7 +561,7 @@ public class RegexpModule
         else {
           // php/151u
           // add unmatched groups first
-          for (int j = regs.getSize(); j < i; j++) {
+          for (int j = regs.getSize().getOne(); j < i; j++) {
             regs.put(LongValue.create(j), empty);
           }
 
@@ -794,7 +794,7 @@ public class RegexpModule
 
             // php/152n
             // add unmatched groups first
-            for (int j = matchResult.getSize(); j < i; j++) {
+            for (int j = matchResult.getSize().getOne(); j < i; j++) {
               ArrayValue part = new ArrayValueImpl();
 
               part.append(empty);
@@ -810,7 +810,7 @@ public class RegexpModule
           } else {
             // php/
             // add any unmatched groups that was skipped
-            for (int j = matchResult.getSize(); j < i; j++) {
+            for (int j = matchResult.getSize().getOne(); j < i; j++) {
               matchResult.put(LongValue.create(j), empty);
             }
 

@@ -83,7 +83,7 @@ public class ArrayAccessDelegate implements ArrayDelegate
 
     Value value = get(env, qThis, index);
 
-    return value.isEmpty();
+    return value.isEmpty().getOne();
   }
 
   @Override

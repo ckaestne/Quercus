@@ -31,6 +31,7 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -142,9 +143,9 @@ public class LongValue extends NumberValue
    * Returns true if the value is empty
    */
   @Override
-  public boolean isEmpty()
+  public V<? extends Boolean> isEmpty()
   {
-    return _value == 0;
+    return V.one(_value == 0);
   }
 
   //

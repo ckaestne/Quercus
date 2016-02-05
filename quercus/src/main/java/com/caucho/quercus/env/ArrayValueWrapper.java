@@ -33,7 +33,6 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.Function4;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -90,7 +89,7 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the size.
    */
   @Override
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
     return _array.getSize();
   }

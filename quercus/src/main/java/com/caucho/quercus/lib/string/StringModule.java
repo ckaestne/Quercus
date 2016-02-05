@@ -596,7 +596,7 @@ public class StringModule extends AbstractQuercusModule {
 
     for (int i = 0; i < stringLength; ++i) {
 
-      if (ulimit <= array.getSize() + 1) {
+      if (ulimit <= array.getSize().getOne() + 1) {
         break;
       }
 
@@ -614,7 +614,7 @@ public class StringModule extends AbstractQuercusModule {
 
     array.append(chunk);
 
-    while (array.getSize() > 0 && limit++ < 0) {
+    while (array.getSize().getOne() > 0 && limit++ < 0) {
       array.pop(env, VHelper.noCtx());
     }
 
@@ -4637,7 +4637,7 @@ public class StringModule extends AbstractQuercusModule {
                                         ArrayValue map)
   {
     VHelper.assertNonVariational(map);
-    int size = map.getSize();
+    int size = map.getSize().getOne();
 
     StringValue []fromList = new StringValue[size];
     StringValue []toList = new StringValue[size];
@@ -5058,7 +5058,7 @@ public class StringModule extends AbstractQuercusModule {
     Value []args;
 
     if (array != null) {
-      args = new Value[array.getSize()];
+      args = new Value[array.getSize().getOne()];
       int i = 0;
       for (EnvVar value : array.values())
         args[i++] = value.getOne();
@@ -5082,7 +5082,7 @@ public class StringModule extends AbstractQuercusModule {
     Value []args;
 
     if (array != null) {
-      args = new Value[array.getSize()];
+      args = new Value[array.getSize().getOne()];
       int i = 0;
       for (EnvVar value : array.values())
         args[i++] = value.getOne();

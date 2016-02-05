@@ -75,7 +75,7 @@ public class Post
                addSlashesToValues,
                isAllowUploads);
 
-      if (postArray.getSize() == 0) {
+      if (postArray.getSize().getOne() == 0) {
         // needs to be last or else this function will consume the inputstream
         putRequestMap(env, postArray, files, request,
                       addSlashesToValues, isAllowUploads);

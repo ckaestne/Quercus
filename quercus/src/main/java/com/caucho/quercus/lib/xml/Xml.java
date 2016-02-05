@@ -162,23 +162,23 @@ public class Xml {
                                          Value endElementHandler)
   {
     if (_obj == null) {
-      if (! startElementHandler.isEmpty()) {
+      if (! startElementHandler.isEmpty().getOne()) {
         _startElementHandler = startElementHandler.toCallable(env, VHelper.noCtx(), false);
       }
 
-      if (! endElementHandler.isEmpty()) {
+      if (! endElementHandler.isEmpty().getOne()) {
         _endElementHandler = endElementHandler.toCallable(env, VHelper.noCtx(), false);
       }
     }
     else {
-      if (! startElementHandler.isEmpty()) {
+      if (! startElementHandler.isEmpty().getOne()) {
         StringValue name = startElementHandler.toStringValue(env);
         CallbackObjectMethod callback = new CallbackObjectMethod(_obj, name);
 
         _startElementHandler = callback;
       }
 
-      if (! endElementHandler.isEmpty()) {
+      if (! endElementHandler.isEmpty().getOne()) {
         StringValue name = endElementHandler.toStringValue(env);
         CallbackObjectMethod callback = new CallbackObjectMethod(_obj, name);
 

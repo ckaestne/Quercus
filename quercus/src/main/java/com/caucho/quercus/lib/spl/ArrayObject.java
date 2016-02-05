@@ -95,7 +95,7 @@ public class ArrayObject
   @Override
   public int count(Env env)
   {
-    return _value.getCount(env);
+    return _value.getCount(env).getOne();
   }
 
   public Value exchangeArray(ArrayValue array)

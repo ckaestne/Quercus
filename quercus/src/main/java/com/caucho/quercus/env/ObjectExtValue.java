@@ -178,12 +178,12 @@ public class ObjectExtValue extends ObjectValue
    * Returns the number of entries.
    */
   @Override
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
 //    throw new UnimplementedVException("need variational implementation returning only not unset fields in each configuration");
     for (EnvVar e: _fieldMap.values())
       e.getOne();
-    return _fieldMap.size();
+    return V.one(_fieldMap.size());
   }
 
   /**
@@ -1035,7 +1035,7 @@ public class ObjectExtValue extends ObjectValue
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    int size = getSize();
+    int size = getSize().getOne();
 
     if (isIncompleteObject())
       size++;
@@ -1210,7 +1210,7 @@ public class ObjectExtValue extends ObjectValue
     @Override
     public int size()
     {
-      return ObjectExtValue.this.getSize();
+      return ObjectExtValue.this.getSize().getOne();
     }
 
     @Override

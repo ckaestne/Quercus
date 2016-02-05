@@ -125,9 +125,9 @@ public class JavaMapAdapter
    * Returns the size.
    */
   @Override
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
-    return size();
+    return V.one(size());
   }
 
   /**
@@ -301,7 +301,7 @@ public class JavaMapAdapter
     @Override
     public int size()
     {
-      return getSize();
+      return getSize().getOne();
     }
 
     @Override
@@ -355,7 +355,7 @@ public class JavaMapAdapter
     @Override
     public int size()
     {
-      return getSize();
+      return getSize().getOne();
     }
 
     @Override

@@ -854,7 +854,7 @@ abstract public class Expr {
    */
   public V<? extends Boolean> evalEmpty(Env env, FeatureExpr ctx)
   {
-    return eval(env, ctx).map(a->a.isEmpty());
+    return eval(env, ctx).flatMap(a -> a.isEmpty());
   }
 
   /**

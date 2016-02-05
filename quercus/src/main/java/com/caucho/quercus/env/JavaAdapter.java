@@ -264,7 +264,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns the size.
    */
   @Override
-  abstract public int getSize();
+  abstract public V<? extends Integer> getSize();
 
   /**
    * Clears the array
@@ -670,7 +670,7 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public Value[] valuesToArray()
   {
-    Value[] values = new Value[getSize()];
+    Value[] values = new Value[getSize().getOne()];
 
     int i = 0;
 
@@ -688,7 +688,7 @@ abstract public class JavaAdapter extends ArrayValue
   @Override
   public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
-    int size = getSize();
+    int size = getSize().getOne();
 
     Object array = Array.newInstance(elementType, size);
 
@@ -887,7 +887,7 @@ abstract public class JavaAdapter extends ArrayValue
     @Override
     public int size()
     {
-      return getSize();
+      return getSize().getOne();
     }
 
     @Override

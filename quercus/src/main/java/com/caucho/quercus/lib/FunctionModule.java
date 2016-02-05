@@ -93,7 +93,7 @@ public class FunctionModule extends AbstractQuercusModule {
     V<? extends ValueOrVar> []args;
 
     if (argArray != null) {
-      args = new V[argArray.getSize()];
+      args = new V[argArray.getSize().getOne()];
 
       int i = 0;
 

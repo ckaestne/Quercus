@@ -143,9 +143,9 @@ public class GlobalArrayValue extends ArrayValueImpl {
    * Returns the size.
    */
   @Override
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
-    return _env.getGlobalEnv().size();
+    return V.one(_env.getGlobalEnv().size());
   }
   
   /**

@@ -88,9 +88,9 @@ public class JavaCollectionAdapter extends JavaAdapter
    * Returns the size.
    */
   @Override
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
-    return _collection.size();
+    return V.one(_collection.size());
   }
 
   /**
@@ -100,13 +100,13 @@ public class JavaCollectionAdapter extends JavaAdapter
   @Override
   public V<? extends Value> createTailKey(FeatureExpr ctx)
   {
-    return V.one(LongValue.create(getSize()));
+    return getSize().map((a)->LongValue.create(a));
   }
 
   @Override
   public Value putImpl(Value key, Value value)
   {
-    if (key.toInt() != getSize())
+    if (key.toInt() != getSize().getOne())
       throw new UnsupportedOperationException(
         "random assignment into Collection");
 
@@ -215,7 +215,7 @@ public class JavaCollectionAdapter extends JavaAdapter
     @Override
     public int size()
     {
-      return getSize();
+      return getSize().getOne();
     }
 
     @Override
@@ -301,7 +301,7 @@ public class JavaCollectionAdapter extends JavaAdapter
     @Override
     public int size()
     {
-      return getSize();
+      return getSize().getOne();
     }
 
     @Override
@@ -354,7 +354,7 @@ public class JavaCollectionAdapter extends JavaAdapter
     @Override
     public int size()
     {
-      return getSize();
+      return getSize().getOne();
     }
 
     @Override

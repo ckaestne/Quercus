@@ -122,9 +122,9 @@ public class BooleanValue extends Value
    * Returns true if the value is empty
    */
   @Override
-  public boolean isEmpty()
+  public V<? extends Boolean> isEmpty()
   {
-    return ! _value;
+    return V.one(! _value);
   }
 
   //

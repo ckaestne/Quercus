@@ -488,7 +488,7 @@ public class PostgresModule extends AbstractQuercusModule {
       // Check column count
       ResultSetMetaData rsMetaData = rs.getMetaData();
       int n = rsMetaData.getColumnCount();
-      if (n < assocArray.getSize())
+      if (n < assocArray.getSize().getOne())
         return null;
 
       ArrayValueImpl newArray = new ArrayValueImpl();
@@ -563,7 +563,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       // Check if all columns were consumed. Otherwise, there are
       // wrong column names passed in.
-      if (matches < assocArray.getSize()) {
+      if (matches < assocArray.getSize().getOne()) {
         return null;
       }
 
@@ -614,7 +614,7 @@ public class PostgresModule extends AbstractQuercusModule {
       }
 
       ArrayValueImpl array = (ArrayValueImpl) rows;
-      int size = array.size();
+      int size = array.size().getOne();
 
       String baseInsert = "INSERT INTO " + tableName + " VALUES(";
 
@@ -714,7 +714,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       while ((value = result.fetchArray(env, PGSQL_NUM)).isArray()) {
         ArrayValue arr = value.toArrayValue(env);
-        int count = arr.getSize();
+        int count = arr.getSize().getOne();
 
         StringValue sb = env.createUnicodeBuilder();
 
@@ -947,7 +947,7 @@ public class PostgresModule extends AbstractQuercusModule {
         newArray.put(LongValue.create(curr++), row.get(column));
       }
 
-      if (newArray.getSize() > 0) {
+      if (newArray.getSize().getOne() > 0) {
         return newArray;
       }
 
@@ -981,7 +981,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       }
 
-      if (newArray.getSize() > 0) {
+      if (newArray.getSize().getOne() > 0) {
         return newArray;
       }
 
@@ -3417,7 +3417,7 @@ public class PostgresModule extends AbstractQuercusModule {
                                                 ArrayValue params)
   {
     try {
-      int size = params.getSize();
+      int size = params.getSize().getOne();
 
       ColumnType[] types = new ColumnType[size];
       for (int i = 0; i < size; i++) {

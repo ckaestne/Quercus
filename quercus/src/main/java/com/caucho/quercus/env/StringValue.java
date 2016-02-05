@@ -227,9 +227,9 @@ abstract public class StringValue
    * Returns true if the value is empty
    */
   @Override
-  public boolean isEmpty()
+  public V<? extends Boolean> isEmpty()
   {
-    return length() == 0 || length() == 1 && charAt(0) == '0';
+    return V.one(length() == 0 || length() == 1 && charAt(0) == '0');
   }
 
   @Override
@@ -932,7 +932,7 @@ abstract public class StringValue
   public Callable toCallable(Env env, FeatureExpr ctx, boolean isOptional)
   {
     // php/1h0o
-    if (isEmpty()) {
+    if (isEmpty().getOne(ctx)) {
       return super.toCallable(env, ctx, isOptional);
     }
 

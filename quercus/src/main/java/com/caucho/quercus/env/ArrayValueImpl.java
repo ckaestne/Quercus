@@ -420,15 +420,15 @@ public class ArrayValueImpl extends ArrayValue
   /**
    * Returns the size.
    */
-  public int size() {
-    return _size.getOne();
+  public V<? extends Integer> size() {
+    return _size;
   }
 
   /**
    * Returns the size.
    */
   @Override
-  public int getSize() {
+  public V<? extends Integer> getSize() {
     return size();
   }
 
@@ -1264,7 +1264,7 @@ public class ArrayValueImpl extends ArrayValue
     if (_isDirty)
       copyOnWrite();
 
-    Entry[] values = new Entry[size()];
+    Entry[] values = new Entry[size().getOne()];
 
     int length = values.length;
 

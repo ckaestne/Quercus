@@ -35,6 +35,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.SessionArrayValue;
 import com.caucho.quercus.env.StringBuilderValue;
 import com.caucho.util.*;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.cache.Cache;
 import java.io.IOException;
@@ -311,7 +312,7 @@ public class QuercusSessionManager
   {
     SessionArrayValue session = (SessionArrayValue) obj;
 
-    return session.isEmpty();
+    return session.isEmpty().getOne();
   }
 
   /**
@@ -604,7 +605,7 @@ public class QuercusSessionManager
       try {
         if (session.isValid()) {
           synchronized (session) {
-            if (! session.isEmpty())
+            if (! session.isEmpty().getOne())
               session.storeOnShutdown();
           }
         }

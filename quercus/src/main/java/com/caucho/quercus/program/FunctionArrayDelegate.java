@@ -124,7 +124,7 @@ public class FunctionArrayDelegate implements ArrayDelegate {
   @Override
   public boolean isEmpty(Env env, ObjectValue qThis, Value key)
   {
-    return get(env, qThis, key).isEmpty();
+    return get(env, qThis, key).isEmpty().getOne();
   }
 
   /**

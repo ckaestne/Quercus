@@ -72,7 +72,7 @@ public class JavaListAdapter
   public Value putImpl(Value key, Value value)
   {
     int pos = key.toInt();
-    int size = getSize();
+    int size = getSize().getOne();
 
     if (0 <= pos && pos <= size) {
       if (pos < size) {
@@ -99,7 +99,7 @@ public class JavaListAdapter
   { 
     int pos = key.toInt();
     
-    if (0 <= pos && pos < getSize())
+    if (0 <= pos && pos < getSize().getOne())
       return EnvVar._gen( wrapJava(_list.get(pos)));
     else
       return EnvVar._gen(UnsetValue.UNSET);
@@ -113,7 +113,7 @@ public class JavaListAdapter
   {
     int pos = key.toInt();
     
-    if (0 <= pos && pos < getSize())
+    if (0 <= pos && pos < getSize().getOne())
       return V.one(wrapJava(_list.remove(pos)));
     else
       return V.one(UnsetValue.UNSET);
@@ -125,7 +125,7 @@ public class JavaListAdapter
   @Override
   public V<? extends Value> pop(Env env, FeatureExpr ctx)
   {    
-    if (getSize() == 0)
+    if (getSize().getOne() == 0)
       return V.one(NullValue.NULL);
     
     return V.one(wrapJava(_list.remove(0)));

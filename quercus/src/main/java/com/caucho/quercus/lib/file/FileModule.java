@@ -647,7 +647,7 @@ public class FileModule extends AbstractQuercusModule {
           ch = is.read();
 
           if (ch < 0) {
-            if (array.getSize() == 0)
+            if (array.getSize().getOne() == 0)
               return BooleanValue.FALSE;
             else
               return array;
@@ -696,7 +696,7 @@ public class FileModule extends AbstractQuercusModule {
         }
 
         if (ch < 0) {
-          if (array.getSize() == 0)
+          if (array.getSize().getOne() == 0)
             return BooleanValue.FALSE;
           else
             return array;
@@ -2183,7 +2183,7 @@ public class FileModule extends AbstractQuercusModule {
 
     if (result == null)
       return BooleanValue.FALSE;
-    else if (result.getSize() == 0 && (flags & GLOB_NOCHECK) != 0)
+    else if (result.getSize().getOne() == 0 && (flags & GLOB_NOCHECK) != 0)
       result.put(pattern);
 
     if ((flags & GLOB_NOSORT) == 0)
@@ -2271,7 +2271,7 @@ public class FileModule extends AbstractQuercusModule {
       path.append(suffix);
       Value subresult = glob(env, path.toString(), flags);
 
-      if (subresult.isArray() && subresult.getSize() > 0) {
+      if (subresult.isArray() && subresult.getSize().getOne() > 0) {
         if (prefix.length() == 0 && suffix.length() == 0)
           return subresult;
         else {

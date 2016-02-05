@@ -326,7 +326,7 @@ public class QuercusImage extends ResourceValue
 
   public void setStyle(Env env, ArrayValue colors)
   {
-    _style = new int[colors.getSize()];
+    _style = new int[colors.getSize().getOne()];
 
     Iterator<EnvVar> iter = colors.getValueIterator(env);
 

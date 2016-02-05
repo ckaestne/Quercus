@@ -89,7 +89,7 @@ public class ArrayIterator
   @Override
   public int count(Env env)
   {
-    return _value.getCount(env);
+    return _value.getCount(env).getOne();
   }
 
   @Override

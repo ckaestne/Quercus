@@ -740,7 +740,7 @@ public class MiscModule extends AbstractQuercusModule {
       File pwdFile = null;
 
       if (envArray != null) {
-        int size = envArray.getSize();
+        int size = envArray.getSize().getOne();
 
         envStrings = new String[size];
 

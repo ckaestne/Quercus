@@ -221,7 +221,7 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         val a = new ArrayValueImpl()
         a.put(t, V.one(x))
         a.pop(null, t) should be (V.one(x))
-        a.isEmpty should be (true)
+        a.isEmpty should be (V.one(true))
         a.pop(null, t) should be (V.one(NullValue.NULL))
 
         a.put(t, V.one(x))

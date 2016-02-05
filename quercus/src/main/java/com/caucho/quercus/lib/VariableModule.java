@@ -171,7 +171,7 @@ public class VariableModule extends AbstractQuercusModule {
    */
   public static boolean empty(@ReadOnly Value v)
   {
-    return v.isEmpty();
+    return v.isEmpty().getOne();
   }
 
   /**

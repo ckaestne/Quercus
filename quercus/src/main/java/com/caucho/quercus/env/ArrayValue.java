@@ -138,7 +138,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public boolean toBoolean()
   {
-    return getSize() != 0;
+    return getSize().getOne() != 0;
   }
 
   /**
@@ -147,7 +147,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public long toLong()
   {
-    if (getSize() > 0)
+    if (getSize().getOne() > 0)
       return 1;
     else
       return 0;
@@ -622,13 +622,13 @@ abstract public class ArrayValue extends Value {
    * Returns the size.
    */
   @Override
-  abstract public int getSize();
+  abstract public V<? extends Integer> getSize();
 
   /**
    * Returns the count().
    */
   @Override
-  public int getCount(Env env)
+  public V<? extends Integer> getCount(Env env)
   {
     return getSize();
   }
@@ -637,15 +637,19 @@ abstract public class ArrayValue extends Value {
    * Returns the count().
    */
   @Override
-  public int getCountRecursive(Env env)
+  public V<? extends Integer> getCountRecursive(Env env)
   {
-    int count = getCount(env);
+    V<? extends Integer> count = getCount(env);
 
     for (VEntry entry : entrySet()) {
-      Value value = entry.getEnvVar().getOne();
+      V<? extends Value> value = entry.getEnvVar().getValue();
 
-      if (value.isArray())
-        count += value.getCountRecursive(env);
+      count = count.flatMap(c ->
+              value.<Integer>flatMap(v -> {
+                if (v.isArray())
+                  return v.getCountRecursive(env).map(a -> a + c);
+                else return V.one(c);
+              }));
     }
 
     return count;
@@ -655,17 +659,17 @@ abstract public class ArrayValue extends Value {
    * Returns true if the value is empty
    */
   @Override
-  public boolean isEmpty()
+  public V<? extends Boolean> isEmpty()
   {
-    return getSize() == 0;
+    return getSize().map(a -> a == 0);
   }
 
   @Override
-  public boolean isEmpty(Env env, Value key)
+  public V<? extends Boolean> isEmpty(Env env, Value key)
   {
-    Value value = get(key).getOne();
+    V<? extends Value> value = get(key).getValue();
 
-    return value.isEmpty();
+    return value.flatMap(a -> a.isEmpty());
   }
 
   /**
@@ -689,8 +693,8 @@ abstract public class ArrayValue extends Value {
     if (!rValue.isArray())
       return 1;
 
-    int lSize =  getSize();
-    int rSize = rValue.toArray().getSize();
+    int lSize = getSize().getOne();
+    int rSize = rValue.toArray().getSize().getOne();
 
     if (lSize != rSize)
       return lSize < rSize ? -1 : 1;
@@ -1359,7 +1363,7 @@ abstract public class ArrayValue extends Value {
   {
     Entry []entries;
 
-    entries = new Entry[getSize()];
+    entries = new Entry[getSize().getOne()];
 
     int i = 0;
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
@@ -1515,7 +1519,7 @@ abstract public class ArrayValue extends Value {
   {
     Entry []entries;
 
-    entries = new Entry[getSize()];
+    entries = new Entry[getSize().getOne()];
 
     int i = 0;
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
@@ -1558,8 +1562,7 @@ abstract public class ArrayValue extends Value {
     }
     else if (! rValue.isArray()) {
       return rValue.eq(this);
-    }
-    else if (getSize() != rValue.getSize()) {
+    } else if (getSize().getOne() != rValue.getSize().getOne()) {
       return false;
     }
 
@@ -1598,8 +1601,7 @@ abstract public class ArrayValue extends Value {
     }
     else if (rValue == null) {
       return false;
-    }
-    else if (getSize() != rValue.getSize()) {
+    } else if (getSize().getOne() != rValue.getSize().getOne()) {
       return false;
     }
 
@@ -1643,7 +1645,7 @@ abstract public class ArrayValue extends Value {
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
+    out.println(VHelper.noCtx(), "array(" + getSize().getOne() + ") {");
 
     for (VEntry mapEntry : entrySet()) {
       varDumpEntry(env, out, depth + 1, valueSet, mapEntry);
@@ -1993,7 +1995,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public Value []getKeyArray(Env env)
   {
-    int len = getSize();
+    int len = getSize().getOne();
     Value []keys = new Value[len];
 
     Iterator<Value> iter = getKeyIterator(env);
@@ -2011,7 +2013,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public Value []getValueArray(Env env)
   {
-    int len = getSize();
+    int len = getSize().getOne();
     Value []values = new Value[len];
 
     Iterator<EnvVar> iter = getValueIterator(env);
@@ -2028,7 +2030,7 @@ abstract public class ArrayValue extends Value {
    */
   public Value[] keysToArray()
   {
-    Value[] values = new Value[getSize()];
+    Value[] values = new Value[getSize().getOne()];
 
     int i = 0;
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
@@ -2043,7 +2045,7 @@ abstract public class ArrayValue extends Value {
    */
   public Value[] valuesToArray()
   {
-    Value[] values = new Value[getSize()];
+    Value[] values = new Value[getSize().getOne()];
 
     int i = 0;
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
@@ -2076,7 +2078,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
-    int size = getSize();
+    int size = getSize().getOne();
 
     Object array = Array.newInstance(elementType, size);
 
@@ -2102,7 +2104,7 @@ abstract public class ArrayValue extends Value {
     @Override
     public int size()
     {
-      return ArrayValue.this.getSize();
+      return ArrayValue.this.getSize().getOne();
     }
 
     @Override
@@ -2120,7 +2122,7 @@ abstract public class ArrayValue extends Value {
     @Override
     public int size()
     {
-      return ArrayValue.this.getSize();
+      return ArrayValue.this.getSize().getOne();
     }
 
     @Override
@@ -2138,7 +2140,7 @@ abstract public class ArrayValue extends Value {
     @Override
     public int size()
     {
-      return ArrayValue.this.getSize();
+      return ArrayValue.this.getSize().getOne();
     }
 
     @Override

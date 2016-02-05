@@ -228,7 +228,7 @@ public class ArrayModule
     if (keys == null || values == null)
       return BooleanValue.FALSE;
 
-    if (keys.getSize() < 1 || values.getSize() < 1) {
+    if (keys.getSize().getOne() < 1 || values.getSize().getOne() < 1) {
       env.warning("Both parameters should have at least 1 element");
 
       return BooleanValue.FALSE;
@@ -1067,7 +1067,7 @@ public class ArrayModule
     if (searchValue.isDefault())
       return array.getKeys();
 
-    ArrayValue newArray = new ArrayValueImpl(array.getSize());
+    ArrayValue newArray = new ArrayValueImpl(array.getSize().getOne());
 
     int i = 0;
 
@@ -1329,7 +1329,7 @@ public class ArrayModule
     int maxsize = 0;
     for (int i = 0; i < arrays.length; i++)
       if (arrays[i].isArray()) {
-        maxsize = Math.max(maxsize, arrays[i].getSize());
+        maxsize = Math.max(maxsize, arrays[i].getSize().getOne());
       }
 
     // create the identity permutation [1..n]
@@ -1406,11 +1406,11 @@ public class ArrayModule
     if (input == null)
       return NullValue.NULL;
 
-    long inputSize = input.getSize();
+    long inputSize = input.getSize().getOne();
 
     long size = Math.abs(padSize);
 
-    if (input.getSize() >= size)
+    if (input.getSize().getOne() >= size)
       return input;
 
     if (size - inputSize > 1048576) {
@@ -1463,7 +1463,7 @@ public class ArrayModule
     if (array == null)
       return NullValue.NULL;
 
-    if (array.getSize() == 0)
+    if (array.getSize().getOne() == 0)
       return DoubleValue.create(0);
 
     double product = 1;
@@ -1487,7 +1487,7 @@ public class ArrayModule
       array.makeValue().put(VHelper.noCtx(), value);
     }
 
-    return array.makeValue().getSize();
+    return array.makeValue().getSize().getOne();
   }
 
   /**
@@ -1504,17 +1504,17 @@ public class ArrayModule
     if (array == null)
       return NullValue.NULL;
 
-    if (array.getSize() == 0)
+    if (array.getSize().getOne() == 0)
       return NullValue.NULL;
 
-    if (num < 1 || array.getSize() < num) {
+    if (num < 1 || array.getSize().getOne() < num) {
       env.warning("Second argument has to be between 1 and the number of "
           + "elements in the array");
 
       return NullValue.NULL;
     }
 
-    long arraySize = array.getSize();
+    long arraySize = array.getSize().getOne();
 
     Value[] keys = new Value[(int) arraySize];
 
@@ -1664,11 +1664,11 @@ public class ArrayModule
 
     ArrayValue newArray = new ArrayValueImpl();
 
-    if (inputArray.getSize() == 0) {
+    if (inputArray.getSize().getOne() == 0) {
       return newArray;
     }
 
-    VEntry[] entryArray = new VEntry[inputArray.getSize()];
+    VEntry[] entryArray = new VEntry[inputArray.getSize().getOne()];
     inputArray.entrySet().toArray(entryArray);
 
     int newIndex = 0;
@@ -1747,7 +1747,7 @@ public class ArrayModule
 
     ArrayValue array = value.makeValue().toArrayValue(env);
 
-    if (array.getSize() < 1)
+    if (array.getSize().getOne() < 1)
       return NullValue.NULL;
 
     Iterator<Value> iter = array.getKeyIterator(env);
@@ -1782,7 +1782,7 @@ public class ArrayModule
     if (array == null)
       return NullValue.NULL;
 
-    int size = array.getSize();
+    int size = array.getSize().getOne();
 
     int startIndex = offset;
 
@@ -1831,7 +1831,7 @@ public class ArrayModule
     if (array == null)
       return NullValue.NULL;
 
-    int size = array.getSize();
+    int size = array.getSize().getOne();
 
     int startIndex = offset;
 
@@ -2484,7 +2484,7 @@ public class ArrayModule
 
     array.keyReset(0, NOT_STRICT);
 
-    return LongValue.create(array.getSize());
+    return LongValue.create(array.getSize().getOne());
   }
 
   /**
@@ -2739,9 +2739,9 @@ public class ArrayModule
     boolean isRecursive = countMethod == COUNT_RECURSIVE;
 
     if (! isRecursive)
-      return value.getCount(env);
+      return value.getCount(env).getOne();
     else
-      return value.getCountRecursive(env);
+      return value.getCountRecursive(env).getOne();
   }
 
   /**

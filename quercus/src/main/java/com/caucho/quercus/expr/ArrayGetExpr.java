@@ -276,7 +276,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.evalIssetValue(env, ctx);
     V<? extends Value> index = _index.evalIssetValue(env, ctx);
 
-    return VHelper.mapAll(array, index,(a,i)-> a.isEmpty(env, i));
+    return VHelper.flatMapAll(array, index,(a,i)-> a.isEmpty(env, i));
   }
 
   @Override

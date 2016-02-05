@@ -94,9 +94,9 @@ public class NullValue extends Value
    * Returns true if the value is empty
    */
   @Override
-  public boolean isEmpty()
+  public V<? extends Boolean> isEmpty()
   {
-    return true;
+    return V.one(true);
   }
 
   //
@@ -476,18 +476,18 @@ public class NullValue extends Value
   }
 
   @Override
-  public int getCount(Env env)
+  public V<? extends Integer> getCount(Env env)
   {
-    return 0;
+    return V.one(0);
   }
 
   /**
    * Returns the array size.
    */
   @Override
-  public int getSize()
+  public V<? extends Integer> getSize()
   {
-    return 0;
+    return V.one(0);
   }
 
   /**

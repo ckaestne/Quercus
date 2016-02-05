@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.lib.UnserializeReader;
 import com.caucho.util.CacheListener;
+import edu.cmu.cs.varex.V;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -322,9 +323,9 @@ public class SessionArrayValue extends ArrayValueWrapper
   }
   
   @Override
-  public boolean isEmpty()
+  public V<? extends Boolean> isEmpty()
   {
-    return getSize() == 0;
+    return getSize().map((a) -> a == 0);
   }
 
   /**

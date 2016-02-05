@@ -3,6 +3,7 @@ package edu.cmu.cs.varex;
 import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
+import edu.cmu.cs.varex.annotation.VDeprecated;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Array;
@@ -18,6 +19,10 @@ public class VHelper {
 
   public static FeatureExpr True() {
     return FeatureExprFactory.True();
+  }
+
+  public static FeatureExpr False() {
+    return FeatureExprFactory.False();
   }
 
   @Deprecated//use only as placeholder, use True instead if intentionally general context intended
@@ -148,5 +153,25 @@ public class VHelper {
     while (it.hasNext()) {
       assertTrue(it.next().getCondition());
     }
+  }
+
+  public static FeatureExpr vToFExpr(V<? extends FeatureExpr> v) {
+    FeatureExpr result = FeatureExprFactory.False();
+    for (Opt<FeatureExpr> o : VList.flatten(v))
+      result = result.or(o.getCondition().and(o.getValue()));
+    return result;
+  }
+
+  @VDeprecated
+  @Deprecated
+  public static boolean isTrue(FeatureExpr c) {
+    if (c.isTautology()) return true;
+    if (c.isContradiction()) return false;
+    throw new UnimplementedVException("incomplete V transformation, cannot translate " + c + " to boolean");
+  }
+
+
+  public static V<? extends Boolean> fexprToVBoolean(V<? extends FeatureExpr> v) {
+    return V.choice(vToFExpr(v), V.one(true), V.one(false));
   }
 }

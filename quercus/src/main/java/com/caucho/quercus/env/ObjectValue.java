@@ -504,15 +504,15 @@ abstract public class ObjectValue extends Callback {
    * Return true if empty.
    */
   @Override
-  public boolean isEmpty(Env env, Value key)
+  public V<? extends Boolean> isEmpty(Env env, Value key)
   {
     ArrayDelegate delegate = _quercusClass.getArrayDelegate();
 
     if (delegate != null) {
-      return delegate.isEmpty(env, this, key);
+      return V.one(delegate.isEmpty(env, this, key));
     }
     else {
-      return true;
+      return V.one(true);
     }
   }
 
@@ -587,7 +587,7 @@ abstract public class ObjectValue extends Callback {
    * Returns the count value with the given key.
    */
   @Override
-  public int getCount(Env env)
+  public V<? extends Integer> getCount(Env env)
   {
     CountDelegate delegate = _quercusClass.getCountDelegate();
 
@@ -595,7 +595,7 @@ abstract public class ObjectValue extends Callback {
     //return getField(null, key.toString());
 
     if (delegate != null)
-      return delegate.count(env, this);
+      return V.one(delegate.count(env, this));
     else
       return super.getSize();
   }
@@ -815,7 +815,7 @@ abstract public class ObjectValue extends Callback {
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    int size = getSize();
+    int size = getSize().getOne();
 
     if (isIncompleteObject())
       size++;
