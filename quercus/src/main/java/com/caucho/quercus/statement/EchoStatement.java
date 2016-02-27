@@ -36,6 +36,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -60,7 +61,7 @@ public class EchoStatement extends Statement {
   {
     V<? extends Value> value = _expr.eval(env, ctx);
 
-    value.vforeach(ctx, (c, a)->a.print(env, c));
+    value.sforeach(ctx, (c, a) -> a.print(env, c));
 
     return V.one(null);
   }

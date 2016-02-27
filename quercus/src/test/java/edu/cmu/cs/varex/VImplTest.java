@@ -1,16 +1,14 @@
 package edu.cmu.cs.varex;
 
-import de.fosd.typechef.conditional.Choice;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
-import edu.cmu.cs.varex.assertion.NullTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by ckaestne on 12/4/2015.
@@ -43,9 +41,6 @@ public class VImplTest {
     Assert.assertEquals(c21, c1.flatMap(k -> V.choice(foo, k + 1, k)));
     Assert.assertEquals(c21, c21.flatMap(k -> V.choice(foo, k, k)));
     Assert.assertEquals(c31, c21.flatMap(k -> V.choice(foo, k + 1, k)));
-
-    Assert.assertEquals(c2, c1.vflatMap(foo, (c, k) -> V.one(t, k + 1)));
-    Assert.assertEquals(c21, c1.vflatMap(foo, (c, k) -> V.choice(foo, k + 1, k)));
   }
 
   private Iterator<Opt<Integer>> list(Opt<Integer>... elements) {
@@ -122,6 +117,40 @@ public class VImplTest {
     Assert.assertEquals("a", V.choice(foo, V.one(t, "a"), V.one(t, "b")).select(foo).getOne());
   }
 
+  @Test
+  public void testSMap() {
+    Assert.assertEquals(V.one(foo, 2),
+            V.choice(foo, 1, 2).smap(foo, p -> p + 1));
+    Assert.assertEquals(V.choice(bar, V.one(foo, 2), V.one(foo, 3)),
+            V.choice(bar, 1, 2).smap(foo, p -> p + 1));
+    Assert.assertEquals(V.one(foo, 2),
+            V.one(t, 1).smap(foo, p -> p + 1));
+    Assert.assertEquals(V.one(foo, 2),
+            V.choice(foo, 1, 2).smap(foo, (c, p) -> {
+              assert c.equivalentTo(foo);
+              return p + 1;
+            }));
+    Assert.assertEquals(V.one(foo, 2),
+            V.one(t, 1).smap(foo, (c, p) -> {
+              assert c.equivalentTo(foo);
+              return p + 1;
+            }));
 
+    Assert.assertEquals(V.one(foo, 2),
+            c1.sflatMap(foo, (c, k) -> V.one(t, k + 1)));
+    Assert.assertEquals(V.choice(bar, V.one(foo, 1), V.one(foo, 2)),
+            c1.sflatMap(foo, (c, k) -> V.choice(bar, k, k + 1)));
+  }
+
+  @Test
+  public void testPMap() {
+    Assert.assertEquals(V.choice(foo, 3, 2),
+            V.choice(foo, 1, 2).pmap(foo, p -> p + 2, p -> p));
+    Assert.assertEquals(V.choice(foo, 3, 2),
+            V.choice(foo, 1, 2).pmap(foo, (Integer p) -> p + 2, Function.identity()));
+
+    Assert.assertEquals(V.choice(foo, V.choice(bar, 2, 3), V.one(1)),
+            c1.pflatMap(foo, v -> V.choice(bar, v + 1, v + 2), v -> V.one(v)));
+  }
 
 }

@@ -717,7 +717,7 @@ public class StringModule extends AbstractQuercusModule {
       isFirst = false;
 
       EnvVar value = iter.next();
-      value.getValue().vforeach(VHelper.noCtx(), (c, a) -> sb[0] = sb[0].append(c, a));
+      value.getValue().sforeach(VHelper.noCtx(), (c, a) -> sb[0] = sb[0].append(c, a));
     }
 
     return sb[0];

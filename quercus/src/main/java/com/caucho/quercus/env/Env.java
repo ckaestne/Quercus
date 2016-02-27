@@ -2023,7 +2023,7 @@ public class Env
    */
   public final V<? extends Var> getVar(FeatureExpr ctx, StringValue name, V<? extends Value> value)
   {
-    return value.vflatMap(ctx, (c, v)-> {
+    return value.sflatMap(ctx, (c, v) -> {
       if (v != null)
         return V.one((Var) value);
       else
@@ -2039,7 +2039,7 @@ public class Env
    */
   public final V<? extends Var> getGlobalVar(FeatureExpr ctx, StringValue name, V<? extends Value> value)
   {
-    return value.vflatMap(ctx, (c, v)-> {
+    return value.sflatMap(ctx, (c, v) -> {
       if (v != null)
         return V.one((Var) value);
       else

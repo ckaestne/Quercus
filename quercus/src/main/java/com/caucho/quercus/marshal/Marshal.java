@@ -204,11 +204,11 @@ abstract public class Marshal {
   }
 
   public V<? extends Object> marshal(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value, Class argClass) {
-    return value.<Object>vflatMap(ctx, (c, v) -> {
+    return value.<Object>sflatMap(ctx, (c, v) -> {
       if (isRefMarshal() && v.isVar()) {
         return V.one(c, marshalRef(env, v._var(), argClass));
       }
-      return v._getValues().select(c).vmap(c, (cc,vv) -> marshalValue(env, cc, vv, argClass));
+      return v._getValues().smap(c, (cc, vv) -> marshalValue(env, cc, vv, argClass));
     });
   }
 

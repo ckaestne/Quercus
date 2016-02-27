@@ -72,7 +72,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    V<? extends Value> value = varName.vflatMap(ctx, (c, vn) -> env.getValue(c, vn));
+    V<? extends Value> value = varName.sflatMap(ctx, (c, vn) -> env.getValue(c, vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -131,7 +131,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    return varName.vflatMap(ctx, (c, vn) -> env.getVar(c, vn));
+    return varName.sflatMap(ctx, (c, vn) -> env.getVar(c, vn));
   }
 
   /**
@@ -147,7 +147,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    V<? extends Var> value = varName.vflatMap(ctx, (c, vn) -> env.getVar(c, vn));
+    V<? extends Var> value = varName.sflatMap(ctx, (c, vn) -> env.getVar(c, vn));
 
     return value.map((v)-> {
       if (v != null)
@@ -171,7 +171,7 @@ public class VarVarExpr extends AbstractVarExpr {
   {
     V<? extends StringValue> varName = _var.evalStringValue(env, ctx);
 
-    V<? extends Var> value = varName.vflatMap(ctx, (c, vn) -> env.getVar(c, vn));
+    V<? extends Var> value = varName.sflatMap(ctx, (c, vn) -> env.getVar(c, vn));
 
     return value.map((a)->a.makeValue().toAutoArray());
   }

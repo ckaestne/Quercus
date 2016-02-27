@@ -35,6 +35,7 @@ import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.util.IdentityHashMap;
+import java.util.function.Function;
 
 /**
  * Represents a PHP variable value.
@@ -1091,7 +1092,7 @@ public class VarImpl extends Var {
 //
   @Override
   public V<? extends Value> preincr(FeatureExpr ctx, int incr) {
-    _value = _value.vflatMap(ctx, (c, x) -> V.choice(c, x.increment(incr), x));
+    _value = _value.pmap(ctx, x -> x.increment(incr), Function.identity());
 
 //    checkVar(_value);
 
@@ -1105,13 +1106,11 @@ public class VarImpl extends Var {
 
   @Override
   public V<? extends Value> postincr(FeatureExpr ctx, int incr) {
-    V<? extends Value> value = _value;
-
-    _value = value.vflatMap(ctx, (c, x) -> V.choice(c, x.increment(incr), x));
+    _value = _value.pmap(ctx, x -> x.increment(incr), Function.identity());
 
 //    checkVar(_value);
 
-    return value;
+    return _value;
   }
 
   //
@@ -1538,7 +1537,7 @@ public class VarImpl extends Var {
   public V<? extends ValueOrVar> put(FeatureExpr ctx, Value index, V<? extends ValueOrVar> value) {
     // php/33m{g,h}
     // _value = _value.toAutoArray().append(index, value);
-    _value = _value.vmap(ctx, (c, a)->a.append(c, index, value));
+    _value = _value.pmap(ctx, (c, a) -> a.append(c, index, value), Function.identity());
 
 //    checkVar(_value);
 

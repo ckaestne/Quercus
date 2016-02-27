@@ -121,7 +121,7 @@ public class ClassVarFieldExpr extends AbstractVarExpr {
   {
     V<? extends QuercusClass> cls = _className.evalQuercusClass(env, ctx);
 
-    return cls.vflatMap(ctx, (c, a) -> a.setStaticFieldRef(env, c, _varName, value)).map((a) -> a.makeValue());
+    return cls.sflatMap(ctx, (c, a) -> a.setStaticFieldRef(env, c, _varName, value)).map((a) -> a.makeValue());
   }
 
   /**

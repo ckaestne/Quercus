@@ -65,7 +65,7 @@ public class ConditionalShortExpr extends Expr {
   {
     V<? extends Value> value = _test.eval(env, ctx);
 
-    return value.vmap(ctx, (c, v)-> {
+    return value.smap(ctx, (c, v) -> {
       if (v.toBoolean())
         return v.copy(); // php/03cj, php/03ck
       else

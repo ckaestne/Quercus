@@ -36,8 +36,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 //import java.io.FileWriter;
@@ -201,7 +201,7 @@ public class CallExpr extends Expr {
     if (_funId==null)
       _funId=lookupFunId(env);
 
-    return _funId.<ValueOrVar>vflatMap(_ctx, (ctx,funId)-> {
+    return _funId.<ValueOrVar>sflatMap(_ctx, (ctx, funId) -> {
 
       if (funId <= 0) {
         env.error(ctx, L.l("'{0}' is an unknown function.", _name), getLocation());

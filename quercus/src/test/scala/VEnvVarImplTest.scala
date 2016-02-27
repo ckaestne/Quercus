@@ -220,7 +220,7 @@ class VEnvVarImplTest extends FlatSpec with Matchers {
 
 
     def assertEquiv(actual: V[_ <: Any], expected: V[_ <: Any]) = {
-        VHelper.vmapAll(FeatureExprFactory.True, actual, expected, new Function4[FeatureExpr, Any, Any, Boolean] {
+        VHelper.smapAll(FeatureExprFactory.True, actual, expected, new Function4[FeatureExpr, Any, Any, Boolean] {
             override def apply(ctx: FeatureExpr, a: Any, b: Any): Boolean = {
                 assert(ctx.isContradiction || a == b, s"$b expected but $a found under condition $ctx")
                 true

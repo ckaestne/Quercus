@@ -476,7 +476,7 @@ public class ObjectExtValue extends ObjectValue
     //if (entry._visibility == FieldVisibility.PRIVATE)
       //return;
 
-    entry.vforeach(ctx, (c, e) -> e.toValue().remove(c, index));
+    entry.sforeach(ctx, (c, e) -> e.toValue().remove(c, index));
   }
 
   /**

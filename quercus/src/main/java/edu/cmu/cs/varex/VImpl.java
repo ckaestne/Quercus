@@ -89,10 +89,10 @@ class VImpl<T> implements V<T> {
     }
 
     @Override
-    public <U> V<? extends U> vmap(FeatureExpr ctx, BiFunction<FeatureExpr, ? super T, ? extends U> fun) {
+    public <U> V<? extends U> map(@Nonnull BiFunction<FeatureExpr, ? super T, ? extends U> fun) {
         Map<U, FeatureExpr> result = new HashMap<>(values.size());
         for (HashMap.Entry<T, FeatureExpr> e : values.entrySet())
-            put(result, fun.apply(ctx.and(e.getValue()), e.getKey()), e.getValue());
+            put(result, fun.apply(e.getValue(), e.getKey()), e.getValue());
         return createV(result);
     }
 
@@ -106,16 +106,16 @@ class VImpl<T> implements V<T> {
         return createV(result);
     }
 
-
     @Override
-    public <U> V<? extends U> vflatMap(FeatureExpr ctx, @Nonnull BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
+    public <U> V<? extends U> flatMap(@Nonnull BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
         Map<U, FeatureExpr> result = new HashMap<>(values.size());
         for (HashMap.Entry<T, FeatureExpr> e : values.entrySet()) {
-            V<? extends U> u = fun.apply(ctx.and(e.getValue()), e.getKey());
+            V<? extends U> u = fun.apply(e.getValue(), e.getKey());
             addVToMap(result, e.getValue(), u);
         }
         return createV(result);
     }
+
 
     private static <U> void addVToMap(Map<U, FeatureExpr> result, FeatureExpr ctx, @Nonnull V<? extends U> u) {
         assert (u instanceof One) || (u instanceof VImpl) : "unexpected V value: " + u;
@@ -151,12 +151,12 @@ class VImpl<T> implements V<T> {
 
     }
 
-
     @Override
-    public void vforeach(FeatureExpr ctx, BiConsumer<FeatureExpr, T> fun) {
+    public void foreach(@Nonnull BiConsumer<FeatureExpr, T> fun) {
         for (HashMap.Entry<T, FeatureExpr> e : values.entrySet())
-            fun.accept(ctx.and(e.getValue()), e.getKey());
+            fun.accept(e.getValue(), e.getKey());
     }
+
 
     @Override
     public FeatureExpr when(Predicate<T> condition) {

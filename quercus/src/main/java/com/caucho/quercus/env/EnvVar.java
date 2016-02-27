@@ -89,7 +89,7 @@ abstract public class EnvVar
    */
   public V<? extends Var> setRef(FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    value.vforeach(ctx, (c, v) -> {
+    value.sforeach(ctx, (c, v) -> {
       if (v.isVar())
         setVar(c, V.one(v._var()));
       else

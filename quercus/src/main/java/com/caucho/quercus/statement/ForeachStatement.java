@@ -42,6 +42,7 @@ import edu.cmu.cs.varex.VList;
 import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Represents a foreach statement.
@@ -175,7 +176,7 @@ public class ForeachStatement
   @Nonnull
   V<? extends ValueOrVar> execute_keyvalue(Env env, FeatureExpr ctx) {
     V<? extends Value> origObj = _objExpr.eval(env, ctx);
-    V<? extends Value> obj = origObj.map(Value::copy); // php/0669
+    V<? extends Value> obj = origObj.map(a -> a.copy()); // php/0669
     Iterator<VEntry> iter = getMergedIterator(env, obj);
 
 
@@ -200,8 +201,8 @@ public class ForeachStatement
 
       V<? extends ValueOrVar> result = _block.execute(env, innerCtx);
 
-      forEachResult = forEachResult.<ValueOrVar>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
-              result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), null)));
+      forEachResult = forEachResult.<ValueOrVar>pflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(oc, fer) :
+              result.<ValueOrVar>sflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), null)), Function.identity());
       ctx = ctx.and(forEachResult.when(x -> x == null));
     }
 
@@ -216,7 +217,7 @@ public class ForeachStatement
     assert (!_isRef);
     assert (_key == null);
     V<? extends Value> origObj = _objExpr.eval(env, ctx);
-    V<? extends Value> obj = origObj.map(Value::copy); // php/0669
+    V<? extends Value> obj = origObj.map(a -> a.copy()); // php/0669
     Iterator<Opt<EnvVar>> iter = getMergedValueIterator(env, obj);
 
 
@@ -232,8 +233,8 @@ public class ForeachStatement
 
       V<? extends ValueOrVar> result = _block.execute(env, innerCtx);
 
-      forEachResult = forEachResult.<ValueOrVar>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
-              result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), null)));
+      forEachResult = forEachResult.<ValueOrVar>pflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
+              result.<ValueOrVar>sflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), null)), Function.identity());
       ctx = ctx.and(forEachResult.when(x -> x == null));
     }
 

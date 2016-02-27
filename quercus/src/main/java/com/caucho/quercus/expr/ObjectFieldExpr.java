@@ -154,7 +154,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
 
-    obj.vmap(ctx, (c, a) -> a.putField(env, c, _name, value));
+    obj.sflatMap(ctx, (c, a) -> a.putField(env, c, _name, value));
 
     return value;
   }
@@ -169,7 +169,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
 
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
     final V<? extends Value> value = obj.flatMap((a)->a.getFieldVar(env, _name))
-      .vflatMap(ctx,(c,a)->a.postincr(c, incr));
+            .sflatMap(ctx, (c, a) -> a.postincr(c, incr));
 //    obj.map((a)->a.putField(env, VHelper.noCtx(), _name, value.getOne()));
 
     return value;
@@ -185,7 +185,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
 
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
     V<? extends Value> value = obj.flatMap((a)->a.getFieldVar(env, _name))
-            .vflatMap(ctx, (c,a)->a.preincr(c, incr));
+            .sflatMap(ctx, (c, a) -> a.preincr(c, incr));
 //    obj.map((a)->a.putField(env, VHelper.noCtx(), _name, value.getOne()));
 
     return value;
@@ -237,7 +237,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
   public void evalUnset(Env env, FeatureExpr ctx)
   {
     V<? extends Value> obj = _objExpr.eval(env, ctx);
-    obj.vforeach(ctx, (c, a) -> a.unsetField(c, _name));
+    obj.sforeach(ctx, (c, a) -> a.unsetField(c, _name));
   }
 
   /**
@@ -249,7 +249,7 @@ public class ObjectFieldExpr extends AbstractVarExpr {
     V<? extends Value> obj = _objExpr.eval(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    obj.vforeach(ctx, (c, a) -> a.unsetArray(env, c, _name, index.getOne()));
+    obj.sforeach(ctx, (c, a) -> a.unsetArray(env, c, _name, index.getOne()));
   }
 
   @Override

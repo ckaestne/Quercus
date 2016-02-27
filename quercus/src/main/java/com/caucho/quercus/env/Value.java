@@ -2367,7 +2367,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   {
     V<? extends Value> v = getThisField(env, name);
 
-    v.vforeach(ctx, (c, vv) -> {
+    v.sforeach(ctx, (c, vv) -> {
       if (!vv.isset()) {
         putThisField(env, c, name, V.one(env.createObject()));
       }
@@ -2384,7 +2384,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   {
     V<? extends Value> vv = getThisField(env, name);
 
-    return vv.vmap(ctx, (c, v) -> {
+    return vv.smap(ctx, (c, v) -> {
       Value array = v.toAutoArray();
 
       if (v == array)
@@ -2620,7 +2620,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   {
     final EnvVar var = getVar(ctx, index);
 
-    return var.getValue().vflatMap(ctx, (c, v) -> {
+    return var.getValue().sflatMap(ctx, (c, v) -> {
       if (v.isset())
         return V.one(v.toValue());
     else {

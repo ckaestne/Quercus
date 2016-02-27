@@ -78,7 +78,7 @@ public class ConditionalExpr extends Expr {
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
 
   {
-    return _test.evalBoolean(env, ctx).vflatMap(ctx, (c, a)->
+    return _test.evalBoolean(env, ctx).sflatMap(ctx, (c, a) ->
             a?   _trueExpr.eval(env, c):  _falseExpr.eval(env, c)
     );
   }

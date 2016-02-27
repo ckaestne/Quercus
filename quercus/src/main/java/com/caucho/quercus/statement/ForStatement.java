@@ -39,6 +39,7 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 
 import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
  * Represents a for statement.
@@ -87,7 +88,7 @@ public class ForStatement extends Statement {
 
         V<? extends ValueOrVar> vresult = _block.execute(env, ctx);
 
-        vresult = vresult.vmap(ctx, (c,v)->{
+        vresult = vresult.pmap(ctx, v -> {
           if (v instanceof BreakValue) {
             BreakValue breakValue = (BreakValue) v;
 
@@ -106,7 +107,7 @@ public class ForStatement extends Statement {
               return null;
           }
           return v;
-        });
+        }, Function.identity());
 
 
         value = V.choice(ctx, vresult, value);

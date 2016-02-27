@@ -30,7 +30,10 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.ValueOrVar;
+import com.caucho.quercus.env.Var;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.expr.VarExpr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
@@ -72,8 +75,8 @@ public class StaticStatement extends Statement {
 
       env.setRef(ctx, _var.getName(), var);
 
-      var.vforeach(ctx, (cc, va) ->
-              va.getValue().vforeach(cc, (c, v) -> {
+      var.sforeach(ctx, (cc, va) ->
+              va.getValue().sforeach(cc, (c, v) -> {
                 if (!v.isset() && _initValue != null) {
                   va.set(c, _initValue.eval(env, c));
                 }

@@ -652,7 +652,7 @@ abstract public class Expr {
 
     final V<? extends Value> value = valueExpr.evalCopy(env, ctx);
 
-    V<? extends ValueOrVar> result = VHelper.vflatMapAll(ctx, array, index, (c, _array, _index) -> _array.put(c, _index, value));
+    V<? extends ValueOrVar> result = VHelper.sflatMapAll(ctx, array, index, (c, _array, _index) -> _array.put(c, _index, value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -676,7 +676,7 @@ abstract public class Expr {
 
     V<? extends ValueOrVar> value = valueExpr.evalRef(env, ctx);
 
-    V<? extends ValueOrVar> result = VHelper.<Value,Value,ValueOrVar>vflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
+    V<? extends ValueOrVar> result = VHelper.<Value, Value, ValueOrVar>sflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -698,7 +698,7 @@ abstract public class Expr {
     V<? extends ValueOrVar> array = evalArray(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    V<? extends ValueOrVar> result = VHelper.<Value,Value,ValueOrVar>vflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
+    V<? extends ValueOrVar> result = VHelper.<Value, Value, ValueOrVar>sflatMapAll(ctx, VHelper.getValues(array), index, (c, _array, _index) -> _array.put(c, _index, value));
 
     //return array.get(index); // php/03mm php/03mn
 
@@ -712,7 +712,7 @@ abstract public class Expr {
   public @Nonnull V<? extends Value> evalArrayAssignTail(Env env, FeatureExpr ctx, V<? extends Value> value)
   {
     V<? extends ValueOrVar> array = evalArray(env, ctx);
-    VHelper.getValues(array).vmap(ctx, (c,a)->a.put(c, value));
+    VHelper.getValues(array).sforeach(ctx, (c, a) -> a.put(c, value));
 
     return value;
   }
@@ -724,7 +724,7 @@ abstract public class Expr {
   {
     V<? extends Var> var = evalVar(env, ctx);
 
-    return var.vflatMap(ctx, (c, a) -> a.postincr(c, incr));
+    return var.sflatMap(ctx, (c, a) -> a.postincr(c, incr));
   }
 
   /**
@@ -734,7 +734,7 @@ abstract public class Expr {
   {
     V<? extends Var> var = evalVar(env, ctx);
 
-    return var.vflatMap(ctx, (c, a) -> a.preincr(c, incr));
+    return var.sflatMap(ctx, (c, a) -> a.preincr(c, incr));
   }
 
   /**
@@ -846,7 +846,7 @@ abstract public class Expr {
     V<? extends Value> array = evalDirty(env, ctx);
     V<? extends Value> index = indexExpr.eval(env, ctx);
 
-    array.vmap(ctx, (c, a) -> a.remove(c, index.getOne()));
+    array.sforeach(ctx, (c, a) -> a.remove(c, index.getOne()));
   }
 
   /**
@@ -887,7 +887,7 @@ abstract public class Expr {
   public void print(Env env, FeatureExpr ctx)
     throws IOException
   {
-    eval(env, ctx).vforeach(ctx, (c, a) -> a.print(env, c));
+    eval(env, ctx).sforeach(ctx, (c, a) -> a.print(env, c));
   }
 
   @Override

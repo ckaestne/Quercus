@@ -77,7 +77,7 @@ public class BinaryCharAtExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.eval(env, ctx);
 
-    return obj.vmap(ctx, (c, a) -> a.charValueAt(_indexExpr.evalLong(env, c).getOne()));
+    return obj.smap(ctx, (c, a) -> a.charValueAt(_indexExpr.evalLong(env, c).getOne()));
   }
   
   /**

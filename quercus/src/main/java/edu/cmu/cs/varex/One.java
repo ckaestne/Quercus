@@ -19,7 +19,10 @@ public class One<T> implements V<T> {
 
     @Override
     public String toString() {
-        return "One(" + value + ")";
+        String condition = "";
+        if (!configSpace.isTautology())
+            condition = configSpace.toString() + ":";
+        return "One(" + condition + value + ")";
     }
 
     @Override
@@ -33,18 +36,18 @@ public class One<T> implements V<T> {
     }
 
     @Override
-    public <U> V<? extends U> vmap(FeatureExpr ctx, BiFunction<FeatureExpr, ? super T, ? extends U> fun) {
-        return new One(configSpace, fun.apply(ctx, value));
+    public <U> V<? extends U> map(BiFunction<FeatureExpr, ? super T, ? extends U> fun) {
+        return new One(configSpace, fun.apply(configSpace, value));
     }
 
     @Override
     public <U> V<? extends U> flatMap(Function<? super T, V<? extends U>> fun) {
-        return fun.apply(value);
+        return fun.apply(value).select(configSpace);
     }
 
     @Override
-    public <U> V<? extends U> vflatMap(FeatureExpr ctx, BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
-        return fun.apply(ctx, value);
+    public <U> V<? extends U> flatMap(BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
+        return fun.apply(configSpace, value).select(configSpace);
     }
 
     @Override
@@ -53,8 +56,8 @@ public class One<T> implements V<T> {
     }
 
     @Override
-    public void vforeach(FeatureExpr ctx, BiConsumer<FeatureExpr, T> fun) {
-        fun.accept(ctx, value);
+    public void foreach(BiConsumer<FeatureExpr, T> fun) {
+        fun.accept(configSpace, value);
     }
 
     @Override

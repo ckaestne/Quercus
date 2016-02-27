@@ -3,6 +3,7 @@ package edu.cmu.cs.varex;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 
+import javax.annotation.Nonnull;
 import java.util.function.*;
 
 
@@ -32,7 +33,7 @@ public class VEmpty<T> implements V<T> {
   }
 
   @Override
-  public <U> V<? extends U> vmap(FeatureExpr ctx, BiFunction<FeatureExpr, ? super T, ? extends U> fun) {
+  public <U> V<? extends U> map(@Nonnull BiFunction<FeatureExpr, ? super T, ? extends U> fun) {
     return instance();
   }
 
@@ -42,7 +43,7 @@ public class VEmpty<T> implements V<T> {
   }
 
   @Override
-  public <U> V<? extends U> vflatMap(FeatureExpr ctx, BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
+  public <U> V<? extends U> flatMap(BiFunction<FeatureExpr, ? super T, V<? extends U>> fun) {
     return instance();
   }
 
@@ -51,7 +52,7 @@ public class VEmpty<T> implements V<T> {
   }
 
   @Override
-  public void vforeach(FeatureExpr ctx, BiConsumer<FeatureExpr, T> fun) {
+  public void foreach(BiConsumer<FeatureExpr, T> fun) {
   }
 
   @Override

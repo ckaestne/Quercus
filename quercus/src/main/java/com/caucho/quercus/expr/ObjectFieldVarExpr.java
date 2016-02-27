@@ -100,7 +100,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
 
     // XXX: getFieldArg(isTop)
 
-    return value.vflatMap(ctx, (c, a) -> a.getFieldArg(env, _nameExpr.evalStringValue(env, c).getOne(), isTop).map((b) -> b.makeValue()));
+    return value.sflatMap(ctx, (c, a) -> a.getFieldArg(env, _nameExpr.evalStringValue(env, c).getOne(), isTop).map((b) -> b.makeValue()));
   }
 
   /**
@@ -117,7 +117,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
     // quercus/0d1k
     V<? extends Value> value = _objExpr.evalObject(env, ctx);
 
-    return value.vflatMap(ctx, (c, a) -> a.getFieldVar(env, _nameExpr.evalStringValue(env, c).getOne()));
+    return value.sflatMap(ctx, (c, a) -> a.getFieldVar(env, _nameExpr.evalStringValue(env, c).getOne()));
   }
 
   /**
@@ -134,7 +134,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.eval(env, ctx);
 
-    return obj.vflatMap(ctx, (c, a) -> a.getField(env, _nameExpr.evalStringValue(env, c).getOne()));
+    return obj.sflatMap(ctx, (c, a) -> a.getField(env, _nameExpr.evalStringValue(env, c).getOne()));
   }
 
   /**
@@ -151,7 +151,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
 
-    obj.vmap(ctx, (c, a) -> a.putField(env, c, _nameExpr.evalStringValue(env, c).getOne(), value.getOne()));
+    obj.sforeach(ctx, (c, a) -> a.putField(env, c, _nameExpr.evalStringValue(env, c).getOne(), value.getOne()));
 
     return value;
   }
@@ -170,7 +170,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
 
-    obj.vmap(ctx, (c, a) -> a.putField(env, c, _nameExpr.evalStringValue(env, c).getOne(), value.getOne().toValue()));
+    obj.sforeach(ctx, (c, a) -> a.putField(env, c, _nameExpr.evalStringValue(env, c).getOne(), value.getOne().toValue()));
 
     return value;
   }
@@ -189,7 +189,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
 
-    return obj.vmap(ctx, (c, a) -> a.getFieldArray(env, _nameExpr.evalStringValue(env, c).getOne()));
+    return obj.smap(ctx, (c, a) -> a.getFieldArray(env, _nameExpr.evalStringValue(env, c).getOne()));
   }
 
   /**
@@ -205,7 +205,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.evalObject(env, ctx);
 
-    return obj.vmap(ctx, (c, a) -> a.getFieldObject(env, _nameExpr.evalStringValue(env, c).getOne()));
+    return obj.smap(ctx, (c, a) -> a.getFieldObject(env, _nameExpr.evalStringValue(env, c).getOne()));
   }
 
   /**
@@ -221,7 +221,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   {
     V<? extends Value> obj = _objExpr.eval(env, ctx);
 
-    obj.vforeach(ctx, (c, a) -> a.unsetField(c, _nameExpr.evalStringValue(env, c).getOne()));
+    obj.sforeach(ctx, (c, a) -> a.unsetField(c, _nameExpr.evalStringValue(env, c).getOne()));
   }
 
   public String toString()
@@ -233,7 +233,7 @@ public class ObjectFieldVarExpr extends AbstractVarExpr {
   public V<? extends Boolean> evalIsset(Env env, FeatureExpr ctx)
   {
     V<? extends Value> object = _objExpr.eval(env, ctx);
-    return object.vflatMap(ctx, (c, a) -> a.issetField(env, _nameExpr.evalStringValue(env, c).getOne()));
+    return object.sflatMap(ctx, (c, a) -> a.issetField(env, _nameExpr.evalStringValue(env, c).getOne()));
   }
 }
 

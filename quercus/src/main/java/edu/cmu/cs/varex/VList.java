@@ -19,12 +19,12 @@ public class VList {
    * of the entry
    */
   public static <T, E> V<? extends T> foldRight(Iterator<Opt<E>> list, V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, E, T, V<? extends T>> op) {
-    V<? extends T> result = init;
+    V<? extends T> result = init.select(ctx);
 
     while (list.hasNext()) {
       final Opt<E> current = list.next();
 
-      result = result.vflatMap(ctx, (c, r) ->
+      result = result.flatMap((c, r) ->
               V.choice(current.getCondition(),
                       op.apply(c.and(current.getCondition()), current.getValue(), r),
                       V.one(r)));
@@ -37,12 +37,12 @@ public class VList {
    * same conditional fold, but may stop earlier without folding over all results if all values meet a criteria
    */
   public static <T, E> V<? extends T> foldRightUntil(Iterator<Opt<E>> list, V<? extends T> init, FeatureExpr ctx, Function4<FeatureExpr, E, T, V<? extends T>> op, Predicate<T> stopCriteria) {
-    V<? extends T> result = init;
+    V<? extends T> result = init.select(ctx);
 
     while (list.hasNext()) {
       final Opt<E> current = list.next();
 
-      result = result.vflatMap(ctx, (c, r) ->
+      result = result.flatMap((c, r) ->
               V.choice(current.getCondition(),
                       op.apply(c.and(current.getCondition()), current.getValue(), r),
                       V.one(r)));
@@ -57,7 +57,7 @@ public class VList {
 
   public static <T> List<Opt<T>> flatten(V<? extends T> v) {
     List<Opt<T>> result = new ArrayList<Opt<T>>();
-    v.vforeach(VHelper.True(), (f, val) -> result.add(Opt.create(f, val)));
+    v.sforeach(VHelper.True(), (f, val) -> result.add(Opt.create(f, val)));
     return result;
   }
 

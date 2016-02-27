@@ -34,7 +34,9 @@ import com.caucho.quercus.program.Arg;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
  * Represents a call to a function.
@@ -131,7 +133,7 @@ public class CallbackFunction extends Callback {
   public V<? extends AbstractFunction> getFunction(Env env, FeatureExpr ctx)
   {
     if (_fun==null || _fun.when(f->f==null).isSatisfiable())
-      _fun = _fun.vflatMap(ctx, (c,f)-> f==null ? env.getFunction(c, _funName):V.one(f ));
+      _fun = _fun.pflatMap(ctx, (c, f) -> f == null ? env.getFunction(c, _funName) : V.one(f), Function.identity());
 
     return _fun;
   }

@@ -34,8 +34,8 @@ import com.caucho.quercus.env.*;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -126,7 +126,7 @@ public class FunArrayExpr extends Expr {
       if (keyExpr != null) {
         V<? extends Value> key = VHelper.getValues(keyExpr.evalArg(env, ctx, true));
 
-        key.vforeach(ctx, (c,k)->
+        key.sforeach(ctx, (c, k) ->
           array.put(c, k.toLocalValue(), value));
       }
       else

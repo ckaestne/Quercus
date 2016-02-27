@@ -64,7 +64,7 @@ public final class EnvVarImpl extends EnvVar
   public V<? extends Value> set(FeatureExpr ctx, V<? extends Value> value)
   {
     V<? extends Value> oldVar = getValue();
-    _var.vforeach(ctx, (c, a)->a.set(c, value));
+    _var.sforeach(ctx, (c, a) -> a.set(c, value));
     return oldVar;
   }
 

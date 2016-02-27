@@ -833,7 +833,7 @@ abstract public class ArrayValue extends Value {
   {
     EnvVar value = get(index);
 
-    V<? extends Var> array = value.getVar().vmap(ctx, (c,a)->{
+    V<? extends Var> array = value.getVar().smap(ctx, (c, a) -> {
       Var result = a.toAutoArray();
       if (result!=a)
         put(c, index, V.one(result));
@@ -1242,7 +1242,7 @@ abstract public class ArrayValue extends Value {
 
   private V<? extends Entry> getNext(FeatureExpr ctx, @Nonnull V<? extends Entry> entry, boolean isPrev) {
     if (ctx.isContradiction()) return V.one(null);
-    return entry.vflatMap(ctx, (c, e) -> {
+    return entry.sflatMap(ctx, (c, e) -> {
       Entry next = isPrev ? e.getPrev() : e.getNext();
       return V.choice(c,
               next == null ? V.one(null) : V.choice(next.getCondition(), V.one(next), getNext(c.andNot(next.getCondition()), V.one(next), isPrev)),

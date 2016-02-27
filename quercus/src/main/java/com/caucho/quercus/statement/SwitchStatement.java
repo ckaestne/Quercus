@@ -101,7 +101,7 @@ public class SwitchStatement extends Statement {
           if (ctx.isSatisfiable()) {
             V<? extends ValueOrVar> vcaseValue = values[j].eval(env, ctx);
 
-            vcaseValue = VHelper.<Value,ValueOrVar,ValueOrVar>vflatMapAll(ctx, vtestValue, vcaseValue, (c, testValue, caseValue) -> {
+            vcaseValue = VHelper.<Value, ValueOrVar, ValueOrVar>sflatMapAll(ctx, vtestValue, vcaseValue, (c, testValue, caseValue) -> {
               if (testValue.eq(caseValue.toValue())) {
                 V<? extends ValueOrVar> vretValue = _blocks[caseIdx].execute(env, c);
 

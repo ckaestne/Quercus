@@ -61,9 +61,9 @@ import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.Vfs;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.*;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.cache.Cache;
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -1366,7 +1366,7 @@ public class QuercusContext
 
     vid = vid.flatMap(id -> id!=null && id >=0 ? V.one(id) : _functionNameMap.getOrDefault(_name, V.one(-1)));
 
-    return vid.vmap(ctx, (c,_id)-> {
+    return vid.smap(ctx, (c, _id) -> {
       int id=_id;
       if (id<0)
         synchronized (_functionNameMap) {
@@ -1414,7 +1414,7 @@ public class QuercusContext
   {
     V<? extends Integer> vid = _functionNameMap.getOrDefault(name,V.one(-1));
 
-    return vid.vflatMap(VHelper.noCtx(), (c,id)-> {
+    return vid.sflatMap(VHelper.noCtx(), (c, id) -> {
 
       if (id==null || id < 0) {
 
@@ -1454,7 +1454,7 @@ public class QuercusContext
   {
     V<? extends Integer> id = getFunctionId(ctx, name);
 
-    id.vmap(ctx, (c,i)->_functionMap[i] = fun);
+    id.sforeach(ctx, (c, i) -> _functionMap[i] = fun);
 
     return id;
   }

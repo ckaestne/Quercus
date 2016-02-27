@@ -471,15 +471,17 @@ public class ArrayValueImpl extends ArrayValue
       copyOnWrite();
     }
 
-    key = key.<Value>vflatMap(ctx, (c, k) -> k instanceof UnsetValue ? createTailKey(c) : V.one(k));
+    key = key.<Value>sflatMap(ctx, (c, k) -> k instanceof UnsetValue ? createTailKey(c) : V.one(k));
 
-    key.vforeach(ctx, (c, k) -> {
+    key.foreach((c, k) -> {
       V<? extends Entry> entry = createEntry(c, k);
 
       // php/0434
       // Var oldVar = entry._var;
 
-      entry.vforeach(c, (cc, a) -> {if (cc.isSatisfiable()) a.set(cc, value);});
+      entry.sforeach(c, (cc, a) -> {
+        if (cc.isSatisfiable()) a.set(cc, value);
+      });
     });
     checkInvariants();
 
@@ -706,9 +708,9 @@ public class ArrayValueImpl extends ArrayValue
 
     V<? extends Entry> entry = createEntry(ctx, index);
 
-    return entry.<ValueOrVar>vflatMap(ctx, (cc, aentry) -> {
+    return entry.<ValueOrVar>sflatMap(ctx, (cc, aentry) -> {
       V<? extends Var> var = aentry.getEnvVar().getVar();
-      return var.<ValueOrVar>vmap(cc, (c, a) -> {
+      return var.<ValueOrVar>smap(cc, (c, a) -> {
         Var result = a.toAutoArray();
         if (result != a) {
           aentry.set(c, V.one(a));
@@ -822,7 +824,7 @@ public class ArrayValueImpl extends ArrayValue
       return;
 
     Ref sharedKey = new Ref();
-    entrySet.vforeach(VHelper.True(), (c, e) -> {
+    entrySet.sforeach(VHelper.True(), (c, e) -> {
       if (e != null) {
         if (sharedKey.v == null)
           sharedKey.v = e.getKey();
@@ -1093,7 +1095,7 @@ public class ArrayValueImpl extends ArrayValue
     @Nonnull V<? extends Entry> existingEntries = getEntry(key);// _lookupMap.getOrDefault(key, V.one(null));
 
 
-    return existingEntries.vflatMap(ctx, (c,e)->{
+    return existingEntries.sflatMap(ctx, (c, e) -> {
       if (e==null)
         return V.choice(c, () -> createNewEntry(c, key), () -> e);
         else return V.one(e);

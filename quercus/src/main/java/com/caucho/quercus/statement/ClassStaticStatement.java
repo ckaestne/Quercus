@@ -82,8 +82,8 @@ public class ClassStaticStatement
 
       env.setVar(ctx, _var.getName(), var);
 
-      var.vforeach(ctx, (cc, va) ->
-              va.getValue().vforeach(cc, (c, v) -> {
+      var.sforeach(ctx, (cc, va) ->
+              va.getValue().sforeach(cc, (c, v) -> {
                 if (!v.isset() && _initValue != null) {
                   va.set(c, _initValue.eval(env, c));
                 }

@@ -86,7 +86,7 @@ public class BinaryOrExpr extends AbstractBinaryExpr {
   @Override
   public V<? extends Boolean> evalBoolean(Env env, FeatureExpr ctx)
   {
-    return _left.evalBoolean(env, ctx).vflatMap(ctx, (c, l) ->
+    return _left.evalBoolean(env, ctx).sflatMap(ctx, (c, l) ->
             l ? V.one(true) : _right.evalBoolean(env, c));
   }
 

@@ -47,20 +47,20 @@ public class VHelper {
                 b.flatMap((bb) -> fun.apply(aa, bb)));
     }
 
-  public static <A, B, R> V<? extends R> vmapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function4<FeatureExpr, A, B, R> fun) {
-    return a.vflatMap(ctx, (c, aa) ->
-            b.vmap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
+  public static <A, B, R> V<? extends R> smapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function4<FeatureExpr, A, B, R> fun) {
+    return a.sflatMap(ctx, (c, aa) ->
+            b.smap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
   }
 
-  public static <A, B, C, R> V<? extends R> vmapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, V<? extends C> c, Function5<FeatureExpr, A, B, C, R> fun) {
-    return a.<R>vflatMap(ctx, (cctx, aa) ->
-            b.<R>vflatMap(cctx, (ccctx, bb) ->
-                    c.<R>vmap(ccctx, (cccctx, cc) -> fun.apply(cccctx, aa, bb, cc))));
+  public static <A, B, C, R> V<? extends R> smapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, V<? extends C> c, Function5<FeatureExpr, A, B, C, R> fun) {
+    return a.<R>sflatMap(ctx, (cctx, aa) ->
+            b.<R>sflatMap(cctx, (ccctx, bb) ->
+                    c.<R>smap(ccctx, (cccctx, cc) -> fun.apply(cccctx, aa, bb, cc))));
   }
 
-  public static <A, B, R> V<? extends R> vflatMapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function4<FeatureExpr, A, B, V<? extends R>> fun) {
-    return a.vflatMap(ctx, (c, aa) ->
-            b.vflatMap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
+  public static <A, B, R> V<? extends R> sflatMapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function4<FeatureExpr, A, B, V<? extends R>> fun) {
+    return a.sflatMap(ctx, (c, aa) ->
+            b.sflatMap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
   }
 
 
@@ -140,7 +140,7 @@ public class VHelper {
   }
 
   public static <T> boolean vequal(V<? extends T> a, V<? extends T> b) {
-    return vmapAll(True(), a, b, (c, aa, bb) -> c.isContradiction() || aa.equals(bb)).when(x->x).isTautology();
+    return smapAll(True(), a, b, (c, aa, bb) -> c.isContradiction() || aa.equals(bb)).when(x -> x).isTautology();
   }
 
   public static void assertTrue(FeatureExpr ctx) {

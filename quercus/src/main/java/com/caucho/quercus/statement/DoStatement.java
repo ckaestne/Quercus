@@ -30,12 +30,16 @@
 package com.caucho.quercus.statement;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.BreakValue;
+import com.caucho.quercus.env.ContinueValue;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 
 import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
  * Represents a do ... while statement.
@@ -75,7 +79,7 @@ public class DoStatement extends Statement {
         env.checkTimeout();
 
         V<? extends ValueOrVar> vresult = _block.execute(env, ctx);
-        vresult = vresult.vmap(ctx, (c,v)->{
+        vresult = vresult.pmap(ctx, v -> {
           if (v instanceof BreakValue) {
             BreakValue breakValue = (BreakValue) v;
 
@@ -94,7 +98,7 @@ public class DoStatement extends Statement {
               return null;
           }
           return v;
-        });
+        }, Function.identity());
 
         value = V.choice(ctx, vresult, value);
         ctx = ctx.and(value.when(x -> x == null));

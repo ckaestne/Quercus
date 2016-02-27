@@ -86,7 +86,7 @@ public class ClassVarVarConstExpr extends Expr
   {
     V<? extends QuercusClass> cls = _className.evalQuercusClass(env, ctx);
 
-    return cls.vmap(ctx, (c, a) -> a.getConstant(env, _name.evalStringValue(env, c).getOne()));
+    return cls.smap(ctx, (c, a) -> a.getConstant(env, _name.evalStringValue(env, c).getOne()));
   }
 
   @Override

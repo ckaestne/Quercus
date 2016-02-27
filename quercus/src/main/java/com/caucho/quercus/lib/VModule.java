@@ -29,15 +29,15 @@
 
 package com.caucho.quercus.lib;
 
-import edu.cmu.cs.varex.annotation.VParamType;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
-import edu.cmu.cs.varex.annotation.VSideeffectFree;
-import edu.cmu.cs.varex.annotation.VVariational;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import de.fosd.typechef.featureexpr.FeatureExprFactory;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.annotation.VParamType;
+import edu.cmu.cs.varex.annotation.VSideeffectFree;
+import edu.cmu.cs.varex.annotation.VVariational;
 
 import javax.annotation.Nonnull;
 import java.util.logging.Logger;
@@ -76,7 +76,7 @@ public class VModule extends AbstractQuercusModule {
     @VVariational@VParamType(Value.class)
     public V<? extends Value> vtest_addandprint(Env env, FeatureExpr ctx, @VParamType(Value.class) V<? extends Value> a, @VParamType(Value.class) V<? extends Value> b) {
         V<? extends LongValue> result = VHelper.mapAll(a, b, (x, y) -> LongValue.create(x.toLong() + y.toLong()));
-        result.vforeach(ctx, (c, v) -> env.print(c, v));
+        result.sforeach(ctx, (c, v) -> env.print(c, v));
         return result;
     }
 

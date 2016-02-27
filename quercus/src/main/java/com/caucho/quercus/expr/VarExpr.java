@@ -229,7 +229,7 @@ public class VarExpr
     */
     value = env.getValue(ctx, _name);
 
-      value = value.vmap(ctx, (c,v)-> {
+    value = value.smap(ctx, (c, v) -> {
                 if (v == null || v.isString() || v.isNull()) {
                   ObjectValue x = env.createObject();
                   env.setValue(c, _name, V.one(x));

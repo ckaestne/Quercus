@@ -36,6 +36,7 @@ import com.caucho.quercus.program.Function;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -60,7 +61,7 @@ public class FunctionDefStatement extends Statement {
     try {
       String name = _fun.getName();
 
-      env.findFunction(env.createString(name)).vforeach(ctx, (c,fun) -> {
+      env.findFunction(env.createString(name)).sforeach(ctx, (c, fun) -> {
         if (fun == null)
           env.addFunction(c, name, _fun);
         else

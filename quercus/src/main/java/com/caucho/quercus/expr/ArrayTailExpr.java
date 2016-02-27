@@ -102,13 +102,13 @@ public class ArrayTailExpr extends AbstractVarExpr {
     if (isTop) {
       V<? extends ValueOrVar> obj = _expr.evalArray(env, ctx);
 
-      return VHelper.getValues(obj).vflatMap(ctx, (c, a) -> a.putVar(c).map((b) -> b.makeValue()));
+      return VHelper.getValues(obj).sflatMap(ctx, (c, a) -> a.putVar(c).map((b) -> b.makeValue()));
     }
     else {
       // php/0d4e need to do a toValue()
       V<? extends Value> obj = _expr.evalArray(env, ctx).map((a)->a.toValue());
 
-      return obj.vflatMap(ctx, (c, a) -> a.getArgTail(env, c, isTop).map((b) -> b.makeValue()));
+      return obj.sflatMap(ctx, (c, a) -> a.getArgTail(env, c, isTop).map((b) -> b.makeValue()));
     }
   }
 
@@ -161,7 +161,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
 
     Value value = env.createObject();
 
-    VHelper.getValues(array).vmap(ctx, (c, a) -> a.put(c, V.one(value)));
+    VHelper.getValues(array).sforeach(ctx, (c, a) -> a.put(c, V.one(value)));
 
     return VHelper.toV(value);
   }
@@ -208,7 +208,7 @@ public class ArrayTailExpr extends AbstractVarExpr {
   {
     V<? extends ValueOrVar> array = _expr.evalArray(env, ctx);
 
-    VHelper.getValues(array).vmap(ctx, (c, a) -> a.put(c, value.map((b) -> b.toValue())));
+    VHelper.getValues(array).sforeach(ctx, (c, a) -> a.put(c, value.map((b) -> b.toValue())));
 
     return value;
   }
