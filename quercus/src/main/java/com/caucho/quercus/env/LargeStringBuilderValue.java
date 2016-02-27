@@ -634,7 +634,7 @@ public class LargeStringBuilderValue
    * Append a Java value to the value.
    */
   @Override
-  public final StringValue append(Value v)
+  public final StringValue append(FeatureExpr ctx, Value v)
   {
     v.appendTo(this);
 

@@ -303,9 +303,9 @@ public class CopyArrayValue extends ArrayValue {
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value index)
+  public EnvVar getVar(FeatureExpr ctx, Value index)
   {
-    return getCopyArray().getVar(index);
+    return getCopyArray().getVar(ctx, index);
   }
 
   /**

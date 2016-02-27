@@ -373,16 +373,16 @@ abstract public class ObjectValue extends Callback {
   @Override
   public StringValue appendTo(UnicodeBuilderValue sb)
   {
-    return sb.append(toString(Env.getInstance()));
+    return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
   }
 
   /**
    * Append to a binary builder.
    */
   @Override
-  public StringValue appendTo(StringBuilderValue sb)
+  public StringValue appendTo(FeatureExpr ctx, StringBuilderValue sb)
   {
-    return sb.append(toString(Env.getInstance()));
+    return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
   }
 
   /**
@@ -400,7 +400,7 @@ abstract public class ObjectValue extends Callback {
   @Override
   public StringValue appendTo(LargeStringBuilderValue sb)
   {
-    return sb.append(toString(Env.getInstance()));
+    return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
   }
 
   /**

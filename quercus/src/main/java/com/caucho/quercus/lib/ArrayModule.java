@@ -2868,7 +2868,7 @@ public class ArrayModule
       Value entryValue;
 
       if (extrRefs)
-        entryValue = array.getVar(entryKey).getOne();
+        entryValue = array.getVar(VHelper.noCtx(), entryKey).getOne();
       else
         entryValue = array.get(entryKey).getOne();
 

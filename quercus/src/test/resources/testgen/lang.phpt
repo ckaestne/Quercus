@@ -153,6 +153,18 @@ $a[] = "e";
 foreach ($a as $k=>$b)
   echo "$k -> $b; ";
 
+
+==== foreach3refshort
+$a = array();
+if (@A)
+    $a[] = "c";
+$a[] = "e";
+foreach ($a as $k=>&$x)
+  $x = "[$x]";
+foreach ($a as $k=>$b)
+  echo "$k -> $b; ";
+
+
 ==== foreach3ref
 $a = array("a", "b");
 if (@A)
@@ -160,8 +172,8 @@ if (@A)
 if (@B && @A)
     $a[] = "d";
 $a[] = "e";
-foreach ($a as $k=>&$b)
-  $b = "[$b]";
+foreach ($a as $k=>&$x)
+  $x = "[$x]";
 foreach ($a as $k=>$b)
   echo "$k -> $b; ";
 
@@ -171,8 +183,8 @@ if (@A)
     $a[] = "c";
 $a[] = "e";
 if (@B)
-    foreach ($a as $k=>&$b)
-        $b = "[$b]";
+    foreach ($a as $k=>&$x)
+        $x = "[$x]";
 foreach ($a as $k=>$b)
     echo "$k -> $b; ";
 
@@ -549,3 +561,21 @@ echo $a.".";
 $d = __NAMESPACE__ . '\MYCONST';
 //echo $d.".";
 echo constant($d);
+
+==== condAssignByRef
+$x = 1;
+if (@A) {
+  $a = 2;
+  $x = &$a;
+  $a = 3;
+  echo $x;
+}
+if (@B) {
+  $a = 4;
+  $x = &$a;
+  $a = 5;
+  if (@A)
+    $a = 6;
+  echo $x;
+}
+echo $x;

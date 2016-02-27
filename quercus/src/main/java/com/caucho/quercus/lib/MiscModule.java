@@ -1322,7 +1322,7 @@ public class MiscModule extends AbstractQuercusModule {
 
       StringValue s = arg.toStringValue(env);
 
-      bb.append(s);
+      bb.append(VHelper.noCtx(), s);
 
       return i;
     }

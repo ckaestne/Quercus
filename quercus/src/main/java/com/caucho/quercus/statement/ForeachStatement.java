@@ -188,7 +188,7 @@ public class ForeachStatement
       EnvVar value;
       if (!_isRef)
         value = entry.getEnvVar();
-      else value = origObj.getOne(innerCtx).getVar(key);
+      else value = origObj.getOne(innerCtx).getVar(innerCtx, key);
 
       if (_key != null)
         _key.evalAssignValue(env, innerCtx, VHelper.toV(key));

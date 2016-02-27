@@ -1129,7 +1129,7 @@ public class RegexpModule
 
       int start = regexpState.start();
       if (tail < start)
-        result = result.append(regexpState.substring(env, tail, start));
+        result = result.append(VHelper.noCtx(), regexpState.substring(env, tail, start));
 
       ArrayValue regs = new ArrayValueImpl();
 
@@ -1154,7 +1154,7 @@ public class RegexpModule
 
       Value replacement = fun.call(env, VHelper.noCtx(), regs).getOne().toValue();
 
-      result = result.append(replacement);
+      result = result.append(VHelper.noCtx(), replacement);
 
       tail = regexpState.end();
 
@@ -1162,7 +1162,7 @@ public class RegexpModule
     }
 
     if (tail < regexpState.getSubjectLength())
-      result = result.append(regexpState.substring(env, tail));
+      result = result.append(VHelper.noCtx(), regexpState.substring(env, tail));
 
     env.freeRegexpState(regexpState);
 
@@ -1348,7 +1348,7 @@ public class RegexpModule
       // append all text up to match
       int start = regexpState.start();
       if (tail < start)
-        result = result.append(regexpState.substring(env, tail, start));
+        result = result.append(VHelper.noCtx(), regexpState.substring(env, tail, start));
 
       // if isEval then append replacement evaluated as PHP code
       // else append replacement string
@@ -1388,7 +1388,7 @@ public class RegexpModule
       return subject;
 
     if (tail < regexpState.getSubjectLength())
-      result = result.append(regexpState.substring(env, tail));
+      result = result.append(VHelper.noCtx(), regexpState.substring(env, tail));
 
     return result;
   }
@@ -1897,7 +1897,7 @@ public class RegexpModule
     StringValue sb = str.createStringBuilder();
 
     sb = sb.appendBytes(startDelim);
-    sb = sb.append(str);
+    sb = sb.append(VHelper.noCtx(), str);
     sb = sb.appendBytes(endDelim);
 
     return sb;
@@ -2270,7 +2270,7 @@ public class RegexpModule
                      RegexpState regexpState)
     {
       if (_group < regexpState.groupCount())
-        sb = sb.append(regexpState.group(env, _group));
+        sb = sb.append(VHelper.noCtx(), regexpState.group(env, _group));
 
       return sb;
     }

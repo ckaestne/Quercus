@@ -169,11 +169,11 @@ public class ArrayCopyValueImpl extends ArrayValueImpl
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value index)
+  public EnvVar getVar(FeatureExpr ctx, Value index)
   {
     _root.setModified();
 
-    return super.getVar(index);
+    return super.getVar(ctx, index);
   }
 
   /**

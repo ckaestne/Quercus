@@ -42,6 +42,7 @@ import com.caucho.quercus.statement.TryStatement;
 import com.caucho.util.IntMap;
 import com.caucho.util.L10N;
 import com.caucho.vfs.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.CharConversionException;
 import java.io.IOException;
@@ -1183,7 +1184,7 @@ public class QuercusParser {
 
         sb.append(_function.getName());
         sb.append("::");
-        sb.append(name);
+        sb.append(VHelper.noCtx(), name);
 
         if (_classDef != null) {
           statement = _factory.createClassStatic(location, sb, var, init);
@@ -4853,13 +4854,13 @@ public class QuercusParser {
       }
 
       if (use != null) {
-        return createStringBuilder().append(use).append(id.substring(ns));
+        return createStringBuilder().append(VHelper.noCtx(), use).append(VHelper.noCtx(), id.substring(ns));
       }
       else if (_namespace.length() == 0) {
         return id;
       }
       else {
-        return createStringBuilder().append(_namespace).append("\\").append(id);
+        return createStringBuilder().append(VHelper.noCtx(), _namespace).append("\\").append(VHelper.noCtx(), id);
       }
     }
     else {
@@ -4880,7 +4881,7 @@ public class QuercusParser {
         return id;
       }
       else {
-        return createStringBuilder().append(_namespace).append('\\').append(id);
+        return createStringBuilder().append(VHelper.noCtx(), _namespace).append('\\').append(VHelper.noCtx(), id);
       }
     }
   }
@@ -5576,7 +5577,7 @@ public class QuercusParser {
       return new ConstStringValue((StringBuilderValue) value);
     }
     else {
-      return value.createStringBuilder().append(value);
+      return value.createStringBuilder().append(VHelper.noCtx(), value);
     }
   }
 

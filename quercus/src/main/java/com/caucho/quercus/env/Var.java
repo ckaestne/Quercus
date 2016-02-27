@@ -370,7 +370,7 @@ public abstract class Var
 //
   public String toString()
   {
-    return getValue().toString();
+    return "Var(" + getValue().toString() + ")";
   }
 //
 //  /**

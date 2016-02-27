@@ -39,8 +39,8 @@ import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -364,7 +364,7 @@ abstract public class JavaAdapter extends ArrayValue
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value index)
+  public EnvVar getVar(FeatureExpr ctx, Value index)
   {
     throw new UnimplementedVException();
 //    // php/0ceg - Since Java does not support references, the adapter

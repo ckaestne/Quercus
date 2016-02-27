@@ -376,11 +376,11 @@ abstract public class ArrayValue extends Value {
             sb.append(obj.getClassName());
           }
           else {
-            sb.append(obj);
+            sb.append(VHelper.noCtx(), obj);
           }
 
           sb.append("::");
-          sb.append(nameV);
+          sb.append(VHelper.noCtx(), nameV);
 
           nameRef.set(sb);
         }

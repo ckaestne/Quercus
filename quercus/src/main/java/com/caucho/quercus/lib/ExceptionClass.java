@@ -35,6 +35,7 @@ import com.caucho.quercus.annotation.ClassImplementation;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.This;
 import com.caucho.quercus.env.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Iterator;
 
@@ -92,9 +93,9 @@ public class ExceptionClass
     StringValue sb = env.createUnicodeBuilder();
 
     sb.append("ExceptionClass[" + value.getName() + "]\n");
-    sb.append(getMessage(env, value));
+    sb.append(VHelper.noCtx(), getMessage(env, value));
     sb.append("\n");
-    sb.append(getTraceAsString(env, value));
+    sb.append(VHelper.noCtx(), getTraceAsString(env, value));
     sb.append("\n");
 
     return sb;

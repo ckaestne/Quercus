@@ -529,7 +529,7 @@ public class PostgresModule extends AbstractQuercusModule {
             value = LongValue.create(value.toLong());
           } else {
             StringValue sb = env.createUnicodeBuilder();
-            value = sb.append("'").append(value).append("'");
+            value = sb.append("'").append(VHelper.noCtx(), value).append("'");
           }
           break;
 
@@ -542,16 +542,16 @@ public class PostgresModule extends AbstractQuercusModule {
             value = DoubleValue.create(value.toDouble());
           } else {
             StringValue sb = env.createUnicodeBuilder();
-            value = sb.append("'").append(value).append("'");
+            value = sb.append("'").append(VHelper.noCtx(), value).append("'");
           }
           break;
 
         default:
           StringValue sb = env.createUnicodeBuilder();
           if (value.isNumberConvertible())  {
-            value = sb.append(value);
+            value = sb.append(VHelper.noCtx(), value);
           } else {
-            value = sb.append("'").append(value).append("'");
+            value = sb.append("'").append(VHelper.noCtx(), value).append("'");
           }
         }
 
@@ -3020,7 +3020,7 @@ public class PostgresModule extends AbstractQuercusModule {
 
       StringValue query = env.createUnicodeBuilder();
       query.append("SELECT * FROM ").append(tableName)
-          .append(" WHERE ").append(whereClause);
+              .append(" WHERE ").append(VHelper.noCtx(), whereClause);
 
       PostgresResult result = pg_query(env, conn, query.toString());
 

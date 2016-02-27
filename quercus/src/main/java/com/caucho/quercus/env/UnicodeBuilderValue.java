@@ -355,7 +355,7 @@ public class UnicodeBuilderValue
    * Append a Java value to the value.
    */
   @Override
-  public StringValue append(Value v)
+  public StringValue append(FeatureExpr ctx, Value v)
   {
     v.appendTo(this);
 
@@ -489,7 +489,7 @@ public class UnicodeBuilderValue
   @Override
   public StringValue append(Env env, StringValue unicodeStr, String charset)
   {
-    return append(unicodeStr);
+    return append(VHelper.noCtx(), unicodeStr);
   }
 
   /**

@@ -33,7 +33,6 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.Function4;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -214,9 +213,9 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value index)
+  public EnvVar getVar(FeatureExpr ctx, Value index)
   {
-    return _array.getVar(index);
+    return _array.getVar(ctx, index);
   }
   
   /**

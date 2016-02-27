@@ -34,6 +34,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -458,7 +459,7 @@ public class XMLWriter {
     _s.append("<").append(env, prefix).append(":").append(env, name);
 
     StringValue endName = prefix.createStringBuilder();
-    endName.append(prefix).append(":").append(name);
+    endName.append(VHelper.noCtx(), prefix).append(":").append(VHelper.noCtx(), name);
     
     _elementStack.add(endName);
     
@@ -801,7 +802,7 @@ public class XMLWriter {
     @Override
       XMLWriterStream append(Env env, StringValue v)
     {
-      _v.append(v);
+      _v.append(VHelper.noCtx(), v);
 
       return this;
     }

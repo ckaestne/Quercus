@@ -376,7 +376,7 @@ public class Xml {
     if (_xmlString == null)
       _xmlString = data.createStringBuilder();
 
-    _xmlString.append(data);
+    _xmlString.append(VHelper.noCtx(), data);
 
     if (isFinal) {
       InputSource is;
@@ -763,7 +763,7 @@ public class Xml {
           // php/1h0l
           StringValue sb = _env.createStringBuilder();
 
-          sb.append(value);
+          sb.append(VHelper.noCtx(), value);
           sb.append(ch, start, length);
 
           elementArray.put(key, sb);

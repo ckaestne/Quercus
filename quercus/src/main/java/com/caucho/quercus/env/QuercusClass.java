@@ -893,7 +893,7 @@ public class QuercusClass extends NullValue {
     StringValue sb = createStringBuilder();
     sb.append(className);
     sb.append("::");
-    sb.append(name);
+    sb.append(VHelper.noCtx(), name);
 
     _staticFieldNameMap.put(name, sb);
   }
@@ -918,7 +918,7 @@ public class QuercusClass extends NullValue {
     StringValue sb = createStringBuilder();
     sb.append(bindingClassName);
     sb.append("::");
-    sb.append(name);
+    sb.append(VHelper.noCtx(), name);
 
     _staticFieldNameMap.put(name, sb);
   }
@@ -1042,7 +1042,7 @@ public class QuercusClass extends NullValue {
         StringValue fullName = env.createStringBuilder();
         fullName.append(_className);
         fullName.append("::");
-        fullName.append(field._name);
+        fullName.append(VHelper.noCtx(), field._name);
 
         env.setStaticRef(VHelper.noCtx(), fullName, V.one(val));
       }

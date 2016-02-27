@@ -39,6 +39,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -531,7 +532,7 @@ public class GettextModule
         int argIndex = ch - '0';
 
         if (0 <= argIndex && argIndex < args.length) {
-          sb.append(args[argIndex]);
+          sb.append(VHelper.noCtx(), args[argIndex]);
           i += 4;
         }
         else {
