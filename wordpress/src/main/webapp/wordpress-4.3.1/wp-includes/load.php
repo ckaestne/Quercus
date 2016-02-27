@@ -563,10 +563,10 @@ function wp_get_active_and_valid_plugins() {
 
 		if ($includePlugin) {
     		$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
-       		echo "<!-- loading plugin $plugin -->";
+       		//echo "<!-- loading plugin $plugin -->";
     	} else {
         	//else not activated
-       		echo "<!-- skipping plugin $plugin -->";
+       		//echo "<!-- skipping plugin $plugin -->";
        	}
 
 		}
