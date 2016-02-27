@@ -162,7 +162,7 @@ public class QuercusMimeUtility
     String valueUnicode = decoder.decode(env, value).toString();
 
     StringValue sb = env.createUnicodeBuilder();
-    sb.append(UnicodeUtility.encode(env, nameUnicode, outCharset));
+    sb.append(VHelper.noCtx(), UnicodeUtility.encode(env, nameUnicode, outCharset));
     sb.append(':');
     sb.append(' ');
 

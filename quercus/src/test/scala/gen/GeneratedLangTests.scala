@@ -1,6 +1,5 @@
 package edu.cmu.cs.varex.gen
-import de.fosd.typechef.featureexpr.FeatureExprFactory
-import org.junit.{Ignore, Test}
+import org.junit.Test
 
 /** generated file, do not modify */
 class GeneratedLangTests extends AbstractPhpGenTest {
@@ -264,6 +263,20 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not and fB.not, "0 -> a; 1 -> b; 2 -> e;")
 	}
 
+	@Test def testForeach3refshort() {
+		eval("""<?php 
+		       |$a = array();
+		       |if (@A)
+		       |    $a[] = "c";
+		       |$a[] = "e";
+		       |foreach ($a as $k=>&$x)
+		       |  $x = "[$x]";
+		       |foreach ($a as $k=>$b)
+		       |  echo "$k -> $b; ";""".stripMargin) to 
+			c(fA, "0 -> [c]; 1 -> [e];") ~
+			c(fA.not, "0 -> [e];")
+	}
+
 	@Test def testForeach3ref() {
 		eval("""<?php 
 		       |$a = array("a", "b");
@@ -272,14 +285,14 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 		       |if (@B && @A)
 		       |    $a[] = "d";
 		       |$a[] = "e";
-		       |foreach ($a as $k=>&$b)
-		       |  $b = "[$b]";
+		       |foreach ($a as $k=>&$x)
+		       |  $x = "[$x]";
 		       |foreach ($a as $k=>$b)
 		       |  echo "$k -> $b; ";""".stripMargin) to 
-			c(fA and fB, "0 -> [a]; 1 -> [b]; 2 -> [c]; 3 -> [d]; 4 -> [d];") ~
-			c(fA.not and fB, "0 -> [a]; 1 -> [b]; 2 -> [b];") ~
-			c(fB.not and fA, "0 -> [a]; 1 -> [b]; 2 -> [c]; 3 -> [c];") ~
-			c(fA.not and fB.not, "0 -> [a]; 1 -> [b]; 2 -> [b];")
+			c(fA and fB, "0 -> [a]; 1 -> [b]; 2 -> [c]; 3 -> [d]; 4 -> [e];") ~
+			c(fA.not and fB, "0 -> [a]; 1 -> [b]; 2 -> [e];") ~
+			c(fB.not and fA, "0 -> [a]; 1 -> [b]; 2 -> [c]; 3 -> [e];") ~
+			c(fA.not and fB.not, "0 -> [a]; 1 -> [b]; 2 -> [e];")
 	}
 
 	@Test def testForeach4vref() {
@@ -289,12 +302,12 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 		       |    $a[] = "c";
 		       |$a[] = "e";
 		       |if (@B)
-		       |    foreach ($a as $k=>&$b)
-		       |        $b = "[$b]";
+		       |    foreach ($a as $k=>&$x)
+		       |        $x = "[$x]";
 		       |foreach ($a as $k=>$b)
 		       |    echo "$k -> $b; ";""".stripMargin) to 
-			c(fA and fB, "0 -> [a]; 1 -> [c]; 2 -> [c];") ~
-			c(fA.not and fB, "0 -> [a]; 1 -> [a];") ~
+			c(fA and fB, "0 -> [a]; 1 -> [c]; 2 -> [e];") ~
+			c(fA.not and fB, "0 -> [a]; 1 -> [e];") ~
 			c(fB.not and fA, "0 -> a; 1 -> c; 2 -> e;") ~
 			c(fA.not and fB.not, "0 -> a; 1 -> e;")
 	}
@@ -774,6 +787,30 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 		       |//echo $d.".";
 		       |echo constant($d);""".stripMargin) to 
 			c(True, "A;.A;.2.1")
+	}
+
+	@Test def testCondAssignByRef() {
+		eval("""<?php 
+		       |$x = 1;
+		       |if (@A) {
+		       |  $a = 2;
+		       |  $x = &$a;
+		       |  $a = 3;
+		       |  echo $x;
+		       |}
+		       |if (@B) {
+		       |  $a = 4;
+		       |  $x = &$a;
+		       |  $a = 5;
+		       |  if (@A)
+		       |    $a = 6;
+		       |  echo $x;
+		       |}
+		       |echo $x;""".stripMargin) to 
+			c(fA and fB, "366") ~
+			c(fA.not and fB, "55") ~
+			c(fB.not and fA, "33") ~
+			c(fA.not and fB.not, "1")
 	}
 
 }

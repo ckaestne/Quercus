@@ -125,7 +125,7 @@ abstract public class UnicodeValue extends StringValue {
   {
     UnicodeBuilderValue sb = new UnicodeBuilderValue();
 
-    sb.append(this);
+    sb.append(VHelper.noCtx(), this);
 
     return sb;
   }

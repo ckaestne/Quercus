@@ -38,6 +38,7 @@ import com.caucho.vfs.TempBuffer;
 import com.caucho.vfs.TempCharBuffer;
 import com.caucho.vfs.TempStream;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.mail.internet.MimeUtility;
 import java.io.IOException;
@@ -198,7 +199,7 @@ public class IconvUtility {
     value = value.toUnicodeValue(env, inCharset);
 
     StringValue sb = env.createUnicodeBuilder();
-    sb.append(name);
+    sb.append(VHelper.noCtx(), name);
     sb.append(':');
     sb.append(' ');
 

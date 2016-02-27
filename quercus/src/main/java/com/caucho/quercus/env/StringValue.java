@@ -1042,7 +1042,7 @@ abstract public class StringValue
     else {
       return (createStringBuilder()
               .append(this, 0, (int) index)
-              .append(value)
+              .append(VHelper.noCtx(), value)
               .append(this, (int) (index + 1), length()));
     }
   }
@@ -1175,9 +1175,9 @@ abstract public class StringValue
       }
 
       if (len != length())
-        sb.append(substring(len));
+        sb.append(VHelper.noCtx(), substring(len));
       else if (len != rStr.length())
-        sb.append(rStr.substring(len));
+        sb.append(VHelper.noCtx(), rStr.substring(len));
 
       return sb;
     }
@@ -1508,7 +1508,7 @@ abstract public class StringValue
   public StringValue append(Env env, StringValue unicodeStr, String charset)
   {
     if (! unicodeStr.isUnicode())
-      return append(unicodeStr);
+      return append(VHelper.noCtx(), unicodeStr);
 
     try {
       byte []bytes = unicodeStr.toString().getBytes(charset);
@@ -1520,7 +1520,7 @@ abstract public class StringValue
     catch (UnsupportedEncodingException e) {
       env.warning(e);
 
-      return append(unicodeStr);
+      return append(VHelper.noCtx(), unicodeStr);
     }
   }
 
@@ -1567,7 +1567,7 @@ abstract public class StringValue
   /**
    * Append a Java value to the value.
    */
-  public StringValue append(Value v)
+  public StringValue append(FeatureExpr ctx, Value v)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
@@ -1703,7 +1703,7 @@ abstract public class StringValue
    */
   public StringValue appendUnicode(Value value)
   {
-    return append(value);
+    return append(VHelper.noCtx(), value);
   }
 
   /**
@@ -1711,7 +1711,7 @@ abstract public class StringValue
    */
   public StringValue appendUnicode(Value v1, Value v2)
   {
-    return append(v1).append(v2);
+    return append(VHelper.noCtx(), v1).append(VHelper.noCtx(), v2);
   }
 
   /**
@@ -2539,7 +2539,7 @@ abstract public class StringValue
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    return createStringBuilder().append(this);
+    return createStringBuilder().append(VHelper.noCtx(), this);
   }
 
   /**

@@ -38,6 +38,7 @@ import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -101,7 +102,7 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     StringValue sb = env.createStringBuilder();
     sb.append(className);
     sb.append("::");
-    sb.append(varName);
+    sb.append(VHelper.noCtx(), varName);
 
     return env.getStaticValue(sb);
   }
@@ -123,7 +124,7 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     StringValue var = env.createStringBuilder();
     var.append(className);
     var.append("::");
-    var.append(varName);
+    var.append(VHelper.noCtx(), varName);
 
     return env.getStaticVar(var);
   }
@@ -146,7 +147,7 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     StringValue var = env.createStringBuilder();
     var.append(className);
     var.append("::");
-    var.append(varName);
+    var.append(VHelper.noCtx(), varName);
 
     env.setStaticRef(ctx, var, value);
 

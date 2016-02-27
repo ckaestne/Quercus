@@ -493,7 +493,7 @@ public class BinaryBuilderValue
     value = value.toValue();
 
     if (value instanceof BinaryBuilderValue) {
-      append(value);
+      append(VHelper.noCtx(), value);
 
       return this;
     }
@@ -501,7 +501,7 @@ public class BinaryBuilderValue
       UnicodeBuilderValue sb = new UnicodeBuilderValue();
 
       appendTo(sb);
-      sb.append(value);
+      sb.append(VHelper.noCtx(), value);
 
       return sb;
     }

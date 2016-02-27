@@ -213,9 +213,9 @@ public class ArrayValueWrapper extends ArrayValue {
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value index)
+  public EnvVar getVar(FeatureExpr ctx, Value index)
   {
-    return _array.getVar(index);
+    return _array.getVar(ctx, index);
   }
   
   /**

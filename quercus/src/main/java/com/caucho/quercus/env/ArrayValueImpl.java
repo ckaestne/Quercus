@@ -770,7 +770,7 @@ public class ArrayValueImpl extends ArrayValue
     // 0d0d
     V<? extends Value> tailKey = createTailKey(ctx);
 
-    return tailKey.flatMap(key->getVar(key).getVar());
+    return tailKey.flatMap(key -> getVar(ctx, key).getVar());
   }
 
   /**
@@ -1044,22 +1044,27 @@ public class ArrayValueImpl extends ArrayValue
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value index) {
+  public EnvVar getVar(FeatureExpr ctx, Value index) {
     if (_isDirty)
       copyOnWrite();
 
-    V<? extends Entry> entry = createEntry(VHelper.noCtx(), index);
+    V<? extends Entry> entry = createEntry(ctx, index);
     // quercus/0431
 
-    return new EnvVarImpl(entry.flatMap((a) -> a.toVar())); // _value.toSimpleVar();
+    return new EnvVarImpl(entry.flatMap((a) -> a == null ? createNullVar() : a.toVar())); // _value.toSimpleVar();
   }
+
+  private V<Var> createNullVar() {
+    return V.one(Var.create(V.one(NullValue.NULL)));
+  }
+
 
   /**
    * Returns the array ref.
    */
   @Override
-  public EnvVar getRef(Value index) {
-    return getVar(index);
+  public EnvVar getRef(FeatureExpr ctx, Value index) {
+    return getVar(ctx, index);
 //    if (_isDirty)
 //      copyOnWrite();
 //
@@ -1089,7 +1094,6 @@ public class ArrayValueImpl extends ArrayValue
 
 
     return existingEntries.vflatMap(ctx, (c,e)->{
-
       if (e==null)
         return V.choice(c, () -> createNewEntry(c, key), () -> e);
         else return V.one(e);

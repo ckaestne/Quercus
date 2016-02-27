@@ -500,7 +500,7 @@ public class LongValue extends NumberValue
       toStringValue(env).jsonEncode(env, context, sb);
     }
     else {
-      sb.append(toStringValue(env));
+      sb.append(VHelper.noCtx(), toStringValue(env));
     }
   }
 
@@ -537,7 +537,7 @@ public class LongValue extends NumberValue
    * Append to a string builder.
    */
   @Override
-  public StringValue appendTo(StringBuilderValue sb)
+  public StringValue appendTo(FeatureExpr ctx, StringBuilderValue sb)
   {
     return sb.append(_value);
   }

@@ -19,7 +19,7 @@ public class One<T> implements V<T> {
 
     @Override
     public String toString() {
-        return "Value(" + value + ")";
+        return "One(" + value + ")";
     }
 
     @Override

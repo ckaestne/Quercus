@@ -128,7 +128,7 @@ public class ClassField
     sb.append('\u0000');
     sb.append('*');
     sb.append('\u0000');
-    sb.append(name);
+    sb.append(VHelper.noCtx(), name);
 
     return sb;
   }
@@ -147,7 +147,7 @@ public class ClassField
     sb.append(declaringClass);
     sb.append('\u0000');
 
-    sb.append(name);
+    sb.append(VHelper.noCtx(), name);
 
     return sb;
   }

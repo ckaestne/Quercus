@@ -1022,7 +1022,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   public StringValue toBinaryValue(Env env) {
     StringValue bb = env.createBinaryBuilder();
 
-    bb.append(this);
+    bb.append(VHelper.noCtx(), this);
 
     return bb;
 
@@ -1151,8 +1151,8 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Append to a binary builder.
    */
-  public StringValue appendTo(StringBuilderValue sb) {
-    return sb.append(toString());
+  public StringValue appendTo(FeatureExpr ctx, StringBuilderValue sb) {
+    return sb.append(ctx, toString());
   }
 
   /**
@@ -2554,7 +2554,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns a reference to the array value.
    */
-  public EnvVar getVar(Value index)
+  public EnvVar getVar(FeatureExpr ctx, Value index)
   {
     return get(index);
   }
@@ -2562,7 +2562,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Returns a reference to the array value.
    */
-  public EnvVar getRef(Value index)
+  public EnvVar getRef(FeatureExpr ctx, Value index)
   {
     return get(index);
   }
@@ -2598,7 +2598,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
   {
-    EnvVar var = getVar(index);
+    EnvVar var = getVar(ctx, index);
 
     return var.getVar().map((a) -> a.toAutoArray());
   }
@@ -2618,7 +2618,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    */
   public V<? extends Value> getObject(Env env, FeatureExpr ctx, Value index)
   {
-    final EnvVar var = getVar(index);
+    final EnvVar var = getVar(ctx, index);
 
     return var.getValue().vflatMap(ctx, (c, v) -> {
       if (v.isset())

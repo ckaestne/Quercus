@@ -160,7 +160,7 @@ public class StringBuilderValue
       _buffer[i] = (byte) s[i];
     }
 
-    v1.appendTo(this);
+    v1.appendTo(VHelper.noCtx(), this);
   }
 
   public StringBuilderValue(byte []s, Value v1)
@@ -176,7 +176,7 @@ public class StringBuilderValue
 
     System.arraycopy(s, 0, _buffer, 0, len);
 
-    v1.appendTo(this);
+    v1.appendTo(VHelper.noCtx(), this);
   }
 
   public StringBuilderValue(Value v1)
@@ -186,7 +186,7 @@ public class StringBuilderValue
     else {
       _buffer = new byte[MIN_LENGTH];
 
-      v1.appendTo(this);
+      v1.appendTo(VHelper.noCtx(), this);
     }
   }
 
@@ -213,17 +213,17 @@ public class StringBuilderValue
   {
     _buffer = new byte[MIN_LENGTH];
 
-    v1.appendTo(this);
-    v2.appendTo(this);
+    v1.appendTo(VHelper.noCtx(), this);
+    v2.appendTo(VHelper.noCtx(), this);
   }
 
   public StringBuilderValue(Value v1, Value v2, Value v3)
   {
     _buffer = new byte[MIN_LENGTH];
 
-    v1.appendTo(this);
-    v2.appendTo(this);
-    v3.appendTo(this);
+    v1.appendTo(VHelper.noCtx(), this);
+    v2.appendTo(VHelper.noCtx(), this);
+    v3.appendTo(VHelper.noCtx(), this);
   }
 
   /**
@@ -575,7 +575,7 @@ public class StringBuilderValue
    * Append to a string builder.
    */
   @Override
-  public StringValue appendTo(StringBuilderValue bb)
+  public StringValue appendTo(FeatureExpr ctx, StringBuilderValue bb)
   {
     bb.append(_buffer, 0, _length);
 
@@ -1088,7 +1088,7 @@ public class StringBuilderValue
     else {
       StringBuilderValue v = new StringBuilderValue(this);
 
-      value.appendTo(v);
+      value.appendTo(VHelper.noCtx(), v);
 
       return v;
     }
@@ -1110,7 +1110,7 @@ public class StringBuilderValue
     else {
       StringBuilderValue v = new StringBuilderValue(this);
 
-      value.appendTo(v);
+      value.appendTo(VHelper.noCtx(), v);
 
       return v;
     }
@@ -1336,7 +1336,7 @@ public class StringBuilderValue
    * Append a Java value to the value.
    */
   @Override
-  public final StringValue append(Value v)
+  public final StringValue append(FeatureExpr ctx, Value v)
   {
     /*
     if (v.length() == 0)
@@ -1349,7 +1349,7 @@ public class StringBuilderValue
     }
     */
 
-    v.appendTo(this);
+    v.appendTo(ctx, this);
 
     return this;
   }
@@ -1396,7 +1396,7 @@ public class StringBuilderValue
   @Override
   public StringValue appendUnicode(Value v)
   {
-    v.appendTo(this);
+    v.appendTo(VHelper.noCtx(), this);
 
     return this;
   }
@@ -1407,8 +1407,8 @@ public class StringBuilderValue
   @Override
   public StringValue appendUnicode(Value v1, Value v2)
   {
-    v1.appendTo(this);
-    v2.appendTo(this);
+    v1.appendTo(VHelper.noCtx(), this);
+    v2.appendTo(VHelper.noCtx(), this);
 
     return this;
   }

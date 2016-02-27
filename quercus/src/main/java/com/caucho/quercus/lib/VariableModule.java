@@ -262,7 +262,7 @@ public class VariableModule extends AbstractQuercusModule {
         String key = entry.getKey().toString();
 
         env.setGlobalValue(VHelper.noCtx(), prefix + key,
-                         array.getVar(entry.getKey()).getValue());
+                         array.getVar(VHelper.noCtx(), entry.getKey()).getValue());
       }
     }
 

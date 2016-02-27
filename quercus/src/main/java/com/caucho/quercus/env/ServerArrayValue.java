@@ -263,12 +263,12 @@ public class ServerArrayValue extends ArrayValueImpl
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value key)
+  public EnvVar getVar(FeatureExpr ctx, Value key)
   {
     if (! _isFilled)
       fillMap();
 
-    return super.getVar(key);
+    return super.getVar(ctx, key);
   }
 
   /**

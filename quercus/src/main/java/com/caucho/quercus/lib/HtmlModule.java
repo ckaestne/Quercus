@@ -37,6 +37,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Encoding;
 import com.caucho.vfs.i18n.EncodingWriter;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -373,7 +374,7 @@ public class HtmlModule extends AbstractQuercusModule {
           sb.append('\'');
       }
       else if (entity != null) {
-        sb.append(entity);
+        sb.append(VHelper.noCtx(), entity);
       }
       else {
         sb.append(ch);
@@ -455,7 +456,7 @@ public class HtmlModule extends AbstractQuercusModule {
           Value value = htmlEntities.get(entity).getOne();
 
           if (value.isNull()) {
-            result.append(entity);
+            result.append(VHelper.noCtx(), entity);
           }
           else if (isUnicode) {
             result.append((char)value.toInt());

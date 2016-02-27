@@ -89,7 +89,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
    * Returns the array ref.
    */
   @Override
-  public EnvVar getVar(Value key)
+  public EnvVar getVar(FeatureExpr ctx, Value key)
   {
     // return _env.getGlobalRef(key.toStringValue());
 
@@ -102,7 +102,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   @Override
   public EnvVar getArg(Value index, boolean isTop)
   {
-    return getVar(index);
+    return getVar(VHelper.noCtx(), index);
   }
 
   /**
@@ -111,7 +111,7 @@ public class GlobalArrayValue extends ArrayValueImpl {
   @Override
   public V<? extends ValueOrVar> getArray(FeatureExpr ctx, Value index)
   {
-    V<? extends Var> array = getVar(index).getVar().map((a)->a.toAutoArray());
+    V<? extends Var> array = getVar(ctx, index).getVar().map((a) -> a.toAutoArray());
 
     return array;
   }

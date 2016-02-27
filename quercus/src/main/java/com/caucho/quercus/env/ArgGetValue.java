@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.Serializable;
 
@@ -92,8 +93,7 @@ public class ArgGetValue extends ArgValue
   public V<? extends Var> toLocalVarDeclAsRef()
   {
     // php/3d55, php/3d49, php/3921
-
-    return _obj.toAutoArray().getVar(_index).getVar()/*.toLocalVarDeclAsRef()*/;
+    return _obj.toAutoArray().getVar(VHelper.noCtx(), _index).getVar()/*.toLocalVarDeclAsRef()*/;
   }
 //
   @Override

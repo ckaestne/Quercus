@@ -40,6 +40,7 @@ import com.caucho.quercus.program.*;
 import com.caucho.quercus.statement.*;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -751,7 +752,7 @@ public class ExprFactory {
       StringValue l = (StringValue) leftString.evalConstant();
       StringValue r = (StringValue) rightString.evalConstant();
 
-      StringValue result = l.createStringBuilder().append(l).append(r);
+      StringValue result = l.createStringBuilder().append(VHelper.noCtx(), l).append(VHelper.noCtx(), r);
 
       Expr value = createBinary((BinaryValue) result);
 
@@ -771,7 +772,7 @@ public class ExprFactory {
       StringValue l = (StringValue) leftString.evalConstant();
       StringValue r = (StringValue) rightString.evalConstant();
 
-      StringValue sb = l.createStringBuilder().append(l).append(r);
+      StringValue sb = l.createStringBuilder().append(VHelper.noCtx(), l).append(VHelper.noCtx(), r);
 
       Expr value = createString(sb);
 
@@ -785,7 +786,7 @@ public class ExprFactory {
       UnicodeValue l = (UnicodeValue) leftString.evalConstant();
       UnicodeValue r = (UnicodeValue) rightString.evalConstant();
 
-      UnicodeValue sb = (UnicodeValue) l.createStringBuilder().append(l).append(r);
+      UnicodeValue sb = (UnicodeValue) l.createStringBuilder().append(VHelper.noCtx(), l).append(VHelper.noCtx(), r);
 
       Expr value = createUnicode(sb);
 

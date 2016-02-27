@@ -653,7 +653,7 @@ public class NullValue extends Value
    * Append to a string builder.
    */
   @Override
-  public StringValue appendTo(StringBuilderValue sb)
+  public StringValue appendTo(FeatureExpr ctx, StringBuilderValue sb)
   {
     return sb;
   }

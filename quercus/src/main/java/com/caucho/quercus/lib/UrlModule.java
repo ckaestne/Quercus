@@ -400,7 +400,7 @@ public class UrlModule
     for (VEntry entry : entrySet) {
       if (! isFirst) {
         if (separator != null)
-          result.append(separator);
+          result.append(VHelper.noCtx(), separator);
         else
           result.append("&");
       }
@@ -414,9 +414,9 @@ public class UrlModule
         httpBuildQueryImpl(env, result, entryValue, newPath, null, separator);
 
       } else {
-        result.append(newPath);
+        result.append(VHelper.noCtx(), newPath);
         result.append("=");
-        result.append(urlencode(entry.getEnvVar().getOne().toStringValue()));
+        result.append(VHelper.noCtx(), urlencode(entry.getEnvVar().getOne().toStringValue()));
       }
     }
   }
@@ -428,7 +428,7 @@ public class UrlModule
     StringValue path = oldPath.createStringBuilder();
 
     if (oldPath.length() != 0) {
-      path.append(oldPath);
+      path.append(VHelper.noCtx(), oldPath);
       //path.append('[');
       path.append("%5B");
       urlencode(path, key.toStringValue());

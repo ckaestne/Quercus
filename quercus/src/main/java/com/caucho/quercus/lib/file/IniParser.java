@@ -31,6 +31,7 @@ package com.caucho.quercus.lib.file;
 
 import com.caucho.quercus.env.*;
 import com.caucho.vfs.ReadStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 
@@ -256,7 +257,7 @@ public class IniParser {
 
           String value = sb.toString().trim();
 
-          result.append(getIniConstant(env, value));
+          result.append(VHelper.noCtx(), getIniConstant(env, value));
 
           for (ch = is.read(); ch >= 0 && ch != '"'; ch = is.read()) {
             result.append((char) ch);

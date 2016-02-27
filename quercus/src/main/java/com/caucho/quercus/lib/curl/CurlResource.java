@@ -808,10 +808,10 @@ public class CurlResource extends ResourceValue
       StringValue bb = env.createBinaryBuilder();
 
       if (_isReturningHeader)
-        bb.append(_header);
+        bb.append(VHelper.noCtx(), _header);
 
       if (_isReturningBody)
-        bb.append(_body);
+        bb.append(VHelper.noCtx(), _body);
 
       data = bb;
     }

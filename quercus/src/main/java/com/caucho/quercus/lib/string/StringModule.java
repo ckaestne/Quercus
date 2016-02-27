@@ -41,7 +41,6 @@ import com.caucho.util.*;
 import com.caucho.vfs.ByteToChar;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.TempBuffer;
-import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
@@ -706,21 +705,22 @@ public class StringModule extends AbstractQuercusModule {
       return NullValue.NULL;
     }
 
-    StringValue sb = glue.createStringBuilder();
+    final StringValue[] sb = {glue.createStringBuilder()};
     boolean isFirst = true;
 
     Iterator<EnvVar> iter = pieces.getValueIterator(env);
 
     while (iter.hasNext()) {
       if (! isFirst)
-        sb = sb.append(glue);
+        sb[0] = sb[0].append(VHelper.noCtx(), glue);
 
       isFirst = false;
 
-      sb = sb.append(iter.next());
+      EnvVar value = iter.next();
+      value.getValue().vforeach(VHelper.noCtx(), (c, a) -> sb[0] = sb[0].append(c, a));
     }
 
-    return sb;
+    return sb[0];
   }
 
   /**
@@ -3071,7 +3071,7 @@ public class StringModule extends AbstractQuercusModule {
     for (int i = 0; i < leftPad; i++)
       sb.append(pad.charAt(i % padStringLen));
 
-    sb = sb.append(string);
+    sb = sb.append(VHelper.noCtx(), string);
 
     for (int i = 0; i < rightPad; i++)
       sb.append(pad.charAt(i % padStringLen));
@@ -3090,7 +3090,7 @@ public class StringModule extends AbstractQuercusModule {
     StringValue sb = string.createStringBuilder(count * string.length());
 
     for (int i = 0; i < count; i++)
-      sb = sb.append(string);
+      sb = sb.append(VHelper.noCtx(), string);
 
     return sb;
   }
@@ -3283,7 +3283,7 @@ public class StringModule extends AbstractQuercusModule {
       }
 
       result = result.append(subject, head, next);
-      result = result.append(replace);
+      result = result.append(VHelper.noCtx(), replace);
 
       if (head < next + searchLen) {
         head = next + searchLen;
@@ -4686,7 +4686,7 @@ public class StringModule extends AbstractQuercusModule {
               continue fromLoop;
           }
 
-          result = result.append(toList[i]);
+          result = result.append(VHelper.noCtx(), toList[i]);
           head = head + fromLen;
 
           continue top;
@@ -4934,9 +4934,9 @@ public class StringModule extends AbstractQuercusModule {
 
     StringValue result = string.createStringBuilder();
 
-    result = result.append(string.substring(0, start));
-    result = result.append(replacement);
-    result = result.append(string.substring(end));
+    result = result.append(VHelper.noCtx(), string.substring(0, start));
+    result = result.append(VHelper.noCtx(), replacement);
+    result = result.append(VHelper.noCtx(), string.substring(end));
 
     return result;
   }
@@ -5844,7 +5844,7 @@ public class StringModule extends AbstractQuercusModule {
         }
       }
 
-      sb.append(value);
+      sb.append(VHelper.noCtx(), value);
 
       if (_isLeft) {
         for (int i = len; i < _min; i++) {

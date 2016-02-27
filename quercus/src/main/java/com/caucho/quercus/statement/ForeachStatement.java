@@ -88,11 +88,11 @@ public class ForeachStatement
     return true;
   }
 
-  private class MergedIterator implements Iterator<VEntry> {
-    private final Iterator<Opt<Iterator<VEntry>>> ititerator;
-    private Opt<Iterator<VEntry>> thisIterator;
+  private abstract class MergedIterator<T, U> implements Iterator<U> {
+    private final Iterator<Opt<Iterator<T>>> ititerator;
+    private Opt<Iterator<T>> thisIterator;
 
-    public MergedIterator(List<Opt<Iterator<VEntry>>> iterators) {
+    public MergedIterator(List<Opt<Iterator<T>>> iterators) {
       this.ititerator = iterators.iterator();
       if (ititerator.hasNext())
         thisIterator = ititerator.next();
@@ -110,55 +110,85 @@ public class ForeachStatement
     }
 
     @Override
-    public VEntry next() {
-      assert hasNext();
-      final VEntry next = thisIterator.getValue().next();
+    public U next() {
+      final T next = thisIterator.getValue().next();
       final FeatureExpr iteratorCondition = thisIterator.getCondition();
-      return new VEntry() {
-        @Override
-        public EnvVar getEnvVar() {
-          return next.getEnvVar();
-        }
-
-        @Override
-        public EnvVar setEnvVar(EnvVar value) {
-          return next.setEnvVar(value);
-        }
-
-        @Override
-        public Value getKey() {
-          return next.getKey();
-        }
-
-        @Override
-        public FeatureExpr getCondition() {
-          return next.getCondition().and(iteratorCondition);
-        }
-      };
+      return restrictCondition(next, iteratorCondition);
     }
+
+    protected abstract U restrictCondition(T value, FeatureExpr cond);
+
   }
 
   private Iterator<VEntry> getMergedIterator(Env env, V<? extends Value> obj) {
     final List<Opt<Iterator<VEntry>>> iterators = VList.flatten(obj.map((a) -> a.getIterator(env)));
-    return new MergedIterator(iterators);
+    return new MergedIterator<VEntry, VEntry>(iterators) {
+
+      @Override
+      protected VEntry restrictCondition(VEntry next, FeatureExpr cond) {
+        return new VEntry() {
+          @Override
+          public EnvVar getEnvVar() {
+            return next.getEnvVar();
+          }
+
+          @Override
+          public EnvVar setEnvVar(EnvVar value) {
+            return next.setEnvVar(value);
+          }
+
+          @Override
+          public Value getKey() {
+            return next.getKey();
+          }
+
+          @Override
+          public FeatureExpr getCondition() {
+            return next.getCondition().and(cond);
+          }
+        };
+      }
+    };
+  }
+
+  private Iterator<Opt<EnvVar>> getMergedValueIterator(Env env, V<? extends Value> obj) {
+    final List<Opt<Iterator<EnvVar>>> iterators = VList.flatten(obj.map((a) -> a.getValueIterator(env)));
+    return new MergedIterator<EnvVar, Opt<EnvVar>>(iterators) {
+      @Override
+      protected Opt<EnvVar> restrictCondition(EnvVar value, FeatureExpr cond) {
+        return Opt.create(cond, value);
+      }
+    };
   }
 
   @Override
   public
   @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx) {
+    if (_key != null || _isRef)
+      return execute_keyvalue(env, ctx);
+    else
+      return execute_value(env, ctx);
+  }
+
+  private
+  @Nonnull
+  V<? extends ValueOrVar> execute_keyvalue(Env env, FeatureExpr ctx) {
     V<? extends Value> origObj = _objExpr.eval(env, ctx);
-    V<? extends Value> obj = origObj.map((a) -> a.copy()); // php/0669
+    V<? extends Value> obj = origObj.map(Value::copy); // php/0669
     Iterator<VEntry> iter = getMergedIterator(env, obj);
 
 
     V<? extends ValueOrVar> forEachResult = V.one(null);
 
-    while (iter.hasNext() && ctx.isSatisfiable()) {
+    while (ctx.isSatisfiable() && iter.hasNext()) {
       VEntry entry = iter.next();
       Value key = entry.getKey();
-      EnvVar value = entry.getEnvVar();
       FeatureExpr innerCtx = ctx.and(entry.getCondition());
+      EnvVar value;
+      if (!_isRef)
+        value = entry.getEnvVar();
+      else value = origObj.getOne(innerCtx).getVar(innerCtx, key);
 
       if (_key != null)
         _key.evalAssignValue(env, innerCtx, VHelper.toV(key));
@@ -171,15 +201,49 @@ public class ForeachStatement
       V<? extends ValueOrVar> result = _block.execute(env, innerCtx);
 
       forEachResult = forEachResult.<ValueOrVar>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
-              result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), fer)));
+              result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), null)));
+      ctx = ctx.and(forEachResult.when(x -> x == null));
     }
 
 
-    return forEachResult;
+    return forEachResult.map(x ->
+            (x instanceof BreakValue) && (((BreakValue) x).getTarget() <= 0) ? null : x);
+  }
+
+  private
+  @Nonnull
+  V<? extends ValueOrVar> execute_value(Env env, FeatureExpr ctx) {
+    assert (!_isRef);
+    assert (_key == null);
+    V<? extends Value> origObj = _objExpr.eval(env, ctx);
+    V<? extends Value> obj = origObj.map(Value::copy); // php/0669
+    Iterator<Opt<EnvVar>> iter = getMergedValueIterator(env, obj);
+
+
+    V<? extends ValueOrVar> forEachResult = V.one(null);
+
+    while (ctx.isSatisfiable() && iter.hasNext()) {
+      Opt<EnvVar> entry = iter.next();
+      FeatureExpr innerCtx = ctx.and(entry.getCondition());
+      EnvVar value = entry.getValue();
+
+
+      _value.evalAssignValue(env, innerCtx, value.copy().getValue());
+
+      V<? extends ValueOrVar> result = _block.execute(env, innerCtx);
+
+      forEachResult = forEachResult.<ValueOrVar>vflatMap(innerCtx, (oc, fer) -> fer != null ? V.one(fer) :
+              result.<ValueOrVar>vflatMap(oc, (c, r) -> V.choice(c, evalReturn(r), null)));
+      ctx = ctx.and(forEachResult.when(x -> x == null));
+    }
+
+
+    return forEachResult.map(x ->
+            (x instanceof BreakValue) && (((BreakValue) x).getTarget() <= 0) ? null : x);
   }
 
   private ValueOrVar evalReturn(ValueOrVar r) {
-    if (r == null) return r;
+    if (r == null) return null;
     else if (r instanceof ContinueValue) {
       ContinueValue conValue = (ContinueValue) r;
 
@@ -194,10 +258,7 @@ public class ForeachStatement
 
       int target = breakValue.getTarget();
 
-      if (target > 1)
-        return new BreakValue(target - 1);
-      else
-        return null;
+      return new BreakValue(target - 1);
     } else
       return r;
   }

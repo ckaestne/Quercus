@@ -636,7 +636,7 @@ public class PDOStatement
         int i = 0;
 
         for (Value key : argsArray.keySet())
-          ctorArgs[i++] = argsArray.getVar(key).getOne();
+          ctorArgs[i++] = argsArray.getVar(VHelper.noCtx(), key).getOne();
       }
       else
         return fetchBoth(env, rs);

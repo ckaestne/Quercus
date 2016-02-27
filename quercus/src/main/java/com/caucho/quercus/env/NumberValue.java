@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.VHelper;
+
 /**
  * Represents a PHP number value (double or long).
  */
@@ -96,6 +98,6 @@ public abstract class NumberValue extends Value {
   @Override
   public void jsonEncode(Env env, JsonEncodeContext context, StringValue sb)
   {
-    sb.append(toStringValue());
+    sb.append(VHelper.noCtx(), toStringValue());
   }
 }
