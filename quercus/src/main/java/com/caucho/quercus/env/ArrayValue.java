@@ -237,11 +237,14 @@ abstract public class ArrayValue extends Value {
   {
     Value obj = env.createObject();
 
-    for (Entry entry = getHead(); entry != null; entry = entry._next) {
+
+    Iterator<VEntry> iter = getIterator(env);
+    while (iter.hasNext()) {
+      VEntry entry = iter.next();
       Value key = entry.getKey();
 
       // php/03oe
-      obj.putField(env, key.toString(), entry.getEnvVar().getValue().getOne());
+      obj.putField(env, entry.getCondition(), key.toString(), entry.getEnvVar().getValue());
     }
 
     return obj;
