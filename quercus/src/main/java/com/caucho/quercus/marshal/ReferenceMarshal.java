@@ -34,7 +34,6 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.Var;
 import com.caucho.quercus.expr.Expr;
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.VHelper;
 
 public class ReferenceMarshal extends Marshal
 {
@@ -59,18 +58,18 @@ public class ReferenceMarshal extends Marshal
   public Object marshal(Env env, FeatureExpr ctx, Expr expr, Class expectedClass)
   {
     // quercus/0d1k
-    return expr.evalRef(env, VHelper.noCtx());
+    return expr.evalRef(env, ctx);
   }
 
   @Override
   protected Object marshalRef(Env env, Var var, Class argClass) {
-    return var.toLocalVarDeclAsRef();
+    return var.toLocalVarDeclAsRef().getOne();
   }
 
   @Override
   public Object marshalValue(Env env, FeatureExpr ctx, Value value, Class argClass)
   {
-    return value.toLocalVarDeclAsRef();
+    return value.toLocalVarDeclAsRef().getOne();
   }
 
   @Override
