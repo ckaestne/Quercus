@@ -1,5 +1,7 @@
 package edu.cmu.cs.varex.gen
-import org.junit.Test
+
+import de.fosd.typechef.featureexpr.FeatureExprFactory
+import org.junit.{Ignore, Test}
 
 /** generated file, do not modify */
 class GeneratedLangTests extends AbstractPhpGenTest {
@@ -811,6 +813,16 @@ class GeneratedLangTests extends AbstractPhpGenTest {
 			c(fA.not and fB, "55") ~
 			c(fB.not and fA, "33") ~
 			c(fA.not and fB.not, "1")
+	}
+
+	@Test def testInc1() {
+		eval(
+			"""<?php
+			  	 	       |$i = 1;
+			  	 	       |echo ++$i;
+			  	 	       |echo $i++;
+			  	 	       |echo $i;""".stripMargin) to
+				c(True, "223")
 	}
 
 }

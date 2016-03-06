@@ -1105,11 +1105,12 @@ public class VarImpl extends Var {
 
   @Override
   public V<? extends Value> postincr(FeatureExpr ctx, int incr) {
+    V<? extends Value> value = _value;
     _value = _value.pmap(ctx, x -> x.increment(incr), Function.identity());
 
 //    checkVar(_value);
 
-    return _value;
+    return value;
   }
 
   //

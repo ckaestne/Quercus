@@ -579,3 +579,9 @@ if (@B) {
   echo $x;
 }
 echo $x;
+
+==== inc1
+$i = 1;
+echo ++$i;
+echo $i++;
+echo $i;
