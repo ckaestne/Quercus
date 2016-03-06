@@ -56,7 +56,7 @@ public class BinaryAddExpr extends AbstractBinaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return VHelper.mapAll(_left.eval(env, ctx), _right.eval(env, ctx), (l, r) -> l.add(r));
+    return VHelper.smapAll(ctx, _left.eval(env, ctx), _right.eval(env, ctx), (l, r) -> l.add(r));
   }
 
   /**

@@ -37,6 +37,7 @@ import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -81,7 +82,7 @@ public class BinaryGtExpr extends AbstractBinaryExpr {
     V<? extends Value> lValue = _left.eval(env, ctx);
     V<? extends Value> rValue = _right.eval(env, ctx);
 
-    return VHelper.mapAll(lValue,rValue,(l,r)-> l.gt(r));
+    return VHelper.smapAll(ctx, lValue, rValue, (l, r) -> l.gt(r));
   }
 
   public String toString()

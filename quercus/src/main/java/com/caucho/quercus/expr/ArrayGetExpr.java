@@ -108,7 +108,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.eval(env, ctx);
     V<? extends Value> index = _index.eval(env, ctx);
 
-    return VHelper.mapAll(array, index,(a,i)-> a.get(i).getOne().copy());
+    return VHelper.smapAll(ctx, array, index, (a, i) -> a.get(i).getOne().copy());
   }
 
   /**
@@ -143,7 +143,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.eval(env, ctx);
     V<? extends Value> index = _index.eval(env, ctx);
 
-    return VHelper.mapAll(array, index,(a,i)-> a.getDirty(i).getOne());
+    return VHelper.smapAll(ctx, array, index, (a, i) -> a.getDirty(i).getOne());
   }
 
   /**
@@ -250,7 +250,7 @@ public class ArrayGetExpr extends AbstractVarExpr {
     V<? extends Value> array = _expr.evalIssetValue(env, ctx);
     V<? extends Value> index = _index.evalIssetValue(env, ctx);
 
-    return VHelper.mapAll(array, index,(a,i)-> a.isset(i));
+    return VHelper.smapAll(ctx, array, index, (a, i) -> a.isset(i));
   }
 
   /**

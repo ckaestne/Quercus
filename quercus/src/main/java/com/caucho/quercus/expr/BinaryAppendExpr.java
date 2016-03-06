@@ -35,7 +35,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -96,7 +96,7 @@ public class BinaryAppendExpr extends Expr
     for (BinaryAppendExpr ptr = _next; ptr != null; ptr = ptr._next) {
       V<? extends Value> ptrValue = ptr._value.eval(env, ctx);
 
-      sb = sb.flatMap(s->ptrValue.map(p->s.toStringBuilder(env).appendUnicode(p)));
+      sb = sb.sflatMap(ctx, s -> ptrValue.map(p -> s.toStringBuilder(env).appendUnicode(p)));
     }
 
     return sb;

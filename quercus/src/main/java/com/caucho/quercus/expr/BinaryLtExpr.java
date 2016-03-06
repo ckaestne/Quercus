@@ -82,7 +82,7 @@ public class BinaryLtExpr extends AbstractBinaryExpr {
     V<? extends Value> lValue = _left.eval(env, ctx);
     V<? extends Value> rValue = _right.eval(env, ctx);
 
-    return VHelper.mapAll(lValue,rValue,(l,r)-> l.lt(r));
+    return VHelper.smapAll(ctx, lValue, rValue, (l, r) -> l.lt(r));
   }
 
   public String toString()

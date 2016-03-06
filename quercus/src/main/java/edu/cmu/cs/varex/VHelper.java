@@ -52,6 +52,12 @@ public class VHelper {
             b.smap(c, (cc, bb) -> fun.apply(cc, aa, bb)));
   }
 
+  public static <A, B, R> V<? extends R> smapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, Function3<A, B, R> fun) {
+    return a.sflatMap(ctx, (c, aa) ->
+            b.smap(c, bb -> fun.apply(aa, bb)));
+  }
+
+
   public static <A, B, C, R> V<? extends R> smapAll(FeatureExpr ctx, V<? extends A> a, V<? extends B> b, V<? extends C> c, Function5<FeatureExpr, A, B, C, R> fun) {
     return a.<R>sflatMap(ctx, (cctx, aa) ->
             b.<R>sflatMap(cctx, (ccctx, bb) ->

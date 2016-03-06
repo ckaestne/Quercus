@@ -75,7 +75,7 @@ public class VModule extends AbstractQuercusModule {
 
     @VVariational@VParamType(Value.class)
     public V<? extends Value> vtest_addandprint(Env env, FeatureExpr ctx, @VParamType(Value.class) V<? extends Value> a, @VParamType(Value.class) V<? extends Value> b) {
-        V<? extends LongValue> result = VHelper.mapAll(a, b, (x, y) -> LongValue.create(x.toLong() + y.toLong()));
+        V<? extends LongValue> result = VHelper.smapAll(ctx, a, b, (x, y) -> LongValue.create(x.toLong() + y.toLong()));
         result.sforeach(ctx, (c, v) -> env.print(c, v));
         return result;
     }

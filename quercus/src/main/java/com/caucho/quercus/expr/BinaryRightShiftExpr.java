@@ -77,7 +77,7 @@ public class BinaryRightShiftExpr extends AbstractBinaryExpr {
     V<? extends Value> lValue = _left.eval(env, ctx);
     V<? extends Value> rValue = _right.eval(env, ctx);
 
-    return VHelper.mapAll(lValue,rValue,(l,r)-> l.rshift(r));
+    return VHelper.smapAll(ctx, lValue, rValue, (l, r) -> l.rshift(r));
   }
 
   /**
@@ -94,7 +94,7 @@ public class BinaryRightShiftExpr extends AbstractBinaryExpr {
     V<? extends Value> lValue = _left.eval(env, ctx);
     V<? extends Value> rValue = _right.eval(env, ctx);
 
-    return VHelper.mapAll(lValue,rValue,(l,r)-> l.toLong()>>r.toLong());
+    return VHelper.smapAll(ctx, lValue, rValue, (l, r) -> l.toLong() >> r.toLong());
   }
 
   public String toString()

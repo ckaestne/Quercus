@@ -92,7 +92,7 @@ public class ArrayIsSetExpr extends Expr {
     V<? extends Value> array = _expr.eval(env, ctx);
     V<? extends Value> index = _index.eval(env, ctx);
 
-    return VHelper.mapAll(array, index,(a,i)->
+    return VHelper.smapAll(ctx, array, index, (a, i) ->
       a.get(i).getOne() != UnsetValue.UNSET);
   }
 
