@@ -708,28 +708,28 @@ public class VariableModule extends AbstractQuercusModule {
    * @param v the variable to print
    * @return the escaped stringPhp
    */
-  public static Value var_dump(Env env,
+  public static Value var_dump(Env env, FeatureExpr ctx,
                                @PassThru @ReadOnly Value v,
                                Value []args)
   {
     try {
       if (v == null)
-        env.getOut().print(VHelper.noCtx(), "NULL#java");
+        env.getOut().print(ctx, "NULL#java");
       else {
-        v.varDump(env, VHelper.noCtx(), env.getOut(), 0, new IdentityHashMap<Value, String>());
+        v.varDump(env, ctx, env.getOut(), 0, new IdentityHashMap<Value, String>());
 
-        env.getOut().println(VHelper.noCtx());
+        env.getOut().println(ctx);
       }
 
       if (args != null) {
         for (Value value : args) {
           if (value == null)
-            env.getOut().print(VHelper.noCtx(), "NULL#java");
+            env.getOut().print(ctx, "NULL#java");
           else {
-            value.varDump(env, VHelper.noCtx(), env.getOut(), 0,
+            value.varDump(env, ctx, env.getOut(), 0,
                           new IdentityHashMap<Value,String>());
 
-            env.getOut().println(VHelper.noCtx());
+            env.getOut().println(ctx);
           }
         }
       }

@@ -44,6 +44,7 @@ import com.caucho.quercus.program.QuercusProgram;
 import com.caucho.util.IoUtil;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
@@ -362,10 +363,10 @@ public class OptionsModule extends AbstractQuercusModule {
   /**
    * Gets an environment value.
    */
-  public static Value getenv(Env env, StringValue key)
+  public static Value getenv(Env env, FeatureExpr ctx, StringValue key)
   {
-    Var serverVars = env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne();
-    Value val = serverVars.makeValue().get(key).getOne();
+    Var serverVars = env.getGlobalVar(ctx, "_SERVER").getOne(ctx);
+    Value val = serverVars.makeValue().get(key).getOne(ctx);
 
     if (val == null || ! val.isset())
       return BooleanValue.FALSE;
@@ -670,27 +671,27 @@ public class OptionsModule extends AbstractQuercusModule {
     }
   }
 
-  public static void phpinfo(Env env, @Optional("INFO_ALL") int what)
+  public static void phpinfo(Env env, FeatureExpr ctx, @Optional("INFO_ALL") int what)
   {
     if (hasRequest(env)) {
       String quercusName = env.getQuercus().getName();
       String css = getPhpinfoCss();
 
-      env.println(VHelper.noCtx(), "<!DOCTYPE html>\n<html><head><title>" + quercusName + "</title>");
-      env.println(VHelper.noCtx(), "<style type=\"text/css\">");
-      env.println(VHelper.noCtx(), css);
-      env.println(VHelper.noCtx());
-      env.println(VHelper.noCtx(), "</style>");
-      env.println(VHelper.noCtx(), "</head><body>");
+      env.println(ctx, "<!DOCTYPE html>\n<html><head><title>" + quercusName + "</title>");
+      env.println(ctx, "<style type=\"text/css\">");
+      env.println(ctx, css);
+      env.println(ctx);
+      env.println(ctx, "</style>");
+      env.println(ctx, "</head><body>");
     }
 
     if ((what & INFO_GENERAL) != 0)
-      phpinfoGeneral(env);
+      phpinfoGeneral(env, ctx);
     if ((what & INFO_VARIABLES) != 0)
-      phpinfoVariables(env);
+      phpinfoVariables(env, ctx);
 
     if (hasRequest(env))
-      env.println(VHelper.noCtx(), "</body></html>");
+      env.println(ctx, "</body></html>");
   }
 
   private static String getPhpinfoCss()
@@ -734,71 +735,71 @@ public class OptionsModule extends AbstractQuercusModule {
            "width: 600px; }";
   }
 
-  private static void phpinfoGeneral(Env env)
+  private static void phpinfoGeneral(Env env, FeatureExpr ctx)
   {
     String quercusName = env.getQuercus().getName();
 
     if (hasRequest(env))
-      env.println(VHelper.noCtx(), "<h1>" + quercusName + "</h1>");
+      env.println(ctx, "<h1>" + quercusName + "</h1>");
     else
-      env.println(VHelper.noCtx(),quercusName);
+      env.println(ctx, quercusName);
 
     if (hasRequest(env)) {
-      env.println(VHelper.noCtx(), "<pre>");
+      env.println(ctx, "<pre>");
     }
 
-    env.println(VHelper.noCtx(), "PHP Version => " + phpversion(env, env.createString("std")));
-    env.println(VHelper.noCtx(), "System => " + System.getProperty("os.name") + " "
+    env.println(ctx, "PHP Version => " + phpversion(env, env.createString("std")));
+    env.println(ctx, "System => " + System.getProperty("os.name") + " "
               + System.getProperty("os.version") + " "
               + System.getProperty("os.arch"));
-    env.println(VHelper.noCtx(), "Build Date => " + env.getQuercus().getVersionDate());
-    env.println(VHelper.noCtx(), "Configure Command => n/a");
-    env.println(VHelper.noCtx(), "Server API => CGI");
-    env.println(VHelper.noCtx(), "Virtual Directory Support => disabled");
+    env.println(ctx, "Build Date => " + env.getQuercus().getVersionDate());
+    env.println(ctx, "Configure Command => n/a");
+    env.println(ctx, "Server API => CGI");
+    env.println(ctx, "Virtual Directory Support => disabled");
 
-    env.println(VHelper.noCtx(), "Configuration File (php.ini) Path => "
+    env.println(ctx, "Configuration File (php.ini) Path => "
                 + env.getQuercus().getIniFile());
 
-    env.println(VHelper.noCtx(), "PHP API => 20031224");
-    env.println(VHelper.noCtx(), "PHP Extension => 20041030");
-    env.println(VHelper.noCtx(), "Debug Build => no");
-    env.println(VHelper.noCtx(), "Thread Safety => enabled");
-    env.println(VHelper.noCtx(), "Registered PHP Streams => php, file, http, https");
+    env.println(ctx, "PHP API => 20031224");
+    env.println(ctx, "PHP Extension => 20041030");
+    env.println(ctx, "Debug Build => no");
+    env.println(ctx, "Thread Safety => enabled");
+    env.println(ctx, "Registered PHP Streams => php, file, http, https");
 
     if (hasRequest(env)) {
-      env.print(VHelper.noCtx(), "</pre>");
+      env.print(ctx, "</pre>");
     }
   }
 
-  private static void phpinfoVariables(Env env)
+  private static void phpinfoVariables(Env env, FeatureExpr ctx)
   {
     if (hasRequest(env)) {
-      env.println(VHelper.noCtx(), "<h2>PHP Variables</h2>");
-      env.println(VHelper.noCtx(), "<table class='center'>");
-      env.println(VHelper.noCtx(), "<tr><th>Variable</th><th>Value</th></tr>");
+      env.println(ctx, "<h2>PHP Variables</h2>");
+      env.println(ctx, "<table class='center'>");
+      env.println(ctx, "<tr><th>Variable</th><th>Value</th></tr>");
     }
     else {
-      env.println(VHelper.noCtx(), "Variable => Value");
+      env.println(ctx, "Variable => Value");
     }
 
     if (hasRequest(env)) {
-      phpinfoVariable(env, "_REQUEST", env.getGlobalVar(VHelper.noCtx(), "_REQUEST").getOne().makeValue());
-      phpinfoVariable(env, "_GET", env.getGlobalVar(VHelper.noCtx(), "_GET").getOne().makeValue());
-      phpinfoVariable(env, "_POST", env.getGlobalVar(VHelper.noCtx(), "_POST").getOne().makeValue());
-      phpinfoVariable(env, "_COOKIE", env.getGlobalVar(VHelper.noCtx(), "_COOKIE").getOne().makeValue());
-      phpinfoVariable(env, "_SESSION", env.getGlobalVar(VHelper.noCtx(), "_SESSION").getOne().makeValue());
+      phpinfoVariable(env, ctx, "_REQUEST", env.getGlobalVar(ctx, "_REQUEST").getOne().makeValue());
+      phpinfoVariable(env, ctx, "_GET", env.getGlobalVar(ctx, "_GET").getOne().makeValue());
+      phpinfoVariable(env, ctx, "_POST", env.getGlobalVar(ctx, "_POST").getOne().makeValue());
+      phpinfoVariable(env, ctx, "_COOKIE", env.getGlobalVar(ctx, "_COOKIE").getOne().makeValue());
+      phpinfoVariable(env, ctx, "_SESSION", env.getGlobalVar(ctx, "_SESSION").getOne().makeValue());
     }
 
-    phpinfoVariable(env, "_ENV", env.getGlobalVar(VHelper.noCtx(), "_ENV").getOne().makeValue());
-    phpinfoVariable(env, "_SERVER", env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().makeValue());
+    phpinfoVariable(env, ctx, "_ENV", env.getGlobalVar(ctx, "_ENV").getOne().makeValue());
+    phpinfoVariable(env, ctx, "_SERVER", env.getGlobalVar(ctx, "_SERVER").getOne().makeValue());
 
     if (hasRequest(env))
-      env.print(VHelper.noCtx(), "</table>");
+      env.print(ctx, "</table>");
 
-    env.println(VHelper.noCtx());
+    env.println(ctx);
   }
 
-  private static void phpinfoVariable(Env env, String name, Value value)
+  private static void phpinfoVariable(Env env, FeatureExpr ctx, String name, Value value)
   {
     if (value.isArray()) {
       ArrayValue array = value.toArrayValue(env);
@@ -807,45 +808,45 @@ public class OptionsModule extends AbstractQuercusModule {
         Value key = escape(env, entry.getKey());
 
         if (hasRequest(env))
-          env.print(VHelper.noCtx(), "<tr><td>");
+          env.print(ctx, "<tr><td>");
 
-        env.print(VHelper.noCtx(), name + "[\"" + key + "\"]");
+        env.print(ctx, name + "[\"" + key + "\"]");
 
         if (hasRequest(env))
-          env.println(VHelper.noCtx(), "</td><td>");
+          env.println(ctx, "</td><td>");
         else
-          env.print(VHelper.noCtx(), " => ");
+          env.print(ctx, " => ");
 
-        phpinfoVariable(env, entry.getEnvVar().getOne());
+        phpinfoVariable(env, ctx, entry.getEnvVar().getOne());
 
         if (hasRequest(env))
-          env.println(VHelper.noCtx(), "</td></tr>");
+          env.println(ctx, "</td></tr>");
       }
     }
     else {
       if (hasRequest(env))
-        env.println(VHelper.noCtx(), "<tr><td>" + name + "</td><td>");
+        env.println(ctx, "<tr><td>" + name + "</td><td>");
 
-      phpinfoVariable(env, value);
+      phpinfoVariable(env, ctx, value);
 
       if (hasRequest(env))
-        env.println(VHelper.noCtx(), "</td></tr>");
+        env.println(ctx, "</td></tr>");
     }
   }
 
-  private static void phpinfoVariable(Env env, Value value)
+  private static void phpinfoVariable(Env env, FeatureExpr ctx, Value value)
   {
     if (value.isString()) {
-      env.println(VHelper.noCtx(),escape(env, value).toString());
+      env.println(ctx, escape(env, value).toString());
     }
     else {
       if (hasRequest(env))
-        env.print(VHelper.noCtx(), "<pre>");
+        env.print(ctx, "<pre>");
 
-      VariableModule.var_dump(env, escape(env, value), null);
+      VariableModule.var_dump(env, ctx, escape(env, value), null);
 
       if (hasRequest(env))
-        env.print(VHelper.noCtx(), "</pre>");
+        env.print(ctx, "</pre>");
     }
   }
 
@@ -860,7 +861,7 @@ public class OptionsModule extends AbstractQuercusModule {
   /**
    * Sets an environment name/value pair.
    */
-  public static boolean putenv(Env env, StringValue settings)
+  public static boolean putenv(Env env, FeatureExpr ctx, StringValue settings)
   {
     int eqIndex = settings.indexOf('=');
 
@@ -870,7 +871,7 @@ public class OptionsModule extends AbstractQuercusModule {
     StringValue key = settings.substring(0, eqIndex);
     StringValue val = settings.substring(eqIndex + 1);
 
-    env.getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().makeValue().put(key, val);
+    env.getGlobalVar(ctx, "_SERVER").getOne(ctx).makeValue().put(key, val);
 
     return true;
   }

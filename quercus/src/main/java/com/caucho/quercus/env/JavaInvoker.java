@@ -891,7 +891,7 @@ abstract public class JavaInvoker
     if (_vvariational)
       return (V<? extends Object>) invoke(obj, javaArgs);
     else if (_vsideeffectFree)
-      return invokeBruteForce(obj, vParamStartAt, javaArgs);
+      return invokeBruteForce(ctx, obj, vParamStartAt, javaArgs);
     else {
       //calling only a single time, hoping that none of the parameters are variational
       try {
@@ -920,20 +920,20 @@ abstract public class JavaInvoker
     return result;
   }
 
-  private V<? extends Object> invokeBruteForce(Object obj, int vParamStartAt, Object[] args) {
+  private V<? extends Object> invokeBruteForce(FeatureExpr ctx, Object obj, int vParamStartAt, Object[] args) {
     //turn array of variational parameter into choice of plain arrays (skip the first vParamStartAt entries)
 
-    V<? extends Object[]> plainArgs = bruteForceArgs(args, vParamStartAt);
+    V<? extends Object[]> plainArgs = bruteForceArgs(ctx, args, vParamStartAt);
 
-    return plainArgs.map(a -> invoke(obj, a));
+    return plainArgs.smap(ctx, a -> invoke(obj, a));
   }
 
   @SuppressWarnings("RedundantCast")
-  private V<? extends Object[]> bruteForceArgs(Object[] input, int idx) {
+  private V<? extends Object[]> bruteForceArgs(FeatureExpr ctx, Object[] input, int idx) {
     if (idx >= input.length)
-      return V.one(input);
+      return V.one(ctx, input);
 
-    return bruteForceArgs(input, idx + 1).<Object[]>flatMap(vparams -> {
+    return bruteForceArgs(ctx, input, idx + 1).<Object[]>sflatMap(ctx, vparams -> {
       V<?> vparam = (V<?>) ((Object[]) vparams)[idx];
       return vparam.<Object[]>map(param -> {
         Object[] result = ((Object[]) vparams).clone();

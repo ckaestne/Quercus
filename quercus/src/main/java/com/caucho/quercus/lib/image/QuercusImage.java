@@ -34,6 +34,7 @@ import com.caucho.util.IntQueue;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -170,7 +171,7 @@ public class QuercusImage extends ResourceValue
     StringValue gdFontPathKey = env.createString("GDFONTPATH");
 
     StringValue gdFontPath
-      = OptionsModule.getenv(env, gdFontPathKey).toStringValue();
+            = OptionsModule.getenv(env, VHelper.noCtx(), gdFontPathKey).toStringValue();
 
     int start = 0;
     int len = gdFontPath.length();
