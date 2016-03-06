@@ -38,8 +38,12 @@ import com.caucho.util.LruCache;
 import com.caucho.vfs.StderrStream;
 import com.caucho.vfs.StringWriter;
 import com.caucho.vfs.WriteStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
+import edu.cmu.cs.varex.annotation.VParamType;
+import edu.cmu.cs.varex.annotation.VVariational;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -535,29 +539,30 @@ public class VariableModule extends AbstractQuercusModule {
    * @param isReturn set to true if returning instead of printing value
    * @return the string that was supposed to be printed, or true
    */
-  public static Value print_r(Env env,
-                              @ReadOnly Value v,
-                              @Optional boolean isReturn)
-  {
-      VWriteStream out;
+  @VVariational
+  @VParamType(Value.class)
+  public static V<? extends Value> print_r(Env env, FeatureExpr ctx,
+                                           @VParamType(Value.class) @ReadOnly V<? extends Value> v,
+                                           @VParamType(Boolean.class) @Optional V<? extends Boolean> isReturn) {
+    VWriteStream out;
 
-      if (isReturn) {
-        StringWriter writer = new StringWriter();
-        out = VWriteStream.adapt(writer.openWrite());
+    if (isReturn.getOne(ctx) == Boolean.TRUE) {
+      //TODO lift completely to support also conditional output within the string and lift createString + writer.getString()
+      StringWriter writer = new StringWriter();
+      out = VWriteStream.adapt(writer.openWrite());
 
-        out.setNewlineString("\n");
+      out.setNewlineString("\n");
 
-        v.printR(env, out, 0, new IdentityHashMap<Value, String>());
+      v.sforeach(ctx, (c, vv) -> vv.printR(env, c, out, 0, new IdentityHashMap<Value, String>()));
 
-        return env.createString(writer.getString());
-      }
-      else {
-        out = env.getOut();
+      return V.one(ctx, env.createString(writer.getString()));
+    } else {
+      out = env.getOut();
 
-        v.printR(env, out, 0, new IdentityHashMap<Value, String>());
+      v.sforeach(ctx, (c, vv) -> vv.printR(env, c, out, 0, new IdentityHashMap<Value, String>()));
 
-        return BooleanValue.TRUE;
-      }
+      return V.one(ctx, BooleanValue.TRUE);
+    }
   }
 
   private static void printDepth(VWriteStream out, int depth)
@@ -711,7 +716,7 @@ public class VariableModule extends AbstractQuercusModule {
       if (v == null)
         env.getOut().print(VHelper.noCtx(), "NULL#java");
       else {
-        v.varDump(env, env.getOut(), 0,  new IdentityHashMap<Value,String>());
+        v.varDump(env, VHelper.noCtx(), env.getOut(), 0, new IdentityHashMap<Value, String>());
 
         env.getOut().println(VHelper.noCtx());
       }
@@ -721,7 +726,7 @@ public class VariableModule extends AbstractQuercusModule {
           if (value == null)
             env.getOut().print(VHelper.noCtx(), "NULL#java");
           else {
-            value.varDump(env, env.getOut(), 0,
+            value.varDump(env, VHelper.noCtx(), env.getOut(), 0,
                           new IdentityHashMap<Value,String>());
 
             env.getOut().println(VHelper.noCtx());
@@ -745,7 +750,7 @@ public class VariableModule extends AbstractQuercusModule {
       if (v == null)
         out.print(VHelper.noCtx(), "NULL#java");
       else {
-        v.varDump(env, out, 0,  new IdentityHashMap<Value,String>());
+        v.varDump(env, VHelper.noCtx(), out, 0, new IdentityHashMap<Value, String>());
 
         out.println(VHelper.noCtx());
       }
@@ -755,7 +760,7 @@ public class VariableModule extends AbstractQuercusModule {
           if (value == null)
             out.print(VHelper.noCtx(), "NULL#java");
           else {
-            value.varDump(env, out, 0,
+            value.varDump(env, VHelper.noCtx(), out, 0,
                           new IdentityHashMap<Value,String>());
 
             out.println(VHelper.noCtx());

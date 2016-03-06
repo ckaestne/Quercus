@@ -30,7 +30,6 @@
 package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.util.IdentityHashMap;
@@ -108,11 +107,11 @@ public class BreakValue extends Value {
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    out.print(VHelper.noCtx(), getClass().getName());
+    out.print(ctx, getClass().getName());
   }
 }
 

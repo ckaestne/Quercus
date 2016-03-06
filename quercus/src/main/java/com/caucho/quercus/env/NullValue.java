@@ -32,7 +32,6 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.marshal.Marshal;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -699,11 +698,11 @@ public class NullValue extends Value
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    out.print(VHelper.noCtx(), "NULL");
+    out.print(ctx, "NULL");
   }
 
   //

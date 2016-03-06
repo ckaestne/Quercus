@@ -2834,7 +2834,7 @@ abstract public class StringValue
   abstract public String toDebugString();
 
   @Override
-  abstract public void varDumpImpl(Env env,
+  abstract public void varDumpImpl(Env env, FeatureExpr ctx,
                                    VWriteStream out,
                                    int depth,
                                    IdentityHashMap<Value, String> valueSet)

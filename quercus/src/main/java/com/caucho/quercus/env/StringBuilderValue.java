@@ -1706,7 +1706,7 @@ public class StringBuilderValue
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
@@ -1715,13 +1715,13 @@ public class StringBuilderValue
     if (length < 0)
         length = 0;
 
-    out.print(VHelper.noCtx(), "string(");
-    out.print(VHelper.noCtx(), length);
-    out.print(VHelper.noCtx(), ") \"");
+    out.print(ctx, "string(");
+    out.print(ctx, length);
+    out.print(ctx, ") \"");
 
-    out.write(VHelper.noCtx(), _buffer, 0, _length);
+    out.write(ctx, _buffer, 0, _length);
 
-    out.print(VHelper.noCtx(), "\"");
+    out.print(ctx, "\"");
   }
 
   @Override

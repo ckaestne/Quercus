@@ -329,25 +329,25 @@ public class ServerArrayValue extends ArrayValueImpl
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
     if (! _isFilled)
       fillMap();
 
-    super.varDumpImpl(env, out, depth, valueSet);
+    super.varDumpImpl(env, ctx, out, depth, valueSet);
   }
 
   @Override
   protected void printRImpl(Env env,
-                            VWriteStream out,
+                            FeatureExpr ctx, VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
     if (! _isFilled)
       fillMap();
 
-    super.printRImpl(env, out, depth, valueSet);
+    super.printRImpl(env, ctx, out, depth, valueSet);
   }
 
   /**

@@ -33,6 +33,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.This;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.ArrayModule;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -232,14 +233,14 @@ public class ArrayIterator
   }
 
 
-   private static void printDepth(VWriteStream out, int depth)
+  private static void printDepth(FeatureExpr ctx, VWriteStream out, int depth)
     throws java.io.IOException
   {
     for (int i = depth; i > 0; i--)
-      out.print(VHelper.noCtx(), ' ');
+      out.print(ctx, ' ');
   }
 
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           Value obj,
                           VWriteStream out,
                           int depth,
@@ -257,7 +258,7 @@ public class ArrayIterator
     else {
       Value arrayValue = _value;
 
-      out.println(VHelper.noCtx(), "object(" + name + ") (" + arrayValue.getCount(env) + ") {");
+      out.println(ctx, "object(" + name + ") (" + arrayValue.getCount(env) + ") {");
 
       depth++;
 
@@ -266,33 +267,34 @@ public class ArrayIterator
 
       while (iterator.hasNext()) {
         VEntry entry = iterator.next();
+        FeatureExpr innerCtx = ctx.and(entry.getCondition());
 
         Value key = entry.getKey();
         EnvVar value = entry.getEnvVar();
 
-        printDepth(out, 2 * depth);
+        printDepth(innerCtx, out, 2 * depth);
 
-        out.print(VHelper.noCtx(), "[");
+        out.print(innerCtx, "[");
 
         if (key.isString())
-          out.print(VHelper.noCtx(), "\"" + key + "\"");
+          out.print(innerCtx, "\"" + key + "\"");
         else
-          out.print(VHelper.noCtx(), key);
+          out.print(innerCtx, key);
 
-        out.println(VHelper.noCtx(), "]=>");
+        out.println(innerCtx, "]=>");
 
-        printDepth(out, 2 * depth);
+        printDepth(innerCtx, out, 2 * depth);
 
-        value.getOne().varDump(env, out, depth, valueSet);
+        value.getOne(innerCtx).varDump(env, innerCtx, out, depth, valueSet);
 
-        out.println(VHelper.noCtx());
+        out.println(innerCtx);
       }
 
       depth--;
 
-      printDepth(out, 2 * depth);
+      printDepth(ctx, out, 2 * depth);
 
-      out.print(VHelper.noCtx(), "}");
+      out.print(ctx, "}");
     }
   }
 }

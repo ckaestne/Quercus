@@ -857,7 +857,7 @@ public class LargeStringBuilderValue
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
@@ -866,17 +866,17 @@ public class LargeStringBuilderValue
     if (length < 0)
         length = 0;
 
-    out.print(VHelper.noCtx(), "string(");
-    out.print(VHelper.noCtx(), length);
-    out.print(VHelper.noCtx(), ") \"");
+    out.print(ctx, "string(");
+    out.print(ctx, length);
+    out.print(ctx, ") \"");
 
     for (int i = 0; i < length; i++) {
       int ch = charAt(i);
 
-      out.print(VHelper.noCtx(), (char) ch);
+      out.print(ctx, (char) ch);
     }
 
-    out.print(VHelper.noCtx(), "\"");
+    out.print(ctx, "\"");
 
     /*
     int length = length();

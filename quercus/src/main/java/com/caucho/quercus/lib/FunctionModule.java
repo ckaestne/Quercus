@@ -30,8 +30,6 @@
 package com.caucho.quercus.lib;
 
 import com.caucho.quercus.Location;
-import edu.cmu.cs.varex.annotation.VParamType;
-import edu.cmu.cs.varex.annotation.VVariational;
 import com.caucho.quercus.annotation.VariableArguments;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.CallExpr;
@@ -42,6 +40,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
+import edu.cmu.cs.varex.annotation.VParamType;
+import edu.cmu.cs.varex.annotation.VVariational;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -72,36 +72,39 @@ public class FunctionModule extends AbstractQuercusModule {
   /**
    * Calls a user function
    */
-  public static Value call_user_func_array(Env env,
-                                           Callable function,
-                                           Value arg)
+  @VVariational
+  @VParamType(Value.class)
+  public static V<? extends Value> call_user_func_array(Env env, FeatureExpr ctx,
+                                                        @VParamType(Callable.class) V<? extends Callable> function,
+                                                        @VParamType(Value.class) @Nonnull V<? extends Value> arg)
   {
     if (function == null) {
       env.warning("call_user_func_array: first argument is not a valid function");
-      return NullValue.NULL;
+      return V.one(ctx, NullValue.NULL);
     }
 
     ArrayValue argArray;
 
-    if (arg.isArray()) {
-      argArray = arg.toArray();
+    if (arg.getOne(ctx).isArray()) {
+      argArray = arg.getOne(ctx).toArray();
     }
     else {
-      argArray = new ArrayValueImpl().append(arg);
+      argArray = new ArrayValueImpl().append(arg.getOne(ctx));
     }
 
     V<? extends ValueOrVar> []args;
 
     if (argArray != null) {
-      args = new V[argArray.getSize().getOne()];
+      args = new V[argArray.getSize().getOne(ctx)];
 
       int i = 0;
 
-      for (VEntry entry : argArray.entrySet()) {
-        ArrayValue.Entry arrayEntry = (ArrayValue.Entry) entry;
+      for (VEntry entry : argArray.entrySet())
+        if (entry.getCondition().and(ctx).isSatisfiable()) {
+          ArrayValue.Entry arrayEntry = (ArrayValue.Entry) entry;
 
-        args[i++] = arrayEntry.getRawValue().getVar();
-      }
+          args[i++] = arrayEntry.getRawValue().getVar();
+        }
     }
     else {
       args = new V[0];
@@ -110,10 +113,10 @@ public class FunctionModule extends AbstractQuercusModule {
     // nam: 2012-04-30 this works for interpreted, but need to also work for compiled
     // chk: 2015-11-26 fix this, otherwise stackframes and consequently wordpress title is missing
     QuercusClass oldCallingClass = env.getCallingClass();
-    env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getCallbackName()), Expr.NULL_ARGS), null, args);
+    env.pushCall(new CallExpr(Location.UNKNOWN, new ConstStringValue(function.getOne(ctx).getCallbackName()), Expr.NULL_ARGS), null, args);
 
     try {
-      return function.call(env, VHelper.noCtx(), args).map((a)->a.toValue().copyReturn()).getOne();
+      return function.sflatMap(ctx, (c, f) -> f.call(env, c, args).flatMap((a) -> a._getValues()).map(a -> a.copyReturn()));
     }
     finally {
       env.popCall();

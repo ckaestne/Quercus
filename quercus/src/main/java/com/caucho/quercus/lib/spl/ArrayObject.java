@@ -34,6 +34,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.ArrayModule;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -202,14 +203,14 @@ public class ArrayObject
       return UnsetValue.UNSET;
   }
 
-  static private void printDepth(VWriteStream out, int depth)
+  static private void printDepth(FeatureExpr ctx, VWriteStream out, int depth)
     throws java.io.IOException
   {
     for (int i = depth; i > 0; i--)
       out.print(VHelper.noCtx(), ' ');
   }
 
-  public void printRImpl(Env env,
+  public void printRImpl(Env env, FeatureExpr ctx,
                          VWriteStream out,
                          int depth,
                          IdentityHashMap<Value, String> valueSet)
@@ -218,19 +219,19 @@ public class ArrayObject
 
     if ((_flags & STD_PROP_LIST) != 0) {
       // XXX:
-      out.print(VHelper.noCtx(), "ArrayObject");
-      out.print(VHelper.noCtx(), ' ');
-      out.println(VHelper.noCtx(), "Object");
-      printDepth(out, 4 * depth);
-      out.println(VHelper.noCtx(), "(");
-      out.print(VHelper.noCtx(), ")");
+      out.print(ctx, "ArrayObject");
+      out.print(ctx, ' ');
+      out.println(ctx, "Object");
+      printDepth(ctx, out, 4 * depth);
+      out.println(ctx, "(");
+      out.print(ctx, ")");
     }
     else {
-      out.print(VHelper.noCtx(), "ArrayObject");
-      out.print(VHelper.noCtx(), ' ');
-      out.println(VHelper.noCtx(), "Object");
-      printDepth(out, 4 * depth);
-      out.println(VHelper.noCtx(), "(");
+      out.print(ctx, "ArrayObject");
+      out.print(ctx, ' ');
+      out.println(ctx, "Object");
+      printDepth(ctx, out, 4 * depth);
+      out.println(ctx, "(");
 
       depth++;
 
@@ -240,27 +241,29 @@ public class ArrayObject
 
       while (iterator.hasNext()) {
         VEntry entry = iterator.next();
+        FeatureExpr innerCtx = ctx.and(entry.getCondition());
 
         Value key = entry.getKey();
         EnvVar value = entry.getEnvVar();
 
-        printDepth(out, 4 * depth);
+        printDepth(innerCtx, out, 4 * depth);
 
-        out.print(VHelper.noCtx(), "[" + key + "] => ");
+        out.print(innerCtx, "[" + key + "] => ");
 
-        value.getOne().printR(env, out, depth + 1, valueSet);
+        final int d = depth;
+        value.getValue().sforeach(innerCtx, (c, a) -> a.printR(env, c, out, d + 1, valueSet));
 
-        out.println(VHelper.noCtx());
+        out.println(innerCtx);
       }
 
       depth--;
 
-      printDepth(out, 4 * depth);
-      out.println(VHelper.noCtx(), ")");
+      printDepth(ctx, out, 4 * depth);
+      out.println(ctx, ")");
     }
   }
 
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           Value object,
                           VWriteStream out,
                           int depth,
@@ -271,12 +274,12 @@ public class ArrayObject
 
     if ((_flags & STD_PROP_LIST) != 0) {
       // XXX:
-      out.println(VHelper.noCtx(), "object(" + name + ") (0) {");
-      out.print(VHelper.noCtx(), "}");
+      out.println(ctx, "object(" + name + ") (0) {");
+      out.print(ctx, "}");
 
     }
     else {
-      out.println(VHelper.noCtx(), "object(" + name + ") (" + _value.getSize() + ") {");
+      out.println(ctx, "object(" + name + ") (" + _value.getSize() + ") {");
 
       depth++;
 
@@ -285,33 +288,35 @@ public class ArrayObject
 
       while (iterator.hasNext()) {
         VEntry entry = iterator.next();
+        FeatureExpr innerCtx = ctx.and(entry.getCondition());
 
         Value key = entry.getKey();
         EnvVar value = entry.getEnvVar();
 
-        printDepth(out, 2 * depth);
+        printDepth(innerCtx, out, 2 * depth);
 
-        out.print(VHelper.noCtx(), "[");
+        out.print(innerCtx, "[");
 
         if (key instanceof StringValue)
-          out.print(VHelper.noCtx(), "\"" + key + "\"");
+          out.print(innerCtx, "\"" + key + "\"");
         else
-          out.print(VHelper.noCtx(), key);
+          out.print(innerCtx, key);
 
-        out.println(VHelper.noCtx(), "]=>");
+        out.println(innerCtx, "]=>");
 
-        printDepth(out, 2 * depth);
+        printDepth(innerCtx, out, 2 * depth);
 
-        value.getOne().varDump(env, out, depth, valueSet);
+        final int d = depth;
+        value.getValue().sforeach(innerCtx, (c, a) -> a.varDump(env, c, out, d, valueSet));
 
-        out.println(VHelper.noCtx());
+        out.println(innerCtx);
       }
 
       depth--;
 
-      printDepth(out, 2 * depth);
+      printDepth(ctx, out, 2 * depth);
 
-      out.print(VHelper.noCtx(), "}");
+      out.print(ctx, "}");
     }
   }
 }

@@ -1031,11 +1031,11 @@ public class ObjectExtValue extends ObjectValue
 
   //XXX: push up to super, and use varDumpObject
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    int size = getSize().getOne();
+    int size = getSize().getOne(ctx);
 
     if (isIncompleteObject())
       size++;
@@ -1043,46 +1043,46 @@ public class ObjectExtValue extends ObjectValue
     out.println(VHelper.noCtx(), "object(" + getName() + ") (" + size + ") {");
 
     if (isIncompleteObject()) {
-      printDepth(out, 2 * (depth + 1));
+      printDepth(ctx, out, 2 * (depth + 1));
       out.println(VHelper.noCtx(), "[\"__Quercus_Incomplete_Class_name\"]=>");
 
-      printDepth(out, 2 * (depth + 1));
+      printDepth(ctx, out, 2 * (depth + 1));
 
       Value value = env.createString(getIncompleteObjectName());
 
-      value.varDump(env, out, depth + 1, valueSet);
+      value.varDump(env, ctx, out, depth + 1, valueSet);
 
-      out.println(VHelper.noCtx());
+      out.println(ctx);
     }
 
     for (VEntry mapEntry : entrySet()) {
 
-      entryVarDumpImpl(env, mapEntry, out, depth + 1, valueSet);
+      entryVarDumpImpl(env, ctx.and(mapEntry.getCondition()), mapEntry, out, depth + 1, valueSet);
     }
 
-    printDepth(out, 2 * depth);
+    printDepth(ctx, out, 2 * depth);
 
-    out.print(VHelper.noCtx(), "}");
+    out.print(ctx, "}");
   }
 
   @Override
   protected void printRImpl(Env env,
-                            VWriteStream out,
+                            FeatureExpr ctx, VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
-    out.print(VHelper.noCtx(), getName());
-    out.print(VHelper.noCtx(), ' ');
-    out.println(VHelper.noCtx(), "Object");
-    printDepth(out, 4 * depth);
-    out.println(VHelper.noCtx(), "(");
+    out.print(ctx, getName());
+    out.print(ctx, ' ');
+    out.println(ctx, "Object");
+    printDepth(ctx, out, 4 * depth);
+    out.println(ctx, "(");
 
     for (VEntry mapEntry : entrySet()) {
 
-      entryPrintRImpl(env, mapEntry, out, depth + 1, valueSet);
+      entryPrintRImpl(env, ctx.and(mapEntry.getCondition()), mapEntry, out, depth + 1, valueSet);
     }
 
-    printDepth(out, 4 * depth);
-    out.println(VHelper.noCtx(), ")");
+    printDepth(ctx, out, 4 * depth);
+    out.println(ctx, ")");
   }
 
   //
@@ -1482,10 +1482,10 @@ public class ObjectExtValue extends ObjectValue
 //      return thisKey.cmp(otherKey);
 //    }
 //
-    public void entryVarDumpImpl(Env env,
-                                 VEntry entry, VWriteStream out,
-                                 int depth,
-                                 IdentityHashMap<Value, String> valueSet)
+public void entryVarDumpImpl(Env env, FeatureExpr ctx,
+                             VEntry entry, VWriteStream out,
+                             int depth,
+                             IdentityHashMap<Value, String> valueSet)
     {
       StringValue key = entry.getKey().toStringValue();
       StringValue name = ClassField.getOrdinaryName(key);
@@ -1498,20 +1498,20 @@ public class ObjectExtValue extends ObjectValue
         suffix = ":private";
       }
 
-      printDepth(out, 2 * depth);
-      out.println(VHelper.noCtx(), "[\"" + name + suffix + "\"]=>");
+      printDepth(ctx, out, 2 * depth);
+      out.println(ctx, "[\"" + name + suffix + "\"]=>");
 
-      printDepth(out, 2 * depth);
+      printDepth(ctx, out, 2 * depth);
 
-      entry.getEnvVar().getValue().getOne().varDump(env, out, depth, valueSet);
+      entry.getEnvVar().getValue().sforeach(ctx, (c, a) -> a.varDump(env, c, out, depth, valueSet));
 
-      out.println(VHelper.noCtx());
+      out.println(ctx);
     }
 //
-    protected void entryPrintRImpl(Env env,
-                                   VEntry entry, VWriteStream out,
-                                   int depth,
-                                   IdentityHashMap<Value, String> valueSet)
+protected void entryPrintRImpl(Env env, FeatureExpr ctx,
+                               VEntry entry, VWriteStream out,
+                               int depth,
+                               IdentityHashMap<Value, String> valueSet)
     {
       StringValue key = entry.getKey().toStringValue();
       StringValue name = ClassField.getOrdinaryName(key);
@@ -1524,12 +1524,12 @@ public class ObjectExtValue extends ObjectValue
         suffix = ":private";
       }
 
-      printDepth(out, 4 * depth);
-      out.print(VHelper.noCtx(), "[" + name + suffix + "] => ");
+      printDepth(ctx, out, 4 * depth);
+      out.print(ctx, "[" + name + suffix + "] => ");
 
-      entry.getEnvVar().getOne().printR(env, out, depth + 1, valueSet);
+      entry.getEnvVar().getValue().sforeach(ctx, (c, a) -> a.printR(env, c, out, depth + 1, valueSet));
 
-      out.println(VHelper.noCtx());
+      out.println(ctx);
     }
 //
 //    private void printDepth(VWriteStream out, int depth)

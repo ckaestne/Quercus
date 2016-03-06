@@ -37,7 +37,6 @@ import com.caucho.quercus.program.JavaClassDef;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import javax.annotation.Nonnull;
@@ -788,64 +787,68 @@ abstract public class JavaAdapter extends ArrayValue
 
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    out.println(VHelper.noCtx(), "array(" + getSize() + ") {");
+    out.println(ctx, "array(" + getSize() + ") {");
 
     int nestedDepth = depth + 1;
 
     for (VEntry mapEntry : entrySet()) {
-      printDepth(out, nestedDepth * 2);
-      out.print(VHelper.noCtx(), "[");
+      FeatureExpr innerCtx = ctx.and(mapEntry.getCondition());
+      printDepth(innerCtx, out, nestedDepth * 2);
+      out.print(innerCtx, "[");
 
       Value key = mapEntry.getKey();
 
       if (key.isString())
-        out.print(VHelper.noCtx(), "\"" + key + "\"");
+        out.print(innerCtx, "\"" + key + "\"");
       else
-        out.print(VHelper.noCtx(), key);
+        out.print(innerCtx, key);
 
-      out.println(VHelper.noCtx(), "]=>");
+      out.println(innerCtx, "]=>");
 
-      printDepth(out, nestedDepth * 2);
+      printDepth(innerCtx, out, nestedDepth * 2);
 
-      mapEntry.getEnvVar().getOne().varDump(env, out, nestedDepth, valueSet);
+      mapEntry.getEnvVar().getValue().sforeach(innerCtx, (c, a) -> a.varDump(env, c, out, nestedDepth, valueSet));
 
-      out.println(VHelper.noCtx());
+      out.println(innerCtx);
     }
 
-    printDepth(out, 2 * depth);
+    printDepth(ctx, out, 2 * depth);
 
-    out.print(VHelper.noCtx(), "}");
+    out.print(ctx, "}");
   }
 
   @Override
-  protected void printRImpl(Env env,
+  protected void printRImpl(Env env, FeatureExpr ctx,
                             VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
-    out.println(VHelper.noCtx(), "Array");
-    printDepth(out, 8 * depth);
-    out.println(VHelper.noCtx(), "(");
+    out.println(ctx, "Array");
+    printDepth(ctx, out, 8 * depth);
+    out.println(ctx, "(");
 
     for (VEntry mapEntry : entrySet()) {
-      printDepth(out, 8 * depth);
+      FeatureExpr innerCtx = ctx.and(mapEntry.getCondition());
+      printDepth(innerCtx, out, 8 * depth);
 
-      out.print(VHelper.noCtx(), "    [");
-      out.print(VHelper.noCtx(), mapEntry.getKey());
-      out.print(VHelper.noCtx(), "] => ");
+      out.print(innerCtx, "    [");
+      out.print(innerCtx, mapEntry.getKey());
+      out.print(innerCtx, "] => ");
 
-      Value value = mapEntry.getEnvVar().getOne();
+      V<? extends Value> value = mapEntry.getEnvVar().getValue();
 
-      if (value != null)
-        value.printR(env, out, depth + 1, valueSet);
-      out.println(VHelper.noCtx());
+      value.sforeach(innerCtx, (c, v) -> {
+        if (v != null)
+          v.printR(env, c, out, depth + 1, valueSet);
+      });
+      out.println(ctx);
     }
 
-    printDepth(out, 8 * depth);
-    out.println(VHelper.noCtx(), ")");
+    printDepth(ctx, out, 8 * depth);
+    out.println(ctx, ")");
   }
 
   //

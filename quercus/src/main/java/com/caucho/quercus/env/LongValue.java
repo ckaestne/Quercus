@@ -624,11 +624,11 @@ public class LongValue extends NumberValue
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value,String> valueSet) {
-    out.print(VHelper.noCtx(), "int(" + toLong() + ")");
+    out.print(ctx, "int(" + toLong() + ")");
   }
 
   //

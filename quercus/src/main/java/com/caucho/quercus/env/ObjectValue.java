@@ -809,30 +809,30 @@ abstract public class ObjectValue extends Callback {
     }
   }
 
-  public void varDumpObject(Env env,
+  public void varDumpObject(Env env, FeatureExpr ctx,
                             VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    int size = getSize().getOne();
+    int size = getSize().getOne(ctx);
 
     if (isIncompleteObject())
       size++;
 
-    out.println(VHelper.noCtx(), "object(" + getName() + ") (" + size + ") {");
+    out.println(ctx, "object(" + getName() + ") (" + size + ") {");
 
     if (isIncompleteObject()) {
-      printDepth(out, 2 * (depth + 1));
-      out.println(VHelper.noCtx(), "[\"__Quercus_Incomplete_Class_name\"]=>");
+      printDepth(ctx, out, 2 * (depth + 1));
+      out.println(ctx, "[\"__Quercus_Incomplete_Class_name\"]=>");
 
-      printDepth(out, 2 * (depth + 1));
+      printDepth(ctx, out, 2 * (depth + 1));
 
       Value value = env.createString(getIncompleteObjectName());
 
-      value.varDump(env, out, depth + 1, valueSet);
+      value.varDump(env, ctx, out, depth + 1, valueSet);
 
-      out.println(VHelper.noCtx());
+      out.println(ctx);
     }
 
     ArrayValue sortedEntries = new ArrayValueImpl();
@@ -850,27 +850,28 @@ abstract public class ObjectValue extends Callback {
 
     while (iter.hasNext()) {
       VEntry entry = iter.next();
+      FeatureExpr innerCtx = ctx.and(entry.getCondition());
 
       Value key = entry.getKey();
       EnvVar value = entry.getEnvVar();
 
-      printDepth(out, 2 * depth);
-      out.println(VHelper.noCtx(), "[\"" + key + "\"]=>");
+      printDepth(innerCtx, out, 2 * depth);
+      out.println(innerCtx, "[\"" + key + "\"]=>");
 
       depth++;
 
-      printDepth(out, 2 * depth);
+      printDepth(innerCtx, out, 2 * depth);
 
-      value.getOne().varDump(env, out, depth, valueSet);
+      value.getOne(innerCtx).varDump(env, innerCtx, out, depth, valueSet);
 
-      out.println(VHelper.noCtx());
+      out.println(innerCtx);
 
       depth--;
     }
 
-    printDepth(out, 2 * depth);
+    printDepth(ctx, out, 2 * depth);
 
-    out.print(VHelper.noCtx(), "}");
+    out.print(ctx, "}");
   }
 
   /**

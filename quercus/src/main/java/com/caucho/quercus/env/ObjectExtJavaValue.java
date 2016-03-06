@@ -146,7 +146,7 @@ public class ObjectExtJavaValue extends ObjectExtValue
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
@@ -155,12 +155,12 @@ public class ObjectExtJavaValue extends ObjectExtValue
     }
 
     if (! _javaClassDef.varDumpImpl(env, this, _object, out, depth, valueSet))
-      super.varDumpImpl(env, out, depth, valueSet);
+      super.varDumpImpl(env, ctx, out, depth, valueSet);
   }
 
   @Override
   protected void printRImpl(Env env,
-                            VWriteStream out,
+                            FeatureExpr ctx, VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
     if (_object == null) {

@@ -3016,47 +3016,47 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return toString();
   }
 
-  public final void varDump(Env env,
+  public final void varDump(Env env, FeatureExpr ctx,
                             VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
   {
     if (valueSet.get(this) != null) {
-      out.print(VHelper.noCtx(), "*recursion*");
+      out.print(ctx, "*recursion*");
       return;
     }
 
     valueSet.put(this, "printing");
 
     try {
-      varDumpImpl(env, out, depth, valueSet);
+      varDumpImpl(env, ctx, out, depth, valueSet);
     }
     finally {
       valueSet.remove(this);
     }
   }
 
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    out.print(VHelper.noCtx(), "resource(" + toString() + ")");
+    out.print(ctx, "resource(" + toString() + ")");
   }
 
-  public final void printR(Env env,
+  public final void printR(Env env, FeatureExpr ctx,
                            VWriteStream out,
                            int depth,
                            IdentityHashMap<Value, String> valueSet)
   {
     if (valueSet.get(this) != null) {
-      out.print(VHelper.noCtx(), "*recursion*");
+      out.print(ctx, "*recursion*");
       return;
     }
 
     valueSet.put(this, "printing");
 
     try {
-      printRImpl(env, out, depth, valueSet);
+      printRImpl(env, ctx, out, depth, valueSet);
     }
     finally {
       valueSet.remove(this);
@@ -3064,15 +3064,15 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   }
 
   protected void printRImpl(Env env,
-                            VWriteStream out,
+                            FeatureExpr ctx, VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
-    out.print(VHelper.noCtx(), toString());
+    out.print(ctx, toString());
   }
 
-  protected void printDepth(VWriteStream out, int depth) {
+  protected void printDepth(FeatureExpr ctx, VWriteStream out, int depth) {
     for (int i = 0; i < depth; i++)
-      out.print(VHelper.noCtx(), ' ');
+      out.print(ctx, ' ');
   }
 
   public int getHashCode()

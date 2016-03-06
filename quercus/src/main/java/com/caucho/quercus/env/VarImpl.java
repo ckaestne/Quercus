@@ -31,7 +31,6 @@ package com.caucho.quercus.env;
 
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.util.IdentityHashMap;
@@ -2344,13 +2343,13 @@ public class VarImpl extends Var {
 
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    out.print(VHelper.noCtx(), "&");
-    _value.foreach(v ->
-            v.varDump(env, out, depth, valueSet)
+    out.print(ctx, "&");
+    _value.sforeach(ctx, (c, v) ->
+            v.varDump(env, c, out, depth, valueSet)
     );
   }
 //

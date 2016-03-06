@@ -33,6 +33,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.VariableModule;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -354,7 +355,7 @@ public class SplObjectStorage
     return array;
   }
 
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           Value obj,
                           VWriteStream out,
                           int depth,
@@ -363,7 +364,7 @@ public class SplObjectStorage
   {
     ArrayValue array = toArrayValue(env);
 
-    array.varDump(env, out, depth, valueSet);
+    array.varDump(env, ctx, out, depth, valueSet);
   }
 
   static class ObjectEntry {

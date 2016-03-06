@@ -33,6 +33,7 @@ import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.util.CurrentTime;
 import com.caucho.vfs.TempBuffer;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -615,7 +616,7 @@ public class BinaryBuilderValue
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
@@ -626,25 +627,25 @@ public class BinaryBuilderValue
 
     // QA needs to distinguish php5 string from php6 binary
     if (CurrentTime.isTest())
-      out.print(VHelper.noCtx(), "binary");
+      out.print(ctx, "binary");
     else
-      out.print(VHelper.noCtx(), "string");
+      out.print(ctx, "string");
 
-    out.print(VHelper.noCtx(), "(");
-    out.print(VHelper.noCtx(), length);
-    out.print(VHelper.noCtx(), ") \"");
+    out.print(ctx, "(");
+    out.print(ctx, length);
+    out.print(ctx, ") \"");
 
     for (int i = 0; i < length; i++) {
       char ch = charAt(i);
 
       if (0x20 <= ch && ch <= 0x7f || ch == '\t' || ch == '\r' || ch == '\n')
-        out.print(VHelper.noCtx(), ch);
+        out.print(ctx, ch);
       else if (ch <= 0xff)
-        out.print(VHelper.noCtx(), "\\x"
+        out.print(ctx, "\\x"
                   + Integer.toHexString(ch / 16)
                   + Integer.toHexString(ch % 16));
       else {
-        out.print(VHelper.noCtx(), "\\u"
+        out.print(ctx, "\\u"
                   + Integer.toHexString((ch >> 12) & 0xf)
                   + Integer.toHexString((ch >> 8) & 0xf)
                   + Integer.toHexString((ch >> 4) & 0xf)
@@ -652,7 +653,7 @@ public class BinaryBuilderValue
       }
     }
 
-    out.print(VHelper.noCtx(), "\"");
+    out.print(ctx, "\"");
   }
 
 

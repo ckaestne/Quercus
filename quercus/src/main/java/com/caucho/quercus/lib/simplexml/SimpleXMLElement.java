@@ -38,6 +38,7 @@ import com.caucho.quercus.env.Value;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VWriteStream;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -301,23 +302,23 @@ public class SimpleXMLElement extends SimpleXMLNode
     return _view.getEntrySet(env, _cls);
   }
 
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           Value obj,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    _view.varDump(env, out, depth, valueSet, _cls);
+    _view.varDump(env, ctx, out, depth, valueSet, _cls);
   }
 
-  public void printRImpl(Env env,
+  public void printRImpl(Env env, FeatureExpr ctx,
                          VWriteStream out,
                          int depth,
                          IdentityHashMap<Value, String> valueSet)
     throws IOException
   {
-    _view.printR(env, out, depth, valueSet, _cls);
+    _view.printR(env, ctx, out, depth, valueSet, _cls);
   }
 
   private String getEncoding()

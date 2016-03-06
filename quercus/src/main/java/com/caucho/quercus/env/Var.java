@@ -2353,18 +2353,18 @@ public abstract class Var
 //
 //
 
-  public final void varDump(Env env,
+  public final void varDump(Env env, FeatureExpr ctx,
                             VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet)
           throws IOException {
-    varDumpImpl(env, out, depth, valueSet);
+    varDumpImpl(env, ctx, out, depth, valueSet);
   }
 
-  abstract protected void varDumpImpl(Env env,
-                          VWriteStream out,
-                          int depth,
-                          IdentityHashMap<Value, String> valueSet)
+  abstract protected void varDumpImpl(Env env, FeatureExpr ctx,
+                                      VWriteStream out,
+                                      int depth,
+                                      IdentityHashMap<Value, String> valueSet)
           ;
 //
 //  protected void printRImpl(Env env,

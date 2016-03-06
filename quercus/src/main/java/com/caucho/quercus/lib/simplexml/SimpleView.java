@@ -32,8 +32,12 @@ package com.caucho.quercus.lib.simplexml;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.Value;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VWriteStream;
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -156,7 +160,7 @@ public abstract class SimpleView
     throw new UnsupportedOperationException(getClass().getSimpleName());
   }
 
-  public void varDump(Env env,
+  public void varDump(Env env, FeatureExpr ctx,
                       VWriteStream out,
                       int depth,
                       IdentityHashMap<Value, String> valueSet,
@@ -165,10 +169,10 @@ public abstract class SimpleView
   {
     Value value = toDumpValue(env, cls, false);
 
-    value.varDump(env, out, depth, valueSet);
+    value.varDump(env, ctx, out, depth, valueSet);
   }
 
-  public void printR(Env env,
+  public void printR(Env env, FeatureExpr ctx,
                      VWriteStream out,
                      int depth,
                      IdentityHashMap<Value, String> valueSet,
@@ -177,7 +181,7 @@ public abstract class SimpleView
   {
     Value value = toDumpValue(env, cls, false);
 
-    value.printR(env, out, depth, valueSet);
+    value.printR(env, ctx, out, depth, valueSet);
   }
 
   public int getCount()

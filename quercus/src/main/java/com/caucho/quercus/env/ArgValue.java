@@ -155,11 +155,11 @@ abstract public class ArgValue extends Var /*extends Value*/
 //  }
 //
   @Override
-  protected void varDumpImpl(Env env,
+  protected void varDumpImpl(Env env, FeatureExpr ctx,
                              VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet) {
-    getValue().foreach((a)->a.varDumpImpl(env, out, depth, valueSet));
+    getValue().sforeach(ctx, (c, a) -> a.varDumpImpl(env, c, out, depth, valueSet));
   }
 //
 //  @Override

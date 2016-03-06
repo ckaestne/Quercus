@@ -1641,53 +1641,53 @@ abstract public class ArrayValue extends Value {
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
-    out.println(VHelper.noCtx(), "array(" + getSize().getOne() + ") {");
+    out.println(ctx, "array(" + getSize().getOne() + ") {");
 
     for (VEntry mapEntry : entrySet()) {
-      varDumpEntry(env, out, depth + 1, valueSet, mapEntry);
+      varDumpEntry(env, ctx, out, depth + 1, valueSet, mapEntry);
 
-      out.println(VHelper.noCtx());
+      out.println(ctx);
     }
 
-    printDepth(out, 2 * depth);
+    printDepth(ctx, out, 2 * depth);
 
-    out.print(VHelper.noCtx(), "}");
+    out.print(ctx, "}");
   }
 
-  protected void varDumpEntry(Env env,
+  protected void varDumpEntry(Env env, FeatureExpr ctx,
                               VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet,
                               VEntry mapEntry) {
     Entry entry = (Entry) mapEntry;
 
-    entry.varDumpImpl(env, out, depth, valueSet);
+    entry.varDumpImpl(env, ctx, out, depth, valueSet);
   }
 
   @Override
   protected void printRImpl(Env env,
-                            VWriteStream out,
+                            FeatureExpr ctx, VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
-    out.println(VHelper.noCtx(), "Array");
-    printDepth(out, 4 * depth);
-    out.println(VHelper.noCtx(), "(");
+    out.println(ctx, "Array");
+    printDepth(ctx, out, 4 * depth);
+    out.println(ctx, "(");
 
     for (VEntry mapEntry : entrySet()) {
       Entry entry = (Entry) mapEntry;
 
-      entry.printRImpl(env, out, depth, valueSet);
+      entry.printRImpl(env, ctx, out, depth, valueSet);
     }
 
-    printDepth(out, 4 * depth);
-    out.println(VHelper.noCtx(), ")");
+    printDepth(ctx, out, 4 * depth);
+    out.println(ctx, ")");
   }
 
-  protected void printREntry(Env env,
+  protected void printREntry(Env env, FeatureExpr ctx,
                              VWriteStream out,
                              int depth,
                              IdentityHashMap<Value, String> valueSet,
@@ -1696,7 +1696,7 @@ abstract public class ArrayValue extends Value {
   {
     Entry entry = (Entry) mapEntry;
 
-    entry.printRImpl(env, out, depth, valueSet);
+    entry.printRImpl(env, ctx, out, depth, valueSet);
   }
 
   public static final class Entry
@@ -1939,47 +1939,47 @@ abstract public class ArrayValue extends Value {
 //      */
 //    }
 
-    public void varDumpImpl(Env env,
+    public void varDumpImpl(Env env, FeatureExpr ctx,
                             VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
-      printDepth(out, 2 * depth);
-      out.print(VHelper.noCtx(), "[");
+      printDepth(ctx, out, 2 * depth);
+      out.print(ctx, "[");
 
       if (_key instanceof StringValue)
-        out.print(VHelper.noCtx(), "\"" + _key + "\"");
+        out.print(ctx, "\"" + _key + "\"");
       else
-        out.print(VHelper.noCtx(), _key);
+        out.print(ctx, _key);
 
-      out.println(VHelper.noCtx(), "]=>");
+      out.println(ctx, "]=>");
 
-      printDepth(out, 2 * depth);
+      printDepth(ctx, out, 2 * depth);
 
       getRawValue().getValue().foreach((a) -> {
-          a.varDump(env, out, depth, valueSet);
+        a.varDump(env, ctx, out, depth, valueSet);
       });
     }
 
-    protected void printRImpl(Env env,
+    protected void printRImpl(Env env, FeatureExpr ctx,
                               VWriteStream out,
                               int depth,
                               IdentityHashMap<Value, String> valueSet) {
-      printDepth(out, 4 * (depth + 1));
-      out.print(VHelper.noCtx(), "[");
-      out.print(VHelper.noCtx(), _key);
-      out.print(VHelper.noCtx(), "] => ");
+      printDepth(ctx, out, 4 * (depth + 1));
+      out.print(ctx, "[");
+      out.print(ctx, _key);
+      out.print(ctx, "] => ");
       if (getRawValue() != null) {
-        getRawValue().getValue().foreach((a) -> {
-            a.printR(env, out, depth + 2, valueSet);
+        getRawValue().getValue().foreach((c, a) -> {
+          a.printR(env, c, out, depth + 2, valueSet);
         });
       }
 
-      out.println(VHelper.noCtx());
+      out.println(ctx);
     }
 
-    private void printDepth(VWriteStream out, int depth) {
+    private void printDepth(FeatureExpr ctx, VWriteStream out, int depth) {
       for (int i = depth; i > 0; i--)
-        out.print(VHelper.noCtx(), ' ');
+        out.print(ctx, ' ');
     }
 
     @Override
@@ -2078,7 +2078,7 @@ abstract public class ArrayValue extends Value {
   @Override
   public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
-    int size = getSize().getOne();
+    int size = getSize().getOne(ctx);
 
     Object array = Array.newInstance(elementType, size);
 
@@ -2089,7 +2089,7 @@ abstract public class ArrayValue extends Value {
 
     for (Entry ptr = getHead(); ptr != null; ptr = ptr.getNext()) {
       Array.set(array, i++, elementMarshal.marshal(env,
-              VHelper.noCtx(), ptr.getEnvVar().getVar(),
+              ctx, ptr.getEnvVar().getVar(),
                                                    elementType));
     }
 

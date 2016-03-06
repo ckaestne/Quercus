@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -68,7 +69,7 @@ abstract public class UnicodeValue extends StringValue {
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
@@ -76,15 +77,15 @@ abstract public class UnicodeValue extends StringValue {
 
     if (length < 0)
         length = 0;
-    
-    out.print(VHelper.noCtx(), "unicode(");
-    out.print(VHelper.noCtx(), length);
-    out.print(VHelper.noCtx(), ") \"");
+
+    out.print(ctx, "unicode(");
+    out.print(ctx, length);
+    out.print(ctx, ") \"");
 
     for (int i = 0; i < length; i++)
-      out.print(VHelper.noCtx(), charAt(i));
+      out.print(ctx, charAt(i));
 
-    out.print(VHelper.noCtx(), "\"");
+    out.print(ctx, "\"");
   }
 
   /**

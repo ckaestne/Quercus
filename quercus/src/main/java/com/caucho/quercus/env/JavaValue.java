@@ -35,8 +35,8 @@ import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -181,7 +181,7 @@ public class JavaValue extends ObjectValue
 
   @Override
   protected void printRImpl(Env env,
-                            VWriteStream out,
+                            FeatureExpr ctx, VWriteStream out,
                             int depth,
                             IdentityHashMap<Value, String> valueSet) {
     if (_classDef.printRImpl(env, _object, out, depth, valueSet)) {
@@ -205,7 +205,7 @@ public class JavaValue extends ObjectValue
       printRDepth(out, depth);
       out.print(VHelper.noCtx(), "    [" + entry.getKey() + "] => ");
 
-      entry.getEnvVar().getOne().printRImpl(env, out, depth + 1, valueSet);
+      entry.getEnvVar().getOne().printRImpl(env, ctx, out, depth + 1, valueSet);
     }
 
     out.println(VHelper.noCtx());
@@ -214,7 +214,7 @@ public class JavaValue extends ObjectValue
   }
 
   @Override
-  public void varDumpImpl(Env env,
+  public void varDumpImpl(Env env, FeatureExpr ctx,
                           VWriteStream out,
                           int depth,
                           IdentityHashMap<Value, String> valueSet) {
@@ -222,7 +222,7 @@ public class JavaValue extends ObjectValue
 
     try {
       if (! _classDef.varDumpImpl(env, this, _object, out, depth, valueSet))
-        out.print(VHelper.noCtx(), "resource(" + toString(env) + ")"); // XXX:
+        out.print(ctx, "resource(" + toString(env) + ")"); // XXX:
     }
     finally {
       env.setThis(oldThis);
