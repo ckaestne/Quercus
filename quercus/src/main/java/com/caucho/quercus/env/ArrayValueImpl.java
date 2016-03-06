@@ -38,6 +38,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.util.IdentityHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -480,7 +481,7 @@ public class ArrayValueImpl extends ArrayValue
       // Var oldVar = entry._var;
 
       entry.sforeach(c, (cc, a) -> {
-        if (cc.isSatisfiable()) a.set(cc, value);
+        a.set(cc, value);
       });
     });
     checkInvariants();
@@ -1103,7 +1104,7 @@ public class ArrayValueImpl extends ArrayValue
   }
 
   private void incSize(FeatureExpr ctx, int increment) {
-    _size = _size.flatMap((Integer s)->V.choice(ctx, increment+s, s));
+    _size = _size.pmap(ctx, s -> increment + s, Function.identity());
   }
 
   /**

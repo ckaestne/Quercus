@@ -12,7 +12,7 @@ import org.scalatest.{FlatSpec, Matchers}
 @RunWith(classOf[JUnitRunner])
 class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
 
-    //    FeatureExprFactory.setDefault(FeatureExprFactory.bdd)
+    //        FeatureExprFactory.setDefault(FeatureExprFactory.bdd)
 
     val foo = FeatureExprFactory.createDefinedExternal("foo")
     val bar = FeatureExprFactory.createDefinedExternal("bar")
@@ -134,13 +134,13 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.get(6).getValue should equal(V.one(x))
 
         a.put(foo, V.one(x))
-        a.get(7).getValue should equal(V.choice(foo, x, UnsetValue.UNSET))
+        assertEquiv(a.get(7).getValue, V.choice(foo, x, UnsetValue.UNSET))
 
         a.append(foo, LongValue.create(10), V.one(z))
         a.get(10).getValue should equal(V.choice(foo, z, UnsetValue.UNSET))
 
         a.put(t, V.one(x))
-        a.get(11).getValue should equal(V.choice(foo, x, UnsetValue.UNSET))
+        assertEquiv(a.get(11).getValue, V.choice(foo, x, UnsetValue.UNSET))
         a.get(7).getValue should equal(V.one(x))
     }
 
@@ -202,7 +202,9 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
         a.next(t) should equal(V.choice(foo, z, y))
         a.prev(t) should equal(V.choice(foo, y, x))
         a.next(foo) should equal(V.choice(foo, z, x))
+        a.current() should equal(V.choice(foo, z, x))
         a.next(bar) should equal(V.choice(foo, V.choice(bar, BooleanValue.FALSE, z), V.choice(bar, y, x)))
+        a.current() should equal(V.choice(foo, V.choice(bar, BooleanValue.FALSE, z), V.choice(bar, y, x)))
         a.reset(bar) should equal(V.choice(bar, V.one(x), V.choice(foo, z, x)))
         a.end(foo) should equal(V.choice(bar, V.choice(foo, z, x), V.choice(foo, z, x)))
     }
@@ -245,5 +247,6 @@ class VArrayImplTest extends FlatSpec with Matchers with AbstractPhpTest {
             }
         });
     }
+
 
 }

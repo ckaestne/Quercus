@@ -1238,19 +1238,19 @@ abstract public class ArrayValue extends Value {
    */
   @Override
   public V<? extends Value> next(FeatureExpr ctx) {
-    _current = getNext(ctx, _current, false);
+    _current = moveCurrent(ctx, _current, false);
 
     return current();
   }
 
-  private V<? extends Entry> getNext(FeatureExpr ctx, @Nonnull V<? extends Entry> entry, boolean isPrev) {
+  private V<? extends Entry> moveCurrent(FeatureExpr ctx, @Nonnull V<? extends Entry> entry, boolean isPrev) {
     if (ctx.isContradiction()) return V.one(null);
-    return entry.sflatMap(ctx, (c, e) -> {
-      Entry next = isPrev ? e.getPrev() : e.getNext();
-      return V.choice(c,
-              next == null ? V.one(null) : V.choice(next.getCondition(), V.one(next), getNext(c.andNot(next.getCondition()), V.one(next), isPrev)),
-              V.one(e));
-    });
+    return entry.pflatMap(ctx,
+            (c, e) -> {
+              Entry next = isPrev ? e.getPrev() : e.getNext();
+              return next == null ? V.one(c, null) : V.choice(next.getCondition(), V.one(next), moveCurrent(c.andNot(next.getCondition()), V.one(next), isPrev));
+            },
+            (c, a) -> V.one(c, a));
   }
 
   /**
@@ -1259,7 +1259,7 @@ abstract public class ArrayValue extends Value {
    */
   @Override
   public V<? extends Value> prev(FeatureExpr ctx) {
-    _current = getNext(ctx, _current, true);
+    _current = moveCurrent(ctx, _current, true);
 
     return current();
   }
