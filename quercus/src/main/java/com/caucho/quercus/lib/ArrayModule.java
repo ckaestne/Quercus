@@ -43,6 +43,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.RandomUtil;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
@@ -632,7 +633,7 @@ public class ArrayModule
    * @param callback the function name for filtering
    * @return a filtered array
    */
-  public static Value array_filter(Env env,
+  public static Value array_filter(Env env, FeatureExpr ctx,
                                    ArrayValue array,
                                    @Optional Value callbackName)
   {
@@ -663,7 +664,7 @@ public class ArrayModule
 //            value = entry.getEnvVar().getOne();
 
           // php/1740
-          boolean isMatch = callback.call(env, VHelper.noCtx(), value.getVar()).getOne().toValue().toBoolean();
+          boolean isMatch = callback.call(env, ctx, value.getVar()).getOne(ctx).toValue().toBoolean();
 
           if (isMatch)
             filteredArray.put(key, value);
@@ -678,8 +679,8 @@ public class ArrayModule
     }
     else {
       for (VEntry entry : array.entrySet()) {
-        if (entry.getEnvVar().getOne().toBoolean())
-          filteredArray.put(entry.getKey(), entry.getEnvVar());
+        if (entry.getEnvVar().getOne(ctx).toBoolean())
+          filteredArray.put(ctx, entry.getKey(), entry.getEnvVar().getVar());
       }
     }
 
@@ -2512,7 +2513,7 @@ public class ArrayModule
    * @param extra extra parameter required by the callback function
    * @return true if the walk succedded, false otherwise
    */
-  public static boolean array_walk_recursive(Env env,
+  public static boolean array_walk_recursive(Env env, FeatureExpr ctx,
                                              @Reference Var arrayVar,
                                              Callable callback,
                                              @Optional("NULL") Value extra)
@@ -2523,7 +2524,7 @@ public class ArrayModule
       return false;
     }
 
-    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
+    ArrayValue array = arrayVar.getValue().getOne(ctx).toArrayValue(env);
 
     if (array == null)
       return false;
@@ -2543,9 +2544,10 @@ public class ArrayModule
 //        else
 //          value = entry.getEnvVar().getOne();
 
-        if (value.getValue().getOne().isArray()) {
-          boolean result = array_walk_recursive(env,
-                                                Var.create(value.getValue().getOne()),
+        FeatureExpr innerCtx = ctx.and(entry.getCondition());
+        if (value.getValue().getOne(innerCtx).isArray()) {
+          boolean result = array_walk_recursive(env, innerCtx,
+                  Var.create(value.getValue().getOne(innerCtx)),
                                                 callback,
                                                 extra);
 
@@ -2553,7 +2555,7 @@ public class ArrayModule
             return false;
         }
         else
-          callback.call(env, VHelper.noCtx(), value.getVar(), V.one(key), V.one(extra));
+          callback.call(env, innerCtx, value.getVar(), V.one(innerCtx, key), V.one(innerCtx, extra));
       }
 
       return true;
@@ -2575,7 +2577,7 @@ public class ArrayModule
    *
    * @return true if the walk succeeded, false otherwise
    */
-  public static boolean array_walk(Env env,
+  public static boolean array_walk(Env env, FeatureExpr ctx,
                                    @Reference Var arrayVar,
                                    Callable callback,
                                    @Optional("NULL") Value userData)
@@ -2586,7 +2588,7 @@ public class ArrayModule
       return false;
     }
 
-    ArrayValue array = arrayVar.makeValue().toArrayValue(env);
+    ArrayValue array = arrayVar.getValue().getOne(ctx).toArrayValue(env);
 
     if (array == null)
       return false;
@@ -2606,7 +2608,8 @@ public class ArrayModule
 //        else
 //          value = entry.getEnvVar().getOne();
 
-        callback.call(env, VHelper.noCtx(),value.getVar(), V.one(key), V.one(userData));
+        FeatureExpr innerCtx = ctx.and(entry.getCondition());
+        callback.call(env, innerCtx, value.getVar(), V.one(innerCtx, key), V.one(innerCtx, userData));
       }
 
       return true;
