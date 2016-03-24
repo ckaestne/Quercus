@@ -87,7 +87,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
   {
     String className = _className.evalString(env, ctx).getOne();
 
-    QuercusClass qClass = env.getClass(className);
+    QuercusClass qClass = env.getClass(ctx, className);
 
     StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
@@ -107,7 +107,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
   {
     String className = _className.evalString(env, ctx).getOne();
 
-    QuercusClass qClass = env.getClass(className);
+    QuercusClass qClass = env.getClass(ctx, className);
 
     StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
@@ -128,7 +128,7 @@ public class ClassVarFieldVarExpr extends AbstractVarExpr {
   {
     String className = _className.evalString(env, ctx).getOne();
 
-    QuercusClass qClass = env.getClass(className);
+    QuercusClass qClass = env.getClass(ctx, className);
 
     StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 

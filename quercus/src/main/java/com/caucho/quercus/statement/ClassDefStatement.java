@@ -36,6 +36,7 @@ import com.caucho.quercus.program.InterpretedClassDef;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -57,9 +58,9 @@ public class ClassDefStatement extends Statement {
   public @Nonnull
   V<? extends ValueOrVar> execute(Env env, FeatureExpr ctx)
   {
-    env.addClass(_cl.getName(), _cl);
+    env.addClass(ctx, _cl.getName(), _cl);
 
-    return V.one(null);
+    return V.one(ctx, null);
   }
 
   public String toString()

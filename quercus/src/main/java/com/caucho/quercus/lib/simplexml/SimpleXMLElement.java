@@ -124,7 +124,7 @@ public class SimpleXMLElement extends SimpleXMLNode
     }
   }
 
-  public static Value __construct(Env env,
+  public static Value __construct(Env env, FeatureExpr ctx,
                                   Value data,
                                   @Optional int options,
                                   @Optional boolean dataIsUrl,
@@ -134,7 +134,7 @@ public class SimpleXMLElement extends SimpleXMLNode
     QuercusClass cls = env.getCallingClass();
 
     if (cls == null) {
-      cls = env.getClass("SimpleXMLElement");
+      cls = env.getClass(ctx, "SimpleXMLElement");
     }
 
     return create(env, cls,

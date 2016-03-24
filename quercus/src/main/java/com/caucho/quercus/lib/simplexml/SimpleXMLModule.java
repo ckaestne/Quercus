@@ -34,6 +34,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 
 import java.util.logging.Logger;
 
@@ -53,7 +54,7 @@ public class SimpleXMLModule
     return new String[] { "SimpleXML" };
   }
 
-  public Value simplexml_load_string(Env env,
+  public Value simplexml_load_string(Env env, FeatureExpr ctx,
                                      Value data,
                                      @Optional String className,
                                      @Optional int options,
@@ -66,14 +67,14 @@ public class SimpleXMLModule
     if (className == null || className.length() == 0)
       className = "SimpleXMLElement";
 
-    QuercusClass cls = env.getClass(className);
+    QuercusClass cls = env.getClass(ctx, className);
 
     return SimpleXMLElement.create(env, cls,
                                    data, options, false,
                                    namespaceV, isPrefix);
   }
 
-  public Value simplexml_load_file(Env env,
+  public Value simplexml_load_file(Env env, FeatureExpr ctx,
                                    @NotNull StringValue file,
                                    @Optional String className,
                                    @Optional int options,
@@ -84,7 +85,7 @@ public class SimpleXMLModule
       className = "SimpleXMLElement";
     }
 
-    QuercusClass cls = env.getClass(className);
+    QuercusClass cls = env.getClass(ctx, className);
 
     return SimpleXMLElement.create(env, cls,
                                    file, options, true,

@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.spl;
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
@@ -48,9 +49,9 @@ public class SplModule extends AbstractQuercusModule
     return new String[] { "SPL" };
   }
 
-  public static Value class_implements(Env env,
-                                        Value obj,
-                                        @Optional boolean autoload)
+  public static Value class_implements(Env env, FeatureExpr ctx,
+                                       Value obj,
+                                       @Optional boolean autoload)
   {
     QuercusClass cls;
 
@@ -58,18 +59,18 @@ public class SplModule extends AbstractQuercusModule
       cls = obj.toObject(env).getQuercusClass();
     }
     else {
-      cls = env.findClass(obj.toString(), autoload, true, true);
+      cls = env.findClass(ctx, obj.toString(), autoload, true, true);
     }
 
     if (cls != null) {
-      return cls.getInterfaces(env, autoload);
+      return cls.getInterfaces(env, ctx, autoload);
     }
     else {
       return BooleanValue.FALSE;
     }
   }
 
-  public static Value class_parents(Env env,
+  public static Value class_parents(Env env, FeatureExpr ctx,
                                     Value obj,
                                     @Optional boolean autoload)
   {
@@ -79,7 +80,7 @@ public class SplModule extends AbstractQuercusModule
       cls = obj.toObject(env).getQuercusClass();
     }
     else {
-      cls = env.findClass(obj.toString(), autoload, true, true);
+      cls = env.findClass(ctx, obj.toString(), autoload, true, true);
     }
 
     if (cls != null) {
@@ -166,11 +167,11 @@ public class SplModule extends AbstractQuercusModule
     }
   }
 
-  public static void spl_autoload(Env env,
+  public static void spl_autoload(Env env, FeatureExpr ctx,
                                   String className,
                                   @Optional String extensions)
   {
-    if (env.findClass(className, false, true, true) != null)
+    if (env.findClass(ctx, className, false, true, true) != null)
       return;
 
     String []extensionList;
@@ -192,7 +193,7 @@ public class SplModule extends AbstractQuercusModule
 
       env.include(VHelper.noCtx(), sb);
 
-      QuercusClass cls = env.findClass(className, false, true, true);
+      QuercusClass cls = env.findClass(ctx, className, false, true, true);
 
       if (cls != null) {
         return;

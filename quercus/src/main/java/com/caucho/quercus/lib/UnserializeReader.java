@@ -223,7 +223,7 @@ public final class UnserializeReader {
         expect(':');
         expect('{');
 
-        QuercusClass qClass = env.findClass(className);
+        QuercusClass qClass = env.findClass(VHelper.noCtx(), className);
         Value obj;
 
         if (qClass != null) {
@@ -311,7 +311,7 @@ public final class UnserializeReader {
         expect(':');
         expect('{');
 
-        QuercusClass qClass = env.findClass(className);
+        QuercusClass qClass = env.findClass(VHelper.noCtx(), className);
 
         if (qClass == null) {
           log.fine(L.l("{0} is an undefined class in unserialize",

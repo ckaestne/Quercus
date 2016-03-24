@@ -94,7 +94,7 @@ public class ObjectNewExpr extends Expr {
     env.pushCall(this, NullValue.NULL, args);
 
     try {
-      QuercusClass cl = env.findAbstractClass(_name);
+      QuercusClass cl = env.findAbstractClass(ctx, _name);
 
       env.checkTimeout();
 

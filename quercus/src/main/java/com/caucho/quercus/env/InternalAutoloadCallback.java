@@ -102,7 +102,7 @@ public class InternalAutoloadCallback
       env.executePage(path, ctx);
     }
 
-    return env.findClass(name, -1, false, false, false);
+    return env.findClass(ctx, name, -1, false, false, false);
   }
 }
 

@@ -180,4 +180,25 @@ public class VHelper {
   public static V<? extends Boolean> fexprToVBoolean(V<? extends FeatureExpr> v) {
     return V.choice(vToFExpr(v), V.one(true), V.one(false));
   }
+
+  /**
+   * equivalent of a conditional if statement that executes both branches
+   * under corresponding contexts (if satisfiable) depending on a variational
+   * boolean value
+   */
+  public static <T> V<? extends T> vif(FeatureExpr ctx, V<? extends Boolean> condition, Function<FeatureExpr, V<? extends T>> thenSupplier, Function<FeatureExpr, V<? extends T>> elseSupplier) {
+    return vif(ctx, condition.when(b -> b), thenSupplier, elseSupplier);
+  }
+
+  public static <T> V<? extends T> vif(FeatureExpr ctx, FeatureExpr condition, Function<FeatureExpr, V<? extends T>> thenSupplier, Function<FeatureExpr, V<? extends T>> elseSupplier) {
+    if (ctx.and(condition).isContradiction())
+      return elseSupplier.apply(ctx);
+    else if (ctx.andNot(condition).isContradiction())
+      return thenSupplier.apply(ctx);
+    return V.choice(condition,
+            thenSupplier.apply(ctx.and(condition)),
+            elseSupplier.apply(ctx.andNot(condition))
+    );
+  }
+
 }

@@ -58,7 +58,7 @@ public class ArrayObject
   private QuercusClass _iteratorClass;
 
   @Name("__construct")
-  public ArrayObject(Env env,
+  public ArrayObject(Env env, FeatureExpr ctx,
                      @Optional Value value,
                      @Optional int flags,
                      @Optional("ArrayIterator") String iteratorClassName)
@@ -71,7 +71,7 @@ public class ArrayObject
     _value = value.toValue();
     _flags = flags;
 
-    QuercusClass iteratorClass = _env.findClass(iteratorClassName);
+    QuercusClass iteratorClass = _env.findClass(ctx, iteratorClassName);
 
     if (iteratorClass == null || ! iteratorClass.isA(env, "Iterator")) {
       throw new IllegalArgumentException(L.l("A class that implements Iterator must be specified"));
@@ -180,7 +180,7 @@ public class ArrayObject
 
   public void setIteratorClass(String iteratorClass)
   {
-    _iteratorClass = _env.findClass(iteratorClass);
+    _iteratorClass = _env.findClass(VHelper.noCtx(), iteratorClass);
   }
 
   public void uasort(Callable func)

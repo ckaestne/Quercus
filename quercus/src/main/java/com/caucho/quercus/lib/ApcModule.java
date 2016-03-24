@@ -38,6 +38,7 @@ import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.Path;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
@@ -204,7 +205,7 @@ public class ApcModule extends AbstractQuercusModule
   /**
    * Returns a value.
    */
-  public Value apc_fetch(Env env,
+  public Value apc_fetch(Env env, FeatureExpr ctx,
                          String key,
                          @Optional @Reference Var isSuccessful)
   {
@@ -221,7 +222,7 @@ public class ApcModule extends AbstractQuercusModule
     Value value = entry.getValue(env);
 
     if (value != null)
-      initObject(env, new IdentityHashMap<Value,Value>(), value);
+      initObject(env, ctx, new IdentityHashMap<Value, Value>(), value);
 
     if (value != null) {
       isSuccessful.set_(BooleanValue.TRUE);
@@ -234,7 +235,7 @@ public class ApcModule extends AbstractQuercusModule
   /**
    * Updates the value's class with a currently available one.
    */
-  private static void initObject(Env env,
+  private static void initObject(Env env, FeatureExpr ctx,
                                  IdentityHashMap<Value,Value> valueMap,
                                  Value value)
   {
@@ -253,10 +254,10 @@ public class ApcModule extends AbstractQuercusModule
       else
         className = obj.getName();
 
-      QuercusClass cls = env.findClass(className);
+      QuercusClass cls = env.findClass(ctx, className);
 
       if (cls != null) {
-        obj.initObject(env, VHelper.noCtx(), cls);
+        obj.initObject(env, ctx, cls);
       }
     }
     else if (value.isArray()) {
@@ -268,7 +269,7 @@ public class ApcModule extends AbstractQuercusModule
       Iterator<EnvVar> iter = value.getValueIterator(env);
 
       while (iter.hasNext()) {
-        initObject(env, valueMap, iter.next().getOne());
+        initObject(env, ctx, valueMap, iter.next().getOne());
       }
     }
   }

@@ -146,7 +146,7 @@ public class LiteralExpr extends Expr {
   {
     V<? extends String> className = evalString(env, ctx);
 
-    return className.map((a)->env.getClass(a));
+    return className.smap(ctx, (c, a) -> env.getClass(c, a));
   }
 
   public String toString()

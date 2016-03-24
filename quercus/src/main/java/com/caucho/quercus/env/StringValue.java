@@ -944,7 +944,7 @@ abstract public class StringValue
       StringValue className = substring(0, p);
       StringValue methodName = substring(p + 2);
 
-      QuercusClass cl = env.findClass(className.toString());
+      QuercusClass cl = env.findClass(ctx, className.toString());
 
       if (cl == null) {
         env.warning(L.l("can't find class {0}", className));

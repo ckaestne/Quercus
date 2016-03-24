@@ -1071,7 +1071,7 @@ public class PDOStatement
         if (args.length < 1 || args.length > 2)
           return false;
 
-        if (env.findClass(args[0].toString()) == null)
+        if (env.findClass(VHelper.noCtx(), args[0].toString()) == null)
           return false;
 
         if (args.length == 2 && !(args[1].isNull() || args[1].isArray())) {

@@ -408,7 +408,7 @@ abstract public class ArrayValue extends Value {
         String clsName = name.substring(0, p);
         name = name.substring(p + 2);
 
-        QuercusClass cls = env.findClass(clsName);
+        QuercusClass cls = env.findClass(VHelper.noCtx(), clsName);
 
         if (cls == null) {
           return false;
@@ -427,7 +427,7 @@ abstract public class ArrayValue extends Value {
     }
     else {
       String clsName = obj.toString();
-      QuercusClass cls = env.findClass(clsName);
+      QuercusClass cls = env.findClass(VHelper.noCtx(), clsName);
 
       if (cls == null) {
         return false;
@@ -483,7 +483,7 @@ abstract public class ArrayValue extends Value {
         String clsName = name.substring(0, p);
         name = name.substring(p + 2);
 
-        QuercusClass cls = env.findClass(clsName);
+        QuercusClass cls = env.findClass(ctx, clsName);
 
         if (cls == null) {
           env.warning(L.l("Callback: '{0}' is not a valid callback class for {1}",
@@ -498,7 +498,7 @@ abstract public class ArrayValue extends Value {
       return new CallbackObjectMethod((ObjectValue) obj, env.createString(name));
     }
     else {
-      QuercusClass cl = env.findClass(obj.toString());
+      QuercusClass cl = env.findClass(ctx, obj.toString());
 
       if (cl == null) {
         env.warning(L.l("Callback: '{0}' is not a valid callback string for {1}",

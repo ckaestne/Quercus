@@ -34,6 +34,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.annotation.ReadOnly;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 
 import javax.naming.Context;
@@ -499,7 +500,7 @@ public class PDO implements EnvCleanup {
   /**
    * Prepares a statement for execution.
    */
-  public Value prepare(Env env,
+  public Value prepare(Env env, FeatureExpr ctx,
                        String query,
                        @Optional ArrayValue driverOptions)
   {
@@ -516,7 +517,7 @@ public class PDO implements EnvCleanup {
       _lastPDOStatement = pdoStatement;
 
       if (_statementClassName != null) {
-        QuercusClass cls = env.getClass(_statementClassName);
+        QuercusClass cls = env.getClass(ctx, _statementClassName);
 
         Value phpObject = cls.callNew(env, VHelper.noCtx(),  pdoStatement, VHelper.toVArray(_statementClassArgs)).getOne().toValue();
 
@@ -536,7 +537,7 @@ public class PDO implements EnvCleanup {
   /**
    * Queries the database
    */
-  public Value query(Env env,
+  public Value query(Env env, FeatureExpr ctx,
                      String query,
                      @Optional int mode,
                      @Optional @ReadOnly Value[] args)
@@ -562,7 +563,7 @@ public class PDO implements EnvCleanup {
       _lastPDOStatement = pdoStatement;
 
       if (_statementClassName != null) {
-        QuercusClass cls = env.getClass(_statementClassName);
+        QuercusClass cls = env.getClass(ctx, _statementClassName);
 
         return cls.callNew(env, VHelper.noCtx(), pdoStatement, VHelper.toVArray(_statementClassArgs)).getOne().toValue();
       }

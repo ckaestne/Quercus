@@ -65,7 +65,7 @@ public class ReflectionClass
 
   protected ReflectionClass(Env env, String name)
   {
-    _cls = env.findClass(name);
+    _cls = env.findClass(VHelper.noCtx(), name);
     _name = name;
   }
 
@@ -86,7 +86,7 @@ public class ReflectionClass
     if (obj.isObject())
       cls = obj.toValue().getQuercusClass();
     else
-      cls = env.findClass(obj.toString());
+      cls = env.findClass(VHelper.noCtx(), obj.toString());
 
     if (cls == null)
       throw new ReflectionException(env, L.l("class '{0}' doesn't exist", obj));
@@ -323,7 +323,7 @@ public class ReflectionClass
       String []defList = def.getInterfaces();
 
       for (int i = 0; i < defList.length; i++) {
-        QuercusClass cls = env.findClass(defList[i]);
+        QuercusClass cls = env.findClass(VHelper.noCtx(), defList[i]);
 
         findInterfaces(env, array, cls);
       }
@@ -332,7 +332,7 @@ public class ReflectionClass
 
   private void addInterface(Env env, ArrayValue array, String name)
   {
-    QuercusClass cls = env.findClass(name);
+    QuercusClass cls = env.findClass(VHelper.noCtx(), name);
 
     array.put(StringValue.create(name),
               env.wrapJava(new ReflectionClass(cls)));

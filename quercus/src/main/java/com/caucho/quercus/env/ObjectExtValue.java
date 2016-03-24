@@ -1146,7 +1146,7 @@ public class ObjectExtValue extends ObjectValue
     Env env = Env.getInstance();
     String name = (String) in.readObject();
 
-    QuercusClass cl = env.findClass(name);
+    QuercusClass cl = env.findClass(VHelper.noCtx(), name);
 
     init();
 

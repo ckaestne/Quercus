@@ -864,7 +864,7 @@ abstract public class Expr {
   {
     V<? extends Value> obj = eval(env, ctx);
 
-    return obj.map(a->a.findQuercusClass(env));
+    return obj.smap(ctx, (c, a) -> a.findQuercusClass(env, c));
   }
 
   /**

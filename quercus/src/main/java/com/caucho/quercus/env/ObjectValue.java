@@ -82,7 +82,7 @@ abstract public class ObjectValue extends Callback {
   }
 
   @Override
-  public QuercusClass findQuercusClass(Env env)
+  public QuercusClass findQuercusClass(Env env, FeatureExpr ctx)
   {
     return _quercusClass;
   }

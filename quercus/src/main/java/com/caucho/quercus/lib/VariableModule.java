@@ -69,7 +69,7 @@ public class VariableModule extends AbstractQuercusModule {
    * @param env the quercus calling environment
    * @param name the constant name
    */
-  public static Value constant(Env env, String name)
+  public static Value constant(Env env, FeatureExpr ctx, String name)
   {
     if (name == null) {
       env.warning(L.l("null passed as constant name"));
@@ -83,7 +83,7 @@ public class VariableModule extends AbstractQuercusModule {
 
       name = name.substring(i + 2);
 
-      return env.getClass(cls).getConstant(env, env.createString(name));
+      return env.getClass(ctx, cls).getConstant(env, env.createString(name));
     }
     else {
       Value constant = env.getConstant(name, false);
@@ -136,7 +136,7 @@ public class VariableModule extends AbstractQuercusModule {
    * @param env the quercus calling environment
    * @param name the constant name
    */
-  public static boolean defined(Env env, String name)
+  public static boolean defined(Env env, FeatureExpr ctx, String name)
   {
     if (name == null)
       return false;
@@ -147,7 +147,7 @@ public class VariableModule extends AbstractQuercusModule {
       String clsName = name.substring(0, i);
       name = name.substring(i + 2);
 
-      QuercusClass cls = env.getClass(clsName);
+      QuercusClass cls = env.getClass(ctx, clsName);
 
       return cls.hasConstant(env.createString(name));
     }

@@ -30,14 +30,16 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.ValueOrVar;
+import com.caucho.quercus.env.Var;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 
 import javax.annotation.Nonnull;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -86,7 +88,7 @@ public class ClassFieldExpr extends AbstractVarExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return env.getClass(_className).getStaticFieldValue(env, _varName);
+    return env.getClass(ctx, _className).getStaticFieldValue(env, _varName);
   }
 
   /**
@@ -100,7 +102,7 @@ public class ClassFieldExpr extends AbstractVarExpr {
   @Override
   public V<? extends Var> evalVar(Env env, FeatureExpr ctx)
   {
-    return env.getClass(_className).getStaticFieldVar(env, _varName);
+    return env.getClass(ctx, _className).getStaticFieldVar(env, _varName);
   }
 
   /**
@@ -115,7 +117,7 @@ public class ClassFieldExpr extends AbstractVarExpr {
   @Override
   public V<? extends ValueOrVar> evalAssignRef(Env env, FeatureExpr ctx, V<? extends ValueOrVar> value)
   {
-    env.getClass(_className).setStaticFieldRef(env, ctx, _varName, value);
+    env.getClass(ctx, _className).setStaticFieldRef(env, ctx, _varName, value);
 
     return value;
   }

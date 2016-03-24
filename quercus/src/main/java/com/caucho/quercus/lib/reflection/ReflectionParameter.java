@@ -103,7 +103,7 @@ public class ReflectionParameter
   public ReflectionClass getDeclaringClass(Env env)
   {
     if (_clsName != null) {
-      QuercusClass cls = env.findClass(_clsName);
+      QuercusClass cls = env.findClass(VHelper.noCtx(), _clsName);
       QuercusClass parent = cls.getParent();
 
       if (parent == null

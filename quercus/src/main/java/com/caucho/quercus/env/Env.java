@@ -68,6 +68,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -289,7 +290,7 @@ public class Env
   private HashMap<ConnectionEntry,ConnectionEntry> _connMap
     = new HashMap<ConnectionEntry,ConnectionEntry>();
 
-  private AbstractFunction _autoload;
+  private V<? extends AbstractFunction> _autoload = V.one(VHelper.True(), null);
   private HashSet<String> _autoloadClasses
     = new HashSet<String>();
 
@@ -4764,7 +4765,7 @@ public class Env
 
   public Value createException(String exceptionClass, String message)
   {
-    QuercusClass cls = getClass(exceptionClass);
+    QuercusClass cls = getClass(VHelper.noCtx(), exceptionClass);
 
     StringValue messageV = createString(message);
     V<? extends Value> []args = new V[]{ V.one(messageV) };
@@ -4782,7 +4783,7 @@ public class Env
 
   public Value createException(String exceptionClass, String ...args)
   {
-    QuercusClass cls = getClass(exceptionClass);
+    QuercusClass cls = getClass(VHelper.noCtx(), exceptionClass);
 
     V<? extends Value>[] argsV = new V[args.length];
 
@@ -4806,7 +4807,7 @@ public class Env
    */
   public Value createException(Throwable e)
   {
-    QuercusClass cls = findClass("Exception");
+    QuercusClass cls = findClass(VHelper.noCtx(), "Exception");
 
     StringValue message = createString(e.getMessage());
     Value []args = { message };
@@ -5067,9 +5068,9 @@ public class Env
    * @param name the class name
    * @return the found class or null if no class found.
    */
-  public QuercusClass findClass(String name)
+  public QuercusClass findClass(FeatureExpr ctx, String name)
   {
-    return findClass(name, -1, true, true, true);
+    return findClass(ctx, name, -1, true, true, true);
   }
 
   /**
@@ -5079,12 +5080,13 @@ public class Env
    * @param useAutoload use autoload to locate the class if necessary
    * @return the found class or null if no class found.
    */
-  public QuercusClass findClass(String name,
+  public QuercusClass findClass(FeatureExpr ctx,
+                                String name,
                                 boolean useAutoload,
                                 boolean useImport,
                                 boolean useAliasMap)
   {
-    return findClass(name, -1, useAutoload, useImport, useAliasMap);
+    return findClass(ctx, name, -1, useAutoload, useImport, useAliasMap);
   }
 
   /**
@@ -5093,9 +5095,9 @@ public class Env
    * @param name the class name
    * @return the found class or null if no class found.
    */
-  public QuercusClass findClass(int id)
+  public QuercusClass findClass(FeatureExpr ctx, int id)
   {
-    return findClass(null, id, true, true, true);
+    return findClass(ctx, null, id, true, true, true);
   }
 
   /**
@@ -5105,12 +5107,12 @@ public class Env
    * @param useAutoload use autoload to locate the class if necessary
    * @return the found class or null if no class found.
    */
-  public QuercusClass findClass(int id,
+  public QuercusClass findClass(FeatureExpr ctx, int id,
                                 boolean useAutoload,
                                 boolean useImport,
                                 boolean useAliasMap)
   {
-    return findClass(null, id, useAutoload, useImport, useAliasMap);
+    return findClass(ctx, null, id, useAutoload, useImport, useAliasMap);
   }
 
   /**
@@ -5120,7 +5122,8 @@ public class Env
    * @param useAutoload use autoload to locate the class if necessary
    * @return the found class or null if no class found.
    */
-  public QuercusClass findClass(String name,
+  public QuercusClass findClass(FeatureExpr ctx,
+                                String name,
                                 int id,
                                 boolean useAutoload,
                                 boolean useImport,
@@ -5138,7 +5141,7 @@ public class Env
       return _qClass[id];
     }
 
-    QuercusClass cl = createClassFromCache(id, useAutoload, useImport, useAliasMap);
+    QuercusClass cl = createClassFromCache(ctx, id, useAutoload, useImport, useAliasMap);
 
     if (cl != null) {
       _qClass[id] = cl;
@@ -5160,7 +5163,7 @@ public class Env
       }
 
       if (qcl == null) {
-        qcl = findClassExt(name, id, useAutoload, useImport, useAliasMap);
+        qcl = findClassExt(ctx, name, id, useAutoload, useImport, useAliasMap);
       }
 
       if (qcl != null) {
@@ -5174,7 +5177,8 @@ public class Env
     }
   }
 
-  private QuercusClass findClassExt(String name,
+  private QuercusClass findClassExt(FeatureExpr ctx,
+                                    String name,
                                     int id,
                                     boolean useAutoload,
                                     boolean useImport,
@@ -5196,24 +5200,23 @@ public class Env
           for (int i = 0; i < size; i++) {
             Callable cb = _autoloadList.get(i);
 
-            cb.call(this, VHelper.noCtx(), V.one(nameString));
+            cb.call(this, ctx, V.one(ctx, nameString));
 
             // php/0977
-            QuercusClass cls = findClass(name, id, false, useImport, useAliasMap);
+            QuercusClass cls = findClass(ctx, name, id, false, useImport, useAliasMap);
 
             if (cls != null)
               return cls;
           }
 
           if (size == 0) {
-            if (_autoload == null)
-              _autoload = findFunction(createString("__autoload")).getOne();
+            _autoload = _autoload.pflatMap(ctx, (c, v) -> (v == null ? findFunction(createString("__autoload")) : V.one(c, v)), Function.identity());
+
+            _autoload.smap(ctx, (c, v) -> v != null ? v.call(this, c, V.one(c, nameString)) : null);
 
             if (_autoload != null) {
-              _autoload.call(this, VHelper.noCtx(), V.one(nameString));
-
               // php/0976
-              QuercusClass cls = findClass(name, id, false, useImport, useAliasMap);
+              QuercusClass cls = findClass(ctx, name, id, false, useImport, useAliasMap);
 
               if (cls != null)
                 return cls;
@@ -5226,8 +5229,8 @@ public class Env
     }
 
     if (useImport) {
-      if (importPhpClass(VHelper.noCtx(), name)) {
-        return findClass(name, id, false, false, useAliasMap);
+      if (importPhpClass(ctx, name)) {
+        return findClass(ctx, name, id, false, false, useAliasMap);
       }
       else {
         try {
@@ -5255,7 +5258,7 @@ public class Env
   /**
    * Returns the class with the given id
    */
-  public QuercusClass getClass(int classId)
+  public QuercusClass getClass(FeatureExpr ctx, int classId)
   {
     if (_qClass.length <= classId) {
       QuercusClass []oldClassList = _qClass;
@@ -5283,7 +5286,7 @@ public class Env
     ClassDef def = _classDef[classId];
 
     if (def == null) {
-      QuercusClass cl = findClass(null, classId, true, true, true);
+      QuercusClass cl = findClass(ctx, null, classId, true, true, true);
 
       if (cl != null)
         return cl;
@@ -5302,7 +5305,7 @@ public class Env
     if (def.getParentName() != null)
       parentId = _quercus.getClassId(def.getParentName());
 
-    addClass(def, classId, parentId);
+    addClass(ctx, def, classId, parentId);
 
     return _qClass[classId];
   }
@@ -5314,7 +5317,7 @@ public class Env
    * @param classId the identifier for the class name
    * @param parentId the identifier for the parent class name
    */
-  public void addClass(ClassDef def, int classId, int parentId)
+  public void addClass(FeatureExpr ctx, ClassDef def, int classId, int parentId)
   {
     def = def.loadClassDef();
 
@@ -5328,7 +5331,7 @@ public class Env
     QuercusClass parentClass = null;
 
     if (parentId >= 0)
-      parentClass = getClass(parentId);
+      parentClass = getClass(ctx, parentId);
 
     QuercusClass qClass = _quercus.getCachedClass(classId);
 
@@ -5353,7 +5356,7 @@ public class Env
     qClass.init(this);
   }
 
-  public void addClass(String name, ClassDef def)
+  public void addClass(FeatureExpr ctx, String name, ClassDef def)
   {
     int id = _quercus.getClassId(name);
 
@@ -5362,7 +5365,7 @@ public class Env
     if (def.getParentName() != null)
       parentId = _quercus.getClassId(def.getParentName());
 
-    addClass(def, id, parentId);
+    addClass(ctx, def, id, parentId);
   }
 
   /**
@@ -5374,7 +5377,8 @@ public class Env
    *
    * @return the found class or null if no class found.
    */
-  private QuercusClass createClassFromCache(int id,
+  private QuercusClass createClassFromCache(FeatureExpr ctx,
+                                            int id,
                                             boolean useAutoload,
                                             boolean useImport,
                                             boolean useAliasMap)
@@ -5387,7 +5391,7 @@ public class Env
       QuercusClass parent = null;
 
       if (parentName != null) {
-        parent = findClass(parentName, -1, useAutoload, useImport, useAliasMap);
+        parent = findClass(ctx, parentName, -1, useAutoload, useImport, useAliasMap);
       }
 
       if (parentName == null || parent != null) {
@@ -5528,9 +5532,9 @@ public class Env
    * @param name the class name
    * @return the found class or null if no class found.
    */
-  public QuercusClass findAbstractClass(String name)
+  public QuercusClass findAbstractClass(FeatureExpr ctx, String name)
   {
-    QuercusClass cl = findClass(name, -1, true, true, true);
+    QuercusClass cl = findClass(ctx, name, -1, true, true, true);
 
     if (cl != null) {
       return cl;
@@ -5551,9 +5555,9 @@ public class Env
    * @return the found class
    * @throws QuercusRuntimeException if the class is not found
    */
-  public QuercusClass getClass(String name)
+  public QuercusClass getClass(FeatureExpr ctx, String name)
   {
-    QuercusClass cl = findClass(name);
+    QuercusClass cl = findClass(ctx, name);
 
     if (cl != null)
       return cl;
@@ -5638,9 +5642,9 @@ public class Env
    * @param methodName the method name
    * @return the found method or null if no method found.
    */
-  public AbstractFunction findFunction(String className, String methodName)
+  public AbstractFunction findFunction(FeatureExpr ctx, String className, String methodName)
   {
-    QuercusClass cl = findClass(className);
+    QuercusClass cl = findClass(ctx, className);
 
     if (cl == null)
       throw new QuercusRuntimeException(L.l("'{0}' is an unknown class",

@@ -236,7 +236,7 @@ public class ConstExpr extends Expr {
   {
     V<? extends String> className = evalString(env, ctx);
 
-    return className.map((cn)->env.getClass(cn));
+    return className.smap(ctx, (c, cn) -> env.getClass(c, cn));
   }
 
   public String toString()

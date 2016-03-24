@@ -38,8 +38,8 @@ import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -101,7 +101,7 @@ public class ClassConstExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    return VHelper.toV(env.getClass(_className).getConstant(env, _name));
+    return VHelper.toV(env.getClass(ctx, _className).getConstant(env, _name));
   }
 
   public String toString()

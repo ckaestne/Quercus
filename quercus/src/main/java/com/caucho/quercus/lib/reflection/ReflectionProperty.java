@@ -83,7 +83,7 @@ public class ReflectionProperty
                                                String clsName,
                                                StringValue propName)
   {
-    QuercusClass cls = env.findClass(clsName);
+    QuercusClass cls = env.findClass(VHelper.noCtx(), clsName);
 
     if (cls == null) {
       throw new ReflectionException(env, L.l("Cannot find class '{0}'", clsName));

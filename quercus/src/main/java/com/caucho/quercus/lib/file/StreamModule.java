@@ -39,6 +39,7 @@ import com.caucho.vfs.FilePath;
 import com.caucho.vfs.MemoryPath;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.TempBuffer;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -409,12 +410,12 @@ public class StreamModule extends AbstractQuercusModule {
     }
   }
 
-  public static boolean stream_register_wrapper(Env env,
+  public static boolean stream_register_wrapper(Env env, FeatureExpr ctx,
                                                 StringValue protocol,
                                                 String className,
                                                 @Optional int flags)
   {
-    return stream_wrapper_register(env, protocol, className, flags);
+    return stream_wrapper_register(env, ctx, protocol, className, flags);
   }
 
   public static Value stream_resolve_include_path(Env env, StringValue relPath)
@@ -628,7 +629,7 @@ public class StreamModule extends AbstractQuercusModule {
   /**
    * Register a wrapper for a protocol.
    */
-  public static boolean stream_wrapper_register(Env env,
+  public static boolean stream_wrapper_register(Env env, FeatureExpr ctx,
                                                 StringValue protocol,
                                                 String className,
                                                 @Optional int flags)
@@ -639,7 +640,7 @@ public class StreamModule extends AbstractQuercusModule {
       return false;
     }
 
-    QuercusClass qClass = env.getClass(className);
+    QuercusClass qClass = env.getClass(ctx, className);
 
     env.addStreamWrapper(protocol, new ProtocolWrapper(qClass));
 

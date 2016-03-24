@@ -86,7 +86,7 @@ public class ClassConstructExpr extends AbstractMethodExpr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    QuercusClass cl = env.findClass(_className);
+    QuercusClass cl = env.findClass(ctx, _className);
 
     if (cl == null) {
       env.error(L.l("no matching class {0}", _className), getLocation());

@@ -234,7 +234,7 @@ public class QuercusClass extends NullValue {
       QuercusClass cls;
 
       // XXX: php/0cn2, but this is wrong:
-      cls = Env.getInstance().findClass(iface, -1,
+      cls = Env.getInstance().findClass(VHelper.noCtx(), iface, -1,
                                         ! isJavaClassDef, true, true);
 
       if (cls == null) {
@@ -261,7 +261,7 @@ public class QuercusClass extends NullValue {
   private void addTraitMethods(HashSet<String> traitSet, ClassDef classDef)
   {
     for (String trait : classDef.getTraits()) {
-      QuercusClass cls = Env.getInstance().findClass(trait);
+      QuercusClass cls = Env.getInstance().findClass(VHelper.noCtx(), trait);
 
       if (cls == null) {
         Env.getInstance().createErrorException(L.l("cannot find trait {0}",
@@ -281,7 +281,7 @@ public class QuercusClass extends NullValue {
   private void addTraitFields(HashSet<String> traitSet, ClassDef classDef)
   {
     for (String trait : classDef.getTraits()) {
-      QuercusClass cls = Env.getInstance().findClass(trait);
+      QuercusClass cls = Env.getInstance().findClass(VHelper.noCtx(), trait);
 
       if (cls == null) {
         Env.getInstance().createErrorException(L.l("cannot find trait {0}",
@@ -1355,11 +1355,11 @@ public class QuercusClass extends NullValue {
    * Returns an array of the interfaces that this class and its parents
    * implements.
    */
-  public ArrayValue getInterfaces(Env env, boolean autoload)
+  public ArrayValue getInterfaces(Env env, FeatureExpr ctx, boolean autoload)
   {
     ArrayValue array = new ArrayValueImpl();
 
-    getInterfaces(env, array, autoload, true);
+    getInterfaces(env, ctx, array, autoload, true);
 
     return array;
   }
@@ -1368,7 +1368,7 @@ public class QuercusClass extends NullValue {
    * Puts the interfaces that this class and its parents implements
    * into the array.
    */
-  private void getInterfaces(Env env, ArrayValue array,
+  private void getInterfaces(Env env, FeatureExpr ctx, ArrayValue array,
                              boolean autoload, boolean isTop)
   {
     ClassDef [] defList = _classDefList;
@@ -1385,14 +1385,14 @@ public class QuercusClass extends NullValue {
       String []defNames = def.getInterfaces();
 
       for (int j = 0; j < defNames.length; j++) {
-        QuercusClass cls = env.findClass(defNames[j]);
+        QuercusClass cls = env.findClass(ctx, defNames[j]);
 
-        cls.getInterfaces(env, array, autoload, false);
+        cls.getInterfaces(env, ctx, array, autoload, false);
       }
     }
 
     if (_parent != null)
-      _parent.getInterfaces(env, array, autoload, false);
+      _parent.getInterfaces(env, ctx, array, autoload, false);
   }
 
   /**
@@ -1411,7 +1411,7 @@ public class QuercusClass extends NullValue {
       String []defNames = def.getInterfaces();
 
       for (int j = 0; j < defNames.length; j++) {
-        QuercusClass cls = env.findClass(defNames[j]);
+        QuercusClass cls = env.findClass(VHelper.noCtx(), defNames[j]);
 
         if (cls.implementsInterface(env, name))
           return true;
@@ -2521,7 +2521,7 @@ public class QuercusClass extends NullValue {
   }
 
   @Override
-  public QuercusClass findQuercusClass(Env env)
+  public QuercusClass findQuercusClass(Env env, FeatureExpr ctx)
   {
     return this;
   }

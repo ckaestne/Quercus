@@ -92,9 +92,9 @@ public class ClassVarNameConstExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    StringValue name = _name.evalStringValue(env, ctx).getOne();
+    StringValue name = _name.evalStringValue(env, ctx).getOne(ctx);
 
-    return VHelper.toV(env.getClass(_className).getConstant(env, name));
+    return VHelper.toV(env.getClass(ctx, _className).getConstant(env, name));
   }
 
   @Override

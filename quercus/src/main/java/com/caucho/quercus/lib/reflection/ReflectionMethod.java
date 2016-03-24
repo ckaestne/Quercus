@@ -78,7 +78,7 @@ public class ReflectionMethod extends ReflectionFunctionAbstract
     else
       clsName = obj.toString();
 
-    return new ReflectionMethod(clsName, env.getClass(clsName).getFunction(name));
+    return new ReflectionMethod(clsName, env.getClass(VHelper.noCtx(), clsName).getFunction(name));
   }
 
   public static String export(Env env,

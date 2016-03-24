@@ -90,8 +90,8 @@ public class ObjectNewVarExpr extends Expr {
   @Override
   @Nonnull protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    String name = _name.evalString(env, ctx).getOne().intern();
-    QuercusClass cl = env.findAbstractClass(name);
+    String name = _name.evalString(env, ctx).getOne(ctx).intern();
+    QuercusClass cl = env.findAbstractClass(ctx, name);
 
     _fullArgs = _args;
 

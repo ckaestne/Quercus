@@ -29,7 +29,9 @@
 
 package com.caucho.quercus.lib;
 
-import com.caucho.quercus.annotation.*;
+import com.caucho.quercus.annotation.Optional;
+import com.caucho.quercus.annotation.ReadOnly;
+import com.caucho.quercus.annotation.ReturnNullAsFalse;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.expr.Expr;
 import com.caucho.quercus.function.AbstractFunction;
@@ -65,7 +67,7 @@ public class ClassesModule extends AbstractQuercusModule {
       return obj.getOne().callMethod(env, ctx, name.getOne(), args).map((a) -> a.toValue());
     }
     else {
-      QuercusClass cls = env.getClass(obj.toString());
+      QuercusClass cls = env.getClass(ctx, obj.toString());
 
       V<? extends Value> result
               = cls.callMethod(env, ctx, env.getThis(), name.getOne(), name.hashCode(), args).map((a) -> a.toValue());
@@ -92,11 +94,11 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * bool class_alias ( string $original , string $alias [, bool $autoload = TRUE ] )
    */
-  public boolean class_alias(Env env,
+  public boolean class_alias(Env env, FeatureExpr ctx,
                              String original, String alias,
                              @Optional("true") boolean isAutoLoad)
   {
-    QuercusClass aliasCls = env.findClass(alias, -1, false, true, true);
+    QuercusClass aliasCls = env.findClass(ctx, alias, -1, false, true, true);
 
     if (aliasCls != null) {
       env.warning(L.l("cannot redeclare class {0}", alias));
@@ -104,7 +106,7 @@ public class ClassesModule extends AbstractQuercusModule {
       return false;
     }
 
-    QuercusClass cls = env.findClass(original, -1, isAutoLoad, true, true);
+    QuercusClass cls = env.findClass(ctx, original, -1, isAutoLoad, true, true);
 
     if (cls == null) {
       env.warning(L.l("original class not found {0}", original));
@@ -120,14 +122,14 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * returns true if the class exists.
    */
-  public static boolean class_exists(Env env,
+  public static boolean class_exists(Env env, FeatureExpr ctx,
                                      String className,
                                      @Optional("true") boolean useAutoload)
   {
     if (className == null)
       return false;
 
-    QuercusClass cl =  env.findClass(className, -1, useAutoload, true, true);
+    QuercusClass cl = env.findClass(ctx, className, -1, useAutoload, true, true);
 
     // php/[03]9m1
     return cl != null && ! cl.isInterface();
@@ -178,7 +180,7 @@ public class ClassesModule extends AbstractQuercusModule {
    *
    * @return an array of method names
    */
-  public static Value get_class_methods(Env env, Value cls)
+  public static Value get_class_methods(Env env, FeatureExpr ctx, Value cls)
   {
     // php/1j11
 
@@ -187,7 +189,7 @@ public class ClassesModule extends AbstractQuercusModule {
     if (cls.isObject())
       cl = cls.getQuercusClass();
     else
-      cl = env.findClass(cls.toString());
+      cl = env.findClass(ctx, cls.toString());
 
     if (cl == null)
       return NullValue.NULL;
@@ -216,7 +218,7 @@ public class ClassesModule extends AbstractQuercusModule {
    *
    * @return an array of member names and values
    */
-  public static Value get_class_vars(Env env, Value obj)
+  public static Value get_class_vars(Env env, FeatureExpr ctx, Value obj)
   {
     // php/1j10
 
@@ -225,7 +227,7 @@ public class ClassesModule extends AbstractQuercusModule {
     if (obj instanceof ObjectValue)
       cl = obj.getQuercusClass();
     else
-      cl = env.findClass(obj.toString());
+      cl = env.findClass(ctx, obj.toString());
 
     if (cl == null)
       return BooleanValue.FALSE;
@@ -288,7 +290,7 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * Returns the object's class name
    */
-  public Value get_parent_class(Env env, @ReadOnly Value value)
+  public Value get_parent_class(Env env, FeatureExpr ctx, @ReadOnly Value value)
   {
     if (value instanceof ObjectValue) {
       ObjectValue obj = (ObjectValue) value;
@@ -301,7 +303,7 @@ public class ClassesModule extends AbstractQuercusModule {
     else if (value.isString()) {
       String className = value.toString();
 
-      QuercusClass cl = env.findClass(className);
+      QuercusClass cl = env.findClass(ctx, className);
 
       if (cl != null) {
         String parent = cl.getParentName();
@@ -317,11 +319,11 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * Returns true if the class exists.
    */
-  public boolean interface_exists(Env env,
+  public boolean interface_exists(Env env, FeatureExpr ctx,
                                   String interfaceName,
                                   @Optional("true") boolean useAutoload)
   {
-    QuercusClass cl =  env.findClass(interfaceName, -1, useAutoload, true, true);
+    QuercusClass cl = env.findClass(ctx, interfaceName, -1, useAutoload, true, true);
 
     // php/[03]9m0
     return cl != null && cl.isInterface();
@@ -346,12 +348,12 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * Returns true if the object implements the given class.
    */
-  public static boolean is_subclass_of(Env env,
+  public static boolean is_subclass_of(Env env, FeatureExpr ctx,
                                        @ReadOnly Value value,
                                        String name)
   {
     if (value.isString()) {
-      QuercusClass cl = env.findClass(value.toString());
+      QuercusClass cl = env.findClass(ctx, value.toString());
 
       return cl.isA(env, name) && ! cl.getName().equalsIgnoreCase(name);
     }
@@ -366,7 +368,7 @@ public class ClassesModule extends AbstractQuercusModule {
    * @param obj the object to test
    * @param methodName the name of the method
    */
-  public static boolean method_exists(Env env,
+  public static boolean method_exists(Env env, FeatureExpr ctx,
                                       Value obj,
                                       StringValue methodName)
   {
@@ -380,7 +382,7 @@ public class ClassesModule extends AbstractQuercusModule {
 
 
     if (qClass == null) {
-      qClass = env.findClass(obj.toString());
+      qClass = env.findClass(ctx, obj.toString());
     }
 
     if (qClass != null) {
@@ -394,12 +396,12 @@ public class ClassesModule extends AbstractQuercusModule {
   /**
    * Returns true if the named property exists on the object.
    */
-  public static Value property_exists(Env env,
+  public static Value property_exists(Env env, FeatureExpr ctx,
                                       Value obj,
                                       StringValue name)
   {
     if (obj.isString()) {
-      QuercusClass cls = env.findClass(obj.toString());
+      QuercusClass cls = env.findClass(ctx, obj.toString());
 
       if (cls != null && cls.getClassField(name) != null)
         return BooleanValue.TRUE;

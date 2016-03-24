@@ -336,7 +336,7 @@ public class JdbcResultResource
         Value result;
 
         if (className != null) {
-          QuercusClass cls = env.findClass(className);
+          QuercusClass cls = env.findClass(VHelper.noCtx(), className);
 
           if (args == null) {
             args = Value.VNULL_ARGS;
