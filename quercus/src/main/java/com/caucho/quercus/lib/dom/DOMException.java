@@ -33,6 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusLanguageException;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import edu.cmu.cs.varex.VHelper;
 
 public class DOMException
   extends QuercusLanguageException
@@ -62,6 +63,6 @@ public class DOMException
   @Override
   public Value toValue(Env env)
   {
-    return env.createException("DOMException", getValue().toString());
+    return env.createException(VHelper.noCtx(), "DOMException", getValue().toString());
   }
 }

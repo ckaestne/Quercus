@@ -34,6 +34,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.VariableModule;
 import com.caucho.util.L10N;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -179,7 +180,7 @@ public class SplObjectStorage
     ObjectEntry entry = _objMap.get(hash);
 
     if (entry == null) {
-      Value e = env.createException("UnexpectedValueException", L.l("{0} not found", hash));
+      Value e = env.createException(VHelper.noCtx(), "UnexpectedValueException", L.l("{0} not found", hash));
 
       throw new QuercusLanguageException(e);
     }

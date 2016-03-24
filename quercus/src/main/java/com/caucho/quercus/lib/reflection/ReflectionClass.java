@@ -38,6 +38,7 @@ import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.program.ClassDef;
 import com.caucho.quercus.program.ClassField;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 
@@ -208,7 +209,7 @@ public class ReflectionClass
 
     if (fun == null)
       throw new QuercusLanguageException(
-        env.createException("ReflectionException",
+              env.createException(VHelper.noCtx(), "ReflectionException",
                             L.l("method {0}::{1}() does not exist",
                                 _name,
                                 name)));
@@ -368,18 +369,18 @@ public class ReflectionClass
     return obj.isA(env, _name);
   }
 
-  public Value newInstance(Env env, @Optional V<? extends ValueOrVar> []args)
+  public Value newInstance(Env env, FeatureExpr ctx, @Optional V<? extends ValueOrVar>[] args)
   {
-    return _cls.callNew(env, args);
+    return _cls.callNew(env, ctx, args).getOne(ctx);
   }
 
-  public Value newInstanceArgs(Env env, @Optional ArrayValue args)
+  public Value newInstanceArgs(Env env, FeatureExpr ctx, @Optional ArrayValue args)
   {
     if (args == null) {
-      return _cls.callNew(env);
+      return _cls.callNew(env, ctx).getOne(ctx);
     }
     else {
-      return _cls.callNew(env, VHelper.toVArray(args.getValueArray(env)));
+      return _cls.callNew(env, ctx, VHelper.toVArray(args.getValueArray(env))).getOne(ctx);
     }
   }
 
@@ -435,7 +436,7 @@ public class ReflectionClass
     getStaticFields(env, array, cls.getParent());
   }
 
-  public Value getStaticPropertyValue(Env env,
+  public Value getStaticPropertyValue(Env env, FeatureExpr ctx,
                                       StringValue name,
                                       @Optional Value defaultV)
   {
@@ -446,7 +447,7 @@ public class ReflectionClass
         return defaultV;
       else
         throw new QuercusLanguageException(
-            env.createException(
+                env.createException(ctx,
                 "ReflectionException",
                 L.l(
                     "Class '{0}' does not have a property named '{1}'",

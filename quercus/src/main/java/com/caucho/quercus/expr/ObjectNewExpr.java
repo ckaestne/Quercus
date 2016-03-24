@@ -36,7 +36,6 @@ import com.caucho.quercus.env.QuercusClass;
 import com.caucho.quercus.env.ValueOrVar;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
-import edu.cmu.cs.varex.VHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -98,7 +97,7 @@ public class ObjectNewExpr extends Expr {
 
       env.checkTimeout();
 
-      return VHelper.toV(cl.callNew(env, args));
+      return cl.callNew(env, ctx, args);
     } finally {
       env.popCall();
     }

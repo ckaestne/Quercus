@@ -342,7 +342,7 @@ public class JdbcResultResource
             args = Value.VNULL_ARGS;
           }
 
-          result = cls.callNew(env, args);
+          result = cls.callNew(env, VHelper.noCtx(), args).getOne();
         }
         else {
           result = env.createObject();

@@ -32,6 +32,7 @@ import com.caucho.quercus.Location;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.QuercusLanguageException;
 import com.caucho.quercus.env.Value;
+import edu.cmu.cs.varex.VHelper;
 
 public class PDOException
   extends QuercusLanguageException
@@ -81,7 +82,7 @@ public class PDOException
   @Override
   public Value toValue(Env env)
   {
-    Value e = env.createException("PDOException", _code, _message);
+    Value e = env.createException(VHelper.noCtx(), "PDOException", _code, _message);
 
     return e;
   }

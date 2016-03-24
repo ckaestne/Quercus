@@ -60,7 +60,7 @@ public class WrappedDirectory extends Directory {
   {
     super();
 
-    _wrapper = qClass.callNew(env, Value.VNULL_ARGS);
+    _wrapper = qClass.callNew(env, VHelper.noCtx(), Value.VNULL_ARGS).getOne();
   }
 
   public boolean open(Env env, StringValue path, LongValue flags)

@@ -102,7 +102,7 @@ public class TryStatement extends Statement {
         Catch item = _catchList.get(i);
 
         if (item.getId().equalsString("QuercusDieException")) {
-          item.getExpr().evalAssignValue(env, ctx, VHelper.toV(env.createException(e)));
+          item.getExpr().evalAssignValue(env, ctx, VHelper.toV(env.createException(VHelper.noCtx(), e)));
 
           return item.getBlock().execute(env, ctx);
         }
@@ -115,7 +115,7 @@ public class TryStatement extends Statement {
         Catch item = _catchList.get(i);
 
         if (item.getId().equalsString("QuercusExitException")) {
-          item.getExpr().evalAssignValue(env, ctx, VHelper.toV(env.createException(e)));
+          item.getExpr().evalAssignValue(env, ctx, VHelper.toV(env.createException(VHelper.noCtx(), e)));
 
           return item.getBlock().execute(env, ctx);
         }
@@ -133,7 +133,7 @@ public class TryStatement extends Statement {
           //if (e instanceof QuercusException && e.getCause() != null)
             //cause = e.getCause();
 
-          item.getExpr().evalAssignValue(env, ctx, VHelper.toV(env.createException(cause)));
+          item.getExpr().evalAssignValue(env, ctx, VHelper.toV(env.createException(VHelper.noCtx(), cause)));
 
           return item.getBlock().execute(env, ctx);
         }

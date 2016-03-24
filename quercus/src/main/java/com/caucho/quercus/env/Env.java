@@ -4763,14 +4763,14 @@ public class Env
     return string;
   }
 
-  public Value createException(String exceptionClass, String message)
+  public Value createException(FeatureExpr ctx, String exceptionClass, String message)
   {
-    QuercusClass cls = getClass(VHelper.noCtx(), exceptionClass);
+    QuercusClass cls = getClass(ctx, exceptionClass);
 
     StringValue messageV = createString(message);
-    V<? extends Value> []args = new V[]{ V.one(messageV) };
+    V<? extends Value>[] args = new V[]{V.one(ctx, messageV)};
 
-    Value value = cls.callNew(this, args);
+    Value value = cls.callNew(this, ctx, args).getOne(ctx);
 
     Location location = getLocation();
 
@@ -4781,17 +4781,17 @@ public class Env
     return value;
   }
 
-  public Value createException(String exceptionClass, String ...args)
+  public Value createException(FeatureExpr ctx, String exceptionClass, String... args)
   {
-    QuercusClass cls = getClass(VHelper.noCtx(), exceptionClass);
+    QuercusClass cls = getClass(ctx, exceptionClass);
 
     V<? extends Value>[] argsV = new V[args.length];
 
     for (int i = 0; i < args.length; i++) {
-      argsV[i] = V.one(createString(args[i]));
+      argsV[i] = V.one(ctx, createString(args[i]));
     }
 
-    Value value = cls.callNew(this, argsV);
+    Value value = cls.callNew(this, ctx, argsV).getOne();
 
     Location location = getLocation();
 
@@ -4805,14 +4805,14 @@ public class Env
   /**
    * Creates a PHP Exception.
    */
-  public Value createException(Throwable e)
+  public Value createException(FeatureExpr ctx, Throwable e)
   {
     QuercusClass cls = findClass(VHelper.noCtx(), "Exception");
 
     StringValue message = createString(e.getMessage());
     Value []args = { message };
 
-    Value value = cls.callNew(this, VHelper.toVArray(args));
+    Value value = cls.callNew(this, ctx, VHelper.toVArray(args)).getOne(ctx);
 
     StackTraceElement elt = e.getStackTrace()[0];
 

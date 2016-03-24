@@ -1257,7 +1257,9 @@ public class QuercusClass extends NullValue {
   /**
    * Creates a new instance.
    */
-  public Value callNew(Env env, V<? extends ValueOrVar> ...args)
+  public
+  @Nonnull
+  V<? extends Value> callNew(Env env, FeatureExpr ctx, V<? extends ValueOrVar>... args)
   {
     QuercusClass oldCallingClass = env.setCallingClass(this);
 
@@ -1278,9 +1280,7 @@ public class QuercusClass extends NullValue {
       ObjectValue objectValue = null;
 
       if (_isJavaWrapper) {
-        Value obj = _javaClassDef.callNew(env,VHelper.noCtx(), args).getOne().toValue();
-
-        return obj;
+        return _javaClassDef.callNew(env, ctx, args).flatMap(a -> a._getValues());
       }
       else if (_javaClassDef != null && _javaClassDef.isDelegate()) {
         objectValue = new ObjectExtValue(env, this);
@@ -1306,12 +1306,12 @@ public class QuercusClass extends NullValue {
       AbstractFunction fun = findConstructor();
 
       if (fun != null)
-        fun.callNew(env, VHelper.noCtx(), this, objectValue, args);
+        fun.callNew(env, ctx, this, objectValue, args);
       else {
         //  if expr
       }
 
-      return objectValue;
+      return V.one(ctx, objectValue);
     }
     finally {
       env.setCallingClass(oldCallingClass);
