@@ -8,6 +8,7 @@ import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse, Part
 import com.caucho.quercus.TQuercus
 import com.openbrace.obmimic.mimic.servlet.http.HttpServletRequestMimic
 import com.openbrace.obmimic.support.servlet.{EndPoint, URLEncodedRequestParameters}
+import de.fosd.typechef.featureexpr.FeatureExprFactory
 import edu.cmu.cs.varex.vio.VWriteStreamImpl
 import net.liftweb.mocks.MockHttpServletRequest
 import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
@@ -19,6 +20,8 @@ class AbstractPHPTest {
 
     val phpRootDir = new File(".")
     assert(phpRootDir.exists(), s"folder $phpRootDir not found")
+
+    val featureCtx = FeatureExprFactory.createDefinedExternal("CTX")
 
     def testFile(phptFile: String): Unit = {
         val file = new File(phptFile)
@@ -80,14 +83,25 @@ class AbstractPHPTest {
             replaceAll("\n?Deprecated: [^\\n]*\n", "").
             replaceAll("\n?Strict Standards:  [^\\n]*\n", "")
 
-        val out = new VWriteStreamImpl()
-        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request, VHelper.True())
-        val phpResult = out.getPlainOutput.trim
+//        val out = new VWriteStreamImpl()
+//        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request, VHelper.True())
+//        val phpResult = out.getPlainOutput.trim
+//
+//
+//        assert(matchResult(expectedResult, phpResult, content contains "EXPECTF", content contains "EXPECTREGEX"),
+//            explainResult(expectedResult, phpResult, phptFile))
+
+        //additionally execute under specific context. expect to get a choice between that the previous output (under the given condition) and nothing
+        val cout = new VWriteStreamImpl()
+        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, cout, request, featureCtx)
+        val cphpResult = cout.getConditionalOutput.filter(_.getCondition.evaluate(Set(featureCtx.feature))).map(_.getValue).mkString.trim
+        val otherphpResult = cout.getConditionalOutput.filter(_.getCondition.evaluate(Set())).map(_.getValue).mkString.trim
+        assert(matchResult(expectedResult, cphpResult, content contains "EXPECTF", content contains "EXPECTREGEX"),
+            explainResult(expectedResult, cphpResult, phptFile))
+        assert(otherphpResult == "", "found unexpected output under condition "+featureCtx.not()+":\n"+otherphpResult)
+
 
         testedFile.deleteOnExit()
-
-        assert(matchResult(expectedResult, phpResult, content contains "EXPECTF", content contains "EXPECTREGEX"),
-            explainResult(expectedResult, phpResult, phptFile))
     }
 
     def createRequest(content: Map[String, String]): HttpServletRequest = {
