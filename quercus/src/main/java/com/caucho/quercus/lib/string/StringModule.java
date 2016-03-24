@@ -41,6 +41,7 @@ import com.caucho.util.*;
 import com.caucho.vfs.ByteToChar;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.TempBuffer;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
@@ -1466,9 +1467,9 @@ public class StringModule extends AbstractQuercusModule {
    * @param env the quercus environment
    * @param value the string to print
    */
-  public static long print(Env env, Value value)
+  public static long print(Env env, FeatureExpr ctx, Value value)
   {
-    value.print(env, VHelper.noCtx());
+    value.print(env, ctx);
 
     return 1;
   }
@@ -1482,11 +1483,11 @@ public class StringModule extends AbstractQuercusModule {
    *
    * @return the formatted string
    */
-  public static int printf(Env env, StringValue format, Value []args)
+  public static int printf(Env env, FeatureExpr ctx, StringValue format, Value[] args)
   {
     Value str = sprintf(env, format, args);
 
-    str.print(env, VHelper.noCtx());
+    str.print(env, ctx);
 
     return str.length();
   }
@@ -5051,22 +5052,22 @@ public class StringModule extends AbstractQuercusModule {
    * @param format the format string
    * @param array the arguments to apply to the format string
    */
-  public static int vprintf(Env env,
+  public static int vprintf(Env env, FeatureExpr ctx,
                             StringValue format,
                             @NotNull ArrayValue array)
   {
     Value []args;
 
     if (array != null) {
-      args = new Value[array.getSize().getOne()];
+      args = new Value[array.getSize().getOne(ctx)];
       int i = 0;
       for (EnvVar value : array.values())
-        args[i++] = value.getOne();
+        args[i++] = value.getOne(ctx);
     }
     else
       args = new Value[0];
 
-    return printf(env, format, args);
+    return printf(env, ctx, format, args);
   }
 
   /**
