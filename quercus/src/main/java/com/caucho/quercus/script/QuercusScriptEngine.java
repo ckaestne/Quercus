@@ -286,7 +286,7 @@ public class QuercusScriptEngine
     }
     finally {
       if (env != null) {
-        env.close();
+        env.close(VHelper.noCtx());
       }
     }
   }

@@ -152,7 +152,7 @@ public class QuercusCompiledScript extends CompiledScript {
       throw new RuntimeException(e);
     } finally {
       if (env != null)
-        env.close();
+        env.close(VHelper.noCtx());
     }
   }
 

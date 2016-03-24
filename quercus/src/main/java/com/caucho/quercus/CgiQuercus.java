@@ -93,7 +93,7 @@ public class CgiQuercus
     } catch (QuercusExitException e) {
     }
 
-    env.close();
+    env.close(VHelper.True());
 
     os.flush();
   }

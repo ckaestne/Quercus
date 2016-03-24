@@ -41,9 +41,9 @@ import edu.cmu.cs.varex.VWriteStream;
 import edu.cmu.cs.varex.vio.VWriteStreamImpl;
 import net.liftweb.mocks.MockHttpServletRequest;
 import net.liftweb.mocks.MockHttpServletResponse;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
@@ -159,7 +159,7 @@ public class TQuercus
 //            for (Object header: response.getHeaderNames())
 //                System.out.println(header + ": "+response.getHeader((String)header)) ;
 
-            env.close();
+            env.close(ctx);
 
             ws.flush();
         }

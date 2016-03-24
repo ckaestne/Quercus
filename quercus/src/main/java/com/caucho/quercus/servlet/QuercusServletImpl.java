@@ -250,7 +250,7 @@ public class QuercusServletImpl extends HttpServlet
       }
       finally {
         if (env != null)
-          env.close();
+          env.close(VHelper.noCtx());
 
         // don't want a flush for an exception
         if (ws != null && env.getDuplex() == null)

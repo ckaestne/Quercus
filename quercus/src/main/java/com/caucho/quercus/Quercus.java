@@ -34,7 +34,6 @@ import com.caucho.quercus.page.QuercusPage;
 import com.caucho.vfs.*;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
-import javax.annotation.Nonnull;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -219,7 +218,7 @@ public class Quercus
     } catch (QuercusErrorException e) {
       log.log(Level.FINER, e.toString(), e);
     } finally {
-      env.close();
+      env.close(VHelper.True());
 
       os.flush();
     }
@@ -247,7 +246,7 @@ public class Quercus
     } catch (QuercusErrorException e) {
       log.log(Level.FINER, e.toString(), e);
     } finally {
-      env.close();
+      env.close(VHelper.True());
 
       os.flush();
     }

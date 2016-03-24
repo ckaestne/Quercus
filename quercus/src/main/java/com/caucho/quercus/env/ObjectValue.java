@@ -122,13 +122,13 @@ abstract public class ObjectValue extends Callback {
     _incompleteObjectName = null;
   }
 
-  public final void cleanup(Env env)
+  public final void cleanup(Env env, FeatureExpr ctx)
   {
     QuercusClass qClass = getQuercusClass();
     AbstractFunction fun = qClass.getDestructor();
 
     if (fun != null) {
-      fun.callMethod(env, VHelper.noCtx(), qClass, this);
+      fun.callMethod(env, ctx, qClass, this);
     }
   }
 

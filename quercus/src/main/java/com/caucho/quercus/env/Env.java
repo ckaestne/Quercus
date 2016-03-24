@@ -7376,11 +7376,11 @@ public class Env
     */
   }
 
-  public void closeDuplex()
+  public void closeDuplex(FeatureExpr ctx)
   {
     _duplex = null;
 
-    close();
+    close(ctx);
   }
 
   public Object getDuplex()
@@ -7391,7 +7391,7 @@ public class Env
   /**
    * Called when the Env is no longer needed.
    */
-  public void close()
+  public void close(FeatureExpr ctx)
   {
     _quercus.completeEnv(this);
 
@@ -7413,18 +7413,18 @@ public class Env
       //throw new RuntimeException(e);
     //}
     finally {
-      cleanup();
+      cleanup(ctx);
     }
   }
 
-  private void cleanup()
+  private void cleanup(FeatureExpr ctx)
   {
     // cleanup is in reverse order of creation
 
     if (_shutdownList != null) {
       for (int i = 0; i < _shutdownList.size(); i++) {
         try {
-          _shutdownList.get(i).call(this, VHelper.noCtx());
+          _shutdownList.get(i).call(this, ctx);
         }
         catch (Throwable e) {
           log.log(Level.FINE, e.toString(), e);
@@ -7461,7 +7461,7 @@ public class Env
 
         try {
           if (obj != null)
-            obj.cleanup(this);
+            obj.cleanup(this, ctx);
         }
         catch (Throwable e) {
           log.log(Level.FINER, e.toString(), e);
