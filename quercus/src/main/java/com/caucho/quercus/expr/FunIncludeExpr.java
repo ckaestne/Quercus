@@ -30,10 +30,14 @@
 package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
-import com.caucho.quercus.env.*;
+import com.caucho.quercus.env.Env;
+import com.caucho.quercus.env.NullValue;
+import com.caucho.quercus.env.StringValue;
+import com.caucho.quercus.env.ValueOrVar;
 import com.caucho.vfs.Path;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -86,14 +90,16 @@ public class FunIncludeExpr extends AbstractUnaryExpr {
   @Nonnull
   protected V<? extends ValueOrVar> _eval(Env env, FeatureExpr ctx)
   {
-    StringValue name = _expr.eval(env, ctx).getOne().toStringValue();
-      
-    env.pushCall(this, NullValue.NULL, new V[] { V.one(name) });
-    try {
-      return env.include(ctx, _dir, name, _isRequire, false);
-    } finally {
-      env.popCall();
-    }
+    return _expr.eval(env, ctx).sflatMap(ctx, (c, v) -> {
+      StringValue name = v.toStringValue();
+
+      env.pushCall(this, NullValue.NULL, new V[]{V.one(c, name)});
+      try {
+        return env.include(c, _dir, name, _isRequire, false);
+      } finally {
+        env.popCall();
+      }
+    });
   }
   
   public String toString()
