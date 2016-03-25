@@ -29,6 +29,8 @@
 
 package com.caucho.quercus.env;
 
+import edu.cmu.cs.varex.VHelper;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -46,7 +48,7 @@ public class StringBuilderOutputStream
   public void write(byte []buffer, int offset, int length)
     throws IOException
   {
-    _sb.append(buffer, offset, length);
+    _sb.append(VHelper.noCtx(), buffer, offset, length);
   }
 
   @Override

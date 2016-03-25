@@ -128,7 +128,7 @@ public class IconvUtility {
 
       StringValue sb = env.createBinaryBuilder();
       for (TempBuffer ptr = ts.getHead(); ptr != null; ptr = ptr.getNext()) {
-        sb.append(ptr.getBuffer(), 0, ptr.getLength());
+        sb.append(VHelper.noCtx(), ptr.getBuffer(), 0, ptr.getLength());
       }
       
       return sb;
@@ -200,8 +200,8 @@ public class IconvUtility {
 
     StringValue sb = env.createUnicodeBuilder();
     sb.append(VHelper.noCtx(), name);
-    sb.append(':');
-    sb.append(' ');
+    sb.append(VHelper.noCtx(), ':');
+    sb.append(VHelper.noCtx(), ' ');
 
     String word = encodeMimeWord(
             value.toString(), outCharset, scheme, lineBreakChars, lineLength);

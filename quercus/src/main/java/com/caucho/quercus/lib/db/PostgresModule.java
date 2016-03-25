@@ -529,7 +529,7 @@ public class PostgresModule extends AbstractQuercusModule {
             value = LongValue.create(value.toLong());
           } else {
             StringValue sb = env.createUnicodeBuilder();
-            value = sb.append("'").append(VHelper.noCtx(), value).append("'");
+            value = sb.append(VHelper.noCtx(), "'").append(VHelper.noCtx(), value).append(VHelper.noCtx(), "'");
           }
           break;
 
@@ -542,7 +542,7 @@ public class PostgresModule extends AbstractQuercusModule {
             value = DoubleValue.create(value.toDouble());
           } else {
             StringValue sb = env.createUnicodeBuilder();
-            value = sb.append("'").append(VHelper.noCtx(), value).append("'");
+            value = sb.append(VHelper.noCtx(), "'").append(VHelper.noCtx(), value).append(VHelper.noCtx(), "'");
           }
           break;
 
@@ -551,7 +551,7 @@ public class PostgresModule extends AbstractQuercusModule {
           if (value.isNumberConvertible())  {
             value = sb.append(VHelper.noCtx(), value);
           } else {
-            value = sb.append("'").append(VHelper.noCtx(), value).append("'");
+            value = sb.append(VHelper.noCtx(), "'").append(VHelper.noCtx(), value).append(VHelper.noCtx(), "'");
           }
         }
 
@@ -723,21 +723,21 @@ public class PostgresModule extends AbstractQuercusModule {
         for (int i = 0; i < count; i++) {
 
           if (sb.length() > 0)
-            sb.append(delimiter);
+            sb.append(VHelper.noCtx(), delimiter);
 
           //Value v = newArray.get(currValue);
 
           Value fieldValue = arr.get(LongValue.create(i)).getOne();
 
           if (fieldValue instanceof NullValue) {
-            sb.append(nullAs);
+            sb.append(VHelper.noCtx(), nullAs);
           } else {
-            sb.append(fieldValue.toString());
+            sb.append(VHelper.noCtx(), fieldValue.toString());
           }
         }
 
         // Every line has a new-line character.
-        sb.append("\n");
+        sb.append(VHelper.noCtx(), "\n");
 
         newArray.put(currValue, sb);
 
@@ -3010,17 +3010,17 @@ public class PostgresModule extends AbstractQuercusModule {
         if (isFirst) {
           isFirst = false;
         } else {
-          whereClause.append(" AND ");
+          whereClause.append(VHelper.noCtx(), " AND ");
         }
-        whereClause.append(k.toString()).append("='")
-            .append(v.toString()).append("'");
+        whereClause.append(VHelper.noCtx(), k.toString()).append(VHelper.noCtx(), "='")
+                .append(VHelper.noCtx(), v.toString()).append(VHelper.noCtx(), "'");
         // String pi = conn.realEscapeString(p).toString();
         // pi = pi.replaceAll("\\\\", "\\\\\\\\");
       }
 
       StringValue query = env.createUnicodeBuilder();
-      query.append("SELECT * FROM ").append(tableName)
-              .append(" WHERE ").append(VHelper.noCtx(), whereClause);
+      query.append(VHelper.noCtx(), "SELECT * FROM ").append(VHelper.noCtx(), tableName)
+              .append(VHelper.noCtx(), " WHERE ").append(VHelper.noCtx(), whereClause);
 
       PostgresResult result = pg_query(env, conn, query.toString());
 

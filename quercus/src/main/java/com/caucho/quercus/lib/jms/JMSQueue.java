@@ -34,6 +34,7 @@ import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import javax.jms.*;
 import java.io.Serializable;
@@ -178,7 +179,7 @@ public class JMSQueue
         sublen = bytesMessage.readBytes(tempBuffer.getBuffer());
 
         if (sublen > 0)
-          bb.append(tempBuffer.getBuffer(), 0, sublen);
+          bb.append(VHelper.noCtx(), tempBuffer.getBuffer(), 0, sublen);
         else
           break;
       }

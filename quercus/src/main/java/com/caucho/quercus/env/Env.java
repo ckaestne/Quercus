@@ -4052,8 +4052,8 @@ public class Env
     StringValue sb = createStringBuilder();
 
     // PHP naming style for anonymous functions
-    sb.append("\u0000lambda_");
-    sb.append(_anonymousFunMap.size() + 1);
+    sb.append(VHelper.noCtx(), "\u0000lambda_");
+    sb.append(VHelper.noCtx(), _anonymousFunMap.size() + 1);
 
     StringValue name = sb;
 
@@ -4757,7 +4757,7 @@ public class Env
       string = new StringBuilderValue();
 
     for (; head != null; head = head.getNext()) {
-      string.append(head.getBuffer(), 0, head.getLength());
+      string.append(VHelper.noCtx(), head.getBuffer(), 0, head.getLength());
     }
 
     return string;

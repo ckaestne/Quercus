@@ -465,7 +465,7 @@ public class ZlibModule extends AbstractQuercusModule {
         inputBuffer[1] = (byte) 0xda;
       }
 
-      out.append(inputBuffer, 0, 2);
+      out.append(VHelper.noCtx(), inputBuffer, 0, 2);
 
       int len;
       while (! isFinished) {
@@ -483,7 +483,7 @@ public class ZlibModule extends AbstractQuercusModule {
         }
 
         while ((len = deflater.deflate(outputBuffer, 0, outputBuffer.length)) > 0) {
-          out.append(outputBuffer, 0, len);
+          out.append(VHelper.noCtx(), outputBuffer, 0, len);
         }
       }
 
@@ -494,7 +494,7 @@ public class ZlibModule extends AbstractQuercusModule {
       inputBuffer[2] = (byte) (value >> 8);
       inputBuffer[3] = (byte) (value >> 0);
 
-      out.append(inputBuffer, 0, 4);
+      out.append(VHelper.noCtx(), inputBuffer, 0, 4);
 
       return out;
     }
@@ -535,7 +535,7 @@ public class ZlibModule extends AbstractQuercusModule {
 
       int len;
       while ((len = in.read(buffer, 0, buffer.length)) >= 0) {
-        sb.append(buffer, 0, len);
+        sb.append(VHelper.noCtx(), buffer, 0, len);
       }
 
       return sb;
@@ -649,7 +649,7 @@ public class ZlibModule extends AbstractQuercusModule {
 
         int inflatedLength;
         while ((inflatedLength = inflater.inflate(outputBuffer, 0, sublen)) > 0) {
-          sb.append(outputBuffer, 0, inflatedLength);
+          sb.append(VHelper.noCtx(), outputBuffer, 0, inflatedLength);
         }
       }
 
@@ -709,7 +709,7 @@ public class ZlibModule extends AbstractQuercusModule {
 
       StringValue sb = env.createBinaryBuilder();
       for (TempBuffer ptr = ts.getHead(); ptr != null; ptr = ptr.getNext())
-        sb.append(ptr.getBuffer(), 0, ptr.getLength());
+        sb.append(VHelper.noCtx(), ptr.getBuffer(), 0, ptr.getLength());
 
       return sb;
     } catch (IOException e) {

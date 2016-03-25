@@ -175,11 +175,11 @@ public class CgiEnv
           }
           else {
             while (spaces > 0) {
-              sb.append('_');
+              sb.append(VHelper.noCtx(), '_');
               spaces--;
             }
 
-            sb.append(ch);
+            sb.append(VHelper.noCtx(), ch);
           }
 
           break;
@@ -190,11 +190,11 @@ public class CgiEnv
           break;
         default:
           while (spaces > 0) {
-            sb.append('_');
+            sb.append(VHelper.noCtx(), '_');
             spaces--;
           }
 
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
       }
     }
 

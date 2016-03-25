@@ -331,14 +331,14 @@ public class CurlHttpRequest
       }
     }
 
-    bb.append(httpStatus);
-    bb.append("\r\n");
+    bb.append(VHelper.noCtx(), httpStatus);
+    bb.append(VHelper.noCtx(), "\r\n");
 
     if (_curl.getHeaderCallback() != null) {
       StringValue sb = env.createStringBuilder();
 
-      sb.append(httpStatus);
-      sb.append("\r\n");
+      sb.append(VHelper.noCtx(), httpStatus);
+      sb.append(VHelper.noCtx(), "\r\n");
 
       Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), env.wrapJava(_curl), sb).getOne().toValue();
 
@@ -351,18 +351,18 @@ public class CurlHttpRequest
     String key;
 
     while ((key = _conn.getHeaderFieldKey(i)) != null) {
-      bb.append(key);
-      bb.append(": ");
-      bb.append(_conn.getHeaderField(i));
-      bb.append("\r\n");
+      bb.append(VHelper.noCtx(), key);
+      bb.append(VHelper.noCtx(), ": ");
+      bb.append(VHelper.noCtx(), _conn.getHeaderField(i));
+      bb.append(VHelper.noCtx(), "\r\n");
 
       if (_curl.getHeaderCallback() != null) {
         StringValue sb = env.createStringBuilder();
 
-        sb.append(key);
-        sb.append(": ");
-        sb.append(_conn.getHeaderField(i));
-        sb.append("\r\n");
+        sb.append(VHelper.noCtx(), key);
+        sb.append(VHelper.noCtx(), ": ");
+        sb.append(VHelper.noCtx(), _conn.getHeaderField(i));
+        sb.append(VHelper.noCtx(), "\r\n");
 
         Value len = _curl.getHeaderCallback().call(env, VHelper.noCtx(), _curl, sb).getOne().toValue();
 
@@ -375,12 +375,12 @@ public class CurlHttpRequest
       i++;
     }
 
-    bb.append("\r\n");
+    bb.append(VHelper.noCtx(), "\r\n");
 
     if (_curl.getHeaderCallback() != null) {
       StringValue sb = env.createUnicodeBuilder();
 
-      sb.append("\r\n");
+      sb.append(VHelper.noCtx(), "\r\n");
 
       Value len = _curl.getHeaderCallback().call(env,VHelper.noCtx(),
               env.wrapJava(_curl),

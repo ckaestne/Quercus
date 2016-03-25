@@ -387,7 +387,7 @@ public class HashModule extends AbstractQuercusModule {
   {
     if (isBinary) {
       StringValue v = env.createBinaryBuilder();
-      v.append(bytes, 0, bytes.length);
+      v.append(VHelper.noCtx(), bytes, 0, bytes.length);
       return v;
     }
     else {
@@ -399,14 +399,14 @@ public class HashModule extends AbstractQuercusModule {
         int d2 = (ch) & 0xf;
 
         if (d1 < 10)
-          v.append((char) ('0' + d1));
+          v.append(VHelper.noCtx(), (char) ('0' + d1));
         else
-          v.append((char) ('a' + d1 - 10));
+          v.append(VHelper.noCtx(), (char) ('a' + d1 - 10));
 
         if (d2 < 10)
-          v.append((char) ('0' + d2));
+          v.append(VHelper.noCtx(), (char) ('0' + d2));
         else
-          v.append((char) ('a' + d2 - 10));
+          v.append(VHelper.noCtx(), (char) ('a' + d2 - 10));
       }
 
       return v;

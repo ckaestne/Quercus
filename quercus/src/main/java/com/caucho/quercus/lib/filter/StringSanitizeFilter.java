@@ -33,6 +33,7 @@ import com.caucho.quercus.env.ArrayValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import edu.cmu.cs.varex.VHelper;
 
 public class StringSanitizeFilter
   extends AbstractFilter
@@ -67,7 +68,7 @@ public class StringSanitizeFilter
         else if (ch == 0x00) {
         }
         else {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
       }
       else if (0x80 <= ch) {
@@ -77,7 +78,7 @@ public class StringSanitizeFilter
           appendEncoded(sb, ch);
         }
         else {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
       }
       else if (isEncodeAmp && ch == '&') {
@@ -85,7 +86,7 @@ public class StringSanitizeFilter
       }
       else if (ch == '"' || ch == '\'') {
         if (isNoEncodeQuotes) {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         else {
           appendEncoded(sb, ch);
@@ -99,7 +100,7 @@ public class StringSanitizeFilter
         }
       }
       else {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
     }
 

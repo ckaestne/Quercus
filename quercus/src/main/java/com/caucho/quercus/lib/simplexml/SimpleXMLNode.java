@@ -6,6 +6,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.util.IoUtil;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -161,7 +162,7 @@ public abstract class SimpleXMLNode
       StringValue value = env.createStringBuilder();
 
       if (env.isUnicodeSemantics()) {
-        value.append(sb.toString());
+        value.append(VHelper.noCtx(), sb.toString());
       }
       else {
         byte []bytes;
@@ -176,7 +177,7 @@ public abstract class SimpleXMLNode
           return BooleanValue.FALSE;
         }
 
-        value.append(bytes);
+        value.append(VHelper.noCtx(), bytes);
       }
 
       return value;

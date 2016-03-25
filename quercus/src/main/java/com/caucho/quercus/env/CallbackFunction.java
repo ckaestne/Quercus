@@ -186,7 +186,7 @@ public class CallbackFunction extends Callback {
   @Override
   protected void varExportImpl(StringValue sb, int level)
   {
-    sb.append("'' . \"\\0\" . '" + _funName.substring(1) + "'");
+    sb.append(VHelper.noCtx(), "'' . \"\\0\" . '" + _funName.substring(1) + "'");
   }
 
   public String toString()

@@ -194,13 +194,13 @@ abstract public class ObjectValue extends Callback {
   {
     StringValue sb = env.createStringBuilder();
 
-    sb.append(getClassName());
-    sb.append('-');
-    sb.append(_objectId);
+    sb.append(VHelper.noCtx(), getClassName());
+    sb.append(VHelper.noCtx(), '-');
+    sb.append(VHelper.noCtx(), _objectId);
 
     if (! CurrentTime.isTest()) {
-      sb.append('-');
-      sb.append(System.identityHashCode(this));
+      sb.append(VHelper.noCtx(), '-');
+      sb.append(VHelper.noCtx(), System.identityHashCode(this));
     }
 
     return sb;
@@ -224,9 +224,9 @@ abstract public class ObjectValue extends Callback {
 
     if (nameRef != null) {
       StringValue sb = env.createStringBuilder();
-      sb.append(_quercusClass.getName());
-      sb.append("::");
-      sb.append("__invoke");
+      sb.append(VHelper.noCtx(), _quercusClass.getName());
+      sb.append(VHelper.noCtx(), "::");
+      sb.append(VHelper.noCtx(), "__invoke");
 
       nameRef.set(sb);
     }
@@ -894,7 +894,7 @@ abstract public class ObjectValue extends Callback {
       return;
     }
     else {
-      sb.append('{');
+      sb.append(VHelper.noCtx(), '{');
 
       int length = 0;
 
@@ -911,16 +911,16 @@ abstract public class ObjectValue extends Callback {
         }
 
         if (length > 0) {
-          sb.append(',');
+          sb.append(VHelper.noCtx(), ',');
         }
 
         key.jsonEncode(env, context, sb);
-        sb.append(':');
+        sb.append(VHelper.noCtx(), ':');
         value.getOne().jsonEncode(env, context, sb);
         length++;
       }
 
-      sb.append('}');
+      sb.append(VHelper.noCtx(), '}');
     }
   }
 }

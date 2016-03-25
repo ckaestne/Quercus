@@ -164,14 +164,14 @@ public class HtmlModule extends AbstractQuercusModule {
       char ch = str.charAt(i);
 
       if (ch != '&') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
 
         continue;
       }
 
       switch (str.charAt(i + 1)) {
         case 'a':
-          sb.append('&');
+          sb.append(VHelper.noCtx(), '&');
           if (i + 4 < len
               && str.charAt(i + 2) == 'm'
               && str.charAt(i + 3) == 'p'
@@ -188,10 +188,10 @@ public class HtmlModule extends AbstractQuercusModule {
               && str.charAt(i + 4) == 't'
               && str.charAt(i + 5) == ';') {
             i += 5;
-            sb.append('"');
+            sb.append(VHelper.noCtx(), '"');
           }
           else
-            sb.append('&');
+            sb.append(VHelper.noCtx(), '&');
           break;
 
         case '#':
@@ -202,10 +202,10 @@ public class HtmlModule extends AbstractQuercusModule {
               && str.charAt(i + 4) == '9'
               && str.charAt(i + 5) == ';') {
             i += 5;
-            sb.append('\'');
+            sb.append(VHelper.noCtx(), '\'');
           }
           else
-            sb.append('&');
+            sb.append(VHelper.noCtx(), '&');
 
           break;
 
@@ -215,10 +215,10 @@ public class HtmlModule extends AbstractQuercusModule {
               && str.charAt(i + 3) == ';') {
                 i += 3;
 
-                sb.append('<');
+            sb.append(VHelper.noCtx(), '<');
           }
           else
-            sb.append('&');
+            sb.append(VHelper.noCtx(), '&');
           break;
 
         case 'g':
@@ -227,14 +227,14 @@ public class HtmlModule extends AbstractQuercusModule {
               && str.charAt(i + 3) == ';') {
                 i += 3;
 
-                sb.append('>');
+            sb.append(VHelper.noCtx(), '>');
           }
           else
-            sb.append('&');
+            sb.append(VHelper.noCtx(), '&');
           break;
 
         default:
-          sb.append('&');
+          sb.append(VHelper.noCtx(), '&');
       }
     }
 
@@ -271,7 +271,7 @@ public class HtmlModule extends AbstractQuercusModule {
               char ch2 = string.charAt(j);
 
               if (ch2 == ';') {
-                sb.append(string, i, j + 1);
+                sb.append(VHelper.noCtx(), string, i, j + 1);
 
                 i = j;
 
@@ -280,28 +280,28 @@ public class HtmlModule extends AbstractQuercusModule {
             }
           }
 
-          sb.append("&amp;");
+          sb.append(VHelper.noCtx(), "&amp;");
           break;
         case '"':
           if ((quoteStyle & ENT_HTML_QUOTE_DOUBLE) != 0)
-            sb.append("&quot;");
+            sb.append(VHelper.noCtx(), "&quot;");
           else
-            sb.append(ch);
+            sb.append(VHelper.noCtx(), ch);
           break;
         case '\'':
           if ((quoteStyle & ENT_HTML_QUOTE_SINGLE) != 0)
-            sb.append("&#039;");
+            sb.append(VHelper.noCtx(), "&#039;");
           else
-            sb.append(ch);
+            sb.append(VHelper.noCtx(), ch);
           break;
         case '<':
-          sb.append("&lt;");
+          sb.append(VHelper.noCtx(), "&lt;");
           break;
         case '>':
-          sb.append("&gt;");
+          sb.append(VHelper.noCtx(), "&gt;");
           break;
         default:
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
           break;
       }
     }
@@ -363,21 +363,21 @@ public class HtmlModule extends AbstractQuercusModule {
 
       if (ch == '"') {
         if ((quoteStyle & ENT_HTML_QUOTE_DOUBLE) != 0)
-          sb.append("&quot;");
+          sb.append(VHelper.noCtx(), "&quot;");
         else
-          sb.append('"');
+          sb.append(VHelper.noCtx(), '"');
       }
       else if (ch == '\'') {
         if ((quoteStyle & ENT_HTML_QUOTE_SINGLE) != 0)
-          sb.append("&#039;");
+          sb.append(VHelper.noCtx(), "&#039;");
         else
-          sb.append('\'');
+          sb.append(VHelper.noCtx(), '\'');
       }
       else if (entity != null) {
         sb.append(VHelper.noCtx(), entity);
       }
       else {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
     }
 
@@ -448,7 +448,7 @@ public class HtmlModule extends AbstractQuercusModule {
         }
         else if (htmlEntityStart < 0) {
           // else add it to result.
-          result.append(ch);
+          result.append(VHelper.noCtx(), ch);
         }
         else if (ch == ';') {
           // If so substitute the entity and add it to result.
@@ -459,7 +459,7 @@ public class HtmlModule extends AbstractQuercusModule {
             result.append(VHelper.noCtx(), entity);
           }
           else if (isUnicode) {
-            result.append((char)value.toInt());
+            result.append(VHelper.noCtx(), (char) value.toInt());
           }
           else {
             out.write(result, (char)value.toInt());
@@ -469,14 +469,14 @@ public class HtmlModule extends AbstractQuercusModule {
         } else if (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')) {
         }
         else {
-          result.append('&');
+          result.append(VHelper.noCtx(), '&');
           i = htmlEntityStart;
           htmlEntityStart = -1;
         }
       }
 
       if (htmlEntityStart > 0) {
-        result.append(string, htmlEntityStart, len);
+        result.append(VHelper.noCtx(), string, htmlEntityStart, len);
       }
     } catch (IOException e) {
       log.log(Level.FINE, e.toString(), e);
@@ -500,19 +500,19 @@ public class HtmlModule extends AbstractQuercusModule {
       char ch = string.charAt(i);
 
       if (ch == '\n') {
-        sb.append("<br />\n");
+        sb.append(VHelper.noCtx(), "<br />\n");
       }
       else if (ch == '\r') {
         if (i + 1 < strLen && string.charAt(i + 1) == '\n') {
-          sb.append("<br />\r\n");
+          sb.append(VHelper.noCtx(), "<br />\r\n");
           i++;
         }
         else {
-          sb.append("<br />\r");
+          sb.append(VHelper.noCtx(), "<br />\r");
         }
       }
       else {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
     }
 

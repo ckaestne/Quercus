@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.file;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.resources.StreamContextResource;
 import com.caucho.vfs.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -196,7 +197,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
     throws IOException
   {
     if (_is != null)
-      return builder.append(_is);
+      return builder.append(VHelper.noCtx(), _is);
     else
       return builder;
   }
@@ -287,7 +288,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
         sublen = read(buffer, 0, sublen);
 
         if (sublen > 0) {
-          bb.append(buffer, 0, sublen);
+          bb.append(VHelper.noCtx(), buffer, 0, sublen);
           length -= sublen;
         }
         else

@@ -31,6 +31,7 @@ package com.caucho.quercus.lib;
 
 import com.caucho.quercus.env.*;
 import com.caucho.util.URLUtil;
+import edu.cmu.cs.varex.VHelper;
 
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -209,14 +210,14 @@ public class UrlRewriterCallback extends CallbackFunction {
                 "<input type=\"hidden\" name=\"" + _sessionName + "\""
                     + " value=\"" + _sessionId + "\" />";
 
-              _output.append(phpSessionInputTag);
+              _output.append(VHelper.noCtx(), phpSessionInputTag);
             }
 
             for (String[] entry : _rewriterVars) {
               String inputTag =
                 "<input type=\"hidden\" name=\"" + entry[0] + "\""
                     + " value=\"" + entry[1] + "\" />";
-              _output.append(inputTag);
+              _output.append(VHelper.noCtx(), inputTag);
             }
           } else {
             int valueEnd = 0;
@@ -230,7 +231,7 @@ public class UrlRewriterCallback extends CallbackFunction {
             }
 
             if (valueEnd > 0) {
-              _output.append(rewriteUrl(_value));
+              _output.append(VHelper.noCtx(), rewriteUrl(_value));
 
               if (_quoted)
                 consumeOneCharacter();
@@ -250,12 +251,12 @@ public class UrlRewriterCallback extends CallbackFunction {
       int tagStart = _input.indexOf('<', _index);
 
       if (tagStart < 0) {
-        _output.append(_input.substring(_index));
+        _output.append(VHelper.noCtx(), _input.substring(_index));
         return null;
       }
 
       // consume everything upto the tag opening
-      _output.append(_input.substring(_index, tagStart + 1));
+      _output.append(VHelper.noCtx(), _input.substring(_index, tagStart + 1));
 
       // skip the '<'
       _index = tagStart + 1;
@@ -349,7 +350,7 @@ public class UrlRewriterCallback extends CallbackFunction {
         if (_quoted)
           valueEnd += 1;
 
-        _output.append(_input.substring(_index, valueEnd));
+        _output.append(VHelper.noCtx(), _input.substring(_index, valueEnd));
 
         _index = valueEnd;
 
@@ -360,7 +361,7 @@ public class UrlRewriterCallback extends CallbackFunction {
     private void consumeOneCharacter()
     {
       if (_index < _input.length()) {
-        _output.append(_input.charAt(_index));
+        _output.append(VHelper.noCtx(), _input.charAt(_index));
         _index += 1;
       }
     }

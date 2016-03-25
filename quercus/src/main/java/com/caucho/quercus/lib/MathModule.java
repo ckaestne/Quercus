@@ -34,6 +34,7 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.RandomUtil;
+import edu.cmu.cs.varex.VHelper;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -227,9 +228,9 @@ public class MathModule extends AbstractQuercusModule {
       int d = resultArray[1].intValue();
 
       if (d < 10)
-        sb.append((char) (d + '0'));
+        sb.append(VHelper.noCtx(), (char) (d + '0'));
       else
-        sb.append((char) (d + 'a' - 10));
+        sb.append(VHelper.noCtx(), (char) (d + 'a' - 10));
 
     } while (num.compareTo(zero) != 0);
 
@@ -237,7 +238,7 @@ public class MathModule extends AbstractQuercusModule {
 
     int len = sb.length();
     for (int i = len - 1; i >= 0; i--) {
-      toReturn.append(sb.charAt(i));
+      toReturn.append(VHelper.noCtx(), sb.charAt(i));
     }
 
     return toReturn;

@@ -376,13 +376,13 @@ abstract public class ArrayValue extends Value {
           StringValue sb = env.createStringBuilder();
 
           if (obj.isObject()) {
-            sb.append(obj.getClassName());
+            sb.append(VHelper.noCtx(), obj.getClassName());
           }
           else {
             sb.append(VHelper.noCtx(), obj);
           }
 
-          sb.append("::");
+          sb.append(VHelper.noCtx(), "::");
           sb.append(VHelper.noCtx(), nameV);
 
           nameRef.set(sb);
@@ -441,9 +441,9 @@ abstract public class ArrayValue extends Value {
       if (nameRef != null) {
         StringValue sb = env.createStringBuilder();
 
-        sb.append(fun.getDeclaringClass().getName());
-        sb.append("::");
-        sb.append(fun.getName());
+        sb.append(VHelper.noCtx(), fun.getDeclaringClass().getName());
+        sb.append(VHelper.noCtx(), "::");
+        sb.append(VHelper.noCtx(), fun.getName());
 
         nameRef.set(sb);
       }
@@ -1422,36 +1422,36 @@ abstract public class ArrayValue extends Value {
   protected void varExportImpl(StringValue sb, int level)
   {
     if (level != 0) {
-      sb.append('\n');
+      sb.append(VHelper.noCtx(), '\n');
     }
 
     for (int i = 0; i < level; i++) {
-      sb.append("  ");
+      sb.append(VHelper.noCtx(), "  ");
     }
 
-    sb.append("array (");
-    sb.append('\n');
+    sb.append(VHelper.noCtx(), "array (");
+    sb.append(VHelper.noCtx(), '\n');
 
     for (Entry entry = getHead(); entry != null; entry = entry._next) {
       Value key = entry.getKey();
       Value value = entry.getEnvVar().getOne();
 
       for (int i = 0; i < level + 1; i++) {
-        sb.append("  ");
+        sb.append(VHelper.noCtx(), "  ");
       }
 
       key.varExportImpl(sb, level + 1);
-      sb.append(" => ");
+      sb.append(VHelper.noCtx(), " => ");
 
       value.varExportImpl(sb, level + 1);
-      sb.append(",\n");
+      sb.append(VHelper.noCtx(), ",\n");
     }
 
     for (int i = 0; i < level; i++) {
-      sb.append("  ");
+      sb.append(VHelper.noCtx(), "  ");
     }
 
-    sb.append(")");
+    sb.append(VHelper.noCtx(), ")");
   }
 
   @Override
@@ -1472,26 +1472,26 @@ abstract public class ArrayValue extends Value {
       length++;
     }
 
-    sb.append('[');
+    sb.append(VHelper.noCtx(), '[');
 
     length = 0;
     for (EnvVar value : values()) {
       if (length > 0) {
-        sb.append(',');
+        sb.append(VHelper.noCtx(), ',');
       }
 
       value.getOne().jsonEncode(env, context, sb);
       length++;
     }
 
-    sb.append(']');
+    sb.append(VHelper.noCtx(), ']');
   }
 
   public void jsonEncodeAssociative(Env env,
                                     JsonEncodeContext context,
                                     StringValue sb)
   {
-    sb.append('{');
+    sb.append(VHelper.noCtx(), '{');
 
     int length = 0;
 
@@ -1501,15 +1501,15 @@ abstract public class ArrayValue extends Value {
       VEntry entry = iter.next();
 
       if (length > 0)
-        sb.append(',');
+        sb.append(VHelper.noCtx(), ',');
 
       entry.getKey().toStringValue(env).jsonEncode(env, context, sb);
-      sb.append(':');
+      sb.append(VHelper.noCtx(), ':');
       entry.getEnvVar().getValue().foreach((a) -> a.jsonEncode(env, context, sb));
       length++;
     }
 
-    sb.append('}');
+    sb.append(VHelper.noCtx(), '}');
   }
 
   /**

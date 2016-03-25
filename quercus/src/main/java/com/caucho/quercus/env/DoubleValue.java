@@ -31,6 +31,7 @@ package com.caucho.quercus.env;
 
 import com.caucho.quercus.marshal.Marshal;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -242,7 +243,7 @@ public class DoubleValue extends NumberValue
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    return env.createUnicodeBuilder().append(toString());
+    return env.createUnicodeBuilder().append(VHelper.noCtx(), toString());
   }
 
   /**
@@ -442,7 +443,7 @@ public class DoubleValue extends NumberValue
   {
     String str = toString(env.getLocaleInfo().getNumeric());
 
-    return env.createStringBuilder().append(str);
+    return env.createStringBuilder().append(VHelper.noCtx(), str);
   }
 
   /**
@@ -538,7 +539,7 @@ public class DoubleValue extends NumberValue
   @Override
   protected void varExportImpl(StringValue sb, int level)
   {
-    sb.append(toString());
+    sb.append(VHelper.noCtx(), toString());
   }
 
   //

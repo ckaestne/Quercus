@@ -33,6 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.resources.StreamResource;
 import com.caucho.vfs.Path;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -78,7 +79,7 @@ public class FileValue extends StreamResource {
     int ch;
 
     while ((ch = read()) >= 0) {
-      sb.append((char) ch);
+      sb.append(VHelper.noCtx(), (char) ch);
 
       if (ch == '\n')
         return sb;

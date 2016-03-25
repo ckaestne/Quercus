@@ -40,6 +40,7 @@ import com.caucho.vfs.MemoryPath;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.TempBuffer;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -276,7 +277,7 @@ public class StreamModule extends AbstractQuercusModule {
       }
 
       while (maxLen-- > 0 && (ch = in.read()) >= 0) {
-        sb.append((char) ch);
+        sb.append(VHelper.noCtx(), (char) ch);
       }
 
       return sb;

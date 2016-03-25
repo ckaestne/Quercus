@@ -764,7 +764,7 @@ public class Xml {
           StringValue sb = _env.createStringBuilder();
 
           sb.append(VHelper.noCtx(), value);
-          sb.append(ch, start, length);
+          sb.append(VHelper.noCtx(), ch, start, length);
 
           elementArray.put(key, sb);
         }
@@ -843,8 +843,8 @@ public class Xml {
       if (_startElementHandler == null && _defaultHandler != null) {
         StringValue sb = _env.createStringBuilder();
 
-        sb.append("<");
-        sb.append(eName);
+        sb.append(VHelper.noCtx(), "<");
+        sb.append(VHelper.noCtx(), eName);
 
         for (int i = 0; i < attrs.getLength(); i++) {
           String aName = attrs.getLocalName(i); // Attr name
@@ -853,15 +853,15 @@ public class Xml {
             aName = attrs.getQName(i);
           }
 
-          sb.append(' ');
-          sb.append(aName);
-          sb.append('=');
-          sb.append('"');
-          sb.append(attrs.getValue(i));
-          sb.append('"');
+          sb.append(VHelper.noCtx(), ' ');
+          sb.append(VHelper.noCtx(), aName);
+          sb.append(VHelper.noCtx(), '=');
+          sb.append(VHelper.noCtx(), '"');
+          sb.append(VHelper.noCtx(), attrs.getValue(i));
+          sb.append(VHelper.noCtx(), '"');
         }
 
-        sb.append(">");
+        sb.append(VHelper.noCtx(), ">");
 
         _defaultHandler.call(_env, VHelper.noCtx(), _parser, sb);
 
@@ -932,9 +932,9 @@ public class Xml {
         else if (_defaultHandler != null) {
           StringValue sb = _env.createStringBuilder();
 
-          sb.append("</");
-          sb.append(eName);
-          sb.append(">");
+          sb.append(VHelper.noCtx(), "</");
+          sb.append(VHelper.noCtx(), eName);
+          sb.append(VHelper.noCtx(), ">");
 
           _defaultHandler.call(_env,VHelper.noCtx(), _parser, sb);
         }
@@ -985,7 +985,7 @@ public class Xml {
 
         value = _env.createStringBuilder();
 
-        value.append(bytes);
+        value.append(VHelper.noCtx(), bytes);
       }
 
       try {

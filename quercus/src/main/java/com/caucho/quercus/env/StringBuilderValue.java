@@ -518,7 +518,7 @@ public class StringBuilderValue
   public StringValue toUnicodeValue()
   {
     // php/0c94
-    return new UnicodeBuilderValue().append(getBuffer(), 0, length());
+    return new UnicodeBuilderValue().append(VHelper.noCtx(), getBuffer(), 0, length());
   }
 
   /**
@@ -577,7 +577,7 @@ public class StringBuilderValue
   @Override
   public StringValue appendTo(FeatureExpr ctx, StringBuilderValue bb)
   {
-    bb.append(_buffer, 0, _length);
+    bb.append(VHelper.noCtx(), _buffer, 0, _length);
 
     return bb;
   }
@@ -588,7 +588,7 @@ public class StringBuilderValue
   @Override
   public StringValue appendTo(UnicodeBuilderValue bb)
   {
-    bb.append(_buffer, 0, _length);
+    bb.append(VHelper.noCtx(), _buffer, 0, _length);
 
     return bb;
   }
@@ -599,7 +599,7 @@ public class StringBuilderValue
   @Override
   public StringValue appendTo(LargeStringBuilderValue bb)
   {
-    bb.append(_buffer, 0, _length);
+    bb.append(VHelper.noCtx(), _buffer, 0, _length);
 
     return bb;
   }
@@ -611,7 +611,7 @@ public class StringBuilderValue
   @Override
   public StringValue appendTo(BinaryBuilderValue bb)
   {
-    bb.append(_buffer, 0, _length);
+    bb.append(VHelper.noCtx(), _buffer, 0, _length);
 
     return bb;
   }
@@ -1148,7 +1148,7 @@ public class StringBuilderValue
    * Append a Java string to the value.
    */
   @Override
-  public final StringValue append(String s, int start, int end)
+  public final StringValue append(FeatureExpr ctx, String s, int start, int end)
   {
     int sublen = end - start;
 
@@ -1170,7 +1170,7 @@ public class StringBuilderValue
    * Append a Java char to the value.
    */
   @Override
-  public final StringValue append(char ch)
+  public final StringValue append(FeatureExpr ctx, char ch)
   {
     if (_buffer.length < _length + 1)
       ensureCapacity(_length + 1);
@@ -1194,7 +1194,7 @@ public class StringBuilderValue
    * Append a Java buffer to the value.
    */
   @Override
-  public final StringValue append(char []buf, int offset, int length)
+  public final StringValue append(FeatureExpr ctx, char[] buf, int offset, int length)
   {
     int end = _length + length;
 
@@ -1217,7 +1217,7 @@ public class StringBuilderValue
    * Append a Java buffer to the value.
    */
   @Override
-  public final StringValue append(char []buf)
+  public final StringValue append(FeatureExpr ctx, char[] buf)
   {
     int length = buf.length;
 
@@ -1236,55 +1236,55 @@ public class StringBuilderValue
     return this;
   }
 
+//  /**
+//   * Append a Java buffer to the value.
+//   */
+//  @Override
+//  public StringValue appendUnicode(FeatureExpr ctx, char []buf)
+//  {
+//    int length = buf.length;
+//
+//    if (_buffer.length < _length + length)
+//      ensureCapacity(_length + length);
+//
+//    byte []buffer = _buffer;
+//    int bufferLength = _length;
+//
+//    for (int i = 0; i < length; i++)
+//      buffer[bufferLength++] = (byte) buf[i];
+//
+//    _buffer = buffer;
+//    _length = bufferLength;
+//
+//    return this;
+//  }
+//
+//  /**
+//   * Append a Java buffer to the value.
+//   */
+//  @Override
+//  public StringValue appendUnicode(FeatureExpr ctx, char[] buf, int offset, int length)
+//  {
+//    if (_buffer.length < _length + length)
+//      ensureCapacity(_length + length);
+//
+//    byte []buffer = _buffer;
+//    int bufferLength = _length;
+//
+//    for (; length > 0; length--)
+//      buffer[bufferLength++] = (byte) buf[offset++];
+//
+//    _buffer = buffer;
+//    _length = bufferLength;
+//
+//    return this;
+//  }
+
   /**
    * Append a Java buffer to the value.
    */
   @Override
-  public StringValue appendUnicode(char []buf)
-  {
-    int length = buf.length;
-
-    if (_buffer.length < _length + length)
-      ensureCapacity(_length + length);
-
-    byte []buffer = _buffer;
-    int bufferLength = _length;
-
-    for (int i = 0; i < length; i++)
-      buffer[bufferLength++] = (byte) buf[i];
-
-    _buffer = buffer;
-    _length = bufferLength;
-
-    return this;
-  }
-
-  /**
-   * Append a Java buffer to the value.
-   */
-  @Override
-  public StringValue appendUnicode(char []buf, int offset, int length)
-  {
-    if (_buffer.length < _length + length)
-      ensureCapacity(_length + length);
-
-    byte []buffer = _buffer;
-    int bufferLength = _length;
-
-    for (; length > 0; length--)
-      buffer[bufferLength++] = (byte) buf[offset++];
-
-    _buffer = buffer;
-    _length = bufferLength;
-
-    return this;
-  }
-
-  /**
-   * Append a Java buffer to the value.
-   */
-  @Override
-  public final StringValue append(CharSequence buf, int head, int tail)
+  public final StringValue append(FeatureExpr ctx, CharSequence buf, int head, int tail)
   {
     int length = tail - head;
 
@@ -1318,7 +1318,7 @@ public class StringBuilderValue
    * Append a Java buffer to the value.
    */
   @Override
-  public StringValue append(StringBuilderValue sb, int head, int tail)
+  public StringValue append(FeatureExpr ctx, StringBuilderValue sb, int head, int tail)
   {
     int length = tail - head;
 
@@ -1394,7 +1394,7 @@ public class StringBuilderValue
    * Append a Java value to the value.
    */
   @Override
-  public StringValue appendUnicode(Value v)
+  public StringValue appendUnicode(FeatureExpr ctx, Value v)
   {
     v.appendTo(VHelper.noCtx(), this);
 
@@ -1404,20 +1404,20 @@ public class StringBuilderValue
   /**
    * Append a Java value to the value.
    */
-  @Override
-  public StringValue appendUnicode(Value v1, Value v2)
-  {
-    v1.appendTo(VHelper.noCtx(), this);
-    v2.appendTo(VHelper.noCtx(), this);
-
-    return this;
-  }
+//  @Override
+//  public StringValue appendUnicode(Value v1, Value v2)
+//  {
+//    v1.appendTo(VHelper.noCtx(), this);
+//    v2.appendTo(VHelper.noCtx(), this);
+//
+//    return this;
+//  }
 
   /**
    * Append a buffer to the value.
    */
   @Override
-  public final StringValue append(byte []buf, int offset, int length)
+  public final StringValue append(FeatureExpr ctx, byte[] buf, int offset, int length)
   {
     int end = _length + length;
 
@@ -1434,23 +1434,23 @@ public class StringBuilderValue
   @Override
   public final void write(byte []buf, int offset, int length)
   {
-    append(buf, offset, length);
+    append(VHelper.noCtx(), buf, offset, length);
   }
 
   /**
    * Append a double to the value.
    */
   @Override
-  public final StringValue append(byte []buf)
+  public final StringValue append(FeatureExpr ctx, byte[] buf)
   {
-    return append(buf, 0, buf.length);
+    return append(VHelper.noCtx(), buf, 0, buf.length);
   }
 
   /**
    * Append a buffer to the value.
    */
   @Override
-  public final StringValue appendUtf8(byte []buf, int offset, int length)
+  public final StringValue appendUtf8(byte[] buf, int offset, int length, FeatureExpr ctx)
   {
     if (_buffer.length < _length + length)
       ensureCapacity(_length + length);
@@ -1507,27 +1507,27 @@ public class StringBuilderValue
    * Append a Java boolean to the value.
    */
   @Override
-  public final StringValue append(boolean v)
+  public final StringValue append(FeatureExpr ctx, boolean v)
   {
-    return append(v ? "true" : "false");
+    return append(ctx, v ? "true" : "false");
   }
 
   /**
    * Append a Java long to the value.
    */
   @Override
-  public StringValue append(long v)
+  public StringValue append(FeatureExpr ctx, long v)
   {
-    return append(String.valueOf(v));
+    return append(ctx, String.valueOf(v));
   }
 
   /**
    * Append a Java double to the value.
    */
   @Override
-  public StringValue append(double v)
+  public StringValue append(FeatureExpr ctx, double v)
   {
-    return append(String.valueOf(v));
+    return append(ctx, String.valueOf(v));
   }
 
   /**
@@ -1588,7 +1588,7 @@ public class StringBuilderValue
         if (count <= 0)
           break;
 
-        append(buffer, 0, count);
+        append(VHelper.noCtx(), buffer, 0, count);
 
         length -= count;
       }
@@ -2205,7 +2205,7 @@ public class StringBuilderValue
     @Override
     public void write(byte []buffer, int offset, int length)
     {
-      append(buffer, offset, length);
+      append(VHelper.noCtx(), buffer, offset, length);
     }
   }
 

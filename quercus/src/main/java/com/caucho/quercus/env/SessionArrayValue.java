@@ -33,6 +33,7 @@ import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.lib.UnserializeReader;
 import com.caucho.util.CacheListener;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -156,7 +157,7 @@ public class SessionArrayValue extends ArrayValueWrapper
           StringValue sb = env.createUnicodeBuilder();
 
           while ((ch = is.read()) > 0 && ch != '|') {
-            sb.append((char) ch);
+            sb.append(VHelper.noCtx(), (char) ch);
           }
 
           if (sb.length() == 0)
@@ -221,7 +222,7 @@ public class SessionArrayValue extends ArrayValueWrapper
     for (int i = 0; i < len; i++) {
       char ch = (char) (((in.read() & 0xff) << 8) + (in.read() & 0xff));
 
-      sb.append(ch);
+      sb.append(VHelper.noCtx(), ch);
     }
 
     decode(env, sb);

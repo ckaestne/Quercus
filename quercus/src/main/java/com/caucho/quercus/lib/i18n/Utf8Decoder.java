@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.i18n;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.UnicodeBuilderValue;
+import edu.cmu.cs.varex.VHelper;
 
 public class Utf8Decoder
   extends Decoder
@@ -76,7 +77,7 @@ public class Utf8Decoder
       int ch = str.charAt(i);
 
       if (ch <= 0x7F)
-        sb.append((char) ch);
+        sb.append(VHelper.noCtx(), (char) ch);
       else if (0xC2 <= ch && ch <= 0xDF) {
         int ch2;
         if (i + 1 < len
@@ -85,14 +86,14 @@ public class Utf8Decoder
 
           int code = ((ch - 0xC0) << 6) + (ch2 - 0x80);
 
-          sb.append((char) code);
+          sb.append(VHelper.noCtx(), (char) code);
         }
         else if (_isIgnoreErrors) {
         }
         else if (_replacement != null)
-          sb.append(_replacement);
+          sb.append(VHelper.noCtx(), _replacement);
         else if (_isAllowMalformedOut)
-          sb.append((char) ch);
+          sb.append(VHelper.noCtx(), (char) ch);
         else
           return;
       }
@@ -114,18 +115,18 @@ public class Utf8Decoder
             int high = 0xD800 + (code >> 10);
             int low = 0xDC00 + (code & 0x3FF);
 
-            sb.append((char) high);
-            sb.append((char) low);
+            sb.append(VHelper.noCtx(), (char) high);
+            sb.append(VHelper.noCtx(), (char) low);
           }
           else
-            sb.append((char) code);
+            sb.append(VHelper.noCtx(), (char) code);
         }
         else if (_isIgnoreErrors) {
         }
         else if (_replacement != null)
-          sb.append(_replacement);
+          sb.append(VHelper.noCtx(), _replacement);
         else if (_isAllowMalformedOut)
-          sb.append((char) ch);
+          sb.append(VHelper.noCtx(), (char) ch);
         else
           return;
       }
@@ -151,27 +152,27 @@ public class Utf8Decoder
             int high = 0xD800 + code >> 10;
             int low = 0xDC00 + code & 0x3FF;
 
-            sb.append((char) high);
-            sb.append((char) low);
+            sb.append(VHelper.noCtx(), (char) high);
+            sb.append(VHelper.noCtx(), (char) low);
           }
           else
-            sb.append((char) code);
+            sb.append(VHelper.noCtx(), (char) code);
         }
         else if (_isIgnoreErrors) {
         }
         else if (_replacement != null)
-          sb.append(_replacement);
+          sb.append(VHelper.noCtx(), _replacement);
         else if (_isAllowMalformedOut)
-          sb.append((char) ch);
+          sb.append(VHelper.noCtx(), (char) ch);
         else
           return;
       }
       else if (_isIgnoreErrors) {
       }
       else if (_replacement != null)
-        sb.append(_replacement);
+        sb.append(VHelper.noCtx(), _replacement);
       else if (_isAllowMalformedOut)
-        sb.append((char) ch);
+        sb.append(VHelper.noCtx(), (char) ch);
       else
         return;
     }

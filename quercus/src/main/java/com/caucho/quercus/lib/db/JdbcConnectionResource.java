@@ -35,6 +35,7 @@ import com.caucho.util.JdbcUtil;
 import com.caucho.util.L10N;
 import com.caucho.util.LruCache;
 import com.caucho.util.SQLExceptionWrapper;
+import edu.cmu.cs.varex.VHelper;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -252,35 +253,35 @@ public abstract class JdbcConnectionResource
 
       switch (c) {
       case '\u0000':
-        buf.append('\\');
-        buf.append(0);
+        buf.append(VHelper.noCtx(), '\\');
+        buf.append(VHelper.noCtx(), 0);
         break;
       case '\n':
-        buf.append('\\');
-        buf.append('n');
+        buf.append(VHelper.noCtx(), '\\');
+        buf.append(VHelper.noCtx(), 'n');
         break;
       case '\r':
-        buf.append('\\');
-        buf.append('r');
+        buf.append(VHelper.noCtx(), '\\');
+        buf.append(VHelper.noCtx(), 'r');
         break;
       case '\\':
-        buf.append('\\');
-        buf.append('\\');
+        buf.append(VHelper.noCtx(), '\\');
+        buf.append(VHelper.noCtx(), '\\');
         break;
       case '\'':
-        buf.append('\\');
-        buf.append('\'');
+        buf.append(VHelper.noCtx(), '\\');
+        buf.append(VHelper.noCtx(), '\'');
         break;
       case '"':
-        buf.append('\\');
-        buf.append('\"');
+        buf.append(VHelper.noCtx(), '\\');
+        buf.append(VHelper.noCtx(), '\"');
         break;
       case '\032':
-        buf.append('\\');
-        buf.append('Z');
+        buf.append(VHelper.noCtx(), '\\');
+        buf.append(VHelper.noCtx(), 'Z');
         break;
       default:
-        buf.append(c);
+        buf.append(VHelper.noCtx(), c);
         break;
       }
     }

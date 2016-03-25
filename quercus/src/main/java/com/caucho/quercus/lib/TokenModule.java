@@ -38,6 +38,7 @@ import com.caucho.quercus.module.IniDefinition;
 import com.caucho.quercus.module.IniDefinitions;
 import com.caucho.util.IntMap;
 import com.caucho.util.L10N;
+import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
@@ -193,7 +194,7 @@ public class TokenModule extends AbstractQuercusModule {
     return _iniDefinitions;
   }
 
-  public static Value highlight_file(Env env,
+  public static Value highlight_file(Env env, FeatureExpr ctx,
                                      StringValue filename,
                                      @Optional boolean isReturn)
   {
@@ -206,11 +207,11 @@ public class TokenModule extends AbstractQuercusModule {
 
     if (v == null)
       return BooleanValue.FALSE;
-    
-    return highlight_string(env, v, isReturn);
+
+    return highlight_string(env, ctx, v, isReturn);
   }
 
-  public static Value highlight_string(Env env,
+  public static Value highlight_string(Env env, FeatureExpr ctx,
                                        StringValue s,
                                        @Optional boolean isReturn)
   {
@@ -223,39 +224,39 @@ public class TokenModule extends AbstractQuercusModule {
       StringValue topColor = env.createString("#000000");
       StringValue lastColor = topColor;
 
-      highlight(sb, out, "<code>");
-      highlight(sb, out, "<span style=\"color: #000000\">\n");
+      highlight(ctx, sb, out, "<code>");
+      highlight(ctx, sb, out, "<span style=\"color: #000000\">\n");
 
       while ((token = lexer.nextToken()) >= 0) {
         StringValue color = getColor(env, token);
 
         if (color != null && ! color.equals(lastColor)) {
           if (! topColor.equals(lastColor))
-            highlight(sb, out, "</span>");
+            highlight(ctx, sb, out, "</span>");
 
           if (! topColor.equals(color))
-            highlight(sb, out, "<span style=\"color: " + color + "\">");
+            highlight(ctx, sb, out, "<span style=\"color: " + color + "\">");
 
           lastColor = color;
         }
 
         if (0x20 <= token && token <= 0x7f) {
           if (sb != null)
-            sb.append((char) token);
+            sb.append(ctx, (char) token);
           else
-            out.print(VHelper.noCtx(), (char) token);
+            out.print(ctx, (char) token);
         }
         else {
           StringValue lexeme = lexer.getLexeme();
 
-          highlight(sb, out, lexeme);
+          highlight(ctx, sb, out, lexeme);
         }
       }
 
       if (! topColor.equals(lastColor))
-        highlight(sb, out, "</span>\n");
-      highlight(sb, out, "</span>\n");
-      highlight(sb, out, "</code>");
+        highlight(ctx, sb, out, "</span>\n");
+      highlight(ctx, sb, out, "</span>\n");
+      highlight(ctx, sb, out, "</code>");
 
       if (sb != null)
         return sb;
@@ -266,20 +267,20 @@ public class TokenModule extends AbstractQuercusModule {
     }
   }
 
-  private static void highlight(StringValue sb,
+  private static void highlight(FeatureExpr ctx, StringValue sb,
                                 VWriteStream out,
                                 String string)
     throws IOException
   {
     if (sb != null) {
-      sb.append(string);
+      sb.append(ctx, string);
     }
     else {
-      out.print(VHelper.noCtx(), string);
+      out.print(ctx, string);
     }
   }
 
-  private static void highlight(StringValue sb,
+  private static void highlight(FeatureExpr ctx, StringValue sb,
                                 VWriteStream out,
                                 StringValue string)
     throws IOException
@@ -291,16 +292,16 @@ public class TokenModule extends AbstractQuercusModule {
 
         switch (ch) {
           case '<':
-            sb.append("&lt;");
+            sb.append(ctx, "&lt;");
             break;
           case '>':
-            sb.append("&gt;");
+            sb.append(ctx, "&gt;");
             break;
           case ' ':
-            sb.append("&nbsp;");
+            sb.append(ctx, "&nbsp;");
             break;
           default:
-            sb.append(ch);
+            sb.append(ctx, ch);
           break;
         }
       }
@@ -312,16 +313,16 @@ public class TokenModule extends AbstractQuercusModule {
 
         switch (ch) {
           case '<':
-            out.print(VHelper.noCtx(), "&lt;");
+            out.print(ctx, "&lt;");
             break;
           case '>':
-            out.print(VHelper.noCtx(), "&gt;");
+            out.print(ctx, "&gt;");
             break;
           case ' ':
-            out.print(VHelper.noCtx(), "&nbsp;");
+            out.print(ctx, "&nbsp;");
             break;
           default:
-            out.print(VHelper.noCtx(), ch);
+            out.print(ctx, ch);
           break;
         }
       }
@@ -555,9 +556,9 @@ public class TokenModule extends AbstractQuercusModule {
         return -1;
 
       case ' ': case '\t': case '\r': case '\n':
-        _lexeme.append((char) ch);
+          _lexeme.append(VHelper.noCtx(), (char) ch);
         while (Character.isWhitespace((ch = read()))) {
-          _lexeme.append((char) ch);
+          _lexeme.append(VHelper.noCtx(), (char) ch);
         }
         unread();
         return T_WHITESPACE;
@@ -610,7 +611,7 @@ public class TokenModule extends AbstractQuercusModule {
           _lexeme.append("//");
 
           while ((ch = read()) >= 0 && ch != '\r' && ch != '\n') {
-            _lexeme.append((char) ch);
+            _lexeme.append(VHelper.noCtx(), (char) ch);
           }
           unread();
 
@@ -632,12 +633,12 @@ public class TokenModule extends AbstractQuercusModule {
             unread();
 
           while ((ch = read()) >= 0) {
-            _lexeme.append((char) ch);
+            _lexeme.append(VHelper.noCtx(), (char) ch);
 
             if (ch != '*') {
             }
             else if ((ch = read()) == '/') {
-              _lexeme.append((char) ch);
+              _lexeme.append(VHelper.noCtx(), (char) ch);
               return token;
             }
             else
@@ -652,9 +653,9 @@ public class TokenModule extends AbstractQuercusModule {
         }
 
       case '#':
-        _lexeme.append('#');
+        _lexeme.append(VHelper.noCtx(), '#');
         while ((ch = read()) >= 0 && ch != '\r' && ch != '\n') {
-          _lexeme.append((char) ch);
+          _lexeme.append(VHelper.noCtx(), (char) ch);
         }
         unread();
         return T_COMMENT;
@@ -673,18 +674,18 @@ public class TokenModule extends AbstractQuercusModule {
         {
           int end = ch;
 
-          _lexeme.append((char) ch);
+          _lexeme.append(VHelper.noCtx(), (char) ch);
 
           while ((ch = read()) >= 0 && ch != end) {
-            _lexeme.append((char) ch);
+            _lexeme.append(VHelper.noCtx(), (char) ch);
 
             if (ch == '\\') {
-              _lexeme.append((char) read());
+              _lexeme.append(VHelper.noCtx(), (char) read());
             }
           }
 
           if (ch > 0)
-            _lexeme.append((char) ch);
+            _lexeme.append(VHelper.noCtx(), (char) ch);
 
           return T_CONSTANT_ENCAPSED_STRING;
         }
@@ -927,7 +928,7 @@ public class TokenModule extends AbstractQuercusModule {
           return T_STRING;
         }
 
-        _lexeme.append((char) ch);
+        _lexeme.append(VHelper.noCtx(), (char) ch);
         return T_BAD_CHARACTER;
       }
     }
@@ -943,7 +944,7 @@ public class TokenModule extends AbstractQuercusModule {
 
       while ((ch = read()) >= 0) {
         if (ch != '<')
-          _lexeme.append((char) ch);
+          _lexeme.append(VHelper.noCtx(), (char) ch);
         else if ((ch = read()) == '?' || ch == '%') {
           unread();
           unread();
@@ -951,7 +952,7 @@ public class TokenModule extends AbstractQuercusModule {
           return _lexeme.length() > 0;
         }
         else {
-          _lexeme.append('<');
+          _lexeme.append(VHelper.noCtx(), '<');
 
           unread();
         }
@@ -965,7 +966,7 @@ public class TokenModule extends AbstractQuercusModule {
       int ch;
       
       while (Character.isJavaIdentifierPart((ch = read()))) {
-        _lexeme.append((char) ch);
+        _lexeme.append(VHelper.noCtx(), (char) ch);
       }
 
       unread();
@@ -981,7 +982,7 @@ public class TokenModule extends AbstractQuercusModule {
              || ch == 'x' || ch == 'X'
              || 'a' <= ch && ch <= 'f'
              || 'A' <= ch && ch <= 'F') {
-        _lexeme.append((char) ch);
+        _lexeme.append(VHelper.noCtx(), (char) ch);
 
         if ('a' <= ch && ch <= 'f' || 'A' <= ch && ch <= 'f'
             || ch == 'x' || ch == 'X')

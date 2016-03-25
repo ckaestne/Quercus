@@ -33,6 +33,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.UnicodeBuilderValue;
 import com.caucho.vfs.TempCharBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -132,7 +133,7 @@ public class GenericDecoder
 
     if (len > 0) {
       int offset = out.arrayOffset();
-      sb.append(out.array(), offset, len);
+      sb.append(VHelper.noCtx(), out.array(), offset, len);
     }
 
     if (coder.isMalformed() || coder.isUnmappable()) {
@@ -145,9 +146,9 @@ public class GenericDecoder
       if (_isIgnoreErrors) {
       }
       else if (_replacement != null)
-        sb.append(_replacement);
+        sb.append(VHelper.noCtx(), _replacement);
       else if (_isAllowMalformedOut)
-        sb.append((char) in.get(errorPosition));
+        sb.append(VHelper.noCtx(), (char) in.get(errorPosition));
       else
         return false;
     }

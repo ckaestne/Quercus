@@ -332,14 +332,14 @@ public class Mysqli extends JdbcConnectionResource
       urlBuilder.append("useServerPrepStmts=true");
     }
 
-    //urlBuilder.append("&useInformationSchema=true");
+    //urlBuilder.append(VHelper.noCtx(), "&useInformationSchema=true");
 
     // required to get the result table name alias,
     // doesn't work in mysql JDBC 5.1.6, but set it anyways in case
     // the mysql guys fix it
     //
     // php/141p
-    //urlBuilder.append("&useOldAliasMetadataBehavior=true");
+    //urlBuilder.append(VHelper.noCtx(), "&useOldAliasMetadataBehavior=true");
 
     return urlBuilder.toString();
   }
@@ -616,26 +616,26 @@ public class Mysqli extends JdbcConnectionResource
     }
 
     if (_lastSql == LastSqlType.UPDATE)
-      sb.append("Rows matched: ");
+      sb.append(VHelper.noCtx(), "Rows matched: ");
     else
-      sb.append("Records: ");
+      sb.append(VHelper.noCtx(), "Records: ");
 
-    sb.append(matched);
+    sb.append(VHelper.noCtx(), matched);
 
     if (_lastSql == LastSqlType.UPDATE) {
-      sb.append("  Changed: "); // PHP adds 2 spaces before Changed:
-      sb.append(changed);
+      sb.append(VHelper.noCtx(), "  Changed: "); // PHP adds 2 spaces before Changed:
+      sb.append(VHelper.noCtx(), changed);
     } else {
-      sb.append(" Duplicates: ");
-      sb.append(duplicates);
+      sb.append(VHelper.noCtx(), " Duplicates: ");
+      sb.append(VHelper.noCtx(), duplicates);
     }
 
     if (_lastSql == LastSqlType.UPDATE)
-      sb.append("  Warnings: "); // Only update has 2 spaces here
+      sb.append(VHelper.noCtx(), "  Warnings: "); // Only update has 2 spaces here
     else
-      sb.append(" Warnings: ");
+      sb.append(VHelper.noCtx(), " Warnings: ");
 
-    sb.append(warnings);
+    sb.append(VHelper.noCtx(), warnings);
 
     return sb;
   }
@@ -944,7 +944,7 @@ public class Mysqli extends JdbcConnectionResource
       sb.append(quoteChar);
     }
     else {
-      sb.append("0x");
+      sb.append(VHelper.noCtx(), "0x");
 
       for (int i = start; i < end; i++) {
         char ch = str.charAt(i);
@@ -1368,35 +1368,35 @@ public class Mysqli extends JdbcConnectionResource
         }
 
         StringValue sb = env.createStringBuilder();
-        sb.append("Uptime: ");
-        sb.append(statusMap.get("Uptime"));
+        sb.append(VHelper.noCtx(), "Uptime: ");
+        sb.append(VHelper.noCtx(), statusMap.get("Uptime"));
 
-        sb.append("  ");
-        sb.append("Threads: ");
-        sb.append(statusMap.get("Threads_connected"));
+        sb.append(VHelper.noCtx(), "  ");
+        sb.append(VHelper.noCtx(), "Threads: ");
+        sb.append(VHelper.noCtx(), statusMap.get("Threads_connected"));
 
-        sb.append("  ");
-        sb.append("Questions: ");
-        sb.append(statusMap.get("Queries"));
+        sb.append(VHelper.noCtx(), "  ");
+        sb.append(VHelper.noCtx(), "Questions: ");
+        sb.append(VHelper.noCtx(), statusMap.get("Queries"));
 
-        sb.append("  ");
-        sb.append("Slow queries: ");
-        sb.append(statusMap.get("Slow_queries"));
+        sb.append(VHelper.noCtx(), "  ");
+        sb.append(VHelper.noCtx(), "Slow queries: ");
+        sb.append(VHelper.noCtx(), statusMap.get("Slow_queries"));
 
-        sb.append("  ");
-        sb.append("Opens: ");
-        sb.append(statusMap.get("Opened_tables")); // XXX: right open?
+        sb.append(VHelper.noCtx(), "  ");
+        sb.append(VHelper.noCtx(), "Opens: ");
+        sb.append(VHelper.noCtx(), statusMap.get("Opened_tables")); // XXX: right open?
 
-        sb.append("  ");
-        sb.append("Flush tables: ");
-        sb.append(statusMap.get("Flush_commands"));
+        sb.append(VHelper.noCtx(), "  ");
+        sb.append(VHelper.noCtx(), "Flush tables: ");
+        sb.append(VHelper.noCtx(), statusMap.get("Flush_commands"));
 
-        sb.append("  ");
-        sb.append("Open tables: ");
-        sb.append(statusMap.get("Open_tables"));
+        sb.append(VHelper.noCtx(), "  ");
+        sb.append(VHelper.noCtx(), "Open tables: ");
+        sb.append(VHelper.noCtx(), statusMap.get("Open_tables"));
 
-        sb.append("  ");
-        sb.append("Queries per second avg: ");
+        sb.append(VHelper.noCtx(), "  ");
+        sb.append(VHelper.noCtx(), "Queries per second avg: ");
 
         String totalQueriesStr = statusMap.get("Queries");
         String uptimeStr = statusMap.get("Uptime");
@@ -1406,7 +1406,7 @@ public class Mysqli extends JdbcConnectionResource
 
         double average = ((double) totalQueries) / uptime;
 
-        sb.append(String.format("%.2f", average));
+        sb.append(VHelper.noCtx(), String.format("%.2f", average));
 
         return sb;
       }
@@ -1439,7 +1439,7 @@ public class Mysqli extends JdbcConnectionResource
         if (str.length() > 0)
           str.append(' ');
         str.append(rs.getString(1));
-        str.append(": ");
+   str.append(VHelper.noCtx(), ": ");
         str.append(rs.getString(2));
       }
 

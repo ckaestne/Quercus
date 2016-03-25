@@ -34,6 +34,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -237,7 +238,7 @@ abstract public class AbstractBinaryInputOutput
     throws IOException
   {
     if (_is != null)
-      return builder.append(_is);
+      return builder.append(VHelper.noCtx(), _is);
     else
       return builder;
   }

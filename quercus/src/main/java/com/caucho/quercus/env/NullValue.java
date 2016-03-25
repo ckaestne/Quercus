@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.marshal.Marshal;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -609,7 +610,7 @@ public class NullValue extends Value
   @Override
   protected void varExportImpl(StringValue sb, int level)
   {
-    sb.append("NULL");
+    sb.append(VHelper.noCtx(), "NULL");
   }
 
   /**
@@ -618,7 +619,7 @@ public class NullValue extends Value
   @Override
   public void jsonEncode(Env env, JsonEncodeContext context, StringValue sb)
   {
-    sb.append("null");
+    sb.append(VHelper.noCtx(), "null");
   }
 
   /**

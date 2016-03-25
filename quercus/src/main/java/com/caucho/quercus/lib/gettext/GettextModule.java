@@ -516,15 +516,15 @@ public class GettextModule
       char ch = msg.charAt(i);
 
       if (ch != '[' || i + 4 > length) {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
         i++;
       }
       else if (msg.charAt(i + 1) != '_') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
         i++;
       }
       else if (msg.charAt(i + 3) != ']') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
         i++;
       }
       else {
@@ -536,7 +536,7 @@ public class GettextModule
           i += 4;
         }
         else {
-          sb.append('[');
+          sb.append(VHelper.noCtx(), '[');
           i++;
         }
       }

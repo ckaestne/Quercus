@@ -136,7 +136,7 @@ abstract public class StringValue
 
       byte []bytes = unicodeStr.toString().getBytes(charset);
 
-      sb.append(bytes);
+      sb.append(VHelper.noCtx(), bytes);
       return sb;
 
     }
@@ -1041,9 +1041,9 @@ abstract public class StringValue
       return this;
     else {
       return (createStringBuilder()
-              .append(this, 0, (int) index)
+              .append(VHelper.noCtx(), this, 0, (int) index)
               .append(VHelper.noCtx(), value)
-              .append(this, (int) (index + 1), length()));
+              .append(VHelper.noCtx(), this, (int) (index + 1), length()));
     }
   }
 
@@ -1056,7 +1056,7 @@ abstract public class StringValue
     // php/03i6
     if (length() == 0) {
       if (incr == 1)
-        return createStringBuilder().append("1");
+        return createStringBuilder().append(VHelper.noCtx(), "1");
       else
         return LongValue.MINUS_ONE;
     }
@@ -1069,34 +1069,34 @@ abstract public class StringValue
 
         if (ch == 'z') {
           if (i == 0)
-            return createStringBuilder().append("aa").append(tail);
+            return createStringBuilder().append(VHelper.noCtx(), "aa").append(VHelper.noCtx(), tail);
           else
             tail.insert(0, 'a');
         }
         else if ('a' <= ch && ch < 'z') {
           return (createStringBuilder()
-                  .append(this, 0, i)
-                  .append((char) (ch + 1))
-                  .append(tail));
+                  .append(VHelper.noCtx(), this, 0, i)
+                  .append(VHelper.noCtx(), (char) (ch + 1))
+                  .append(VHelper.noCtx(), tail));
         }
         else if (ch == 'Z') {
           if (i == 0)
-            return createStringBuilder().append("AA").append(tail);
+            return createStringBuilder().append(VHelper.noCtx(), "AA").append(VHelper.noCtx(), tail);
           else
             tail.insert(0, 'A');
         }
         else if ('A' <= ch && ch < 'Z') {
           return (createStringBuilder()
-                  .append(this, 0, i)
-                  .append((char) (ch + 1))
-                  .append(tail));
+                  .append(VHelper.noCtx(), this, 0, i)
+                  .append(VHelper.noCtx(), (char) (ch + 1))
+                  .append(VHelper.noCtx(), tail));
         }
         else if ('0' <= ch && ch <= '9' && i == length() - 1) {
           return LongValue.create(toLong() + incr);
         }
       }
 
-      return createStringBuilder().append(tail.toString());
+      return createStringBuilder().append(VHelper.noCtx(), tail.toString());
     }
     else if (getValueType().isLongAdd()) {
       return LongValue.create(toLong() + incr);
@@ -1242,7 +1242,7 @@ abstract public class StringValue
       }
     }
 
-    sb.append('"');
+    sb.append(VHelper.noCtx(), '"');
 
     int len = length();
     for (int i = 0; i < len; i++) {
@@ -1250,41 +1250,41 @@ abstract public class StringValue
 
       switch (c) {
       case '\b':
-        sb.append('\\');
-        sb.append('b');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 'b');
         break;
       case '\f':
-        sb.append('\\');
-        sb.append('f');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 'f');
         break;
       case '\n':
-        sb.append('\\');
-        sb.append('n');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 'n');
         break;
       case '\r':
-        sb.append('\\');
-        sb.append('r');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 'r');
         break;
       case '\t':
-        sb.append('\\');
-        sb.append('t');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 't');
         break;
       case '\\':
-        sb.append('\\');
-        sb.append('\\');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), '\\');
         break;
       case '"':
         if (context.isEscapeQuote()) {
-          sb.append("\\u0022");
+          sb.append(VHelper.noCtx(), "\\u0022");
         }
         else {
-          sb.append('\\');
-          sb.append('"');
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), '"');
         }
         break;
       case '/':
-        sb.append('\\');
-        sb.append('/');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), '/');
         break;
       default:
         if (c <= 0x1f) {
@@ -1320,37 +1320,37 @@ abstract public class StringValue
       }
     }
 
-    sb.append('"');
+    sb.append(VHelper.noCtx(), '"');
   }
 
   private void jsonEncodeUnicode(StringValue sb, int c)
   {
-    sb.append('\\');
-    sb.append('u');
+    sb.append(VHelper.noCtx(), '\\');
+    sb.append(VHelper.noCtx(), 'u');
 
     int d = (c >> 12) & 0xf;
     if (d < 10)
-      sb.append((char) ('0' + d));
+      sb.append(VHelper.noCtx(), (char) ('0' + d));
     else
-      sb.append((char) ('a' + d - 10));
+      sb.append(VHelper.noCtx(), (char) ('a' + d - 10));
 
     d = (c >> 8) & 0xf;
     if (d < 10)
-      sb.append((char) ('0' + d));
+      sb.append(VHelper.noCtx(), (char) ('0' + d));
     else
-      sb.append((char) ('a' + d - 10));
+      sb.append(VHelper.noCtx(), (char) ('a' + d - 10));
 
     d = (c >> 4) & 0xf;
     if (d < 10)
-      sb.append((char) ('0' + d));
+      sb.append(VHelper.noCtx(), (char) ('0' + d));
     else
-      sb.append((char) ('a' + d - 10));
+      sb.append(VHelper.noCtx(), (char) ('a' + d - 10));
 
     d = (c) & 0xf;
     if (d < 10)
-      sb.append((char) ('0' + d));
+      sb.append(VHelper.noCtx(), (char) ('0' + d));
     else
-      sb.append((char) ('a' + d - 10));
+      sb.append(VHelper.noCtx(), (char) ('a' + d - 10));
   }
 
   private void jsonEncodeAscii(JsonEncodeContext context,
@@ -1360,51 +1360,51 @@ abstract public class StringValue
     switch (ch) {
       case '<':
         if (context.isEscapeTag()) {
-          sb.append("\\u003C");
+          sb.append(VHelper.noCtx(), "\\u003C");
         }
         else {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         break;
 
       case '>':
         if (context.isEscapeTag()) {
-          sb.append("\\u003E");
+          sb.append(VHelper.noCtx(), "\\u003E");
         }
         else {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         break;
 
       case '&':
         if (context.isEscapeAmp()) {
-          sb.append("\\u0026");
+          sb.append(VHelper.noCtx(), "\\u0026");
         }
         else {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         break;
 
       case '\'':
         if (context.isEscapeApos()) {
-          sb.append("\\u0027");
+          sb.append(VHelper.noCtx(), "\\u0027");
         }
         else {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         break;
 
       case '"':
         if (context.isEscapeQuote()) {
-          sb.append("\\u0022");
+          sb.append(VHelper.noCtx(), "\\u0022");
         }
         else {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         break;
 
       default:
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
   }
 
@@ -1454,7 +1454,7 @@ abstract public class StringValue
   /**
    * Append a Java string to the value.
    */
-  public StringValue append(String s, int start, int end)
+  public StringValue append(FeatureExpr ctx, String s, int start, int end)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
@@ -1462,7 +1462,7 @@ abstract public class StringValue
   /**
    * Append a Java buffer to the value.
    */
-  public StringValue append(char []buf, int offset, int length)
+  public StringValue append(FeatureExpr ctx, char[] buf, int offset, int length)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
@@ -1470,15 +1470,15 @@ abstract public class StringValue
   /**
    * Append a Java double to the value.
    */
-  public StringValue append(char []buf)
+  public StringValue append(FeatureExpr ctx, char[] buf)
   {
-    return append(buf, 0, buf.length);
+    return append(ctx, buf, 0, buf.length);
   }
 
   /**
    * Append a Java buffer to the value.
    */
-  public StringValue append(CharSequence buf, int head, int tail)
+  public StringValue append(FeatureExpr ctx, CharSequence buf, int head, int tail)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
@@ -1486,17 +1486,17 @@ abstract public class StringValue
   /**
    * Append a Java buffer to the value.
    */
-  public StringValue append(StringBuilderValue sb, int head, int tail)
+  public StringValue append(FeatureExpr ctx, StringBuilderValue sb, int head, int tail)
   {
-    return append((CharSequence) sb, head, tail);
+    return append(ctx, (CharSequence) sb, head, tail);
   }
 
   /**
    * Append a Java buffer to the value.
    */
-  public StringValue append(UnicodeBuilderValue sb, int head, int tail)
+  public StringValue append(FeatureExpr ctx, UnicodeBuilderValue sb, int head, int tail)
   {
-    return append((CharSequence) sb, head, tail);
+    return append(ctx, (CharSequence) sb, head, tail);
   }
 
   /*
@@ -1505,29 +1505,29 @@ abstract public class StringValue
    * @param str should be a Unicode string
    * @param charset to decode string from
    */
-  public StringValue append(Env env, StringValue unicodeStr, String charset)
+  public StringValue append(Env env, FeatureExpr ctx, StringValue unicodeStr, String charset)
   {
     if (! unicodeStr.isUnicode())
-      return append(VHelper.noCtx(), unicodeStr);
+      return append(ctx, unicodeStr);
 
     try {
       byte []bytes = unicodeStr.toString().getBytes(charset);
 
-      append(bytes);
+      append(ctx, bytes);
       return this;
 
     }
     catch (UnsupportedEncodingException e) {
       env.warning(e);
 
-      return append(VHelper.noCtx(), unicodeStr);
+      return append(ctx, unicodeStr);
     }
   }
 
   /**
    * Append a Java char to the value.
    */
-  public StringValue append(char v)
+  public StringValue append(FeatureExpr ctx, char v)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
@@ -1535,33 +1535,33 @@ abstract public class StringValue
   /**
    * Append a Java boolean to the value.
    */
-  public StringValue append(boolean v)
+  public StringValue append(FeatureExpr ctx, boolean v)
   {
-    return append(v ? "true" : "false");
+    return append(ctx, v ? "true" : "false");
   }
 
   /**
    * Append a Java long to the value.
    */
-  public StringValue append(long v)
+  public StringValue append(FeatureExpr ctx, long v)
   {
-    return append(String.valueOf(v));
+    return append(ctx, String.valueOf(v));
   }
 
   /**
    * Append a Java double to the value.
    */
-  public StringValue append(double v)
+  public StringValue append(FeatureExpr ctx, double v)
   {
-    return append(String.valueOf(v));
+    return append(ctx, String.valueOf(v));
   }
 
   /**
    * Append a Java value to the value.
    */
-  public StringValue append(Object v)
+  public StringValue append(FeatureExpr ctx, Object v)
   {
-    return append(String.valueOf(v));
+    return append(ctx, String.valueOf(v));
   }
 
   /**
@@ -1583,7 +1583,7 @@ abstract public class StringValue
   /**
    * Append a byte buffer to the value.
    */
-  public StringValue append(byte []buf, int offset, int length)
+  public StringValue append(FeatureExpr ctx, byte[] buf, int offset, int length)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
@@ -1591,15 +1591,15 @@ abstract public class StringValue
   /**
    * Append a byte buffer to the value.
    */
-  public StringValue append(byte []buf)
+  public StringValue append(FeatureExpr ctx, byte[] buf)
   {
-    return append(buf, 0, buf.length);
+    return append(ctx, buf, 0, buf.length);
   }
 
   /**
    * Append a byte buffer to the value.
    */
-  public StringValue appendUtf8(byte []buf, int offset, int length)
+  public StringValue appendUtf8(byte[] buf, int offset, int length, FeatureExpr ctx)
   {
     throw new UnsupportedOperationException(getClass().getName());
   }
@@ -1607,9 +1607,9 @@ abstract public class StringValue
   /**
    * Append a byte buffer to the value.
    */
-  public StringValue appendUtf8(byte []buf)
+  public StringValue appendUtf8(FeatureExpr ctx, byte[] buf)
   {
-    return appendUtf8(buf, 0, buf.length);
+    return appendUtf8(buf, 0, buf.length, ctx);
   }
 
   /**
@@ -1621,98 +1621,98 @@ abstract public class StringValue
     int length = length();
 
     for (int i = 0; i < length; i++)
-      sb.append(charAt(i));
+      sb.append(VHelper.noCtx(), charAt(i));
 
     return this;
   }
 
-  /**
-   * Append a Java boolean to the value.
-   */
-  public StringValue appendUnicode(boolean v)
-  {
-    return append(v ? "true" : "false");
-  }
-
-  /**
-   * Append a Java long to the value.
-   */
-  public StringValue appendUnicode(long v)
-  {
-    return append(String.valueOf(v));
-  }
-
-  /**
-   * Append a Java double to the value.
-   */
-  public StringValue appendUnicode(double v)
-  {
-    return append(String.valueOf(v));
-  }
-
-  /**
-   * Append a Java value to the value.
-   */
-  public StringValue appendUnicode(Object v)
-  {
-    return append(String.valueOf(v));
-  }
-
-  /**
-   * Append a Java char, possibly converting to a unicode string
-   */
-  public StringValue appendUnicode(char v)
-  {
-    return append(v);
-  }
-
-  /**
-   * Append a Java char buffer, possibly converting to a unicode string
-   */
-  public StringValue appendUnicode(char []buffer, int offset, int length)
-  {
-    return append(buffer, offset, length);
-  }
-
-  /**
-   * Append a Java char buffer, possibly converting to a unicode string
-   */
-  public StringValue appendUnicode(char []buffer)
-  {
-    return append(buffer);
-  }
-
-  /**
-   * Append a Java char buffer, possibly converting to a unicode string
-   */
-  public StringValue appendUnicode(String value)
-  {
-    return append(value);
-  }
+//  /**
+//   * Append a Java boolean to the value.
+//   */
+//  public StringValue appendUnicode(FeatureExpr ctx, boolean v)
+//  {
+//    return append(v ? "true" : "false");
+//  }
+//
+//  /**
+//   * Append a Java long to the value.
+//   */
+//  public StringValue appendUnicode(FeatureExpr ctx, long v)
+//  {
+//    return append(String.valueOf(v));
+//  }
+//
+//  /**
+//   * Append a Java double to the value.
+//   */
+//  public StringValue appendUnicode(FeatureExpr ctx, double v)
+//  {
+//    return append(String.valueOf(v));
+//  }
+//
+//  /**
+//   * Append a Java value to the value.
+//   */
+//  public StringValue appendUnicode(FeatureExpr ctx, Object v)
+//  {
+//    return append(String.valueOf(v));
+//  }
+//
+//  /**
+//   * Append a Java char, possibly converting to a unicode string
+//   */
+//  public StringValue appendUnicode(FeatureExpr ctx, char v)
+//  {
+//    return append(ctx, v);
+//  }
+//
+//  /**
+//   * Append a Java char buffer, possibly converting to a unicode string
+//   */
+//  public StringValue appendUnicode(FeatureExpr ctx, char[] buffer, int offset, int length)
+//  {
+//    return append(ctx, buffer, offset, length);
+//  }
+//
+//  /**
+//   * Append a Java char buffer, possibly converting to a unicode string
+//   */
+//  public StringValue appendUnicode(char []buffer)
+//  {
+//    return append(ctx, buffer);
+//  }
 
   /**
    * Append a Java char buffer, possibly converting to a unicode string
    */
-  public StringValue appendUnicode(String value, int offset, int length)
+  public StringValue appendUnicode(FeatureExpr ctx, String value)
   {
-    return append(value, offset, length);
+    return append(ctx, value);
   }
+
+//  /**
+//   * Append a Java char buffer, possibly converting to a unicode string
+//   */
+//  public StringValue appendUnicode(String value, int offset, int length)
+//  {
+//    return append(ctx, value, offset, length);
+//  }
 
   /**
    * Append a Java char buffer, possibly converting to a unicode string
    */
-  public StringValue appendUnicode(Value value)
+  public StringValue appendUnicode(FeatureExpr ctx, Value value)
   {
-    return append(VHelper.noCtx(), value);
+    return append(ctx, value);
   }
 
-  /**
-   * Append a Java char buffer, possibly converting to a unicode string
-   */
-  public StringValue appendUnicode(Value v1, Value v2)
-  {
-    return append(VHelper.noCtx(), v1).append(VHelper.noCtx(), v2);
-  }
+//  /**
+//   * Append a Java char buffer, possibly converting to a unicode string
+//   */
+//  public StringValue appendUnicode(Value v1, Value v2)
+//  {
+//    return append(ctx, v1).append(ctx, v2);
+//  }
 
   /**
    * Append a Java byte to the value without conversions.
@@ -1785,7 +1785,7 @@ abstract public class StringValue
   public StringValue append(TempBuffer ptr)
   {
     for (; ptr != null; ptr = ptr.getNext()) {
-      append(ptr.getBuffer(), 0, ptr.getLength());
+      append(VHelper.noCtx(), ptr.getBuffer(), 0, ptr.getLength());
     }
 
     return this;
@@ -1800,7 +1800,7 @@ abstract public class StringValue
     int ch;
 
     while ((ch = reader.read()) >= 0) {
-      append((char) ch);
+      append(VHelper.noCtx(), (char) ch);
     }
 
     return this;
@@ -1815,7 +1815,7 @@ abstract public class StringValue
     int ch;
 
     while (length-- > 0 && (ch = reader.read()) >= 0) {
-      append((char) ch);
+      append(VHelper.noCtx(), (char) ch);
     }
 
     return this;
@@ -1838,7 +1838,7 @@ abstract public class StringValue
       sublen = is.read(buffer, 0, sublen);
 
       if (sublen > 0)
-        append(buffer, 0, sublen);
+        append(VHelper.noCtx(), buffer, 0, sublen);
 
       return sublen;
     } catch (IOException e) {
@@ -1868,7 +1868,7 @@ abstract public class StringValue
         sublen = is.read(buffer, 0, sublen);
 
         if (sublen > 0) {
-          append(buffer, 0, sublen);
+          append(VHelper.noCtx(), buffer, 0, sublen);
           length -= sublen;
           readLength += sublen;
         }
@@ -1904,7 +1904,7 @@ abstract public class StringValue
         sublen = is.read(buffer, 0, sublen);
 
         if (sublen > 0) {
-          append(buffer, 0, sublen);
+          append(VHelper.noCtx(), buffer, 0, sublen);
           length -= sublen;
           readLength += sublen;
         }
@@ -1942,7 +1942,7 @@ abstract public class StringValue
         sublen = is.read(buffer, 0, sublen);
 
         if (sublen > 0) {
-          append(buffer, 0, sublen);
+          append(VHelper.noCtx(), buffer, 0, sublen);
           readLength += sublen;
           length -= sublen;
         }
@@ -1979,7 +1979,7 @@ abstract public class StringValue
         sublen = is.read(buffer, 0, sublen);
 
         if (sublen > 0) {
-          append(buffer, 0, sublen);
+          append(VHelper.noCtx(), buffer, 0, sublen);
           length -= sublen;
           readLength += sublen;
         }
@@ -2001,7 +2001,7 @@ abstract public class StringValue
   @Override
   protected void varExportImpl(StringValue sb, int level)
   {
-    sb.append("'");
+    sb.append(VHelper.noCtx(), "'");
 
     int len = length();
     for (int i = 0; i < len; i++) {
@@ -2009,17 +2009,17 @@ abstract public class StringValue
 
       switch (ch) {
       case '\'':
-        sb.append("\\'");
+        sb.append(VHelper.noCtx(), "\\'");
         break;
       case '\\':
-        sb.append("\\\\");
+        sb.append(VHelper.noCtx(), "\\\\");
         break;
       default:
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
     }
 
-    sb.append("'");
+    sb.append(VHelper.noCtx(), "'");
   }
 
   //
@@ -2392,13 +2392,13 @@ abstract public class StringValue
       char ch = charAt(i);
 
       if ('a' <= ch && ch <= 'z') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
       else if ('A' <= ch && ch <= 'Z') {
-        sb.append((char) (ch + 'a' - 'A'));
+        sb.append(VHelper.noCtx(), (char) (ch + 'a' - 'A'));
       }
       else if (isUnicode() && Character.isUpperCase(ch)) {
-        sb.append(Character.toLowerCase(ch));
+        sb.append(VHelper.noCtx(), Character.toLowerCase(ch));
       }
     }
 
@@ -2512,7 +2512,7 @@ abstract public class StringValue
 
     Decoder decoder = Decoder.create(charset);
 
-    sb.append(decoder.decode(env, this));
+    sb.append(VHelper.noCtx(), decoder.decode(env, this));
 
     return sb;
   }

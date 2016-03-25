@@ -576,19 +576,19 @@ public class JdbcResultResource
           else if (getMetaData().isCurrency(column)) {
             StringValue sb = env.createUnicodeBuilder();
 
-            sb.append("$");
+            sb.append(VHelper.noCtx(), "$");
 
-            return sb.append(value);
+            return sb.append(VHelper.noCtx(), value);
           }
           else if (value == 0.0) {
             StringValue sb = env.createUnicodeBuilder();
 
-            return sb.append("0");
+            return sb.append(VHelper.noCtx(), "0");
           }
           else {
             StringValue sb = env.createUnicodeBuilder();
 
-            return sb.append(value);
+            return sb.append(VHelper.noCtx(), value);
           }
         }
 
@@ -749,7 +749,7 @@ public class JdbcResultResource
 
     StringValue bb = env.createUnicodeBuilder();
 
-    bb.append(bytes);
+    bb.append(VHelper.noCtx(), bytes);
 
     return bb;
   }

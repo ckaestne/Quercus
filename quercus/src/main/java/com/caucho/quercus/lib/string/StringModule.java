@@ -120,44 +120,44 @@ public class StringModule extends AbstractQuercusModule {
       char ch = source.charAt(i);
 
       if (ch >= 256 || ! bitmap[ch]) {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
         continue;
       }
 
       switch (ch) {
       case 0x07:
-        sb.append("\\a");
+        sb.append(VHelper.noCtx(), "\\a");
         break;
       case '\b':
-        sb.append("\\b");
+        sb.append(VHelper.noCtx(), "\\b");
         break;
       case '\t':
-        sb.append("\\t");
+        sb.append(VHelper.noCtx(), "\\t");
         break;
       case '\n':
-        sb.append("\\n");
+        sb.append(VHelper.noCtx(), "\\n");
         break;
       case 0xb:
-        sb.append("\\v");
+        sb.append(VHelper.noCtx(), "\\v");
         break;
       case '\f':
-        sb.append("\\f");
+        sb.append(VHelper.noCtx(), "\\f");
         break;
       case '\r':
-        sb.append("\\r");
+        sb.append(VHelper.noCtx(), "\\r");
         break;
       default:
         if (ch < 0x20 || ch >= 0x7f) {
           // save as octal
-          sb.append("\\");
-          sb.append((char) ('0' + ((ch >> 6) & 7)));
-          sb.append((char) ('0' + ((ch >> 3) & 7)));
-          sb.append((char) ('0' + ((ch) & 7)));
+          sb.append(VHelper.noCtx(), "\\");
+          sb.append(VHelper.noCtx(), (char) ('0' + ((ch >> 6) & 7)));
+          sb.append(VHelper.noCtx(), (char) ('0' + ((ch >> 3) & 7)));
+          sb.append(VHelper.noCtx(), (char) ('0' + ((ch) & 7)));
           break;
         }
         else {
-          sb.append("\\");
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), "\\");
+          sb.append(VHelper.noCtx(), ch);
           break;
         }
       }
@@ -227,19 +227,19 @@ public class StringModule extends AbstractQuercusModule {
 
       switch (ch) {
       case 0x0:
-        sb.append("\\0");
+        sb.append(VHelper.noCtx(), "\\0");
         break;
       case '\'':
-        sb.append("\\'");
+        sb.append(VHelper.noCtx(), "\\'");
         break;
       case '\"':
-        sb.append("\\\"");
+        sb.append(VHelper.noCtx(), "\\\"");
         break;
       case '\\':
-        sb.append("\\\\");
+        sb.append(VHelper.noCtx(), "\\\\");
         break;
       default:
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
         break;
       }
     }
@@ -260,16 +260,16 @@ public class StringModule extends AbstractQuercusModule {
         int d = (ch >> 4) & 0xf;
 
         if (d < 10)
-          sb.append((char) (d + '0'));
+          sb.append(VHelper.noCtx(), (char) (d + '0'));
         else
-          sb.append((char) (d + 'a' - 10));
+          sb.append(VHelper.noCtx(), (char) (d + 'a' - 10));
 
         d = (ch) & 0xf;
 
         if (d < 10)
-          sb.append((char) (d + '0'));
+          sb.append(VHelper.noCtx(), (char) (d + '0'));
         else
-          sb.append((char) (d + 'a' - 10));
+          sb.append(VHelper.noCtx(), (char) (d + 'a' - 10));
       }
 
       return sb;
@@ -307,7 +307,7 @@ public class StringModule extends AbstractQuercusModule {
 
     StringValue sb = env.createUnicodeBuilder();
 
-    sb.append((char) value);
+    sb.append(VHelper.noCtx(), (char) value);
 
     return sb;
   }
@@ -430,7 +430,7 @@ public class StringModule extends AbstractQuercusModule {
       if (45 < sublen)
         sublen = 45;
 
-      result.append((char) (sublen + 0x20));
+      result.append(VHelper.noCtx(), (char) (sublen + 0x20));
 
       int end = i + sublen;
 
@@ -443,17 +443,17 @@ public class StringModule extends AbstractQuercusModule {
         if (i < length)
           code += source.charAt(i++);
 
-        result.append(toUUChar(((code >> 18) & 0x3f)));
-        result.append(toUUChar(((code >> 12) & 0x3f)));
-        result.append(toUUChar(((code >> 6) & 0x3f)));
-        result.append(toUUChar(((code) & 0x3f)));
+        result.append(VHelper.noCtx(), toUUChar(((code >> 18) & 0x3f)));
+        result.append(VHelper.noCtx(), toUUChar(((code >> 12) & 0x3f)));
+        result.append(VHelper.noCtx(), toUUChar(((code >> 6) & 0x3f)));
+        result.append(VHelper.noCtx(), toUUChar(((code) & 0x3f)));
       }
 
-      result.append('\n');
+      result.append(VHelper.noCtx(), '\n');
     }
 
-    result.append((char) 0x60);
-    result.append('\n');
+    result.append(VHelper.noCtx(), (char) 0x60);
+    result.append(VHelper.noCtx(), '\n');
 
     return result;
   }
@@ -513,7 +513,7 @@ public class StringModule extends AbstractQuercusModule {
 
         for (int i = 0; i < count.length; i++) {
           if (count[i] > 0)
-            sb.append((char) i);
+            sb.append(VHelper.noCtx(), (char) i);
         }
 
         return sb;
@@ -525,7 +525,7 @@ public class StringModule extends AbstractQuercusModule {
 
         for (int i = 0; i < count.length; i++) {
           if (count[i] == 0)
-            sb.append((char) i);
+            sb.append(VHelper.noCtx(), (char) i);
         }
 
         return sb;
@@ -653,7 +653,7 @@ public class StringModule extends AbstractQuercusModule {
 
       int d = d1 * 16 + d2;
 
-      sb.append((char) d);
+      sb.append(VHelper.noCtx(), (char) d);
     }
 
     return sb;
@@ -941,8 +941,8 @@ public class StringModule extends AbstractQuercusModule {
       int d1 = (digest[i] >> 4) & 0xf;
       int d2 = (digest[i] & 0xf);
 
-      sb.append(toHexChar(d1));
-      sb.append(toHexChar(d2));
+      sb.append(VHelper.noCtx(), toHexChar(d1));
+      sb.append(VHelper.noCtx(), toHexChar(d2));
     }
 
     return sb;
@@ -1554,11 +1554,11 @@ public class StringModule extends AbstractQuercusModule {
       switch (ch) {
       case '.': case '\\': case '+': case '*': case '?':
       case '[': case '^': case ']': case '(': case ')': case '$':
-        sb.append("\\");
-        sb.append(ch);
+          sb.append(VHelper.noCtx(), "\\");
+          sb.append(VHelper.noCtx(), ch);
         break;
       default:
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
         break;
       }
     }
@@ -1881,7 +1881,7 @@ public class StringModule extends AbstractQuercusModule {
   {
     if (isBinary) {
       StringValue v = env.createBinaryBuilder();
-      v.append(bytes, 0, bytes.length);
+      v.append(VHelper.noCtx(), bytes, 0, bytes.length);
       return v;
     }
     else {
@@ -1893,14 +1893,14 @@ public class StringModule extends AbstractQuercusModule {
     int d2 = (ch) & 0xf;
 
     if (d1 < 10)
-      v.append((char) ('0' + d1));
+      v.append(VHelper.noCtx(), (char) ('0' + d1));
     else
-      v.append((char) ('a' + d1 - 10));
+      v.append(VHelper.noCtx(), (char) ('a' + d1 - 10));
 
     if (d2 < 10)
-      v.append((char) ('0' + d2));
+      v.append(VHelper.noCtx(), (char) ('0' + d2));
     else
-      v.append((char) ('a' + d2 - 10));
+      v.append(VHelper.noCtx(), (char) ('a' + d2 - 10));
       }
 
       return v;
@@ -1932,11 +1932,11 @@ public class StringModule extends AbstractQuercusModule {
         char code = SOUNDEX_VALUES[ch - 'A'];
 
         if (count == 0) {
-          result.append(ch);
+          result.append(VHelper.noCtx(), ch);
           count++;
         }
         else if (code != '0' && code != lastCode) {
-          result.append(code);
+          result.append(VHelper.noCtx(), code);
           count++;
         }
 
@@ -1945,7 +1945,7 @@ public class StringModule extends AbstractQuercusModule {
     }
 
     for (; count < 4; count++) {
-      result.append('0');
+      result.append(VHelper.noCtx(), '0');
     }
 
     return result;
@@ -2793,7 +2793,7 @@ public class StringModule extends AbstractQuercusModule {
       char ch = string.charAt(sIndex);
 
       if (! isWhitespace(ch))
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       else
         break;
     }
@@ -3070,12 +3070,12 @@ public class StringModule extends AbstractQuercusModule {
     StringValue sb = string.createStringBuilder(string.length() + padLen);
 
     for (int i = 0; i < leftPad; i++)
-      sb.append(pad.charAt(i % padStringLen));
+      sb.append(VHelper.noCtx(), pad.charAt(i % padStringLen));
 
     sb = sb.append(VHelper.noCtx(), string);
 
     for (int i = 0; i < rightPad; i++)
-      sb.append(pad.charAt(i % padStringLen));
+      sb.append(VHelper.noCtx(), pad.charAt(i % padStringLen));
 
     return sb;
   }
@@ -3283,7 +3283,7 @@ public class StringModule extends AbstractQuercusModule {
         result = subject.createStringBuilder();
       }
 
-      result = result.append(subject, head, next);
+      result = result.append(VHelper.noCtx(), subject, head, next);
       result = result.append(VHelper.noCtx(), replace);
 
       if (head < next + searchLen) {
@@ -3301,7 +3301,7 @@ public class StringModule extends AbstractQuercusModule {
 
       int subjectLength = subject.length();
       if (head > 0 && head < subjectLength)
-        result = result.append(subject, head, subjectLength);
+        result = result.append(VHelper.noCtx(), subject, head, subjectLength);
 
       return result;
     }
@@ -3363,15 +3363,15 @@ public class StringModule extends AbstractQuercusModule {
       if ('a' <= ch && ch <= 'z') {
         int off = ch - 'a';
 
-        sb.append((char) ('a' + (off + 13) % 26));
+        sb.append(VHelper.noCtx(), (char) ('a' + (off + 13) % 26));
       }
       else if ('A' <= ch && ch <= 'Z') {
         int off = ch - 'A';
 
-        sb.append((char) ('A' + (off + 13) % 26));
+        sb.append(VHelper.noCtx(), (char) ('A' + (off + 13) % 26));
       }
       else {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
     }
 
@@ -3666,7 +3666,7 @@ public class StringModule extends AbstractQuercusModule {
       char ch = string.charAt(i);
 
       if (i + 1 >= len || ch != '<') {
-        result.append(ch);
+        result.append(VHelper.noCtx(), ch);
         continue;
       }
 
@@ -3675,8 +3675,8 @@ public class StringModule extends AbstractQuercusModule {
       if (Character.isWhitespace(ch)) {
         i++;
 
-        result.append('<');
-        result.append(ch);
+        result.append(VHelper.noCtx(), '<');
+        result.append(VHelper.noCtx(), ch);
         continue;
       }
 
@@ -3698,7 +3698,7 @@ public class StringModule extends AbstractQuercusModule {
       int tagEnd = 0;
 
       if (allowedTagMap != null && allowedTagMap.contains(tagName)) {
-        result.append(string, i, Math.min(j + 1, len));
+        result.append(VHelper.noCtx(), string, i, Math.min(j + 1, len));
       }
       else {
         while (j < len && (ch = string.charAt(j)) != '<') {
@@ -3922,12 +3922,12 @@ public class StringModule extends AbstractQuercusModule {
           if (ch2 == '0') {
             ch2 = 0x0;
           }
-          sb.append(ch2);
+          sb.append(VHelper.noCtx(), ch2);
           i++;
         }
       }
       else
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
 
     return sb;
@@ -4248,7 +4248,7 @@ public class StringModule extends AbstractQuercusModule {
     StringValue sb = string.createStringBuilder(string.length());
 
     for (int i = string.length() - 1; i >= 0; i--) {
-      sb.append(string.charAt(i));
+      sb.append(VHelper.noCtx(), string.charAt(i));
     }
 
     return sb;
@@ -4619,9 +4619,9 @@ public class StringModule extends AbstractQuercusModule {
       char ch = string.charAt(i);
 
       if (map[ch] != 0)
-        sb.append(map[ch]);
+        sb.append(VHelper.noCtx(), map[ch]);
       else
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
 
     return sb;
@@ -4694,7 +4694,7 @@ public class StringModule extends AbstractQuercusModule {
         }
       }
 
-      result.append(ch);
+      result.append(VHelper.noCtx(), ch);
       head++;
     }
 
@@ -5004,8 +5004,8 @@ public class StringModule extends AbstractQuercusModule {
 
     StringValue sb = string.createStringBuilder();
 
-    sb = sb.append(Character.toUpperCase(string.charAt(0)));
-    sb = sb.append(string, 1, string.length());
+    sb = sb.append(VHelper.noCtx(), Character.toUpperCase(string.charAt(0)));
+    sb = sb.append(VHelper.noCtx(), string, 1, string.length());
 
     return sb;
   }
@@ -5178,20 +5178,20 @@ public class StringModule extends AbstractQuercusModule {
 
       if (ch == breakChar && string.regionMatches(
           i, breakString, 0, breakLen)) {
-        sb.append(string, head, i + breakLen);
+        sb.append(VHelper.noCtx(), string, head, i + breakLen);
         head = i + breakLen;
       } else if (width <= i - head) {
         if (ch == ' ') {
-          sb.append(string, head, i);
-          sb.append(breakString);
+          sb.append(VHelper.noCtx(), string, head, i);
+          sb.append(VHelper.noCtx(), breakString);
           head = i + 1;
         } else if (head < lastSpace) {
-          sb.append(string, head, lastSpace);
-          sb.append(breakString);
+          sb.append(VHelper.noCtx(), string, head, lastSpace);
+          sb.append(VHelper.noCtx(), breakString);
           head = lastSpace + 1;
         } else if (isCut) {
-          sb.append(string, head, i);
-          sb.append(breakString);
+          sb.append(VHelper.noCtx(), string, head, i);
+          sb.append(VHelper.noCtx(), breakString);
           head = i;
         }
       } else if (ch == ' ') {
@@ -5200,7 +5200,7 @@ public class StringModule extends AbstractQuercusModule {
     }
 
     if (head < len) {
-      sb.append(string, head, len);
+      sb.append(VHelper.noCtx(), string, head, len);
     }
 
     return sb;
@@ -5321,7 +5321,7 @@ public class StringModule extends AbstractQuercusModule {
     @Override
     public boolean apply(Env env, StringValue sb, Value []args)
     {
-      sb.append(_text, 0, _text.length);
+      sb.append(VHelper.noCtx(), _text, 0, _text.length);
 
       return true;
     }
@@ -5406,7 +5406,7 @@ public class StringModule extends AbstractQuercusModule {
         return false;
       }
 
-      sb.append(String.format(_locale.getLocale(), _format, value));
+      sb.append(VHelper.noCtx(), String.format(_locale.getLocale(), _format, value));
 
       return true;
     }
@@ -5485,17 +5485,17 @@ public class StringModule extends AbstractQuercusModule {
       }
 
       for (int i = digits + 1; i < _min; i++)
-        sb.append(_pad);
+        sb.append(VHelper.noCtx(), _pad);
 
       for (; digits >= 0; digits--) {
         int digit = (int) (value >>> (4 * digits)) & 0xf;
 
         if (digit <= 9)
-          sb.append((char) ('0' + digit));
+          sb.append(VHelper.noCtx(), (char) ('0' + digit));
         else if (_isUpper)
-          sb.append((char) ('A' + digit - 10));
+          sb.append(VHelper.noCtx(), (char) ('A' + digit - 10));
         else
-          sb.append((char) ('a' + digit - 10));
+          sb.append(VHelper.noCtx(), (char) ('a' + digit - 10));
       }
 
       return true;
@@ -5593,10 +5593,10 @@ public class StringModule extends AbstractQuercusModule {
       }
 
       for (int i = buf.length - digits; i < _min; i++)
-        sb.append(_pad);
+        sb.append(VHelper.noCtx(), _pad);
 
       for (; digits < buf.length; digits++) {
-        sb.append(buf[digits]);
+        sb.append(VHelper.noCtx(), buf[digits]);
       }
 
       return true;
@@ -5672,12 +5672,12 @@ public class StringModule extends AbstractQuercusModule {
       }
 
       for (int i = digits + 1; i < _min; i++)
-        sb.append(_pad);
+        sb.append(VHelper.noCtx(), _pad);
 
       for (; digits >= 0; digits--) {
         int digit = (int) (value >>> (digits)) & 0x1;
 
-        sb.append((char) ('0' + digit));
+        sb.append(VHelper.noCtx(), (char) ('0' + digit));
       }
 
       return true;
@@ -5736,13 +5736,13 @@ public class StringModule extends AbstractQuercusModule {
           char ch = s.charAt(i);
 
           if (ch == ' ')
-            sb.append('0');
+            sb.append(VHelper.noCtx(), '0');
           else
-            sb.append(ch);
+            sb.append(VHelper.noCtx(), ch);
         }
       }
       else {
-        sb.append(s);
+        sb.append(VHelper.noCtx(), s);
       }
 
       return true;
@@ -5815,7 +5815,7 @@ public class StringModule extends AbstractQuercusModule {
     @Override
     public boolean apply(Env env, StringValue sb, Value []args)
     {
-      sb.append(_prefix, 0, _prefix.length);
+      sb.append(VHelper.noCtx(), _prefix, 0, _prefix.length);
 
       StringValue value;
 
@@ -5841,7 +5841,7 @@ public class StringModule extends AbstractQuercusModule {
 
       if (! _isLeft) {
         for (int i = len; i < _min; i++) {
-          sb.append(_pad);
+          sb.append(VHelper.noCtx(), _pad);
         }
       }
 
@@ -5849,7 +5849,7 @@ public class StringModule extends AbstractQuercusModule {
 
       if (_isLeft) {
         for (int i = len; i < _min; i++) {
-          sb.append(_pad);
+          sb.append(VHelper.noCtx(), _pad);
         }
       }
 
@@ -6072,7 +6072,7 @@ public class StringModule extends AbstractQuercusModule {
         char ch = string.charAt(sIndex);
 
         if (_set.contains(ch)) {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         else {
           break;
@@ -6115,7 +6115,7 @@ public class StringModule extends AbstractQuercusModule {
         char ch = string.charAt(sIndex);
 
         if (! _set.contains(ch)) {
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
         }
         else {
           break;
@@ -6593,7 +6593,7 @@ public class StringModule extends AbstractQuercusModule {
         if (isWhitespace(ch))
           break;
 
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
 
       sscanfPut(var, sb, isReturnArray);

@@ -36,6 +36,7 @@ import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.LongValue;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -281,36 +282,36 @@ public class Postgres extends JdbcConnectionResource
 
       switch (c) {
         case '\u0000':
-          buf.append('\\');
-          buf.append('\u0000');
+          buf.append(VHelper.noCtx(), '\\');
+          buf.append(VHelper.noCtx(), '\u0000');
           break;
         case '\n':
-          buf.append('\\');
-          buf.append('n');
+          buf.append(VHelper.noCtx(), '\\');
+          buf.append(VHelper.noCtx(), 'n');
           break;
         case '\r':
-          buf.append('\\');
-          buf.append('r');
+          buf.append(VHelper.noCtx(), '\\');
+          buf.append(VHelper.noCtx(), 'r');
           break;
         case '\\':
-          buf.append('\\');
-          buf.append('\\');
+          buf.append(VHelper.noCtx(), '\\');
+          buf.append(VHelper.noCtx(), '\\');
           break;
         case '\'':
-          buf.append('\'');
-          buf.append('\'');
+          buf.append(VHelper.noCtx(), '\'');
+          buf.append(VHelper.noCtx(), '\'');
           break;
         case '"':
           // pg_escape_string does nothing about it.
           // buf.append('\\');
-          buf.append('\"');
+          buf.append(VHelper.noCtx(), '\"');
           break;
         case '\032':
-          buf.append('\\');
-          buf.append('Z');
+          buf.append(VHelper.noCtx(), '\\');
+          buf.append(VHelper.noCtx(), 'Z');
           break;
         default:
-          buf.append(c);
+          buf.append(VHelper.noCtx(), c);
           break;
       }
     }

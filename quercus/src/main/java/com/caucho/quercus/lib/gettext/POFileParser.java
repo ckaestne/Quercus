@@ -36,6 +36,7 @@ import com.caucho.quercus.lib.gettext.expr.PluralExpr;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -275,13 +276,13 @@ class POFileParser extends GettextParser
           ch = read();
           switch (ch) {
             case 'n':
-              sb.append('\n');
+              sb.append(VHelper.noCtx(), '\n');
               break;
             case 'r':
-              sb.append('\r');
+              sb.append(VHelper.noCtx(), '\r');
               break;
             case 't':
-              sb.append('\t');
+              sb.append(VHelper.noCtx(), '\t');
               break;
             case '\r':
               ch = read();
@@ -292,7 +293,7 @@ class POFileParser extends GettextParser
               break;
             default:
               _peekChar = ch;
-              sb.append('\\');
+              sb.append(VHelper.noCtx(), '\\');
           }
           break;
 
@@ -300,7 +301,7 @@ class POFileParser extends GettextParser
           return UNKNOWN;
 
         default:
-          sb.append((char)ch);
+          sb.append(VHelper.noCtx(), (char) ch);
       }
     }
 

@@ -239,7 +239,7 @@ public class LongValue extends NumberValue
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    return env.createUnicodeBuilder().append(_value);
+    return env.createUnicodeBuilder().append(VHelper.noCtx(), _value);
   }
 
   /**
@@ -521,7 +521,7 @@ public class LongValue extends NumberValue
   @Override
   public StringValue appendTo(UnicodeBuilderValue sb)
   {
-    return sb.append(_value);
+    return sb.append(VHelper.noCtx(), _value);
   }
 
   /**
@@ -530,7 +530,7 @@ public class LongValue extends NumberValue
   @Override
   public StringValue appendTo(BinaryBuilderValue sb)
   {
-    return sb.append(_value);
+    return sb.append(VHelper.noCtx(), _value);
   }
 
   /**
@@ -539,7 +539,7 @@ public class LongValue extends NumberValue
   @Override
   public StringValue appendTo(FeatureExpr ctx, StringBuilderValue sb)
   {
-    return sb.append(_value);
+    return sb.append(VHelper.noCtx(), _value);
   }
 
   /**
@@ -548,7 +548,7 @@ public class LongValue extends NumberValue
   @Override
   public StringValue appendTo(LargeStringBuilderValue sb)
   {
-    return sb.append(_value);
+    return sb.append(VHelper.noCtx(), _value);
   }
 
   /**
@@ -568,7 +568,7 @@ public class LongValue extends NumberValue
   @Override
   protected void varExportImpl(StringValue sb, int level)
   {
-    sb.append(_value);
+    sb.append(VHelper.noCtx(), _value);
   }
 
   //

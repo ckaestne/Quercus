@@ -1178,12 +1178,12 @@ public class QuercusParser {
         StringValue sb = createStringBuilder();
 
         if (_classDef != null) {
-          sb.append(_classDef.getName());
-          sb.append("::");
+          sb.append(VHelper.noCtx(), _classDef.getName());
+          sb.append(VHelper.noCtx(), "::");
         }
 
-        sb.append(_function.getName());
-        sb.append("::");
+        sb.append(VHelper.noCtx(), _function.getName());
+        sb.append(VHelper.noCtx(), "::");
         sb.append(VHelper.noCtx(), name);
 
         if (_classDef != null) {
@@ -4860,7 +4860,7 @@ public class QuercusParser {
         return id;
       }
       else {
-        return createStringBuilder().append(VHelper.noCtx(), _namespace).append("\\").append(VHelper.noCtx(), id);
+        return createStringBuilder().append(VHelper.noCtx(), _namespace).append(VHelper.noCtx(), "\\").append(VHelper.noCtx(), id);
       }
     }
     else {
@@ -4881,7 +4881,7 @@ public class QuercusParser {
         return id;
       }
       else {
-        return createStringBuilder().append(VHelper.noCtx(), _namespace).append('\\').append(VHelper.noCtx(), id);
+        return createStringBuilder().append(VHelper.noCtx(), _namespace).append(VHelper.noCtx(), '\\').append(VHelper.noCtx(), id);
       }
     }
   }
@@ -4894,10 +4894,10 @@ public class QuercusParser {
 
     if (isIdentifierStart(ch)) {
       _sb.setLength(0);
-      _sb.append((char) ch);
+      _sb.append(VHelper.noCtx(), (char) ch);
 
       for (ch = read(); isIdentifierPart(ch); ch = read()) {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
       }
 
       _peek = ch;
@@ -4916,10 +4916,10 @@ public class QuercusParser {
 
     if (isNamespaceIdentifierStart(ch)) {
       _sb.setLength(0);
-      _sb.append((char) ch);
+      _sb.append(VHelper.noCtx(), (char) ch);
 
       for (ch = read(); isNamespaceIdentifierPart(ch); ch = read()) {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
       }
 
       _peek = ch;
@@ -4967,23 +4967,23 @@ public class QuercusParser {
 
     if (ch == '*') {
       _sb.setLength(0);
-      _sb.append('/');
-      _sb.append('*');
+      _sb.append(VHelper.noCtx(), '/');
+      _sb.append(VHelper.noCtx(), '*');
 
       do {
         if (ch != '*') {
-          _sb.append((char) ch);
+          _sb.append(VHelper.noCtx(), (char) ch);
         }
         else if ((ch = read()) == '/') {
-          _sb.append('*');
-          _sb.append('/');
+          _sb.append(VHelper.noCtx(), '*');
+          _sb.append(VHelper.noCtx(), '/');
 
           _comment = _sb.toString();
 
           return;
         }
         else {
-          _sb.append('*');
+          _sb.append(VHelper.noCtx(), '*');
           _peek = ch;
         }
       } while ((ch = read()) >= 0);
@@ -5036,7 +5036,7 @@ public class QuercusParser {
           }
         }
         else if (ch != '?') {
-          sb.append('<');
+          sb.append(VHelper.noCtx(), '<');
         }
         else if ((ch = read()) == '=') {
           _lexeme = sb;
@@ -5044,10 +5044,10 @@ public class QuercusParser {
           return TEXT_ECHO;
         }
         else if (ch != 'p' && ch != 'P' && ! isShortOpenTag()) {
-          sb.append('<');
-          sb.append('?');
+          sb.append(VHelper.noCtx(), '<');
+          sb.append(VHelper.noCtx(), '?');
 
-          sb.append((char) ch);
+          sb.append(VHelper.noCtx(), (char) ch);
 
           ch = read();
         }
@@ -5062,7 +5062,7 @@ public class QuercusParser {
         }
       }
       else {
-        sb.append((char) ch);
+        sb.append(VHelper.noCtx(), (char) ch);
 
         ch = read();
       }
@@ -5081,7 +5081,7 @@ public class QuercusParser {
   {
     int begin = sb.length();
 
-    sb.append('<');
+    sb.append(VHelper.noCtx(), '<');
 
     if (! parseTextMatch(sb, "script"))
       return false;
@@ -5095,13 +5095,13 @@ public class QuercusParser {
 
     if(openingParentheses == '\'' || openingParentheses == '"'){
       if (! parseTextMatch(sb, "php")){
-        sb.append((char) openingParentheses);
+        sb.append(VHelper.noCtx(), (char) openingParentheses);
         return false;
       }
 
       int closingParentheses = read();
       if(openingParentheses != closingParentheses){
-        sb.append((char) closingParentheses);
+        sb.append(VHelper.noCtx(), (char) closingParentheses);
         return false;
       }
     }
@@ -5137,7 +5137,7 @@ public class QuercusParser {
         return false;
       }
       else
-        sb.append((char) ch);
+        sb.append(VHelper.noCtx(), (char) ch);
     }
 
     return true;
@@ -5149,7 +5149,7 @@ public class QuercusParser {
     int ch;
 
     while (Character.isWhitespace((ch = read()))) {
-      sb.append((char) ch);
+      sb.append(VHelper.noCtx(), (char) ch);
     }
 
     _peek = ch;
@@ -5180,11 +5180,11 @@ public class QuercusParser {
             int value = parseUnicodeEscape(false);
 
             if (value < 0) {
-              _sb.append('\\');
-              _sb.append('u');
+              _sb.append(VHelper.noCtx(), '\\');
+              _sb.append(VHelper.noCtx(), 'u');
             }
             else
-              _sb.append((char) value); // Character.toChars(value));
+              _sb.append(VHelper.noCtx(), (char) value); // Character.toChars(value));
 
             continue;
           }
@@ -5192,36 +5192,36 @@ public class QuercusParser {
             int value = parseUnicodeEscape(true);
 
             if (value < 0) {
-              _sb.append('\\');
-              _sb.append('U');
+              _sb.append(VHelper.noCtx(), '\\');
+              _sb.append(VHelper.noCtx(), 'U');
             }
             else
-              _sb.append((char) value); // Character.toChars(value));
+              _sb.append(VHelper.noCtx(), (char) value); // Character.toChars(value));
 
             continue;
           }
         }
 
         if (end == '"') {
-          _sb.append('\\');
+          _sb.append(VHelper.noCtx(), '\\');
 
           if (ch >= 0)
-            _sb.append((char) ch);
+            _sb.append(VHelper.noCtx(), (char) ch);
         }
         else {
           switch (ch) {
           case '\'': case '\\':
-            _sb.append((char) ch);
+              _sb.append(VHelper.noCtx(), (char) ch);
             break;
           default:
-            _sb.append('\\');
-            _sb.append((char) ch);
+            _sb.append(VHelper.noCtx(), '\\');
+            _sb.append(VHelper.noCtx(), (char) ch);
             break;
           }
         }
       }
       else
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
     }
 
     _lexeme = copyStringValue(_sb);
@@ -5237,7 +5237,7 @@ public class QuercusParser {
     int ch;
 
     while ((ch = read()) >= 0 && ch != '\'' && ! Character.isWhitespace(ch)) {
-      _sb.append((char) ch);
+      _sb.append(VHelper.noCtx(), (char) ch);
     }
 
     if (ch != '\'') {
@@ -5264,12 +5264,12 @@ public class QuercusParser {
             break;
           }
           else {
-            _sb.append('\r');
-            _sb.append((char) ch);
+            _sb.append(VHelper.noCtx(), '\r');
+            _sb.append(VHelper.noCtx(), (char) ch);
           }
         }
         else {
-          _sb.append('\r');
+          _sb.append(VHelper.noCtx(), '\r');
         }
       }
       else if (ch == '\n') {
@@ -5277,10 +5277,10 @@ public class QuercusParser {
           break;
         }
 
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
       }
       else {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
       }
     }
 
@@ -5313,7 +5313,7 @@ public class QuercusParser {
       return true;
     }
     else {
-      _sb.append(nowdocName, 0, i);
+      _sb.append(VHelper.noCtx(), nowdocName, 0, i);
 
       return false;
     }
@@ -5337,7 +5337,7 @@ public class QuercusParser {
     while ((ch = read()) >= 0
            && ! Character.isWhitespace(ch)
            && ! (isQuoted && ch == '"')) {
-      _sb.append((char) ch);
+      _sb.append(VHelper.noCtx(), (char) ch);
     }
 
     _heredocEnd = _sb.toString();
@@ -5412,7 +5412,7 @@ public class QuercusParser {
         _sb.setLength(0);
 
         for (; isIdentifierPart(ch); ch = read()) {
-          _sb.append((char) ch);
+          _sb.append(VHelper.noCtx(), (char) ch);
         }
 
         _peek = ch;
@@ -5438,7 +5438,7 @@ public class QuercusParser {
             else if (isIdentifierPart(ch = read())) {
               _sb.setLength(0);
               for (; isIdentifierPart(ch); ch = read()) {
-                _sb.append((char) ch);
+                _sb.append(VHelper.noCtx(), (char) ch);
               }
 
               tail = tail.createFieldGet(_factory, getLocation(),
@@ -5492,7 +5492,7 @@ public class QuercusParser {
 
     if (ch == '$') {
       for (ch = read(); isIdentifierPart(ch); ch = read()) {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
       }
 
       StringValue nameV = copyStringValue(_sb);
@@ -5515,7 +5515,7 @@ public class QuercusParser {
     }
     else if (isIdentifierPart(ch)) {
       for (; isIdentifierPart(ch); ch = read()) {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
       }
 
       Expr constExpr = _factory.createConst(_sb.toString());
@@ -5620,37 +5620,37 @@ public class QuercusParser {
 
         switch (ch) {
         case '0': case '1': case '2': case '3':
-          _sb.append((char) parseOctalEscape(ch));
+            _sb.append(VHelper.noCtx(), (char) parseOctalEscape(ch));
           break;
         case 't':
-          _sb.append('\t');
+          _sb.append(VHelper.noCtx(), '\t');
           break;
         case 'r':
-          _sb.append('\r');
+          _sb.append(VHelper.noCtx(), '\r');
           break;
         case 'n':
-          _sb.append('\n');
+          _sb.append(VHelper.noCtx(), '\n');
           break;
         case '"':
         case '`':
           if (_heredocEnd != null)
-            _sb.append('\\');
+            _sb.append(VHelper.noCtx(), '\\');
 
-          _sb.append((char) ch);
+          _sb.append(VHelper.noCtx(), (char) ch);
           break;
         case '$':
         case '\\':
-          _sb.append((char) ch);
+          _sb.append(VHelper.noCtx(), (char) ch);
           break;
         case 'x': {
           int value = parseHexEscape();
 
           if (value >= 0) {
-            _sb.append((char) value);
+            _sb.append(VHelper.noCtx(), (char) value);
           }
           else {
-            _sb.append('\\');
-            _sb.append('x');
+            _sb.append(VHelper.noCtx(), '\\');
+            _sb.append(VHelper.noCtx(), 'x');
           }
 
           break;
@@ -5660,15 +5660,15 @@ public class QuercusParser {
             int result = parseUnicodeEscape(false);
 
             if (result < 0) {
-              _sb.append('\\');
-              _sb.append('u');
+              _sb.append(VHelper.noCtx(), '\\');
+              _sb.append(VHelper.noCtx(), 'u');
             }
             else
-              _sb.append(Character.toChars(result));
+              _sb.append(VHelper.noCtx(), Character.toChars(result));
           }
           else {
-            _sb.append('\\');
-            _sb.append((char) ch);
+            _sb.append(VHelper.noCtx(), '\\');
+            _sb.append(VHelper.noCtx(), (char) ch);
           }
           break;
         case 'U':
@@ -5676,28 +5676,28 @@ public class QuercusParser {
             int result = parseUnicodeEscape(true);
 
             if (result < 0) {
-              _sb.append('\\');
-              _sb.append('U');
+              _sb.append(VHelper.noCtx(), '\\');
+              _sb.append(VHelper.noCtx(), 'U');
             }
             else
-              _sb.append(Character.toChars(result));
+              _sb.append(VHelper.noCtx(), Character.toChars(result));
           }
           else {
-            _sb.append('\\');
-            _sb.append((char) ch);
+            _sb.append(VHelper.noCtx(), '\\');
+            _sb.append(VHelper.noCtx(), (char) ch);
           }
           break;
         case '{':
           ch = read();
           _peek = ch;
           if (ch == '$' && _heredocEnd == null)
-            _sb.append('{');
+            _sb.append(VHelper.noCtx(), '{');
           else
-            _sb.append("\\{");
+            _sb.append(VHelper.noCtx(), "\\{");
           break;
         default:
-          _sb.append('\\');
-          _sb.append((char) ch);
+          _sb.append(VHelper.noCtx(), '\\');
+          _sb.append(VHelper.noCtx(), (char) ch);
           break;
         }
       }
@@ -5715,7 +5715,7 @@ public class QuercusParser {
           return SIMPLE_STRING_ESCAPE;
         }
         else {
-          _sb.append('$');
+          _sb.append(VHelper.noCtx(), '$');
           _peek = ch;
         }
       }
@@ -5729,7 +5729,7 @@ public class QuercusParser {
         }
         else {
           _peek = ch;
-          _sb.append('{');
+          _sb.append(VHelper.noCtx(), '{');
         }
       }
       /* quercus/013c
@@ -5737,7 +5737,7 @@ public class QuercusParser {
         throw error(L.l("unexpected newline in string."));
       */
       else {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
 
         if (_heredocEnd == null || ! _sb.endsWith(_heredocEnd)) {
         }
@@ -5917,33 +5917,33 @@ public class QuercusParser {
     int token = LONG;
 
     for (; '0' <= ch && ch <= '9'; ch = read()) {
-      _sb.append((char) ch);
+      _sb.append(VHelper.noCtx(), (char) ch);
     }
 
     if (ch == '.') {
       token = DOUBLE;
 
-      _sb.append((char) ch);
+      _sb.append(VHelper.noCtx(), (char) ch);
 
       for (ch = read(); '0' <= ch && ch <= '9'; ch = read()) {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
       }
     }
 
     if (ch == 'e' || ch == 'E') {
       token = DOUBLE;
 
-      _sb.append((char) ch);
+      _sb.append(VHelper.noCtx(), (char) ch);
 
       ch = read();
       if (ch == '+' || ch == '-') {
-        _sb.append((char) ch);
+        _sb.append(VHelper.noCtx(), (char) ch);
         ch = read();
       }
 
       if ('0' <= ch && ch <= '9') {
         for (; '0' <= ch && ch <= '9'; ch = read()) {
-          _sb.append((char) ch);
+          _sb.append(VHelper.noCtx(), (char) ch);
         }
       }
       else

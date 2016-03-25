@@ -125,9 +125,9 @@ public class ClassField
   public static StringValue createProtectedCanonicalName(StringValue sb,
                                                          StringValue name)
   {
-    sb.append('\u0000');
-    sb.append('*');
-    sb.append('\u0000');
+    sb.append(VHelper.noCtx(), '\u0000');
+    sb.append(VHelper.noCtx(), '*');
+    sb.append(VHelper.noCtx(), '\u0000');
     sb.append(VHelper.noCtx(), name);
 
     return sb;
@@ -143,9 +143,9 @@ public class ClassField
                                                        StringValue name,
                                                        String declaringClass)
   {
-    sb.append('\u0000');
-    sb.append(declaringClass);
-    sb.append('\u0000');
+    sb.append(VHelper.noCtx(), '\u0000');
+    sb.append(VHelper.noCtx(), declaringClass);
+    sb.append(VHelper.noCtx(), '\u0000');
 
     sb.append(VHelper.noCtx(), name);
 
@@ -189,7 +189,7 @@ public class ClassField
         break;
       }
       else {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
     }
 

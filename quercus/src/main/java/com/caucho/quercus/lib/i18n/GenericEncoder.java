@@ -31,6 +31,7 @@ package com.caucho.quercus.lib.i18n;
 
 import com.caucho.quercus.env.StringValue;
 import com.caucho.vfs.TempBuffer;
+import edu.cmu.cs.varex.VHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -119,9 +120,9 @@ public class GenericEncoder
       if (_isIgnore) {
       }
       else if (_replacement != null)
-        sb.append(_replacement);
+        sb.append(VHelper.noCtx(), _replacement);
       else if (_isReplaceUnicode)
-        sb.append("U+" + Integer.toHexString(in.get(errorIndex)));
+        sb.append(VHelper.noCtx(), "U+" + Integer.toHexString(in.get(errorIndex)));
       else
         return false;
     }

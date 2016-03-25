@@ -188,11 +188,11 @@ public class ImageModule extends AbstractQuercusModule {
 
     StringValue sb = env.createStringBuilder();
 
-    sb.append("width=\"");
-    sb.append(info.getWidth());
-    sb.append("\" height=\"");
-    sb.append(info.getHeight());
-    sb.append("\"");
+    sb.append(VHelper.noCtx(), "width=\"");
+    sb.append(VHelper.noCtx(), info.getWidth());
+    sb.append(VHelper.noCtx(), "\" height=\"");
+    sb.append(VHelper.noCtx(), info.getHeight());
+    sb.append(VHelper.noCtx(), "\"");
 
     imageArray.put(VHelper.noCtx(), V.one(sb));
 

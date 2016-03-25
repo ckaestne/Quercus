@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.i18n;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.UnicodeBuilderValue;
+import edu.cmu.cs.varex.VHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -96,7 +97,7 @@ public class Big5Decoder
 
     if (len > 0) {
       int offset = out.arrayOffset();
-      sb.append(out.array(), offset, len);
+      sb.append(VHelper.noCtx(), out.array(), offset, len);
     }
 
     if (coder.isMalformed() || coder.isUnmappable()) {
@@ -106,7 +107,7 @@ public class Big5Decoder
           && (in.get(errorPosition) & 0xFF) == '\u00a3'
           && (in.get(errorPosition + 1) & 0xFF) == '\u00e1') {
 
-        sb.append('\u20AC');
+        sb.append(VHelper.noCtx(), '\u20AC');
         in.position(errorPosition + 2);
 
         return true;
@@ -118,9 +119,9 @@ public class Big5Decoder
       if (_isIgnoreErrors) {
       }
       else if (_replacement != null)
-        sb.append(_replacement);
+        sb.append(VHelper.noCtx(), _replacement);
       else if (_isAllowMalformedOut)
-        sb.append((char) in.get(errorPosition));
+        sb.append(VHelper.noCtx(), (char) in.get(errorPosition));
       else
         return false;
     }

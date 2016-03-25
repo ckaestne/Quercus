@@ -588,7 +588,7 @@ public class UrlModule
         }
 
         StringValue sb = env.createStringBuilder();
-        sb.append(str, 0, colon);
+        sb.append(VHelper.noCtx(), str, 0, colon);
         array.put(SCHEME_V, SCHEME_U, sb, isUnicode);
 
         i = end + 1;
@@ -597,7 +597,7 @@ public class UrlModule
                || (ch = str.charAt(colon + 1)) <= '0'
                || '9' <= ch) {
         StringValue sb = env.createStringBuilder();
-        sb.append(str, 0, colon);
+        sb.append(VHelper.noCtx(), str, 0, colon);
         array.put(SCHEME_V, SCHEME_U, sb, isUnicode);
 
         i = colon + 1;
@@ -621,12 +621,12 @@ public class UrlModule
       if (0 <= colon && colon < atSign) {
         if (i < colon) {
           user = env.createStringBuilder();
-          user.append(str, i, colon);
+          user.append(VHelper.noCtx(), str, i, colon);
         }
 
         if (colon + 1 < atSign) {
           pass = env.createStringBuilder();
-          pass.append(str, colon + 1, atSign);
+          pass.append(VHelper.noCtx(), str, colon + 1, atSign);
         }
 
         i = atSign + 1;
@@ -635,7 +635,7 @@ public class UrlModule
       }
       else {
         user = env.createStringBuilder();
-        user.append(str, i, atSign);
+        user.append(VHelper.noCtx(), str, i, atSign);
 
         i = atSign + 1;
       }
@@ -646,7 +646,7 @@ public class UrlModule
 
       if (i < colon) {
         StringValue sb = env.createStringBuilder();
-        sb.append(str, i, colon);
+        sb.append(VHelper.noCtx(), str, i, colon);
         array.put(HOST_V, HOST_U, sb, isUnicode);
 
         int end;
@@ -678,28 +678,28 @@ public class UrlModule
       }
       else if (i < question && (slash < i || question < slash)) {
         StringValue sb = env.createStringBuilder();
-        sb.append(str, i, question);
+        sb.append(VHelper.noCtx(), str, i, question);
         array.put(HOST_V, HOST_U, sb, isUnicode);
 
         i = question + 1;
       }
       else if (i < slash) {
         StringValue sb = env.createStringBuilder();
-        sb.append(str, i, slash);
+        sb.append(VHelper.noCtx(), str, i, slash);
         array.put(HOST_V, HOST_U, sb, isUnicode);
 
         i = slash;
       }
       else if (i < pound) {
         StringValue sb = env.createStringBuilder();
-        sb.append(str, i, pound);
+        sb.append(VHelper.noCtx(), str, i, pound);
         array.put(HOST_V, HOST_U, sb, isUnicode);
 
         i = pound + 1;
       }
       else {
         StringValue sb = env.createStringBuilder();
-        sb.append(str, i, strlen);
+        sb.append(VHelper.noCtx(), str, i, strlen);
         array.put(HOST_V, HOST_U, sb, isUnicode);
 
         i = strlen;
@@ -715,7 +715,7 @@ public class UrlModule
 
     if (i < question) {
       StringValue sb = env.createStringBuilder();
-      sb.append(str, i, question);
+      sb.append(VHelper.noCtx(), str, i, question);
       array.put(PATH_V, PATH_U, sb, isUnicode);
 
       i = question + 1;
@@ -725,7 +725,7 @@ public class UrlModule
       if (i < pound) {
         StringValue sb = env.createStringBuilder();
 
-        sb.append(str, i, pound);
+        sb.append(VHelper.noCtx(), str, i, pound);
 
         if (0 <= question)
           array.put(QUERY_V, QUERY_U, sb, isUnicode);
@@ -735,13 +735,13 @@ public class UrlModule
 
       if (pound + 1 < strlen) {
         StringValue sb = env.createStringBuilder();
-        sb.append(str, pound + 1, strlen);
+        sb.append(VHelper.noCtx(), str, pound + 1, strlen);
         array.put(FRAGMENT_V, FRAGMENT_U, sb, isUnicode);
       }
     }
     else if (i < strlen) {
       StringValue sb = env.createStringBuilder();
-      sb.append(str, i, strlen);
+      sb.append(VHelper.noCtx(), str, i, strlen);
 
       if (0 <= question)
         array.put(QUERY_V, QUERY_U, sb, isUnicode);
@@ -858,19 +858,19 @@ public class UrlModule
       char ch = str.charAt(i);
 
       if ('a' <= ch && ch <= 'z')
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       else if ('A' <= ch && ch <= 'Z')
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       else if ('0' <= ch && ch <= '9')
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       else if (ch == '-' || ch == '_' || ch == '.')
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       else if (ch == ' ')
-        sb.append('+');
+        sb.append(VHelper.noCtx(), '+');
       else {
-        sb.append('%');
-        sb.append(toHexDigit(ch / 16));
-        sb.append(toHexDigit(ch));
+        sb.append(VHelper.noCtx(), '%');
+        sb.append(VHelper.noCtx(), toHexDigit(ch / 16));
+        sb.append(VHelper.noCtx(), toHexDigit(ch));
       }
     }
   }

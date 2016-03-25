@@ -30,6 +30,7 @@
 package com.caucho.quercus.lib.i18n;
 
 import com.caucho.quercus.env.StringValue;
+import edu.cmu.cs.varex.VHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -78,15 +79,15 @@ public class Big5Encoder
 
       if (in.get(errorIndex) == '\u20AC') {
         // euro
-        sb.append('\u00a3');
-        sb.append('\u00e1');
+        sb.append(VHelper.noCtx(), '\u00a3');
+        sb.append(VHelper.noCtx(), '\u00e1');
       }
       else if (_isIgnore) {
       }
       else if (_replacement != null)
-        sb.append(_replacement);
+        sb.append(VHelper.noCtx(), _replacement);
       else if (_isReplaceUnicode)
-        sb.append("U+" + Integer.toHexString(in.get(errorIndex)));
+        sb.append(VHelper.noCtx(), "U+" + Integer.toHexString(in.get(errorIndex)));
       else
         return false;
     }

@@ -907,39 +907,39 @@ public class ObjectExtValue extends ObjectValue
   protected void varExportImpl(StringValue sb, int level)
   {
     if (level != 0) {
-      sb.append('\n');
+      sb.append(VHelper.noCtx(), '\n');
     }
 
     for (int i = 0; i < level; i++) {
-      sb.append("  ");
+      sb.append(VHelper.noCtx(), "  ");
     }
 
-    sb.append(getName());
-    sb.append("::__set_state(array(\n");
+    sb.append(VHelper.noCtx(), getName());
+    sb.append(VHelper.noCtx(), "::__set_state(array(\n");
 
     for (VEntry entry : entrySet()) {
       Value key = entry.getKey();
       Value value = entry.getEnvVar().getOne();
 
       for (int i = 0; i < level; i++) {
-        sb.append("  ");
+        sb.append(VHelper.noCtx(), "  ");
       }
 
-      sb.append("   ");
+      sb.append(VHelper.noCtx(), "   ");
 
       key.varExportImpl(sb, level + 1);
 
-      sb.append(" => ");
+      sb.append(VHelper.noCtx(), " => ");
 
       value.varExportImpl(sb, level + 1);
-      sb.append(",\n");
+      sb.append(VHelper.noCtx(), ",\n");
     }
 
     for (int i = 0; i < level; i++) {
-      sb.append("  ");
+      sb.append(VHelper.noCtx(), "  ");
     }
 
-    sb.append("))");
+    sb.append(VHelper.noCtx(), "))");
   }
 
   /**
@@ -1114,7 +1114,7 @@ public class ObjectExtValue extends ObjectValue
       return;
     }
 
-    sb.append('{');
+    sb.append(VHelper.noCtx(), '{');
 
     int length = 0;
 
@@ -1128,16 +1128,16 @@ public class ObjectExtValue extends ObjectValue
       }
 
       if (length > 0) {
-        sb.append(',');
+        sb.append(VHelper.noCtx(), ',');
       }
 
       entry.getKey().toStringValue(env).jsonEncode(env, context, sb);
-      sb.append(':');
+      sb.append(VHelper.noCtx(), ':');
       entry.getValue().getOne().jsonEncode(env, context, sb);
       length++;
     }
 
-    sb.append('}');
+    sb.append(VHelper.noCtx(), '}');
   }
 
   private void readObject(ObjectInputStream in)

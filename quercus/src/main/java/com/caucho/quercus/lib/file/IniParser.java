@@ -96,7 +96,7 @@ public class IniParser {
         throw new IOException("expected ']' but saw end of line");
       }
 
-      sb.append((char) ch);
+      sb.append(VHelper.noCtx(), (char) ch);
       ch = is.read();
     }
 
@@ -167,7 +167,7 @@ public class IniParser {
         break;
       }
 
-      sb.append((char) ch);
+      sb.append(VHelper.noCtx(), (char) ch);
       ch = is.read();
     }
 
@@ -213,7 +213,7 @@ public class IniParser {
       StringValue sb = env.createStringBuilder();
 
       for (ch = is.read(); ch >= 0 && ch != quoteChar; ch = is.read()) {
-        sb.append((char) ch);
+        sb.append(VHelper.noCtx(), (char) ch);
       }
 
       skipToNewline(is);
@@ -260,7 +260,7 @@ public class IniParser {
           result.append(VHelper.noCtx(), getIniConstant(env, value));
 
           for (ch = is.read(); ch >= 0 && ch != '"'; ch = is.read()) {
-            result.append((char) ch);
+            result.append(VHelper.noCtx(), (char) ch);
           }
 
           skipToNewline(is);

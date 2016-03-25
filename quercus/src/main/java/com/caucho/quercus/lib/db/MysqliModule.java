@@ -38,6 +38,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
 import com.caucho.util.Log;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1009,35 +1010,35 @@ public class MysqliModule extends AbstractQuercusModule {
       c = unescapedString.charAt(i);
       switch (c) {
       case '\u0000':
-        sb.append('\\');
-        sb.append('\u0000');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), '\u0000');
         break;
       case '\n':
-        sb.append('\\');
-        sb.append('n');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 'n');
         break;
       case '\r':
-        sb.append('\\');
-        sb.append('r');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 'r');
         break;
       case '\\':
-        sb.append('\\');
-        sb.append('\\');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), '\\');
         break;
       case '\'':
-        sb.append('\\');
-        sb.append('\'');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), '\'');
         break;
       case '"':
-        sb.append('\\');
-        sb.append('\"');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), '\"');
         break;
       case '\032':
-        sb.append('\\');
-        sb.append('Z');
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), 'Z');
         break;
       default:
-        sb.append(c);
+        sb.append(VHelper.noCtx(), c);
         break;
       }
     }
@@ -1083,12 +1084,12 @@ public class MysqliModule extends AbstractQuercusModule {
         if (arg == null)
           throw new IllegalArgumentException(L.l("argument `{0}' cannot be null", arg));
 
-        sb.append('\'');
+        sb.append(VHelper.noCtx(), '\'');
         escapeString(sb, String.valueOf(arg));
-        sb.append('\'');
+        sb.append(VHelper.noCtx(), '\'');
       }
       else
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
 
     return query(env, conn, sb);

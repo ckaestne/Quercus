@@ -100,8 +100,8 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
     StringValue sb = env.createStringBuilder();
-    sb.append(className);
-    sb.append("::");
+    sb.append(VHelper.noCtx(), className);
+    sb.append(VHelper.noCtx(), "::");
     sb.append(VHelper.noCtx(), varName);
 
     return env.getStaticValue(sb);
@@ -122,8 +122,8 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
     StringValue var = env.createStringBuilder();
-    var.append(className);
-    var.append("::");
+    var.append(VHelper.noCtx(), className);
+    var.append(VHelper.noCtx(), "::");
     var.append(VHelper.noCtx(), varName);
 
     return env.getStaticVar(var);
@@ -145,8 +145,8 @@ public class ClassVirtualFieldVarExpr extends AbstractVarExpr {
     StringValue varName = _varName.evalStringValue(env, ctx).getOne();
 
     StringValue var = env.createStringBuilder();
-    var.append(className);
-    var.append("::");
+    var.append(VHelper.noCtx(), className);
+    var.append(VHelper.noCtx(), "::");
     var.append(VHelper.noCtx(), varName);
 
     env.setStaticRef(ctx, var, value);

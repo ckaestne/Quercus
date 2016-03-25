@@ -36,6 +36,7 @@ import com.caucho.quercus.lib.gettext.expr.PluralExpr;
 import com.caucho.util.L10N;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.ReadStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -180,7 +181,7 @@ class MOFileParser extends GettextParser
     StringValue sb = _env.createUnicodeBuilder();
 
     for (int ch = _in.read(); ch > 0; ch = _in.read()) {
-      sb.append((char) ch);
+      sb.append(VHelper.noCtx(), (char) ch);
     }
 
     return sb;
@@ -199,7 +200,7 @@ class MOFileParser extends GettextParser
       int ch = _in.readChar();
 
       if (ch > 0)
-        sb.append((char)ch);
+        sb.append(VHelper.noCtx(), (char) ch);
 
       else if (ch == 0) {
         list.add(sb);

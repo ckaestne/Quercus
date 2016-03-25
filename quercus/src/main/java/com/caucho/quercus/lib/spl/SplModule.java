@@ -188,8 +188,8 @@ public class SplModule extends AbstractQuercusModule
     for (String ext : extensionList) {
       StringValue sb = env.createStringBuilder();
 
-      sb.append(filePrefix);
-      sb.append(ext);
+      sb.append(VHelper.noCtx(), filePrefix);
+      sb.append(VHelper.noCtx(), ext);
 
       env.include(VHelper.noCtx(), sb);
 

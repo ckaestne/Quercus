@@ -81,7 +81,7 @@ public class BinaryValueMarshal extends Marshal
       return ((Value) value).toBinaryValue(env);
     else {
       StringValue ret =  env.createBinaryBuilder();
-      ret.append(value);
+      ret.append(VHelper.noCtx(), value);
       return ret;
     }
   }

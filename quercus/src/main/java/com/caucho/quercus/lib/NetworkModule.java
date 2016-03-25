@@ -243,16 +243,16 @@ public class NetworkModule extends AbstractQuercusModule {
 
     StringValue sb = env.createStringBuilder();
 
-    sb.append((address & 0xFF000000L) >> 24);
-    sb.append('.');
+    sb.append(VHelper.noCtx(), (address & 0xFF000000L) >> 24);
+    sb.append(VHelper.noCtx(), '.');
 
-    sb.append((address & 0xFF0000L) >> 16);
-    sb.append('.');
+    sb.append(VHelper.noCtx(), (address & 0xFF0000L) >> 16);
+    sb.append(VHelper.noCtx(), '.');
 
-    sb.append((address & 0xFF00L) >> 8);
-    sb.append('.');
+    sb.append(VHelper.noCtx(), (address & 0xFF00L) >> 8);
+    sb.append(VHelper.noCtx(), '.');
 
-    sb.append(address & 0xFFL);
+    sb.append(VHelper.noCtx(), address & 0xFFL);
 
     return sb;
   }

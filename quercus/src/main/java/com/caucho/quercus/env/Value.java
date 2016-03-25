@@ -933,6 +933,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * <p>
    * where $a is never assigned in the function
    */
+  @Override
   public V<? extends ValueOrVar> toRefValue() {
     return V.one(this);
   }
@@ -1070,21 +1071,21 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Converts to a string builder
    */
   public StringValue toStringBuilder(Env env) {
-    return env.createUnicodeBuilder().appendUnicode(this);
+    return env.createUnicodeBuilder().appendUnicode(VHelper.noCtx(), this);
   }
 
   /**
    * Converts to a string builder
    */
   public StringValue toStringBuilder(Env env, Value value) {
-    return toStringBuilder(env).appendUnicode(value);
+    return toStringBuilder(env).appendUnicode(VHelper.noCtx(), value);
   }
 
   /**
    * Converts to a string builder
    */
   public StringValue toStringBuilder(Env env, StringValue value) {
-    return toStringBuilder(env).appendUnicode(value);
+    return toStringBuilder(env).appendUnicode(VHelper.noCtx(), value);
   }
 
   /**
@@ -1145,7 +1146,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Append to a string builder.
    */
   public StringValue appendTo(UnicodeBuilderValue sb) {
-    return sb.append(toString());
+    return sb.append(VHelper.noCtx(), toString());
   }
 
   /**
@@ -1166,7 +1167,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Append to a binary builder.
    */
   public StringValue appendTo(LargeStringBuilderValue sb) {
-    return sb.append(toString());
+    return sb.append(VHelper.noCtx(), toString());
   }
 
   /**
@@ -2894,7 +2895,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   {
     env.warning(L.l("type is unsupported; json encoded as null"));
 
-    sb.append("null");
+    sb.append(VHelper.noCtx(), "null");
   }
 
   /**

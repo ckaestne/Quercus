@@ -443,53 +443,53 @@ public class BinaryBuilderValue
     return this;
   }
 
-  /**
-   * Append a Java buffer to the value.
-   */
-  @Override
-  public final StringValue appendUnicode(char []buf, int offset, int length)
-  {
-    UnicodeBuilderValue sb = new UnicodeBuilderValue();
-
-    appendTo(sb);
-    sb.append(buf, offset, length);
-
-    return sb;
-  }
-
-  /**
-   * Append a Java string to the value.
-   */
-  @Override
-  public final StringValue appendUnicode(String s)
-  {
-    UnicodeBuilderValue sb = new UnicodeBuilderValue();
-
-    appendTo(sb);
-    sb.append(s);
-
-    return sb;
-  }
+//  /**
+//   * Append a Java buffer to the value.
+//   */
+//  @Override
+//  public final StringValue appendUnicode(FeatureExpr ctx, char[] buf, int offset, int length)
+//  {
+//    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+//
+//    appendTo(sb);
+//    sb.append(ctx, buf, offset, length);
+//
+//    return sb;
+//  }
 
   /**
    * Append a Java string to the value.
    */
   @Override
-  public final StringValue appendUnicode(String s, int start, int end)
+  public final StringValue appendUnicode(FeatureExpr ctx, String s)
   {
     UnicodeBuilderValue sb = new UnicodeBuilderValue();
 
     appendTo(sb);
-    sb.append(s, start, end);
+    sb.append(ctx, s);
 
     return sb;
   }
+
+//  /**
+//   * Append a Java string to the value.
+//   */
+//  @Override
+//  public final StringValue appendUnicode(String s, int start, int end)
+//  {
+//    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+//
+//    appendTo(sb);
+//    sb.append(VHelper.noCtx(), s, start, end);
+//
+//    return sb;
+//  }
 
   /**
    * Append a value to the value.
    */
   @Override
-  public final StringValue appendUnicode(Value value)
+  public final StringValue appendUnicode(FeatureExpr ctx, Value value)
   {
     value = value.toValue();
 
@@ -510,60 +510,60 @@ public class BinaryBuilderValue
       return value.appendTo(this);
   }
 
-  /**
-   * Append a Java char to the value.
-   */
-  @Override
-  public final StringValue appendUnicode(char ch)
-  {
-    UnicodeBuilderValue sb = new UnicodeBuilderValue();
-
-    appendTo(sb);
-    sb.append(ch);
-
-    return sb;
-  }
-
-  /**
-   * Append a Java boolean to the value.
-   */
-  @Override
-  public final StringValue appendUnicode(boolean v)
-  {
-    return append(v ? "true" : "false");
-  }
-
-  /**
-   * Append a Java long to the value.
-   */
-  @Override
-  public StringValue appendUnicode(long v)
-  {
-    // XXX: this probably is frequent enough to special-case
-
-    return append(String.valueOf(v));
-  }
-
-  /**
-   * Append a Java double to the value.
-   */
-  @Override
-  public StringValue appendUnicode(double v)
-  {
-    return append(String.valueOf(v));
-  }
-
-  /**
-   * Append a Java object to the value.
-   */
-  @Override
-  public StringValue appendUnicode(Object v)
-  {
-    if (v instanceof String)
-      return appendUnicode(v.toString());
-    else
-      return append(v.toString());
-  }
+//  /**
+//   * Append a Java char to the value.
+//   */
+//  @Override
+//  public final StringValue appendUnicode(FeatureExpr ctx, char ch)
+//  {
+//    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+//
+//    appendTo(sb);
+//    sb.append(VHelper.noCtx(), ch);
+//
+//    return sb;
+//  }
+//
+//  /**
+//   * Append a Java boolean to the value.
+//   */
+//  @Override
+//  public final StringValue appendUnicode(FeatureExpr ctx, boolean v)
+//  {
+//    return append(ctx, v ? "true" : "false");
+//  }
+//
+//  /**
+//   * Append a Java long to the value.
+//   */
+//  @Override
+//  public StringValue appendUnicode(FeatureExpr ctx, long v)
+//  {
+//    // XXX: this probably is frequent enough to special-case
+//
+//    return append(ctx, String.valueOf(v));
+//  }
+//
+//  /**
+//   * Append a Java double to the value.
+//   */
+//  @Override
+//  public StringValue appendUnicode(FeatureExpr ctx, double v)
+//  {
+//    return append(ctx, String.valueOf(v));
+//  }
+//
+//  /**
+//   * Append a Java object to the value.
+//   */
+//  @Override
+//  public StringValue appendUnicode(FeatureExpr ctx, Object v)
+//  {
+//    if (v instanceof String)
+//      return appendUnicode(ctx, v.toString());
+//    else
+//      return append(ctx, v.toString());
+//  }
 
   /**
    * Append to a string builder.

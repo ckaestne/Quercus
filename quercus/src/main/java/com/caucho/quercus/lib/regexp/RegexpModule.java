@@ -847,21 +847,21 @@ public class RegexpModule
       char ch = string.charAt(i);
 
       if (ch >= 256)
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       else if (PREG_QUOTE[ch]) {
-        sb.append('\\');
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), ch);
       }
       else if (extra != null && extra[ch]) {
-        sb.append('\\');
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), ch);
       }
       else if (ch == 0) {
         // php/153q
-        sb.append("\\000");
+        sb.append(VHelper.noCtx(), "\\000");
       }
       else
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
 
     return sb;
@@ -1367,7 +1367,7 @@ public class RegexpModule
 
         try {
           if (evalString.length() > 0) { // php/152z
-            result = result.append(env.evalCode(evalString, VHelper.noCtx()));
+            result = result.append(VHelper.noCtx(), env.evalCode(evalString, VHelper.noCtx()));
           }
         } catch (Exception e) {
           env.warning(e);
@@ -1743,19 +1743,19 @@ public class RegexpModule
       char ch = string.charAt(i);
 
       if (Character.isLowerCase(ch)) {
-        sb.append('[');
-        sb.append(Character.toUpperCase(ch));
-        sb.append(ch);
-        sb.append(']');
+        sb.append(VHelper.noCtx(), '[');
+        sb.append(VHelper.noCtx(), Character.toUpperCase(ch));
+        sb.append(VHelper.noCtx(), ch);
+        sb.append(VHelper.noCtx(), ']');
       }
       else if (Character.isUpperCase(ch)) {
-        sb.append('[');
-        sb.append(ch);
-        sb.append(Character.toLowerCase(ch));
-        sb.append(']');
+        sb.append(VHelper.noCtx(), '[');
+        sb.append(VHelper.noCtx(), ch);
+        sb.append(VHelper.noCtx(), Character.toLowerCase(ch));
+        sb.append(VHelper.noCtx(), ']');
       }
       else
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
 
     return sb;

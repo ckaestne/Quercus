@@ -40,6 +40,7 @@ import com.caucho.vfs.Path;
 import com.caucho.vfs.TempBuffer;
 import com.caucho.vfs.TempStream;
 import com.caucho.vfs.WriteStream;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -210,7 +211,7 @@ public class PDF
     for (TempBuffer ptr = ts.getHead();
          ptr != null;
          ptr = ptr.getNext()) {
-      result.append(ptr.getBuffer(), 0, ptr.getLength());
+      result.append(VHelper.noCtx(), ptr.getBuffer(), 0, ptr.getLength());
     }
 
     ts.destroy();

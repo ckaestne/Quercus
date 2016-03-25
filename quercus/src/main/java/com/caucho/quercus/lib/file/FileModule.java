@@ -592,7 +592,7 @@ public class FileModule extends AbstractQuercusModule {
       if (ch >= 0) {
         StringValue v = env.createBinaryBuilder(1);
 
-        v.append((char) ch);
+        v.append(VHelper.noCtx(), (char) ch);
 
         return v;
       }
@@ -672,12 +672,12 @@ public class FileModule extends AbstractQuercusModule {
               ch = is.read();
 
               if (ch == quote)
-                sb.append((char) ch);
+                sb.append(VHelper.noCtx(), (char) ch);
               else
                 break;
             }
             else
-              sb.append((char) ch);
+              sb.append(VHelper.noCtx(), (char) ch);
           }
 
           array.append(sb);
@@ -689,7 +689,7 @@ public class FileModule extends AbstractQuercusModule {
           for (;
                ch >= 0 && ch != comma && ch != '\r' && ch != '\n';
                ch = is.read()) {
-            sb.append((char) ch);
+            sb.append(VHelper.noCtx(), (char) ch);
           }
 
           array.append(sb);
@@ -2068,13 +2068,13 @@ public class FileModule extends AbstractQuercusModule {
         StringValue sb = env.createUnicodeBuilder();
 
         if (prefix.length() > 0) {
-          sb.append(prefix);
+          sb.append(VHelper.noCtx(), prefix);
 
           if (! prefix.equals("/"))
-            sb.append("/");
+            sb.append(VHelper.noCtx(), "/");
         }
 
-        sb.append(entry);
+        sb.append(VHelper.noCtx(), entry);
 
         Path entryPath = path.lookup(entry);
 
@@ -2093,7 +2093,7 @@ public class FileModule extends AbstractQuercusModule {
             if ((flags & GLOB_ERR) != 0 && isNull)
               return null;
           } else if ((flags & GLOB_MARK) != 0) {
-            sb.append("/");
+            sb.append(VHelper.noCtx(), "/");
           }
         }
 
@@ -2882,9 +2882,9 @@ public class FileModule extends AbstractQuercusModule {
 
     // php/164c
     if (pathStr.endsWith("/"))
-      return sb.append(pathStr, 0, pathStr.length() - 1);
+      return sb.append(VHelper.noCtx(), pathStr, 0, pathStr.length() - 1);
     else
-      return sb.append(pathStr, 0, pathStr.length());
+      return sb.append(VHelper.noCtx(), pathStr, 0, pathStr.length());
   }
 
   /**

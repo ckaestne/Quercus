@@ -246,7 +246,7 @@ public class Zlib {
         readChar = _in.read();
 
         if (readChar >= 0) {
-          sbv.append((char) readChar);
+          sbv.append(VHelper.noCtx(), (char) readChar);
 
           if (readChar == '\n' || readChar == '\r')
             break;
@@ -353,7 +353,7 @@ public class Zlib {
       for (int i = 0; i < length; i++) {
         readChar = _in.read();
         if (readChar >= 0) {
-          sb.append((char)readChar);
+          sb.append(VHelper.noCtx(), (char) readChar);
           if (readChar == '\n' || readChar == '\r')
             break;
         } else

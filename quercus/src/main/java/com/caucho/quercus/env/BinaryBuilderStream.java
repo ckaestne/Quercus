@@ -30,6 +30,7 @@
 package com.caucho.quercus.env;
 
 import com.caucho.vfs.StreamImpl;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
 
@@ -71,6 +72,6 @@ public class BinaryBuilderStream extends StreamImpl
   public void write(byte []buffer, int offset, int length, boolean isEnd)
     throws IOException
   {
-    _out.append(buffer, offset, length);
+    _out.append(VHelper.noCtx(), buffer, offset, length);
   }
 }

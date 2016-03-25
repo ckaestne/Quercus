@@ -33,6 +33,7 @@ import com.caucho.quercus.env.ArrayValue;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import edu.cmu.cs.varex.VHelper;
 
 public class AbstractFilter implements Filter
 {
@@ -89,11 +90,11 @@ public class AbstractFilter implements Filter
 
   protected static void appendEncoded(StringValue sb, char ch)
   {
-    sb.append('&');
-    sb.append('#');
+    sb.append(VHelper.noCtx(), '&');
+    sb.append(VHelper.noCtx(), '#');
 
-    sb.append((int) ch);
+    sb.append(VHelper.noCtx(), (int) ch);
 
-    sb.append(';');
+    sb.append(VHelper.noCtx(), ';');
   }
 }

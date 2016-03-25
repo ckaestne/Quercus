@@ -30,6 +30,7 @@
 package com.caucho.quercus.lib.i18n;
 
 import com.caucho.quercus.env.StringValue;
+import edu.cmu.cs.varex.VHelper;
 
 public class Utf8Encoder
   extends Encoder
@@ -97,7 +98,7 @@ public class Utf8Encoder
           if (_isIgnore) {
           }
           else if (_replacement != null)
-            sb.append(_replacement);
+            sb.append(VHelper.noCtx(), _replacement);
           else
             return sb;
 

@@ -248,10 +248,10 @@ public class LargeStringBuilderValue
 
     int i = 0;
     for (; i < fixedLength; i++) {
-      bb.append(_bufferList[i], 0, SIZE);
+      bb.append(VHelper.noCtx(), _bufferList[i], 0, SIZE);
     }
 
-    bb.append(_bufferList[i], 0, tail);
+    bb.append(VHelper.noCtx(), _bufferList[i], 0, tail);
   }
 
   /**
@@ -373,7 +373,7 @@ public class LargeStringBuilderValue
       int startOffset = start % SIZE;
 
       if (startChunk == endChunk) {
-        stringValue.append(_bufferList[startChunk],
+        stringValue.append(VHelper.noCtx(), _bufferList[startChunk],
                            startOffset,
                            (end - start));
 
@@ -382,7 +382,7 @@ public class LargeStringBuilderValue
       else {
         int len = SIZE - startOffset;
 
-        stringValue.append(_bufferList[startChunk], startOffset, len);
+        stringValue.append(VHelper.noCtx(), _bufferList[startChunk], startOffset, len);
 
         start += len;
       }
@@ -409,7 +409,7 @@ public class LargeStringBuilderValue
       if ('A' <= ch && ch <= 'Z')
         ch = (ch + 'a' - 'A');
 
-      string.append((char) ch);
+      string.append(VHelper.noCtx(), (char) ch);
     }
 
     return string;
@@ -433,7 +433,7 @@ public class LargeStringBuilderValue
       if ('a' <= ch && ch <= 'z')
         ch = (ch + 'A' - 'a');
 
-      string.append((char) ch);
+      string.append(VHelper.noCtx(), (char) ch);
     }
 
     return string;
@@ -470,14 +470,14 @@ public class LargeStringBuilderValue
     return new LargeStringBuilderValue(_bufferList, _length);
   }
 
-  /**
-   * Append a Java buffer to the value.
-   */
-  @Override
-  public final StringValue appendUnicode(char []buf, int offset, int length)
-  {
-    return append(buf, offset, length);
-  }
+//  /**
+//   * Append a Java buffer to the value.
+//   */
+//  @Override
+//  public final StringValue appendUnicode(FeatureExpr ctx, char[] buf, int offset, int length)
+//  {
+//    return append(VHelper.noCtx(), buf, offset, length);
+//  }
 
   /**
    * Append a Java string to the value.
@@ -503,7 +503,7 @@ public class LargeStringBuilderValue
    * Append a Java buffer to the value.
    */
   @Override
-  public StringValue append(CharSequence buf, int head, int tail)
+  public StringValue append(FeatureExpr ctx, CharSequence buf, int head, int tail)
   {
     int len = tail - head;
 
@@ -522,7 +522,7 @@ public class LargeStringBuilderValue
    * Append a Java buffer to the value.
    */
   @Override
-  public final StringValue append(char []buf, int offset, int length)
+  public final StringValue append(FeatureExpr ctx, char[] buf, int offset, int length)
   {
     ensureCapacity(_length + length);
 
@@ -539,7 +539,7 @@ public class LargeStringBuilderValue
    * Append a buffer to the value.
    */
   @Override
-  public final StringValue append(byte []buf, int offset, int length)
+  public final StringValue append(FeatureExpr ctx, byte[] buf, int offset, int length)
   {
     ensureCapacity(_length + length);
 
@@ -565,16 +565,16 @@ public class LargeStringBuilderValue
    * Append a double to the value.
    */
   @Override
-  public final StringValue append(byte []buf)
+  public final StringValue append(FeatureExpr ctx, byte[] buf)
   {
-    return append(buf, 0, buf.length);
+    return append(VHelper.noCtx(), buf, 0, buf.length);
   }
 
   /**
    * Append a Java byte to the value without conversions.
    */
   @Override
-  public final StringValue append(char v)
+  public final StringValue append(FeatureExpr ctx, char v)
   {
     if (_length % SIZE == 0)
       ensureCapacity(_length + 1);
@@ -605,29 +605,29 @@ public class LargeStringBuilderValue
    * Append a Java boolean to the value.
    */
   @Override
-  public final StringValue append(boolean v)
+  public final StringValue append(FeatureExpr ctx, boolean v)
   {
-    return append(v ? "true" : "false");
+    return append(ctx, v ? "true" : "false");
   }
 
   /**
    * Append a Java long to the value.
    */
   @Override
-  public StringValue append(long v)
+  public StringValue append(FeatureExpr ctx, long v)
   {
     // XXX: this probably is frequent enough to special-case
 
-    return append(String.valueOf(v));
+    return append(ctx, String.valueOf(v));
   }
 
   /**
    * Append a Java double to the value.
    */
   @Override
-  public StringValue append(double v)
+  public StringValue append(FeatureExpr ctx, double v)
   {
-    return append(String.valueOf(v));
+    return append(ctx, String.valueOf(v));
   }
 
   /**
@@ -956,7 +956,7 @@ public class LargeStringBuilderValue
     @Override
     public void write(int ch)
     {
-      append(ch);
+      append(VHelper.noCtx(), ch);
     }
 
     /**
@@ -965,7 +965,7 @@ public class LargeStringBuilderValue
     @Override
     public void write(byte []buffer, int offset, int length)
     {
-      append(buffer, offset, length);
+      append(VHelper.noCtx(), buffer, offset, length);
     }
   }
 }

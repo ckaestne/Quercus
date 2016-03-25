@@ -613,13 +613,13 @@ public class CurlResource extends ResourceValue
     StringValue bb = env.createBinaryBuilder();
 
     for (Map.Entry<String,String> entry : _requestProperties.entrySet()) {
-      bb.append(entry.getKey());
-      bb.append(": ");
-      bb.append(entry.getValue());
-      bb.append("\r\n");
+      bb.append(VHelper.noCtx(), entry.getKey());
+      bb.append(VHelper.noCtx(), ": ");
+      bb.append(VHelper.noCtx(), entry.getValue());
+      bb.append(VHelper.noCtx(), "\r\n");
     }
 
-    bb.append("\r\n");
+    bb.append(VHelper.noCtx(), "\r\n");
 
     return bb;
   }

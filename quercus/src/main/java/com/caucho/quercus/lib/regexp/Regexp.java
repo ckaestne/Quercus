@@ -36,6 +36,7 @@ import com.caucho.quercus.env.UnicodeValue;
 import com.caucho.quercus.lib.i18n.Utf8Encoder;
 import com.caucho.util.CharBuffer;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -285,7 +286,7 @@ public class Regexp {
       char ch = source.charAt(i);
 
       if (ch < 0x80) {
-        target.append(ch);
+        target.append(VHelper.noCtx(), ch);
       }
       else if ((ch & 0xe0) == 0xc0) {
         if (len <= i + 1) {
@@ -295,7 +296,7 @@ public class Regexp {
 
         char ch2 = source.charAt(++i);
 
-        target.append((char) (((ch & 0x1f) << 6)
+        target.append(VHelper.noCtx(), (char) (((ch & 0x1f) << 6)
                               + (ch2 & 0x3f)));
       }
       else if ((ch & 0xf0) == 0xe0) {
@@ -307,7 +308,7 @@ public class Regexp {
         char ch2 = source.charAt(++i);
         char ch3 = source.charAt(++i);
 
-        target.append((char) (((ch & 0x0f) << 12)
+        target.append(VHelper.noCtx(), (char) (((ch & 0x0f) << 12)
                               + ((ch2 & 0x3f) << 6)
                               + (ch3 & 0x3f)));
       }
@@ -329,8 +330,8 @@ public class Regexp {
         int high = ((codePoint - 0x10000) >> 10) + 0xD800;
         int low = (codePoint & 0x3FF) + 0xDC00;
 
-        target.append((char) high);
-        target.append((char) low);
+        target.append(VHelper.noCtx(), (char) high);
+        target.append(VHelper.noCtx(), (char) low);
       }
     }
 

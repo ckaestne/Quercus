@@ -358,35 +358,35 @@ public class MysqlModule extends AbstractQuercusModule {
 
       switch(ch) {
         case 0:
-          sb.append('\\');
-          sb.append(0);
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), 0);
           break;
         case '\n':
-          sb.append('\\');
-          sb.append('n');
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), 'n');
           break;
         case '\r':
-          sb.append('\\');
-          sb.append('r');
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), 'r');
           break;
         case '\\':
-          sb.append('\\');
-          sb.append('\\');
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), '\\');
           break;
         case '\'':
-          sb.append('\\');
-          sb.append('\'');
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), '\'');
           break;
         case '"':
-          sb.append('\\');
-          sb.append('"');
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), '"');
           break;
         case 0x1A:
-          sb.append('\\');
-          sb.append('Z');
+          sb.append(VHelper.noCtx(), '\\');
+          sb.append(VHelper.noCtx(), 'Z');
           break;
         default:
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
       }
     }
 

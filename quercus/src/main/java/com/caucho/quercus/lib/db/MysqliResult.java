@@ -996,7 +996,7 @@ public class MysqliResult extends JdbcResultResource {
       int length = bytes.length;
       int offset = 0;
 
-      bb.appendUtf8(bytes);
+      bb.appendUtf8(VHelper.noCtx(), bytes);
 
       /*
       while (offset < length) {
@@ -1031,7 +1031,7 @@ public class MysqliResult extends JdbcResultResource {
 
       StringValue bb = env.createUnicodeBuilder();
 
-      bb.append(bytes);
+      bb.append(VHelper.noCtx(), bytes);
 
       return bb;
     }

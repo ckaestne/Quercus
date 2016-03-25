@@ -38,6 +38,7 @@ import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.CharBuffer;
 import com.caucho.util.L10N;
 import com.caucho.util.QDate;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -888,8 +889,8 @@ public class DateModule extends AbstractQuercusModule {
     else {
       return (env.createUnicodeBuilder()
               .append(String.format("%.6f", now - Math.floor(now)))
-              .append(' ')
-              .append((int) Math.floor(now)));
+              .append(VHelper.noCtx(), ' ')
+              .append(VHelper.noCtx(), (int) Math.floor(now)));
     }
   }
 

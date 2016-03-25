@@ -31,6 +31,7 @@ package com.caucho.quercus.lib.json;
 
 import com.caucho.quercus.env.*;
 import com.caucho.util.L10N;
+import edu.cmu.cs.varex.VHelper;
 
 import java.util.logging.Logger;
 
@@ -440,28 +441,28 @@ class JsonDecoder {
 
         switch (ch) {
           case '"':
-            sb.append('"');
+            sb.append(VHelper.noCtx(), '"');
             break;
           case '\\':
-            sb.append('\\');
+            sb.append(VHelper.noCtx(), '\\');
             break;
           case '/':
-            sb.append('/');
+            sb.append(VHelper.noCtx(), '/');
             break;
           case 'b':
-            sb.append('\b');
+            sb.append(VHelper.noCtx(), '\b');
             break;
           case 'f':
-            sb.append('\f');
+            sb.append(VHelper.noCtx(), '\f');
             break;
           case 'n':
-            sb.append('\n');
+            sb.append(VHelper.noCtx(), '\n');
             break;
           case 'r':
-            sb.append('\r');
+            sb.append(VHelper.noCtx(), '\r');
             break;
           case 't':
-            sb.append('\t');
+            sb.append(VHelper.noCtx(), '\t');
             break;
           case 'u':
           case 'U':
@@ -482,15 +483,15 @@ class JsonDecoder {
             }
 
             if (hex < 0x80)
-              sb.append((char)hex);
+              sb.append(VHelper.noCtx(), (char) hex);
             else if (hex < 0x800) {
-              sb.append((char) (0xc0 + (hex >> 6)));
-              sb.append((char) (0x80 + (hex & 0x3f)));
+              sb.append(VHelper.noCtx(), (char) (0xc0 + (hex >> 6)));
+              sb.append(VHelper.noCtx(), (char) (0x80 + (hex & 0x3f)));
             }
             else {
-              sb.append((char) (0xe0 + (hex >> 12)));
-              sb.append((char) (0x80 + ((hex >> 6) & 0x3f)));
-              sb.append((char) (0x80 + (hex & 0x3f)));
+              sb.append(VHelper.noCtx(), (char) (0xe0 + (hex >> 12)));
+              sb.append(VHelper.noCtx(), (char) (0x80 + ((hex >> 6) & 0x3f)));
+              sb.append(VHelper.noCtx(), (char) (0x80 + (hex & 0x3f)));
             }
           }
 
@@ -500,7 +501,7 @@ class JsonDecoder {
           return sb;
 
         default:
-          sb.append(ch);
+          sb.append(VHelper.noCtx(), ch);
       }
     }
 
@@ -526,7 +527,7 @@ class JsonDecoder {
         return sb;
       }
 
-      sb.append(ch);
+      sb.append(VHelper.noCtx(), ch);
     }
 
     return sb;

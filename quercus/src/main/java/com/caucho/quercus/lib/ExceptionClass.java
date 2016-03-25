@@ -92,11 +92,11 @@ public class ExceptionClass
   {
     StringValue sb = env.createUnicodeBuilder();
 
-    sb.append("ExceptionClass[" + value.getName() + "]\n");
+    sb.append(VHelper.noCtx(), "ExceptionClass[" + value.getName() + "]\n");
     sb.append(VHelper.noCtx(), getMessage(env, value));
-    sb.append("\n");
+    sb.append(VHelper.noCtx(), "\n");
     sb.append(VHelper.noCtx(), getTraceAsString(env, value));
-    sb.append("\n");
+    sb.append(VHelper.noCtx(), "\n");
 
     return sb;
   }
@@ -165,19 +165,19 @@ public class ExceptionClass
     Value trace = getTrace(env, obj);
 
     StringValue sb = env.createUnicodeBuilder();
-    sb.append("<trace>");
+    sb.append(VHelper.noCtx(), "<trace>");
 
     Iterator<EnvVar> iter = trace.getValueIterator(env);
 
     while (iter.hasNext()) {
       Value value = iter.next().getOne();
 
-      sb = sb.append('\n');
-      sb = sb.append(value.get(env.createString("file")));
-      sb = sb.append(':');
-      sb = sb.append(value.get(env.createString("line")));
-      sb = sb.append(": ");
-      sb = sb.append(value.get(env.createString("function")));
+      sb = sb.append(VHelper.noCtx(), '\n');
+      sb = sb.append(VHelper.noCtx(), value.get(env.createString("file")));
+      sb = sb.append(VHelper.noCtx(), ':');
+      sb = sb.append(VHelper.noCtx(), value.get(env.createString("line")));
+      sb = sb.append(VHelper.noCtx(), ": ");
+      sb = sb.append(VHelper.noCtx(), value.get(env.createString("function")));
     }
 
     return sb;

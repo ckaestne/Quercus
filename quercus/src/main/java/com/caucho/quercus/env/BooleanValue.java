@@ -32,6 +32,7 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.marshal.Marshal;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.io.IOException;
@@ -179,7 +180,7 @@ public class BooleanValue extends Value
     StringValue sb = env.createUnicodeBuilder();
 
     if (_value)
-      sb.append("1");
+      sb.append(VHelper.noCtx(), "1");
 
     return sb;
   }
@@ -344,9 +345,9 @@ public class BooleanValue extends Value
   public void jsonEncode(Env env, JsonEncodeContext context, StringValue sb)
   {
     if (_value)
-      sb.append("true");
+      sb.append(VHelper.noCtx(), "true");
     else
-      sb.append("false");
+      sb.append(VHelper.noCtx(), "false");
   }
 
   /**
@@ -355,7 +356,7 @@ public class BooleanValue extends Value
   @Override
   protected void varExportImpl(StringValue sb, int level)
   {
-    sb.append(_value ? "true" : "false");
+    sb.append(VHelper.noCtx(), _value ? "true" : "false");
   }
 
   /**

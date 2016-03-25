@@ -151,7 +151,7 @@ public class MiscModule extends AbstractQuercusModule {
 
     StringValue sb = env.createStringBuilder();
 
-    sb.append(quote);
+    sb.append(VHelper.noCtx(), quote);
 
     int len = arg.length();
 
@@ -159,16 +159,16 @@ public class MiscModule extends AbstractQuercusModule {
       char ch = arg.charAt(i);
 
       if (ch == quote) {
-        sb.append('\\');
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), '\\');
+        sb.append(VHelper.noCtx(), ch);
       }
       else if (ch == '%' && isWindows)
-        sb.append(' ');
+        sb.append(VHelper.noCtx(), ' ');
       else
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
 
-    sb.append(quote);
+    sb.append(VHelper.noCtx(), quote);
 
     return sb;
   }
@@ -627,7 +627,7 @@ public class MiscModule extends AbstractQuercusModule {
 
       int ch;
       while ((ch = is.read()) >= 0) {
-        sb.append((char) ch);
+        sb.append(VHelper.noCtx(), (char) ch);
       }
 
       is.close();
@@ -1271,9 +1271,9 @@ public class MiscModule extends AbstractQuercusModule {
 
         if (ch != _pad) {
           if (j + 1 != offset)
-            bb.append(s, j, offset);
+            bb.append(VHelper.noCtx(), s, j, offset);
           else
-            bb.append(ch);
+            bb.append(VHelper.noCtx(), ch);
 
           j = offset;
         }
@@ -1340,9 +1340,9 @@ public class MiscModule extends AbstractQuercusModule {
 
         if (ch != _pad) {
           if (j + 1 != offset)
-            bb.append(s, j, offset);
+            bb.append(VHelper.noCtx(), s, j, offset);
           else
-            bb.append(ch);
+            bb.append(VHelper.noCtx(), ch);
 
           j = offset;
         }
@@ -1449,13 +1449,13 @@ public class MiscModule extends AbstractQuercusModule {
       while (offset < strLen) {
         char ch = s.charAt(offset++);
 
-        sb.append(digitToHex(ch >> 4));
+        sb.append(VHelper.noCtx(), digitToHex(ch >> 4));
 
         if (--len <= 0) {
           break;
         }
 
-        sb.append(digitToHex(ch));
+        sb.append(VHelper.noCtx(), digitToHex(ch));
 
         if (--len <= 0) {
           break;
@@ -1548,8 +1548,8 @@ public class MiscModule extends AbstractQuercusModule {
       for (int i = _length / 2 - 1; i >= 0; i--) {
         char ch = s.charAt(offset++);
 
-        sb.append(digitToHex(ch));
-        sb.append(digitToHex(ch >> 4));
+        sb.append(VHelper.noCtx(), digitToHex(ch));
+        sb.append(VHelper.noCtx(), digitToHex(ch >> 4));
       }
 
       result.put(_name, sb);
@@ -1625,8 +1625,8 @@ public class MiscModule extends AbstractQuercusModule {
           key = env.createString(_name);
         else {
           StringValue sb = env.createStringBuilder();
-          sb.append(_name);
-          sb.append(j + 1);
+          sb.append(VHelper.noCtx(), _name);
+          sb.append(VHelper.noCtx(), j + 1);
 
           key = sb;
         }
@@ -1727,8 +1727,8 @@ public class MiscModule extends AbstractQuercusModule {
           key = env.createString(_name);
         else {
           StringValue sb = env.createStringBuilder();
-          sb.append(_name);
-          sb.append(j + 1);
+          sb.append(VHelper.noCtx(), _name);
+          sb.append(VHelper.noCtx(), j + 1);
 
           key = sb;
         }
@@ -1812,8 +1812,8 @@ public class MiscModule extends AbstractQuercusModule {
           key = env.createString(_name);
         else {
           StringValue sb = env.createBinaryBuilder();
-          sb.append(_name);
-          sb.append(j + 1);
+          sb.append(VHelper.noCtx(), _name);
+          sb.append(VHelper.noCtx(), j + 1);
 
           key = sb;
         }
@@ -1897,8 +1897,8 @@ public class MiscModule extends AbstractQuercusModule {
           key = env.createString(_name);
         else {
           StringValue sb = env.createBinaryBuilder();
-          sb.append(_name);
-          sb.append(j + 1);
+          sb.append(VHelper.noCtx(), _name);
+          sb.append(VHelper.noCtx(), j + 1);
 
           key = sb;
         }

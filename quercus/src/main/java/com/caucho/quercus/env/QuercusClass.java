@@ -891,8 +891,8 @@ public class QuercusClass extends NullValue {
     fieldList.add(new StaticField(name, value));
 
     StringValue sb = createStringBuilder();
-    sb.append(className);
-    sb.append("::");
+    sb.append(VHelper.noCtx(), className);
+    sb.append(VHelper.noCtx(), "::");
     sb.append(VHelper.noCtx(), name);
 
     _staticFieldNameMap.put(name, sb);
@@ -916,8 +916,8 @@ public class QuercusClass extends NullValue {
     fieldList.add(new StaticField(name, value));
 
     StringValue sb = createStringBuilder();
-    sb.append(bindingClassName);
-    sb.append("::");
+    sb.append(VHelper.noCtx(), bindingClassName);
+    sb.append(VHelper.noCtx(), "::");
     sb.append(VHelper.noCtx(), name);
 
     _staticFieldNameMap.put(name, sb);
@@ -1040,8 +1040,8 @@ public class QuercusClass extends NullValue {
         val = expr.eval(env, FeatureExprFactory.True()).getOne();
 
         StringValue fullName = env.createStringBuilder();
-        fullName.append(_className);
-        fullName.append("::");
+        fullName.append(VHelper.noCtx(), _className);
+        fullName.append(VHelper.noCtx(), "::");
         fullName.append(VHelper.noCtx(), field._name);
 
         env.setStaticRef(VHelper.noCtx(), fullName, V.one(val));

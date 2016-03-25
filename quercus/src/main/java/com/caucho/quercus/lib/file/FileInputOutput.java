@@ -34,6 +34,7 @@ import com.caucho.quercus.env.EnvCleanup;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.vfs.*;
+import edu.cmu.cs.varex.VHelper;
 
 import java.io.*;
 import java.util.logging.Level;
@@ -229,7 +230,7 @@ public class FileInputOutput extends AbstractBinaryOutput
     throws IOException
   {
     if (_stream != null)
-      return builder.append(_stream);
+      return builder.append(VHelper.noCtx(), _stream);
     else
       return builder;
   }
@@ -256,7 +257,7 @@ public class FileInputOutput extends AbstractBinaryOutput
         sublen = read(buffer, 0, sublen);
 
         if (sublen > 0) {
-          bb.append(buffer, 0, sublen);
+          bb.append(VHelper.noCtx(), buffer, 0, sublen);
           length -= sublen;
         }
         else

@@ -31,6 +31,7 @@ package com.caucho.quercus.lib.i18n;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
+import edu.cmu.cs.varex.VHelper;
 
 public class UnicodeUtility
 {
@@ -47,19 +48,19 @@ public class UnicodeUtility
       char ch = str.charAt(i);
 
       if (ch <= 0x7F)
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       else if (0xC2 <= ch && ch <= 0xDF) {
         char ch2;
         if (i + 1 < len
             && 0x80 <= (ch2 = str.charAt(i + 1)) && ch2 <= 0xBF) {
           i++;
-          sb.append(ch);
-          sb.append(ch2);
+          sb.append(VHelper.noCtx(), ch);
+          sb.append(VHelper.noCtx(), ch2);
         }
         else if (isIgnore) {
         }
         else if (replacement != null)
-          sb.append(replacement);
+          sb.append(VHelper.noCtx(), replacement);
         else
           return sb;
       }
@@ -70,14 +71,14 @@ public class UnicodeUtility
             && 0x80 <= (ch2 = str.charAt(i + 1)) && ch2 <= 0xBF
             && 0x80 <= (ch3 = str.charAt(i + 2)) && ch3 <= 0xBF) {
           i += 2;
-          sb.append(ch);
-          sb.append(ch2);
-          sb.append(ch3);
+          sb.append(VHelper.noCtx(), ch);
+          sb.append(VHelper.noCtx(), ch2);
+          sb.append(VHelper.noCtx(), ch3);
         }
         else if (isIgnore) {
         }
         else if (replacement != null)
-          sb.append(replacement);
+          sb.append(VHelper.noCtx(), replacement);
         else
           return sb;
       }
@@ -91,22 +92,22 @@ public class UnicodeUtility
             && 0x80 <= (ch3 = str.charAt(i + 2)) && ch3 <= 0xBF
             && 0x80 <= (ch4 = str.charAt(i + 3)) && ch4 <= 0xBF) {
           i += 3;
-          sb.append(ch);
-          sb.append(ch2);
-          sb.append(ch3);
-          sb.append(ch4);
+          sb.append(VHelper.noCtx(), ch);
+          sb.append(VHelper.noCtx(), ch2);
+          sb.append(VHelper.noCtx(), ch3);
+          sb.append(VHelper.noCtx(), ch4);
         }
         else if (isIgnore) {
         }
         else if (replacement != null)
-          sb.append(replacement);
+          sb.append(VHelper.noCtx(), replacement);
         else
           return sb;
       }
       else if (isIgnore) {
       }
       else if (replacement != null)
-        sb.append(replacement);
+        sb.append(VHelper.noCtx(), replacement);
       else
         return sb;
     }

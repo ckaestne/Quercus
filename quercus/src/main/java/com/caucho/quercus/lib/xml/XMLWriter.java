@@ -459,7 +459,7 @@ public class XMLWriter {
     _s.append("<").append(env, prefix).append(":").append(env, name);
 
     StringValue endName = prefix.createStringBuilder();
-    endName.append(VHelper.noCtx(), prefix).append(":").append(VHelper.noCtx(), name);
+    endName.append(VHelper.noCtx(), prefix).append(VHelper.noCtx(), ":").append(VHelper.noCtx(), name);
     
     _elementStack.add(endName);
     
@@ -794,7 +794,7 @@ public class XMLWriter {
     @Override
     XMLWriterStream append(char v)
     {
-      _v.append(v);
+      _v.append(VHelper.noCtx(), v);
 
       return this;
     }
@@ -810,7 +810,7 @@ public class XMLWriter {
     @Override
     XMLWriterStream append(String text)
     {
-      _v.append(text);
+      _v.append(VHelper.noCtx(), text);
 
       return this;
     }

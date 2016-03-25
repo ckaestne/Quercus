@@ -163,8 +163,8 @@ public class QuercusMimeUtility
 
     StringValue sb = env.createUnicodeBuilder();
     sb.append(VHelper.noCtx(), UnicodeUtility.encode(env, nameUnicode, outCharset));
-    sb.append(':');
-    sb.append(' ');
+    sb.append(VHelper.noCtx(), ':');
+    sb.append(VHelper.noCtx(), ' ');
 
     String word = encodeMimeWord(valueUnicode.toString(),
                                  outCharset,
@@ -172,7 +172,7 @@ public class QuercusMimeUtility
                                  lineBreakChars,
                                  lineLength);
 
-    sb.append(MimeUtility.fold(sb.length(), word));
+    sb.append(VHelper.noCtx(), MimeUtility.fold(sb.length(), word));
 
     return sb;
   }

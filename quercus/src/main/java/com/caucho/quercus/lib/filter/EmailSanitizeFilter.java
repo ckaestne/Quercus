@@ -32,6 +32,7 @@ package com.caucho.quercus.lib.filter;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
 import com.caucho.quercus.env.Value;
+import edu.cmu.cs.varex.VHelper;
 
 public class EmailSanitizeFilter
   extends AbstractFilter
@@ -49,13 +50,13 @@ public class EmailSanitizeFilter
       char ch = str.charAt(i);
 
       if ('a' <= ch && ch <= 'z') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
       else if ('A' <= ch && ch <= 'Z') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
       else if ('0' <= ch && ch <= '9') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
       else if (ch == '@'
                || ch == '.'
@@ -80,7 +81,7 @@ public class EmailSanitizeFilter
                || ch == '~'
                || ch == '['
                || ch == ']') {
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
       }
       else {
         // do nothing

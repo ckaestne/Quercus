@@ -34,6 +34,7 @@ import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.util.Base64;
 import de.fosd.typechef.featureexpr.FeatureExpr;
 import edu.cmu.cs.varex.V;
+import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
 
 import java.util.Enumeration;
@@ -537,18 +538,18 @@ public class ServerArrayValue extends ArrayValueImpl
   {
     StringValue sb = _env.createUnicodeBuilder();
 
-    sb.append("HTTP_");
+    sb.append(VHelper.noCtx(), "HTTP_");
 
     int len = key.length();
     for (int i = 0; i < len; i++) {
       char ch = key.charAt(i);
 
       if (Character.isLowerCase(ch))
-        sb.append(Character.toUpperCase(ch));
+        sb.append(VHelper.noCtx(), Character.toUpperCase(ch));
       else if (ch == '-')
-        sb.append('_');
+        sb.append(VHelper.noCtx(), '_');
       else
-        sb.append(ch);
+        sb.append(VHelper.noCtx(), ch);
     }
 
     return sb;

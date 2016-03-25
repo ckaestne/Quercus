@@ -322,7 +322,7 @@ public class UnicodeBuilderValue
    * Append a buffer to the value.
    */
   @Override
-  public final StringValue append(byte []buf, int offset, int length)
+  public final StringValue append(FeatureExpr ctx, byte[] buf, int offset, int length)
   {
     if (_buffer.length < _length + length)
       ensureCapacity(_length + length);
@@ -385,7 +385,7 @@ public class UnicodeBuilderValue
    * Append a Java string to the value.
    */
   @Override
-  public StringValue append(String s, int start, int end)
+  public StringValue append(FeatureExpr ctx, String s, int start, int end)
   {
     int len = Math.min(s.length(), end - start);
 
@@ -403,7 +403,7 @@ public class UnicodeBuilderValue
    * Append a Java char to the value.
    */
   @Override
-  public StringValue append(char v)
+  public StringValue append(FeatureExpr ctx, char v)
   {
     if (_buffer.length < _length + 1)
       ensureCapacity(_length + 1);
@@ -417,7 +417,7 @@ public class UnicodeBuilderValue
    * Append a Java buffer to the value.
    */
   @Override
-  public StringValue append(char []buf, int offset, int length)
+  public StringValue append(FeatureExpr ctx, char[] buf, int offset, int length)
   {
     if (_buffer.length < _length + length)
       ensureCapacity(_length + length);
@@ -433,16 +433,16 @@ public class UnicodeBuilderValue
    * Append a Java double to the value.
    */
   @Override
-  public StringValue append(char []buf)
+  public StringValue append(FeatureExpr ctx, char[] buf)
   {
-    return append(buf, 0, buf.length);
+    return append(VHelper.noCtx(), buf, 0, buf.length);
   }
 
   /**
    * Append a Java buffer to the value.
    */
   @Override
-  public StringValue append(CharSequence buf, int head, int tail)
+  public StringValue append(FeatureExpr ctx, CharSequence buf, int head, int tail)
   {
     int len = tail - head;
 
@@ -465,7 +465,7 @@ public class UnicodeBuilderValue
    * Append a Java buffer to the value.
    */
   @Override
-  public StringValue append(UnicodeBuilderValue sb, int head, int tail)
+  public StringValue append(FeatureExpr ctx, UnicodeBuilderValue sb, int head, int tail)
   {
     int len = tail - head;
 
@@ -487,7 +487,7 @@ public class UnicodeBuilderValue
    * @param charset to decode string from
    */
   @Override
-  public StringValue append(Env env, StringValue unicodeStr, String charset)
+  public StringValue append(Env env, FeatureExpr ctx, StringValue unicodeStr, String charset)
   {
     return append(VHelper.noCtx(), unicodeStr);
   }
@@ -498,7 +498,7 @@ public class UnicodeBuilderValue
   @Override
   public StringValue appendTo(UnicodeBuilderValue sb)
   {
-    sb.append(_buffer, 0, _length);
+    sb.append(VHelper.noCtx(), _buffer, 0, _length);
 
     return sb;
   }
@@ -820,7 +820,7 @@ public class UnicodeBuilderValue
 
     UnicodeBuilderValue sb = new UnicodeBuilderValue(len);
 
-    sb.append(_buffer, start, len);
+    sb.append(VHelper.noCtx(), _buffer, start, len);
 
     return sb;
   }
