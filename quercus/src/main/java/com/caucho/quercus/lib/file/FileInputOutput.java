@@ -242,7 +242,7 @@ public class FileInputOutput extends AbstractBinaryOutput
   public StringValue read(int length)
     throws IOException
   {
-    StringValue bb = _env.createBinaryBuilder();
+    StringValue bb = _env.createStringBuilder();
     TempBuffer temp = TempBuffer.allocate();
 
     try {

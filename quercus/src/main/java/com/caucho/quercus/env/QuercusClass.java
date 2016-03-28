@@ -925,22 +925,22 @@ public class QuercusClass extends NullValue {
 
   private StringValue createString(String s)
   {
-    if (_moduleContext.isUnicodeSemantics()) {
-      return new UnicodeBuilderValue(s);
-    }
-    else {
+//    if (_moduleContext.isUnicodeSemantics()) {
+//      return new UnicodeBuilderValue(s);
+//    }
+//    else {
       return new ConstStringValue(s);
-    }
+//    }
   }
 
   private StringValue createStringBuilder()
   {
-    if (_moduleContext.isUnicodeSemantics()) {
-      return new UnicodeBuilderValue();
-    }
-    else {
+//    if (_moduleContext.isUnicodeSemantics()) {
+//      return new UnicodeBuilderValue();
+//    }
+//    else {
       return new StringBuilderValue();
-    }
+//    }
   }
 
   /**

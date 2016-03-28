@@ -51,7 +51,7 @@ public class JavaByteObjectArrayMarshal extends JavaArrayMarshal
     for (int i = 0; i < data.length; i++)
       data[i] = byteValue[i];
 
-    return env.createBinaryBuilder(data);
+    return env.createString(data);
   }
 
   @Override

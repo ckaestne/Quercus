@@ -161,10 +161,10 @@ public abstract class SimpleXMLNode
     if (filename.isDefault()) {
       StringValue value = env.createStringBuilder();
 
-      if (env.isUnicodeSemantics()) {
-        value.append(VHelper.noCtx(), sb.toString());
-      }
-      else {
+//      if (env.isUnicodeSemantics()) {
+//        value.append(VHelper.noCtx(), sb.toString());
+//      }
+//      else {
         byte []bytes;
 
         try {
@@ -178,7 +178,7 @@ public abstract class SimpleXMLNode
         }
 
         value.append(VHelper.noCtx(), bytes);
-      }
+//      }
 
       return value;
     }

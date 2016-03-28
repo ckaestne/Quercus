@@ -964,10 +964,10 @@ public class Xml {
     {
       StringValue value;
 
-      if (_env.isUnicodeSemantics()) {
-        value = _env.createString(buf, start, length);
-      }
-      else {
+//      if (_env.isUnicodeSemantics()) {
+//        value = _env.createString(buf, start, length);
+//      }
+//      else {
         String encoding = _outputEncoding;
 
         if (encoding == null)
@@ -986,7 +986,7 @@ public class Xml {
         value = _env.createStringBuilder();
 
         value.append(VHelper.noCtx(), bytes);
-      }
+//      }
 
       try {
         if (_characterDataHandler != null)

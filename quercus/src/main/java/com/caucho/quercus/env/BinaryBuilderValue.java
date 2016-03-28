@@ -1,667 +1,667 @@
-/*
- * Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
- *
- * This file is part of Resin(R) Open Source
- *
- * Each copy or derived work must preserve the copyright notice and this
- * notice unmodified.
- *
- * Resin Open Source is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Resin Open Source is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
- * of NON-INFRINGEMENT.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Resin Open Source; if not, write to the
- *
- *   Free Software Foundation, Inc.
- *   59 Temple Place, Suite 330
- *   Boston, MA 02111-1307  USA
- *
- * @author Scott Ferguson
- */
-
-package com.caucho.quercus.env;
-
-import com.caucho.quercus.QuercusRuntimeException;
-import com.caucho.quercus.marshal.Marshal;
-import com.caucho.util.CurrentTime;
-import com.caucho.vfs.TempBuffer;
-import de.fosd.typechef.featureexpr.FeatureExpr;
-import edu.cmu.cs.varex.VHelper;
-import edu.cmu.cs.varex.VWriteStream;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.IdentityHashMap;
-import java.util.Locale;
-
-/**
- * Represents a 8-bit PHP 6 style binary builder (unicode.semantics = on)
- */
-public class BinaryBuilderValue
-  extends StringBuilderValue
-{
-  public static final BinaryBuilderValue EMPTY = new BinaryBuilderValue("");
-
-  private final static BinaryBuilderValue []CHAR_STRINGS;
-
-  public BinaryBuilderValue()
-  {
-    super(128);
-  }
-
-  public BinaryBuilderValue(BinaryBuilderValue v)
-  {
-    super(v);
-  }
-
-  public BinaryBuilderValue(int capacity)
-  {
-    super(capacity);
-  }
-
-  public BinaryBuilderValue(byte []buffer, int offset, int length)
-  {
-    super(buffer, offset, length);
-  }
-
-  public BinaryBuilderValue(byte []buffer)
-  {
-    super(buffer);
-  }
-
-  public BinaryBuilderValue(String s)
-  {
-    super(s);
-  }
-
-  public BinaryBuilderValue(char []buffer)
-  {
-    super(buffer);
-  }
-
-  public BinaryBuilderValue(char []s, Value v1)
-  {
-    super(s, v1);
-  }
-
-  public BinaryBuilderValue(TempBuffer head)
-  {
-    this();
-
-    // php/0c4l
-    append(head);
-  }
-
-  public BinaryBuilderValue(byte ch)
-  {
-    super(ch);
-  }
-
-  /**
-   * Creates the string.
-   */
-  public static StringValue create(int value)
-  {
-    if (value < CHAR_STRINGS.length)
-      return CHAR_STRINGS[value];
-    else
-      return new BinaryBuilderValue(value);
-  }
-
-  /**
-   * Creates the string.
-   */
-  public static StringValue create(char value)
-  {
-    // php/3jb1
-    if (value < CHAR_STRINGS.length)
-      return CHAR_STRINGS[value];
-    else
-      return new BinaryBuilderValue(value);
-  }
-
-  /**
-   * Returns the type.
-   */
-  @Override
-  public String getType()
-  {
-    return "string";
-  }
-
-  /**
-   * Returns true for a BinaryValue.
-   */
-  @Override
-  public boolean isBinary()
-  {
-    return true;
-  }
-
-  //
-  // marshal costs
-  //
-
-  /**
-   * Cost to convert to a byte
-   */
-  @Override
-  public int toByteMarshalCost()
-  {
-    if (isLongConvertible())
-      return Marshal.COST_NUMERIC_LOSSLESS;
-    else if (isDoubleConvertible())
-      return Marshal.COST_NUMERIC_LOSSY;
-    else
-      return Marshal.COST_BINARY_TO_BYTE;
-  }
-
-  /**
-   * Cost to convert to a String
-   */
-  @Override
-  public int toStringMarshalCost()
-  {
-    return Marshal.COST_BINARY_TO_STRING;
-  }
-
-  /**
-   * Cost to convert to a char[]
-   */
-  @Override
-  public int toCharArrayMarshalCost()
-  {
-    return Marshal.COST_BINARY_TO_STRING + 5;
-  }
-
-  /**
-   * Cost to convert to a byte[]
-   */
-  @Override
-  public int toByteArrayMarshalCost()
-  {
-    return Marshal.COST_EQUAL;
-  }
-
-  /**
-   * Cost to convert to a binary value
-   */
-  @Override
-  public int toBinaryValueMarshalCost()
-  {
-    return Marshal.COST_IDENTICAL;
-  }
-
-  /**
-   * Cost to convert to a string value
-   */
-  @Override
-  public int toStringValueMarshalCost()
-  {
-    return Marshal.COST_IDENTICAL + 1;
-  }
-
-  /**
-   * Converts to a Unicode, 16-bit string.
-   */
-  @Override
-  public StringValue toUnicode(Env env)
-  {
-    return new UnicodeBuilderValue(this);
-  }
-
-  /**
-   * Converts to a UnicodeValue.
-   */
-  @Override
-  public StringValue toUnicodeValue()
-  {
-    return new UnicodeBuilderValue(this);
-  }
-
-  /**
-   * Converts to a UnicodeValue.
-   */
-  @Override
-  public StringValue toUnicodeValue(Env env)
-  {
-    return new UnicodeBuilderValue(this);
-  }
-
-  /**
-   * Converts to a UnicodeValue in desired charset.
-   */
-  @Override
-  public StringValue toUnicodeValue(Env env, String charset)
-  {
-    return toUnicodeValue(env);
-  }
-
-  /**
-   * Converts to a string builder
-   */
-  @Override
-  public StringValue toStringBuilder()
-  {
-    // XXX: can this just return this, or does it need to return a copy?
-    return new BinaryBuilderValue(this);
-  }
-
-  /**
-   * Returns the character at an index
-   */
-  @Override
-  public Value charValueAt(long index)
-  {
-    int len = length();
-
-    if (index < 0 || len <= index)
-      return UnsetBinaryValue.UNSET;
-    else
-      return BinaryBuilderValue.create(getBuffer()[(int) index] & 0xff);
-  }
-
-  /**
-   * Returns a subsequence
-   */
-  @Override
-  public CharSequence subSequence(int start, int end)
-  {
-    if (end <= start)
-      return EMPTY;
-
-    return new BinaryBuilderValue(getBuffer(), start, end - start);
-  }
-
-  /**
-   * Convert to lower case.
-   */
-  @Override
-  public StringValue toLowerCase(Locale locale)
-  {
-    int length = length();
-
-    BinaryBuilderValue string = new BinaryBuilderValue(length);
-
-    byte []srcBuffer = getBuffer();
-    byte []dstBuffer = string.getBuffer();
-
-    for (int i = 0; i < length; i++) {
-      byte ch = srcBuffer[i];
-
-      if ('A' <= ch && ch <= 'Z')
-        dstBuffer[i] = (byte) (ch + 'a' - 'A');
-      else
-        dstBuffer[i] = ch;
-    }
-
-    string.setLength(length);
-
-    return string;
-  }
-
-  /**
-   * Convert to lower case.
-   */
-  @Override
-  public StringValue toUpperCase()
-  {
-    int length = length();
-
-    BinaryBuilderValue string = new BinaryBuilderValue(length);
-
-    byte []srcBuffer = getBuffer();
-    byte []dstBuffer = string.getBuffer();
-
-    for (int i = 0; i < length; i++) {
-      byte ch = srcBuffer[i];
-
-      if ('a' <= ch && ch <= 'z')
-        dstBuffer[i] = (byte) (ch + 'A' - 'a');
-      else
-        dstBuffer[i] = ch;
-    }
-
-    string.setLength(length);
-
-    return string;
-  }
-
-  //
-  // append code
-  //
-
-  /**
-   * Creates a string builder of the same type.
-   */
-  @Override
-  public BinaryBuilderValue createStringBuilder()
-  {
-    return new BinaryBuilderValue();
-  }
-
-  /**
-   * Creates a string builder of the same type.
-   */
-  @Override
-  public BinaryBuilderValue createStringBuilder(int length)
-  {
-    return new BinaryBuilderValue(length);
-  }
-
-  /**
-   * Creates a string builder of the same type.
-   */
-  @Override
-  public BinaryBuilderValue
-    createStringBuilder(byte []buffer, int offset, int length)
-  {
-    return new BinaryBuilderValue(length);
-  }
-
-  /**
-   * Converts to a string builder
-   */
-  @Override
-  public StringValue toStringBuilder(Env env)
-  {
-    return new BinaryBuilderValue(getBuffer(), 0, length());
-  }
-
-  /**
-   * Converts to a string builder
-   */
-  @Override
-  public StringValue toStringBuilder(Env env, Value value)
-  {
-    if (value.isUnicode()) {
-      UnicodeBuilderValue sb = new UnicodeBuilderValue(this);
-
-      value.appendTo(sb);
-
-      return sb;
-    }
-    else {
-      BinaryBuilderValue v = new BinaryBuilderValue(this);
-
-      value.appendTo(v);
-
-      return v;
-    }
-  }
-
-  /**
-   * Converts to a string builder
-   */
-  @Override
-  public StringValue toStringBuilder(Env env, StringValue value)
-  {
-    if (value.isUnicode()) {
-      UnicodeBuilderValue sb = new UnicodeBuilderValue(this);
-
-      value.appendTo(sb);
-
-      return sb;
-    }
-    else {
-      BinaryBuilderValue v = new BinaryBuilderValue(this);
-
-      value.appendTo(v);
-
-      return v;
-    }
-  }
-
-  /**
-   * Append a Java buffer to the value.
-   */
-  // @Override
-  public final StringValue append(BinaryBuilderValue sb, int head, int tail)
-  {
-    int length = tail - head;
-
-    byte []buffer = getBuffer();
-    byte []sbBuffer = sb.getBuffer();
-
-    int offset = length();
-
-    if (buffer.length < offset + length)
-      ensureCapacity(offset + length);
-
-    System.arraycopy(sbBuffer, head, buffer, offset, tail - head);
-
-    setLength(offset + tail - head);
-
-    return this;
-  }
-
+///*
+// * Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
+// *
+// * This file is part of Resin(R) Open Source
+// *
+// * Each copy or derived work must preserve the copyright notice and this
+// * notice unmodified.
+// *
+// * Resin Open Source is free software; you can redistribute it and/or modify
+// * it under the terms of the GNU General Public License as published by
+// * the Free Software Foundation; either version 2 of the License, or
+// * (at your option) any later version.
+// *
+// * Resin Open Source is distributed in the hope that it will be useful,
+// * but WITHOUT ANY WARRANTY; without even the implied warranty of
+// * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
+// * of NON-INFRINGEMENT.  See the GNU General Public License for more
+// * details.
+// *
+// * You should have received a copy of the GNU General Public License
+// * along with Resin Open Source; if not, write to the
+// *
+// *   Free Software Foundation, Inc.
+// *   59 Temple Place, Suite 330
+// *   Boston, MA 02111-1307  USA
+// *
+// * @author Scott Ferguson
+// */
+//
+//package com.caucho.quercus.env;
+//
+//import com.caucho.quercus.QuercusRuntimeException;
+//import com.caucho.quercus.marshal.Marshal;
+//import com.caucho.util.CurrentTime;
+//import com.caucho.vfs.TempBuffer;
+//import de.fosd.typechef.featureexpr.FeatureExpr;
+//import edu.cmu.cs.varex.VHelper;
+//import edu.cmu.cs.varex.VWriteStream;
+//
+//import java.io.IOException;
+//import java.io.Reader;
+//import java.util.IdentityHashMap;
+//import java.util.Locale;
+//
+///**
+// * Represents a 8-bit PHP 6 style binary builder (unicode.semantics = on)
+// */
+//public class BinaryBuilderValue
+//  extends StringBuilderValue
+//{
+//  public static final BinaryBuilderValue EMPTY = new BinaryBuilderValue("");
+//
+//  private final static BinaryBuilderValue []CHAR_STRINGS;
+//
+//  public BinaryBuilderValue()
+//  {
+//    super(128);
+//  }
+//
+//  public BinaryBuilderValue(BinaryBuilderValue v)
+//  {
+//    super(v);
+//  }
+//
+//  public BinaryBuilderValue(int capacity)
+//  {
+//    super(capacity);
+//  }
+//
+//  public BinaryBuilderValue(byte []buffer, int offset, int length)
+//  {
+//    super(buffer, offset, length);
+//  }
+//
+//  public BinaryBuilderValue(byte []buffer)
+//  {
+//    super(buffer);
+//  }
+//
+//  public BinaryBuilderValue(String s)
+//  {
+//    super(s);
+//  }
+//
+//  public BinaryBuilderValue(char []buffer)
+//  {
+//    super(buffer);
+//  }
+//
+//  public BinaryBuilderValue(char []s, Value v1)
+//  {
+//    super(s, v1);
+//  }
+//
+//  public BinaryBuilderValue(TempBuffer head)
+//  {
+//    this();
+//
+//    // php/0c4l
+//    append(head);
+//  }
+//
+//  public BinaryBuilderValue(byte ch)
+//  {
+//    super(ch);
+//  }
+//
+//  /**
+//   * Creates the string.
+//   */
+//  public static StringValue create(int value)
+//  {
+//    if (value < CHAR_STRINGS.length)
+//      return CHAR_STRINGS[value];
+//    else
+//      return new BinaryBuilderValue(value);
+//  }
+//
+//  /**
+//   * Creates the string.
+//   */
+//  public static StringValue create(char value)
+//  {
+//    // php/3jb1
+//    if (value < CHAR_STRINGS.length)
+//      return CHAR_STRINGS[value];
+//    else
+//      return new BinaryBuilderValue(value);
+//  }
+//
+//  /**
+//   * Returns the type.
+//   */
+//  @Override
+//  public String getType()
+//  {
+//    return "string";
+//  }
+//
+//  /**
+//   * Returns true for a BinaryValue.
+//   */
+//  @Override
+//  public boolean isBinary()
+//  {
+//    return true;
+//  }
+//
+//  //
+//  // marshal costs
+//  //
+//
+//  /**
+//   * Cost to convert to a byte
+//   */
+//  @Override
+//  public int toByteMarshalCost()
+//  {
+//    if (isLongConvertible())
+//      return Marshal.COST_NUMERIC_LOSSLESS;
+//    else if (isDoubleConvertible())
+//      return Marshal.COST_NUMERIC_LOSSY;
+//    else
+//      return Marshal.COST_BINARY_TO_BYTE;
+//  }
+//
+//  /**
+//   * Cost to convert to a String
+//   */
+//  @Override
+//  public int toStringMarshalCost()
+//  {
+//    return Marshal.COST_BINARY_TO_STRING;
+//  }
+//
+//  /**
+//   * Cost to convert to a char[]
+//   */
+//  @Override
+//  public int toCharArrayMarshalCost()
+//  {
+//    return Marshal.COST_BINARY_TO_STRING + 5;
+//  }
+//
+//  /**
+//   * Cost to convert to a byte[]
+//   */
+//  @Override
+//  public int toByteArrayMarshalCost()
+//  {
+//    return Marshal.COST_EQUAL;
+//  }
+//
+//  /**
+//   * Cost to convert to a binary value
+//   */
+//  @Override
+//  public int toBinaryValueMarshalCost()
+//  {
+//    return Marshal.COST_IDENTICAL;
+//  }
+//
+//  /**
+//   * Cost to convert to a string value
+//   */
+//  @Override
+//  public int toStringValueMarshalCost()
+//  {
+//    return Marshal.COST_IDENTICAL + 1;
+//  }
+//
+//  /**
+//   * Converts to a Unicode, 16-bit string.
+//   */
+//  @Override
+//  public StringValue toUnicode(Env env)
+//  {
+//    return new UnicodeBuilderValue(this);
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue.
+//   */
+//  @Override
+//  public StringValue toUnicodeValue()
+//  {
+//    return new UnicodeBuilderValue(this);
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue.
+//   */
+//  @Override
+//  public StringValue toUnicodeValue(Env env)
+//  {
+//    return new UnicodeBuilderValue(this);
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue in desired charset.
+//   */
+//  @Override
+//  public StringValue toUnicodeValue(Env env, String charset)
+//  {
+//    return toUnicodeValue(env);
+//  }
+//
+//  /**
+//   * Converts to a string builder
+//   */
+//  @Override
+//  public StringValue toStringBuilder()
+//  {
+//    // XXX: can this just return this, or does it need to return a copy?
+//    return new BinaryBuilderValue(this);
+//  }
+//
+//  /**
+//   * Returns the character at an index
+//   */
+//  @Override
+//  public Value charValueAt(long index)
+//  {
+//    int len = length();
+//
+//    if (index < 0 || len <= index)
+//      return UnsetBinaryValue.UNSET;
+//    else
+//      return BinaryBuilderValue.create(getBuffer()[(int) index] & 0xff);
+//  }
+//
+//  /**
+//   * Returns a subsequence
+//   */
+//  @Override
+//  public CharSequence subSequence(int start, int end)
+//  {
+//    if (end <= start)
+//      return EMPTY;
+//
+//    return new BinaryBuilderValue(getBuffer(), start, end - start);
+//  }
+//
+//  /**
+//   * Convert to lower case.
+//   */
+//  @Override
+//  public StringValue toLowerCase(Locale locale)
+//  {
+//    int length = length();
+//
+//    BinaryBuilderValue string = new BinaryBuilderValue(length);
+//
+//    byte []srcBuffer = getBuffer();
+//    byte []dstBuffer = string.getBuffer();
+//
+//    for (int i = 0; i < length; i++) {
+//      byte ch = srcBuffer[i];
+//
+//      if ('A' <= ch && ch <= 'Z')
+//        dstBuffer[i] = (byte) (ch + 'a' - 'A');
+//      else
+//        dstBuffer[i] = ch;
+//    }
+//
+//    string.setLength(length);
+//
+//    return string;
+//  }
+//
+//  /**
+//   * Convert to lower case.
+//   */
+//  @Override
+//  public StringValue toUpperCase()
+//  {
+//    int length = length();
+//
+//    BinaryBuilderValue string = new BinaryBuilderValue(length);
+//
+//    byte []srcBuffer = getBuffer();
+//    byte []dstBuffer = string.getBuffer();
+//
+//    for (int i = 0; i < length; i++) {
+//      byte ch = srcBuffer[i];
+//
+//      if ('a' <= ch && ch <= 'z')
+//        dstBuffer[i] = (byte) (ch + 'A' - 'a');
+//      else
+//        dstBuffer[i] = ch;
+//    }
+//
+//    string.setLength(length);
+//
+//    return string;
+//  }
+//
+//  //
+//  // append code
+//  //
+//
+//  /**
+//   * Creates a string builder of the same type.
+//   */
+//  @Override
+//  public BinaryBuilderValue createStringBuilder()
+//  {
+//    return new BinaryBuilderValue();
+//  }
+//
+//  /**
+//   * Creates a string builder of the same type.
+//   */
+//  @Override
+//  public BinaryBuilderValue createStringBuilder(int length)
+//  {
+//    return new BinaryBuilderValue(length);
+//  }
+//
+//  /**
+//   * Creates a string builder of the same type.
+//   */
+//  @Override
+//  public BinaryBuilderValue
+//    createStringBuilder(byte []buffer, int offset, int length)
+//  {
+//    return new BinaryBuilderValue(length);
+//  }
+//
+//  /**
+//   * Converts to a string builder
+//   */
+//  @Override
+//  public StringValue toStringBuilder(Env env)
+//  {
+//    return new BinaryBuilderValue(getBuffer(), 0, length());
+//  }
+//
+//  /**
+//   * Converts to a string builder
+//   */
+//  @Override
+//  public StringValue toStringBuilder(Env env, Value value)
+//  {
+//    if (value.isUnicode()) {
+//      UnicodeBuilderValue sb = new UnicodeBuilderValue(this);
+//
+//      value.appendTo(sb);
+//
+//      return sb;
+//    }
+//    else {
+//      BinaryBuilderValue v = new BinaryBuilderValue(this);
+//
+//      value.appendTo(v);
+//
+//      return v;
+//    }
+//  }
+//
+//  /**
+//   * Converts to a string builder
+//   */
+//  @Override
+//  public StringValue toStringBuilder(Env env, StringValue value)
+//  {
+//    if (value.isUnicode()) {
+//      UnicodeBuilderValue sb = new UnicodeBuilderValue(this);
+//
+//      value.appendTo(sb);
+//
+//      return sb;
+//    }
+//    else {
+//      BinaryBuilderValue v = new BinaryBuilderValue(this);
+//
+//      value.appendTo(v);
+//
+//      return v;
+//    }
+//  }
+//
 //  /**
 //   * Append a Java buffer to the value.
 //   */
-//  @Override
-//  public final StringValue appendUnicode(FeatureExpr ctx, char[] buf, int offset, int length)
+//  // @Override
+//  public final StringValue append(BinaryBuilderValue sb, int head, int tail)
 //  {
-//    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+//    int length = tail - head;
 //
-//    appendTo(sb);
-//    sb.append(ctx, buf, offset, length);
+//    byte []buffer = getBuffer();
+//    byte []sbBuffer = sb.getBuffer();
 //
-//    return sb;
+//    int offset = length();
+//
+//    if (buffer.length < offset + length)
+//      ensureCapacity(offset + length);
+//
+//    System.arraycopy(sbBuffer, head, buffer, offset, tail - head);
+//
+//    setLength(offset + tail - head);
+//
+//    return this;
 //  }
-
-  /**
-   * Append a Java string to the value.
-   */
-  @Override
-  public final StringValue appendUnicode(FeatureExpr ctx, String s)
-  {
-    UnicodeBuilderValue sb = new UnicodeBuilderValue();
-
-    appendTo(sb);
-    sb.append(ctx, s);
-
-    return sb;
-  }
-
+//
+////  /**
+////   * Append a Java buffer to the value.
+////   */
+////  @Override
+////  public final StringValue appendUnicode(FeatureExpr ctx, char[] buf, int offset, int length)
+////  {
+////    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+////
+////    appendTo(sb);
+////    sb.append(ctx, buf, offset, length);
+////
+////    return sb;
+////  }
+//
 //  /**
 //   * Append a Java string to the value.
 //   */
 //  @Override
-//  public final StringValue appendUnicode(String s, int start, int end)
+//  public final StringValue appendUnicode(FeatureExpr ctx, String s)
 //  {
 //    UnicodeBuilderValue sb = new UnicodeBuilderValue();
 //
 //    appendTo(sb);
-//    sb.append(VHelper.noCtx(), s, start, end);
-//
-//    return sb;
-//  }
-
-  /**
-   * Append a value to the value.
-   */
-  @Override
-  public final StringValue appendUnicode(FeatureExpr ctx, Value value)
-  {
-    value = value.toValue();
-
-    if (value instanceof BinaryBuilderValue) {
-      append(VHelper.noCtx(), value);
-
-      return this;
-    }
-    else if (value.isString()) {
-      UnicodeBuilderValue sb = new UnicodeBuilderValue();
-
-      appendTo(sb);
-      sb.append(VHelper.noCtx(), value);
-
-      return sb;
-    }
-    else
-      return value.appendTo(this);
-  }
-
-//  /**
-//   * Append a Java char to the value.
-//   */
-//  @Override
-//  public final StringValue appendUnicode(FeatureExpr ctx, char ch)
-//  {
-//    UnicodeBuilderValue sb = new UnicodeBuilderValue();
-//
-//    appendTo(sb);
-//    sb.append(VHelper.noCtx(), ch);
+//    sb.append(ctx, s);
 //
 //    return sb;
 //  }
 //
-//  /**
-//   * Append a Java boolean to the value.
-//   */
-//  @Override
-//  public final StringValue appendUnicode(FeatureExpr ctx, boolean v)
-//  {
-//    return append(ctx, v ? "true" : "false");
-//  }
+////  /**
+////   * Append a Java string to the value.
+////   */
+////  @Override
+////  public final StringValue appendUnicode(String s, int start, int end)
+////  {
+////    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+////
+////    appendTo(sb);
+////    sb.append(VHelper.noCtx(), s, start, end);
+////
+////    return sb;
+////  }
 //
 //  /**
-//   * Append a Java long to the value.
+//   * Append a value to the value.
 //   */
 //  @Override
-//  public StringValue appendUnicode(FeatureExpr ctx, long v)
+//  public final StringValue appendUnicode(FeatureExpr ctx, Value value)
 //  {
-//    // XXX: this probably is frequent enough to special-case
+//    value = value.toValue();
 //
-//    return append(ctx, String.valueOf(v));
-//  }
+//    if (value instanceof BinaryBuilderValue) {
+//      append(VHelper.noCtx(), value);
 //
-//  /**
-//   * Append a Java double to the value.
-//   */
-//  @Override
-//  public StringValue appendUnicode(FeatureExpr ctx, double v)
-//  {
-//    return append(ctx, String.valueOf(v));
-//  }
+//      return this;
+//    }
+//    else if (value.isString()) {
+//      UnicodeBuilderValue sb = new UnicodeBuilderValue();
 //
-//  /**
-//   * Append a Java object to the value.
-//   */
-//  @Override
-//  public StringValue appendUnicode(FeatureExpr ctx, Object v)
-//  {
-//    if (v instanceof String)
-//      return appendUnicode(ctx, v.toString());
+//      appendTo(sb);
+//      sb.append(VHelper.noCtx(), value);
+//
+//      return sb;
+//    }
 //    else
-//      return append(ctx, v.toString());
+//      return value.appendTo(this);
 //  }
-
-  /**
-   * Append to a string builder.
-   */
-  @Override
-  public StringValue appendTo(UnicodeBuilderValue sb)
-  {
-    if (length() == 0)
-      return sb;
-
-    Env env = Env.getInstance();
-
-    try {
-      Reader reader = env.getRuntimeEncodingFactory().create(toInputStream());
-
-      if (reader != null) {
-        sb.append(reader);
-
-        reader.close();
-      }
-
-      return sb;
-    } catch (IOException e) {
-      throw new QuercusRuntimeException(e);
-    }
-  }
-
-  @Override
-  public String toDebugString()
-  {
-    StringBuilder sb = new StringBuilder();
-
-    int length = length();
-
-    sb.append("binary(");
-    sb.append(length);
-    sb.append(") \"");
-
-    int appendLength = length > 256 ? 256 : length;
-
-    for (int i = 0; i < appendLength; i++)
-      sb.append(charAt(i));
-
-    if (length > 256)
-      sb.append(" ...");
-
-    sb.append('"');
-
-    return sb.toString();
-  }
-
-  @Override
-  public void varDumpImpl(Env env, FeatureExpr ctx,
-                          VWriteStream out,
-                          int depth,
-                          IdentityHashMap<Value, String> valueSet) {
-    int length = length();
-
-    if (length < 0)
-        length = 0;
-
-    // QA needs to distinguish php5 string from php6 binary
-    if (CurrentTime.isTest())
-      out.print(ctx, "binary");
-    else
-      out.print(ctx, "string");
-
-    out.print(ctx, "(");
-    out.print(ctx, length);
-    out.print(ctx, ") \"");
-
-    for (int i = 0; i < length; i++) {
-      char ch = charAt(i);
-
-      if (0x20 <= ch && ch <= 0x7f || ch == '\t' || ch == '\r' || ch == '\n')
-        out.print(ctx, ch);
-      else if (ch <= 0xff)
-        out.print(ctx, "\\x"
-                  + Integer.toHexString(ch / 16)
-                  + Integer.toHexString(ch % 16));
-      else {
-        out.print(ctx, "\\u"
-                  + Integer.toHexString((ch >> 12) & 0xf)
-                  + Integer.toHexString((ch >> 8) & 0xf)
-                  + Integer.toHexString((ch >> 4) & 0xf)
-                  + Integer.toHexString((ch) & 0xf));
-      }
-    }
-
-    out.print(ctx, "\"");
-  }
-
-
-  static {
-    CHAR_STRINGS = new BinaryBuilderValue[256];
-
-    for (int i = 0; i < CHAR_STRINGS.length; i++)
-      CHAR_STRINGS[i] = new BinaryBuilderValue((byte) i);
-  }
-}
-
+//
+////  /**
+////   * Append a Java char to the value.
+////   */
+////  @Override
+////  public final StringValue appendUnicode(FeatureExpr ctx, char ch)
+////  {
+////    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+////
+////    appendTo(sb);
+////    sb.append(VHelper.noCtx(), ch);
+////
+////    return sb;
+////  }
+////
+////  /**
+////   * Append a Java boolean to the value.
+////   */
+////  @Override
+////  public final StringValue appendUnicode(FeatureExpr ctx, boolean v)
+////  {
+////    return append(ctx, v ? "true" : "false");
+////  }
+////
+////  /**
+////   * Append a Java long to the value.
+////   */
+////  @Override
+////  public StringValue appendUnicode(FeatureExpr ctx, long v)
+////  {
+////    // XXX: this probably is frequent enough to special-case
+////
+////    return append(ctx, String.valueOf(v));
+////  }
+////
+////  /**
+////   * Append a Java double to the value.
+////   */
+////  @Override
+////  public StringValue appendUnicode(FeatureExpr ctx, double v)
+////  {
+////    return append(ctx, String.valueOf(v));
+////  }
+////
+////  /**
+////   * Append a Java object to the value.
+////   */
+////  @Override
+////  public StringValue appendUnicode(FeatureExpr ctx, Object v)
+////  {
+////    if (v instanceof String)
+////      return appendUnicode(ctx, v.toString());
+////    else
+////      return append(ctx, v.toString());
+////  }
+//
+//  /**
+//   * Append to a string builder.
+//   */
+//  @Override
+//  public StringValue appendTo(UnicodeBuilderValue sb)
+//  {
+//    if (length() == 0)
+//      return sb;
+//
+//    Env env = Env.getInstance();
+//
+//    try {
+//      Reader reader = env.getRuntimeEncodingFactory().create(toInputStream());
+//
+//      if (reader != null) {
+//        sb.append(reader);
+//
+//        reader.close();
+//      }
+//
+//      return sb;
+//    } catch (IOException e) {
+//      throw new QuercusRuntimeException(e);
+//    }
+//  }
+//
+//  @Override
+//  public String toDebugString()
+//  {
+//    StringBuilder sb = new StringBuilder();
+//
+//    int length = length();
+//
+//    sb.append("binary(");
+//    sb.append(length);
+//    sb.append(") \"");
+//
+//    int appendLength = length > 256 ? 256 : length;
+//
+//    for (int i = 0; i < appendLength; i++)
+//      sb.append(charAt(i));
+//
+//    if (length > 256)
+//      sb.append(" ...");
+//
+//    sb.append('"');
+//
+//    return sb.toString();
+//  }
+//
+//  @Override
+//  public void varDumpImpl(Env env, FeatureExpr ctx,
+//                          VWriteStream out,
+//                          int depth,
+//                          IdentityHashMap<Value, String> valueSet) {
+//    int length = length();
+//
+//    if (length < 0)
+//        length = 0;
+//
+//    // QA needs to distinguish php5 string from php6 binary
+//    if (CurrentTime.isTest())
+//      out.print(ctx, "binary");
+//    else
+//      out.print(ctx, "string");
+//
+//    out.print(ctx, "(");
+//    out.print(ctx, length);
+//    out.print(ctx, ") \"");
+//
+//    for (int i = 0; i < length; i++) {
+//      char ch = charAt(i);
+//
+//      if (0x20 <= ch && ch <= 0x7f || ch == '\t' || ch == '\r' || ch == '\n')
+//        out.print(ctx, ch);
+//      else if (ch <= 0xff)
+//        out.print(ctx, "\\x"
+//                  + Integer.toHexString(ch / 16)
+//                  + Integer.toHexString(ch % 16));
+//      else {
+//        out.print(ctx, "\\u"
+//                  + Integer.toHexString((ch >> 12) & 0xf)
+//                  + Integer.toHexString((ch >> 8) & 0xf)
+//                  + Integer.toHexString((ch >> 4) & 0xf)
+//                  + Integer.toHexString((ch) & 0xf));
+//      }
+//    }
+//
+//    out.print(ctx, "\"");
+//  }
+//
+//
+//  static {
+//    CHAR_STRINGS = new BinaryBuilderValue[256];
+//
+//    for (int i = 0; i < CHAR_STRINGS.length; i++)
+//      CHAR_STRINGS[i] = new BinaryBuilderValue((byte) i);
+//  }
+//}
+//

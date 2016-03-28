@@ -801,7 +801,7 @@ public final class UnserializeReader {
 
   public final StringValue readUnicodeValue(Env env, int len)
   {
-    StringValue s = new UnicodeBuilderValue(_buffer, _index, len);
+    StringValue s = new StringBuilderValue(_buffer, _index, len);
 
     _index += len;
 

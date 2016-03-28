@@ -69,7 +69,7 @@ public class QuercusScriptEngine
   private QuercusContext _quercus;
 
   private String _scriptEncoding = "utf-8";
-  private boolean _isUnicodeSemantics;
+//  private boolean _isUnicodeSemantics;
 
   public QuercusScriptEngine()
   {
@@ -95,7 +95,7 @@ public class QuercusScriptEngine
                              boolean isUnicodeSemantics)
   {
     _factory = factory;
-    _isUnicodeSemantics = isUnicodeSemantics;
+//    _isUnicodeSemantics = isUnicodeSemantics;
   }
 
   public QuercusScriptEngine(QuercusScriptEngineFactory factory,
@@ -105,24 +105,24 @@ public class QuercusScriptEngine
     _quercus = quercus;
 
     _scriptEncoding = _quercus.getScriptEncoding();
-    _isUnicodeSemantics = quercus.isUnicodeSemantics();
+//    _isUnicodeSemantics = quercus.isUnicodeSemantics();
   }
 
   /**
    * Returns true if unicode.semantics (PHP6) is on.
    */
-  public boolean isUnicodeSemantics()
-  {
-    return _isUnicodeSemantics;
-  }
+//  public boolean isUnicodeSemantics()
+//  {
+//    return _isUnicodeSemantics;
+//  }
 
   /**
    * True to turn on unicode.semantics (PHP6).
    */
-  public void setUnicodeSemantics(boolean isUnicodeSemantics)
-  {
-    _isUnicodeSemantics = isUnicodeSemantics;
-  }
+//  public void setUnicodeSemantics(boolean isUnicodeSemantics)
+//  {
+//    _isUnicodeSemantics = isUnicodeSemantics;
+//  }
 
   /**
    * Returns the encoding to use for reading in scripts (default utf-8).
@@ -144,13 +144,13 @@ public class QuercusScriptEngine
     }
   }
 
-  private static QuercusContext createQuercus(String scriptEncoding,
-                                              boolean isUnicodeSemantics)
+  private static QuercusContext createQuercus(String scriptEncoding
+                                             /* boolean isUnicodeSemantics*/)
   {
     QuercusContext quercus = new QuercusContext();
 
     quercus.setScriptEncoding(scriptEncoding);
-    quercus.setUnicodeSemantics(isUnicodeSemantics);
+//    quercus.setUnicodeSemantics(isUnicodeSemantics);
 
     quercus.init();
     quercus.start();
@@ -165,7 +165,7 @@ public class QuercusScriptEngine
   public QuercusContext getQuercus()
   {
     if (_quercus == null) {
-      _quercus = createQuercus(_scriptEncoding, _isUnicodeSemantics);
+      _quercus = createQuercus(_scriptEncoding/*, _isUnicodeSemantics*/);
     }
 
     return _quercus;
@@ -185,17 +185,17 @@ public class QuercusScriptEngine
     try {
       QuercusProgram program;
 
-      if (isUnicodeSemantics()) {
-        program = QuercusParser.parse(quercus, null, script);
-      }
-      else {
+//      if (isUnicodeSemantics()) {
+//        program = QuercusParser.parse(quercus, null, script);
+//      }
+//      else {
         InputStream is
           = EncoderStream.open(script, quercus.getScriptEncoding());
 
         ReadStream rs = new ReadStream(new VfsStream(is, null));
 
         program = QuercusParser.parse(quercus, null, rs);
-      }
+//      }
 
       Writer writer = cxt.getWriter();
 
@@ -369,7 +369,7 @@ public class QuercusScriptEngine
   @Override
   public String toString()
   {
-    return getClass().getSimpleName() + "[isUnicodeSemantics=" + _isUnicodeSemantics + "]";
+    return getClass().getSimpleName() /*+ "[isUnicodeSemantics=" + _isUnicodeSemantics + "]"*/;
   }
 }
 

@@ -238,7 +238,7 @@ public class Zlib {
     if (_in == null)
       return null;
 
-    UnicodeBuilderValue sbv = new UnicodeBuilderValue();
+    StringBuilderValue sbv = new StringBuilderValue();
     int readChar;
 
     try {
@@ -299,7 +299,7 @@ public class Zlib {
    */
   public StringValue gzread(Env env, int length)
   {
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
     int readChar;
 
     if (_in == null)

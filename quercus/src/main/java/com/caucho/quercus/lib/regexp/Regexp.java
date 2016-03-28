@@ -31,12 +31,9 @@ package com.caucho.quercus.lib.regexp;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.UnicodeBuilderValue;
-import com.caucho.quercus.env.UnicodeValue;
-import com.caucho.quercus.lib.i18n.Utf8Encoder;
+//import com.caucho.quercus.lib.i18n.Utf8Encoder;
 import com.caucho.util.CharBuffer;
 import com.caucho.util.L10N;
-import edu.cmu.cs.varex.VHelper;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -74,7 +71,7 @@ public class Regexp {
   boolean _isUnicode;
   boolean _isPHP5String;
 
-  boolean _isUtf8;
+//  boolean _isUtf8;
   boolean _isEval;
 
   private IllegalRegexpException _exception;
@@ -176,13 +173,13 @@ public class Regexp {
 
     // XXX: what if unicode.semantics='true'?
 
-    if ((flags & Regcomp.UTF8) != 0) {
-      _pattern = fromUtf8(pattern);
-
-      if (_pattern == null) {
-        throw new IllegalRegexpException(L.l("Regexp: error converting subject to utf8"));
-      }
-    }
+//    if ((flags & Regcomp.UTF8) != 0) {
+//      _pattern = fromUtf8(pattern);
+//
+//      if (_pattern == null) {
+//        throw new IllegalRegexpException(L.l("Regexp: error converting subject to utf8"));
+//      }
+//    }
   }
 
   public StringValue getRawRegexp()
@@ -195,10 +192,10 @@ public class Regexp {
     return _pattern;
   }
 
-  public boolean isUTF8()
-  {
-    return _isUtf8;
-  }
+//  public boolean isUTF8()
+//  {
+//    return _isUtf8;
+//  }
 
   public boolean isEval()
   {
@@ -212,17 +209,17 @@ public class Regexp {
 
   public StringValue convertSubject(Env env, StringValue subject)
   {
-    if (isUTF8())
-      return fromUtf8(subject);
-    else
+//    if (isUTF8())
+//      return fromUtf8(subject);
+//    else
       return subject;
   }
 
   public StringValue convertResult(Env env, StringValue result)
   {
-    if (isUTF8())
-      return toUtf8(env, result);
-    else
+//    if (isUTF8())
+//      return toUtf8(env, result);
+//    else
       return result;
   }
 
@@ -231,7 +228,7 @@ public class Regexp {
     _ignoreCase = (comp._flags & Regcomp.IGNORE_CASE) != 0;
     _isGlobal = (comp._flags & Regcomp.GLOBAL) != 0;
     _isAnchorBegin = (comp._flags & Regcomp.ANCHORED) != 0;
-    _isUtf8 = (comp._flags & Regcomp.UTF8) != 0;
+//    _isUtf8 = (comp._flags & Regcomp.UTF8) != 0;
 
     if (prog.isAnchorBegin())
       _isAnchorBegin = true;
@@ -259,11 +256,11 @@ public class Regexp {
            : comp._groupNameMap.entrySet()) {
       StringValue groupName = entry.getValue();
 
-      if (_isUnicode) {
-      }
-      else if (isUTF8()) {
-        groupName.toBinaryValue("UTF-8");
-      }
+//      if (_isUnicode) {
+//      }
+//      else if (isUTF8()) {
+//        groupName.toBinaryValue("UTF-8");
+//      }
 
       _groupNames[entry.getKey().intValue()] = groupName;
     }
@@ -277,74 +274,74 @@ public class Regexp {
   public boolean isGlobal() { return _isGlobal; }
   public boolean isIgnoreCase() { return _ignoreCase; }
 
-  static UnicodeValue fromUtf8(StringValue source)
-  {
-    UnicodeValue target = new UnicodeBuilderValue();
-    int len = source.length();
+//  static UnicodeValue fromUtf8(StringValue source)
+//  {
+//    UnicodeValue target = new UnicodeBuilderValue();
+//    int len = source.length();
+//
+//    for (int i = 0; i < len; i++) {
+//      char ch = source.charAt(i);
+//
+//      if (ch < 0x80) {
+//        target.append(VHelper.noCtx(), ch);
+//      }
+//      else if ((ch & 0xe0) == 0xc0) {
+//        if (len <= i + 1) {
+//          log.fine(L.l("Regexp: bad UTF-8 sequence, saw EOF"));
+//          return null;
+//        }
+//
+//        char ch2 = source.charAt(++i);
+//
+//        target.append(VHelper.noCtx(), (char) (((ch & 0x1f) << 6)
+//                              + (ch2 & 0x3f)));
+//      }
+//      else if ((ch & 0xf0) == 0xe0) {
+//        if (len <= i + 2) {
+//          log.fine(L.l("Regexp: bad UTF-8 sequence, saw EOF"));
+//          return null;
+//        }
+//
+//        char ch2 = source.charAt(++i);
+//        char ch3 = source.charAt(++i);
+//
+//        target.append(VHelper.noCtx(), (char) (((ch & 0x0f) << 12)
+//                              + ((ch2 & 0x3f) << 6)
+//                              + (ch3 & 0x3f)));
+//      }
+//      else {
+//        if (i + 3 >= len) {
+//          log.fine(L.l("Regexp: bad UTF-8 sequence, saw EOF"));
+//          return null;
+//        }
+//
+//        char ch2 = source.charAt(++i);
+//        char ch3 = source.charAt(++i);
+//        char ch4 = source.charAt(++i);
+//
+//        int codePoint = ((ch & 0x07) << 18)
+//                         + ((ch2 & 0x3F) << 12)
+//                         + ((ch3 & 0x3F) << 6)
+//                         + (ch4 & 0x3F);
+//
+//        int high = ((codePoint - 0x10000) >> 10) + 0xD800;
+//        int low = (codePoint & 0x3FF) + 0xDC00;
+//
+//        target.append(VHelper.noCtx(), (char) high);
+//        target.append(VHelper.noCtx(), (char) low);
+//      }
+//    }
+//
+//    return target;
+//  }
 
-    for (int i = 0; i < len; i++) {
-      char ch = source.charAt(i);
-
-      if (ch < 0x80) {
-        target.append(VHelper.noCtx(), ch);
-      }
-      else if ((ch & 0xe0) == 0xc0) {
-        if (len <= i + 1) {
-          log.fine(L.l("Regexp: bad UTF-8 sequence, saw EOF"));
-          return null;
-        }
-
-        char ch2 = source.charAt(++i);
-
-        target.append(VHelper.noCtx(), (char) (((ch & 0x1f) << 6)
-                              + (ch2 & 0x3f)));
-      }
-      else if ((ch & 0xf0) == 0xe0) {
-        if (len <= i + 2) {
-          log.fine(L.l("Regexp: bad UTF-8 sequence, saw EOF"));
-          return null;
-        }
-
-        char ch2 = source.charAt(++i);
-        char ch3 = source.charAt(++i);
-
-        target.append(VHelper.noCtx(), (char) (((ch & 0x0f) << 12)
-                              + ((ch2 & 0x3f) << 6)
-                              + (ch3 & 0x3f)));
-      }
-      else {
-        if (i + 3 >= len) {
-          log.fine(L.l("Regexp: bad UTF-8 sequence, saw EOF"));
-          return null;
-        }
-
-        char ch2 = source.charAt(++i);
-        char ch3 = source.charAt(++i);
-        char ch4 = source.charAt(++i);
-
-        int codePoint = ((ch & 0x07) << 18)
-                         + ((ch2 & 0x3F) << 12)
-                         + ((ch3 & 0x3F) << 6)
-                         + (ch4 & 0x3F);
-
-        int high = ((codePoint - 0x10000) >> 10) + 0xD800;
-        int low = (codePoint & 0x3FF) + 0xDC00;
-
-        target.append(VHelper.noCtx(), (char) high);
-        target.append(VHelper.noCtx(), (char) low);
-      }
-    }
-
-    return target;
-  }
-
-  static StringValue toUtf8(Env env, StringValue source)
-  {
-    Utf8Encoder encoder = new Utf8Encoder();
-
-    StringValue sb = env.createBinaryBuilder();
-    return encoder.encode(sb, source);
-  }
+//  static StringValue toUtf8(Env env, StringValue source)
+//  {
+//    Utf8Encoder encoder = new Utf8Encoder();
+//
+//    StringValue sb = env.createStringBuilder();
+//    return encoder.encode(sb, source);
+//  }
 
   public String toString()
   {

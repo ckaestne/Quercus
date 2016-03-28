@@ -590,7 +590,7 @@ public class FileModule extends AbstractQuercusModule {
       int ch = is.read();
 
       if (ch >= 0) {
-        StringValue v = env.createBinaryBuilder(1);
+        StringValue v = env.createStringBuilder();
 
         v.append(VHelper.noCtx(), (char) ch);
 
@@ -664,7 +664,7 @@ public class FileModule extends AbstractQuercusModule {
             break;
         }
 
-        StringValue sb = env.createBinaryBuilder();
+        StringValue sb = env.createStringBuilder();
 
         if (ch == quote) {
           for (ch = is.read(); ch >= 0; ch = is.read()) {
@@ -799,7 +799,7 @@ public class FileModule extends AbstractQuercusModule {
       ArrayValue array = new ArrayValueImpl();
 
       try {
-        StringValue bb = env.createBinaryBuilder();
+        StringValue bb = env.createStringBuilder();
 
         for (int ch = is.read(); ch >= 0; ch = is.read()) {
           if (ch == '\n') {
@@ -809,7 +809,7 @@ public class FileModule extends AbstractQuercusModule {
 
             if (bb.length() > 0 || ! skipEmptyLines) {
               array.append(bb);
-              bb = env.createBinaryBuilder();
+              bb = env.createStringBuilder();
             }
           }
           else if (ch == '\r') {
@@ -830,7 +830,7 @@ public class FileModule extends AbstractQuercusModule {
 
             if (bb.length() > 0 || ! skipEmptyLines) {
               array.append(bb);
-              bb = env.createBinaryBuilder();
+              bb = env.createStringBuilder();
             }
           }
           else {
@@ -1178,7 +1178,7 @@ public class FileModule extends AbstractQuercusModule {
 
     BinaryInput is = (BinaryInput) s;
 
-    StringValue bb = env.createLargeBinaryBuilder();
+    StringValue bb = env.createStringBuilder();
     bb.appendReadAll(is, maxLen);
 
     s.close();
@@ -1879,7 +1879,7 @@ public class FileModule extends AbstractQuercusModule {
     if (length < 0)
       length = Integer.MAX_VALUE;
 
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
 
     // fread is not "readAll". For example, socket reads.
     // sb.appendReadAll(is, length);
@@ -2065,7 +2065,7 @@ public class FileModule extends AbstractQuercusModule {
       Matcher matcher = compiledGlobRegex.matcher(entry);
 
       if (matcher.matches()) {
-        StringValue sb = env.createUnicodeBuilder();
+        StringValue sb = env.createStringBuilder();
 
         if (prefix.length() > 0) {
           sb.append(VHelper.noCtx(), prefix);

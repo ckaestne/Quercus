@@ -176,7 +176,7 @@ public class CurlHttpRequest
 
     _curl.setResponseCode(_conn.getResponseCode());
 
-    Value header = getHeader(env, env.createBinaryBuilder());
+    Value header = getHeader(env, env.createStringBuilder());
 
     if (header == BooleanValue.FALSE) {
       return false;
@@ -184,7 +184,7 @@ public class CurlHttpRequest
 
     _curl.setHeader(header.toStringValue());
 
-    Value body = getBody(env, env.createBinaryBuilder());
+    Value body = getBody(env, env.createStringBuilder());
 
     if (body == BooleanValue.FALSE) {
       return false;
@@ -378,7 +378,7 @@ public class CurlHttpRequest
     bb.append(VHelper.noCtx(), "\r\n");
 
     if (_curl.getHeaderCallback() != null) {
-      StringValue sb = env.createUnicodeBuilder();
+      StringValue sb = env.createStringBuilder();
 
       sb.append(VHelper.noCtx(), "\r\n");
 

@@ -135,7 +135,7 @@ public class XmlModule extends AbstractQuercusModule {
    */
   public static Value utf8_decode(Env env, StringValue str)
   {
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
 
     int len = str.length();
     for (int i = 0; i < len; i++) {

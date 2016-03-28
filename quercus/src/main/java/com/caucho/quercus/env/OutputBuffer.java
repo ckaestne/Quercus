@@ -128,7 +128,7 @@ public class OutputBuffer {
     try {
       _out.flush();
 
-      StringValue bb = _env.createBinaryBuilder();
+      StringValue bb = _env.createStringBuilder();
 
       for (Opt<String> frag: _tempStream.getContent()) {
 

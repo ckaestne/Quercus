@@ -90,7 +90,7 @@ public class ExceptionClass
    */
   public static Value __toString(Env env, @This ObjectValue value)
   {
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
 
     sb.append(VHelper.noCtx(), "ExceptionClass[" + value.getName() + "]\n");
     sb.append(VHelper.noCtx(), getMessage(env, value));
@@ -164,7 +164,7 @@ public class ExceptionClass
   {
     Value trace = getTrace(env, obj);
 
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
     sb.append(VHelper.noCtx(), "<trace>");
 
     Iterator<EnvVar> iter = trace.getValueIterator(env);

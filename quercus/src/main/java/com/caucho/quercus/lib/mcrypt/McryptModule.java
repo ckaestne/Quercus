@@ -101,7 +101,7 @@ public class McryptModule extends AbstractQuercusModule {
       else
         result = mcrypt.decrypt(data);
       
-      return env.createBinaryBuilder(result, 0, result.length);
+      return env.createString(result, 0, result.length);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -129,7 +129,7 @@ public class McryptModule extends AbstractQuercusModule {
       else
         result = mcrypt.decrypt(data);
       
-      return env.createBinaryBuilder(result, 0, result.length);
+      return env.createString(result, 0, result.length);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -142,7 +142,7 @@ public class McryptModule extends AbstractQuercusModule {
                                              int size,
                                              @Optional int randomMode)
   {
-    StringValue bb = env.createBinaryBuilder(size);
+    StringValue bb = env.createStringBuilder();
 
     for (int i = 0; i < size; i++)
       bb.appendByte((byte) RandomUtil.nextInt(256));
@@ -167,7 +167,7 @@ public class McryptModule extends AbstractQuercusModule {
 
       byte []result = mcrypt.decrypt(data);
 
-      return env.createBinaryBuilder(result, 0, result.length);
+      return env.createString(result, 0, result.length);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -195,7 +195,7 @@ public class McryptModule extends AbstractQuercusModule {
       else
         result = mcrypt.decrypt(data);
       
-      return env.createBinaryBuilder(result, 0, result.length);
+      return env.createString(result, 0, result.length);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -323,7 +323,7 @@ public class McryptModule extends AbstractQuercusModule {
 
       mcrypt.init(key, iv);
 
-      return env.createBinaryBuilder(mcrypt.encrypt(data));
+      return env.createString(mcrypt.encrypt(data));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -337,7 +337,7 @@ public class McryptModule extends AbstractQuercusModule {
     if (mcrypt == null)
       return null;
     else
-      return env.createBinaryBuilder(mcrypt.encrypt(data));
+      return env.createString(mcrypt.encrypt(data));
   }
 
   /**
@@ -670,7 +670,7 @@ public class McryptModule extends AbstractQuercusModule {
       else
         result = mcrypt.decrypt(data);
       
-      return env.createBinaryBuilder(result);
+      return env.createString(result);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -684,6 +684,6 @@ public class McryptModule extends AbstractQuercusModule {
     if (mcrypt == null)
       return BooleanValue.FALSE;
     else
-      return env.createBinaryBuilder(mcrypt.decrypt(data));
+      return env.createString(mcrypt.decrypt(data));
   }
 }

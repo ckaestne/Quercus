@@ -1,31 +1,31 @@
 /*
- * Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
- *
- * This file is part of Resin(R) Open Source
- *
- * Each copy or derived work must preserve the copyright notice and this
- * notice unmodified.
- *
- * Resin Open Source is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Resin Open Source is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
- * of NON-INFRINGEMENT.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Resin Open Source; if not, write to the
- *
- *   Free Software Foundation, Inc.
- *   59 Temple Place, Suite 330
- *   Boston, MA 02111-1307  USA
- *
- * @author Nam Nguyen
- */
+* Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
+*
+* This file is part of Resin(R) Open Source
+*
+* Each copy or derived work must preserve the copyright notice and this
+* notice unmodified.
+*
+* Resin Open Source is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* Resin Open Source is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
+* of NON-INFRINGEMENT.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Resin Open Source; if not, write to the
+*
+*   Free Software Foundation, Inc.
+*   59 Temple Place, Suite 330
+*   Boston, MA 02111-1307  USA
+*
+* @author Nam Nguyen
+*/
 
 package com.caucho.quercus.lib.i18n;
 
@@ -409,7 +409,7 @@ public class MbstringModule
   {
     String encoding = getEncoding(env);
 
-    string = string.convertToUnicode(env, encoding);
+//    string = string;
 
     // XXX: option
 
@@ -435,12 +435,12 @@ public class MbstringModule
     StringValue eregStr;
 
     if (eregValue.isLong())
-      eregStr = UnicodeBuilderValue.create((char) eregValue.toInt());
+      eregStr = (StringValue) StringBuilderValue.create("" + (char) eregValue.toInt());
     else
-      eregStr = eregValue.toStringValue(env).convertToUnicode(env, encoding);
+      eregStr = eregValue.toStringValue(env);
 
-    replacement = replacement.convertToUnicode(env, encoding);
-    subject = subject.convertToUnicode(env, encoding);
+    replacement = replacement;
+    subject = subject;
 
     //XXX: option
 
@@ -477,12 +477,12 @@ public class MbstringModule
     StringValue eregStr;
 
     if (pattern.isLong())
-      eregStr = UnicodeBuilderValue.create((char) pattern.toInt());
+      eregStr = StringBuilderValue.create((char) pattern.toInt());
     else
-      eregStr = pattern.toStringValue(env).convertToUnicode(env, encoding);
+      eregStr = pattern.toStringValue(env);
 
-    replacement = replacement.convertToUnicode(env, encoding);
-    subject = subject.convertToUnicode(env, encoding);
+    replacement = replacement;
+    subject = subject;
 
     //XXX: option
 
@@ -509,7 +509,7 @@ public class MbstringModule
   {
     String encoding = getEncoding(env);
 
-    string = string.convertToUnicode(env, encoding);
+    string = string;
 
     if (regs == null) {
       return RegexpModule.eregImpl(env, ereg, string, null);
@@ -865,7 +865,7 @@ public class MbstringModule
 
     Encoder encoder = getEncoder(env, toEncoding);
 
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
     return encoder.encode(sb, contentsUnicode);
   }
 
@@ -934,9 +934,9 @@ public class MbstringModule
 
     String encoding = getEncoding(env);
 
-    subject = subject.toBinaryValue(encoding);
-    message = message.toBinaryValue(encoding);
-    additionalHeaders = additionalHeaders.toBinaryValue(encoding);
+//    subject = subject.toBinaryValue(encoding);
+//    message = message.toBinaryValue(encoding);
+//    additionalHeaders = additionalHeaders.toBinaryValue(encoding);
 
     boolean result = MailModule.mail(env,
                                      to.toString(),
@@ -958,7 +958,7 @@ public class MbstringModule
   {
     String encoding = getEncoding(env);
 
-    string = string.convertToUnicode(env, encoding);
+    string = string;
 
     Value val = RegexpModule.split(env, ereg, string, limit);
 
@@ -1046,7 +1046,7 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    str = str.convertToUnicode(env, encoding);
+    str = str;
 
     return LongValue.create(str.length());
   }
@@ -1062,8 +1062,8 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    haystack = haystack.convertToUnicode(env, encoding);
-    needle = needle.convertToUnicode(env, encoding);
+    haystack = haystack;
+    needle = needle;
 
     return StringModule.strpos(env, haystack, needle, offset);
   }
@@ -1079,8 +1079,8 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    haystack = haystack.convertToUnicode(env, encoding);
-    needle = needle.convertToUnicode(env, encoding);
+    haystack = haystack;
+    needle = needle;
 
     return StringModule.strrpos(env, haystack, needle, offsetV);
   }
@@ -1094,7 +1094,7 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    StringValue unicodeStr = str.convertToUnicode(env, encoding);
+    StringValue unicodeStr = str;
     unicodeStr = StringModule.strtolower(str);
 
     return str.create(env, unicodeStr, encoding);
@@ -1109,7 +1109,7 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    StringValue unicodeStr = str.convertToUnicode(env, encoding);
+    StringValue unicodeStr = str;
     unicodeStr = StringModule.strtoupper(str);
 
     return str.create(env, unicodeStr, encoding);
@@ -1124,7 +1124,7 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    str = str.convertToUnicode(env, encoding);
+    str = str;
 
     return LongValue.create(str.length());
 
@@ -1167,8 +1167,8 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    haystack = haystack.convertToUnicode(env, encoding);
-    needle = needle.convertToUnicode(env, encoding);
+    haystack = haystack;
+    needle = needle;
 
     int count = 0;
     int sublen = needle.length();
@@ -1194,7 +1194,7 @@ public class MbstringModule
   {
     encoding = getEncoding(env, encoding);
 
-    StringValue unicodeStr = str.convertToUnicode(env, encoding);
+    StringValue unicodeStr = str;
 
     Value val = StringModule.substr(env, unicodeStr, start, lengthV);
 
@@ -1294,7 +1294,7 @@ public class MbstringModule
   {
     Encoder encoder = getEncoder(env, encoding);
 
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
     return encoder.encode(sb, str);
   }
 
@@ -1484,7 +1484,7 @@ public class MbstringModule
     val = val.toValue();
 
     if (val.isString()) {
-      StringValue sb = env.createBinaryBuilder();
+      StringValue sb = env.createStringBuilder();
 
       return encoder.encode(sb, val.toStringValue(), true);
     }
@@ -1532,7 +1532,7 @@ public class MbstringModule
                UnicodeEregi ereg,
                Value option)
     {
-      _string = string.convertToUnicode(env, getEncoding(env));
+      _string = string;//.convertToUnicode(env, getEncoding(env));
       _position = 0;
       _length = _string.length();
 

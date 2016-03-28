@@ -1,31 +1,31 @@
 /*
- * Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
- *
- * This file is part of Resin(R) Open Source
- *
- * Each copy or derived work must preserve the copyright notice and this
- * notice unmodified.
- *
- * Resin Open Source is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Resin Open Source is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
- * of NON-INFRINGEMENT.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Resin Open Source; if not, write to the
- *
- *   Free Software Foundation, Inc.
- *   59 Temple Place, Suite 330
- *   Boston, MA 02111-1307  USA
- *
- * @author Scott Ferguson
- */
+* Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
+*
+* This file is part of Resin(R) Open Source
+*
+* Each copy or derived work must preserve the copyright notice and this
+* notice unmodified.
+*
+* Resin Open Source is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* Resin Open Source is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
+* of NON-INFRINGEMENT.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Resin Open Source; if not, write to the
+*
+*   Free Software Foundation, Inc.
+*   59 Temple Place, Suite 330
+*   Boston, MA 02111-1307  USA
+*
+* @author Scott Ferguson
+*/
 
 package com.caucho.quercus.env;
 
@@ -33,6 +33,7 @@ import com.caucho.quercus.QuercusModuleException;
 import com.caucho.util.CharBuffer;
 import com.caucho.vfs.TempCharBuffer;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -43,16 +44,16 @@ import java.util.Locale;
 import java.util.zip.CRC32;
 
 /**
- * Represents a PHP 5 style string builder (unicode.semantics = off)
- */
+* Represents a PHP 5 style string builder (unicode.semantics = off)
+*/
 public class StringBuilderValue
-  extends BinaryValue
+  extends StringValue
 {
   public static final StringBuilderValue EMPTY = new ConstStringValue("");
 
   private static final StringBuilderValue []CHAR_STRINGS;
-  private static final int LARGE_BUILDER_THRESHOLD
-    = LargeStringBuilderValue.SIZE;
+//  private static final int LARGE_BUILDER_THRESHOLD
+//    = LargeStringBuilderValue.SIZE;
 
   private byte []_buffer;
   private int _length;
@@ -493,51 +494,51 @@ public class StringBuilderValue
     }
   }
 
-  /**
-   * Converts to a BinaryValue.
-   */
-  @Override
-  public final StringValue toBinaryValue(Env env)
-  {
-    return this;
-  }
+//  /**
+//   * Converts to a BinaryValue.
+//   */
+//  @Override
+//  public final StringValue toBinaryValue(Env env)
+//  {
+//    return this;
+//  }
 
-  /**
-   * Converts to a BinaryValue in desired charset.
-   */
-  @Override
-  public final StringValue toBinaryValue(String charset)
-  {
-    return this;
-  }
-
-  /**
-   * Converts to a UnicodeValue.
-   */
-  @Override
-  public StringValue toUnicodeValue()
-  {
-    // php/0c94
-    return new UnicodeBuilderValue().append(VHelper.noCtx(), getBuffer(), 0, length());
-  }
-
-  /**
-   * Converts to a UnicodeValue.
-   */
-  @Override
-  public StringValue toUnicodeValue(Env env)
-  {
-    return toUnicodeValue();
-  }
-
-  /**
-   * Converts to a UnicodeValue in desired charset.
-   */
-  @Override
-  public StringValue toUnicodeValue(Env env, String charset)
-  {
-    return toUnicodeValue();
-  }
+//  /**
+//   * Converts to a BinaryValue in desired charset.
+//   */
+//  @Override
+//  public final StringValue toBinaryValue(String charset)
+//  {
+//    return this;
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue.
+//   */
+//  @Override
+//  public StringValue toUnicodeValue()
+//  {
+//    // php/0c94
+//    return new UnicodeBuilderValue().append(VHelper.noCtx(), getBuffer(), 0, length());
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue.
+//   */
+//  @Override
+//  public StringValue toUnicodeValue(Env env)
+//  {
+//    return toUnicodeValue();
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue in desired charset.
+//   */
+//  @Override
+//  public StringValue toUnicodeValue(Env env, String charset)
+//  {
+//    return toUnicodeValue();
+//  }
 
   /**
    * Converts to an object.
@@ -582,39 +583,39 @@ public class StringBuilderValue
     return bb;
   }
 
-  /**
-   * Append to a string builder.
-   */
-  @Override
-  public StringValue appendTo(UnicodeBuilderValue bb)
-  {
-    bb.append(VHelper.noCtx(), _buffer, 0, _length);
-
-    return bb;
-  }
-
-  /**
-   * Append to a string builder.
-   */
-  @Override
-  public StringValue appendTo(LargeStringBuilderValue bb)
-  {
-    bb.append(VHelper.noCtx(), _buffer, 0, _length);
-
-    return bb;
-  }
-
-
-  /**
-   * Append to a string builder.
-   */
-  @Override
-  public StringValue appendTo(BinaryBuilderValue bb)
-  {
-    bb.append(VHelper.noCtx(), _buffer, 0, _length);
-
-    return bb;
-  }
+//  /**
+//   * Append to a string builder.
+//   */
+//  @Override
+//  public StringValue appendTo(UnicodeBuilderValue bb)
+//  {
+//    bb.append(VHelper.noCtx(), _buffer, 0, _length);
+//
+//    return bb;
+//  }
+//
+//  /**
+//   * Append to a string builder.
+//   */
+//  @Override
+//  public StringValue appendTo(LargeStringBuilderValue bb)
+//  {
+//    bb.append(VHelper.noCtx(), _buffer, 0, _length);
+//
+//    return bb;
+//  }
+//
+//
+//  /**
+//   * Append to a string builder.
+//   */
+//  @Override
+//  public StringValue appendTo(BinaryBuilderValue bb)
+//  {
+//    bb.append(VHelper.noCtx(), _buffer, 0, _length);
+//
+//    return bb;
+//  }
 
   /**
    * Converts to a key.
@@ -1066,9 +1067,9 @@ public class StringBuilderValue
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    if (_length >= LARGE_BUILDER_THRESHOLD)
-      return new LargeStringBuilderValue(this);
-    else
+//    if (_length >= LARGE_BUILDER_THRESHOLD)
+//      return new LargeStringBuilderValue(this);
+//    else
       return new StringBuilderValue(this);
   }
 
@@ -1078,20 +1079,20 @@ public class StringBuilderValue
   @Override
   public StringValue toStringBuilder(Env env, Value value)
   {
-    if (_length + value.length() >= LARGE_BUILDER_THRESHOLD) {
-      LargeStringBuilderValue v = new LargeStringBuilderValue(this);
-
-      value.appendTo(v);
-
-      return v;
-    }
-    else {
+//    if (_length + value.length() >= LARGE_BUILDER_THRESHOLD) {
+//      LargeStringBuilderValue v = new LargeStringBuilderValue(this);
+//
+//      value.appendTo(v);
+//
+//      return v;
+//    }
+//    else {
       StringBuilderValue v = new StringBuilderValue(this);
 
       value.appendTo(VHelper.noCtx(), v);
 
       return v;
-    }
+//    }
   }
 
   /**
@@ -1100,20 +1101,20 @@ public class StringBuilderValue
   @Override
   public StringValue toStringBuilder(Env env, StringValue value)
   {
-    if (_length + value.length() >= LARGE_BUILDER_THRESHOLD) {
-      LargeStringBuilderValue v = new LargeStringBuilderValue(this);
-
-      value.appendTo(v);
-
-      return v;
-    }
-    else {
+//    if (_length + value.length() >= LARGE_BUILDER_THRESHOLD) {
+//      LargeStringBuilderValue v = new LargeStringBuilderValue(this);
+//
+//      value.appendTo(v);
+//
+//      return v;
+//    }
+//    else {
       StringBuilderValue v = new StringBuilderValue(this);
 
       value.appendTo(VHelper.noCtx(), v);
 
       return v;
-    }
+//    }
   }
 
   //
@@ -1609,6 +1610,14 @@ public class StringBuilderValue
   {
     return _buffer;
   }
+  /**
+   * Returns the buffer.
+   */
+  public final char []getBufferC()
+  {
+    throw new UnimplementedVException();
+//    return _buffer;
+  }
 
   /**
    * Sets the length.
@@ -1972,24 +1981,24 @@ public class StringBuilderValue
 
       return true;
     }
-    else if (o instanceof LargeStringBuilderValue) {
-      StringValue value = (StringValue) o;
-
-      int length = _length;
-      int lengthB = value.length();
-
-      if (length != lengthB)
-        return false;
-
-      byte []bufferA = _buffer;
-
-      for (int i = length - 1; i >= 0; i--) {
-        if (bufferA[i] != value.charAt(i))
-          return false;
-      }
-
-      return true;
-    }
+//    else if (o instanceof LargeStringBuilderValue) {
+//      StringValue value = (StringValue) o;
+//
+//      int length = _length;
+//      int lengthB = value.length();
+//
+//      if (length != lengthB)
+//        return false;
+//
+//      byte []bufferA = _buffer;
+//
+//      for (int i = length - 1; i >= 0; i--) {
+//        if (bufferA[i] != value.charAt(i))
+//          return false;
+//      }
+//
+//      return true;
+//    }
     else if (o instanceof StringValue) {
       StringValue str = (StringValue) o;
 
@@ -2097,7 +2106,7 @@ public class StringBuilderValue
   public void generate(PrintWriter out)
     throws IOException
   {
-    ConstStringValue.generateImpl(out, this);
+//    ConstStringValue.generateImpl(out, this);
   }
 
   //
@@ -2213,7 +2222,7 @@ public class StringBuilderValue
     CHAR_STRINGS = new ConstStringValue[256];
 
     for (int i = 0; i < CHAR_STRINGS.length; i++) {
-      CHAR_STRINGS[i] = new ConstStringValue((char) i);
+      CHAR_STRINGS[i] = new ConstStringValue(""+((char) i));
     }
   }
 }

@@ -322,7 +322,7 @@ public class SocketModule extends AbstractQuercusModule {
         length = socket.read(buffer, 0, length);
 
         if (length > 0) {
-          StringValue sb = env.createBinaryBuilder(buffer, 0, length);
+          StringValue sb = env.createString(buffer, 0, length);
           return sb;
         } else
           return BooleanValue.FALSE;

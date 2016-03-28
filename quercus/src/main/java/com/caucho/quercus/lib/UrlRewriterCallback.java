@@ -157,7 +157,7 @@ public class UrlRewriterCallback extends CallbackFunction {
       _input = input;
       _env = env;
       _index = 0;
-      _output = env.createUnicodeBuilder();
+      _output = env.createStringBuilder();
     }
 
     public Value parse()

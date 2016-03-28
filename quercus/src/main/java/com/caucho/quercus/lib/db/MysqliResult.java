@@ -991,7 +991,7 @@ public class MysqliResult extends JdbcResultResource {
       if (bytes == null)
         return NullValue.NULL;
 
-      StringValue bb = env.createUnicodeBuilder();
+      StringValue bb = env.createStringBuilder();
 
       int length = bytes.length;
       int offset = 0;
@@ -1029,7 +1029,7 @@ public class MysqliResult extends JdbcResultResource {
       if (bytes == null)
         return NullValue.NULL;
 
-      StringValue bb = env.createUnicodeBuilder();
+      StringValue bb = env.createStringBuilder();
 
       bb.append(VHelper.noCtx(), bytes);
 

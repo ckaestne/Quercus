@@ -58,7 +58,7 @@ public class LineReader
   public StringValue readLine(Env env, BinaryInput input, long length)
     throws IOException
   {
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
 
     int ch;
 

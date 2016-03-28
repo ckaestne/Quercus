@@ -103,23 +103,23 @@ public class JMSQueue
       Set<VEntry> entrySet = array.entrySet();
 
       for (VEntry entry : entrySet) {
-        if (entry.getEnvVar().getOne() instanceof BinaryValue) {
-          byte []bytes = ((BinaryValue) entry.getEnvVar().getOne()).toBytes();
-
-          ((MapMessage) message).setBytes(entry.getKey().toString(), bytes);
-        } else {
+//        if (entry.getEnvVar().getOne() instanceof BinaryValue) {
+//          byte []bytes = ((BinaryValue) entry.getEnvVar().getOne()).toBytes();
+//
+//          ((MapMessage) message).setBytes(entry.getKey().toString(), bytes);
+//        } else {
           // every primitive except for bytes can be translated from a string
           ((MapMessage) message).setString(entry.getKey().toString(),
                                            entry.getEnvVar().toString());
-        }
+//        }
       }
-    } else if (value instanceof BinaryValue) {
-      message = _session.createBytesMessage();
-
-
-      byte []bytes = ((BinaryValue) value).toBytes();
-
-      ((BytesMessage) message).writeBytes(bytes);
+//    } else if (value instanceof BinaryValue) {
+//      message = _session.createBytesMessage();
+//
+//
+//      byte []bytes = ((BinaryValue) value).toBytes();
+//
+//      ((BytesMessage) message).writeBytes(bytes);
     } else if (value.isLongConvertible()) {
       message = _session.createStreamMessage();
 
@@ -170,7 +170,7 @@ public class JMSQueue
       BytesMessage bytesMessage = (BytesMessage) message;
       int length = (int) bytesMessage.getBodyLength();
 
-      StringValue bb = env.createBinaryBuilder(length);
+      StringValue bb = env.createStringBuilder();
 
       TempBuffer tempBuffer = TempBuffer.allocate();
       int sublen;

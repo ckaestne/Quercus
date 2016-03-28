@@ -610,7 +610,7 @@ public class CurlResource extends ResourceValue
    */
   public Value getRequestProperties(Env env)
   {
-    StringValue bb = env.createBinaryBuilder();
+    StringValue bb = env.createStringBuilder();
 
     for (Map.Entry<String,String> entry : _requestProperties.entrySet()) {
       bb.append(VHelper.noCtx(), entry.getKey());
@@ -805,7 +805,7 @@ public class CurlResource extends ResourceValue
         return BooleanValue.TRUE;
     }
     else {
-      StringValue bb = env.createBinaryBuilder();
+      StringValue bb = env.createStringBuilder();
 
       if (_isReturningHeader)
         bb.append(VHelper.noCtx(), _header);

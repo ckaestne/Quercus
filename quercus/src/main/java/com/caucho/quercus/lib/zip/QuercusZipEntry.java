@@ -126,7 +126,7 @@ public class QuercusZipEntry {
     if (_in == null)
       return null;
 
-    StringValue bb = env.createBinaryBuilder();
+    StringValue bb = env.createStringBuilder();
 
     bb.appendReadAll((InputStream) _in, length);
 

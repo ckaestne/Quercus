@@ -253,7 +253,7 @@ public class StringModule extends AbstractQuercusModule {
   public static StringValue bin2hex(Env env, InputStream is)
   {
     try {
-      StringValue sb = env.createUnicodeBuilder();
+      StringValue sb = env.createStringBuilder();
 
       int ch;
       while ((ch = is.read()) >= 0) {
@@ -302,10 +302,10 @@ public class StringModule extends AbstractQuercusModule {
    */
   public static StringValue chr(Env env, long value)
   {
-    if (! env.isUnicodeSemantics())
+//    if (! env.isUnicodeSemantics())
       value = value & 0xFF;
 
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
 
     sb.append(VHelper.noCtx(), (char) value);
 
@@ -643,7 +643,7 @@ public class StringModule extends AbstractQuercusModule {
    */
   public static StringValue hex2bin(Env env, StringValue s)
   {
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
 
     int len = s.length();
 
@@ -936,7 +936,7 @@ public class StringModule extends AbstractQuercusModule {
 
   private static StringValue digestToString(Env env, byte []digest)
   {
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
     for (int i = 0; i < digest.length; i++) {
       int d1 = (digest[i] >> 4) & 0xf;
       int d2 = (digest[i] & 0xf);
@@ -1880,12 +1880,12 @@ public class StringModule extends AbstractQuercusModule {
   private static Value hashToValue(Env env, byte []bytes, boolean isBinary)
   {
     if (isBinary) {
-      StringValue v = env.createBinaryBuilder();
+      StringValue v = env.createStringBuilder();
       v.append(VHelper.noCtx(), bytes, 0, bytes.length);
       return v;
     }
     else {
-      StringValue v = env.createUnicodeBuilder();
+      StringValue v = env.createStringBuilder();
 
       for (int i = 0; i < bytes.length; i++) {
     int ch = bytes[i];

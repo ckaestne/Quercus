@@ -386,12 +386,12 @@ public class HashModule extends AbstractQuercusModule {
   private static Value hashToValue(Env env, byte []bytes, boolean isBinary)
   {
     if (isBinary) {
-      StringValue v = env.createBinaryBuilder();
+      StringValue v = env.createStringBuilder();
       v.append(VHelper.noCtx(), bytes, 0, bytes.length);
       return v;
     }
     else {
-      StringValue v = env.createUnicodeBuilder();
+      StringValue v = env.createStringBuilder();
 
       for (int i = 0; i < bytes.length; i++) {
         int ch = bytes[i];

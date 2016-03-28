@@ -402,10 +402,10 @@ public class RegexpModule
     }
   }
 
-  public static UnicodeEreg createUnicodeEreg(Env env, StringValue pattern)
-  {
-    return createUnicodeEreg(env, pattern, MbstringModule.getEncoding(env));
-  }
+//  public static UnicodeEreg createUnicodeEreg(Env env, StringValue pattern)
+//  {
+//    return createUnicodeEreg(env, pattern, MbstringModule.getEncoding(env));
+//  }
 
   public static UnicodeEreg createUnicodeEreg(Env env,
                                               StringValue pattern,
@@ -417,7 +417,7 @@ public class RegexpModule
       UnicodeEreg ereg = _unicodeEregCache.get(key);
 
       if (ereg == null) {
-        pattern = pattern.convertToUnicode(env, encoding);
+//        pattern = pattern.convertToUnicode(env, encoding);
 
         StringValue cleanPattern = cleanEregRegexp(pattern, false);
 
@@ -435,7 +435,7 @@ public class RegexpModule
       return null;
     }
   }
-
+//
   public static UnicodeEregi createUnicodeEregi(Env env, StringValue pattern)
   {
     return createUnicodeEregi(env, pattern, MbstringModule.getEncoding(env));
@@ -451,7 +451,7 @@ public class RegexpModule
       UnicodeEregi ereg = _unicodeEregiCache.get(key);
 
       if (ereg == null) {
-        pattern = pattern.convertToUnicode(env, encoding);
+//        pattern = pattern.convertToUnicode(env, encoding);
 
         StringValue cleanPattern = cleanEregRegexp(pattern, false);
 

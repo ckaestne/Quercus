@@ -31,7 +31,8 @@ package com.caucho.quercus.lib;
 
 import com.caucho.quercus.annotation.Optional;
 import com.caucho.quercus.env.*;
-import com.caucho.quercus.lib.i18n.Decoder;
+//import com.caucho.quercus.lib.i18n.Decoder;
+//import com.caucho.quercus.lib.i18n.Encoder;
 import com.caucho.quercus.lib.i18n.Encoder;
 import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.util.L10N;
@@ -40,7 +41,6 @@ import com.caucho.vfs.i18n.EncodingWriter;
 import edu.cmu.cs.varex.VHelper;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,29 +79,29 @@ public class HtmlModule extends AbstractQuercusModule {
   {
   }
 
-  private static ConstArrayValue toUnicodeArray(Env env, ArrayValue array)
-  {
-    ArrayValueImpl copy = new ArrayValueImpl();
-
-    Iterator<VEntry> iter = array.getIterator(env);
-
-    while (iter.hasNext()) {
-      VEntry entry = iter.next();
-
-      Value key = entry.getKey();
-      Value value = entry.getEnvVar().getOne();
-
-      if (key.isString())
-        key = key.toUnicodeValue(env);
-
-      if (value.isString())
-        value = value.toUnicodeValue(env);
-
-      copy.put(key, value);
-    }
-
-    return new ConstArrayValue(copy);
-  }
+//  private static ConstArrayValue toUnicodeArray(Env env, ArrayValue array)
+//  {
+//    ArrayValueImpl copy = new ArrayValueImpl();
+//
+//    Iterator<VEntry> iter = array.getIterator(env);
+//
+//    while (iter.hasNext()) {
+//      VEntry entry = iter.next();
+//
+//      Value key = entry.getKey();
+//      Value value = entry.getEnvVar().getOne();
+//
+////      if (key.isString())
+////        key = key.toUnicodeValue(env);
+//
+////      if (value.isString())
+////        value = value.toUnicodeValue(env);
+//
+//      copy.put(key, value);
+//    }
+//
+//    return new ConstArrayValue(copy);
+//  }
 
   /**
    * Returns HTML translation tables.
@@ -112,30 +112,30 @@ public class HtmlModule extends AbstractQuercusModule {
       @Optional("ENT_COMPAT") int quoteStyle) {
     Value result;
 
-    if (! env.isUnicodeSemantics()) {
+//    if (! env.isUnicodeSemantics()) {
       if (table == HTML_ENTITIES)
         result = HTML_ENTITIES_ARRAY.copy();
       else
         result = HTML_SPECIALCHARS_ARRAY.copy();
-    }
-    else {
-      if (table == HTML_ENTITIES) {
-        if (HTML_ENTITIES_ARRAY_UNICODE == null) {
-          HTML_ENTITIES_ARRAY_UNICODE = toUnicodeArray(
-              env, HTML_ENTITIES_ARRAY);
-        }
-
-        result = HTML_ENTITIES_ARRAY_UNICODE.copy();
-      }
-      else {
-        if (HTML_SPECIALCHARS_ARRAY_UNICODE == null) {
-          HTML_SPECIALCHARS_ARRAY_UNICODE = toUnicodeArray(
-              env, HTML_SPECIALCHARS_ARRAY);
-        }
-
-        result = HTML_SPECIALCHARS_ARRAY_UNICODE.copy();
-      }
-    }
+//    }
+//    else {
+//      if (table == HTML_ENTITIES) {
+//        if (HTML_ENTITIES_ARRAY_UNICODE == null) {
+//          HTML_ENTITIES_ARRAY_UNICODE = toUnicodeArray(
+//              env, HTML_ENTITIES_ARRAY);
+//        }
+//
+//        result = HTML_ENTITIES_ARRAY_UNICODE.copy();
+//      }
+//      else {
+//        if (HTML_SPECIALCHARS_ARRAY_UNICODE == null) {
+//          HTML_SPECIALCHARS_ARRAY_UNICODE = toUnicodeArray(
+//              env, HTML_SPECIALCHARS_ARRAY);
+//        }
+//
+//        result = HTML_SPECIALCHARS_ARRAY_UNICODE.copy();
+//      }
+//    }
 
     if ((quoteStyle & ENT_HTML_QUOTE_SINGLE) != 0)
       result.put(env.createString('\''), env.createString("&#39;"));
@@ -330,29 +330,29 @@ public class HtmlModule extends AbstractQuercusModule {
 
     CharSequence unicodeStr;
 
-    if (string.isUnicode()) {
+//    if (string.isUnicode()) {
       unicodeStr = string;
-    }
-    else {
-      try {
-        Decoder decoder = Decoder.create(charset);
-        decoder.setAllowMalformedOut(true);
+//    }
+//    else {
+//      try {
+//        Decoder decoder = Decoder.create(charset);
+//        decoder.setAllowMalformedOut(true);
+//
+//        unicodeStr = decoder.decode(env, string);
+//      }
+//      catch (Exception e) {
+//        env.warning(L.l("unsupported encoding, defaulting to utf-8"), e);
+//
+//        charset = "UTF-8";
+//
+//        Decoder decoder = Decoder.create(charset);
+//        decoder.setAllowMalformedOut(true);
+//
+//        unicodeStr = decoder.decode(env, string);
+//      }
+//    }
 
-        unicodeStr = decoder.decode(env, string);
-      }
-      catch (Exception e) {
-        env.warning(L.l("unsupported encoding, defaulting to utf-8"), e);
-
-        charset = "UTF-8";
-
-        Decoder decoder = Decoder.create(charset);
-        decoder.setAllowMalformedOut(true);
-
-        unicodeStr = decoder.decode(env, string);
-      }
-    }
-
-    UnicodeBuilderValue sb = new UnicodeBuilderValue();
+    StringBuilderValue sb = new StringBuilderValue();
 
     int len = unicodeStr.length();
 
@@ -387,7 +387,7 @@ public class HtmlModule extends AbstractQuercusModule {
     else {
       Encoder encoder = Encoder.create(charset);
 
-      StringValue result = env.createBinaryBuilder();
+      StringValue result = env.createStringBuilder();
       return encoder.encode(result, sb);
     }
   }
@@ -410,27 +410,27 @@ public class HtmlModule extends AbstractQuercusModule {
 
     ArrayValue htmlEntities = null;
 
-    boolean isUnicode = env.isUnicodeSemantics();
-
-    if (isUnicode) {
-      if (HTML_ENTITIES_ARRAY_UNICODE_ENTITY_KEY == null) {
-        HTML_ENTITIES_ARRAY_UNICODE_ENTITY_KEY = toUnicodeArray(
-            env, HTML_ENTITIES_ARRAY_ENTITY_KEY);
-      }
-
-      htmlEntities = HTML_ENTITIES_ARRAY_UNICODE_ENTITY_KEY;
-    }
-    else
+//    boolean isUnicode = env.isUnicodeSemantics();
+//
+//    if (isUnicode) {
+//      if (HTML_ENTITIES_ARRAY_UNICODE_ENTITY_KEY == null) {
+//        HTML_ENTITIES_ARRAY_UNICODE_ENTITY_KEY = toUnicodeArray(
+//            env, HTML_ENTITIES_ARRAY_ENTITY_KEY);
+//      }
+//
+//      htmlEntities = HTML_ENTITIES_ARRAY_UNICODE_ENTITY_KEY;
+//    }
+//    else
       htmlEntities = HTML_ENTITIES_ARRAY_ENTITY_KEY;
 
     EncodingWriter out = null;
 
-    if (! isUnicode) {
+//    if (! isUnicode) {
       if (charset == null || charset.length() == 0)
         charset = env.getRuntimeEncoding();
 
       out = Encoding.getWriteEncoding(charset);
-    }
+//    }
 
     int len = string.length();
     int htmlEntityStart = -1;
@@ -458,11 +458,11 @@ public class HtmlModule extends AbstractQuercusModule {
           if (value.isNull()) {
             result.append(VHelper.noCtx(), entity);
           }
-          else if (isUnicode) {
-            result.append(VHelper.noCtx(), (char) value.toInt());
-          }
+//          else if (isUnicode) {
+//            result.append(VHelper.noCtx(), (char) value.toInt());
+//          }
           else {
-            out.write(result, (char)value.toInt());
+            out.write(result, (char) value.toInt());
           }
 
           htmlEntityStart = -1;

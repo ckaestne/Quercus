@@ -45,14 +45,14 @@ public class WrappedDirectory extends Directory {
   private static final ConstStringValue DIR_REWINDDIR
     = new ConstStringValue("dir_rewinddir");
 
-  private static final UnicodeBuilderValue DIR_CLOSEDIR_U
-    = new UnicodeBuilderValue("dir_closedir");
-  private static final UnicodeBuilderValue DIR_OPENDIR_U
-    = new UnicodeBuilderValue("dir_opendir");
-  private static final UnicodeBuilderValue DIR_READDIR_U
-    = new UnicodeBuilderValue("dir_readdir");
-  private static final UnicodeBuilderValue DIR_REWINDDIR_U
-    = new UnicodeBuilderValue("dir_rewinddir");
+//  private static final UnicodeBuilderValue DIR_CLOSEDIR_U
+//    = new UnicodeBuilderValue("dir_closedir");
+//  private static final UnicodeBuilderValue DIR_OPENDIR_U
+//    = new UnicodeBuilderValue("dir_opendir");
+//  private static final UnicodeBuilderValue DIR_READDIR_U
+//    = new UnicodeBuilderValue("dir_readdir");
+//  private static final UnicodeBuilderValue DIR_REWINDDIR_U
+//    = new UnicodeBuilderValue("dir_rewinddir");
 
   private Value _wrapper;
 
@@ -65,9 +65,9 @@ public class WrappedDirectory extends Directory {
 
   public boolean open(Env env, StringValue path, LongValue flags)
   {
-    if (env.isUnicodeSemantics())
-      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR_U, path, flags).getOne().toValue().toBoolean();
-    else
+//    if (env.isUnicodeSemantics())
+//      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR_U, path, flags).getOne().toValue().toBoolean();
+//    else
       return _wrapper.callMethod(env, VHelper.noCtx(), DIR_OPENDIR, path, flags).getOne().toValue().toBoolean();
   }
 
@@ -77,9 +77,9 @@ public class WrappedDirectory extends Directory {
   @Override
   public Value read(Env env)
   {
-    if (env.isUnicodeSemantics())
-      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR_U).getOne().toValue();
-    else
+//    if (env.isUnicodeSemantics())
+//      return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR_U).getOne().toValue();
+//    else
       return _wrapper.callMethod(env, VHelper.noCtx(), DIR_READDIR).getOne().toValue();
   }
 
@@ -89,9 +89,9 @@ public class WrappedDirectory extends Directory {
   @Override
   public void rewind(Env env)
   {
-    if (env.isUnicodeSemantics())
-      _wrapper.callMethod(env, VHelper.noCtx(), DIR_REWINDDIR_U);
-    else
+//    if (env.isUnicodeSemantics())
+//      _wrapper.callMethod(env, VHelper.noCtx(), DIR_REWINDDIR_U);
+//    else
       _wrapper.callMethod(env, VHelper.noCtx(), DIR_REWINDDIR);
   }
 
@@ -101,9 +101,9 @@ public class WrappedDirectory extends Directory {
   @Override
   public void close(Env env)
   {
-    if (env.isUnicodeSemantics())
-      _wrapper.callMethod(env, VHelper.noCtx(), DIR_CLOSEDIR_U);
-    else
+//    if (env.isUnicodeSemantics())
+//      _wrapper.callMethod(env, VHelper.noCtx(), DIR_CLOSEDIR_U);
+//    else
       _wrapper.callMethod(env, VHelper.noCtx(), DIR_CLOSEDIR);
   }
 

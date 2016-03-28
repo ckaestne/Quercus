@@ -257,18 +257,18 @@ public class QuercusParser {
 
     _scriptEncoding = scriptEncoding;
 
-    if (isUnicodeSemantics()) {
-      _namespace = UnicodeBuilderValue.EMPTY;
-      _lexeme = UnicodeBuilderValue.EMPTY;
-
-      _sb = new UnicodeBuilderValue();
-    }
-    else {
+//    if (isUnicodeSemantics()) {
+//      _namespace = UnicodeBuilderValue.EMPTY;
+//      _lexeme = UnicodeBuilderValue.EMPTY;
+//
+//      _sb = new UnicodeBuilderValue();
+//    }
+//    else {
       _namespace = ConstStringValue.EMPTY;
       _lexeme = ConstStringValue.EMPTY;
 
       _sb = new StringBuilderValue();
-    }
+//    }
   }
 
   public QuercusParser(QuercusContext quercus,
@@ -335,9 +335,9 @@ public class QuercusParser {
     ReadStream is = path.openRead();
 
     try {
-      if (quercus != null && quercus.isUnicodeSemantics()) {
-        is.setEncoding(encoding);
-      }
+//      if (quercus != null && quercus.isUnicodeSemantics()) {
+//        is.setEncoding(encoding);
+//      }
 
       QuercusParser parser;
       parser = new QuercusParser(quercus, path, is);
@@ -358,9 +358,9 @@ public class QuercusParser {
     ReadStream is = path.openRead();
 
     try {
-      if (quercus != null && quercus.isUnicodeSemantics()) {
-        is.setEncoding(encoding);
-      }
+//      if (quercus != null && quercus.isUnicodeSemantics()) {
+//        is.setEncoding(encoding);
+//      }
 
       QuercusParser parser;
       parser = new QuercusParser(quercus, path, is);
@@ -461,10 +461,10 @@ public class QuercusParser {
     return fun;
   }
 
-  public boolean isUnicodeSemantics()
-  {
-    return _quercus != null && _quercus.isUnicodeSemantics();
-  }
+//  public boolean isUnicodeSemantics()
+//  {
+//    return _quercus != null && _quercus.isUnicodeSemantics();
+//  }
 
   public boolean isShortOpenTag()
   {
@@ -3605,15 +3605,15 @@ public class QuercusParser {
 
     case BINARY:
       try {
-        if (isUnicodeSemantics()) {
-          BinaryValue value
-            = (BinaryValue) _lexeme.toBinaryValue(_scriptEncoding);
-
-          return _factory.createBinary(value);
-        }
-        else {
+//        if (isUnicodeSemantics()) {
+//          BinaryValue value
+//            = (BinaryValue) _lexeme.toBinaryValue(_scriptEncoding);
+//
+//          return _factory.createBinary(value);
+//        }
+//        else {
           return _factory.createString(_lexeme);
-        }
+//        }
       }
       catch (Exception e) {
         throw new QuercusParseException(e);
@@ -3764,10 +3764,10 @@ public class QuercusParser {
             return _factory.createToDouble(parseAssignExpr());
           else if ("string".equalsIgnoreCase(type))
             return _factory.createToString(parseAssignExpr());
-          else if ("binary".equalsIgnoreCase(type))
-            return _factory.createToBinary(parseAssignExpr());
-          else if ("unicode".equalsIgnoreCase(type))
-            return _factory.createToUnicode(parseAssignExpr());
+//          else if ("binary".equalsIgnoreCase(type))
+//            return _factory.createToBinary(parseAssignExpr());
+//          else if ("unicode".equalsIgnoreCase(type))
+//            return _factory.createToUnicode(parseAssignExpr());
           else if ("object".equalsIgnoreCase(type))
             return _factory.createToObject(parseAssignExpr());
           else if ("array".equalsIgnoreCase(type))
@@ -5158,7 +5158,7 @@ public class QuercusParser {
   private void parseStringToken(int end)
     throws IOException
   {
-    parseStringToken(end, isUnicodeSemantics());
+    parseStringToken(end, /*isUnicodeSemantics()*/false);
   }
 
   /**
@@ -5389,12 +5389,12 @@ public class QuercusParser {
   {
     Expr expr;
 
-    if (isUnicode) {
+//    if (isUnicode) {
       expr = createStringExpr(prefix);
-    }
-    else {
-      expr = createBinaryExpr(prefix.toBinaryValue(_scriptEncoding));
-    }
+//    }
+//    else {
+//      expr = createBinaryExpr(prefix.toBinaryValue(_scriptEncoding));
+//    }
 
     while (true) {
       Expr tail;
@@ -5467,10 +5467,10 @@ public class QuercusParser {
       if (_sb.length() > 0) {
         Expr string;
 
-        if (isUnicode)
+//        if (isUnicode)
           string = createStringExpr(copyStringValue(_sb));
-        else
-          string = createBinaryExpr(copyStringValue(_sb.toBinaryValue(_scriptEncoding)));
+//        else
+//          string = createBinaryExpr(copyStringValue(_sb.toBinaryValue(_scriptEncoding)));
 
         expr = _factory.createAppend(expr, string);
       }
@@ -5542,53 +5542,53 @@ public class QuercusParser {
 
   private Expr createStringExpr(StringValue lexeme)
   {
-    if (lexeme.isUnicode()) {
-      return _factory.createUnicode((UnicodeValue) lexeme);
-    }
-    else {
+//    if (lexeme.isUnicode()) {
+//      return _factory.createUnicode((UnicodeValue) lexeme);
+//    }
+//    else {
       return _factory.createString(lexeme);
-    }
+//    }
   }
 
   private Expr createBinaryExpr(StringValue lexeme)
   {
-    if (lexeme.isUnicode()) {
-      return _factory.createBinary((BinaryValue) lexeme);
-    }
-    else {
+//    if (lexeme.isUnicode()) {
+//      return _factory.createBinary((BinaryValue) lexeme);
+//    }
+//    else {
       return _factory.createString(lexeme);
-    }
+//    }
   }
 
   private StringValue createStringValue(String lexeme)
   {
     // XXX: see QuercusParser.parseDefault for _quercus == null
-    if (isUnicodeSemantics()) {
-      return new UnicodeBuilderValue(lexeme);
-    }
-    else {
+//    if (isUnicodeSemantics()) {
+//      return new UnicodeBuilderValue(lexeme);
+//    }
+//    else {
       return new ConstStringValue(lexeme);
-    }
+//    }
   }
 
   private StringValue copyStringValue(StringValue value)
   {
-    if (value instanceof StringBuilderValue) {
-      return new ConstStringValue((StringBuilderValue) value);
-    }
-    else {
+//    if (value instanceof StringBuilderValue) {
+//      return new ConstStringValue((StringBuilderValue) value);
+//    }
+//    else {
       return value.createStringBuilder().append(VHelper.noCtx(), value);
-    }
+//    }
   }
 
   private StringValue createStringBuilder()
   {
-    if (isUnicodeSemantics()) {
-      return new UnicodeBuilderValue();
-    }
-    else {
+//    if (isUnicodeSemantics()) {
+//      return new UnicodeBuilderValue();
+//    }
+//    else {
       return new StringBuilderValue();
-    }
+//    }
   }
 
   /**
@@ -5597,7 +5597,7 @@ public class QuercusParser {
   private int parseEscapedString(char end)
     throws IOException
   {
-    return parseEscapedString(end, isUnicodeSemantics());
+    return parseEscapedString(end, false /*isUnicodeSemantics()*/);
   }
 
   /**

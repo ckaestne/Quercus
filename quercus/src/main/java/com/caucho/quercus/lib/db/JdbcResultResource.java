@@ -1,31 +1,31 @@
 /*
- * Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
- *
- * This file is part of Resin(R) Open Source
- *
- * Each copy or derived work must preserve the copyright notice and this
- * notice unmodified.
- *
- * Resin Open Source is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Resin Open Source is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
- * of NON-INFRINGEMENT.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Resin Open Source; if not, write to the
- *
- *   Free Software Foundation, Inc.
- *   59 Temple Place, Suite 330
- *   Boston, MA 02111-1307  USA
- *
- * @author Scott Ferguson
- */
+* Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
+*
+* This file is part of Resin(R) Open Source
+*
+* Each copy or derived work must preserve the copyright notice and this
+* notice unmodified.
+*
+* Resin Open Source is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* Resin Open Source is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
+* of NON-INFRINGEMENT.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Resin Open Source; if not, write to the
+*
+*   Free Software Foundation, Inc.
+*   59 Temple Place, Suite 330
+*   Boston, MA 02111-1307  USA
+*
+* @author Scott Ferguson
+*/
 
 package com.caucho.quercus.lib.db;
 
@@ -42,8 +42,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Represents a JDBC Result value.
- */
+* Represents a JDBC Result value.
+*/
 public class JdbcResultResource
 {
   private static final Logger log
@@ -574,19 +574,19 @@ public class JdbcResultResource
           if (rs.wasNull())
             return NullValue.NULL;
           else if (getMetaData().isCurrency(column)) {
-            StringValue sb = env.createUnicodeBuilder();
+            StringValue sb = env.createStringBuilder();
 
             sb.append(VHelper.noCtx(), "$");
 
             return sb.append(VHelper.noCtx(), value);
           }
           else if (value == 0.0) {
-            StringValue sb = env.createUnicodeBuilder();
+            StringValue sb = env.createStringBuilder();
 
             return sb.append(VHelper.noCtx(), "0");
           }
           else {
-            StringValue sb = env.createUnicodeBuilder();
+            StringValue sb = env.createStringBuilder();
 
             return sb.append(VHelper.noCtx(), value);
           }
@@ -606,7 +606,7 @@ public class JdbcResultResource
       case Types.VARBINARY:
       case Types.BINARY:
         {
-          StringValue bb = env.createBinaryBuilder();
+          StringValue bb = env.createStringBuilder();
 
           InputStream is = rs.getBinaryStream(column);
 
@@ -626,15 +626,15 @@ public class JdbcResultResource
 
       case Types.VARCHAR:
       case Types.LONGVARCHAR:
-        if (env.isUnicodeSemantics()) {
-          return getUnicodeColumnString(env, rs, getMetaData(), column);
-        }
-        else if (this instanceof MysqliResult) {
+//        if (env.isUnicodeSemantics()) {
+//          return getUnicodeColumnString(env, rs, getMetaData(), column);
+//        }
+        /*else */if (this instanceof MysqliResult) {
           // for mysql, need to read raw bytes from the wire, assuming that we
           // already called "SET character_set_results latin1", thereby
           // requesting the server do all the encoding work for the client
 
-          StringValue bb = env.createBinaryBuilder();
+          StringValue bb = env.createStringBuilder();
 
           InputStream is = rs.getBinaryStream(column);
 
@@ -682,10 +682,10 @@ public class JdbcResultResource
             return env.createString(strValue);
         }
       }
-    } catch (IOException e) {
-      log.log(Level.FINE, e.toString(), e);
-
-      return NullValue.NULL;
+//    } catch (IOException e) {
+//      log.log(Level.FINE, e.toString(), e);
+//
+//      return NullValue.NULL;
     } catch (SQLException e) {
       // php/141e
       log.log(Level.FINE, e.toString(), e);
@@ -723,7 +723,7 @@ public class JdbcResultResource
     if (reader == null) // || rs.wasNull())
       return NullValue.NULL;
 
-    StringValue bb = env.createUnicodeBuilder();
+    StringValue bb = env.createStringBuilder();
 
     bb.append(reader);
 
@@ -747,7 +747,7 @@ public class JdbcResultResource
     if (bytes == null)
       return NullValue.NULL;
 
-    StringValue bb = env.createUnicodeBuilder();
+    StringValue bb = env.createStringBuilder();
 
     bb.append(VHelper.noCtx(), bytes);
 

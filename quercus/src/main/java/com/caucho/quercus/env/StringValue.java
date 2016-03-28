@@ -32,13 +32,14 @@ package com.caucho.quercus.env;
 import com.caucho.quercus.QuercusModuleException;
 import com.caucho.quercus.QuercusRuntimeException;
 import com.caucho.quercus.lib.file.BinaryInput;
-import com.caucho.quercus.lib.i18n.Decoder;
+//import com.caucho.quercus.lib.i18n.Decoder;
 import com.caucho.quercus.marshal.Marshal;
 import com.caucho.util.ByteAppendable;
 import com.caucho.util.LruCache;
 import com.caucho.vfs.ReadStream;
 import com.caucho.vfs.TempBuffer;
 import de.fosd.typechef.featureexpr.FeatureExpr;
+import edu.cmu.cs.varex.UnimplementedVException;
 import edu.cmu.cs.varex.V;
 import edu.cmu.cs.varex.VHelper;
 import edu.cmu.cs.varex.VWriteStream;
@@ -884,45 +885,48 @@ abstract public class StringValue
   @Override
   public Object valuesToArray(Env env, FeatureExpr ctx, Class elementType)
   {
-    if (char.class.equals(elementType)) {
-      return toUnicode(env).toCharArray();
-    }
-    else if (Character.class.equals(elementType)) {
-      char[] chars = toUnicode(env).toCharArray();
-
-      int length = chars.length;
-
-      Character[] charObjects = new Character[length];
-
-      for (int i = 0; i < length; i++) {
-        charObjects[i] = Character.valueOf(chars[i]);
-      }
-
-      return charObjects;
-    }
-    else if (byte.class.equals(elementType)) {
-      return toBinaryValue(env).toBytes();
-    }
-    else if (Byte.class.equals(elementType)) {
-      byte[] bytes = toBinaryValue(env).toBytes();
-
-      int length = bytes.length;
-
-      Byte[] byteObjects = new Byte[length];
-
-      for (int i = 0; i < length; i++) {
-        byteObjects[i] = Byte.valueOf(bytes[i]);
-      }
-
-      return byteObjects;
-    }
-    else {
-      env.error(L.l("Can't assign {0} with type {1} to {2}",
-                    this,
-                    this.getClass(),
-                    elementType));
-      return null;
-    }
+    throw new UnimplementedVException();
+//    if (char.class.equals(elementType)) {
+//      return toUnicode(env).toCharArray();
+//    }
+//    else if (Character.class.equals(elementType)) {
+//      char[] chars = toUnicode(env).toCharArray();
+//
+//      int length = chars.length;
+//
+//      Character[] charObjects = new Character[length];
+//
+//      for (int i = 0; i < length; i++) {
+//        charObjects[i] = Character.valueOf(chars[i]);
+//      }
+//
+//      return charObjects;
+//    }
+//    else if (byte.class.equals(elementType)) {
+//      throw new UnimplementedVException();
+////      return toBinaryValue(env).toBytes();
+//    }
+//    else if (Byte.class.equals(elementType)) {
+//      throw new UnimplementedVException();
+////      byte[] bytes = toBinaryValue(env).toBytes();
+////
+////      int length = bytes.length;
+////
+////      Byte[] byteObjects = new Byte[length];
+////
+////      for (int i = 0; i < length; i++) {
+////        byteObjects[i] = Byte.valueOf(bytes[i]);
+////      }
+////
+////      return byteObjects;
+//    }
+//    else {
+//      env.error(L.l("Can't assign {0} with type {1} to {2}",
+//                    this,
+//                    this.getClass(),
+//                    elementType));
+//      return null;
+//    }
   }
 
   /**
@@ -1021,7 +1025,7 @@ abstract public class StringValue
     int len = length();
 
     if (index < 0 || len <= index)
-      return UnsetUnicodeValue.UNSET;
+      return UnsetStringValue.UNSET;
     else {
       return StringValue.create(charAt((int) index));
     }
@@ -1492,12 +1496,12 @@ abstract public class StringValue
   }
 
   /**
-   * Append a Java buffer to the value.
-   */
-  public StringValue append(FeatureExpr ctx, UnicodeBuilderValue sb, int head, int tail)
-  {
-    return append(ctx, (CharSequence) sb, head, tail);
-  }
+//   * Append a Java buffer to the value.
+//   */
+//  public StringValue append(FeatureExpr ctx, UnicodeBuilderValue sb, int head, int tail)
+//  {
+//    return append(ctx, (CharSequence) sb, head, tail);
+//  }
 
   /*
    * Appends a Unicode string to the value.
@@ -1615,16 +1619,16 @@ abstract public class StringValue
   /**
    * Append to a string builder.
    */
-  @Override
-  public StringValue appendTo(UnicodeBuilderValue sb)
-  {
-    int length = length();
-
-    for (int i = 0; i < length; i++)
-      sb.append(VHelper.noCtx(), charAt(i));
-
-    return this;
-  }
+//  @Override
+//  public StringValue appendTo(UnicodeBuilderValue sb)
+//  {
+//    int length = length();
+//
+//    for (int i = 0; i < length; i++)
+//      sb.append(VHelper.noCtx(), charAt(i));
+//
+//    return this;
+//  }
 
 //  /**
 //   * Append a Java boolean to the value.
@@ -2417,9 +2421,9 @@ abstract public class StringValue
   {
     int length = length();
 
-    UnicodeBuilderValue string = new UnicodeBuilderValue(length);
+    StringBuilderValue string = new StringBuilderValue(length);
 
-    char []buffer = string.getBuffer();
+    char []buffer = string.getBufferC();
     getChars(0, buffer, 0, length);
 
     for (int i = 0; i < length; i++) {
@@ -2494,44 +2498,44 @@ abstract public class StringValue
   /**
    * Converts to a unicode value.
    */
-  @Override
-  public StringValue toUnicode(Env env)
-  {
-    return this;
-  }
+//  @Override
+//  public StringValue toUnicode(Env env)
+//  {
+//    return this;
+//  }
 
-  /**
-   * Decodes from charset and returns UnicodeValue.
-   *
-   * @param env
-   * @param charset
-   */
-  public StringValue toUnicodeValue(Env env, String charset)
-  {
-    StringValue sb = new UnicodeBuilderValue();
-
-    Decoder decoder = Decoder.create(charset);
-
-    sb.append(VHelper.noCtx(), decoder.decode(env, this));
-
-    return sb;
-  }
-
-  /**
-   * Decodes from charset and returns UnicodeValue.
-   *
-   * @param env
-   * @param charset
-   */
-  public StringValue convertToUnicode(Env env, String charset)
-  {
-    Decoder decoder = Decoder.create(charset);
-    decoder.setAllowMalformedOut(true);
-
-    StringValue result = decoder.decodeUnicode(this);
-
-    return result;
-  }
+//  /**
+//   * Decodes from charset and returns UnicodeValue.
+//   *
+//   * @param env
+//   * @param charset
+//   */
+//  public StringValue toUnicodeValue(Env env, String charset)
+//  {
+//    StringValue sb = new UnicodeBuilderValue();
+//
+//    Decoder decoder = Decoder.create(charset);
+//
+//    sb.append(VHelper.noCtx(), decoder.decode(env, this));
+//
+//    return sb;
+//  }
+//
+//  /**
+//   * Decodes from charset and returns UnicodeValue.
+//   *
+//   * @param env
+//   * @param charset
+//   */
+//  public StringValue convertToUnicode(Env env, String charset)
+//  {
+//    Decoder decoder = Decoder.create(charset);
+//    decoder.setAllowMalformedOut(true);
+//
+//    StringValue result = decoder.decodeUnicode(this);
+//
+//    return result;
+//  }
 
   /**
    * Converts to a string builder

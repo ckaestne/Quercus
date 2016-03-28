@@ -977,78 +977,78 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return toStringBuilder(env);
   }
 
-  /**
-   * Converts to a Unicode string.  For unicode.semantics=false, this will
-   * still return a StringValue. For unicode.semantics=true, this will
-   * return a UnicodeStringValue.
-   */
-  public StringValue toUnicode(Env env) {
-    return toUnicodeValue(env);
-  }
+//  /**
+//   * Converts to a Unicode string.  For unicode.semantics=false, this will
+//   * still return a StringValue. For unicode.semantics=true, this will
+//   * return a UnicodeStringValue.
+//   */
+//  public StringValue toUnicode(Env env) {
+//    return toUnicodeValue(env);
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue for marshaling, so it will create a
+//   * UnicodeValue event when unicode.semantics=false.
+//   */
+//  public StringValue toUnicodeValue() {
+//    return toUnicodeValue(Env.getInstance());
+//  }
+//
+//  /**
+//   * Converts to a UnicodeValue for marshaling, so it will create a
+//   * UnicodeValue event when unicode.semantics=false.
+//   */
+//  public StringValue toUnicodeValue(Env env) {
+//    // php/0ci0
+//    return new UnicodeBuilderValue(env.createString(toString()));
+//  }
 
-  /**
-   * Converts to a UnicodeValue for marshaling, so it will create a
-   * UnicodeValue event when unicode.semantics=false.
-   */
-  public StringValue toUnicodeValue() {
-    return toUnicodeValue(Env.getInstance());
-  }
+//  /**
+//   * Converts to a BinaryValue.
+//   */
+//  public StringValue toBinaryValue() {
+//    return toBinaryValue(Env.getInstance());
+//  }
+//
+//  /**
+//   * Converts to a BinaryValue.
+//   */
+//  public StringValue toBinaryValue(String charset) {
+//    return toBinaryValue();
+//  }
 
-  /**
-   * Converts to a UnicodeValue for marshaling, so it will create a
-   * UnicodeValue event when unicode.semantics=false.
-   */
-  public StringValue toUnicodeValue(Env env) {
-    // php/0ci0
-    return new UnicodeBuilderValue(env.createString(toString()));
-  }
-
-  /**
-   * Converts to a BinaryValue.
-   */
-  public StringValue toBinaryValue() {
-    return toBinaryValue(Env.getInstance());
-  }
-
-  /**
-   * Converts to a BinaryValue.
-   */
-  public StringValue toBinaryValue(String charset) {
-    return toBinaryValue();
-  }
-
-  /**
-   * Converts to a BinaryValue.
-   */
-  public StringValue toBinaryValue(Env env) {
-    StringValue bb = env.createBinaryBuilder();
-
-    bb.append(VHelper.noCtx(), this);
-
-    return bb;
-
-      /*
-    try {
-      int length = 0;
-      while (true) {
-        bb.ensureCapacity(bb.getLength() + 256);
-
-        int sublen = is.read(bb.getBuffer(),
-                             bb.getOffset(),
-                             bb.getLength() - bb.getOffset());
-
-        if (sublen <= 0)
-          return bb;
-        else {
-          length += sublen;
-          bb.setOffset(length);
-        }
-      }
-    } catch (IOException e) {
-      throw new QuercusException(e);
-    }
-      */
-  }
+//  /**
+//   * Converts to a BinaryValue.
+//   */
+//  public StringValue toBinaryValue(Env env) {
+//    StringValue bb = env.createStringBuilder();
+//
+//    bb.append(VHelper.noCtx(), this);
+//
+//    return bb;
+//
+//      /*
+//    try {
+//      int length = 0;
+//      while (true) {
+//        bb.ensureCapacity(bb.getLength() + 256);
+//
+//        int sublen = is.read(bb.getBuffer(),
+//                             bb.getOffset(),
+//                             bb.getLength() - bb.getOffset());
+//
+//        if (sublen <= 0)
+//          return bb;
+//        else {
+//          length += sublen;
+//          bb.setOffset(length);
+//        }
+//      }
+//    } catch (IOException e) {
+//      throw new QuercusException(e);
+//    }
+//      */
+//  }
 
   /**
    * Returns a byteArrayInputStream for the value.
@@ -1071,7 +1071,7 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
    * Converts to a string builder
    */
   public StringValue toStringBuilder(Env env) {
-    return env.createUnicodeBuilder().appendUnicode(VHelper.noCtx(), this);
+    return env.createStringBuilder().appendUnicode(VHelper.noCtx(), this);
   }
 
   /**
@@ -1145,9 +1145,10 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
   /**
    * Append to a string builder.
    */
-  public StringValue appendTo(UnicodeBuilderValue sb) {
-    return sb.append(VHelper.noCtx(), toString());
-  }
+//  @Deprecated@VDeprecated
+//  public StringValue appendTo(StringBuilderValue sb) {
+//    return sb.append(VHelper.noCtx(), toString());
+//  }
 
   /**
    * Append to a binary builder.
@@ -1156,19 +1157,19 @@ abstract public class Value implements java.io.Serializable, ValueOrVar {
     return sb.append(ctx, toString());
   }
 
-  /**
-   * Append to a binary builder.
-   */
-  public StringValue appendTo(BinaryBuilderValue sb) {
-    return sb.appendBytes(toString());
-  }
-
-  /**
-   * Append to a binary builder.
-   */
-  public StringValue appendTo(LargeStringBuilderValue sb) {
-    return sb.append(VHelper.noCtx(), toString());
-  }
+//  /**
+//   * Append to a binary builder.
+//   */
+//  public StringValue appendTo(BinaryBuilderValue sb) {
+//    return sb.appendBytes(toString());
+//  }
+//
+//  /**
+//   * Append to a binary builder.
+//   */
+//  public StringValue appendTo(LargeStringBuilderValue sb) {
+//    return sb.append(VHelper.noCtx(), toString());
+//  }
 
   /**
    * Copy for assignment.

@@ -157,7 +157,7 @@ public class MhashModule extends AbstractQuercusModule {
 
     byte[] result = messageDigest.digest(data.toBytes());
 
-    return env.createBinaryBuilder(result);
+    return env.createString(result, 0, result.length);
   }
 
   /**

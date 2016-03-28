@@ -1,31 +1,31 @@
 /*
- * Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
- *
- * This file is part of Resin(R) Open Source
- *
- * Each copy or derived work must preserve the copyright notice and this
- * notice unmodified.
- *
- * Resin Open Source is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Resin Open Source is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
- * of NON-INFRINGEMENT.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Resin Open Source; if not, write to the
- *
- *   Free Software Foundation, Inc.
- *   59 Temple Place, Suite 330
- *   Boston, MA 02111-1307  USA
- *
- * @author Scott Ferguson
- */
+* Copyright (c) 1998-2012 Caucho Technology -- all rights reserved
+*
+* This file is part of Resin(R) Open Source
+*
+* Each copy or derived work must preserve the copyright notice and this
+* notice unmodified.
+*
+* Resin Open Source is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* Resin Open Source is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, or any warranty
+* of NON-INFRINGEMENT.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Resin Open Source; if not, write to the
+*
+*   Free Software Foundation, Inc.
+*   59 Temple Place, Suite 330
+*   Boston, MA 02111-1307  USA
+*
+* @author Scott Ferguson
+*/
 
 package com.caucho.quercus.lib.i18n;
 
@@ -92,7 +92,7 @@ public class IconvUtility {
         in = str.toReader(inCharset);
       } catch (IOException e) {
         log.log(Level.WARNING, e.toString(), e);
-    
+
         in = str.toReader("utf-8");
       }
 
@@ -103,7 +103,7 @@ public class IconvUtility {
         out.setEncoding(outCharset);
       } catch (IOException e) {
         log.log(Level.WARNING, e.toString(), e);
-    
+
         out.setEncoding("utf-8");
       }
 
@@ -126,11 +126,11 @@ public class IconvUtility {
 
       out.flush();
 
-      StringValue sb = env.createBinaryBuilder();
+      StringValue sb = env.createStringBuilder();
       for (TempBuffer ptr = ts.getHead(); ptr != null; ptr = ptr.getNext()) {
         sb.append(VHelper.noCtx(), ptr.getBuffer(), 0, ptr.getLength());
       }
-      
+
       return sb;
     } catch (IOException e) {
       throw new QuercusModuleException(e);
@@ -152,7 +152,7 @@ public class IconvUtility {
     StringValue str = env.createString(
             MimeUtility.unfold(MimeUtility.decodeText(word.toString())));
 
-    return str.toBinaryValue(charset);
+    return str;
   }
 
   public static Value encodeMime(Env env,
@@ -195,10 +195,10 @@ public class IconvUtility {
                               int lineLength)
     throws UnsupportedEncodingException
   {
-    name = name.toUnicodeValue(env, inCharset);
-    value = value.toUnicodeValue(env, inCharset);
+//    name = name.toUnicodeValue(env, inCharset);
+//    value = value.toUnicodeValue(env, inCharset);
 
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
     sb.append(VHelper.noCtx(), name);
     sb.append(VHelper.noCtx(), ':');
     sb.append(VHelper.noCtx(), ' ');

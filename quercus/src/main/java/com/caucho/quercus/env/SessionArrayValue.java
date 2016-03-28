@@ -154,7 +154,7 @@ public class SessionArrayValue extends ArrayValueWrapper
         while (true) {
           int ch;
 
-          StringValue sb = env.createUnicodeBuilder();
+          StringValue sb = env.createStringBuilder();
 
           while ((ch = is.read()) > 0 && ch != '|') {
             sb.append(VHelper.noCtx(), (char) ch);
@@ -217,7 +217,7 @@ public class SessionArrayValue extends ArrayValueWrapper
                + ((in.read() & 0xff) << 8)
                + ((in.read() & 0xff)));
 
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
 
     for (int i = 0; i < len; i++) {
       char ch = (char) (((in.read() & 0xff) << 8) + (in.read() & 0xff));

@@ -67,43 +67,43 @@ public class UrlModule
 
   private static final StringValue SCHEME_V
     = new ConstStringValue("scheme");
-  private static final StringValue SCHEME_U
-    = new UnicodeBuilderValue("scheme");
+//  private static final StringValue SCHEME_U
+//    = new UnicodeBuilderValue("scheme");
 
   private static final StringValue USER_V
     = new ConstStringValue("user");
-  private static final StringValue USER_U
-    = new UnicodeBuilderValue("user");
+//  private static final StringValue USER_U
+//    = new UnicodeBuilderValue("user");
 
   private static final StringValue PASS_V
     = new ConstStringValue("pass");
-  private static final StringValue PASS_U
-    = new UnicodeBuilderValue("pass");
-
+//  private static final StringValue PASS_U
+//    = new UnicodeBuilderValue("pass");
+//
   private static final StringValue HOST_V
     = new ConstStringValue("host");
-  private static final StringValue HOST_U
-    = new UnicodeBuilderValue("host");
+//  private static final StringValue HOST_U
+//    = new UnicodeBuilderValue("host");
 
   private static final StringValue PORT_V
     = new ConstStringValue("port");
-  private static final StringValue PORT_U
-    = new UnicodeBuilderValue("port");
+//  private static final StringValue PORT_U
+//    = new UnicodeBuilderValue("port");
 
   private static final StringValue PATH_V
     = new ConstStringValue("path");
-  private static final StringValue PATH_U
-    = new UnicodeBuilderValue("path");
-
+//  private static final StringValue PATH_U
+//    = new UnicodeBuilderValue("path");
+//
   private static final StringValue QUERY_V
     = new ConstStringValue("query");
-  private static final StringValue QUERY_U
-    = new UnicodeBuilderValue("query");
+//  private static final StringValue QUERY_U
+//    = new UnicodeBuilderValue("query");
 
   private static final StringValue FRAGMENT_V
     = new ConstStringValue("fragment");
-  private static final StringValue FRAGMENT_U
-    = new UnicodeBuilderValue("fragment");
+//  private static final StringValue FRAGMENT_U
+//    = new UnicodeBuilderValue("fragment");
 
   /**
    * Encodes base64
@@ -147,7 +147,7 @@ public class UrlModule
     if (str.length() == 0)
       return str;
 
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
 
     OutputStream os = new StringBuilderOutputStream(sb);
 
@@ -363,7 +363,7 @@ public class UrlModule
                                        @Optional StringValue numeric_prefix,
                                        @Optional("'&'") StringValue separator)
   {
-    StringValue result = env.createUnicodeBuilder();
+    StringValue result = env.createStringBuilder();
 
     httpBuildQueryImpl(env,
                        result,
@@ -526,29 +526,29 @@ public class UrlModule
                                 StringValue str,
                                 @Optional("-1") int component)
   {
-    boolean isUnicode = env.isUnicodeSemantics();
+//    boolean isUnicode = env.isUnicodeSemantics();
 
     ArrayValueImpl array = new ArrayValueImpl();
 
-    parseUrl(env, str, array, isUnicode);
+    parseUrl(env, str, array, /*isUnicode*/false);
 
     switch (component) {
       case PHP_URL_SCHEME:
-        return array.get(isUnicode ? SCHEME_U : SCHEME_V).getOne();
+        return array.get(/*isUnicode ? SCHEME_U :*/SCHEME_V).getOne();
       case PHP_URL_HOST:
-        return array.get(isUnicode ? HOST_U : HOST_V).getOne();
+        return array.get(/*isUnicode ? HOST_U :*/HOST_V).getOne();
       case PHP_URL_PORT:
-        return array.get(isUnicode ? PORT_U : PORT_V).getOne();
+        return array.get(/*isUnicode ? PORT_U :*/PORT_V).getOne();
       case PHP_URL_USER:
-        return array.get(isUnicode ? USER_U : USER_V).getOne();
+        return array.get(/*isUnicode ? USER_U :*/USER_V).getOne();
       case PHP_URL_PASS:
-        return array.get(isUnicode ? PASS_U : PASS_V).getOne();
+        return array.get(/*isUnicode ? PASS_U :*/PASS_V).getOne();
       case PHP_URL_PATH:
-        return array.get(isUnicode ? PATH_U : PATH_V).getOne();
+        return array.get(/*isUnicode ? PATH_U :*/PATH_V).getOne();
       case PHP_URL_QUERY:
-        return array.get(isUnicode ? QUERY_U : QUERY_V).getOne();
+        return array.get(/*isUnicode ? QUERY_U :*/QUERY_V).getOne();
       case PHP_URL_FRAGMENT:
-        return array.get(isUnicode ? FRAGMENT_U : FRAGMENT_V).getOne();
+        return array.get(/*isUnicode ? FRAGMENT_U :*/FRAGMENT_V).getOne();
     }
 
     return array;
@@ -562,7 +562,7 @@ public class UrlModule
     int strlen = str.length();
 
     if (strlen == 0) {
-      array.put(PATH_V, PATH_U, env.getEmptyString(), isUnicode);
+      array.put(PATH_V, env.getEmptyString());
       return;
     }
 
@@ -589,7 +589,7 @@ public class UrlModule
 
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, 0, colon);
-        array.put(SCHEME_V, SCHEME_U, sb, isUnicode);
+        array.put(SCHEME_V, sb);
 
         i = end + 1;
       }
@@ -598,7 +598,7 @@ public class UrlModule
                || '9' <= ch) {
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, 0, colon);
-        array.put(SCHEME_V, SCHEME_U, sb, isUnicode);
+        array.put(SCHEME_V, sb);
 
         i = colon + 1;
       }
@@ -647,7 +647,7 @@ public class UrlModule
       if (i < colon) {
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, i, colon);
-        array.put(HOST_V, HOST_U, sb, isUnicode);
+        array.put(HOST_V, sb);
 
         int end;
         if (i < slash)
@@ -671,7 +671,7 @@ public class UrlModule
               break;
           }
 
-          array.put(PORT_V, PORT_U, LongValue.create(port), isUnicode);
+          array.put(PORT_V, LongValue.create(port));
         }
 
         i = end;
@@ -679,28 +679,28 @@ public class UrlModule
       else if (i < question && (slash < i || question < slash)) {
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, i, question);
-        array.put(HOST_V, HOST_U, sb, isUnicode);
+        array.put(HOST_V, sb);
 
         i = question + 1;
       }
       else if (i < slash) {
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, i, slash);
-        array.put(HOST_V, HOST_U, sb, isUnicode);
+        array.put(HOST_V, sb);
 
         i = slash;
       }
       else if (i < pound) {
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, i, pound);
-        array.put(HOST_V, HOST_U, sb, isUnicode);
+        array.put(HOST_V, sb);
 
         i = pound + 1;
       }
       else {
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, i, strlen);
-        array.put(HOST_V, HOST_U, sb, isUnicode);
+        array.put(HOST_V, sb);
 
         i = strlen;
       }
@@ -708,15 +708,15 @@ public class UrlModule
 
     // insert user and password after port
     if (user != null)
-      array.put(USER_V, USER_U, user, isUnicode);
+      array.put(USER_V, user);
 
     if (pass != null)
-      array.put(PASS_V, PASS_U, pass, isUnicode);
+      array.put(PASS_V, pass);
 
     if (i < question) {
       StringValue sb = env.createStringBuilder();
       sb.append(VHelper.noCtx(), str, i, question);
-      array.put(PATH_V, PATH_U, sb, isUnicode);
+      array.put(PATH_V, sb);
 
       i = question + 1;
     }
@@ -728,15 +728,15 @@ public class UrlModule
         sb.append(VHelper.noCtx(), str, i, pound);
 
         if (0 <= question)
-          array.put(QUERY_V, QUERY_U, sb, isUnicode);
+          array.put(QUERY_V, sb);
         else
-          array.put(PATH_V, PATH_U, sb, isUnicode);
+          array.put(PATH_V, sb);
       }
 
       if (pound + 1 < strlen) {
         StringValue sb = env.createStringBuilder();
         sb.append(VHelper.noCtx(), str, pound + 1, strlen);
-        array.put(FRAGMENT_V, FRAGMENT_U, sb, isUnicode);
+        array.put(FRAGMENT_V, sb);
       }
     }
     else if (i < strlen) {
@@ -744,9 +744,9 @@ public class UrlModule
       sb.append(VHelper.noCtx(), str, i, strlen);
 
       if (0 <= question)
-        array.put(QUERY_V, QUERY_U, sb, isUnicode);
+        array.put(QUERY_V, sb);
       else
-        array.put(PATH_V, PATH_U, sb, isUnicode);
+        array.put(PATH_V, sb);
     }
   }
 

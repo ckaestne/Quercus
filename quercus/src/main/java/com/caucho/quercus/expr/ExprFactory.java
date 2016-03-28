@@ -31,9 +31,9 @@ package com.caucho.quercus.expr;
 
 import com.caucho.quercus.Location;
 import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.env.BinaryValue;
+//import com.caucho.quercus.env.BinaryValue;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.env.UnicodeValue;
+//import com.caucho.quercus.env.UnicodeValue;
 import com.caucho.quercus.env.Value;
 import com.caucho.quercus.parser.QuercusParser;
 import com.caucho.quercus.program.*;
@@ -94,21 +94,21 @@ public class ExprFactory {
     return new LiteralStringExpr(lexeme);
   }
 
-  /**
-   * Creates a string literal expression.
-   */
-  public Expr createUnicode(UnicodeValue lexeme)
-  {
-    return new LiteralUnicodeExpr(lexeme);
-  }
-
-  /**
-   * Creates a binary literal expression.
-   */
-  public Expr createBinary(BinaryValue value)
-  {
-    return new LiteralBinaryStringExpr(value);
-  }
+//  /**
+//   * Creates a string literal expression.
+//   */
+//  public Expr createUnicode(UnicodeValue lexeme)
+//  {
+//    return new LiteralUnicodeExpr(lexeme);
+//  }
+//
+//  /**
+//   * Creates a binary literal expression.
+//   */
+//  public Expr createBinary(BinaryValue value)
+//  {
+//    return new LiteralBinaryStringExpr(value);
+//  }
 
   /**
    * Creates a long literal expression.
@@ -527,21 +527,21 @@ public class ExprFactory {
     return new ToStringExpr(expr);
   }
 
-  /**
-   * Creates a unicode cast
-   */
-  public Expr createToUnicode(Expr expr)
-  {
-    return new ToUnicodeExpr(expr);
-  }
-
-  /**
-   * Creates a binary string cast
-   */
-  public Expr createToBinary(Expr expr)
-  {
-    return new ToBinaryExpr(expr);
-  }
+//  /**
+//   * Creates a unicode cast
+//   */
+//  public Expr createToUnicode(Expr expr)
+//  {
+//    return new ToUnicodeExpr(expr);
+//  }
+//
+//  /**
+//   * Creates a binary string cast
+//   */
+//  public Expr createToBinary(Expr expr)
+//  {
+//    return new ToBinaryExpr(expr);
+//  }
 
   /**
    * Creates an object cast
@@ -742,29 +742,29 @@ public class ExprFactory {
 
     tail = append(left.getNext(), tail);
 
-    if (left.getValue() instanceof LiteralBinaryStringExpr
-        && tail.getValue() instanceof LiteralBinaryStringExpr) {
-      LiteralBinaryStringExpr leftString
-        = (LiteralBinaryStringExpr) left.getValue();
-      LiteralBinaryStringExpr rightString
-        = (LiteralBinaryStringExpr) tail.getValue();
-
-      StringValue l = (StringValue) leftString.evalConstant();
-      StringValue r = (StringValue) rightString.evalConstant();
-
-      StringValue result = l.createStringBuilder().append(VHelper.noCtx(), l).append(VHelper.noCtx(), r);
-
-      Expr value = createBinary((BinaryValue) result);
-
-      return createAppendImpl(value, tail.getNext());
-    }
-    else if (left.getValue() instanceof LiteralBinaryStringExpr
-             || tail.getValue() instanceof LiteralBinaryStringExpr) {
-      left.setNext(tail);
-
-      return left;
-    }
-    else if (left.getValue() instanceof LiteralStringExpr
+//    if (left.getValue() instanceof LiteralBinaryStringExpr
+//        && tail.getValue() instanceof LiteralBinaryStringExpr) {
+//      LiteralBinaryStringExpr leftString
+//        = (LiteralBinaryStringExpr) left.getValue();
+//      LiteralBinaryStringExpr rightString
+//        = (LiteralBinaryStringExpr) tail.getValue();
+//
+//      StringValue l = (StringValue) leftString.evalConstant();
+//      StringValue r = (StringValue) rightString.evalConstant();
+//
+//      StringValue result = l.createStringBuilder().append(VHelper.noCtx(), l).append(VHelper.noCtx(), r);
+//
+//      Expr value = createBinary((BinaryValue) result);
+//
+//      return createAppendImpl(value, tail.getNext());
+//    }
+//    else if (left.getValue() instanceof LiteralBinaryStringExpr
+//             || tail.getValue() instanceof LiteralBinaryStringExpr) {
+//      left.setNext(tail);
+//
+//      return left;
+//    }
+    /*else*/ if (left.getValue() instanceof LiteralStringExpr
              && tail.getValue() instanceof LiteralStringExpr) {
       LiteralStringExpr leftString = (LiteralStringExpr) left.getValue();
       LiteralStringExpr rightString = (LiteralStringExpr) tail.getValue();
@@ -778,20 +778,20 @@ public class ExprFactory {
 
       return createAppendImpl(value, tail.getNext());
     }
-    else if (left.getValue() instanceof LiteralUnicodeExpr
-             && tail.getValue() instanceof LiteralUnicodeExpr) {
-      LiteralUnicodeExpr leftString = (LiteralUnicodeExpr) left.getValue();
-      LiteralUnicodeExpr rightString = (LiteralUnicodeExpr) tail.getValue();
-
-      UnicodeValue l = (UnicodeValue) leftString.evalConstant();
-      UnicodeValue r = (UnicodeValue) rightString.evalConstant();
-
-      UnicodeValue sb = (UnicodeValue) l.createStringBuilder().append(VHelper.noCtx(), l).append(VHelper.noCtx(), r);
-
-      Expr value = createUnicode(sb);
-
-      return createAppendImpl(value, tail.getNext());
-    }
+//    else if (left.getValue() instanceof LiteralUnicodeExpr
+//             && tail.getValue() instanceof LiteralUnicodeExpr) {
+//      LiteralUnicodeExpr leftString = (LiteralUnicodeExpr) left.getValue();
+//      LiteralUnicodeExpr rightString = (LiteralUnicodeExpr) tail.getValue();
+//
+//      UnicodeValue l = (UnicodeValue) leftString.evalConstant();
+//      UnicodeValue r = (UnicodeValue) rightString.evalConstant();
+//
+//      UnicodeValue sb = (UnicodeValue) l.createStringBuilder().append(VHelper.noCtx(), l).append(VHelper.noCtx(), r);
+//
+//      Expr value = createUnicode(sb);
+//
+//      return createAppendImpl(value, tail.getNext());
+//    }
     else {
       left.setNext(tail);
 

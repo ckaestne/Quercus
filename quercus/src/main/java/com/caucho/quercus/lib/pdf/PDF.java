@@ -207,7 +207,7 @@ public class PDF
     if (ts == null)
       return BooleanValue.FALSE;
 
-    StringValue result = env.createBinaryBuilder();
+    StringValue result = env.createStringBuilder();
     for (TempBuffer ptr = ts.getHead();
          ptr != null;
          ptr = ptr.getNext()) {

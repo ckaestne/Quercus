@@ -95,8 +95,8 @@ public class QuercusContext
 
   private ModuleContext _moduleContext;
 
-  private static LruCache<String, UnicodeBuilderValue> _unicodeMap
-    = new LruCache<String, UnicodeBuilderValue>(8 * 1024);
+//  private static LruCache<String, UnicodeBuilderValue> _unicodeMap
+//    = new LruCache<String, UnicodeBuilderValue>(8 * 1024);
 
   private static LruCache<String, ConstStringValue> _stringMap
     = new LruCache<String, ConstStringValue>(8 * 1024);
@@ -220,7 +220,7 @@ public class QuercusContext
 
   private JdbcDriverContext _jdbcDriverContext;
 
-  private Boolean _isUnicodeSemantics;
+//  private Boolean _isUnicodeSemantics;
 
   /**
    * Constructor.
@@ -460,23 +460,23 @@ public class QuercusContext
     return false;
   }
 
-  public void setUnicodeSemantics(boolean isUnicode)
-  {
-    _isUnicodeSemantics = Boolean.valueOf(isUnicode);
-  }
+//  public void setUnicodeSemantics(boolean isUnicode)
+//  {
+//    _isUnicodeSemantics = Boolean.valueOf(isUnicode);
+//  }
 
-  /**
-   * Returns true if unicode.semantics is on.
-   */
-  public boolean isUnicodeSemantics()
-  {
-    if (_isUnicodeSemantics == null) {
-      return false;
-    }
-    else {
-      return _isUnicodeSemantics.booleanValue();
-    }
-  }
+//  /**
+//   * Returns true if unicode.semantics is on.
+//   */
+//  public boolean isUnicodeSemantics()
+//  {
+//    if (_isUnicodeSemantics == null) {
+//      return false;
+//    }
+//    else {
+//      return _isUnicodeSemantics.booleanValue();
+//    }
+//  }
 
   /**
    * Returns true if URLs may be arguments of include().
@@ -525,8 +525,8 @@ public class QuercusContext
   {
     if (_scriptEncoding != null)
       return _scriptEncoding;
-    else if (isUnicodeSemantics())
-      return "utf-8";
+//    else if (isUnicodeSemantics())
+//      return "utf-8";
     else
       return "utf-8";
   }
@@ -544,18 +544,18 @@ public class QuercusContext
    */
   public String getOutputEncoding()
   {
-    if (! _isUnicodeSemantics)
+//    if (! _isUnicodeSemantics)
       return null;
 
-    String encoding = QuercusContext.INI_UNICODE_OUTPUT_ENCODING.getAsString(this);
-
-    if (encoding == null)
-      encoding = QuercusContext.INI_UNICODE_FALLBACK_ENCODING.getAsString(this);
-
-    if (encoding == null)
-      encoding = "utf-8";
-
-    return encoding;
+//    String encoding = QuercusContext.INI_UNICODE_OUTPUT_ENCODING.getAsString(this);
+//
+//    if (encoding == null)
+//      encoding = QuercusContext.INI_UNICODE_FALLBACK_ENCODING.getAsString(this);
+//
+//    if (encoding == null)
+//      encoding = "utf-8";
+//
+//    return encoding;
   }
 
 
@@ -1031,9 +1031,9 @@ public class QuercusContext
   public void setServerEnv(String name, String value)
   {
     // php/3j58
-    if (isUnicodeSemantics())
-      setServerEnv(createUnicodeString(name), createUnicodeString(value));
-    else
+//    if (isUnicodeSemantics())
+//      setServerEnv(createUnicodeString(name), createUnicodeString(value));
+//    else
       setServerEnv(createString(name), createString(value));
   }
 
@@ -1591,9 +1591,9 @@ public class QuercusContext
   public int getConstantId(String name)
   {
     // php/3j12
-    if (isUnicodeSemantics())
-      return getConstantId(new UnicodeBuilderValue(name));
-    else
+//    if (isUnicodeSemantics())
+//      return getConstantId(new UnicodeBuilderValue(name));
+//    else
       return getConstantId(new ConstStringValue(name));
   }
 
@@ -1840,11 +1840,11 @@ public class QuercusContext
       }
     }
 
-    if (_isUnicodeSemantics == null) {
-      _isUnicodeSemantics = getIniBoolean("unicode.semantics");
-    }
+//    if (_isUnicodeSemantics == null) {
+//      _isUnicodeSemantics = getIniBoolean("unicode.semantics");
+//    }
 
-    _moduleContext.setUnicodeSemantics(_isUnicodeSemantics);
+//    _moduleContext.setUnicodeSemantics(_isUnicodeSemantics);
 
     for (Map.Entry<String,String> entry : System.getenv().entrySet()) {
       _serverEnvMap.put(createString(entry.getKey()),
@@ -1909,9 +1909,9 @@ public class QuercusContext
 
     Map<StringValue, Value> map;
 
-    if (isUnicodeSemantics())
-      map = info.getUnicodeConstMap();
-    else
+//    if (isUnicodeSemantics())
+//      map = info.getUnicodeConstMap();
+//    else
       map = info.getConstMap();
 
     if (map != null) {
@@ -1983,18 +1983,18 @@ public class QuercusContext
    * Creates a string.  Because these strings are typically Java
    * constants, they fit into a lru cache.
    */
-  public UnicodeBuilderValue createUnicodeString(String name)
-  {
-    UnicodeBuilderValue value = _unicodeMap.get(name);
-
-    if (value == null) {
-      value = new UnicodeBuilderValue(name);
-
-      _unicodeMap.put(name, value);
-    }
-
-    return value;
-  }
+//  public UnicodeBuilderValue createUnicodeString(String name)
+//  {
+//    UnicodeBuilderValue value = _unicodeMap.get(name);
+//
+//    if (value == null) {
+//      value = new UnicodeBuilderValue(name);
+//
+//      _unicodeMap.put(name, value);
+//    }
+//
+//    return value;
+//  }
 
   /**
    * Creates a string.  Because these strings are typically Java
@@ -2002,20 +2002,20 @@ public class QuercusContext
    */
   public StringValue createString(String name)
   {
-    if (isUnicodeSemantics()) {
-      UnicodeBuilderValue value = _unicodeMap.get(name);
-
-      if (value == null) {
-        if (isUnicodeSemantics()) {
-          value = new UnicodeBuilderValue(name);
-        }
-
-        _unicodeMap.put(name, value);
-      }
-
-      return value;
-    }
-    else {
+//    if (isUnicodeSemantics()) {
+//      UnicodeBuilderValue value = _unicodeMap.get(name);
+//
+//      if (value == null) {
+//        if (isUnicodeSemantics()) {
+//          value = new UnicodeBuilderValue(name);
+//        }
+//
+//        _unicodeMap.put(name, value);
+//      }
+//
+//      return value;
+//    }
+//    else {
       ConstStringValue value = _stringMap.get(name);
 
       if (value == null) {
@@ -2025,7 +2025,7 @@ public class QuercusContext
       }
 
       return value;
-    }
+//    }
   }
 
   /**

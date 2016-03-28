@@ -271,7 +271,7 @@ public class ZlibModule extends AbstractQuercusModule {
       if (ch < 0)
         return BooleanValue.FALSE;
       else {
-        StringValue sb = env.createBinaryBuilder(1);
+        StringValue sb = env.createStringBuilder();
 
         sb.appendByte(ch);
 
@@ -448,7 +448,7 @@ public class ZlibModule extends AbstractQuercusModule {
 
       boolean isFinished = false;
 
-      StringValue out = env.createLargeBinaryBuilder();
+      StringValue out = env.createStringBuilder();
 
       inputBuffer[0] = (byte) 0x78;
 
@@ -531,7 +531,7 @@ public class ZlibModule extends AbstractQuercusModule {
 
       in = new InflaterInputStream(is);
 
-      StringValue sb = env.createLargeBinaryBuilder();
+      StringValue sb = env.createStringBuilder();
 
       int len;
       while ((len = in.read(buffer, 0, buffer.length)) >= 0) {
@@ -633,7 +633,7 @@ public class ZlibModule extends AbstractQuercusModule {
 
     try {
       inflater = new Inflater(true);
-      StringValue sb = env.createBinaryBuilder();
+      StringValue sb = env.createStringBuilder();
 
       while (length > 0) {
         int sublen = Math.min(length, inputBuffer.length);
@@ -707,7 +707,7 @@ public class ZlibModule extends AbstractQuercusModule {
       }
       gzOut.close();
 
-      StringValue sb = env.createBinaryBuilder();
+      StringValue sb = env.createStringBuilder();
       for (TempBuffer ptr = ts.getHead(); ptr != null; ptr = ptr.getNext())
         sb.append(VHelper.noCtx(), ptr.getBuffer(), 0, ptr.getLength());
 

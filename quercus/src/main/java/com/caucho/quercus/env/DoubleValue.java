@@ -243,7 +243,7 @@ public class DoubleValue extends NumberValue
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    return env.createUnicodeBuilder().append(VHelper.noCtx(), toString());
+    return env.createStringBuilder().append(VHelper.noCtx(), toString());
   }
 
   /**

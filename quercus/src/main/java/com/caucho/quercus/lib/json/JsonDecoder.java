@@ -425,7 +425,7 @@ class JsonDecoder {
    */
   private Value decodeString(Env env, boolean isQuoted)
   {
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
 
     while (_offset < _len) {
       char ch = _str.charAt(_offset++);
@@ -516,7 +516,7 @@ class JsonDecoder {
    */
   private Value decodeIdentifier(Env env)
   {
-    StringValue sb = env.createUnicodeBuilder();
+    StringValue sb = env.createStringBuilder();
 
     while (_offset < _len) {
       char ch = _str.charAt(_offset++);

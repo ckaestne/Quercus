@@ -41,7 +41,7 @@ public class JavaByteArrayMarshal extends JavaArrayMarshal
   @Override
   public Value unmarshal(Env env, FeatureExpr ctx, Object value)
   {
-    return env.createBinaryBuilder((byte[]) value);
+    return env.createString((byte[]) value);
   }
 
   @Override

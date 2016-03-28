@@ -93,7 +93,7 @@ public class ModuleContext
   protected MarshalFactory _marshalFactory;
   protected ExprFactory _exprFactory;
 
-  private boolean _isUnicodeSemantics;
+//  private boolean _isUnicodeSemantics;
 
   /**
    * Constructor.
@@ -133,35 +133,35 @@ public class ModuleContext
     }
   }
 
-  public boolean isUnicodeSemantics()
-  {
-    return _isUnicodeSemantics;
-  }
-
-  public void setUnicodeSemantics(boolean isUnicodeSemantics)
-  {
-    // XXX: need to refactor static vs runtime unicode handling
-    _isUnicodeSemantics = isUnicodeSemantics;
-  }
+//  public boolean isUnicodeSemantics()
+//  {
+//    return _isUnicodeSemantics;
+//  }
+//
+//  public void setUnicodeSemantics(boolean isUnicodeSemantics)
+//  {
+//    // XXX: need to refactor static vs runtime unicode handling
+//    _isUnicodeSemantics = isUnicodeSemantics;
+//  }
 
   public StringValue createString(String s)
   {
-    if (_isUnicodeSemantics) {
-      return new UnicodeBuilderValue(s);
-    }
-    else {
+//    if (_isUnicodeSemantics) {
+//      return new UnicodeBuilderValue(s);
+//    }
+//    else {
       return new ConstStringValue(s);
-    }
+//    }
   }
 
   public StringValue createStringBuilder()
   {
-    if (_isUnicodeSemantics) {
-      return new UnicodeBuilderValue();
-    }
-    else {
+//    if (_isUnicodeSemantics) {
+//      return new UnicodeBuilderValue();
+//    }
+//    else {
       return new StringBuilderValue();
-    }
+//    }
   }
 
   /**

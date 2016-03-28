@@ -183,8 +183,8 @@ public class ModuleInfo {
       if (value != null) {
         _constMap.put(new ConstStringValue(field.getName()), value);
 
-        _unicodeConstMap.put(new UnicodeBuilderValue(field.getName()),
-                             value);
+//        _unicodeConstMap.put(new UnicodeBuilderValue(field.getName()),
+//                             value);
       }
     }
 

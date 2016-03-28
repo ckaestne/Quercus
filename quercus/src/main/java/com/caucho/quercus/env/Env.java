@@ -146,50 +146,50 @@ public class Env
   private static final StringValue PHP_SELF_STRING
     = new ConstStringValue("PHP_SELF");
 
-  private static final StringValue PHP_SELF_STRING_U
-    = new UnicodeBuilderValue("PHP_SELF");
+//  private static final StringValue PHP_SELF_STRING_U
+//    = new UnicodeBuilderValue("PHP_SELF");
 
   private static final StringValue S_GET
     = new ConstStringValue("_GET");
 
-  private static final StringValue S_GET_U
-    = new UnicodeBuilderValue("_GET");
+//  private static final StringValue S_GET_U
+//    = new UnicodeBuilderValue("_GET");
 
   private static final StringValue S_POST
     = new ConstStringValue("_POST");
 
-  private static final StringValue S_POST_U
-    = new UnicodeBuilderValue("_POST");
+//  private static final StringValue S_POST_U
+//    = new UnicodeBuilderValue("_POST");
 
   private static final StringValue S_SESSION
     = new ConstStringValue("_SESSION");
 
-  private static final StringValue S_SESSION_U
-    = new UnicodeBuilderValue("_SESSION");
+//  private static final StringValue S_SESSION_U
+//    = new UnicodeBuilderValue("_SESSION");
 
   private static final StringValue S_SERVER
     = new ConstStringValue("_SERVER");
 
-  private static final StringValue S_SERVER_U
-    = new UnicodeBuilderValue("_SERVER");
+//  private static final StringValue S_SERVER_U
+//    = new UnicodeBuilderValue("_SERVER");
 
   private static final StringValue S_COOKIE
     = new ConstStringValue("_COOKIE");
 
-  private static final StringValue S_COOKIE_U
-    = new UnicodeBuilderValue("_COOKIE");
+//  private static final StringValue S_COOKIE_U
+//    = new UnicodeBuilderValue("_COOKIE");
 
   private static final StringValue S_FILES
     = new ConstStringValue("_FILES");
 
-  private static final StringValue S_FILES_U
-    = new UnicodeBuilderValue("_FILES");
+//  private static final StringValue S_FILES_U
+//    = new UnicodeBuilderValue("_FILES");
 
   private static final StringValue S_ARGV
     = new ConstStringValue("argv");
 
-  private static final StringValue S_ARGV_U
-    = new UnicodeBuilderValue("argv");
+//  private static final StringValue S_ARGV_U
+//    = new UnicodeBuilderValue("argv");
 
   public static final Value []EMPTY_VALUE = new Value[0];
 
@@ -280,7 +280,7 @@ public class Env
 
   private Closure _closure;
 
-  private final boolean _isUnicodeSemantics;
+//  private final boolean _isUnicodeSemantics;
   private boolean _isAllowUrlInclude;
   private boolean _isAllowUrlFopen;
 
@@ -415,7 +415,7 @@ public class Env
     _quercus = quercus;
 
     _isStrict = quercus.isStrict();
-    _isUnicodeSemantics = quercus.isUnicodeSemantics();
+//    _isUnicodeSemantics = quercus.isUnicodeSemantics();
 
     _isAllowUrlInclude = quercus.isAllowUrlInclude();
     _isAllowUrlFopen = quercus.isAllowUrlFopen();
@@ -633,7 +633,7 @@ public class Env
         warning(e);
       }
 
-      StringValue bb = createBinaryBuilder();
+      StringValue bb = createStringBuilder();
       bb.appendReadAll(is, Integer.MAX_VALUE);
 
       setInputData(bb);
@@ -690,10 +690,10 @@ public class Env
   /**
    * Returns true if unicode.semantics is on.
    */
-  public boolean isUnicodeSemantics()
-  {
-    return _isUnicodeSemantics;
-  }
+//  public boolean isUnicodeSemantics()
+//  {
+//    return _isUnicodeSemantics;
+//  }
 
   /**
    * Returns the encoding used for scripts.
@@ -718,21 +718,21 @@ public class Env
    */
   public String getRuntimeEncoding()
   {
-    if (! _isUnicodeSemantics)
+//    if (! _isUnicodeSemantics)
       return "iso-8859-1";
 
-    StringValue encoding = getIni("unicode.runtime_encoding");
-
-    if (encoding.length() == 0) {
-      encoding = getIni("unicode.fallback_encoding");
-    }
-
-    if (encoding.length() > 0) {
-      return encoding.toString();
-    }
-    else {
-      return "utf-8";
-    }
+//    StringValue encoding = getIni("unicode.runtime_encoding");
+//
+//    if (encoding.length() == 0) {
+//      encoding = getIni("unicode.fallback_encoding");
+//    }
+//
+//    if (encoding.length() > 0) {
+//      return encoding.toString();
+//    }
+//    else {
+//      return "utf-8";
+//    }
   }
 
   /**
@@ -758,21 +758,21 @@ public class Env
    */
   public String getHttpInputEncoding()
   {
-    if (! _isUnicodeSemantics)
+//    if (! _isUnicodeSemantics)
       return null;
 
-    StringValue encoding = getIni("unicode.http_input_encoding");
-
-    if (encoding.length() == 0) {
-      encoding = getIni("unicode.fallback_encoding");
-    }
-
-    if (encoding.length() > 0) {
-      return encoding.toString();
-    }
-    else {
-      return "utf-8";
-    }
+//    StringValue encoding = getIni("unicode.http_input_encoding");
+//
+//    if (encoding.length() == 0) {
+//      encoding = getIni("unicode.fallback_encoding");
+//    }
+//
+//    if (encoding.length() > 0) {
+//      return encoding.toString();
+//    }
+//    else {
+//      return "utf-8";
+//    }
   }
 
   /**
@@ -786,71 +786,71 @@ public class Env
   /**
    * Creates a binary builder.
    */
-  public StringValue createBinaryBuilder()
-  {
-    if (_isUnicodeSemantics)
-      return new BinaryBuilderValue();
-    else
-      return new StringBuilderValue();
-  }
+//  public StringValue createStringBuilder()
+//  {
+////    if (_isUnicodeSemantics)
+////      return new BinaryBuilderValue();
+////    else
+//      return new StringBuilderValue();
+//  }
 
   /**
    * Creates a binary builder for large things like files.
    */
-  public StringValue createLargeBinaryBuilder()
-  {
-    if (_isUnicodeSemantics)
-      return new BinaryBuilderValue();
-    else
-      return new LargeStringBuilderValue();
-  }
-
-  /**
-   * Creates a binary builder.
-   */
-  public StringValue createBinaryBuilder(int length)
-  {
-    if (_isUnicodeSemantics)
-      return new BinaryBuilderValue(length);
-    else
-      return new StringBuilderValue(length);
-  }
-
-  /**
-   * Creates a binary builder.
-   */
-  public StringValue createBinaryBuilder(byte []buffer, int offset, int length)
-  {
-    if (_isUnicodeSemantics)
-      return new BinaryBuilderValue(buffer, offset, length);
-    else
-      return new StringBuilderValue(buffer, offset, length);
-  }
-
-  /**
-   * Creates a binary builder.
-   */
-  public StringValue createBinaryBuilder(byte []buffer)
-  {
-    if (buffer == null)
-      return StringBuilderValue.EMPTY;
-
-    if (_isUnicodeSemantics)
-      return new BinaryBuilderValue(buffer, 0, buffer.length);
-    else
-      return new StringBuilderValue(buffer, 0, buffer.length);
-  }
-
-  /**
-   * Creates a unicode builder.
-   */
-  public StringValue createUnicodeBuilder()
-  {
-    if (_isUnicodeSemantics)
-      return new UnicodeBuilderValue();
-    else
-      return new StringBuilderValue();
-  }
+//  public StringValue createLargeBinaryBuilder()
+//  {
+////    if (_isUnicodeSemantics)
+////      return new BinaryBuilderValue();
+////    else
+//      return new LargeStringBuilderValue();
+//  }
+//
+//  /**
+//   * Creates a binary builder.
+//   */
+//  public StringValue createStringBuilder(int length)
+//  {
+//    if (_isUnicodeSemantics)
+//      return new BinaryBuilderValue(length);
+//    else
+//      return new StringBuilderValue(length);
+//  }
+//
+//  /**
+//   * Creates a binary builder.
+//   */
+//  public StringValue createStringBuilder(byte []buffer, int offset, int length)
+//  {
+//    if (_isUnicodeSemantics)
+//      return new BinaryBuilderValue(buffer, offset, length);
+//    else
+//      return new StringBuilderValue(buffer, offset, length);
+//  }
+//
+//  /**
+//   * Creates a binary builder.
+//   */
+//  public StringValue createStringBuilder(byte []buffer)
+//  {
+//    if (buffer == null)
+//      return StringBuilderValue.EMPTY;
+//
+//    if (_isUnicodeSemantics)
+//      return new BinaryBuilderValue(buffer, 0, buffer.length);
+//    else
+//      return new StringBuilderValue(buffer, 0, buffer.length);
+//  }
+//
+//  /**
+//   * Creates a unicode builder.
+//   */
+//  public StringValue createStringBuilder()
+//  {
+//    if (_isUnicodeSemantics)
+//      return new UnicodeBuilderValue();
+//    else
+//      return new StringBuilderValue();
+//  }
 
   public TimeZone getDefaultTimeZone()
   {
@@ -1692,12 +1692,12 @@ public class Env
 
     StringValue sessionStr;
 
-    if (isUnicodeSemantics()) {
-      sessionStr = S_SESSION_U;
-    }
-    else {
+//    if (isUnicodeSemantics()) {
+//      sessionStr = S_SESSION_U;
+//    }
+//    else {
       sessionStr = S_SESSION;
-    }
+//    }
 
     if (session != null) {
       Var var = getGlobalVar(VHelper.noCtx(), sessionStr).getOne();
@@ -2478,13 +2478,13 @@ public class Env
   {
     int specialVarId;
 
-    if (isUnicodeSemantics()) {
-      specialVarId = SPECIAL_VARS_U.get(name);
-    }
-    else {
+//    if (isUnicodeSemantics()) {
+//      specialVarId = SPECIAL_VARS_U.get(name);
+//    }
+//    else {
       specialVarId = SPECIAL_VARS.get(name);
 
-    }
+//    }
 
     if (isCheckGlobal) {
       if (specialVarId != IntMap.NULL) {
@@ -2529,7 +2529,7 @@ public class Env
           return null;
         }
 
-        Var array = getGlobalEnvVar(isUnicodeSemantics() ? S_ARGV_U : S_ARGV).getVar().getOne();
+        Var array = getGlobalEnvVar(/*isUnicodeSemantics() ? S_ARGV_U : */S_ARGV).getVar().getOne();
 
         int size = array.getValue().getOne().getSize().getOne();
 
@@ -2548,7 +2548,7 @@ public class Env
         if (! QuercusContext.INI_REGISTER_LONG_ARRAYS.getAsBoolean(this))
           return null;
         else
-          return getGlobalEnvVar(isUnicodeSemantics() ? S_POST_U : S_POST);
+          return getGlobalEnvVar(/*isUnicodeSemantics() ? S_POST_U : */S_POST);
       }
 
       case _POST: {
@@ -2575,7 +2575,7 @@ public class Env
         if (! QuercusContext.INI_REGISTER_LONG_ARRAYS.getAsBoolean(this))
           return null;
         else
-          return getGlobalEnvVar(isUnicodeSemantics() ? S_FILES_U : S_FILES);
+          return getGlobalEnvVar(/*isUnicodeSemantics() ? S_FILES_U : */S_FILES);
       }
 
       case _FILES: {
@@ -2603,7 +2603,7 @@ public class Env
         else if (! isGlobal)
           return null;
         else
-          return getGlobalEnvVar(isUnicodeSemantics() ? S_GET_U : S_GET);
+          return getGlobalEnvVar(/*isUnicodeSemantics() ? S_GET_U : */S_GET);
       }
 
       case _GET: {
@@ -2691,7 +2691,7 @@ public class Env
         if (! QuercusContext.INI_REGISTER_LONG_ARRAYS.getAsBoolean(this))
           return null;
         else
-          return getGlobalEnvVar(isUnicodeSemantics() ? S_SERVER_U : S_SERVER);
+          return getGlobalEnvVar(/*isUnicodeSemantics() ? S_SERVER_U : */S_SERVER);
       }
 
       case _SERVER: {
@@ -2738,7 +2738,7 @@ public class Env
         if (! QuercusContext.INI_REGISTER_LONG_ARRAYS.getAsBoolean(this))
           return null;
         else
-          return getGlobalEnvVar(isUnicodeSemantics() ? S_COOKIE_U : S_COOKIE);
+          return getGlobalEnvVar(/*isUnicodeSemantics() ? S_COOKIE_U : */S_COOKIE);
 
       case _COOKIE: {
         Var var = new VarImpl();
@@ -2773,7 +2773,7 @@ public class Env
 
         _globalMap.put(name, envVar);
 
-        var.set(VHelper.noCtx(),getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().getValue().<Value>map((a)->a.get(isUnicodeSemantics() ? PHP_SELF_STRING_U : PHP_SELF_STRING).getOne()));
+        var.set(VHelper.noCtx(),getGlobalVar(VHelper.noCtx(), "_SERVER").getOne().getValue().<Value>map((a)->a.get(/*isUnicodeSemantics() ? PHP_SELF_STRING_U : */PHP_SELF_STRING).getOne()));
 
         return envVar;
       }
@@ -4635,9 +4635,9 @@ public class Env
    */
   public StringValue getEmptyString()
   {
-    if (_isUnicodeSemantics)
-      return UnicodeBuilderValue.EMPTY;
-    else
+//    if (_isUnicodeSemantics)
+//      return UnicodeBuilderValue.EMPTY;
+//    else
       return ConstStringValue.EMPTY;
   }
 
@@ -4646,10 +4646,13 @@ public class Env
    */
   public StringValue createStringBuilder()
   {
-    if (_isUnicodeSemantics)
-      return new UnicodeBuilderValue();
-    else
+//    if (_isUnicodeSemantics)
+//      return new UnicodeBuilderValue();
+//    else
       return new StringBuilderValue();
+  }
+  public StringValue createString(byte []buffer) {
+    return createString(buffer, 0, buffer.length);
   }
 
   /**
@@ -4657,10 +4660,10 @@ public class Env
    */
   public StringValue createString(byte []buffer, int offset, int length)
   {
-    if (_isUnicodeSemantics)
-      return new UnicodeValueImpl(new String(buffer, offset, length));
-    else
-      return new ConstStringValue(buffer, offset, length);
+//    if (_isUnicodeSemantics)
+//      return new UnicodeValueImpl(new String(buffer, offset, length));
+//    else
+      return new ConstStringValue(new String(buffer, offset, length));
   }
 
   /**
@@ -4668,10 +4671,10 @@ public class Env
    */
   public StringValue createString(char []buffer, int length)
   {
-    if (_isUnicodeSemantics)
-      return new UnicodeBuilderValue(buffer, length);
-    else
-      return new ConstStringValue(buffer, length);
+//    if (_isUnicodeSemantics)
+//      return new UnicodeBuilderValue(buffer, length);
+//    else
+      return new ConstStringValue(new String(buffer, 0, length));
   }
 
   /**
@@ -4679,10 +4682,10 @@ public class Env
    */
   public StringValue createString(char []buffer, int offset, int length)
   {
-    if (_isUnicodeSemantics)
-      return new UnicodeBuilderValue(buffer, offset, length);
-    else
-      return new ConstStringValue(buffer, offset, length);
+//    if (_isUnicodeSemantics)
+//      return new UnicodeBuilderValue(buffer, offset, length);
+//    else
+      return new ConstStringValue(new String(buffer, offset, length));
   }
 
   /**
@@ -4691,9 +4694,9 @@ public class Env
   public StringValue createString(long value) {
     String s = String.valueOf(value);
 
-    if (_isUnicodeSemantics)
-      return new UnicodeValueImpl(s);
-    else
+//    if (_isUnicodeSemantics)
+//      return new UnicodeValueImpl(s);
+//    else
       return new ConstStringValue(s);
   }
 
@@ -4703,19 +4706,19 @@ public class Env
   public StringValue createString(String s)
   {
     if (s == null || s.length() == 0) {
-      return (_isUnicodeSemantics
+      return (/*_isUnicodeSemantics
               ? UnicodeBuilderValue.EMPTY
-              : ConstStringValue.EMPTY);
+              : */ConstStringValue.EMPTY);
     }
     else if (s.length() == 1) {
-      if (_isUnicodeSemantics)
-        return UnicodeBuilderValue.create(s.charAt(0));
-      else
+//      if (_isUnicodeSemantics)
+//        return UnicodeBuilderValue.create(s.charAt(0));
+//      else
         return ConstStringValue.create(s.charAt(0));
     }
-    else if (_isUnicodeSemantics) {
-      return new UnicodeBuilderValue(s);
-    }
+//    else if (_isUnicodeSemantics) {
+//      return new UnicodeBuilderValue(s);
+//    }
     else if (s.length() < 256) {
       StringValue stringValue = _internStringMap.get(s);
 
@@ -4738,9 +4741,9 @@ public class Env
    */
   public StringValue createString(char ch)
   {
-    if (_isUnicodeSemantics)
-      return UnicodeValueImpl.create(ch);
-    else
+//    if (_isUnicodeSemantics)
+//      return UnicodeValueImpl.create(ch);
+//    else
       return ConstStringValue.create(ch);
   }
 
@@ -4751,9 +4754,9 @@ public class Env
   {
     StringValue string;
 
-    if (_isUnicodeSemantics)
-      string = new BinaryBuilderValue();
-    else
+//    if (_isUnicodeSemantics)
+//      string = new BinaryBuilderValue();
+//    else
       string = new StringBuilderValue();
 
     for (; head != null; head = head.getNext()) {
@@ -7719,26 +7722,26 @@ public class Env
     SPECIAL_VARS.put(new ConstStringValue("PHP_SELF"), PHP_SELF);
     SPECIAL_VARS.put(new ConstStringValue("HTTP_RAW_POST_DATA"), HTTP_RAW_POST_DATA);
 
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("GLOBALS"), _GLOBAL);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_SERVER"), _SERVER);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_GET"), _GET);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_POST"), _POST);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_FILES"), _FILES);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_REQUEST"), _REQUEST);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_COOKIE"), _COOKIE);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_SESSION"), _SESSION);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_ENV"), _ENV);
-
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("argc"), ARGC);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("argv"), ARGV);
-
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_GET_VARS"), HTTP_GET_VARS);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_POST_VARS"), HTTP_POST_VARS);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_POST_FILES"), HTTP_POST_FILES);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_COOKIE_VARS"), HTTP_COOKIE_VARS);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_SERVER_VARS"), HTTP_SERVER_VARS);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("PHP_SELF"), PHP_SELF);
-    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_RAW_POST_DATA"), HTTP_RAW_POST_DATA);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("GLOBALS"), _GLOBAL);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_SERVER"), _SERVER);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_GET"), _GET);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_POST"), _POST);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_FILES"), _FILES);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_REQUEST"), _REQUEST);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_COOKIE"), _COOKIE);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_SESSION"), _SESSION);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("_ENV"), _ENV);
+//
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("argc"), ARGC);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("argv"), ARGV);
+//
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_GET_VARS"), HTTP_GET_VARS);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_POST_VARS"), HTTP_POST_VARS);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_POST_FILES"), HTTP_POST_FILES);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_COOKIE_VARS"), HTTP_COOKIE_VARS);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_SERVER_VARS"), HTTP_SERVER_VARS);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("PHP_SELF"), PHP_SELF);
+//    SPECIAL_VARS_U.put(new UnicodeBuilderValue("HTTP_RAW_POST_DATA"), HTTP_RAW_POST_DATA);
 
     DEFAULT_QUERY_SEPARATOR_MAP = new int[128];
     DEFAULT_QUERY_SEPARATOR_MAP['&'] = 1;

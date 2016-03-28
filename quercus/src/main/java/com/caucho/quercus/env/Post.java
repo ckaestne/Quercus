@@ -146,7 +146,7 @@ public class Post
         }
       }
       else {
-        StringValue bb = env.createBinaryBuilder();
+        StringValue bb = env.createStringBuilder();
 
         bb.appendReadAll(is, Integer.MAX_VALUE);
 

@@ -506,7 +506,7 @@ public class MiscModule extends AbstractQuercusModule {
       if (segments == null)
         return BooleanValue.FALSE;
 
-      StringValue bb = env.createBinaryBuilder();
+      StringValue bb = env.createStringBuilder();
 
       int i = 0;
       for (PackSegment segment : segments) {
@@ -623,7 +623,7 @@ public class MiscModule extends AbstractQuercusModule {
       OutputStream os = process.getOutputStream();
       os.close();
 
-      StringValue sb = env.createUnicodeBuilder();
+      StringValue sb = env.createStringBuilder();
 
       int ch;
       while ((ch = is.read()) >= 0) {
@@ -1262,7 +1262,7 @@ public class MiscModule extends AbstractQuercusModule {
       if (strLen - offset < _length)
         return offset;
 
-      StringValue bb = env.createBinaryBuilder();
+      StringValue bb = env.createStringBuilder();
 
       int j = offset;
 
@@ -1331,7 +1331,7 @@ public class MiscModule extends AbstractQuercusModule {
     public int unpack(Env env, ArrayValue result,
                       StringValue s, int offset, int strLen)
     {
-      StringValue bb = env.createBinaryBuilder();
+      StringValue bb = env.createStringBuilder();
 
       int j = offset;
 
@@ -1811,7 +1811,7 @@ public class MiscModule extends AbstractQuercusModule {
         else if (_length == 1)
           key = env.createString(_name);
         else {
-          StringValue sb = env.createBinaryBuilder();
+          StringValue sb = env.createStringBuilder();
           sb.append(VHelper.noCtx(), _name);
           sb.append(VHelper.noCtx(), j + 1);
 
@@ -1896,7 +1896,7 @@ public class MiscModule extends AbstractQuercusModule {
         else if (_length == 1)
           key = env.createString(_name);
         else {
-          StringValue sb = env.createBinaryBuilder();
+          StringValue sb = env.createStringBuilder();
           sb.append(VHelper.noCtx(), _name);
           sb.append(VHelper.noCtx(), j + 1);
 

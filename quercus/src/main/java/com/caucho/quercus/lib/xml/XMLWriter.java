@@ -85,7 +85,7 @@ public class XMLWriter {
    */
   public boolean openMemory(Env env)
   {
-    StringValue s = env.createUnicodeBuilder();
+    StringValue s = env.createStringBuilder();
     
     _s = new MemoryXMLWriterStream(s);
 

@@ -239,7 +239,7 @@ public class LongValue extends NumberValue
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    return env.createUnicodeBuilder().append(VHelper.noCtx(), _value);
+    return env.createStringBuilder().append(VHelper.noCtx(), _value);
   }
 
   /**
@@ -515,23 +515,23 @@ public class LongValue extends NumberValue
     env.print(ctx, _value);
   }
 
-  /**
-   * Append to a unicode builder.
-   */
-  @Override
-  public StringValue appendTo(UnicodeBuilderValue sb)
-  {
-    return sb.append(VHelper.noCtx(), _value);
-  }
-
-  /**
-   * Append to a binary builder.
-   */
-  @Override
-  public StringValue appendTo(BinaryBuilderValue sb)
-  {
-    return sb.append(VHelper.noCtx(), _value);
-  }
+//  /**
+//   * Append to a unicode builder.
+//   */
+//  @Override
+//  public StringValue appendTo(UnicodeBuilderValue sb)
+//  {
+//    return sb.append(VHelper.noCtx(), _value);
+//  }
+//
+//  /**
+//   * Append to a binary builder.
+//   */
+//  @Override
+//  public StringValue appendTo(BinaryBuilderValue sb)
+//  {
+//    return sb.append(VHelper.noCtx(), _value);
+//  }
 
   /**
    * Append to a string builder.
@@ -542,14 +542,14 @@ public class LongValue extends NumberValue
     return sb.append(VHelper.noCtx(), _value);
   }
 
-  /**
-   * Append to a string builder.
-   */
-  @Override
-  public StringValue appendTo(LargeStringBuilderValue sb)
-  {
-    return sb.append(VHelper.noCtx(), _value);
-  }
+//  /**
+//   * Append to a string builder.
+//   */
+//  @Override
+//  public StringValue appendTo(LargeStringBuilderValue sb)
+//  {
+//    return sb.append(VHelper.noCtx(), _value);
+//  }
 
   /**
    * Serializes the value.

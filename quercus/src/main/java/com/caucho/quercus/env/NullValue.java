@@ -209,7 +209,7 @@ public class NullValue extends Value
   @Override
   public StringValue toStringBuilder(Env env)
   {
-    return env.createUnicodeBuilder();
+    return env.createStringBuilder();
   }
 
   /**
@@ -469,9 +469,9 @@ public class NullValue extends Value
   {
     Env env = Env.getInstance();
 
-    if (env != null && env.isUnicodeSemantics())
-      return UnicodeBuilderValue.EMPTY;
-    else
+//    if (env != null && env.isUnicodeSemantics())
+//      return UnicodeBuilderValue.EMPTY;
+//    else
       return StringBuilderValue.EMPTY;
   }
 
@@ -631,23 +631,23 @@ public class NullValue extends Value
     return new ArrayValueImpl();
   }
 
-  /**
-   * Append to a binary builder.
-   */
-  @Override
-  public StringValue appendTo(BinaryBuilderValue sb)
-  {
-    return sb;
-  }
-
-  /**
-   * Append to a unicode builder.
-   */
-  @Override
-  public StringValue appendTo(UnicodeBuilderValue sb)
-  {
-    return sb;
-  }
+//  /**
+//   * Append to a binary builder.
+//   */
+//  @Override
+//  public StringValue appendTo(BinaryBuilderValue sb)
+//  {
+//    return sb;
+//  }
+//
+//  /**
+//   * Append to a unicode builder.
+//   */
+//  @Override
+//  public StringValue appendTo(UnicodeBuilderValue sb)
+//  {
+//    return sb;
+//  }
 
   /**
    * Append to a string builder.
@@ -661,11 +661,11 @@ public class NullValue extends Value
   /**
    * Append to a string builder.
    */
-  @Override
-  public StringValue appendTo(LargeStringBuilderValue sb)
-  {
-    return sb;
-  }
+//  @Override
+//  public StringValue appendTo(LargeStringBuilderValue sb)
+//  {
+//    return sb;
+//  }
 
   //
   // Java generator code

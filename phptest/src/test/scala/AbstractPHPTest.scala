@@ -83,22 +83,22 @@ class AbstractPHPTest {
             replaceAll("\n?Deprecated: [^\\n]*\n", "").
             replaceAll("\n?Strict Standards:  [^\\n]*\n", "")
 
-//        val out = new VWriteStreamImpl()
-//        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request, VHelper.True())
-//        val phpResult = out.getPlainOutput.trim
-//
-//
-//        assert(matchResult(expectedResult, phpResult, content contains "EXPECTF", content contains "EXPECTREGEX"),
-//            explainResult(expectedResult, phpResult, phptFile))
+        val out = new VWriteStreamImpl()
+        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, out, request, VHelper.True())
+        val phpResult = out.getPlainOutput.trim
 
-        //additionally execute under specific context. expect to get a choice between that the previous output (under the given condition) and nothing
-        val cout = new VWriteStreamImpl()
-        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, cout, request, featureCtx)
-        val cphpResult = cout.getConditionalOutput.filter(_.getCondition.evaluate(Set(featureCtx.feature))).map(_.getValue).mkString.trim
-        val otherphpResult = cout.getConditionalOutput.filter(_.getCondition.evaluate(Set())).map(_.getValue).mkString.trim
-        assert(matchResult(expectedResult, cphpResult, content contains "EXPECTF", content contains "EXPECTREGEX"),
-            explainResult(expectedResult, cphpResult, phptFile))
-        assert(otherphpResult == "", "found unexpected output under condition "+featureCtx.not()+":\n"+otherphpResult)
+
+        assert(matchResult(expectedResult, phpResult, content contains "EXPECTF", content contains "EXPECTREGEX"),
+            explainResult(expectedResult, phpResult, phptFile))
+
+//        //additionally execute under specific context. expect to get a choice between that the previous output (under the given condition) and nothing
+//        val cout = new VWriteStreamImpl()
+//        new TQuercus(ini.toMap[String, String]).executeFile(testedFile, cout, request, featureCtx)
+//        val cphpResult = cout.getConditionalOutput.filter(_.getCondition.evaluate(Set(featureCtx.feature))).map(_.getValue).mkString.trim
+//        val otherphpResult = cout.getConditionalOutput.filter(_.getCondition.evaluate(Set())).map(_.getValue).mkString.trim
+//        assert(matchResult(expectedResult, cphpResult, content contains "EXPECTF", content contains "EXPECTREGEX"),
+//            explainResult(expectedResult, cphpResult, phptFile))
+//        assert(otherphpResult == "", "found unexpected output under condition "+featureCtx.not()+":\n"+otherphpResult)
 
 
         testedFile.deleteOnExit()

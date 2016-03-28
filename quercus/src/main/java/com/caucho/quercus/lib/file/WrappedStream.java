@@ -61,22 +61,22 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   private static final ConstStringValue STREAM_WRITE
     = new ConstStringValue("stream_write");
 
-  private static final UnicodeBuilderValue STREAM_CLOSE_U
-    = new UnicodeBuilderValue("stream_close");
-  private static final UnicodeBuilderValue STREAM_EOF_U
-    = new UnicodeBuilderValue("stream_eof");
-  private static final UnicodeBuilderValue STREAM_FLUSH_U
-    = new UnicodeBuilderValue("stream_flush");
-  private static final UnicodeBuilderValue STREAM_OPEN_U
-    = new UnicodeBuilderValue("stream_open");
-  private static final UnicodeBuilderValue STREAM_READ_U
-    = new UnicodeBuilderValue("stream_read");
-  private static final UnicodeBuilderValue STREAM_SEEK_U
-    = new UnicodeBuilderValue("stream_seek");
-  private static final UnicodeBuilderValue STREAM_TELL_U
-    = new UnicodeBuilderValue("stream_tell");
-  private static final UnicodeBuilderValue STREAM_WRITE_U
-    = new UnicodeBuilderValue("stream_write");
+//  private static final UnicodeBuilderValue STREAM_CLOSE_U
+//    = new UnicodeBuilderValue("stream_close");
+//  private static final UnicodeBuilderValue STREAM_EOF_U
+//    = new UnicodeBuilderValue("stream_eof");
+//  private static final UnicodeBuilderValue STREAM_FLUSH_U
+//    = new UnicodeBuilderValue("stream_flush");
+//  private static final UnicodeBuilderValue STREAM_OPEN_U
+//    = new UnicodeBuilderValue("stream_open");
+//  private static final UnicodeBuilderValue STREAM_READ_U
+//    = new UnicodeBuilderValue("stream_read");
+//  private static final UnicodeBuilderValue STREAM_SEEK_U
+//    = new UnicodeBuilderValue("stream_seek");
+//  private static final UnicodeBuilderValue STREAM_TELL_U
+//    = new UnicodeBuilderValue("stream_tell");
+//  private static final UnicodeBuilderValue STREAM_WRITE_U
+//    = new UnicodeBuilderValue("stream_write");
 
   private byte []printBuffer = new byte[1];
 
@@ -112,10 +112,10 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
 
     _wrapper = qClass.callNew(env, VHelper.noCtx(), Value.VNULL_ARGS).getOne();
 
-    if (env.isUnicodeSemantics())
-      _wrapper.callMethod(env, VHelper.noCtx(), STREAM_OPEN_U,
-                          path, mode, options, NullValue.NULL);
-    else
+//    if (env.isUnicodeSemantics())
+//      _wrapper.callMethod(env, VHelper.noCtx(), STREAM_OPEN_U,
+//                          path, mode, options, NullValue.NULL);
+//    else
       _wrapper.callMethod(env, VHelper.noCtx(), STREAM_OPEN,
                           path, mode, options, NullValue.NULL);
   }
@@ -179,12 +179,12 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     if (cls != null) {
       StringValue funName;
 
-      if (_env.isUnicodeSemantics()) {
-        funName = STREAM_CLOSE_U;
-      }
-      else {
+//      if (_env.isUnicodeSemantics()) {
+//        funName = STREAM_CLOSE_U;
+//      }
+//      else {
         funName = STREAM_CLOSE;
-      }
+//      }
 
       AbstractFunction fun = cls.findFunction(funName);
 
@@ -219,9 +219,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     } else {
       Value output;
 
-      if (_env.isUnicodeSemantics())
-        output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U, LongValue.ONE).getOne().toValue();
-      else
+//      if (_env.isUnicodeSemantics())
+//        output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U, LongValue.ONE).getOne().toValue();
+//      else
         output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ, LongValue.ONE).getOne().toValue();
 
       _buffer = (int) output.toLong();
@@ -247,10 +247,10 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
 
     Value output;
 
-    if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
-                                   LongValue.create(length)).getOne().toValue();
-    else
+//    if (_env.isUnicodeSemantics())
+//      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
+//                                   LongValue.create(length)).getOne().toValue();
+//    else
       output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ,
                                    LongValue.create(length)).getOne().toValue();
 
@@ -273,10 +273,10 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
 
     Value output;
 
-    if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
-                                   LongValue.create(length)).getOne().toValue();
-    else
+//    if (_env.isUnicodeSemantics())
+//      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
+//                                   LongValue.create(length)).getOne().toValue();
+//    else
       output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ,
                                    LongValue.create(length)).getOne().toValue();
 
@@ -322,14 +322,14 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   {
     Value output;
 
-    if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
-                                   LongValue.create(length)).getOne().toValue();
-    else
+//    if (_env.isUnicodeSemantics())
+//      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ_U,
+//                                   LongValue.create(length)).getOne().toValue();
+//    else
       output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_READ,
                                    LongValue.create(length)).getOne().toValue();
 
-    return output.toBinaryValue(_env);
+    return output.toStringValue(_env);
   }
 
   /**
@@ -364,13 +364,13 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   public void write(byte []buffer, int offset, int length)
     throws IOException
   {
-    StringValue bb = _env.createBinaryBuilder(buffer, offset, length);
+    StringValue bb = _env.createString(buffer, offset, length);
 
     Value output;
 
-    if (_env.isUnicodeSemantics())
-      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE_U, bb).getOne().toValue();
-    else
+//    if (_env.isUnicodeSemantics())
+//      output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE_U, bb).getOne().toValue();
+//    else
       output = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE, bb).getOne().toValue();
 
     _writeLength = (int) output.toLong();
@@ -451,9 +451,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   @Override
   public boolean isEOF()
   {
-    if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_EOF_U).getOne().toValue().toBoolean();
-    else
+//    if (_env.isUnicodeSemantics())
+//      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_EOF_U).getOne().toValue().toBoolean();
+//    else
       return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_EOF).getOne().toValue().toBoolean();
   }
 
@@ -463,9 +463,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   @Override
   public long getPosition()
   {
-    if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_TELL_U).getOne().toValue().toLong();
-    else
+//    if (_env.isUnicodeSemantics())
+//      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_TELL_U).getOne().toValue().toLong();
+//    else
       return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_TELL).getOne().toValue().toLong();
   }
 
@@ -478,10 +478,10 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     LongValue offsetValue = LongValue.create(offset);
     LongValue whenceValue = LongValue.create(SEEK_SET);
 
-    if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK_U,
-                                 offsetValue, whenceValue).getOne().toValue().toBoolean();
-    else
+//    if (_env.isUnicodeSemantics())
+//      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK_U,
+//                                 offsetValue, whenceValue).getOne().toValue().toBoolean();
+//    else
       return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK,
                                  offsetValue, whenceValue).getOne().toValue().toBoolean();
   }
@@ -492,10 +492,10 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     LongValue offsetValue = LongValue.create(offset);
     LongValue whenceValue = LongValue.create(whence);
 
-    if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK_U,
-                                 offsetValue, whenceValue).getOne().toValue().toLong();
-    else
+//    if (_env.isUnicodeSemantics())
+//      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK_U,
+//                                 offsetValue, whenceValue).getOne().toValue().toLong();
+//    else
       return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_SEEK,
                                  offsetValue, whenceValue).getOne().toValue().toLong();
   }
@@ -506,9 +506,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   {
     boolean result;
 
-    if (_env.isUnicodeSemantics())
-      result = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH_U).getOne().toValue().toBoolean();
-    else
+//    if (_env.isUnicodeSemantics())
+//      result = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH_U).getOne().toValue().toBoolean();
+//    else
       result = _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH).getOne().toValue().toBoolean();
 
     if (! result)
@@ -518,9 +518,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
   @Override
   public Value stat()
   {
-    if (_env.isUnicodeSemantics())
-      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH_U).getOne().toValue();
-    else
+//    if (_env.isUnicodeSemantics())
+//      return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH_U).getOne().toValue();
+//    else
       return _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_FLUSH).getOne().toValue();
   }
 
@@ -538,9 +538,9 @@ public class WrappedStream implements BinaryInput, BinaryOutput {
     public void write(int b)
       throws IOException
     {
-      if (_env.isUnicodeSemantics())
-        _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE_U, LongValue.create(b));
-      else
+//      if (_env.isUnicodeSemantics())
+//        _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE_U, LongValue.create(b));
+//      else
         _wrapper.callMethod(_env, VHelper.noCtx(), STREAM_WRITE, LongValue.create(b));
     }
   }

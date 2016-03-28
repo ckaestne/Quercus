@@ -149,15 +149,15 @@ public class MarshalFactory {
     else if (StringValue.class.equals(argType)) {
       marshal = StringValueMarshal.MARSHAL;
     }
-    else if (UnicodeValue.class.equals(argType)) {
-      marshal = UnicodeValueMarshal.MARSHAL;
-    }
-    else if (BinaryValue.class.equals(argType)) {
-      marshal = BinaryValueMarshal.MARSHAL;
-    }
-    else if (BinaryBuilderValue.class.equals(argType)) {
-      marshal = BinaryValueMarshal.MARSHAL;
-    }
+//    else if (UnicodeValue.class.equals(argType)) {
+//      marshal = UnicodeValueMarshal.MARSHAL;
+//    }
+//    else if (BinaryValue.class.equals(argType)) {
+//      marshal = BinaryValueMarshal.MARSHAL;
+//    }
+//    else if (BinaryBuilderValue.class.equals(argType)) {
+//      marshal = BinaryValueMarshal.MARSHAL;
+//    }
     else if (InputStream.class.equals(argType)) {
       marshal = InputStreamMarshal.MARSHAL;
     }
@@ -197,12 +197,12 @@ public class MarshalFactory {
     else if (Eregi.class.equals(argType)) {
       marshal = EregiMarshal.MARSHAL;
     }
-    else if (UnicodeEreg.class.equals(argType)) {
-      marshal = UnicodeEregMarshal.MARSHAL;
-    }
-    else if (UnicodeEregi.class.equals(argType)) {
-      marshal = UnicodeEregiMarshal.MARSHAL;
-    }
+//    else if (UnicodeEreg.class.equals(argType)) {
+//      marshal = UnicodeEregMarshal.MARSHAL;
+//    }
+//    else if (UnicodeEregi.class.equals(argType)) {
+//      marshal = UnicodeEregiMarshal.MARSHAL;
+//    }
     else if (URL.class.equals(argType)) {
       marshal = URLMarshal.MARSHAL;
     }

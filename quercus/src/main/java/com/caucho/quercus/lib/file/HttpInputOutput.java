@@ -155,7 +155,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
       else if (optionName.equals("user_agent"))
         _httpStream.setAttribute("User-Agent", optionValue.toString());
       else if (optionName.equals("content"))
-        _bodyStart = optionValue.toBinaryValue(env).toBytes();
+        _bodyStart = optionValue.toStringValue().toBytes();
       else if (optionName.equals("proxy"))
         env.stub("StreamContextResource::proxy option");
       else if (optionName.equals("request_fulluri"))
@@ -273,7 +273,7 @@ public class HttpInputOutput extends AbstractBinaryOutput
   public StringValue read(int length)
     throws IOException
   {
-    StringValue bb = _env.createBinaryBuilder();
+    StringValue bb = _env.createStringBuilder();
     TempBuffer temp = TempBuffer.allocate();
     
     try {

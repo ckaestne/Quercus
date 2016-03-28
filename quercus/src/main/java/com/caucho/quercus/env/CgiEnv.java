@@ -322,7 +322,7 @@ public class CgiEnv
                     isMagicQuotes,
                     getIniBoolean("file_uploads"));
     } else if (! method.equals("GET")) {
-      StringValue bb = createBinaryBuilder();
+      StringValue bb = createStringBuilder();
       //bb.appendReadAll(is, contentLength);
 
       setInputData(bb);

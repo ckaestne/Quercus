@@ -367,14 +367,14 @@ abstract public class ObjectValue extends Callback {
     return this;
   }
 
-  /**
-   * Append to a string builder.
-   */
-  @Override
-  public StringValue appendTo(UnicodeBuilderValue sb)
-  {
-    return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
-  }
+//  /**
+//   * Append to a string builder.
+//   */
+//  @Override
+//  public StringValue appendTo(UnicodeBuilderValue sb)
+//  {
+//    return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
+//  }
 
   /**
    * Append to a binary builder.
@@ -385,23 +385,23 @@ abstract public class ObjectValue extends Callback {
     return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
   }
 
-  /**
-   * Append to a binary builder.
-   */
-  @Override
-  public StringValue appendTo(BinaryBuilderValue sb)
-  {
-    return sb.appendBytes(toString(Env.getInstance()));
-  }
-
-  /**
-   * Append to a binary builder.
-   */
-  @Override
-  public StringValue appendTo(LargeStringBuilderValue sb)
-  {
-    return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
-  }
+//  /**
+//   * Append to a binary builder.
+//   */
+//  @Override
+//  public StringValue appendTo(BinaryBuilderValue sb)
+//  {
+//    return sb.appendBytes(toString(Env.getInstance()));
+//  }
+//
+//  /**
+//   * Append to a binary builder.
+//   */
+//  @Override
+//  public StringValue appendTo(LargeStringBuilderValue sb)
+//  {
+//    return sb.append(VHelper.noCtx(), toString(Env.getInstance()));
+//  }
 
   /**
    * Returns the array value with the given key.

@@ -528,7 +528,7 @@ public class PostgresModule extends AbstractQuercusModule {
           if (value.isLongConvertible()) {
             value = LongValue.create(value.toLong());
           } else {
-            StringValue sb = env.createUnicodeBuilder();
+            StringValue sb = env.createStringBuilder();
             value = sb.append(VHelper.noCtx(), "'").append(VHelper.noCtx(), value).append(VHelper.noCtx(), "'");
           }
           break;
@@ -541,13 +541,13 @@ public class PostgresModule extends AbstractQuercusModule {
           if (value.isDoubleConvertible()) {
             value = DoubleValue.create(value.toDouble());
           } else {
-            StringValue sb = env.createUnicodeBuilder();
+            StringValue sb = env.createStringBuilder();
             value = sb.append(VHelper.noCtx(), "'").append(VHelper.noCtx(), value).append(VHelper.noCtx(), "'");
           }
           break;
 
         default:
-          StringValue sb = env.createUnicodeBuilder();
+          StringValue sb = env.createStringBuilder();
           if (value.isNumberConvertible())  {
             value = sb.append(VHelper.noCtx(), value);
           } else {
@@ -716,7 +716,7 @@ public class PostgresModule extends AbstractQuercusModule {
         ArrayValue arr = value.toArrayValue(env);
         int count = arr.getSize().getOne();
 
-        StringValue sb = env.createUnicodeBuilder();
+        StringValue sb = env.createStringBuilder();
 
         LongValue currValue = LongValue.create(curr);
 
@@ -2292,7 +2292,7 @@ public class PostgresModule extends AbstractQuercusModule {
           .invoke(largeObject);
 
       try {
-        StringValue bb = env.createBinaryBuilder();
+        StringValue bb = env.createStringBuilder();
 
         bb.appendReadAll(is, len);
 
@@ -3000,7 +3000,7 @@ public class PostgresModule extends AbstractQuercusModule {
       if (conn == null)
         return null;
 
-      StringValue whereClause = env.createUnicodeBuilder();
+      StringValue whereClause = env.createStringBuilder();
 
       boolean isFirst = true;
 
@@ -3018,7 +3018,7 @@ public class PostgresModule extends AbstractQuercusModule {
         // pi = pi.replaceAll("\\\\", "\\\\\\\\");
       }
 
-      StringValue query = env.createUnicodeBuilder();
+      StringValue query = env.createStringBuilder();
       query.append(VHelper.noCtx(), "SELECT * FROM ").append(VHelper.noCtx(), tableName)
               .append(VHelper.noCtx(), " WHERE ").append(VHelper.noCtx(), whereClause);
 

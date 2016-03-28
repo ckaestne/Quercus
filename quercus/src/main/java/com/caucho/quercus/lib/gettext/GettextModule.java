@@ -440,10 +440,10 @@ public class GettextModule
     
     StringValue sb;
     
-    if (msg.isUnicode())
-      sb = env.createUnicodeBuilder();
-    else
-      sb = env.createBinaryBuilder();
+//    if (msg.isUnicode())
+//      sb = env.createStringBuilder();
+//    else
+      sb = env.createStringBuilder();
     
     return formatImpl(env, msg, args, sb);
   }
@@ -454,7 +454,7 @@ public class GettextModule
                                           Value []args,
                                           String charset)
   {
-    StringValue sb = env.createBinaryBuilder();
+    StringValue sb = env.createStringBuilder();
 
     byte []bytes = null;
     

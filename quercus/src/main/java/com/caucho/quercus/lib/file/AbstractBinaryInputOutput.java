@@ -180,7 +180,7 @@ abstract public class AbstractBinaryInputOutput
     if (_is == null)
       return null;
 
-    StringValue bb = _env.createBinaryBuilder();
+    StringValue bb = _env.createStringBuilder();
 
     if (bb.appendRead(_is, length) > 0)
       return bb;

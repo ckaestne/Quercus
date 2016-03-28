@@ -31,7 +31,7 @@ package com.caucho.quercus.lib.dom;
 
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.env.StringValue;
-import com.caucho.quercus.lib.i18n.Encoder;
+//import com.caucho.quercus.lib.i18n.Encoder;
 import org.w3c.dom.Node;
 
 public class DOMNode<T extends Node>
@@ -177,10 +177,10 @@ public class DOMNode<T extends Node>
 
   private CharSequence convertToUtf8(Env env, String value)
   {
-    if (env.isUnicodeSemantics()) {
-      return value;
-    }
-    else {
+//    if (env.isUnicodeSemantics()) {
+//      return value;
+//    }
+//    else {
       int len = value.length();
 
       boolean isUtf16 = false;
@@ -196,21 +196,21 @@ public class DOMNode<T extends Node>
         }
       }
 
-      if (isUtf16) {
-        // XXX: for mediawiki-1.20.2 install text,
-        //      not right but will have to do until we redo DOM
-        Encoder encoder = Encoder.create("utf-8");
-
-        StringValue sb = env.createBinaryBuilder();
-
-        encoder.encode(sb, value);
-
-        return sb;
-      }
-      else {
+//      if (isUtf16) {
+//        // XXX: for mediawiki-1.20.2 install text,
+//        //      not right but will have to do until we redo DOM
+//        Encoder encoder = Encoder.create("utf-8");
+//
+//        StringValue sb = env.createStringBuilder();
+//
+//        encoder.encode(sb, value);
+//
+//        return sb;
+//      }
+//      else {
         return value;
-      }
-    }
+//      }
+//    }
   }
 
   public Object getUserData(String key)
